@@ -117,7 +117,13 @@
         "dmg"
       ],
       "type": "distribution",
-      "icon": "icon.icns"
+      "icon": "icon.icns",
+      "publish": [
+        {
+          "provider": "generic",
+          "url": "https://download.desech.com/mac"
+        }
+      ]
     }
   }
 }

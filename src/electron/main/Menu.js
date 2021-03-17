@@ -213,9 +213,9 @@ export default {
   },
 
   moveQuitMenuOption (menu) {
-    menu[0].submenu.push(menu[1].submenu[8])
+    menu[0].submenu.push(menu[1].submenu[7])
+    delete menu[1].submenu[6]
     delete menu[1].submenu[7]
-    delete menu[1].submenu[8]
   },
 
   injectEditMacMenu (menu, locale) {

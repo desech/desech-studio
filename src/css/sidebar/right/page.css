@@ -1,0 +1,13 @@
+.sidebar-right #page-section .right-page-form {
+  padding: 10px 0;
+}
+
+.sidebar-right #page-section .grid {
+  align-items: start;
+  grid-template-columns: 40px auto;
+}
+
+.sidebar-right #page-section textarea {
+  font-size: 13px;
+  line-height: 18px;
+}

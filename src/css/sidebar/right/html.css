@@ -1,0 +1,122 @@
+.sidebar-right #html-section .style-tag-container:not(.custom) {
+  grid-template-columns: 1fr;
+}
+
+.sidebar-right #html-section .html-details-button {
+  padding: 15px 15px 7px 15px;
+  font-size: 12px;
+}
+
+.sidebar-right #html-section .html-details-button:hover {
+  color: var(--section-title-hover);
+}
+
+.sidebar-right #html-section .html-details-button span {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.sidebar-right #html-section .html-details-button svg {
+  transform: rotate(-90deg);
+}
+
+.sidebar-right #html-section .html-details-main.opened .html-details-button svg {
+  transform: none;
+}
+
+.sidebar-right #html-section .html-details-main:not(.opened) .html-details-container {
+  display: none;
+}
+
+.sidebar-right #html-section .html-details-container .grid {
+  gap: 5px;
+}
+
+.sidebar-right #html-section .style-html-source-button svg {
+  display: inline-block;
+  margin-top: -2px;
+  padding-right: 7px;
+}
+
+.sidebar-right #html-section .style-html-track-element .style-html-source-button {
+  height: 25px;
+  padding: 0 4px;
+  box-shadow: var(--btn-shadow) 0 0 1px 0;
+}
+
+.sidebar-right #html-section .style-html-source-name {
+  font-size: 12px;
+  height: 25px;
+  line-height: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-right #html-section .html-details-container form:not([data-type="email"]) .html-show-email,
+.sidebar-right #html-section .html-details-container form:not([data-type="number"]) .html-show-number,
+.sidebar-right #html-section .html-details-container form[data-type="password"] .html-hide-password,
+.sidebar-right #html-section .html-details-container form[data-type="number"] .html-hide-number,
+.sidebar-right #html-section .html-details-container[data-type="audio"] form .html-hide-audio {
+  display: none;
+}
+
+.sidebar-right #html-section .check-button {
+  margin: 0;
+}
+
+.sidebar-right #html-section ul.panel-list li.style-html-list-elem {
+  height: inherit;
+  padding: 0;
+}
+
+.sidebar-right #html-section ul.panel-list form.style-html-li-form {
+  display: flex;
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-right #html-section ul.panel-list form.style-html-li-form>input.style-html-option-input {
+  width: 75px;
+  height: 20px;
+  font-size: 11px;
+}
+
+.sidebar-right #html-section ul.panel-list form.style-html-li-form[data-type="optgroup"]>input.style-html-option-input {
+  width: 170px;
+  height: 20px;
+  font-size: 11px;
+}
+
+.sidebar-right #html-section .style-html-svg {
+  padding: 7px 15px;
+}
+
+.sidebar-right #html-section .style-html-svg p {
+  padding-bottom: 7px;
+  font-size: 12px;
+}
+
+.sidebar-right #html-section .style-html-svg textarea {
+  height: 100px;
+}
+
+.sidebar-right #html-section .style-html-title {
+  padding: 7px 15px;
+  font-size: 12px;
+}
+
+.sidebar-right #html-section ul.panel-list>li:hover,
+.sidebar-right #html-section ul.panel-list>li.active,
+.sidebar-right #html-section ul.panel-list>li.dragdrop-start {
+  background-color: var(--list-fields-bg-hover);
+}
+
+.sidebar-right #html-section ul.panel-list>li:hover svg,
+.sidebar-right #html-section ul.panel-list>li.active svg,
+.sidebar-right #html-section ul.panel-list>li.dragdrop-start svg {
+  color: var(--list-fields-txt);
+}

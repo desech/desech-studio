@@ -1,0 +1,275 @@
+.sidebar-right {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: 100vh;
+  font-size: 13px;
+  background-color: var(--main-bg);
+  color: var(--main-txt);
+  box-shadow: var(--main-shadow) 1px 1px 1px 0 inset;
+}
+
+.sidebar-right header {
+  height: 45px;
+  line-height: 45px;
+  padding: 0 15px;
+}
+
+.sidebar-right header button {
+  margin-right: 10px;
+}
+
+.sidebar-right header button:last-child {
+  margin-right: 0;
+}
+
+.sidebar-right .right-panel-container {
+  height: 100%;
+}
+
+.sidebar-right .right-panel-container>div {
+  height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-right .sidebar-section {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--section-border);
+}
+
+.sidebar-right .sidebar-title {
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-right .grid {
+  display: grid;
+  padding: 7px 15px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.sidebar-right .sidebar-section.toggle .sidebar-title-text {
+  cursor: pointer;
+}
+
+.sidebar-right .sidebar-section:not(.toggle) .sidebar-title-text svg {
+  display: none;
+}
+
+.sidebar-right .sidebar-section.toggle:not(.active) .sidebar-title-text svg {
+  transform: rotate(-90deg);
+}
+
+.sidebar-right .sidebar-section:not(.active) .sidebar-content {
+  display: none;
+}
+
+.sidebar-right .sidebar-section:not(.active):not(:hover) .sidebar-title {
+  opacity: 0.5;
+}
+
+.sidebar-right .sidebar-section.toggle:hover .sidebar-title-text {
+  color: var(--section-title-hover);
+}
+
+.sidebar-right .sidebar-section .sidebar-content {
+  padding-top: 10px;
+}
+
+.sidebar-right .sidebar-section button.simple {
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-right .align-left svg,
+.sidebar-right .align-center svg {
+  transform: rotateZ(-90deg);
+}
+
+.sidebar-right .align-right svg {
+  transform: rotateZ(-90deg);
+}
+
+.sidebar-right .input-option-label {
+  font-size: 12px;
+}
+
+.sidebar-right ul.panel-list li .fill-color-container {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  vertical-align: middle;
+  border-radius: 2px;
+  overflow: hidden;
+  background: url(../asset/image/alpha.png) 0 0/7px repeat;
+  box-shadow: var(--picker-btn-shadow) 0 0 1px 1px;
+}
+
+.sidebar-right ul.panel-list li .fill-color {
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.sidebar-right ul.panel-list li .fill-name {
+  vertical-align: middle;
+}
+
+.sidebar-right .sidebar-section .col-dropdown-input-option .standard-dropdown {
+  display: inline-block;
+}
+
+.sidebar-right .sidebar-section svg.topleft-corner {
+  transform: scaleX(-1);
+}
+
+.sidebar-right .sidebar-section svg.bottomleft-corner {
+  transform: scale(-1);
+}
+
+.sidebar-right .sidebar-section svg.bottomright-corner {
+  transform: scaleY(-1);
+}
+
+.sidebar-right .input-extra-ms .input-extra-value {
+  width: 58px;
+  padding-right: 20px;
+}
+
+.sidebar-right .input-extra-ms .input-extra-text {
+  margin-left: -20px;
+}
+
+.sidebar-right .sidebar-section .sidebar-emptiness {
+  height: 50px;
+}
+
+.sidebar-right .grid.grid-cell {
+  grid-template-columns: 1fr;
+  row-gap: 15px;
+  padding: 10px 0 0 0;
+}
+
+.sidebar-right .grid.grid-cell .grid-title {
+  display: grid;
+  grid-template-columns: auto 18px;
+  align-items: center;
+}
+
+.sidebar-right .grid.grid-cell .grid {
+  padding: 0;
+}
+
+.sidebar-right .grid-list {
+  padding-top: 10px;
+  border-top: 1px solid var(--section-border);
+}
+
+.sidebar-right .grid-list .cell {
+  grid-template-columns: 1fr 18px;
+  column-gap: 5px;
+  margin-bottom: 5px;
+}
+
+.sidebar-right .grid-cell .grid-gap {
+  grid-template-columns: 25px 1fr;
+  padding-top: 5px;
+}
+
+.sidebar-right .color-button-main {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  column-gap: 3px;
+}
+
+.sidebar-right .color-button-on {
+  width: 32px;
+  cursor: pointer;
+}
+
+.sidebar-right .color-button-on .color-button-container {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  border-radius: 2px;
+  margin-left: 1px;
+  overflow: hidden;
+  background: url(../asset/image/alpha.png) 0 0/7px repeat;
+  box-shadow: var(--picker-btn-shadow) 0 0 1px 1px;
+}
+
+.sidebar-right .color-button-on:hover .color-button-container,
+.sidebar-right .color-button-on.selected .color-button-container,
+.sidebar-right .color-button-on.active .color-button-container {
+  box-shadow: var(--picker-btn-shadow-hover) 0 0 3px 2px;
+}
+
+.sidebar-right .color-button-on .color-button {
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.sidebar-right .color-button-on svg {
+  transform: rotate(-90deg);
+}
+
+.sidebar-right .color-button-on.active svg {
+  transform: none;
+}
+
+.sidebar-right .switch-radius {
+  margin: 0 2px;
+}
+
+.sidebar-right .alert {
+  padding: 10px 15px;
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--error);
+}
+
+.sidebar-right .alert svg {
+  margin-right: 5px;
+  vertical-align: top;
+}
+
+.sidebar-right .style-css-elem-property {
+  font-size: 12px;
+}
+
+.sidebar-right button.highlight-source-file {
+  cursor: default;
+  text-align: left;
+}
+
+.sidebar-right button.highlight-source-file:hover {
+  color: inherit
+}
+
+.sidebar-right button.highlight-source-file[value] {
+  cursor: pointer;
+}
+
+.sidebar-right button.highlight-source-file[value]:hover {
+  color: var(--source-txt-hover);
+}
+
+.sidebar-right .sidebar-content .style-separator {
+  padding-top: 10px;
+}
+
+.sidebar-right #text-section .color-picker,
+.sidebar-right #border-section .color-picker {
+  padding-bottom: 10px;
+}

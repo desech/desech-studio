@@ -1,0 +1,19 @@
+.sidebar-right #border-section .border-radius-each-container {
+  grid-template-columns: auto 1fr auto 1fr;
+  gap: 10px;
+  padding: 5px 5px 15px 5px;
+}
+
+.sidebar-right #border-section .border-radius-each-grid {
+  grid-template-columns: 1fr 1fr;
+  column-gap: 5px;
+  padding: 0;
+}
+
+.sidebar-right #border-section .switch-side-container {
+  grid-template-columns: 23px 23px 23px;
+  grid-template-rows: 23px 23px 23px;
+  gap: 5px;
+  padding: 0;
+  justify-content: end;
+}

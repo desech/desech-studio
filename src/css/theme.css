@@ -1,0 +1,151 @@
+/* canvas colors */
+
+body {
+  --canvas-bg: rgb(238, 238, 238);
+  --canvas-shadow: rgb(0, 0, 0, 0.5);
+  --canvas-scroll-thumb: rgb(0, 0, 0, 0.2);
+  --canvas-overlay-shadow1: rgb(0, 0, 0, 0.1);
+  --canvas-overlay-shadow2: rgb(255, 255, 255, 0.1);
+  --element-hover: rgb(70, 70, 70);
+  --switch-btn-bg: rgb(255, 255, 255);
+  --switch-btn-txt: rgb(0, 0, 0);
+  --resize-btn-bg: rgb(255, 255, 255);
+  --resize-counter-txt: rgb(255, 255, 255);
+  --grid-track-color: rgb(255, 255, 255);
+}
+
+/* accent colors */
+
+body {
+  --main-txt-highlight: rgb(0, 140, 255);
+  --menu-bg-hover: rgb(0, 140, 255);
+  --menu-txt-hover: rgb(255, 255, 255);
+  --list-bg-hover: rgb(0, 140, 255);
+  --list-bg-highlight: rgb(253, 106, 21);
+  --list-txt-special: rgb(0, 140, 255);
+  --list-fields-bg-hover: rgba(0, 140, 255, 0.1);
+  --scroll-track: transparent;
+  --btn-txt-hover: rgb(0, 140, 255);
+  --btn-shadow-hover: rgb(0, 140, 255);
+  --btn-bg-fill: rgb(0, 140, 255);
+  --btn-txt-fill: rgb(255, 255, 255);
+  --field-bg: transparent;
+  --field-bg-hover: rgb(0, 140, 255);
+  --resize-color: rgb(0, 140, 255);
+  --resize-margin-bg: rgb(249, 204, 157);
+  --resize-margin-btn: rgb(249, 162, 71);
+  --resize-margin-txt: rgb(255, 130, 0);
+  --resize-padding-bg: rgb(196, 208, 139);
+  --resize-padding-btn: rgb(137, 160, 24);
+  --resize-padding-txt: rgb(132, 158, 4);
+  --switch-btn-hover: rgb(0, 140, 255);
+  --grid-border: rgb(0, 140, 255);
+  --grid-track-bg: rgba(0, 140, 255, 0.7);
+  --grid-track-bg-hover: rgb(0, 140, 255);
+  --grid-track-add-bg: rgba(253, 106, 21, 0.7);
+  --grid-track-add-bg-hover: rgb(253, 106, 21);
+  --move-color: rgb(253, 106, 21);
+  --section-title-hover: rgb(0, 140, 255);
+  --source-txt-hover: rgb(253, 106, 21);
+  --picker-btn-shadow-hover: rgb(0, 140, 255);
+  --dialog-txt-highlight: rgb(0, 140, 255);
+  --link-txt: rgb(0, 140, 255);
+  --error: rgb(255, 0, 0);
+  --highlight-border: rgb(0, 140, 255);
+  --link-hover: rgb(0, 140, 255);
+}
+
+/* theme light */
+
+body,
+body[data-theme="light"] {
+  --body-bg: rgb(255, 255, 255);
+  --body-txt: rgb(70, 70, 70);
+  --main-bg: rgb(255, 255, 255);
+  --main-shadow: rgba(0, 0, 0, 0.1);
+  --main-txt: rgb(70, 70, 70);
+  --main-txt-disabled: rgba(0, 0, 0, 0.5);
+  --tooltip-bg: rgb(43, 43, 43);
+  --tooltip-txt: rgb(255, 255, 255);
+  --menu-bg: rgb(43, 43, 43);
+  --menu-txt: rgb(255, 255, 255);
+  --menu-shadow: rgba(0, 0, 0, 0.5);
+  --menu-separator: rgba(255, 255, 255, 0.3);
+  --list-txt-hover: rgb(255, 255, 255);
+  --list-tree: rgba(0, 0, 0, 0.1);
+  --list-fields-txt: rgb(70, 70, 70);
+  --scroll-thumb: rgba(0, 0, 0, 0.2);
+  --btn-txt: rgb(70, 70, 70);
+  --btn-shadow: rgb(0, 0, 0, 0.5);
+  --field-bg-select: rgb(255, 255, 255);
+  --field-bg-svg-select: url('../asset/image/arrow-down-black.svg');
+  --field-shadow: rgb(0, 0, 0);
+  --field-txt: rgb(70, 70, 70);
+  --field-txt-hover: rgb(255, 255, 255);
+  --field-txt-disabled: rgb(0, 0, 0, 0.5);
+  --field-bg-disabled: rgb(238, 238, 238);
+  --field-edit-bg: rgb(255, 255, 255);
+  --prompt-shadow: rgba(0, 0, 0, 0.3);
+  --grid-cell-bg: rgb(255, 255, 255);
+  --grid-cell-shadow: rgba(0, 0, 0, 0.1);
+  --grid-cell-hover: rgba(245, 245, 245);
+  --section-border: rgba(0, 0, 0, 0.1);
+  --section-shadow-hover: rgba(0, 0, 0, 0.1);
+  --picker-btn-shadow: rgb(0, 0, 0, 0.1);
+  --image-btn-shadow: rgb(0, 0, 0, 0.1);
+  --start-shadow: rgba(0, 0, 0, 0.1);
+  --overlay-bg: rgb(255, 255, 255);
+  --overlay-shadow: rgba(0, 0, 0, 0.3);
+  --overlay-txt: rgb(70, 70, 70);
+  --dialog-bg: rgb(255, 255, 255);
+  --dialog-txt: rgb(70, 70, 70);
+  --dialog-shadow: rgba(0, 0, 0, 0.3);
+  --dialog-header-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* theme dark */
+
+body[data-theme="dark"] {
+  --body-bg: rgb(0, 0, 0);
+  --body-txt: rgb(255, 255, 255);
+  --main-bg: rgb(0, 0, 0);
+  --main-shadow: rgba(255, 255, 255, 0.3);
+  --main-txt: rgb(255, 255, 255);
+  --main-txt-disabled: rgba(255, 255, 255, 0.5);
+  --tooltip-bg: rgb(255, 255, 255);
+  --tooltip-txt: rgb(0, 0, 0);
+  --menu-bg: rgb(255, 255, 255);
+  --menu-txt: rgb(0, 0, 0);
+  --menu-shadow: rgba(255, 255, 255, 0.5);
+  --menu-separator: rgba(0, 0, 0, 0.1);
+  --list-txt-hover:rgb(255, 255, 255);
+  --list-tree: rgba(255, 255, 255, 0.3);
+  --list-fields-txt: rgb(255, 255, 255);
+  --scroll-thumb: rgba(255, 255, 255, 0.2);
+  --btn-txt: rgb(255, 255, 255);
+  --btn-shadow: rgb(255, 255, 255);
+  --field-bg-select: rgb(0, 0, 0);
+  --field-bg-svg-select: url('../asset/image/arrow-down-white.svg');
+  --field-shadow: rgb(255, 255, 255);
+  --field-txt: rgb(255, 255, 255);
+  --field-txt-hover: rgb(0, 0, 0);
+  --field-txt-disabled: rgb(255, 255, 255, 0.5);
+  --field-bg-disabled: rgb(50, 50, 50);
+  --field-edit-bg: rgb(0, 0, 0);
+  --prompt-shadow: rgba(255, 255, 255, 0.3);
+  --grid-cell-bg: rgb(0, 0, 0);
+  --grid-cell-shadow: rgba(255, 255, 255, 0.3);
+  --grid-cell-hover: rgba(15, 15, 15);
+  --section-border: rgba(255, 255, 255, 0.3);
+  --section-shadow-hover: rgba(255, 255, 255, 0.3);
+  --picker-btn-shadow: rgb(255, 255, 255, 0.3);
+  --image-btn-shadow: rgb(255, 255, 255, 0.3);
+  --start-shadow: rgba(255, 255, 255, 0.3);
+  --overlay-bg: rgb(0, 0, 0);
+  --overlay-shadow: rgba(255, 255, 255, 0.3);
+  --overlay-txt: rgb(255, 255, 255);
+  --dialog-bg: rgb(0, 0, 0);
+  --dialog-txt: rgb(255, 255, 255);
+  --dialog-shadow: rgba(255, 255, 255, 0.3);
+  --dialog-header-shadow: rgba(255, 255, 255, 0.3);
+}

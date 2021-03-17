@@ -1,0 +1,186 @@
+body {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+template, [hidden] {
+  display: none !important;
+}
+
+div, main, article, section, nav, aside, header, h1, h2, h3, h4, h5, h6, footer,address, p,
+pre, blockquote, figure, figcaption, ul, ol, li, dl, dt, dd, form, label, output, slot, button,
+svg, img, video, audio, input, select, textarea {
+  display: block;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+b, i, a, span, strong, em, time, ins, del, s, mark, small, sub, sup, q, abbr, cite, dfn, samp,
+code, var, kbd, bdo, ruby, rt, rb {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a.text, a.block {
+  display: block;
+}
+
+a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+pre {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+li {
+  display: list-item;
+}
+
+button, input, select, textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+button {
+  width: max-content;
+  height: max-content;
+  background-color: transparent;
+  border: none;
+}
+
+input, select, textarea {
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 3px;
+  padding: 3px;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgb(0, 0, 0, 0.5);
+}
+
+input[type="checkbox"], input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+  background-color: rgb(0, 0, 0);
+  box-shadow: rgb(255, 255, 255) 0px 0px 1px 4px inset;
+}
+
+input[type="color"], input[type="file"] {
+  border: none;
+}
+
+select {
+  background-color: transparent;
+  padding: 0px 25px 0 5px;
+  background: url(../../asset/image/arrow-down.svg) no-repeat right center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none
+}
+
+textarea {
+  resize: none;
+}
+
+b, strong {
+  font-weight: 700;
+}
+
+i, em, cite, dfn, var {
+  font-style: italic;
+}
+
+ins {
+  text-decoration-line: underline;
+}
+
+del, s {
+  text-decoration-line: line-through;
+}
+
+mark {
+  background-color: rgb(255, 255, 0);
+}
+
+small {
+  font-size: small;
+}
+
+sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
+sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+q::before {
+  content: open-quote;
+}
+
+q::after {
+  content: close-quote;
+}
+
+samp, code, kbd {
+  font-family: inherit;
+}
+
+bdo {
+  unicode-bidi: bidi-override;
+}
+
+ruby {
+  text-indent: inherit;
+}
+
+rt {
+  text-indent: inherit;
+  line-height: inherit;
+  font-size: inherit;
+  text-align: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+svg {
+  fill: currentColor;
+}
+
+.block {
+  display: grid;
+  gap: 10px;
+  min-height: 24px;
+}

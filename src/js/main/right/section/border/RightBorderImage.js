@@ -1,0 +1,163 @@
+import HelperStyle from '../../../../helper/HelperStyle.js'
+import InputUnitField from '../../../../component/InputUnitField.js'
+import StateStyleSheet from '../../../../state/StateStyleSheet.js'
+import HelperEvent from '../../../../helper/HelperEvent.js'
+import RightCommon from '../../RightCommon.js'
+import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
+import ColorPickerGradient from '../../../../component/color-picker/ColorPickerGradient.js'
+import RightBorderFillProperty from './RightBorderFillProperty.js'
+
+export default {
+  getEvents () {
+    return {
+      click: ['clickSliceFillEvent'],
+      change: ['changeOutsetEvent', 'changeSliceEvent', 'changeRepeatEvent'],
+      setsource: ['setsourceImageEvent']
+    }
+  },
+
+  handleEvent (event) {
+    HelperEvent.handleEvents(this, event)
+  },
+
+  changeOutsetEvent (event) {
+    if (event.target.classList.contains('border-image-outset')) {
+      this.inputOutset(event.target)
+    }
+  },
+
+  changeSliceEvent (event) {
+    if (event.target.classList.contains('border-image-slice')) {
+      this.inputSlice(event.target)
+    }
+  },
+
+  clickSliceFillEvent (event) {
+    if (event.target.closest('.border-slice-fill-button')) {
+      this.clickSliceFill(event.target.closest('.border-slice-fill-button'))
+    }
+  },
+
+  changeRepeatEvent (event) {
+    if (event.target.classList.contains('border-image-repeat')) {
+      this.changeRepeat(event.target)
+    }
+  },
+
+  setsourceImageEvent (event) {
+    if (event.target.closest('.border-fill-container #picker-source-image')) {
+      this.setImageSource(event.target, event.detail)
+    }
+  },
+
+  inputOutset (input) {
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-outset')
+    RightCommon.changeStyle({
+      'border-image-outset': this.getInput4SidesValue(input, fullValue)
+    })
+  },
+
+  getInput4SidesValue (input, fullValue) {
+    const type = input.closest('.border-fill-container').dataset.type
+    const value = InputUnitField.getValue(input)
+    return HelperStyle.set4SidesValue(type, value, fullValue)
+  },
+
+  inputSlice (input) {
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-slice')
+    const value = this.getInput4SidesValue(input, this.removeFill(fullValue)) + (this.hasFill(fullValue) ? ' fill' : '')
+    RightCommon.changeStyle({
+      'border-image-slice': value
+    })
+  },
+
+  removeFill (value) {
+    return value.replace('fill', '').trim()
+  },
+
+  hasFill (value) {
+    return value.includes('fill')
+  },
+
+  clickSliceFill (button) {
+    const value = this.removeFill(StateStyleSheet.getPropertyValue('border-image-slice'))
+    const finalValue = button.classList.contains('selected') ? value + ' fill' : value
+    RightCommon.changeStyle({
+      'border-image-slice': finalValue
+    })
+  },
+
+  changeRepeat (select) {
+    // @todo simplify this by using form fields instead of state fields, check RightFillImage
+    const value = select.value || 'stretch'
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-repeat') // can be empty or both types set
+    const finalValue = this.getRepeatValue(value, select.dataset.type, fullValue)
+    RightCommon.changeStyle({
+      'border-image-repeat': finalValue
+    })
+  },
+
+  getRepeatValue (value, type, fullValue) {
+    const parts = this.getRepeatParts(fullValue)
+    if (type === 'horizontal') {
+      parts[0] = value
+    } else { // vertical
+      parts[1] = value
+    }
+    return (parts[0] === parts[1]) ? parts[0] : parts.join(' ')
+  },
+
+  getRepeatParts (fullValue) {
+    const parts = fullValue ? fullValue.split(' ') : ['stretch', 'stretch']
+    parts[1] = parts[1] || parts[0] // when we have one value, we need to set it to the 2nd too
+    return parts
+  },
+
+  setImageSource (button, file) {
+    file = encodeURI(file)
+    ColorPickerGradient.setBackgroundImageSource(button.closest('.fill-image'), file)
+    this.saveImageSource(button, file)
+  },
+
+  saveImageSource (button, file) {
+    const background = `url("${file}")`
+    RightBorderFillProperty.updatePreviewSwatch(button.closest('#border-section'), background)
+    RightCommon.changeStyle({
+      'border-image-source': background
+    })
+  },
+
+  injectBorderImage (container) {
+    const fields = container.getElementsByClassName('fill-border-image')[0].elements
+    const type = container.closest('.border-fill-container').dataset.type
+    const selector = StyleSheetSelector.getCurrentSelector()
+    this.injectOutset(fields.outset, type, selector)
+    this.injectSlice(fields.slice, type, selector)
+    this.injectFill(fields.fill, selector)
+    this.injectRepeat(fields, selector)
+  },
+
+  injectOutset (field, type, selector) {
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-outset', selector)
+    const value = HelperStyle.get4SidesValue(type, fullValue)
+    InputUnitField.setValue(field, value)
+  },
+
+  injectSlice (field, type, selector) {
+    const fullValue = this.removeFill(StateStyleSheet.getPropertyValue('border-image-slice', selector))
+    const value = HelperStyle.get4SidesValue(type, fullValue)
+    InputUnitField.setValue(field, value)
+  },
+
+  injectFill (field, selector) {
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-slice', selector)
+    if (this.hasFill(fullValue)) field.classList.add('selected')
+  },
+
+  injectRepeat (fields, selector) {
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-repeat', selector)
+    const parts = this.getRepeatParts(fullValue)
+    fields.repeat1.value = parts[0]
+    fields.repeat2.value = parts[1]
+  }
+}

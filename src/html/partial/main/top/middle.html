@@ -1,0 +1,48 @@
+<div class="sidebar-top-middle">
+  <div class="sidebar-action-container">
+    <div class="page-name">
+      <div class="page-name-text" id="loaded-file-name">index.html</div>
+    </div>
+
+    <button type="button" id="undo-button" class="small undo-button tooltip bottom inactive" data-tooltip="{{#i18n}} Undo (CTRL + Z) {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>
+      </svg>
+    </button>
+    <button type="button" id="redo-button" class="small redo-button tooltip bottom inactive" data-tooltip="{{#i18n}} Redo (CTRL + SHIFT + Z) {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>
+      </svg>
+    </button>
+    
+    <button type="button" id="save-button" class="small save-button tooltip bottom inactive" data-commandid="1" data-tooltip="{{#i18n}} Save (CTRL + S) {{/i18n}}">
+      <span class="state active">
+        <svg width="14" height="14" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+        </svg>
+        <span class="button-text">{{#i18n}} Save {{/i18n}}</span>
+      </span>
+      <span class="state inactive">
+        <svg width="14" height="14" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <span class="button-text">{{#i18n}} Saved {{/i18n}}</span>
+      </span>
+      <span class="state loading">
+        <svg width="14" height="14" viewBox="0 0 24 24">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+          <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+        <span class="button-text">{{#i18n}} Saving {{/i18n}}</span>
+      </span>
+    </button>
+  </div>
+
+  <div class="history">
+    {{> mainTopHistory }}
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="size-minmax-labels">
+  <div>{{#i18n}} Min {{/i18n}}</div>
+  <div>{{#i18n}} Max {{/i18n}}</div>
+</div>
+
+<div class="grid small-inputs" style="grid-template-columns: 30px 55px auto;">
+  <div style="font-size:12px">{{#i18n}} Width {{/i18n}}</div>
+  {{> componentInputUnit name="width" class="change-style" length="1" percent="1" widthHeight="1" placeholder="-" }}
+
+  <div class="grid size-minmax-inputs">
+    {{> componentInputUnit name="min-width" class="change-style" length="1" percent="1" widthHeight="1" placeholder="-" }}
+    <div style="text-align: center;">-</div>
+    {{> componentInputUnit name="max-width" class="change-style" length="1" percent="1" widthHeight="1" placeholder="-" }}
+  </div>
+</div>
+
+<div class="grid small-inputs" style="grid-template-columns: 30px 55px auto;">
+  <div style="font-size:12px">{{#i18n}} Height {{/i18n}}</div>
+  {{> componentInputUnit name="height" class="change-style" length="1" percent="1" widthHeight="1" placeholder="-" }}
+
+  <div class="grid size-minmax-inputs">
+    {{> componentInputUnit name="min-height" class="change-style" length="1" percent="1" widthHeight="1" placeholder="-" }}
+    <div style="text-align: center;">-</div>
+    {{> componentInputUnit name="max-height" class="change-style" length="1" percent="1" widthHeight="1" placeholder="-" }}
+  </div>
+</div>

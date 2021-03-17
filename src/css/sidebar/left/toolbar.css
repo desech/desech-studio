@@ -1,0 +1,75 @@
+.sidebar-left {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100vh;
+  background-color: var(--main-bg);
+  box-shadow: var(--main-shadow) -1px 1px 1px 0 inset;
+}
+
+.sidebar-left>div {
+  width: 42px;
+  padding: 15px 5px 0 15px;
+}
+
+.sidebar-left button.tool-button,
+.sidebar-left button.panel-list-button {
+  display: block;
+  margin: 0 0 20px 0;
+  padding: 0;
+}
+
+.sidebar-left .tool-buttons-container button.tool-button {
+  padding-left: 0;
+}
+
+.sidebar-left button.tool-button-dropdown {
+  position: absolute;
+  width: 13px;
+  height: 30px;
+  margin-top: -52px;
+  margin-left: 26px;
+  padding-left: 1px;
+}
+
+.sidebar-left button.tool-button-dropdown>svg {
+  margin-left: -4px;
+}
+
+.sidebar-left button.tool-button-dropdown:hover .tool-button-list {
+  display: block;
+}
+
+.sidebar-left .tool-button-list {
+  display: none;
+  position: absolute;
+  width: 100px;
+  margin-top: -21px;
+  margin-left: 7px;
+  padding: 3px 0;
+  color: var(--menu-txt);
+  background-color: var(--menu-bg);
+  box-shadow: var(--menu-shadow) 1px 1px 2px 0;
+  border-radius: 2px;
+  font-size: 12px;
+  z-index: 1;
+}
+
+.sidebar-left .tool-button-list-elem {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  justify-items: left;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+
+.sidebar-left .tool-button-list-elem:hover {
+  background-color: var(--menu-bg-hover);
+  color: var(--menu-txt-hover);
+}

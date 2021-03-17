@@ -1,0 +1,50 @@
+<template id="template-style-component">
+  <form id="component-section" class="sidebar-section active" data-type="component">
+    <div class="sidebar-title">
+      <div class="sidebar-title-text">{{#i18n}} Component {{/i18n}}</div>
+      <button type="button" class="style-component-property-add button small tooltip left" data-tooltip="{{#i18n}} Add Property {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="sidebar-content">
+      <ul class="style-component-list"></ul>
+      <div class="style-component-text">
+        <p>{{#i18n}} You can use component properties to replace text, attribute names and attribute values. {{/i18n}}</p>
+        <p>{{#i18n}} To do so, add text like &nbsp; <em>&#123;&#123;componentProperty&#125;&#125;</em> &nbsp; in the component elements. {{/i18n}}</p>
+        <p>{{#i18n}} You can also insert a component children element (right click on element) which will make the component behave like a wrapper. {{/i18n}}</p>
+        <p>{{#i18n}} In order to see the property values, you need to be in the Preview Mode (P). {{/i18n}}</p>
+      </div>
+    </div>
+  </form>
+</template>
+
+<template id="template-style-component-property">
+  <li class="style-component-property">
+    <div class="grid" style="grid-template-columns: 1fr 1fr 18px; column-gap: 5px">
+      <input class="style-component-property-field style-component-property-name" type="text" name="name[]" placeholder="{{#i18n}} Name {{/i18n}}" data-invalid-error="{{#i18n}} Invalid property name {{/i18n}}">
+      <textarea class="style-component-property-field scrollbar" name="value[]" placeholder="{{#i18n}} Value {{/i18n}}" style="height: 25px;"></textarea>
+
+      <button type="button" class="style-component-property-delete small tooltip left" data-tooltip="{{#i18n}} Delete {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+          <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+      </button>
+    </div>
+  </li>
+</template>
+
+<template id="template-style-component-children">
+  <div id="component-children-section">
+    <div class="style-component-children-container">
+      <div class="style-component-children-title">{{#i18n}} Component Children {{/i18n}}</div>
+      <div class="style-component-children-content">
+        <p>{{#i18n}} You can only have one children element. {{/i18n}}</p>
+        <p>{{#i18n}} After you include the component, you will be able to add content to this children element. {{/i18n}}</p>
+      </div>
+    </div>
+  </div>
+</template>

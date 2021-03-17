@@ -1,0 +1,52 @@
+<template id="template-panel-file">
+  <div class="sidebar-left-panel-inner">
+    <div class="panel-list-empty">
+      {{#i18n}} Loading files ... {{/i18n}}
+    </div>
+
+    <div class="panel-list-items panel-list-files" hidden>
+      <header class="file-grid">
+        <div hidden class="panel-search-cycle-file panel-search-cycle">{{#i18n}} Press F3/F2 {{/i18n}}</div>
+        <input class="panel-file-search panel-search" type="text" placeholder="{{#i18n}} All Files {{/i18n}}">
+        {{> mainLeftFileCreateFolder }}
+        {{> mainLeftFileCreateFile }}
+      </header>
+
+      <div class="panel-list-files-box panel-list-box scrollbar">
+        <ul class="panel-file-list panel-list-container panel-list dragdrop-container" data-container-only="true"></ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="template-panel-file-create-folder">
+  <div>
+    <div class="overlay-title">{{#i18n}} New folder {{/i18n}}</div>
+    <form>
+      <select name="parent" class="panel-choose-folder">
+        <option value="">{{#i18n}} -- Parent folder -- {{/i18n}}</option>
+      </select>
+      <input name="folder" class="panel-folder-name" placeholder="{{#i18n}} New folder {{/i18n}}">
+    </form>
+  </div>
+</template>
+
+<template id="template-panel-file-create-file">
+  <div>
+    <div class="overlay-title">{{#i18n}} New File {{/i18n}}</div>
+    <form enctype="multipart/form-data" method="post" id="panel-create-file-form">
+      <select name="parent" class="panel-choose-folder">
+        <option value="">{{#i18n}} -- Parent folder -- {{/i18n}}</option>
+      </select>
+      <div class="panel-file-container">
+        <input name="name" class="panel-file-name" placeholder="file.html">
+        <div>{{#i18n}} or {{/i18n}}</div>
+        <label class="upload-button" for="panel-upload-file">{{#i18n}} Choose file {{/i18n}}</label>
+        <input hidden id="panel-upload-file" name="file" type="file">
+      </div>
+    </form>
+  </div>
+</template>
+
+{{> mainLeftFileItem }}
+{{> mainLeftFileIcon }}

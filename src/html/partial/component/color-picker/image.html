@@ -1,0 +1,18 @@
+<div class="grid" style="grid-template-columns: 80px 1fr; align-items: start; column-gap: 20px; padding-bottom: 15px;">
+  <div class="image-container">
+    <div class="image-source"></div>
+  </div>
+
+  <div class="grid" style="grid-template-columns: 1fr; font-size: 11px; padding: 0;">
+    <div>
+      <button type="button" class="choose-source-button picker-source-file composed small" id="picker-source-image" data-folder="/asset/image">
+        <svg width="14" height="14" viewBox="0 0 24 24">
+          <defs><path d="M24 24H0V0h24v24z"/></defs>
+          <path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"/>
+        </svg>
+        <span style="font-size:12px">{{#i18n}} Pick image {{/i18n}}</span>
+      </button>
+    </div>
+    <button type="button" name="source" class="highlight-source-file picker-source-name simple"></button>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+.tooltip-container {
+  position: absolute;
+  height: 24px;
+}
+
+.tooltip-container .tooltip-text {
+  position: relative;
+  z-index: 5;
+  white-space: nowrap;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+  border-radius: 2px;
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-txt);
+  box-shadow: var(--canvas-overlay-shadow1) 0 0 1px 1px, var(--canvas-overlay-shadow2) 0 0 1px 1px;
+}
+
+.tooltip-container .tooltip-arrow {
+  position: relative;
+  z-index: 4;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  background-color: var(--tooltip-bg);
+  box-shadow: var(--tooltip-shadow1) 0 0 1px 1px, var(--tooltip-shadow2) 0 0 1px 1px;
+}
+
+.tooltip-container.top .tooltip-arrow {
+  margin: -6px auto 0 auto;
+}
+
+.tooltip-container.bottom .tooltip-arrow {
+  margin: -28px auto 0 auto;
+}
+
+.tooltip-container.left .tooltip-arrow {
+  float: right;
+  margin-top: -17px;
+  margin-right: -4px;
+}
+
+.tooltip-container.right .tooltip-arrow {
+  margin-top: -17px;
+  margin-left: -4px;
+}

@@ -1,0 +1,46 @@
+<div class="timing-function">
+  <div class="grid" style="grid-template-columns: 1fr;">
+    <select name="timing" class="timing-function-select timing-field timing-select">
+      <option value="">{{#i18n}} - Timing - {{/i18n}}</option>
+      <option value="ease">{{#i18n}} Ease {{/i18n}}</option>
+      <option value="ease-in">{{#i18n}} Ease in {{/i18n}}</option>
+      <option value="ease-out">{{#i18n}} Ease out {{/i18n}}</option>
+      <option value="ease-in-out">{{#i18n}} Ease in out {{/i18n}}</option>
+      <option value="linear">{{#i18n}} Linear {{/i18n}}</option>
+      <option value="step-start">{{#i18n}} Step start {{/i18n}}</option>
+      <option value="step-end">{{#i18n}} Step end {{/i18n}}</option>
+      <option value="steps">{{#i18n}} Steps {{/i18n}}</option>
+      <option value="cubic-bezier">{{#i18n}} Cubic bezier {{/i18n}}</option>
+      <optgroup label="{{#i18n}} Cubic bezier presets {{/i18n}}">
+        <!-- https://easings.net/ -->
+        <option value="easeInSine" data-bezier="0.12, 0, 0.39, 0">{{#i18n}} Ease in sine {{/i18n}}</option>
+        <option value="easeInCubic" data-bezier="0.32, 0, 0.67, 0">{{#i18n}} Ease in cubic {{/i18n}}</option>
+        <option value="easeInQuint" data-bezier="0.64, 0, 0.78, 0">{{#i18n}} Ease in quint {{/i18n}}</option>
+        <option value="easeInCirc" data-bezier="0.55, 0, 1, 0.45">{{#i18n}} Ease in circ {{/i18n}}</option>
+        <option value="easeInQuad" data-bezier="0.11, 0, 0.5, 0">{{#i18n}} Ease in quad {{/i18n}}</option>
+        <option value="easeInQuart" data-bezier="0.5, 0, 0.75, 0">{{#i18n}} Ease in quart {{/i18n}}</option>
+        <option value="easeInExpo" data-bezier="0.7, 0, 0.84, 0">{{#i18n}} Ease in expo {{/i18n}}</option>
+        <option value="easeInBack" data-bezier="0.36, 0, 0.66, -0.56">{{#i18n}} Ease in back {{/i18n}}</option>
+        
+        <option value="easeOutSine" data-bezier="0.61, 1, 0.88, 1">{{#i18n}} Ease out sine {{/i18n}}</option>
+        <option value="easeOutCubic" data-bezier="0.33, 1, 0.68, 1">{{#i18n}} Ease out cubic {{/i18n}}</option>
+        <option value="easeOutQuint" data-bezier="0.22, 1, 0.36, 1">{{#i18n}} Ease out quint {{/i18n}}</option>
+        <option value="easeOutCirc" data-bezier="0, 0.55, 0.45, 1">{{#i18n}} Ease out circ {{/i18n}}</option>
+        <option value="easeOutQuad" data-bezier="0.5, 1, 0.89, 1">{{#i18n}} Ease out quad {{/i18n}}</option>
+        <option value="easeOutQuart" data-bezier="0.25, 1, 0.5, 1">{{#i18n}} Ease out quart {{/i18n}}</option>
+        <option value="easeOutExpo" data-bezier="0.16, 1, 0.3, 1">{{#i18n}} Ease out expo {{/i18n}}</option>
+        <option value="easeOutBack" data-bezier="0.34, 1.56, 0.64, 1">{{#i18n}} Ease out back {{/i18n}}</option>
+        
+        <option value="easeInOutSine" data-bezier="0.37, 0, 0.63, 1">{{#i18n}} Ease in/out sine {{/i18n}}</option>
+        <option value="easeInOutCubic" data-bezier="0.65, 0, 0.35, 1">{{#i18n}} Ease in/out cubic {{/i18n}}</option>
+        <option value="easeInOutQuint" data-bezier="0.83, 0, 0.17, 1">{{#i18n}} Ease in/out quint {{/i18n}}</option>
+        <option value="easeInOutCirc" data-bezier="0.85, 0, 0.15, 1">{{#i18n}} Ease in/out circ {{/i18n}}</option>
+        <option value="easeInOutQuad" data-bezier="0.5, 1, 0.89, 1">{{#i18n}} Ease in/out quad {{/i18n}}</option>
+        <option value="easeInOutQuart" data-bezier="0.25, 1, 0.5, 1">{{#i18n}} Ease in/out quart {{/i18n}}</option>
+        <option value="easeInOutExpo" data-bezier="0.16, 1, 0.3, 1">{{#i18n}} Ease in/out expo {{/i18n}}</option>
+        <option value="easeInOutBack" data-bezier="0.34, 1.56, 0.64, 1">{{#i18n}} Ease in/out back {{/i18n}}</option>
+      </optgroup>
+    </select>
+  </div>
+  <div class="timing-container"></div>
+</div>

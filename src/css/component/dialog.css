@@ -1,0 +1,225 @@
+dialog.dialog {
+  max-width: 100vw;
+  min-width: 250px;
+  margin: 10% auto;
+  font-size: 14px;
+  border: none;
+  border-radius: 2px;
+  background-color: var(--dialog-bg);
+  color: var(--dialog-txt);
+  box-shadow: var(--dialog-shadow) 0 0 5px 0;
+}
+
+dialog.dialog .dialog-header {
+  display: grid;
+  grid-template-columns: auto 18px;
+  column-gap: 10px;
+  align-items: center;
+  min-height: 50px;
+  font-size: 16px;
+  padding: 0 8px 0 15px;
+  box-shadow: var(--dialog-header-shadow) 0 -1px 1px 0 inset;
+}
+
+dialog.dialog .dialog-body {
+  padding: 20px 15px;
+}
+
+dialog.dialog .dialog-footer {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  padding: 15px;
+  box-shadow: var(--dialog-header-shadow) -1px 1px 0 0 inset;
+}
+
+dialog.dialog .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+
+/* specific dialogs */
+
+dialog.dialog .dialog-auth {
+  padding: 20px;
+  text-align: center;
+}
+
+dialog.dialog .dialog-auth .dialog-auth-button {
+  margin-top: 30px;
+}
+
+dialog.dialog .dialog-about {
+  line-height: 25px;
+}
+
+dialog.dialog .dialog-about p span {
+  padding-left: 10px;
+  color: var(--dialog-txt-highlight);
+}
+
+dialog.dialog .dialog-shortcuts {
+  height: 475px;
+  padding: 0 10px 10px 10px;
+  overflow: auto;
+}
+
+dialog.dialog .dialog-shortcuts .title {
+  font-size: 16px;
+  line-height: 30px;
+  margin-bottom: 15px;
+  box-shadow: var(--dialog-header-shadow) 0 -1px 1px 0 inset;
+}
+
+dialog.dialog .dialog-shortcuts .grid-section {
+  grid-template-columns: 1fr;
+  margin-bottom: 20px;
+  row-gap: 0;
+}
+
+dialog.dialog .dialog-shortcuts .grid-section:last-child {
+  margin-bottom: 0;
+}
+
+dialog.dialog .dialog-shortcuts .grid-section>.grid {
+  padding: 10px 20px;
+}
+
+dialog.dialog .dialog-shortcuts .grid-section>.grid:hover {
+  background-color: var(--grid-cell-hover);
+}
+
+dialog.dialog .dialog-shortcuts .description p {
+  padding-bottom: 15px;
+}
+
+dialog.dialog .dialog-shortcuts .description p:last-child {
+  padding: 0;
+}
+
+dialog.dialog .dialog-plugin {
+  width: 400px;
+}
+
+dialog.dialog .dialog-plugin .plugin-list {
+  max-height: 400px;
+  overflow: auto;
+}
+
+dialog.dialog .dialog-plugin .plugin-item {
+  padding: 8px 10px;
+}
+
+dialog.dialog .dialog-plugin .plugin-item:hover {
+  background-color: var(--grid-cell-hover);
+}
+
+dialog.dialog .dialog-plugin .plugin-item-meta {
+  line-height: 25px;
+}
+
+dialog.dialog .dialog-plugin .plugin-item-button {
+  align-self: center;
+  justify-self: end;
+}
+
+dialog.dialog .dialog-plugin .plugin-meta {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+
+/* import dialogs */
+
+dialog.dialog .dialog-import {
+  width: 450px;
+}
+
+dialog.dialog .dialog-import-prompt ul {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+dialog.dialog .dialog-import-prompt ul li {
+  padding-bottom: 10px;
+}
+
+dialog.dialog .dialog-import-prompt .dialog-import-file {
+  margin-top: 10px;
+  width: auto;
+}
+
+dialog.dialog .dialog-import-loader .dialog-figma-continue {
+  display: block;
+  margin: 50px auto 10px auto;
+}
+
+dialog.dialog .dialog-import-loader ul.loader-progress {
+  max-height: 88px;
+  overflow: auto;
+  font-size: 13px;
+}
+
+dialog.dialog .dialog-import-loader ul.loader-progress a {
+  color: var(--link-txt);
+}
+
+dialog.dialog .dialog-import-loader ul.loader-progress a:hover {
+  text-decoration: underline;
+}
+
+dialog.dialog .dialog-import-loader .dialog-import-finished {
+  margin: 15px 0 5px 0;
+}
+
+dialog.dialog .dialog-figma-import .figma-title {
+  padding-bottom: 15px;
+  font-size: 16px;
+}
+
+dialog.dialog .dialog-figma-import .figma-input {
+  height: 40px;
+  font-size: 15px;
+}
+
+dialog.dialog .dialog-figma-import .figma-import-file {
+  width: auto;
+  margin-top: 20px;
+}
+
+dialog.dialog .dialog-figma-import .figma-import-file svg {
+  display: inline-block;
+  margin-right: 8px;
+}
+
+dialog.dialog .dialog-figma-import .figma-warning {
+  margin-top: 20px;
+}
+
+/* font dialog */
+
+dialog.dialog .dialog-font-title {
+  padding-bottom: 15px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+dialog.dialog .dialog-font .grid {
+  grid-template-columns: 50px 150px 20px auto;
+  align-items: center;
+  padding-bottom: 15px;
+}
+
+dialog.dialog .dialog-font-or {
+  font-size: 12px;
+}
+
+dialog.dialog .dialog-font-custom {
+  padding: 5px 0 15px 0;
+}
+
+dialog.dialog .dialog-font-submit {
+  width: auto;
+}

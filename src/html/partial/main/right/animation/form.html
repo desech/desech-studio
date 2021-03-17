@@ -1,0 +1,72 @@
+<template id="template-animation-form">
+  <!-- animation: 1s ease 0s infinite normal none running scale-up-top, 1s cubic-bezier(0, 0, 0, 0) 0s infinite normal none running scale-up-top -->
+  <form class="slide-container">
+    <div class="grid" style="grid-template-columns: 1fr;">
+      {{> mainRightAnimationSelect }}
+    </div>
+
+    <div class="grid" style="grid-template-columns: 30px 1fr 30px 1fr;">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Duration {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <defs>
+            <path id="a" d="M0 0h24v24H0V0z"/>
+          </defs>
+          <clipPath id="b">
+            <use xlink:href="#a" overflow="visible"/>
+          </clipPath>
+          <path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
+        </svg>
+      </div>
+      {{> componentInputUnit name="duration" class="animation-field animation-input" time="1" }}
+
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Delay {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <defs>
+            <path id="a" d="M0 0h24v24H0V0z"/>
+          </defs>
+          <clipPath id="b">
+            <use xlink:href="#a" overflow="visible"/>
+          </clipPath>
+          <path clip-path="url(#b)" d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.73 2.71-2.73 7.08 0 9.79 2.73 2.71 7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29-3.51 3.48-9.21 3.48-12.72 0-3.5-3.47-3.53-9.11-.02-12.58 3.51-3.47 9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08-.72 1.21L11 13V8h1.5z"/>
+        </svg>
+      </div>
+      {{> componentInputUnit name="delay" class="animation-field animation-input" time="1" }}
+    </div>
+
+    {{> componentTimingFunction }} 
+
+    <div class="grid" style="grid-template-columns: 24px 1fr 1fr;">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Iteration count {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0zm0 0h24v24H0z" fill="none"/>
+          <path d="M10 7H8v4H4v2h4v4h2v-4h4v-2h-4V7zm10 11h-2V7.38L15 8.4V6.7L19.7 5h.3v13z"/>
+        </svg>
+      </div>
+      <input type="number" step="0.01" name="iteration" class="animation-field animation-input" placeholder="{{#i18n}} Infinite {{/i18n}}">
+
+      <select name="direction" class="animation-field animation-select">
+        <option value="">{{#i18n}} - Direction - {{/i18n}}</option>
+        <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+        <option value="reverse">{{#i18n}} Reverse {{/i18n}}</option>
+        <option value="alternate">{{#i18n}} Alternate {{/i18n}}</option>
+        <option value="alternate-reverse">{{#i18n}} Alternate in reverse {{/i18n}}</option>
+      </select>
+    </div>
+
+    <div class="grid">
+      <select name="fill" class="animation-field animation-select">
+        <option value="">{{#i18n}} - Fill mode - {{/i18n}}</option>
+        <option value="none">{{#i18n}} None {{/i18n}}</option>
+        <option value="forwards">{{#i18n}} Forwards {{/i18n}}</option>
+        <option value="backwards">{{#i18n}} Backwards {{/i18n}}</option>
+        <option value="both">{{#i18n}} Both {{/i18n}}</option>
+      </select>
+
+      <select name="state" class="animation-field animation-select">
+        <option value="">{{#i18n}} - Play state - {{/i18n}}</option>
+        <option value="running">{{#i18n}} Running {{/i18n}}</option>
+        <option value="paused">{{#i18n}} Paused {{/i18n}}</option>
+      </select>
+    </div>
+  </form>
+</template>

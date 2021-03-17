@@ -1,0 +1,34 @@
+<template id="template-effect-blend">
+  <div class="effect-blend">
+    <!-- mix-blend-mode: normal -->
+    <div class="grid" style="grid-template-columns: 1fr;">
+      <select name="blend" class="effect-field effect-select">
+        <option value="">{{#i18n}} - Blend mode - {{/i18n}}</option>
+        <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+        <option value="multiply">{{#i18n}} Multiply {{/i18n}}</option>
+        <option value="screen">{{#i18n}} Screen {{/i18n}}</option>
+        <option value="overlay">{{#i18n}} Overlay {{/i18n}}</option>
+        <option value="darken">{{#i18n}} Darken {{/i18n}}</option>
+        <option value="lighten">{{#i18n}} Lighten {{/i18n}}</option>
+        <option value="color-dodge">{{#i18n}} Color dodge {{/i18n}}</option>
+        <option value="color-burn">{{#i18n}} Color burn {{/i18n}}</option>
+        <option value="hard-light">{{#i18n}} Hard light {{/i18n}}</option>
+        <option value="soft-light">{{#i18n}} Soft light {{/i18n}}</option>
+        <option value="difference">{{#i18n}} Difference {{/i18n}}</option>
+        <option value="exclusion">{{#i18n}} Exclusion {{/i18n}}</option>
+        <option value="hue">{{#i18n}} Hue {{/i18n}}</option>
+        <option value="saturation">{{#i18n}} Saturation {{/i18n}}</option>
+        <option value="color">{{#i18n}} Color {{/i18n}}</option>
+        <option value="luminosity">{{#i18n}} Luminosity {{/i18n}}</option>
+      </select>
+    </div>
+
+    <div class="alert">
+      <svg width="14" height="14" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+      </svg>
+      {{#i18n}} You can only have one blend mode {{/i18n}}
+    </div>
+  </div>
+</template>

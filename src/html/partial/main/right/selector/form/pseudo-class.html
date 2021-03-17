@@ -1,0 +1,62 @@
+<template id="template-dialog-selector-add-pseudo-class">
+  <div class="selector-grid" style="grid-template-columns: auto auto auto;">
+    <select name="combinator" style="width: 140px;">
+      {{> mainRightSelectorFormCombinator }}
+    </select>
+
+    <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes -->
+    <!-- https://drafts.csswg.org/selectors-4/ -->
+    <select class="pseudo-class-dropdown" name="pseudo_class" required>
+      <option value="">{{#i18n}} - Pseudo class - {{/i18n}}</option>
+      <optgroup label="{{#i18n}} User action (order matters) {{/i18n}}">
+        <option value=":hover">{{#i18n}} Mouse over {{/i18n}} (:hover)</option>
+        <option value=":active">{{#i18n}} Mouse click {{/i18n}} (:active)</option>
+        <option value=":focus">{{#i18n}} Focus {{/i18n}} (:focus)</option>
+        <option value=":focus-within">{{#i18n}} Focus parent {{/i18n}} (:focus-within)</option>
+      </optgroup>
+      <optgroup label="{{#i18n}} Form {{/i18n}}">
+        <option value=":enabled">{{#i18n}} Enabled {{/i18n}} (:enabled)</option>
+        <option value=":disabled">{{#i18n}} Disabled {{/i18n}} (:disabled)</option>
+        <option value=":read-only">{{#i18n}} Read only {{/i18n}} (:read-only)</option>
+        <option value=":read-write">{{#i18n}} Read & write {{/i18n}} (:read-write)</option>
+        <option value=":placeholder-shown">{{#i18n}} Has placeholder {{/i18n}} (:placeholder-shown)</option>
+        <option value=":default">{{#i18n}} Default {{/i18n}} (:default)</option>
+        <option value=":checked">{{#i18n}} Checked / Selected {{/i18n}} (:checked)</option>
+        <option value=":indeterminate">{{#i18n}} Indeterminate {{/i18n}} (:indeterminate)</option>
+      </optgroup>
+      <optgroup label="{{#i18n}} Form validation {{/i18n}}">
+        <option value=":valid">{{#i18n}} Valid {{/i18n}} (:valid)</option>
+        <option value=":invalid">{{#i18n}} Invalid {{/i18n}} (:invalid)</option>
+        <option value=":in-range">{{#i18n}} In range {{/i18n}} (:in-range)</option>
+        <option value=":out-of-range">{{#i18n}} Out of range {{/i18n}} (:out-of-range)</option>
+        <option value=":required">{{#i18n}} Required {{/i18n}} (:required)</option>
+        <option value=":optional">{{#i18n}} Optional {{/i18n}} (:optional)</option>
+      </optgroup>
+      <optgroup label="{{#i18n}} Location {{/i18n}}">
+        <option value=":any-link">{{#i18n}} Any link {{/i18n}} (:any-link)</option>
+        <option value=":link">{{#i18n}} Unvisited link {{/i18n}} (:link)</option>
+        <option value=":visited">{{#i18n}} Visited link {{/i18n}} (:visited)</option>
+        <option value=":target">{{#i18n}} Link contains target {{/i18n}} (:target)</option>
+      </optgroup>
+      <optgroup label="{{#i18n}} Parent {{/i18n}}">
+        <option value=":first-child">{{#i18n}} First child {{/i18n}} (:first-child)</option>
+        <option value=":first-of-type">{{#i18n}} First tag child {{/i18n}} (:first-of-type)</option>
+        <option value=":last-child">{{#i18n}} Last child {{/i18n}} (:last-child)</option>
+        <option value=":last-of-type">{{#i18n}} Last tag child {{/i18n}} (:last-of-type)</option>
+        <option value=":only-child">{{#i18n}} Only child {{/i18n}} (:only-child)</option>
+        <option value=":only-of-type">{{#i18n}} Only tag child {{/i18n}} (:only-of-type)</option>
+        <option value=":nth-child()" data-input="1">{{#i18n}} Child at position {{/i18n}} (:nth-child)</option>
+        <option value=":nth-of-type()" data-input="1">{{#i18n}} Child tag at position {{/i18n}} (:nth-of-type)</option>
+        <option value=":nth-last-child()" data-input="1">{{#i18n}} Last child at position {{/i18n}} (:nth-last-child)</option>
+        <option value=":nth-last-of-type()" data-input="1">{{#i18n}} Last tag child at position {{/i18n}} (:nth-last-of-type)</option>
+      </optgroup>
+      <optgroup label="{{#i18n}} Other {{/i18n}}">
+        <option value=":fullscreen">{{#i18n}} Fullscreen {{/i18n}} (:fullscreen)</option>
+        <option value=":lang()" data-input="1">{{#i18n}} Language {{/i18n}} (:lang)</option>
+      </optgroup>
+    </select>
+
+    <input type="text" name="pseudo_class_value" hidden required
+      placeholder="{{#i18n}} Value {{/i18n}}" pattern="([a-zA-Z0-9+-])+" style="width: 50px;">
+  </div>
+</template>

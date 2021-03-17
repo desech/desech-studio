@@ -1,0 +1,52 @@
+<template id="template-dialog-import">
+  <div>
+    <div class="dialog-body">
+      <div class="dialog-import">
+        <div class="dialog-import-prompt">
+          <ul class="select-text">
+            <li>{{#i18n}} Pages will be converted to folders. {{/i18n}}</li>
+            <li>{{#i18n}} Top level groups or frames/artboards will be converted to files. Please make sure only relevant top level elements are visible. {{/i18n}}</li>
+            <li>{{#i18n}} Only images/paths marked for export will be processed. If your images are built with groups and masks you will need to flatten them first. For backup you can keep your original image, but keep it hidden. {{/i18n}}</li>
+            <li>{{#i18n}} AdobeXD drawn paths are mostly ignored except polygons. {{/i18n}}</li>
+            <li>{{#i18n}} Elements that clip/intersect each other are sometimes ignored. When the import finishes you will see how many were ignored. {{/i18n}}</li>
+            <li>{{#i18n}} Please make sure your project file was saved with the latest version of Sketch/AdobeXD. {{/i18n}}</li>
+          </ul>
+          <button type="button" class="dialog-import-file composed highlighted">{{#i18n}} Start the Import {{/i18n}}</button>
+        </div>
+
+        <div class="dialog-import-loader" hidden>
+          <div class="loader">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="margin: 20px auto 30px auto;">
+              <path d="M0 0h24v24H0z" fill="none"/>
+              <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
+            </svg>
+            <button type="button" class="dialog-figma-continue highlighted fill" hidden>
+              {{#i18n}} Continue {{/i18n}}
+            </button>
+            <ul class="loader-progress select-text scrollbar"></ul>
+            <button type="button" class="dialog-import-finished composed highlighted" hidden>
+              {{#i18n}} Open the Project {{/i18n}}
+            </button>
+          </div>
+        </div>
+
+        <div class="dialog-figma-import" hidden>
+          <div class="figma-title">{{#i18n}} Paste here your figma file {{/i18n}}</div>
+          <input class="figma-input" type="text" placeholder="https://www.figma.com/file/AAAp8eBsXXXe000XhRmXXX/Project" data-error="{{#i18n}} Invalid file url {{/i18n}}">
+          <div class="figma-warning">
+            {{#i18n}} You might need to disable your firewall for the import to work. {{/i18n}}
+          </div>
+          <button type="button" class="figma-import-file composed highlighted">
+            <div>
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+              </svg>
+              {{#i18n}} Import file {{/i18n}}
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

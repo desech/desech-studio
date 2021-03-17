@@ -1,0 +1,42 @@
+.dialog-selector-add-container {
+  width: 480px;
+}
+
+.dialog-selector-add-container .dialog-selector-add-preview {
+  min-height: 20px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--highlight-border);
+  border-radius: 3px;
+  text-align: center;
+  user-select: text;
+}
+
+.dialog-selector-add-container .dialog-selector-add-buttons {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 20px;
+  row-gap: 10px;
+}
+
+.dialog-selector-add-container .dialog-selector-add-form {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--section-border);
+  display: grid;
+  grid-template-columns: auto 80px;
+  justify-content: start;
+  column-gap: 20px;
+}
+
+.dialog-selector-add-container .dialog-selector-add-form input,
+.dialog-selector-add-container .dialog-selector-add-form select {
+  width: 150px;
+  height: 30px;
+}
+
+.dialog-selector-add-container .selector-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 20px;
+}

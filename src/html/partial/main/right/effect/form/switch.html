@@ -1,0 +1,32 @@
+<template id="template-effect-switch">
+  <div class="effect-switch">
+    <div class="grid" style="grid-template-columns: 1fr;">
+      <select class="effect-type">
+        <optgroup label="{{#i18n}} Filter {{/i18n}}">
+          <option selected value="drop-shadow" data-type="filter">{{#i18n}} Drop shadow {{/i18n}}</option>
+          <option value="opacity" data-type="filter">{{#i18n}} Opacity {{/i18n}}</option>
+          <option value="blur" data-type="filter">{{#i18n}} Blur {{/i18n}}</option>
+          <option value="brightness" data-type="filter">{{#i18n}} Brightness {{/i18n}}</option>
+          <option value="contrast" data-type="filter">{{#i18n}} Contrast {{/i18n}}</option>
+          <option value="hue-rotate" data-type="filter">{{#i18n}} Hue {{/i18n}}</option>
+          <option value="saturate" data-type="filter">{{#i18n}} Saturation {{/i18n}}</option>
+          <option value="grayscale" data-type="filter">{{#i18n}} Grayscale {{/i18n}}</option>
+          <option value="sepia" data-type="filter">{{#i18n}} Sepia {{/i18n}}</option>
+          <option value="invert" data-type="filter">{{#i18n}} Invert {{/i18n}}</option>
+        </optgroup>
+        <option value="box-shadow" data-type="shadow">{{#i18n}} Box shadow {{/i18n}}</option>
+        <optgroup label="{{#i18n}} Transform {{/i18n}}">
+          <option value="perspective" data-type="transform">{{#i18n}} Perspective {{/i18n}}</option>
+          <option value="translate3d" data-type="transform">{{#i18n}} Move / Translate {{/i18n}}</option>
+          <option value="scale3d" data-type="transform">{{#i18n}} Scale {{/i18n}}</option>
+          <option value="rotate" data-type="transform">{{#i18n}} Rotate {{/i18n}}</option>
+          <option value="skew" data-type="transform">{{#i18n}} Skew {{/i18n}}</option>
+          <option value="matrix" data-type="transform">{{#i18n}} Matrix 2D {{/i18n}}</option>
+          <option value="matrix3d" data-type="transform">{{#i18n}} Matrix 3D {{/i18n}}</option>
+        </optgroup>
+        <option value="transition" data-type="transition">{{#i18n}} Transition {{/i18n}}</option>
+        <option value="mix-blend-mode" data-type="blend">{{#i18n}} Blend Mode {{/i18n}}</option>
+      </select>
+    </div>
+  </div>
+</template>

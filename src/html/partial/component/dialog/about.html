@@ -1,0 +1,12 @@
+<template id="template-dialog-about">
+  <div>
+    <div class="dialog-header">{{#i18n}} About {{/i18n}} {{pageTitle}}</div>
+    <div class="dialog-body">
+      <div class="dialog-about">
+        <p>{{#i18n}} Version {{/i18n}}: <span>{{ about.version }}</span></p>
+        <p>{{#i18n}} Electron {{/i18n}}: <span>{{ about.electron }}</span></p>
+        <p style="font-size: 12px; margin-top: 5px;">{{#i18n}} Copyright Desech Studio SRL{{/i18n}}</p>
+      </div>
+    </div>
+  </div>
+</template>

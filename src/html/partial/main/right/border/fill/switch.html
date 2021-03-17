@@ -1,0 +1,20 @@
+<template id="template-border-fill-switch">
+  <div class="fill-switch">
+    <div class="grid" style="grid-template-columns: 1fr;">
+      <select class="fill-type">
+        <option selected value="solid-color">{{#i18n}} Solid color {{/i18n}}</option>
+        <option value="linear-gradient">{{#i18n}} Linear gradient {{/i18n}}</option>
+        <option value="radial-gradient">{{#i18n}} Radial gradient {{/i18n}}</option>
+        <option value="image">{{#i18n}} Image {{/i18n}}</option>
+      </select>
+    </div>
+
+    <div class="border-image-warnings alert" hidden>
+      <svg width="14" height="14" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+      </svg>
+      {{#i18n}} Border radius is not supported for gradients and images, only solid colors {{/i18n}}
+    </div>
+  </div>
+</template>

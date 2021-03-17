@@ -1,0 +1,41 @@
+.sidebar-right #component-section .style-component-list {
+  border-bottom: 1px solid var(--section-border);
+  padding-bottom: 10px;
+  min-height: 40px;
+}
+
+.sidebar-right #component-section .style-component-text {
+  padding: 15px;
+  line-height: 20px;
+}
+
+.sidebar-right #component-section .style-component-text p {
+  padding-bottom: 10px;
+}
+
+.sidebar-right #component-section .style-component-text p:last-child {
+  padding: 0;
+}
+
+.sidebar-right #component-section .style-component-text em {
+  font-weight: bold;
+}
+
+.sidebar-right #component-children-section .style-component-children-container {
+  height: auto;
+  margin: 15px 10px;
+  padding: 20px 10px;
+  font-size: 13px;
+  line-height: 22px;
+  box-shadow: var(--prompt-shadow) 0 0 2px 0;
+  border-radius: 2px;
+}
+
+.sidebar-right #component-children-section .style-component-children-title {
+  padding-bottom: 15px;
+  font-size: 14px;
+}
+
+.sidebar-right #component-children-section .style-component-children-content p {
+  padding: 7px 0;
+}

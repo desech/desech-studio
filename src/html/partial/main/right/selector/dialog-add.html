@@ -1,0 +1,42 @@
+<template id="template-dialog-selector-add">
+  <div>
+    <div class="dialog-header">{{#i18n}} Add selector {{/i18n}}</div>
+    <div class="dialog-body">
+      <div class="dialog-selector-add-container">
+        <div class="dialog-selector-add-preview" data-selector=""
+          data-error="{{#i18n}} Invalid selector {{/i18n}}">...</div>
+        <div class="dialog-selector-add-buttons">
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="component">{{#i18n}} Add component class {{/i18n}}</button>
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="pseudo-class">{{#i18n}} Add pseudo class {{/i18n}}</button>
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="pseudo-element">{{#i18n}} Add pseudo element {{/i18n}}</button>
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="child">{{#i18n}} Add child tag {{/i18n}}</button>
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="attribute">{{#i18n}} Add attribute {{/i18n}}</button>
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="combinator">{{#i18n}} Add combinator {{/i18n}}</button>
+          <button type="button" class="dialog-selector-add-button composed highlighted" data-type="custom">{{#i18n}} Add custom {{/i18n}}</button>
+        </div>
+        <form class="dialog-selector-add-form" hidden data-error="{{#i18n}} Invalid value {{/i18n}}">
+          <div class="dialog-selector-add-details"></div>
+          <button type="submit" class="dialog-selector-confirm-button composed highlighted">{{#i18n}} Confirm {{/i18n}}</button>
+        </form>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button disabled type="button" class="dialog-selector-save-button composed highlighted fill">{{#i18n}} Add Selector {{/i18n}}</button>
+      <button type="button" class="dialog-close composed highlighted">{{#i18n}} Cancel {{/i18n}}</button>
+    </div>
+  </div>
+</template>
+
+{{> mainRightSelectorFormComponent }}
+{{> mainRightSelectorFormPseudoClass }}
+{{> mainRightSelectorFormPseudoElement }}
+{{> mainRightSelectorFormChild }}
+{{> mainRightSelectorFormAttribute }}
+{{> mainRightSelectorFormCustom }}
+
+<template id="template-dialog-selector-add-combinator">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors#combinators -->
+  <select name="combinator" required>
+    {{> mainRightSelectorFormCombinator }}
+  </select>
+</template>

@@ -1,0 +1,13 @@
+<template id="template-dialog-selector-add-pseudo-element">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements -->
+  <!-- https://drafts.csswg.org/css-pseudo-4/ -->
+  <select name="pseudo_element" required>
+    <option value="">{{#i18n}} - Pseudo element - {{/i18n}}</option>
+    <option value="::before">{{#i18n}} Before {{/i18n}} (::before)</option>
+    <option value="::after">{{#i18n}} After {{/i18n}} (::after)</option>
+    <option value="::placeholder">{{#i18n}} Placeholder {{/i18n}} (::placeholder)</option>
+    <option value="::first-line">{{#i18n}} First line {{/i18n}} (::first-line)</option>
+    <option value="::first-letter">{{#i18n}} First letter {{/i18n}} (::first-letter)</option>
+    <option value="::selection">{{#i18n}} Selected text {{/i18n}} (::selection)</option>
+  </select>
+</template>

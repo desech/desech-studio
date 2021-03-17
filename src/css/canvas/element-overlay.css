@@ -1,0 +1,343 @@
+#element-overlay {
+  position: absolute;
+  pointer-events: none;
+}
+
+#element-overlay .resize-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  box-sizing: border-box;
+}
+
+#element-overlay .resize-margin {
+  border: 0 solid var(--resize-margin-bg);
+  box-sizing: content-box;
+}
+
+#element-overlay .resize-padding {
+  border: 0 solid var(--resize-padding-bg);
+}
+
+#element-overlay .resize-button {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  pointer-events: all;
+  border: 1px solid var(--resize-color);
+  background-color: var(--resize-btn-bg);
+}
+
+#element-overlay .resize-button.long {
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+}
+
+#element-overlay .resize-button.wide {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+#element-overlay .resize-margin .resize-button {
+  border-color: var(--resize-margin-btn);
+}
+
+#element-overlay .resize-padding .resize-button {
+  border-color: var(--resize-padding-btn);
+}
+
+#element-overlay .resize-button:hover {
+  background-color: var(--resize-color);
+  box-shadow: 0 0 4px 0 var(--resize-color);
+}
+
+#element-overlay .resize-margin .resize-button:hover {
+  background-color: var(--resize-margin-btn);
+  box-shadow: 0 0 4px 0 var(--resize-margin-btn);
+}
+
+#element-overlay .resize-padding .resize-button:hover {
+  background-color: var(--resize-padding-btn);
+  box-shadow: 0 0 4px 0 var(--resize-padding-btn);
+}
+
+#element-overlay .element-overlay-container {
+  width: 100%;
+  height: 100%;
+}
+
+#element-overlay .element-overlay-container .overlay-button-switch-container,
+#element-overlay .element-overlay-container .overlay-margin-padding-toggle,
+#element-overlay .element-overlay-container .overlay-size-width-toggle,
+#element-overlay .element-overlay-container .overlay-size-height-toggle,
+#element-overlay .element-overlay-container .overlay-size-corner-toggle,
+#element-overlay .element-overlay-container[data-type="component-children"] div.resize-button {
+  display: none;
+}
+
+#element-overlay .element-overlay-container.container:not(.small-width):not(.small-height) .overlay-button-switch-container,
+#element-overlay .element-overlay-container:not(.small-width) .overlay-size-height-toggle,
+#element-overlay .element-overlay-container:not(.small-height) .overlay-size-width-toggle,
+#element-overlay .element-overlay-container .overlay-size-corner-toggle {
+  display: block;
+}
+
+#element-overlay .element-overlay-container:not(.small-width):not(.small-height):not(.editing) .overlay-margin-padding-toggle {
+  display: grid;
+}
+
+#element-overlay .resize-mode {
+  width: 100%;
+  height: 100%;
+}
+
+#element-overlay .resize-mode {
+  border: none
+}
+
+#element-overlay .resize-size {
+  border: 0 solid var(--resize-color);
+}
+
+#element-overlay .resize-nw {
+  top: -4px;
+  left: -4px;
+}
+
+#element-overlay .resize-top {
+  top: -4px;
+  left: calc(50% - 6px);
+}
+
+#element-overlay .resize-ne {
+  top: -4px;
+  right: -4px;
+}
+
+#element-overlay .resize-left {
+  top: calc(50% - 6px);
+  left: -4px;
+}
+
+#element-overlay .resize-right {
+  top: calc(50% - 6px);
+  right: -4px;
+}
+
+#element-overlay .resize-sw {
+  bottom: -4px;
+  left: -4px;
+}
+
+#element-overlay .resize-bottom {
+  bottom: -4px;
+  left: calc(50% - 6px);
+}
+
+#element-overlay .resize-se {
+  bottom: -4px;
+  right: -4px;
+}
+
+#element-overlay .resize-size .resize-nw,
+#element-overlay .resize-size .resize-se {
+  cursor: url(../asset/image/cursor/nwse-resize-blue.png) 15 15, nwse-resize;
+}
+
+#element-overlay .resize-size .resize-ne,
+#element-overlay .resize-size .resize-sw {
+  cursor: url(../asset/image/cursor/nesw-resize-blue.png) 15 15, nesw-resize;
+}
+
+#element-overlay .resize-size .resize-top,
+#element-overlay .resize-size .resize-bottom {
+  cursor: url(../asset/image/cursor/ns-resize-blue.png) 15 15, ns-resize;
+}
+
+#element-overlay .resize-padding .resize-top,
+#element-overlay .resize-padding .resize-bottom {
+  cursor: url(../asset/image/cursor/ns-resize-green.png) 15 15, ns-resize;
+}
+
+#element-overlay .resize-margin .resize-top,
+#element-overlay .resize-margin .resize-bottom {
+  cursor: url(../asset/image/cursor/ns-resize-orange.png) 15 15, ns-resize;
+}
+
+#element-overlay .resize-size .resize-left,
+#element-overlay .resize-size .resize-right {
+  cursor: url(../asset/image/cursor/ew-resize-blue.png) 15 15, ew-resize;
+}
+
+#element-overlay .resize-padding .resize-left,
+#element-overlay .resize-padding .resize-right {
+  cursor: url(../asset/image/cursor/ew-resize-green.png) 15 15, ew-resize;
+}
+
+#element-overlay .resize-margin .resize-left,
+#element-overlay .resize-margin .resize-right {
+  cursor: url(../asset/image/cursor/ew-resize-orange.png) 15 15, ew-resize;
+}
+
+#element-overlay .resize-counter {
+  background-color: var(--resize-color);
+  color: var(--resize-counter-txt);
+  border-radius: 2px;
+  font-size: 13px;
+  line-height: 21px;
+  padding: 0 3px;
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+  z-index: 1;
+}
+
+#element-overlay .resize-margin .resize-counter {
+  background-color: var(--resize-margin-btn);
+}
+
+#element-overlay .resize-padding .resize-counter {
+  background-color: var(--resize-padding-btn);
+}
+
+
+/* grid */
+
+#element-overlay .overlay-button-switch {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  bottom: -8px;
+  right: calc(50% - 34px);
+  pointer-events: all;
+  z-index: 1;
+  cursor: pointer;
+  border-radius: 2px;
+  background-color: var(--switch-btn-bg);
+  color: var(--switch-btn-txt);
+}
+
+#element-overlay .overlay-button-switch svg {
+  display: block;
+}
+
+#element-overlay .overlay-button-switch svg:hover {
+  color: var(--switch-btn-hover);
+}
+
+#element-overlay .grid-mode {
+  position: absolute;
+  outline: 1px solid var(--grid-border);
+  outline-offset: -1px;
+}
+
+#element-overlay .grid-mode .tracks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#element-overlay .grid-mode .track-columns {
+  display: grid;
+  position: absolute;
+  width: 100%;
+  top: -6px;
+}
+
+#element-overlay .grid-mode .track-rows {
+  display: grid;
+  position: absolute;
+  height: 100%;
+  left: -6px;
+}
+
+#element-overlay .grid-mode .track-cell {
+  background-color: var(--grid-track-bg);
+  color: var(--grid-track-color);
+  text-align: center;
+  font-size: 11px;
+  border-radius: 2px;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+#element-overlay .grid-mode .track-cell:hover {
+  background-color: var(--grid-track-bg-hover);
+}
+
+#element-overlay .grid-mode .track-cell.track-column {
+  height: 13px;
+  line-height: 12px;
+}
+
+#element-overlay .grid-mode .track-cell.track-row {
+  width: 13px;
+  line-height: 16px;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+}
+
+#element-overlay .grid-mode .track-add-cell {
+  position: absolute;
+  height: 13px;
+  width: 13px;
+  background-color: var(--grid-track-add-bg);
+}
+
+#element-overlay .grid-mode .track-add-cell:hover {
+  background-color: var(--grid-track-add-bg-hover);
+}
+
+#element-overlay .grid-mode .track-add-column {
+  top: -6px;
+  right: -7px;
+}
+
+#element-overlay .grid-mode .track-add-row {
+  left: -6px;
+  bottom: -7px;
+}
+
+#element-overlay .grid-mode .track-add-cell svg {
+  display: block;
+}
+
+#element-overlay .grid-mode .track-cell-options {
+  position: absolute;
+  width: 120px;
+  height: 20px;
+  padding: 5px 10px;
+  border-radius: 2px;
+  background-color: var(--grid-cell-bg);
+  box-shadow: var(--grid-cell-shadow) 0 0 2px 1px;
+}
+
+#element-overlay .grid-mode .track-cell-options-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: auto 20px;
+  column-gap: 5px;
+  pointer-events: all;
+}
+
+#element-overlay .grid-mode .track-cell-options .component-input-unit {
+  height: 20px;
+}
+
+#element-overlay .grid-mode .grid {
+  display: grid;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#element-overlay .grid-mode .grid .cell {
+  outline: 1px dotted var(--grid-border);
+  outline-offset: -1px;
+}

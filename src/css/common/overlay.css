@@ -1,0 +1,37 @@
+.desech-studio .overlay .overlay-arrow-container {
+  position: relative;
+  width: 200px;
+  height: 10px;
+  margin: 0 calc(-100px + 7px);
+  padding-top: 3px;
+  z-index: 3;
+}
+
+.desech-studio .overlay .overlay-arrow {
+  width: 10px;
+  height: 10px;
+  margin-left: 100px;
+  transform: rotate(45deg);
+  background-color: var(--overlay-bg);
+  box-shadow: var(--overlay-shadow) -1px -1px 1px 0;
+}
+
+.desech-studio .overlay .overlay-content {
+  position: relative;
+  width: 200px;
+  height: 135px;
+  box-sizing: border-box;
+  margin: -5px calc(-100px + 7px) calc(-135px - 8px);
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 2px;
+  z-index: 2;
+  background-color: var(--overlay-bg);
+  color: var(--overlay-txt);
+  box-shadow: var(--overlay-shadow) 0 0 2px 1px;
+}
+
+.desech-studio .overlay .overlay-title {
+  margin: 5px 0 15px 0;
+  text-align: center;
+}

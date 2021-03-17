@@ -1,0 +1,139 @@
+.desech-studio input {
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  height: 25px;
+  font-family: Roboto;
+  font-size: 12px;
+  line-height: 25px;
+  padding: 0 5px;
+  border: none;
+  border-radius: 2px;
+  background-color: var(--field-bg);
+  color: var(--field-txt);
+  box-shadow: var(--field-shadow) 0 0 1px 0;
+  cursor: inherit;
+}
+
+.desech-studio input:focus,
+.desech-studio input:hover,
+.desech-studio textarea:focus,
+.desech-studio textarea:hover,
+.desech-studio select:focus,
+.desech-studio select:hover {
+  color: var(--field-txt);
+  box-shadow: var(--field-bg-hover) 0 0 2px 1px;
+}
+
+.desech-studio input::placeholder {
+  color: var(--field-txt);
+  opacity: 0.5;
+}
+
+.desech-studio input:invalid {
+  box-shadow: var(--error) 0 0 4px 0;
+}
+
+.desech-studio input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.desech-studio select {
+  -webkit-appearance: none;
+  outline: none;
+  width: 100%;
+  height: 25px;
+	line-height: 25px;
+	padding: 0 15px 0 5px;
+  border: none;
+  border-radius: 2px;
+  font-family: Roboto;
+  font-size: 13px;
+  background-image: var(--field-bg-svg-select);
+  background-position: right -4px center;
+  background-repeat: no-repeat;
+  background-color: var(--field-bg);
+  color: var(--field-txt);
+  box-shadow: var(--field-shadow) 0 0 1px 0;
+  box-sizing: border-box;
+}
+
+.desech-studio select optgroup,
+.desech-studio select option {
+  font-size: 13px;
+  color: var(--field-txt);
+  background-color: var(--field-bg-select);
+}
+
+.desech-studio .input-extra {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.desech-studio .input-extra .input-extra-value {
+  display: inline-block;
+  width: 40px;
+  padding: 4px 13px 4px 4px;
+  outline: none;
+}
+
+.desech-studio .input-extra .input-extra-text {
+  display: inline-block;
+  position: absolute;
+  margin-top: 5px;
+  margin-left: -13px;
+  color: var(--field-txt-disabled);
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.desech-studio .input-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+}
+
+.desech-studio .input-split input {
+  border-radius: 0;
+}
+
+.desech-studio .input-split input:first-child {
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.desech-studio .input-split input:last-child {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.desech-studio .grid .check-button {
+  margin: 0 2px;
+}
+
+.desech-studio .grid .check-button:first-child {
+  margin: 0 2px 0 0;
+}
+
+.desech-studio .grid .check-button:last-child {
+  margin: 0 0 0 2px;
+}
+
+.desech-studio textarea {
+  width: 100%;
+  padding: 3px;
+  box-sizing: border-box;
+  font-family: Roboto;
+  font-size: 12px;
+  cursor: inherit;
+  resize: vertical;
+  border: none;
+  border-radius: 2px;
+  background-color: var(--field-bg);
+  color: var(--field-txt);
+  box-shadow: var(--field-shadow) 0 0 1px 0;
+}
+
+.desech-studio input[disabled] {
+  background-color: var(--field-bg-disabled);
+} 

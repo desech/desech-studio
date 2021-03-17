@@ -1,0 +1,10 @@
+{
+  "development": {
+    "web": "https://desech.work",
+    "api": "http://api.desech.work"
+  },
+  "production": {
+    "web": "https://www.desech.com",
+    "api": "https://api.desech.com"
+  }
+}

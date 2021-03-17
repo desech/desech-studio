@@ -1,0 +1,179 @@
+<template id="template-effect-transition">
+  <div class="effect-transition">
+    <!-- transition: all 0s ease 0s, margin-right 1s cubic-bezier(0.29, 1.01, 1, -0.68) 2s, padding 2s steps(2, start) 1s -->
+    <div class="grid" style="grid-template-columns: 1fr;">
+      <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties -->
+      <select name="property" class="effect-field effect-select">
+        <option value="all">{{#i18n}} All properties {{/i18n}}</option>
+        <optgroup label="{{#i18n}} Common {{/i18n}}">
+          <option value="opacity">opacity</option>
+          <option value="width">width</option>
+          <option value="height">height</option> 
+          <option value="margin">margin</option>
+          <option value="padding">padding</option>
+          <option value="border">border</option>
+          <option value="transform">transform</option>
+          <option value="filter">filter</option>         
+        </optgroup>
+        <optgroup label="{{#i18n}} Size {{/i18n}}">           
+          <option value="max-width">max-width</option>
+          <option value="max-height">max-height</option>
+          <option value="min-width">min-width</option>
+          <option value="min-height">min-height</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Background {{/i18n}}">
+          <option value="background">background</option>
+          <option value="background-color">background-color</option>
+          <option value="background-position">background-position</option>
+          <option value="background-size">background-size</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Border {{/i18n}}">
+          <option value="border-radius">border-radius</option>
+          <option value="border-width">border-width</option>
+          <option value="border-color">border-color</option>
+          <option value="border-image-width">border-image-width</option>
+          <option value="border-image-slice">border-image-slice</option>
+          <option value="border-image-outset">border-image-outset</option>
+          <option value="border-top">border-top</option>
+          <option value="border-bottom">border-bottom</option>
+          <option value="border-left">border-left</option>
+          <option value="border-right">border-right</option>
+          <option value="border-top-color">border-top-color</option>
+          <option value="border-top-width">border-top-width</option>
+          <option value="border-top-left-radius">border-top-left-radius</option>
+          <option value="border-top-right-radius">border-top-right-radius</option>
+          <option value="border-bottom-color">border-bottom-color</option>
+          <option value="border-bottom-width">border-bottom-width</option>
+          <option value="border-bottom-left-radius">border-bottom-left-radius</option>
+          <option value="border-bottom-right-radius">border-bottom-right-radius</option>
+          <option value="border-left-color">border-left-color</option>
+          <option value="border-left-width">border-left-width</option>
+          <option value="border-right-color">border-right-color</option>
+          <option value="border-right-width">border-right-width</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Outline {{/i18n}}">
+          <option value="outline">outline</option>
+          <option value="outline-width">outline-width</option>
+          <option value="outline-color">outline-color</option>
+          <option value="outline-offset">outline-offset</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Position {{/i18n}}">
+          <option value="top">top</option>
+          <option value="bottom">bottom</option>
+          <option value="left">left</option>
+          <option value="right">right</option>
+          <option value="vertical-align">vertical-align</option>
+          <option value="z-index">z-index</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Grid {{/i18n}}">
+          <option value="grid-template-columns">grid-template-columns</option>
+          <option value="grid-template-rows">grid-template-rows</option>
+          <option value="gap">gap</option>
+          <option value="row-gap">row-gap</option>
+          <option value="column-gap">column-gap</option>
+          <option value="order">order</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Text {{/i18n}}">
+          <option value="font">font</option>
+          <option value="font-size">font-size</option>
+          <option value="line-height">line-height</option>
+          <option value="font-weight">font-weight</option>
+          <option value="font-stretch">font-stretch</option>
+          <option value="font-variation-settings">font-variation-settings</option>
+          <option value="letter-spacing">letter-spacing</option>
+          <option value="text-decoration">text-decoration</option>
+          <option value="text-decoration-color">text-decoration-color</option>
+          <option value="text-emphasis">text-emphasis</option>
+          <option value="text-emphasis-color">text-emphasis-color</option>
+          <option value="text-indent">text-indent</option>
+          <option value="text-shadow">text-shadow</option>
+          <option value="word-spacing">word-spacing</option>
+          <option value="color">color</option>
+          <option value="caret-color">caret-color</option>
+          <option value="columns">columns</option>
+          <option value="column-count">column-count</option>
+          <option value="column-width">column-width</option>
+          <option value="column-rule">column-rule</option>
+          <option value="column-rule-width">column-rule-width</option>
+          <option value="column-rule-color">column-rule-color</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Margin {{/i18n}}">
+          <option value="margin-top">margin-top</option>
+          <option value="margin-bottom">margin-bottom</option>
+          <option value="margin-left">margin-left</option>
+          <option value="margin-right">margin-right</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Padding {{/i18n}}">
+          <option value="padding-top">padding-top</option>
+          <option value="padding-bottom">padding-bottom</option>
+          <option value="padding-left">padding-left</option>
+          <option value="padding-right">padding-right</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Scroll {{/i18n}}">
+          <option value="scroll-margin">scroll-margin</option>
+          <option value="scroll-margin-top">scroll-margin-top</option>
+          <option value="scroll-margin-bottom">scroll-margin-bottom</option>
+          <option value="scroll-margin-left">scroll-margin-left</option>
+          <option value="scroll-margin-right">scroll-margin-right</option>
+          <option value="scroll-margin-block-start">scroll-margin-block-start</option>
+          <option value="scroll-margin-block-end">scroll-margin-block-end</option>
+          <option value="scroll-margin-inline-start">scroll-margin-inline-start</option>
+          <option value="scroll-margin-inline-end">scroll-margin-inline-end</option>
+          <option value="scroll-padding">scroll-padding</option>
+          <option value="scroll-padding-top">scroll-padding-top</option>
+          <option value="scroll-padding-bottom">scroll-padding-bottom</option>
+          <option value="scroll-padding-left">scroll-padding-left</option>
+          <option value="scroll-padding-right">scroll-padding-right</option>
+          <option value="scroll-padding-block-start">scroll-padding-block-start</option>
+          <option value="scroll-padding-block-end">scroll-padding-block-end</option>
+          <option value="scroll-padding-inline-start">scroll-padding-inline-start</option>
+          <option value="scroll-padding-inline-end">scroll-padding-inline-end</option>
+        </optgroup>
+        <optgroup label="{{#i18n}} Effects {{/i18n}}">
+          <option value="visibility">visibility</option>
+          <option value="box-shadow">box-shadow</option>
+          <option value="backdrop-filter">backdrop-filter</option>
+          <option value="clip-path">clip-path</option>
+          <option value="object-position">object-position</option>
+          <option value="perspective">perspective</option>
+          <option value="perspective-origin">perspective-origin</option>
+          <option value="shape-outside">shape-outside</option>
+          <option value="shape-margin">shape-margin</option>
+          <option value="shape-image-threshold">shape-image-threshold</option>
+          <option value="transform-origin">transform-origin</option>
+          <option value="translate">translate</option>
+        </optgroup>
+      </select>
+    </div>
+    
+    <div class="grid" style="grid-template-columns: 30px 1fr 30px 1fr;">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Duration {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <defs>
+            <path id="a" d="M0 0h24v24H0V0z"/>
+          </defs>
+          <clipPath id="b">
+            <use xlink:href="#a" overflow="visible"/>
+          </clipPath>
+          <path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
+        </svg>
+      </div>
+      {{> componentInputUnit name="duration" class="effect-field effect-input" time="1" }}
+
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Delay {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <defs>
+            <path id="a" d="M0 0h24v24H0V0z"/>
+          </defs>
+          <clipPath id="b">
+            <use xlink:href="#a" overflow="visible"/>
+          </clipPath>
+          <path clip-path="url(#b)" d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.73 2.71-2.73 7.08 0 9.79 2.73 2.71 7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29-3.51 3.48-9.21 3.48-12.72 0-3.5-3.47-3.53-9.11-.02-12.58 3.51-3.47 9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08-.72 1.21L11 13V8h1.5z"/>
+        </svg>
+      </div>
+      {{> componentInputUnit name="delay" class="effect-field effect-input" time="1" }}
+    </div>
+
+    {{> componentTimingFunction }}
+  </div>
+</template>

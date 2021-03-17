@@ -1,0 +1,53 @@
+<template id="template-style-html-attr-a">
+  <form class="style-html-details">
+    <div class="grid" style="grid-template-columns: 24px 1fr 28px">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Url link (href) {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+        </svg>
+      </div>
+      <input class="style-html-field" name="href" type="text" placeholder="{{#i18n}} URL, mailto:, tel:, #ID {{/i18n}}">
+      <div>
+        <button type="button" name="target" value="_blank" class="style-html-button check-button small tooltip left" data-tooltip="{{#i18n}} Open in new tab {{/i18n}}">
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 24px 1fr 28px">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Relation {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M16.5 12c1.38 0 2.49-1.12 2.49-2.5S17.88 7 16.5 7C15.12 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 2.99-1.34 2.99-3S10.66 5 9 5C7.34 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z"/>
+        </svg>
+      </div>
+      <select class="style-html-field" name="rel">
+        <option value="">{{#i18n}} - Relation - {{/i18n}}</option>
+        <option value="nofollow">{{#i18n}} No follow {{/i18n}} (nofollow)</option>
+        <option value="noreferrer">{{#i18n}} No referrer {{/i18n}} (noreferrer)</option>
+        <option value="noopener">{{#i18n}} No opener {{/i18n}} (noopener)</option>
+        <option value="pingback">{{#i18n}} Ping back {{/i18n}} (pingback)</option>
+        <option value="alternate">{{#i18n}} Alternate {{/i18n}} (alternate)</option>
+        <option value="author">{{#i18n}} Author {{/i18n}} (author)</option>
+        <option value="bookmark">{{#i18n}} Bookmark {{/i18n}} (bookmark)</option>
+        <option value="canonical">{{#i18n}} Canonical {{/i18n}} (canonical)</option>
+        <option value="external">{{#i18n}} External {{/i18n}} (external)</option>
+        <option value="help">{{#i18n}} Help {{/i18n}} (help)</option>
+        <option value="icon">{{#i18n}} Icon {{/i18n}} (icon)</option>
+        <option value="license">{{#i18n}} License {{/i18n}} (license)</option>
+        <option value="modulepreload">{{#i18n}} Module preload {{/i18n}} (modulepreload)</option>
+        <option value="prefetch">{{#i18n}} Prefetch {{/i18n}} (prefetch)</option>
+        <option value="prev">{{#i18n}} Previous {{/i18n}} (prev)</option>
+        <option value="next">{{#i18n}} Next {{/i18n}} (next)</option>
+        <option value="search">{{#i18n}} Search {{/i18n}} (search)</option>
+        <option value="shortlink">{{#i18n}} Short link {{/i18n}} (shortlink)</option>
+        <option value="stylesheet">{{#i18n}} Stylesheet {{/i18n}} (stylesheet)</option>
+        <option value="tag">{{#i18n}} Tag {{/i18n}} (tag)</option>
+      </select>
+    </div>
+  </form>
+</template>

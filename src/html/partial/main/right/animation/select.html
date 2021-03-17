@@ -1,0 +1,759 @@
+<!-- https://animista.net/ -->
+<select name="type" class="animation-field animation-select animation-type">
+  <option value="">{{#i18n}} - Animations - {{/i18n}}</option>
+
+  <optgroup class="text-animation" label="{{#i18n}} Text {{/i18n}}" hidden>
+    <option class="group" value="group" disabled>{{#i18n}} Tracking in {{/i18n}}</option>
+      <option value="tracking-in-expand"> &nbsp;  &nbsp; {{#i18n}} Tracking in expand {{/i18n}}</option>
+      <option value="tracking-in-expand-fwd"> &nbsp;  &nbsp; {{#i18n}} Tracking in expand forward {{/i18n}}</option>
+      <option value="tracking-in-expand-fwd-top"> &nbsp;  &nbsp; {{#i18n}} Tracking in expand forward top {{/i18n}}</option>
+      <option value="tracking-in-expand-fwd-bottom"> &nbsp;  &nbsp; {{#i18n}} Tracking in expand forward bottom {{/i18n}}</option>
+      <option value="tracking-in-contract"> &nbsp;  &nbsp; {{#i18n}} Tracking in contract {{/i18n}}</option>
+      <option value="tracking-in-contract-bck"> &nbsp;  &nbsp; {{#i18n}} Tracking in contract backward {{/i18n}}</option>
+      <option value="tracking-in-contract-bck-top"> &nbsp;  &nbsp; {{#i18n}} Tracking in contract backward top {{/i18n}}</option>
+      <option value="tracking-in-contract-bck-bottom"> &nbsp;  &nbsp; {{#i18n}} Tracking in contract backward bottom {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Tracking out {{/i18n}}</option>
+      <option value="tracking-out-expand"> &nbsp;  &nbsp; {{#i18n}} Tracking out expand {{/i18n}}</option>
+      <option value="tracking-out-expand-fwd"> &nbsp;  &nbsp; {{#i18n}} Tracking out expand forward {{/i18n}}</option>
+      <option value="tracking-out-expand-fwd-top"> &nbsp;  &nbsp; {{#i18n}} Tracking out expand forward top {{/i18n}}</option>
+      <option value="tracking-out-expand-fwd-bottom"> &nbsp;  &nbsp; {{#i18n}} Tracking out expand forward bottom {{/i18n}}</option>
+      <option value="tracking-out-contract"> &nbsp;  &nbsp; {{#i18n}} Tracking out contract {{/i18n}}</option>
+      <option value="tracking-out-contract-bck"> &nbsp;  &nbsp; {{#i18n}} Tracking out contract backward {{/i18n}}</option>
+      <option value="tracking-out-contract-bck-top"> &nbsp;  &nbsp; {{#i18n}} Tracking out contract backward top {{/i18n}}</option>
+      <option value="tracking-out-contract-bck-bottom"> &nbsp;  &nbsp; {{#i18n}} Tracking out contract backward bottom {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Focus in {{/i18n}}</option>
+      <option value="text-focus-in"> &nbsp;  &nbsp; {{#i18n}} Focus in {{/i18n}}</option>
+      <option value="focus-in-expand"> &nbsp;  &nbsp; {{#i18n}} Focus in expand {{/i18n}}</option>
+      <option value="focus-in-expand-fwd"> &nbsp;  &nbsp; {{#i18n}} Focus in expand forward {{/i18n}}</option>
+      <option value="focus-in-contract"> &nbsp;  &nbsp; {{#i18n}} Focus in contract {{/i18n}}</option>
+      <option value="focus-in-contract-bck"> &nbsp;  &nbsp; {{#i18n}} Focus in contract backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Blur out {{/i18n}}</option>
+      <option value="text-blur-out"> &nbsp;  &nbsp; {{#i18n}} Blur out {{/i18n}}</option>
+      <option value="blur-out-expand"> &nbsp;  &nbsp; {{#i18n}} Blur out expand {{/i18n}}</option>
+      <option value="blur-out-expand-fwd"> &nbsp;  &nbsp; {{#i18n}} Blur out expand forward {{/i18n}}</option>
+      <option value="blur-out-contract"> &nbsp;  &nbsp; {{#i18n}} Blur out contract {{/i18n}}</option>
+      <option value="blur-out-contract-bck"> &nbsp;  &nbsp; {{#i18n}} Blur out contract backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flicker {{/i18n}}</option>
+      <option value="text-flicker-in-glow"> &nbsp;  &nbsp; {{#i18n}} Flicker in glow {{/i18n}}</option>
+      <option value="text-flicker-out-glow"> &nbsp;  &nbsp; {{#i18n}} Flicker out glow {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shadow drop {{/i18n}}</option>
+      <option value="text-shadow-drop-center"> &nbsp;  &nbsp; {{#i18n}} Shadow drop center {{/i18n}}</option>
+      <option value="text-shadow-drop-top"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top {{/i18n}}</option>
+      <option value="text-shadow-drop-tr"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top right {{/i18n}}</option>
+      <option value="text-shadow-drop-right"> &nbsp;  &nbsp; {{#i18n}} Shadow drop right {{/i18n}}</option>
+      <option value="text-shadow-drop-br"> &nbsp;  &nbsp; {{#i18n}} Shadow drop bottom right {{/i18n}}</option>
+      <option value="text-shadow-drop-bottom"> &nbsp;  &nbsp; {{#i18n}} Shadow drop bottom {{/i18n}}</option>
+      <option value="text-shadow-drop-bl"> &nbsp;  &nbsp; {{#i18n}} Shadow drop bottom left {{/i18n}}</option>
+      <option value="text-shadow-drop-left"> &nbsp;  &nbsp; {{#i18n}} Shadow drop left {{/i18n}}</option>
+      <option value="text-shadow-drop-tl"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shadow pop {{/i18n}}</option>
+      <option value="text-shadow-pop-top"> &nbsp;  &nbsp; {{#i18n}} Shadow pop top {{/i18n}}</option>
+      <option value="text-shadow-pop-tr"> &nbsp;  &nbsp; {{#i18n}} Shadow pop top right {{/i18n}}</option>
+      <option value="text-shadow-pop-right"> &nbsp;  &nbsp; {{#i18n}} Shadow pop right {{/i18n}}</option>
+      <option value="text-shadow-pop-br"> &nbsp;  &nbsp; {{#i18n}} Shadow pop bottom right {{/i18n}}</option>
+      <option value="text-shadow-pop-bottom"> &nbsp;  &nbsp; {{#i18n}} Shadow pop bottom {{/i18n}}</option>
+      <option value="text-shadow-pop-bl"> &nbsp;  &nbsp; {{#i18n}} Shadow pop bottom left {{/i18n}}</option>
+      <option value="text-shadow-pop-left"> &nbsp;  &nbsp; {{#i18n}} Shadow pop left {{/i18n}}</option>
+      <option value="text-shadow-pop-tl"> &nbsp;  &nbsp; {{#i18n}} Shadow pop top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Pop up {{/i18n}}</option>
+      <option value="text-pop-up-top"> &nbsp;  &nbsp; {{#i18n}} Pop up top {{/i18n}}</option>
+      <option value="text-pop-up-tr"> &nbsp;  &nbsp; {{#i18n}} Pop up top right {{/i18n}}</option>
+      <option value="text-pop-up-right"> &nbsp;  &nbsp; {{#i18n}} Pop up right {{/i18n}}</option>
+      <option value="text-pop-up-br"> &nbsp;  &nbsp; {{#i18n}} Pop up bottom right {{/i18n}}</option>
+      <option value="text-pop-up-bottom"> &nbsp;  &nbsp; {{#i18n}} Pop up bottom {{/i18n}}</option>
+      <option value="text-pop-up-bl"> &nbsp;  &nbsp; {{#i18n}} Pop up bottom left {{/i18n}}</option>
+      <option value="text-pop-up-left"> &nbsp;  &nbsp; {{#i18n}} Pop up left {{/i18n}}</option>
+      <option value="text-pop-up-tl"> &nbsp;  &nbsp; {{#i18n}} Pop up top left {{/i18n}}</option>
+  </optgroup>
+
+  <optgroup label="{{#i18n}} Basic {{/i18n}}">
+    <option class="group" value="group" disabled>{{#i18n}} Scale up {{/i18n}}</option>
+      <option value="scale-up-top"> &nbsp;  &nbsp; {{#i18n}} Scale up top {{/i18n}}</option>
+      <option value="scale-up-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale up bottom {{/i18n}}</option>
+      <option value="scale-up-left"> &nbsp;  &nbsp; {{#i18n}} Scale up left {{/i18n}}</option>
+      <option value="scale-up-right"> &nbsp;  &nbsp; {{#i18n}} Scale up right {{/i18n}}</option>
+      <option value="scale-up-center"> &nbsp;  &nbsp; {{#i18n}} Scale up center {{/i18n}}</option>
+      <option value="scale-up-tl"> &nbsp;  &nbsp; {{#i18n}} Scale up top left {{/i18n}}</option>
+      <option value="scale-up-tr"> &nbsp;  &nbsp; {{#i18n}} Scale up top right {{/i18n}}</option>
+      <option value="scale-up-bl"> &nbsp;  &nbsp; {{#i18n}} Scale up bottom left {{/i18n}}</option>
+      <option value="scale-up-br"> &nbsp;  &nbsp; {{#i18n}} Scale up bottom right {{/i18n}}</option>
+      <option value="scale-up-ver-top"> &nbsp;  &nbsp; {{#i18n}} Scale up vertical top {{/i18n}}</option>
+      <option value="scale-up-ver-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale up vertical bottom {{/i18n}}</option>
+      <option value="scale-up-ver-center"> &nbsp;  &nbsp; {{#i18n}} Scale up vertical center {{/i18n}}</option>
+      <option value="scale-up-hor-left"> &nbsp;  &nbsp; {{#i18n}} Scale up horizontal left {{/i18n}}</option>
+      <option value="scale-up-hor-right"> &nbsp;  &nbsp; {{#i18n}} Scale up horizontal right {{/i18n}}</option>
+      <option value="scale-up-hor-center"> &nbsp;  &nbsp; {{#i18n}} Scale up horizontal center {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Scale down {{/i18n}}</option>
+      <option value="scale-down-top"> &nbsp;  &nbsp; {{#i18n}} Scale down top {{/i18n}}</option>
+      <option value="scale-down-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale down bottom {{/i18n}}</option>
+      <option value="scale-down-left"> &nbsp;  &nbsp; {{#i18n}} Scale down left {{/i18n}}</option>
+      <option value="scale-down-right"> &nbsp;  &nbsp; {{#i18n}} Scale down right {{/i18n}}</option>
+      <option value="scale-down-center"> &nbsp;  &nbsp; {{#i18n}} Scale down center {{/i18n}}</option>
+      <option value="scale-down-tl"> &nbsp;  &nbsp; {{#i18n}} Scale down top left {{/i18n}}</option>
+      <option value="scale-down-tr"> &nbsp;  &nbsp; {{#i18n}} Scale down top right {{/i18n}}</option>
+      <option value="scale-down-bl"> &nbsp;  &nbsp; {{#i18n}} Scale down bottom left {{/i18n}}</option>
+      <option value="scale-down-br"> &nbsp;  &nbsp; {{#i18n}} Scale down bottom right {{/i18n}}</option>
+      <option value="scale-down-ver-top"> &nbsp;  &nbsp; {{#i18n}} Scale down vertical top {{/i18n}}</option>
+      <option value="scale-down-ver-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale down vertical bottom {{/i18n}}</option>
+      <option value="scale-down-ver-center"> &nbsp;  &nbsp; {{#i18n}} Scale down vertical center {{/i18n}}</option>
+      <option value="scale-down-hor-left"> &nbsp;  &nbsp; {{#i18n}} Scale down horizontal left {{/i18n}}</option>
+      <option value="scale-down-hor-right"> &nbsp;  &nbsp; {{#i18n}} Scale down horizontal right {{/i18n}}</option>
+      <option value="scale-down-hor-center"> &nbsp;  &nbsp; {{#i18n}} Scale down horizontal center {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate {{/i18n}}</option>
+      <option value="rotate-top"> &nbsp;  &nbsp; {{#i18n}} Rotate top {{/i18n}}</option>
+      <option value="rotate-bottom"> &nbsp;  &nbsp; {{#i18n}} Rotate bottom {{/i18n}}</option>
+      <option value="rotate-left"> &nbsp;  &nbsp; {{#i18n}} Rotate left {{/i18n}}</option>
+      <option value="rotate-right"> &nbsp;  &nbsp; {{#i18n}} Rotate right {{/i18n}}</option>
+      <option value="rotate-center"> &nbsp;  &nbsp; {{#i18n}} Rotate center {{/i18n}}</option>
+      <option value="rotate-tl"> &nbsp;  &nbsp; {{#i18n}} Rotate top left {{/i18n}}</option>
+      <option value="rotate-tr"> &nbsp;  &nbsp; {{#i18n}} Rotate top right {{/i18n}}</option>
+      <option value="rotate-bl"> &nbsp;  &nbsp; {{#i18n}} Rotate bottom left {{/i18n}}</option>
+      <option value="rotate-br"> &nbsp;  &nbsp; {{#i18n}} Rotate bottom right {{/i18n}}</option>
+      <option value="rotate-hor-top"> &nbsp;  &nbsp; {{#i18n}} Rotate horizontal top {{/i18n}}</option>
+      <option value="rotate-hor-bottom"> &nbsp;  &nbsp; {{#i18n}} Rotate horizontal bottom {{/i18n}}</option>
+      <option value="rotate-hor-center"> &nbsp;  &nbsp; {{#i18n}} Rotate horizontal center {{/i18n}}</option>
+      <option value="rotate-vert-left"> &nbsp;  &nbsp; {{#i18n}} Rotate vertical left {{/i18n}}</option>
+      <option value="rotate-vert-right"> &nbsp;  &nbsp; {{#i18n}} Rotate vertical right {{/i18n}}</option>
+      <option value="rotate-vert-center"> &nbsp;  &nbsp; {{#i18n}} Rotate vertical center {{/i18n}}</option>
+      <option value="rotate-diagonal-1"> &nbsp;  &nbsp; {{#i18n}} Rotate diagonal 1 {{/i18n}}</option>
+      <option value="rotate-diagonal-2"> &nbsp;  &nbsp; {{#i18n}} Rotate diagonal 2 {{/i18n}}</option>
+      <option value="rotate-diagonal-tl"> &nbsp;  &nbsp; {{#i18n}} Rotate diagonal top left {{/i18n}}</option>
+      <option value="rotate-diagonal-tr"> &nbsp;  &nbsp; {{#i18n}} Rotate diagonal top right {{/i18n}}</option>
+      <option value="rotate-diagonal-bl"> &nbsp;  &nbsp; {{#i18n}} Rotate diagonal bottom left {{/i18n}}</option>
+      <option value="rotate-diagonal-br"> &nbsp;  &nbsp; {{#i18n}} Rotate diagonal bottom right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate scale {{/i18n}}</option>
+      <option value="rotate-scale-up"> &nbsp;  &nbsp; {{#i18n}} Rotate scale up {{/i18n}}</option>
+      <option value="rotate-scale-down"> &nbsp;  &nbsp; {{#i18n}} Rotate scale down {{/i18n}}</option>
+      <option value="rotate-scale-up-ver"> &nbsp;  &nbsp; {{#i18n}} Rotate scale up vertical {{/i18n}}</option>
+      <option value="rotate-scale-down-ver"> &nbsp;  &nbsp; {{#i18n}} Rotate scale down vertical {{/i18n}}</option>
+      <option value="rotate-scale-up-hor"> &nbsp;  &nbsp; {{#i18n}} Rotate scale up horizontal {{/i18n}}</option>
+      <option value="rotate-scale-down-hor"> &nbsp;  &nbsp; {{#i18n}} Rotate scale down horizontal {{/i18n}}</option>
+      <option value="rotate-scale-up-diag-1"> &nbsp;  &nbsp; {{#i18n}} Rotate scale up diagonal 1 {{/i18n}}</option>
+      <option value="rotate-scale-down-diag-1"> &nbsp;  &nbsp; {{#i18n}} Rotate scale down diagonal 1 {{/i18n}}</option>
+      <option value="rotate-scale-up-diag-2"> &nbsp;  &nbsp; {{#i18n}} Rotate scale up diagonal 2 {{/i18n}}</option>
+      <option value="rotate-scale-down-diag-2"> &nbsp;  &nbsp; {{#i18n}} Rotate scale down diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate 90 {{/i18n}}</option>
+      <option value="rotate-90-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 CW {{/i18n}}</option>
+      <option value="rotate-90-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 CCW {{/i18n}}</option>
+      <option value="rotate-90-top-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 top CW {{/i18n}}</option>
+      <option value="rotate-90-bottom-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 bottom CW {{/i18n}}</option>
+      <option value="rotate-90-left-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 left CW {{/i18n}}</option>
+      <option value="rotate-90-right-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 right CW {{/i18n}}</option>
+      <option value="rotate-90-top-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 top CCW {{/i18n}}</option>
+      <option value="rotate-90-bottom-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 bottom CCW {{/i18n}}</option>
+      <option value="rotate-90-left-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 left CCW {{/i18n}}</option>
+      <option value="rotate-90-right-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 right CCW {{/i18n}}</option>
+      <option value="rotate-90-tl-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 top left CW {{/i18n}}</option>
+      <option value="rotate-90-tr-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 top right CW {{/i18n}}</option>
+      <option value="rotate-90-bl-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 bottom left CW {{/i18n}}</option>
+      <option value="rotate-90-br-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 bottom right CW {{/i18n}}</option>
+      <option value="rotate-90-tl-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 top left CCW {{/i18n}}</option>
+      <option value="rotate-90-tr-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 top right CCW {{/i18n}}</option>
+      <option value="rotate-90-bl-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 bottom left CCW {{/i18n}}</option>
+      <option value="rotate-90-br-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 bottom right CCW {{/i18n}}</option>
+      <option value="rotate-90-horizontal-fwd"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 horizontal forward {{/i18n}}</option>
+      <option value="rotate-90-horizontal-bck"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 horizontal backward {{/i18n}}</option>
+      <option value="rotate-90-vertical-fwd"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 vertical forward {{/i18n}}</option>
+      <option value="rotate-90-vertical-bck"> &nbsp;  &nbsp; {{#i18n}} Rotate 90 vertical backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flip {{/i18n}}</option>
+      <option value="flip-horizontal-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip horizontal forward {{/i18n}}</option>
+      <option value="flip-horizontal-bck"> &nbsp;  &nbsp; {{#i18n}} Flip horizontal backward {{/i18n}}</option>
+      <option value="flip-vertical-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip vertical forward {{/i18n}}</option>
+      <option value="flip-vertical-bck"> &nbsp;  &nbsp; {{#i18n}} Flip vertical backward {{/i18n}}</option>
+      <option value="flip-horizontal-top"> &nbsp;  &nbsp; {{#i18n}} Flip horizontal top {{/i18n}}</option>
+      <option value="flip-horizontal-bottom"> &nbsp;  &nbsp; {{#i18n}} Flip horizontal bottom {{/i18n}}</option>
+      <option value="flip-vertical-left"> &nbsp;  &nbsp; {{#i18n}} Flip vertical left {{/i18n}}</option>
+      <option value="flip-vertical-right"> &nbsp;  &nbsp; {{#i18n}} Flip vertical right {{/i18n}}</option>
+      <option value="flip-diagonal-1-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 1 forward {{/i18n}}</option>
+      <option value="flip-diagonal-1-bck"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 1 backward {{/i18n}}</option>
+      <option value="flip-diagonal-2-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 2 foward {{/i18n}}</option>
+      <option value="flip-diagonal-2-bck"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 2 backward {{/i18n}}</option>
+      <option value="flip-diagonal-1-tr"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 1 top right {{/i18n}}</option>
+      <option value="flip-diagonal-1-bl"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 1 bottom left {{/i18n}}</option>
+      <option value="flip-diagonal-2-tl"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 2 top left {{/i18n}}</option>
+      <option value="flip-diagonal-2-br"> &nbsp;  &nbsp; {{#i18n}} Flip diagonal 2 bottom right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flip 2 {{/i18n}}</option>
+      <option value="flip-2-hor-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal top forward {{/i18n}}</option>
+      <option value="flip-2-hor-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal bottom forward {{/i18n}}</option>
+      <option value="flip-2-hor-top-bck"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal top backward {{/i18n}}</option>
+      <option value="flip-2-hor-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal bottom backward {{/i18n}}</option>
+      <option value="flip-2-hor-top-1"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal top 1 {{/i18n}}</option>
+      <option value="flip-2-hor-top-2"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal top 2 {{/i18n}}</option>
+      <option value="flip-2-hor-bottom-1"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal bottom 1 {{/i18n}}</option>
+      <option value="flip-2-hor-bottom-2"> &nbsp;  &nbsp; {{#i18n}} Flip 2 horizontal bottom 2 {{/i18n}}</option>
+      <option value="flip-2-ver-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical left forward {{/i18n}}</option>
+      <option value="flip-2-ver-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical right forward {{/i18n}}</option>
+      <option value="flip-2-ver-left-bck"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical left backward {{/i18n}}</option>
+      <option value="flip-2-ver-right-bck"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical right backward {{/i18n}}</option>
+      <option value="flip-2-ver-left-1"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical left 1 {{/i18n}}</option>
+      <option value="flip-2-ver-left-2"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical left 2 {{/i18n}}</option>
+      <option value="flip-2-ver-right-1"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical right 1 {{/i18n}}</option>
+      <option value="flip-2-ver-right-2"> &nbsp;  &nbsp; {{#i18n}} Flip 2 vertical right 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flip scale {{/i18n}}</option>
+      <option value="flip-scale-up-hor"> &nbsp;  &nbsp; {{#i18n}} Flip scale up horizontal {{/i18n}}</option>
+      <option value="flip-scale-up-ver"> &nbsp;  &nbsp; {{#i18n}} Flip scale up vertival {{/i18n}}</option>
+      <option value="flip-scale-down-hor"> &nbsp;  &nbsp; {{#i18n}} Flip scale down horizontal {{/i18n}}</option>
+      <option value="flip-scale-down-ver"> &nbsp;  &nbsp; {{#i18n}} Flip scale down vertical {{/i18n}}</option>
+      <option value="flip-scale-up-diag-1"> &nbsp;  &nbsp; {{#i18n}} Flip scale up diagonal 1 {{/i18n}}</option>
+      <option value="flip-scale-up-diag-2"> &nbsp;  &nbsp; {{#i18n}} Flip scale up diagonal 2 {{/i18n}}</option>
+      <option value="flip-scale-down-diag-1"> &nbsp;  &nbsp; {{#i18n}} Flip scale down diagonal 1 {{/i18n}}</option>
+      <option value="flip-scale-down-diag-2"> &nbsp;  &nbsp; {{#i18n}} Flip scale down diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flip scale 2 {{/i18n}}</option>
+      <option value="flip-scale-2-hor-top"> &nbsp;  &nbsp; {{#i18n}} Flip scale 2 horizontal top {{/i18n}}</option>
+      <option value="flip-scale-2-hor-bottom"> &nbsp;  &nbsp; {{#i18n}} Flip scale 2 horizontal bottom {{/i18n}}</option>
+      <option value="flip-scale-2-ver-left"> &nbsp;  &nbsp; {{#i18n}} Flip scale 2 vertical left {{/i18n}}</option>
+      <option value="flip-scale-2-ver-right"> &nbsp;  &nbsp; {{#i18n}} Flip scale 2 vertical right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Swing {{/i18n}}</option>
+      <option value="swing-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing top forward {{/i18n}}</option>
+      <option value="swing-top-bck"> &nbsp;  &nbsp; {{#i18n}} Swing top backward {{/i18n}}</option>
+      <option value="swing-top-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing top right forward {{/i18n}}</option>
+      <option value="swing-top-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swing top right backward {{/i18n}}</option>
+      <option value="swing-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing right forward {{/i18n}}</option>
+      <option value="swing-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swing right backward {{/i18n}}</option>
+      <option value="swing-bottom-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing bottom right forward {{/i18n}}</option>
+      <option value="swing-bottom-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swing bottom right backward {{/i18n}}</option>
+      <option value="swing-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing bottom forward {{/i18n}}</option>
+      <option value="swing-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Swing bottom backward {{/i18n}}</option>
+      <option value="swing-bottom-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing bottom left forward {{/i18n}}</option>
+      <option value="swing-bottom-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swing bottom left backward {{/i18n}}</option>
+      <option value="swing-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing left forward {{/i18n}}</option>
+      <option value="swing-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swing left backward {{/i18n}}</option>
+      <option value="swing-top-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing top left forward {{/i18n}}</option>
+      <option value="swing-top-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swing top left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide {{/i18n}}</option>
+      <option value="slide-top"> &nbsp;  &nbsp; {{#i18n}} Slide top {{/i18n}}</option>
+      <option value="slide-tr"> &nbsp;  &nbsp; {{#i18n}} Slide top right {{/i18n}}</option>
+      <option value="slide-right"> &nbsp;  &nbsp; {{#i18n}} Slide right {{/i18n}}</option>
+      <option value="slide-br"> &nbsp;  &nbsp; {{#i18n}} Slide bottom right {{/i18n}}</option>
+      <option value="slide-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide bottom {{/i18n}}</option>
+      <option value="slide-bl"> &nbsp;  &nbsp; {{#i18n}} Slide bottom left {{/i18n}}</option>
+      <option value="slide-left"> &nbsp;  &nbsp; {{#i18n}} Slide left {{/i18n}}</option>
+      <option value="slide-tl"> &nbsp;  &nbsp; {{#i18n}} Slide top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide backward {{/i18n}}</option>
+      <option value="slide-bck-center"> &nbsp;  &nbsp; {{#i18n}} Slide backward center {{/i18n}}</option>
+      <option value="slide-bck-top"> &nbsp;  &nbsp; {{#i18n}} Slide backward top {{/i18n}}</option>
+      <option value="slide-bck-tr"> &nbsp;  &nbsp; {{#i18n}} Slide backward top right {{/i18n}}</option>
+      <option value="slide-bck-right"> &nbsp;  &nbsp; {{#i18n}} Slide backward right {{/i18n}}</option>
+      <option value="slide-bck-br"> &nbsp;  &nbsp; {{#i18n}} Slide backward bottom right {{/i18n}}</option>
+      <option value="slide-bck-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide backward bottom {{/i18n}}</option>
+      <option value="slide-bck-bl"> &nbsp;  &nbsp; {{#i18n}} Slide backward bottom left {{/i18n}}</option>
+      <option value="slide-bck-left"> &nbsp;  &nbsp; {{#i18n}} Slide backward left {{/i18n}}</option>
+      <option value="slide-bck-tl"> &nbsp;  &nbsp; {{#i18n}} Slide backward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide forward {{/i18n}}</option>
+      <option value="slide-fwd-center"> &nbsp;  &nbsp; {{#i18n}} Slide forward center {{/i18n}}</option>
+      <option value="slide-fwd-top"> &nbsp;  &nbsp; {{#i18n}} Slide forward top {{/i18n}}</option>
+      <option value="slide-fwd-tr"> &nbsp;  &nbsp; {{#i18n}} Slide forward top right {{/i18n}}</option>
+      <option value="slide-fwd-right"> &nbsp;  &nbsp; {{#i18n}} Slide forward right {{/i18n}}</option>
+      <option value="slide-fwd-br"> &nbsp;  &nbsp; {{#i18n}} Slide forward bottom right {{/i18n}}</option>
+      <option value="slide-fwd-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide forward bottom {{/i18n}}</option>
+      <option value="slide-fwd-bl"> &nbsp;  &nbsp; {{#i18n}} Slide forward bottom left {{/i18n}}</option>
+      <option value="slide-fwd-left"> &nbsp;  &nbsp; {{#i18n}} Slide forward left {{/i18n}}</option>
+      <option value="slide-fwd-tl"> &nbsp;  &nbsp; {{#i18n}} Slide forward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide rotate {{/i18n}}</option>
+      <option value="slide-rotate-hor-top"> &nbsp;  &nbsp; {{#i18n}} Slide rotate horizontal top {{/i18n}}</option>
+      <option value="slide-rotate-hor-t-bck"> &nbsp;  &nbsp; {{#i18n}} Slide rotate horizontal top backward {{/i18n}}</option>
+      <option value="slide-rotate-hor-t-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide rotate horizontal top forward {{/i18n}}</option>
+      <option value="slide-rotate-ver-right"> &nbsp;  &nbsp; {{#i18n}} Slide rotate vertical right {{/i18n}}</option>
+      <option value="slide-rotate-ver-r-bck"> &nbsp;  &nbsp; {{#i18n}} Slide rotate vertical right backward {{/i18n}}</option>
+      <option value="slide-rotate-ver-r-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide rotate vertical right forward {{/i18n}}</option>
+      <option value="slide-rotate-hor-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide rotate horizontal bottom {{/i18n}}</option>
+      <option value="slide-rotate-hor-b-bck"> &nbsp;  &nbsp; {{#i18n}} Slide rotate horizontal bottom backward {{/i18n}}</option>
+      <option value="slide-rotate-hor-b-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide rotate horizontal bottom forward {{/i18n}}</option>
+      <option value="slide-rotate-ver-left"> &nbsp;  &nbsp; {{#i18n}} Slide rotate vertical left {{/i18n}}</option>
+      <option value="slide-rotate-ver-l-bck"> &nbsp;  &nbsp; {{#i18n}} Slide rotate vertical left backward {{/i18n}}</option>
+      <option value="slide-rotate-ver-l-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide rotate vertical left forward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shadow drop {{/i18n}}</option>
+      <option value="shadow-drop-center"> &nbsp;  &nbsp; {{#i18n}} Shadow drop center {{/i18n}}</option>
+      <option value="shadow-drop-top"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top {{/i18n}}</option>
+      <option value="shadow-drop-right"> &nbsp;  &nbsp; {{#i18n}} Shadow drop right {{/i18n}}</option>
+      <option value="shadow-drop-bottom"> &nbsp;  &nbsp; {{#i18n}} Shadow drop bottom {{/i18n}}</option>
+      <option value="shadow-drop-left"> &nbsp;  &nbsp; {{#i18n}} Shadow drop left {{/i18n}}</option>
+      <option value="shadow-drop-lr"> &nbsp;  &nbsp; {{#i18n}} Shadow drop left right {{/i18n}}</option>
+      <option value="shadow-drop-tb"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top bottom {{/i18n}}</option>
+      <option value="shadow-drop-tr"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top right {{/i18n}}</option>
+      <option value="shadow-drop-br"> &nbsp;  &nbsp; {{#i18n}} Shadow drop bottom right {{/i18n}}</option>
+      <option value="shadow-drop-bl"> &nbsp;  &nbsp; {{#i18n}} Shadow drop bottom left {{/i18n}}</option>
+      <option value="shadow-drop-tl"> &nbsp;  &nbsp; {{#i18n}} Shadow drop top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shadow 2 drop {{/i18n}}</option>
+      <option value="shadow-drop-2-center"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop center {{/i18n}}</option>
+      <option value="shadow-drop-2-top"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop top {{/i18n}}</option>
+      <option value="shadow-drop-2-right"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop right {{/i18n}}</option>
+      <option value="shadow-drop-2-bottom"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop bottom {{/i18n}}</option>
+      <option value="shadow-drop-2-left"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop left {{/i18n}}</option>
+      <option value="shadow-drop-2-lr"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop left right {{/i18n}}</option>
+      <option value="shadow-drop-2-tb"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop top bottom {{/i18n}}</option>
+      <option value="shadow-drop-2-tr"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop top right {{/i18n}}</option>
+      <option value="shadow-drop-2-br"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop bottom right {{/i18n}}</option>
+      <option value="shadow-drop-2-bl"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop bottom left {{/i18n}}</option>
+      <option value="shadow-drop-2-tl"> &nbsp;  &nbsp; {{#i18n}} Shadow 2 drop top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shadow pop {{/i18n}}</option>
+      <option value="shadow-pop-tr"> &nbsp;  &nbsp; {{#i18n}} Shadow pop top right {{/i18n}}</option>
+      <option value="shadow-pop-br"> &nbsp;  &nbsp; {{#i18n}} Shadow pop bottom right {{/i18n}}</option>
+      <option value="shadow-pop-bl"> &nbsp;  &nbsp; {{#i18n}} Shadow pop bottom left {{/i18n}}</option>
+      <option value="shadow-pop-tl"> &nbsp;  &nbsp; {{#i18n}} Shadow pop top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shadow inset {{/i18n}}</option>
+      <option value="shadow-inset-center"> &nbsp;  &nbsp; {{#i18n}} Shadow inset center {{/i18n}}</option>
+      <option value="shadow-inset-top"> &nbsp;  &nbsp; {{#i18n}} Shadow inset top {{/i18n}}</option>
+      <option value="shadow-inset-right"> &nbsp;  &nbsp; {{#i18n}} Shadow inset right {{/i18n}}</option>
+      <option value="shadow-inset-bottom"> &nbsp;  &nbsp; {{#i18n}} Shadow inset bottom {{/i18n}}</option>
+      <option value="shadow-inset-left"> &nbsp;  &nbsp; {{#i18n}} Shadow inset left {{/i18n}}</option>
+      <option value="shadow-inset-lr"> &nbsp;  &nbsp; {{#i18n}} Shadow inset left right {{/i18n}}</option>
+      <option value="shadow-inset-tb"> &nbsp;  &nbsp; {{#i18n}} Shadow inset top bottom {{/i18n}}</option>
+      <option value="shadow-inset-tr"> &nbsp;  &nbsp; {{#i18n}} Shadow inset top right {{/i18n}}</option>
+      <option value="shadow-inset-br"> &nbsp;  &nbsp; {{#i18n}} Shadow inset bottom right {{/i18n}}</option>
+      <option value="shadow-inset-bl"> &nbsp;  &nbsp; {{#i18n}} Shadow inset bottom left {{/i18n}}</option>
+      <option value="shadow-inset-tl"> &nbsp;  &nbsp; {{#i18n}} Shadow inset top left {{/i18n}}</option>
+  </optgroup>
+
+  <optgroup label="{{#i18n}} Entrances {{/i18n}}">
+    <option class="group" value="group" disabled>{{#i18n}} Scale in {{/i18n}}</option>
+      <option value="scale-in-top"> &nbsp;  &nbsp; {{#i18n}} Scale in top {{/i18n}}</option>
+      <option value="scale-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale in bottom {{/i18n}}</option>
+      <option value="scale-in-left"> &nbsp;  &nbsp; {{#i18n}} Scale in left {{/i18n}}</option>
+      <option value="scale-in-right"> &nbsp;  &nbsp; {{#i18n}} Scale in right {{/i18n}}</option>
+      <option value="scale-in-center"> &nbsp;  &nbsp; {{#i18n}} Scale in center {{/i18n}}</option>
+      <option value="scale-in-tl"> &nbsp;  &nbsp; {{#i18n}} Scale in top left {{/i18n}}</option>
+      <option value="scale-in-tr"> &nbsp;  &nbsp; {{#i18n}} Scale in top right {{/i18n}}</option>
+      <option value="scale-in-bl"> &nbsp;  &nbsp; {{#i18n}} Scale in bottom left {{/i18n}}</option>
+      <option value="scale-in-br"> &nbsp;  &nbsp; {{#i18n}} Scale in bottom right {{/i18n}}</option>
+      <option value="scale-in-ver-top"> &nbsp;  &nbsp; {{#i18n}} Scale in vertical top {{/i18n}}</option>
+      <option value="scale-in-ver-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale in vertical bottom {{/i18n}}</option>
+      <option value="scale-in-ver-center"> &nbsp;  &nbsp; {{#i18n}} Scale in vertical center {{/i18n}}</option>
+      <option value="scale-in-hor-left"> &nbsp;  &nbsp; {{#i18n}} Scale in horizontal left {{/i18n}}</option>
+      <option value="scale-in-hor-right"> &nbsp;  &nbsp; {{#i18n}} Scale in horizontal right {{/i18n}}</option>
+      <option value="scale-in-hor-center"> &nbsp;  &nbsp; {{#i18n}} Scale in horizontal center {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate in {{/i18n}}</option>
+      <option value="rotate-in-center"> &nbsp;  &nbsp; {{#i18n}} Rotate in center {{/i18n}}</option>
+      <option value="rotate-in-top"> &nbsp;  &nbsp; {{#i18n}} Rotate in top {{/i18n}}</option>
+      <option value="rotate-in-tr"> &nbsp;  &nbsp; {{#i18n}} Rotate in top right {{/i18n}}</option>
+      <option value="rotate-in-right"> &nbsp;  &nbsp; {{#i18n}} Rotate in right {{/i18n}}</option>
+      <option value="rotate-in-br"> &nbsp;  &nbsp; {{#i18n}} Rotate in bottom right {{/i18n}}</option>
+      <option value="rotate-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Rotate in bottom {{/i18n}}</option>
+      <option value="rotate-in-bl"> &nbsp;  &nbsp; {{#i18n}} Rotate in bottom left {{/i18n}}</option>
+      <option value="rotate-in-left"> &nbsp;  &nbsp; {{#i18n}} Rotate in left {{/i18n}}</option>
+      <option value="rotate-in-tl"> &nbsp;  &nbsp; {{#i18n}} Rotate in top left {{/i18n}}</option>
+      <option value="rotate-in-hor"> &nbsp;  &nbsp; {{#i18n}} Rotate in horizontal {{/i18n}}</option>
+      <option value="rotate-in-ver"> &nbsp;  &nbsp; {{#i18n}} Rotate in vertical {{/i18n}}</option>
+      <option value="rotate-in-diag-1"> &nbsp;  &nbsp; {{#i18n}} Rotate in diagonal 1 {{/i18n}}</option>
+      <option value="rotate-in-diag-2"> &nbsp;  &nbsp; {{#i18n}} Rotate in diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate in 2 {{/i18n}}</option>
+      <option value="rotate-in-2-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 CW {{/i18n}}</option>
+      <option value="rotate-in-2-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 CCW {{/i18n}}</option>
+      <option value="rotate-in-2-fwd-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 forward CW {{/i18n}}</option>
+      <option value="rotate-in-2-fwd-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 forward CCW {{/i18n}}</option>
+      <option value="rotate-in-2-bck-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 backward CW {{/i18n}}</option>
+      <option value="rotate-in-2-bck-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 backward CCW {{/i18n}}</option>
+      <option value="rotate-in-2-tr-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 top right CW {{/i18n}}</option>
+      <option value="rotate-in-2-tr-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 top right CCW {{/i18n}}</option>
+      <option value="rotate-in-2-br-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 bottom right CW {{/i18n}}</option>
+      <option value="rotate-in-2-br-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 bottom right CCW {{/i18n}}</option>
+      <option value="rotate-in-2-bl-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 bottom left CW {{/i18n}}</option>
+      <option value="rotate-in-2-bl-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 bottom left CCW {{/i18n}}</option>
+      <option value="rotate-in-2-tl-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 top left CW {{/i18n}}</option>
+      <option value="rotate-in-2-tl-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate in 2 top left CCW {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Swirl in {{/i18n}}</option>
+      <option value="swirl-in-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in forward {{/i18n}}</option>
+      <option value="swirl-in-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in backward {{/i18n}}</option>
+      <option value="swirl-in-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in top forward {{/i18n}}</option>
+      <option value="swirl-in-top-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in top backward {{/i18n}}</option>
+      <option value="swirl-in-tr-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in top right forward {{/i18n}}</option>
+      <option value="swirl-in-tr-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in top right backward {{/i18n}}</option>
+      <option value="swirl-in-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in right forward {{/i18n}}</option>
+      <option value="swirl-in-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in right backward {{/i18n}}</option>
+      <option value="swirl-in-br-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in bottom right forward {{/i18n}}</option>
+      <option value="swirl-in-br-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in bottom right backward {{/i18n}}</option>
+      <option value="swirl-in-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in bottom forward {{/i18n}}</option>
+      <option value="swirl-in-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in bottom backward {{/i18n}}</option>
+      <option value="swirl-in-bl-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in bottom left forward {{/i18n}}</option>
+      <option value="swirl-in-bl-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in bottom left backward {{/i18n}}</option>
+      <option value="swirl-in-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in left forward {{/i18n}}</option>
+      <option value="swirl-in-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in left backward {{/i18n}}</option>
+      <option value="swirl-in-tl-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl in top left forward {{/i18n}}</option>
+      <option value="swirl-in-tl-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl in top left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flip in {{/i18n}}</option>
+      <option value="flip-in-hor-bottom"> &nbsp;  &nbsp; {{#i18n}} Flip in horizontal bottom {{/i18n}}</option>
+      <option value="flip-in-hor-top"> &nbsp;  &nbsp; {{#i18n}} Flip in horizontal top {{/i18n}}</option>
+      <option value="flip-in-ver-right"> &nbsp;  &nbsp; {{#i18n}} Flip in vertical right {{/i18n}}</option>
+      <option value="flip-in-ver-left"> &nbsp;  &nbsp; {{#i18n}} Flip in vertical left {{/i18n}}</option>
+      <option value="flip-in-diag-1-tr"> &nbsp;  &nbsp; {{#i18n}} Flip in diagonal 1 top right {{/i18n}}</option>
+      <option value="flip-in-diag-1-bl"> &nbsp;  &nbsp; {{#i18n}} Flip in diagonal 1 bottom left {{/i18n}}</option>
+      <option value="flip-in-diag-2-tl"> &nbsp;  &nbsp; {{#i18n}} Flip in diagonal 2 top left {{/i18n}}</option>
+      <option value="flip-in-diag-2-br"> &nbsp;  &nbsp; {{#i18n}} Flip in diagonal 2 bottom right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slit in {{/i18n}}</option>
+      <option value="slit-in-vertical"> &nbsp;  &nbsp; {{#i18n}} Slit in vertical {{/i18n}}</option>
+      <option value="slit-in-horizontal"> &nbsp;  &nbsp; {{#i18n}} Slit in horizontal {{/i18n}}</option>
+      <option value="slit-in-diagonal-1"> &nbsp;  &nbsp; {{#i18n}} Slit in diagonal 1 {{/i18n}}</option>
+      <option value="slit-in-diagonal-2"> &nbsp;  &nbsp; {{#i18n}} Slit in diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide in {{/i18n}}</option>
+      <option value="slide-in-top"> &nbsp;  &nbsp; {{#i18n}} Slide in top {{/i18n}}</option>
+      <option value="slide-in-tr"> &nbsp;  &nbsp; {{#i18n}} Slide in top right {{/i18n}}</option>
+      <option value="slide-in-right"> &nbsp;  &nbsp; {{#i18n}} Slide in right {{/i18n}}</option>
+      <option value="slide-in-br"> &nbsp;  &nbsp; {{#i18n}} Slide in bottom right {{/i18n}}</option>
+      <option value="slide-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide in bottom {{/i18n}}</option>
+      <option value="slide-in-bl"> &nbsp;  &nbsp; {{#i18n}} Slide in bottom left {{/i18n}}</option>
+      <option value="slide-in-left"> &nbsp;  &nbsp; {{#i18n}} Slide in left {{/i18n}}</option>
+      <option value="slide-in-tl"> &nbsp;  &nbsp; {{#i18n}} Slide in top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide in forward {{/i18n}}</option>
+      <option value="slide-in-fwd-center"> &nbsp;  &nbsp; {{#i18n}} Slide in forward center {{/i18n}}</option>
+      <option value="slide-in-fwd-top"> &nbsp;  &nbsp; {{#i18n}} Slide in forward top {{/i18n}}</option>
+      <option value="slide-in-fwd-tr"> &nbsp;  &nbsp; {{#i18n}} Slide in forward top right {{/i18n}}</option>
+      <option value="slide-in-fwd-right"> &nbsp;  &nbsp; {{#i18n}} Slide in forward right {{/i18n}}</option>
+      <option value="slide-in-fwd-br"> &nbsp;  &nbsp; {{#i18n}} Slide in forward bottom right {{/i18n}}</option>
+      <option value="slide-in-fwd-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide in forward bottom {{/i18n}}</option>
+      <option value="slide-in-fwd-bl"> &nbsp;  &nbsp; {{#i18n}} Slide in forward bottom left {{/i18n}}</option>
+      <option value="slide-in-fwd-left"> &nbsp;  &nbsp; {{#i18n}} Slide in forward left {{/i18n}}</option>
+      <option value="slide-in-fwd-tl"> &nbsp;  &nbsp; {{#i18n}} Slide in forward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide in backward {{/i18n}}</option>
+      <option value="slide-in-bck-center"> &nbsp;  &nbsp; {{#i18n}} Slide in backward center {{/i18n}}</option>
+      <option value="slide-in-bck-top"> &nbsp;  &nbsp; {{#i18n}} Slide in backward top {{/i18n}}</option>
+      <option value="slide-in-bck-tr"> &nbsp;  &nbsp; {{#i18n}} Slide in backward top right {{/i18n}}</option>
+      <option value="slide-in-bck-right"> &nbsp;  &nbsp; {{#i18n}} Slide in backward right {{/i18n}}</option>
+      <option value="slide-in-bck-br"> &nbsp;  &nbsp; {{#i18n}} Slide in backward bottom right {{/i18n}}</option>
+      <option value="slide-in-bck-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide in backward bottom {{/i18n}}</option>
+      <option value="slide-in-bck-bl"> &nbsp;  &nbsp; {{#i18n}} Slide in backward bottom left {{/i18n}}</option>
+      <option value="slide-in-bck-left"> &nbsp;  &nbsp; {{#i18n}} Slide in backward left {{/i18n}}</option>
+      <option value="slide-in-bck-tl"> &nbsp;  &nbsp; {{#i18n}} Slide in backward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide in blurred {{/i18n}}</option>
+      <option value="slide-in-blurred-top"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred top {{/i18n}}</option>
+      <option value="slide-in-blurred-tr"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred top right {{/i18n}}</option>
+      <option value="slide-in-blurred-right"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred right {{/i18n}}</option>
+      <option value="slide-in-blurred-br"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred bottom right {{/i18n}}</option>
+      <option value="slide-in-blurred-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred bottom {{/i18n}}</option>
+      <option value="slide-in-blurred-bl"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred bottom left {{/i18n}}</option>
+      <option value="slide-in-blurred-left"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred left {{/i18n}}</option>
+      <option value="slide-in-blurred-tl"> &nbsp;  &nbsp; {{#i18n}} Slide in blurred top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide in elliptic {{/i18n}}</option>
+      <option value="slide-in-elliptic-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic top forward {{/i18n}}</option>
+      <option value="slide-in-elliptic-top-bck"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic top backward {{/i18n}}</option>
+      <option value="slide-in-elliptic-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic right forward {{/i18n}}</option>
+      <option value="slide-in-elliptic-right-bck"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic right backward {{/i18n}}</option>
+      <option value="slide-in-elliptic-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic bottom forward {{/i18n}}</option>
+      <option value="slide-in-elliptic-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic bottom backward {{/i18n}}</option>
+      <option value="slide-in-elliptic-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic left forward {{/i18n}}</option>
+      <option value="slide-in-elliptic-left-bck"> &nbsp;  &nbsp; {{#i18n}} Slide in elliptic left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Bounce in {{/i18n}}</option>
+      <option value="bounce-in-top"> &nbsp;  &nbsp; {{#i18n}} Bounce in top {{/i18n}}</option>
+      <option value="bounce-in-right"> &nbsp;  &nbsp; {{#i18n}} Bounce in right {{/i18n}}</option>
+      <option value="bounce-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Bounce in bottom {{/i18n}}</option>
+      <option value="bounce-in-left"> &nbsp;  &nbsp; {{#i18n}} Bounce in left {{/i18n}}</option>
+      <option value="bounce-in-fwd"> &nbsp;  &nbsp; {{#i18n}} Bounce in forward {{/i18n}}</option>
+      <option value="bounce-in-bck"> &nbsp;  &nbsp; {{#i18n}} Bounce in backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Roll in {{/i18n}}</option>
+      <option value="roll-in-top"> &nbsp;  &nbsp; {{#i18n}} Roll in top {{/i18n}}</option>
+      <option value="roll-in-right"> &nbsp;  &nbsp; {{#i18n}} Roll in right {{/i18n}}</option>
+      <option value="roll-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Roll in bottom {{/i18n}}</option>
+      <option value="roll-in-left"> &nbsp;  &nbsp; {{#i18n}} Roll in left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Roll in blurred {{/i18n}}</option>
+      <option value="roll-in-blurred-top"> &nbsp;  &nbsp; {{#i18n}} Roll in blurred top {{/i18n}}</option>
+      <option value="roll-in-blurred-right"> &nbsp;  &nbsp; {{#i18n}} Roll in blurred right {{/i18n}}</option>
+      <option value="roll-in-blurred-bottom"> &nbsp;  &nbsp; {{#i18n}} Roll in blurred bottom {{/i18n}}</option>
+      <option value="roll-in-blurred-left"> &nbsp;  &nbsp; {{#i18n}} Roll in blurred left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Tilt in {{/i18n}}</option>
+      <option value="tilt-in-top-1"> &nbsp;  &nbsp; {{#i18n}} Tilt in top 1 {{/i18n}}</option>
+      <option value="tilt-in-top-2"> &nbsp;  &nbsp; {{#i18n}} Tilt in top 2 {{/i18n}}</option>
+      <option value="tilt-in-tr"> &nbsp;  &nbsp; {{#i18n}} Tilt in top right {{/i18n}}</option>
+      <option value="tilt-in-right-1"> &nbsp;  &nbsp; {{#i18n}} Tilt in right 1 {{/i18n}}</option>
+      <option value="tilt-in-right-2"> &nbsp;  &nbsp; {{#i18n}} Tilt in right 2 {{/i18n}}</option>
+      <option value="tilt-in-br"> &nbsp;  &nbsp; {{#i18n}} Tilt in bottom right {{/i18n}}</option>
+      <option value="tilt-in-bottom-1"> &nbsp;  &nbsp; {{#i18n}} Tilt in bottom 1 {{/i18n}}</option>
+      <option value="tilt-in-bottom-2"> &nbsp;  &nbsp; {{#i18n}} Tilt in bottom 2 {{/i18n}}</option>
+      <option value="tilt-in-bl"> &nbsp;  &nbsp; {{#i18n}} Tilt in bottom left {{/i18n}}</option>
+      <option value="tilt-in-left-1"> &nbsp;  &nbsp; {{#i18n}} Tilt in left 1 {{/i18n}}</option>
+      <option value="tilt-in-left-2"> &nbsp;  &nbsp; {{#i18n}} Tilt in left 2 {{/i18n}}</option>
+      <option value="tilt-in-tl"> &nbsp;  &nbsp; {{#i18n}} Tilt in top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Tilt in forward {{/i18n}}</option>
+      <option value="tilt-in-fwd-tr"> &nbsp;  &nbsp; {{#i18n}} Tilt in forward top right {{/i18n}}</option>
+      <option value="tilt-in-fwd-br"> &nbsp;  &nbsp; {{#i18n}} Tilt in forward bottom right {{/i18n}}</option>
+      <option value="tilt-in-fwd-bl"> &nbsp;  &nbsp; {{#i18n}} Tilt in forward bottom left {{/i18n}}</option>
+      <option value="tilt-in-fwd-tl"> &nbsp;  &nbsp; {{#i18n}} Tilt in forward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Swing in {{/i18n}}</option>
+      <option value="swing-in-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing in top forward {{/i18n}}</option>
+      <option value="swing-in-top-bck"> &nbsp;  &nbsp; {{#i18n}} Swing in top backward {{/i18n}}</option>
+      <option value="swing-in-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing in right forward {{/i18n}}</option>
+      <option value="swing-in-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swing in right backward {{/i18n}}</option>
+      <option value="swing-in-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing in bottom forward {{/i18n}}</option>
+      <option value="swing-in-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Swing in bottom backward {{/i18n}}</option>
+      <option value="swing-in-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing in left forward {{/i18n}}</option>
+      <option value="swing-in-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swing in left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Fade in {{/i18n}}</option>
+      <option value="fade-in"> &nbsp;  &nbsp; {{#i18n}} Fade in {{/i18n}}</option>
+      <option value="fade-in-fwd"> &nbsp;  &nbsp; {{#i18n}} Fade in forward {{/i18n}}</option>
+      <option value="fade-in-bck"> &nbsp;  &nbsp; {{#i18n}} Fade in backward {{/i18n}}</option>
+      <option value="fade-in-top"> &nbsp;  &nbsp; {{#i18n}} Fade in top {{/i18n}}</option>
+      <option value="fade-in-tr"> &nbsp;  &nbsp; {{#i18n}} Fade in top right {{/i18n}}</option>
+      <option value="fade-in-right"> &nbsp;  &nbsp; {{#i18n}} Fade in right {{/i18n}}</option>
+      <option value="fade-in-br"> &nbsp;  &nbsp; {{#i18n}} Fade in bottom right {{/i18n}}</option>
+      <option value="fade-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Fade in bottom {{/i18n}}</option>
+      <option value="fade-in-bl"> &nbsp;  &nbsp; {{#i18n}} Fade in bottom left {{/i18n}}</option>
+      <option value="fade-in-left"> &nbsp;  &nbsp; {{#i18n}} Fade in left {{/i18n}}</option>
+      <option value="fade-in-tl"> &nbsp;  &nbsp; {{#i18n}} Fade in top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Puff in {{/i18n}}</option>
+      <option value="puff-in-center"> &nbsp;  &nbsp; {{#i18n}} Puff in center {{/i18n}}</option>
+      <option value="puff-in-top"> &nbsp;  &nbsp; {{#i18n}} Puff in top {{/i18n}}</option>
+      <option value="puff-in-tr"> &nbsp;  &nbsp; {{#i18n}} Puff in top right {{/i18n}}</option>
+      <option value="puff-in-right"> &nbsp;  &nbsp; {{#i18n}} Puff in right {{/i18n}}</option>
+      <option value="puff-in-br"> &nbsp;  &nbsp; {{#i18n}} Puff in bottom right {{/i18n}}</option>
+      <option value="puff-in-bottom"> &nbsp;  &nbsp; {{#i18n}} Puff in bottom {{/i18n}}</option>
+      <option value="puff-in-bl"> &nbsp;  &nbsp; {{#i18n}} Puff in bottom left {{/i18n}}</option>
+      <option value="puff-in-left"> &nbsp;  &nbsp; {{#i18n}} Puff in left {{/i18n}}</option>
+      <option value="puff-in-tl"> &nbsp;  &nbsp; {{#i18n}} Puff in top left {{/i18n}}</option>
+      <option value="puff-in-hor"> &nbsp;  &nbsp; {{#i18n}} Puff in horizontal {{/i18n}}</option>
+      <option value="puff-in-ver"> &nbsp;  &nbsp; {{#i18n}} Puff in vertical {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flicker in {{/i18n}}</option>
+      <option value="flicker-in-1"> &nbsp;  &nbsp; {{#i18n}} Flicker in 1 {{/i18n}}</option>
+      <option value="flicker-in-2"> &nbsp;  &nbsp; {{#i18n}} Flicker in 2 {{/i18n}}</option>
+  </optgroup>
+
+  <optgroup label="{{#i18n}} Exits {{/i18n}}">
+    <option class="group" value="group" disabled>{{#i18n}} Scale out {{/i18n}}</option>
+      <option value="scale-out-top"> &nbsp;  &nbsp; {{#i18n}} Scale out top {{/i18n}}</option>
+      <option value="scale-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale out bottom {{/i18n}}</option>
+      <option value="scale-out-left"> &nbsp;  &nbsp; {{#i18n}} Scale out left {{/i18n}}</option>
+      <option value="scale-out-right"> &nbsp;  &nbsp; {{#i18n}} Scale out right {{/i18n}}</option>
+      <option value="scale-out-center"> &nbsp;  &nbsp; {{#i18n}} Scale out center {{/i18n}}</option>
+      <option value="scale-out-tl"> &nbsp;  &nbsp; {{#i18n}} Scale out top left {{/i18n}}</option>
+      <option value="scale-out-tr"> &nbsp;  &nbsp; {{#i18n}} Scale out top right {{/i18n}}</option>
+      <option value="scale-out-bl"> &nbsp;  &nbsp; {{#i18n}} Scale out bottom left {{/i18n}}</option>
+      <option value="scale-out-br"> &nbsp;  &nbsp; {{#i18n}} Scale out bottom right {{/i18n}}</option>
+      <option value="scale-out-ver-top"> &nbsp;  &nbsp; {{#i18n}} Scale out vertical top {{/i18n}}</option>
+      <option value="scale-out-ver-bottom"> &nbsp;  &nbsp; {{#i18n}} Scale out vertical bottom {{/i18n}}</option>
+      <option value="scale-out-ver-center"> &nbsp;  &nbsp; {{#i18n}} Scale out vertical center {{/i18n}}</option>
+      <option value="scale-out-hor-left"> &nbsp;  &nbsp; {{#i18n}} Scale out horizontal left {{/i18n}}</option>
+      <option value="scale-out-hor-right"> &nbsp;  &nbsp; {{#i18n}} Scale out horizontal right {{/i18n}}</option>
+      <option value="scale-out-hor-center"> &nbsp;  &nbsp; {{#i18n}} Scale out horizontal center {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate out {{/i18n}}</option>
+      <option value="rotate-out-center"> &nbsp;  &nbsp; {{#i18n}} Rotate out center {{/i18n}}</option>
+      <option value="rotate-out-top"> &nbsp;  &nbsp; {{#i18n}} Rotate out top {{/i18n}}</option>
+      <option value="rotate-out-tr"> &nbsp;  &nbsp; {{#i18n}} Rotate out top right {{/i18n}}</option>
+      <option value="rotate-out-right"> &nbsp;  &nbsp; {{#i18n}} Rotate out right {{/i18n}}</option>
+      <option value="rotate-out-br"> &nbsp;  &nbsp; {{#i18n}} Rotate out bottom right {{/i18n}}</option>
+      <option value="rotate-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Rotate out bottom {{/i18n}}</option>
+      <option value="rotate-out-bl"> &nbsp;  &nbsp; {{#i18n}} Rotate out bottom left {{/i18n}}</option>
+      <option value="rotate-out-left"> &nbsp;  &nbsp; {{#i18n}} Rotate out left {{/i18n}}</option>
+      <option value="rotate-out-tl"> &nbsp;  &nbsp; {{#i18n}} Rotate out top left {{/i18n}}</option>
+      <option value="rotate-out-hor"> &nbsp;  &nbsp; {{#i18n}} Rotate out horizontal {{/i18n}}</option>
+      <option value="rotate-out-ver"> &nbsp;  &nbsp; {{#i18n}} Rotate out vertical {{/i18n}}</option>
+      <option value="rotate-out-diag-1"> &nbsp;  &nbsp; {{#i18n}} Rotate out diagonal 1 {{/i18n}}</option>
+      <option value="rotate-out-diag-2"> &nbsp;  &nbsp; {{#i18n}} Rotate out diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Rotate out 2 {{/i18n}}</option>
+      <option value="rotate-out-2-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 CW {{/i18n}}</option>
+      <option value="rotate-out-2-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 CCW {{/i18n}}</option>
+      <option value="rotate-out-2-bck"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 backward {{/i18n}}</option>
+      <option value="rotate-out-2-fwd"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 forward {{/i18n}}</option>
+      <option value="rotate-out-2-tr-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 top right CW {{/i18n}}</option>
+      <option value="rotate-out-2-tr-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 top right CCW {{/i18n}}</option>
+      <option value="rotate-out-2-br-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 bottom right CW {{/i18n}}</option>
+      <option value="rotate-out-2-br-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 bottom right CCW {{/i18n}}</option>
+      <option value="rotate-out-2-bl-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 bottom left CW {{/i18n}}</option>
+      <option value="rotate-out-2-bl-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 bottom left CCW {{/i18n}}</option>
+      <option value="rotate-out-2-tl-cw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 top left CW {{/i18n}}</option>
+      <option value="rotate-out-2-tl-ccw"> &nbsp;  &nbsp; {{#i18n}} Rotate out 2 top left CCW {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Swirl out {{/i18n}}</option>
+      <option value="swirl-out-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out forward {{/i18n}}</option>
+      <option value="swirl-out-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out backward {{/i18n}}</option>
+      <option value="swirl-out-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out top forward {{/i18n}}</option>
+      <option value="swirl-out-top-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out top backward {{/i18n}}</option>
+      <option value="swirl-out-tr-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out top right forward {{/i18n}}</option>
+      <option value="swirl-out-tr-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out top right backward {{/i18n}}</option>
+      <option value="swirl-out-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out right forward {{/i18n}}</option>
+      <option value="swirl-out-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out right backward {{/i18n}}</option>
+      <option value="swirl-out-br-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out bottom right forward {{/i18n}}</option>
+      <option value="swirl-out-br-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out bottom right backward {{/i18n}}</option>
+      <option value="swirl-out-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out bottom forward {{/i18n}}</option>
+      <option value="swirl-out-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out bottom backward {{/i18n}}</option>
+      <option value="swirl-out-bl-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out bottom left forward {{/i18n}}</option>
+      <option value="swirl-out-bl-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out bottom left backward {{/i18n}}</option>
+      <option value="swirl-out-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out left forward {{/i18n}}</option>
+      <option value="swirl-out-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out left backward {{/i18n}}</option>
+      <option value="swirl-out-tl-fwd"> &nbsp;  &nbsp; {{#i18n}} Swirl out top left forward {{/i18n}}</option>
+      <option value="swirl-out-tl-bck"> &nbsp;  &nbsp; {{#i18n}} Swirl out top left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flip out {{/i18n}}</option>
+      <option value="flip-out-hor-bottom"> &nbsp;  &nbsp; {{#i18n}} Flip out horizontal bottom {{/i18n}}</option>
+      <option value="flip-out-hor-top"> &nbsp;  &nbsp; {{#i18n}} Flip out horizontal top {{/i18n}}</option>
+      <option value="flip-out-ver-right"> &nbsp;  &nbsp; {{#i18n}} Flip out vertical right {{/i18n}}</option>
+      <option value="flip-out-ver-left"> &nbsp;  &nbsp; {{#i18n}} Flip out vertical left {{/i18n}}</option>
+      <option value="flip-out-diag-1-tr"> &nbsp;  &nbsp; {{#i18n}} Flip out diagonal 1 top right {{/i18n}}</option>
+      <option value="flip-out-diag-1-bl"> &nbsp;  &nbsp; {{#i18n}} Flip out diagonal 1 bottom left {{/i18n}}</option>
+      <option value="flip-out-diag-2-tl"> &nbsp;  &nbsp; {{#i18n}} Flip out diagonal 2 top left {{/i18n}}</option>
+      <option value="flip-out-diag-2-br"> &nbsp;  &nbsp; {{#i18n}} Flip out diagonal 2 bottom right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slit out {{/i18n}}</option>
+      <option value="slit-out-vertical"> &nbsp;  &nbsp; {{#i18n}} Slit out vertical {{/i18n}}</option>
+      <option value="slit-out-horizontal"> &nbsp;  &nbsp; {{#i18n}} Slit out horizontal {{/i18n}}</option>
+      <option value="slit-out-diagonal-1"> &nbsp;  &nbsp; {{#i18n}} Slit out diagonal 1 {{/i18n}}</option>
+      <option value="slit-out-diagonal-2"> &nbsp;  &nbsp; {{#i18n}} Slit out diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide out {{/i18n}}</option>
+      <option value="slide-out-top"> &nbsp;  &nbsp; {{#i18n}} Slide out top {{/i18n}}</option>
+      <option value="slide-out-tr"> &nbsp;  &nbsp; {{#i18n}} Slide out top right {{/i18n}}</option>
+      <option value="slide-out-right"> &nbsp;  &nbsp; {{#i18n}} Slide out right {{/i18n}}</option>
+      <option value="slide-out-br"> &nbsp;  &nbsp; {{#i18n}} Slide out bottom right {{/i18n}}</option>
+      <option value="slide-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide out bottom {{/i18n}}</option>
+      <option value="slide-out-bl"> &nbsp;  &nbsp; {{#i18n}} Slide out bottom left {{/i18n}}</option>
+      <option value="slide-out-left"> &nbsp;  &nbsp; {{#i18n}} Slide out left {{/i18n}}</option>
+      <option value="slide-out-tl"> &nbsp;  &nbsp; {{#i18n}} Slide out top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide out forward {{/i18n}}</option>
+      <option value="slide-out-fwd-center"> &nbsp;  &nbsp; {{#i18n}} Slide out forward center {{/i18n}}</option>
+      <option value="slide-out-fwd-top"> &nbsp;  &nbsp; {{#i18n}} Slide out forward top {{/i18n}}</option>
+      <option value="slide-out-fwd-tr"> &nbsp;  &nbsp; {{#i18n}} Slide out forward top right {{/i18n}}</option>
+      <option value="slide-out-fwd-right"> &nbsp;  &nbsp; {{#i18n}} Slide out forward right {{/i18n}}</option>
+      <option value="slide-out-fwd-br"> &nbsp;  &nbsp; {{#i18n}} Slide out forward bottom right {{/i18n}}</option>
+      <option value="slide-out-fwd-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide out forward bottom {{/i18n}}</option>
+      <option value="slide-out-fwd-bl"> &nbsp;  &nbsp; {{#i18n}} Slide out forward bottom left {{/i18n}}</option>
+      <option value="slide-out-fwd-left"> &nbsp;  &nbsp; {{#i18n}} Slide out forward left {{/i18n}}</option>
+      <option value="slide-out-fwd-tl"> &nbsp;  &nbsp; {{#i18n}} Slide out forward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide out backward {{/i18n}}</option>
+      <option value="slide-out-bck-center"> &nbsp;  &nbsp; {{#i18n}} Slide out backward center {{/i18n}}</option>
+      <option value="slide-out-bck-top"> &nbsp;  &nbsp; {{#i18n}} Slide out backward top {{/i18n}}</option>
+      <option value="slide-out-bck-tr"> &nbsp;  &nbsp; {{#i18n}} Slide out backward top right {{/i18n}}</option>
+      <option value="slide-out-bck-right"> &nbsp;  &nbsp; {{#i18n}} Slide out backward right {{/i18n}}</option>
+      <option value="slide-out-bck-br"> &nbsp;  &nbsp; {{#i18n}} Slide out backward bottom right {{/i18n}}</option>
+      <option value="slide-out-bck-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide out backward bottom {{/i18n}}</option>
+      <option value="slide-out-bck-bl"> &nbsp;  &nbsp; {{#i18n}} Slide out backward bottom left {{/i18n}}</option>
+      <option value="slide-out-bck-left"> &nbsp;  &nbsp; {{#i18n}} Slide out backward left {{/i18n}}</option>
+      <option value="slide-out-bck-tl"> &nbsp;  &nbsp; {{#i18n}} Slide out backward top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide out blurred {{/i18n}}</option>
+      <option value="slide-out-blurred-top"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred top {{/i18n}}</option>
+      <option value="slide-out-blurred-tr"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred top right {{/i18n}}</option>
+      <option value="slide-out-blurred-right"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred right {{/i18n}}</option>
+      <option value="slide-out-blurred-br"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred bottom right {{/i18n}}</option>
+      <option value="slide-out-blurred-bottom"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred bottom {{/i18n}}</option>
+      <option value="slide-out-blurred-bl"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred bottom left {{/i18n}}</option>
+      <option value="slide-out-blurred-left"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred left {{/i18n}}</option>
+      <option value="slide-out-blurred-tl"> &nbsp;  &nbsp; {{#i18n}} Slide out blurred top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Slide out elliptic {{/i18n}}</option>
+      <option value="slide-out-elliptic-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic top forward {{/i18n}}</option>
+      <option value="slide-out-elliptic-top-bck"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic top backward {{/i18n}}</option>
+      <option value="slide-out-elliptic-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic right forward {{/i18n}}</option>
+      <option value="slide-out-elliptic-right-bck"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic right backward {{/i18n}}</option>
+      <option value="slide-out-elliptic-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic bottom forward {{/i18n}}</option>
+      <option value="slide-out-elliptic-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic bottom backward {{/i18n}}</option>
+      <option value="slide-out-elliptic-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic left forward {{/i18n}}</option>
+      <option value="slide-out-elliptic-left-bck"> &nbsp;  &nbsp; {{#i18n}} Slide out elliptic left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Bounce out {{/i18n}}</option>
+      <option value="bounce-out-top"> &nbsp;  &nbsp; {{#i18n}} Bounce out top {{/i18n}}</option>
+      <option value="bounce-out-right"> &nbsp;  &nbsp; {{#i18n}} Bounce out right {{/i18n}}</option>
+      <option value="bounce-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Bounce out bottom {{/i18n}}</option>
+      <option value="bounce-out-left"> &nbsp;  &nbsp; {{#i18n}} Bounce out left {{/i18n}}</option>
+      <option value="bounce-out-fwd"> &nbsp;  &nbsp; {{#i18n}} Bounce out forward {{/i18n}}</option>
+      <option value="bounce-out-bck"> &nbsp;  &nbsp; {{#i18n}} Bounce out backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Roll out {{/i18n}}</option>
+      <option value="roll-out-top"> &nbsp;  &nbsp; {{#i18n}} Roll out top {{/i18n}}</option>
+      <option value="roll-out-right"> &nbsp;  &nbsp; {{#i18n}} Roll out right {{/i18n}}</option>
+      <option value="roll-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Roll out bottom {{/i18n}}</option>
+      <option value="roll-out-left"> &nbsp;  &nbsp; {{#i18n}} Roll out left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Roll out blurred {{/i18n}}</option>
+      <option value="roll-out-blurred-top"> &nbsp;  &nbsp; {{#i18n}} Roll out blurred top {{/i18n}}</option>
+      <option value="roll-out-blurred-right"> &nbsp;  &nbsp; {{#i18n}} Roll out blurred right {{/i18n}}</option>
+      <option value="roll-out-blurred-bottom"> &nbsp;  &nbsp; {{#i18n}} Roll out blurred bottom {{/i18n}}</option>
+      <option value="roll-out-blurred-left"> &nbsp;  &nbsp; {{#i18n}} Roll out blurred left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Swing out {{/i18n}}</option>
+      <option value="swing-out-top-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing out top forward {{/i18n}}</option>
+      <option value="swing-out-top-bck"> &nbsp;  &nbsp; {{#i18n}} Swing out top backward {{/i18n}}</option>
+      <option value="swing-out-right-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing out right forward {{/i18n}}</option>
+      <option value="swing-out-right-bck"> &nbsp;  &nbsp; {{#i18n}} Swing out right backward {{/i18n}}</option>
+      <option value="swing-out-bottom-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing out bottom forward {{/i18n}}</option>
+      <option value="swing-out-bottom-bck"> &nbsp;  &nbsp; {{#i18n}} Swing out bottom backward {{/i18n}}</option>
+      <option value="swing-out-left-fwd"> &nbsp;  &nbsp; {{#i18n}} Swing out left forward {{/i18n}}</option>
+      <option value="swing-out-left-bck"> &nbsp;  &nbsp; {{#i18n}} Swing out left backward {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Fade out {{/i18n}}</option>
+      <option value="fade-out"> &nbsp;  &nbsp; {{#i18n}} Fade out {{/i18n}}</option>
+      <option value="fade-out-fwd"> &nbsp;  &nbsp; {{#i18n}} Fade out forward {{/i18n}}</option>
+      <option value="fade-out-bck"> &nbsp;  &nbsp; {{#i18n}} Fade out backward {{/i18n}}</option>
+      <option value="fade-out-top"> &nbsp;  &nbsp; {{#i18n}} Fade out top {{/i18n}}</option>
+      <option value="fade-out-tr"> &nbsp;  &nbsp; {{#i18n}} Fade out top right {{/i18n}}</option>
+      <option value="fade-out-right"> &nbsp;  &nbsp; {{#i18n}} Fade out right {{/i18n}}</option>
+      <option value="fade-out-br"> &nbsp;  &nbsp; {{#i18n}} Fade out bottom right {{/i18n}}</option>
+      <option value="fade-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Fade out bottom {{/i18n}}</option>
+      <option value="fade-out-bl"> &nbsp;  &nbsp; {{#i18n}} Fade out bottom left {{/i18n}}</option>
+      <option value="fade-out-left"> &nbsp;  &nbsp; {{#i18n}} Fade out left {{/i18n}}</option>
+      <option value="fade-out-tl"> &nbsp;  &nbsp; {{#i18n}} Fade out top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Puff out {{/i18n}}</option>
+      <option value="puff-out-center"> &nbsp;  &nbsp; {{#i18n}} Puff out center {{/i18n}}</option>
+      <option value="puff-out-top"> &nbsp;  &nbsp; {{#i18n}} Puff out top {{/i18n}}</option>
+      <option value="puff-out-tr"> &nbsp;  &nbsp; {{#i18n}} Puff out top right {{/i18n}}</option>
+      <option value="puff-out-right"> &nbsp;  &nbsp; {{#i18n}} Puff out right {{/i18n}}</option>
+      <option value="puff-out-br"> &nbsp;  &nbsp; {{#i18n}} Puff out bottom right {{/i18n}}</option>
+      <option value="puff-out-bottom"> &nbsp;  &nbsp; {{#i18n}} Puff out bottom {{/i18n}}</option>
+      <option value="puff-out-bl"> &nbsp;  &nbsp; {{#i18n}} Puff out bottom left {{/i18n}}</option>
+      <option value="puff-out-left"> &nbsp;  &nbsp; {{#i18n}} Puff out left {{/i18n}}</option>
+      <option value="puff-out-tl"> &nbsp;  &nbsp; {{#i18n}} Puff out top left {{/i18n}}</option>
+      <option value="puff-out-hor"> &nbsp;  &nbsp; {{#i18n}} Puff out horizontal {{/i18n}}</option>
+      <option value="puff-out-ver"> &nbsp;  &nbsp; {{#i18n}} Puff out vertical {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flicker out {{/i18n}}</option>
+      <option value="flicker-out-1"> &nbsp;  &nbsp; {{#i18n}} Flicker out 1 {{/i18n}}</option>
+      <option value="flicker-out-2"> &nbsp;  &nbsp; {{#i18n}} Flicker out 2 {{/i18n}}</option>
+  </optgroup>
+
+  <optgroup label="{{#i18n}} Attention {{/i18n}}">
+    <option class="group" value="group" disabled>{{#i18n}} Vibrate {{/i18n}}</option>
+      <option value="vibrate-1"> &nbsp;  &nbsp; {{#i18n}} Vibrate 1 {{/i18n}}</option>
+      <option value="vibrate-2"> &nbsp;  &nbsp; {{#i18n}} Vibrate 2 {{/i18n}}</option>
+      <option value="vibrate-3"> &nbsp;  &nbsp; {{#i18n}} Vibrate 3 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Flicker {{/i18n}}</option>
+      <option value="flicker-1"> &nbsp;  &nbsp; {{#i18n}} Flicker 1 {{/i18n}}</option>
+      <option value="flicker-2"> &nbsp;  &nbsp; {{#i18n}} Flicker 2 {{/i18n}}</option>
+      <option value="flicker-3"> &nbsp;  &nbsp; {{#i18n}} Flicker 3 {{/i18n}}</option>
+      <option value="flicker-4"> &nbsp;  &nbsp; {{#i18n}} Flicker 4 {{/i18n}}</option>
+      <option value="flicker-5"> &nbsp;  &nbsp; {{#i18n}} Flicker 5 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Shake {{/i18n}}</option>
+      <option value="shake-horizontal"> &nbsp;  &nbsp; {{#i18n}} Shake horizontal {{/i18n}}</option>
+      <option value="shake-vertical"> &nbsp;  &nbsp; {{#i18n}} Shake vertical {{/i18n}}</option>
+      <option value="shake-lr"> &nbsp;  &nbsp; {{#i18n}} Shake left right {{/i18n}}</option>
+      <option value="shake-tr"> &nbsp;  &nbsp; {{#i18n}} Shake top right {{/i18n}}</option>
+      <option value="shake-top"> &nbsp;  &nbsp; {{#i18n}} Shake top {{/i18n}}</option>
+      <option value="shake-right"> &nbsp;  &nbsp; {{#i18n}} Shake right {{/i18n}}</option>
+      <option value="shake-br"> &nbsp;  &nbsp; {{#i18n}} Shake bottom right {{/i18n}}</option>
+      <option value="shake-bottom"> &nbsp;  &nbsp; {{#i18n}} Shake bottom {{/i18n}}</option>
+      <option value="shake-bl"> &nbsp;  &nbsp; {{#i18n}} Shake bottom left {{/i18n}}</option>
+      <option value="shake-left"> &nbsp;  &nbsp; {{#i18n}} Shake left {{/i18n}}</option>
+      <option value="shake-tl"> &nbsp;  &nbsp; {{#i18n}} Shake top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Jello {{/i18n}}</option>
+      <option value="jello-horizontal"> &nbsp;  &nbsp; {{#i18n}} Jello horizontal {{/i18n}}</option>
+      <option value="jello-vertical"> &nbsp;  &nbsp; {{#i18n}} Jello vertical {{/i18n}}</option>
+      <option value="jello-diagonal-1"> &nbsp;  &nbsp; {{#i18n}} Jello diagonal 1 {{/i18n}}</option>
+      <option value="jello-diagonal-2"> &nbsp;  &nbsp; {{#i18n}} Jello diagonal 2 {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Wobble {{/i18n}}</option>
+      <option value="wobble-hor-top"> &nbsp;  &nbsp; {{#i18n}} Wobble horizontal top {{/i18n}}</option>
+      <option value="wobble-hor-bottom"> &nbsp;  &nbsp; {{#i18n}} Wobble horizontal bottom {{/i18n}}</option>
+      <option value="wobble-ver-left"> &nbsp;  &nbsp; {{#i18n}} Wobble vertical left {{/i18n}}</option>
+      <option value="wobble-ver-right"> &nbsp;  &nbsp; {{#i18n}} Wobble vertical right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Bounce {{/i18n}}</option>
+      <option value="bounce-top"> &nbsp;  &nbsp; {{#i18n}} Bounce top {{/i18n}}</option>
+      <option value="bounce-bottom"> &nbsp;  &nbsp; {{#i18n}} Bounce bottom {{/i18n}}</option>
+      <option value="bounce-left"> &nbsp;  &nbsp; {{#i18n}} Bounce left {{/i18n}}</option>
+      <option value="bounce-right"> &nbsp;  &nbsp; {{#i18n}} Bounce right {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Pulsate {{/i18n}}</option>
+      <option value="heartbeat"> &nbsp;  &nbsp; {{#i18n}} Heartbeat {{/i18n}}</option>
+      <option value="pulsate-bck"> &nbsp;  &nbsp; {{#i18n}} Pulsate backward {{/i18n}}</option>
+      <option value="pulsate-fwd"> &nbsp;  &nbsp; {{#i18n}} Pulsate forward {{/i18n}}</option>
+      <option value="ping"> &nbsp;  &nbsp; {{#i18n}} Ping {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Blink {{/i18n}}</option>
+      <option value="blink-1"> &nbsp;  &nbsp; {{#i18n}} Blink 1 {{/i18n}}</option>
+      <option value="blink-2"> &nbsp;  &nbsp; {{#i18n}} Blink 2 {{/i18n}}</option>
+  </optgroup>
+
+  <optgroup label="{{#i18n}} Background {{/i18n}}">
+    <option class="group" value="group" disabled>{{#i18n}} Ken burns {{/i18n}}</option>
+      <option value="kenburns-top"> &nbsp;  &nbsp; {{#i18n}} Ken burns top {{/i18n}}</option>
+      <option value="kenburns-top-right"> &nbsp;  &nbsp; {{#i18n}} Ken burns top right {{/i18n}}</option>
+      <option value="kenburns-right"> &nbsp;  &nbsp; {{#i18n}} Ken burns right {{/i18n}}</option>
+      <option value="kenburns-bottom-right"> &nbsp;  &nbsp; {{#i18n}} Ken burns bottom right {{/i18n}}</option>
+      <option value="kenburns-bottom"> &nbsp;  &nbsp; {{#i18n}} Ken burns bottom {{/i18n}}</option>
+      <option value="kenburns-bottom-left"> &nbsp;  &nbsp; {{#i18n}} Ken burns bottom left {{/i18n}}</option>
+      <option value="kenburns-left"> &nbsp;  &nbsp; {{#i18n}} Ken burns left {{/i18n}}</option>
+      <option value="kenburns-top-left"> &nbsp;  &nbsp; {{#i18n}} Ken burns top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Background pan {{/i18n}}</option>
+      <option value="bg-pan-top"> &nbsp;  &nbsp; {{#i18n}} Background pan top {{/i18n}}</option>
+      <option value="bg-pan-tr"> &nbsp;  &nbsp; {{#i18n}} Background pan top right {{/i18n}}</option>
+      <option value="bg-pan-right"> &nbsp;  &nbsp; {{#i18n}} Background pan right {{/i18n}}</option>
+      <option value="bg-pan-br"> &nbsp;  &nbsp; {{#i18n}} Background pan bottom right {{/i18n}}</option>
+      <option value="bg-pan-bottom"> &nbsp;  &nbsp; {{#i18n}} Background pan bottom {{/i18n}}</option>
+      <option value="bg-pan-bl"> &nbsp;  &nbsp; {{#i18n}} Background pan bottom left {{/i18n}}</option>
+      <option value="bg-pan-left"> &nbsp;  &nbsp; {{#i18n}} Background pan left {{/i18n}}</option>
+      <option value="bg-pan-tl"> &nbsp;  &nbsp; {{#i18n}} Background pan top left {{/i18n}}</option>
+    <option class="group" value="group" disabled>{{#i18n}} Color change {{/i18n}}</option>
+      <option value="color-change-2x"> &nbsp;  &nbsp; {{#i18n}} Color change 2x {{/i18n}}</option>
+      <option value="color-change-3x"> &nbsp;  &nbsp; {{#i18n}} Color change 3x {{/i18n}}</option>
+      <option value="color-change-4x"> &nbsp;  &nbsp; {{#i18n}} Color change 4x {{/i18n}}</option>
+      <option value="color-change-5x"> &nbsp;  &nbsp; {{#i18n}} Color change 5x {{/i18n}}</option>
+  </optgroup>
+</select>

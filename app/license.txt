@@ -1,0 +1,13 @@
+Desech Studio
+Copyright Desech Studio SRL
+
+Google Material design icons
+Apache 2.0 License
+
+Google Material design components
+Google MIT License
+
+Google Fonts
+SIL Open Font License, v1.1
+Apache 2 license
+Ubuntu Font License v1.0

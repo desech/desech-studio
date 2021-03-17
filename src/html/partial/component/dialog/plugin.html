@@ -1,0 +1,31 @@
+<template id="template-dialog-plugin">
+  <div>
+    <div class="dialog-header">{{#i18n}} Plugins {{/i18n}}</div>
+    <div class="dialog-body">
+      <form class="dialog-plugin">
+        <div class="content">
+          <div class="plugin-list scrollbar" data-categories='{"designSystem":"{{#i18n}} Design System {{/i18n}}","exportCode":"{{#i18n}} Export Code {{/i18n}}"}'></div>
+        </div>
+        <div class="loader" hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" style="margin:20px auto 30px auto;">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
+          </svg>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="template-dialog-plugin-item">
+  <div class="plugin-item grid">
+    <div class="plugin-item-meta">
+      <p class="plugin-name"></p>
+      <p class="plugin-meta"></p>
+    </div>
+    <div class="plugin-item-button">
+      <button type="button" class="plugin-install composed small">{{#i18n}} Install {{/i18n}}</button>
+      <button hidden type="button" class="plugin-remove composed small">{{#i18n}} Remove {{/i18n}}</button>
+    </div>
+  </div>
+</template>

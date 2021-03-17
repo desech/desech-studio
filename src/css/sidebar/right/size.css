@@ -1,0 +1,109 @@
+.sidebar-right #size-section .size-minmax-labels {
+  position: relative;
+  float: right;
+  width: 100px;
+  height: 15px;
+  margin: -12px 20px -15px 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.sidebar-right #size-section .size-minmax-inputs {
+  grid-template-columns: auto 5px auto;
+  padding: 0;
+  gap: 3px;
+  margin-left: 15px;
+}
+
+.sidebar-right #size-section .margin-grid {
+  grid-template-columns: 1fr; 
+  grid-template-rows: 20px 1fr 20px; 
+  justify-items: center; 
+  gap: 0; 
+  margin: 10px 5px 0 5px;
+  padding: 4px 2px;
+}
+
+.sidebar-right #size-section .margin-grid .title {
+  float: left;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 3px;
+}
+
+.sidebar-right #size-section .margin-grid .title.margin {
+  margin-left: -87px;
+  color: var(--resize-margin-btn);
+}
+
+.sidebar-right #size-section .margin-grid .title.padding {
+  margin-left: -87px;
+  color: var(--resize-padding-btn);
+}
+
+.sidebar-right #size-section .margin-grid .component-input-unit {
+  width: 53px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 10px;
+}
+
+.sidebar-right #size-section .margin-grid .margin .component-input-unit:hover,
+.sidebar-right #size-section .margin-grid .margin .component-input-unit select:hover {
+  box-shadow: var(--resize-margin-btn) 0 0 2px 1px;
+}
+
+.sidebar-right #size-section .margin-grid .margin input {
+  color: var(--resize-margin-txt);
+}
+
+.sidebar-right #size-section .margin-grid .padding .component-input-unit:hover,
+.sidebar-right #size-section .margin-grid .padding .component-input-unit select:hover {
+  box-shadow: var(--resize-padding-btn) 0 0 2px 1px;
+}
+
+.sidebar-right #size-section .margin-grid .padding input {
+  color: var(--resize-padding-txt);
+}
+
+.sidebar-right #size-section .margin-grid .grid {
+  width: 100%;
+  gap: 0;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.sidebar-right #size-section .margin-grid .padding-grid {
+  grid-template-columns: 1fr;
+  grid-template-rows: 20px 1fr 20px;
+  margin: 2px;
+  padding: 4px 0;
+  justify-items: center;
+  width: 98%;
+}
+
+.sidebar-right #size-section .margin-grid .button-link {
+  float: right;
+  height: 18px;
+  margin: 0 -30px -18px 0;
+  padding: 0;
+}
+
+.sidebar-right #size-section .margin-grid .button-link.selected[data-type="margin"],
+.sidebar-right #size-section .margin-grid .button-link[data-type="margin"]:hover {
+  color: var(--resize-margin-btn);
+}
+
+.sidebar-right #size-section .margin-grid .button-link.selected[data-type="padding"],
+.sidebar-right #size-section .margin-grid .button-link[data-type="padding"]:hover {
+  color: var(--resize-padding-btn);
+}
+
+.sidebar-right #size-section .margin-grid .button-link.selected svg.off,
+.sidebar-right #size-section .margin-grid .button-link:not(.selected) svg.on {
+  display: none;
+}

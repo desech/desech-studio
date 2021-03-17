@@ -1,0 +1,163 @@
+#sidebar-left-panel {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: 250px;
+  height: 100vh;
+  font-size: 13px;
+  background-color: var(--main-bg);
+  color: var(--main-txt);
+  box-shadow: var(--main-shadow) -1px 1px 1px 0 inset;
+}
+
+#sidebar-left-panel .sidebar-left-panel-inner {
+  height: 100%;
+  padding-top: 15px;
+  box-sizing: border-box;
+}
+
+#sidebar-left-panel .panel-list-items {
+  height: 100%;
+}
+
+#sidebar-left-panel .panel-file-item.loaded:not(.active):not(:hover) .panel-item-icon svg,
+#sidebar-left-panel .panel-file-item.loaded:not(.active):not(:hover) .panel-item-name {
+  color: var(--list-txt-special);
+}
+
+#sidebar-left-panel header {
+  margin-bottom: 10px;
+  padding: 0 10px;
+}
+
+#sidebar-left-panel header.file-grid {
+  display: grid;
+  grid-template-columns: auto 24px 24px;
+  column-gap: 5px;
+  align-items: center;
+}
+
+#sidebar-left-panel .panel-search {
+  padding: 0 80px 0 22px;
+  background-image: url('../asset/image/icon/search.svg');
+  background-size: 16px;
+  background-position: 2px;
+  background-repeat: no-repeat;
+}
+
+#sidebar-left-panel .panel-search::placeholder {
+  font-size: 12px;
+}
+
+#sidebar-left-panel .panel-search-cycle {
+  position: absolute;
+  top: 17px;
+  right: 12px;
+  width: 70px;
+  height: 21px;
+  line-height: 21px;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 11px;
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-txt);
+}
+
+#sidebar-left-panel .panel-search-cycle-file {
+  right: 70px;
+}
+
+#sidebar-left-panel .panel-list-empty {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 2px;
+  text-align: center;
+  box-shadow: var(--prompt-shadow) 0 0 2px 0;
+}
+
+#sidebar-left-panel .panel-list-box {
+  overflow: auto;
+  width: 100%;
+  height: calc(100% - 35px);
+}
+
+#sidebar-left-panel ul.panel-list-container>li {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  column-gap: 3px;
+  justify-content: left;
+  align-items: start;
+  height: 25px;
+  line-height: 25px;
+}
+
+#sidebar-left-panel .list-item-tree {
+  height: 100%;
+}
+
+#sidebar-left-panel button.panel-item-expand-button[hidden] {
+  display: block !important;
+  visibility: hidden;
+}
+
+#sidebar-left-panel button.panel-item-expand-button {
+  margin-top: 7px;
+  padding: 0;
+}
+
+#sidebar-left-panel li.active button.panel-item-expand-button,
+#sidebar-left-panel li.selected button.panel-item-expand-button,
+#sidebar-left-panel li:hover button.panel-item-expand-button {
+  color: var(--list-txt-hover);
+}
+
+#sidebar-left-panel button.panel-item-expand-button svg {
+  transform: rotate(-90deg);
+}
+
+#sidebar-left-panel button.panel-item-expand-button.opened svg {
+  transform: none;
+}
+
+#sidebar-left-panel .panel-item-name {
+  white-space: nowrap;
+}
+
+#sidebar-left-panel ul.panel-list li.panel-file-item.selected {
+  background-color: var(--list-bg-highlight);
+  color: var(--list-txt-hover);
+  animation: 1s cubic-bezier(0.25, 1, 0.5, 1) 0s infinite normal none running shadow-inset-center;
+}
+
+#sidebar-left-panel ul.panel-list[data-select-file] li.panel-file-item:hover {
+  background-color: var(--list-bg-highlight);
+  color: var(--list-txt-hover);
+}
+
+#sidebar-left-panel ul.panel-file-list>li.editing {
+  cursor: text;
+}
+
+#sidebar-left-panel ul.panel-file-list .panel-file-input {
+  background-color: var(--field-edit-bg);
+  height: 21px;
+}
+
+#sidebar-left-panel ul.panel-element-list .panel-element-item.hidden {
+  opacity: 0.3;
+}
+
+#sidebar-left-panel ul.panel-element-list .panel-item-hidden {
+  padding: 0 2px;
+}
+
+#sidebar-left-panel .panel-create-overlay select {
+  margin-bottom: 20px;
+}
+
+#sidebar-left-panel .panel-create-overlay .panel-file-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 10px;
+  align-items: center;
+}

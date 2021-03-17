@@ -1,0 +1,58 @@
+import { JSDOM } from 'jsdom'
+import { URL } from 'whatwg-url'
+import fs from 'fs'
+import path from 'path'
+import ParseHtml from './parse/ParseHtml.js'
+import ParseCss from './parse/ParseCss.js'
+import CustomResourceLoader from './parse/CustomResourceLoader.js'
+import Cookie from '../lib/Cookie.js'
+import Font from '../lib/Font.js'
+
+export default {
+  async parseHtmlCssFile (file, parseElementCss = true) {
+    const folder = await Cookie.getCookie('currentFolder')
+    const dom = new JSDOM(fs.readFileSync(file).toString(), {
+      resources: new CustomResourceLoader(),
+      url: new URL('file:' + path.resolve(file))
+    })
+    const data = await this.parseFileType(dom.window.document, file, folder, parseElementCss)
+    data.font = Font.getFontsList(folder)
+    return data
+  },
+
+  async parseFileType (document, file, folder, parseElementCss) {
+    if (file.startsWith(folder + '/component')) {
+      return await this.parseDom(document, folder, parseElementCss)
+    } else {
+      return await this.parseOnDomReady(document, folder, parseElementCss)
+    }
+  },
+
+  parseOnDomReady (document, folder, parseElementCss) {
+    return new Promise((resolve, reject) => {
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          return resolve(await this.parseDom(document, folder, parseElementCss))
+        } catch (error) {
+          reject(error)
+        }
+      })
+    })
+  },
+
+  async parseDom (document, folder, parseElementCss) {
+    const html = ParseHtml.parseHtml(document, folder)
+    const css = await this.parseCss(document, folder, parseElementCss)
+    return { html, css }
+  },
+
+  async parseCss (document, folder, parseElementCss) {
+    if (document.styleSheets.length) {
+      return ParseCss.parseCss(document, folder, parseElementCss)
+    }
+    // parse index.html for css, but ignore its element css file
+    const index = path.resolve(folder, 'index.html')
+    const data = await this.parseHtmlCssFile(index, false)
+    return data.css
+  }
+}

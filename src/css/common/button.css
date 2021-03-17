@@ -1,0 +1,109 @@
+.desech-studio button {
+	display: inline-block;
+	position: relative;
+	padding: 5px 4px;
+	color: var(--btn-txt);
+	cursor: pointer;
+	outline: none;
+	font-family: Roboto;
+	border: none;
+	width: inherit;
+	line-height: 1.5;
+	border-radius: 2px;
+}
+
+.desech-studio button.small {
+  font-size: 12px;
+  padding: 2px;
+}
+
+.desech-studio button.composed {
+	box-shadow: var(--btn-shadow) 0 0 1px 0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.desech-studio button.composed:hover {
+	box-shadow: var(--btn-shadow-hover) 0 0 2px 0;
+}
+
+.desech-studio button.highlighted {
+  color: var(--btn-txt-hover);	
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+.desech-studio button.fill {
+  background-color: var(--btn-bg-fill);
+  color: var(--btn-txt-fill);
+}
+
+.desech-studio button.fill:hover {
+  background-color: transparent;
+  color: var(--btn-txt);
+  box-shadow: var(--btn-shadow-hover) 0 0 2px 0;
+}
+
+.desech-studio button.fill[disabled] {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.desech-studio button.fill[disabled]:hover {
+  background-color: var(--btn-bg-fill);
+  color: var(--btn-txt-fill);
+  box-shadow: inherit;
+}
+
+.desech-studio button span.state {
+  display: none;
+}
+
+.desech-studio button span.state svg {
+	display: inline;
+}
+
+.desech-studio button.active span.active,
+.desech-studio button.inactive span.inactive,
+.desech-studio button.loading span.loading {
+	display: block;
+	margin-top: -2px;
+}
+
+.desech-studio button:hover,
+.desech-studio button.selected {
+	color: var(--btn-txt-hover);
+}
+
+.desech-studio button.loading,
+.desech-studio button.inactive {
+	opacity: 0.5;
+}
+
+.desech-studio button svg {
+	display: block;
+}
+
+.desech-studio button span.button-text {
+	padding: 0 3px;
+	vertical-align: middle;
+}
+
+.desech-studio label.upload-button {
+  display: inline-block;
+  height: 25px;
+  font-size: 12px;
+  line-height: 25px;
+  padding: 0 5px;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: var(--field-bg);
+  color: var(--field-txt);
+  box-shadow: var(--field-shadow) 0 0 1px 0;
+  text-align: center;
+}
+
+.desech-studio label.upload-button:focus,
+.desech-studio label.upload-button:hover {
+  box-shadow: var(--field-bg-hover) 0 0 2px 1px;
+}

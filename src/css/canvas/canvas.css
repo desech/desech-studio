@@ -1,0 +1,201 @@
+.main-container {
+  padding-left: 60px;
+  padding-right: 260px;
+}
+
+#page-main.left-panel-open .main-container {
+  padding-left: calc(60px + 250px);
+}
+
+.canvas-container {
+  position: relative; /* keep the overlay in the scroll area */
+  height: calc(100vh - 40px);
+  padding: 10px;
+  overflow: auto;
+  background-color: var(--canvas-bg);
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.canvas-container.scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--canvas-scroll-thumb);
+}
+
+#canvas {
+  position: relative;
+  width: 1280px; /* defaults in case the custom value fails */
+  height: 2000px; /* defaults in case the custom value fails */
+  box-shadow: 0 0 4px 0 var(--canvas-shadow);
+  overflow: auto;
+}
+
+#canvas[data-tool="block"] {
+  cursor: url(../asset/image/icon-cursor/block.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="text"] {
+  cursor: url(../asset/image/icon-cursor/text.svg) 15 15, text;
+}
+
+#canvas[data-tool="icon"] {
+  cursor: url(../asset/image/icon-cursor/icon.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="image"] {
+  cursor: url(../asset/image/icon-cursor/image.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="video"] {
+  cursor: url(../asset/image/icon-cursor/video.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="audio"] {
+  cursor: url(../asset/image/icon-cursor/audio.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="input"] {
+  cursor: url(../asset/image/icon-cursor/input.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="dropdown"] {
+  cursor: url(../asset/image/icon-cursor/dropdown.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="textarea"] {
+  cursor: url(../asset/image/icon-cursor/textarea.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="checkbox"] {
+  cursor: url(../asset/image/icon-cursor/checkbox.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="range"] {
+  cursor: url(../asset/image/icon-cursor/range.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="color"] {
+  cursor: url(../asset/image/icon-cursor/color.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="file"] {
+  cursor: url(../asset/image/icon-cursor/file.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="hand"],
+#canvas[data-operation="panning"] {
+  cursor: url(../asset/image/icon-cursor/hand.svg) 15 15, crosshair;
+}
+
+#canvas .element.dragdrop-start {
+  background-color: var(--move-color);
+}
+
+#canvas .element.dragdrop-over-top {
+  margin-top: 3px;
+  box-shadow: 0 -3px 0 0 var(--move-color);
+}
+
+#canvas .element.dragdrop-over-bottom {
+  margin-bottom: 3px;
+  box-shadow: 0 3px 0 0 var(--move-color);
+}
+
+#canvas .element.moving {
+  position: absolute;
+  opacity: 0.5;
+  pointer-events: none; /* used to fetch what's behind the element, so we can position it */
+}
+
+#canvas .block.moving {
+  width: 300px;
+  overflow: hidden;
+}
+
+#canvas .component-children {
+  min-height: 24px;
+}
+
+.audio {
+  height: 54px; /* to fix the displaying bug */
+}
+
+/* we see the outlines when we are creating, moving or hovering over an element */
+/* we see the inline element outlines when we are hovering over the main parent */
+/* also see the outlines when */
+main#page-main:not(.preview) #canvas:not([data-tool='select']):not([data-tool='hand']) .element:not(.inline),
+main#page-main:not(.preview) #canvas[data-operation="moving"] .element:not(.inline),
+main#page-main:not(.preview) #canvas:not([data-operation="editing"]) .element:hover,
+main#page-main:not(.preview) #canvas:not([data-operation="editing"]) .element.text:hover .element.inline,
+main#page-main:not(.preview) .canvas-container:hover #canvas:not([data-operation="editing"]) .element.selected {
+  outline: 1px solid var(--element-hover);
+  outline-offset: -1px;
+  box-shadow: var(--element-hover) 0 0 4px 0 inset;
+}
+
+main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.moving).top {
+  margin-top: 3px;
+  box-shadow: 0 -3px 0 0 var(--move-color);
+}
+
+main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.moving).bottom {
+  margin-bottom: 3px;
+  box-shadow: 0 3px 0 0 var(--move-color);
+}
+
+main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.moving).inside {
+  box-shadow: inset 0 0 8px 2px var(--move-color);
+  outline-color: var(--move-color);
+}
+
+/* don't show anything for component element children */
+/*main#page-main:not(.preview) div.canvas-container div#canvas .element.component .element:not(.component-children) {
+  outline-color: transparent;
+  box-shadow: none;
+}*/
+
+/* preview mode */
+main#page-main.preview .sidebar-left,
+main#page-main.preview .sidebar-right,
+main#page-main.preview #sidebar-left-panel {
+  display: none;
+}
+
+main#page-main.preview .main-container {
+  padding: 0;
+}
+
+main#page-main.preview .canvas-container {
+  padding: 0;
+}
+
+/* contextmenu */
+
+.desech-studio .contextmenu {
+  position: absolute;
+  border-radius: 2px;
+  font-size: 13px;
+  background-color: var(--menu-bg);
+  color: var(--menu-txt);
+  box-shadow: #FFF 0 0 2px 0, #000 0 0 2px 0; /* the bg can be white or black */
+  z-index: 3;
+}
+
+.desech-studio .contextmenu ul.menu-list {
+  border-bottom: 1px solid var(--menu-separator);
+}
+
+.desech-studio .contextmenu ul.menu-list:last-child {
+  border: none;
+}
+
+.desech-studio .contextmenu ul.menu-list li {
+  height: 20px;
+  line-height: 20px;
+  padding: 5px 10px;
+}
+
+.desech-studio .contextmenu ul.menu-list li:hover {
+  background-color: var(--menu-bg-hover);
+  color: var(--menu-txt-hover);
+}

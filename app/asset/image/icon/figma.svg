@@ -1,0 +1,22 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="1147.5 -20 400 400" style="enable-background:new 1147.5 -20 400 400;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#353535;}
+	.st1{fill:#0ACF83;}
+	.st2{fill:#A259FF;}
+	.st3{fill:#F24E1E;}
+	.st4{fill:#FF7262;}
+	.st5{fill:#1ABCFE;}
+</style>
+<circle class="st0" cx="1347.5" cy="180" r="190.5"/>
+<g>
+	<path id="path0_fill" class="st1" d="M1310,292.5c20.7,0,37.5-16.8,37.5-37.5v-37.5H1310c-20.7,0-37.5,16.8-37.5,37.5
+		S1289.3,292.5,1310,292.5z"/>
+	<path id="path1_fill" class="st2" d="M1272.5,180c0-20.7,16.8-37.5,37.5-37.5h37.5v75H1310C1289.3,217.5,1272.5,200.7,1272.5,180z"
+		/>
+	<path id="path1_fill_1_" class="st3" d="M1272.5,105c0-20.7,16.8-37.5,37.5-37.5h37.5v75H1310
+		C1289.3,142.5,1272.5,125.7,1272.5,105z"/>
+	<path id="path2_fill" class="st4" d="M1347.5,67.5h37.5c20.7,0,37.5,16.8,37.5,37.5s-16.8,37.5-37.5,37.5h-37.5V67.5z"/>
+	<path id="path3_fill" class="st5" d="M1422.5,180c0,20.7-16.8,37.5-37.5,37.5s-37.5-16.8-37.5-37.5s16.8-37.5,37.5-37.5
+		S1422.5,159.3,1422.5,180z"/>
+</g>
+</svg>

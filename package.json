@@ -1,0 +1,123 @@
+{
+  "type": "module",
+  "name": "desech-studio",
+  "description": "Desech Studio, a professional editor for web designers and front-end developers",
+  "homepage": "https://www.desech.com",
+  "author": {
+    "name": "Desech Studio SRL",
+    "email": "contact@desech.com"
+  },
+  "version": "1.0.0",
+  "license": "license.txt",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.desech.com:5522/~/desech-studio.git"
+  },
+  "scripts": {
+    "build-all-dev": "npm-run-all build-locale build-html build-css build-js-dev",
+    "build-locale": "node --experimental-json-modules build/scripts/build-locale.js",
+    "build-js-dev": "webpack --mode development --config webpack.config.cjs",
+    "build-html": "node --experimental-json-modules build/scripts/build-html.js",
+    "build-css": "node build/scripts/build-css.js",
+    "build-js-prod": "webpack --mode production --config webpack.config.cjs",
+    "build-all-prod": "npm-run-all build-locale build-html build-css build-js-prod",
+    "pack-linux-x86": "npx electron-builder --linux --x64 --dir",
+    "build-linux-x86": "npx electron-builder --linux --x64",
+    "pack-linux-arm": "npx electron-builder --linux --arm64 --dir",
+    "build-linux-arm": "npx electron-builder --linux --arm64",
+    "pack-win": "npx electron-builder --win --x64 --dir",
+    "build-win": "npx electron-builder --win --x64",
+    "pack-mac": "npx electron-builder --mac --x64 --dir",
+    "build-mac": "npx electron-builder --mac --x64",
+    "test": "time ava",
+    "test-watch": "ava --watch",
+    "update-packages": "ncu -u"
+  },
+  "devDependencies": {
+    "adm-zip": "^0.5.4",
+    "archiver": "^5.3.0",
+    "ava": "^3.15.0",
+    "circular-dependency-plugin": "^5.2.2",
+    "clean-css": "^5.1.1",
+    "csv": "^5.4.0",
+    "electron": "^12.0.1",
+    "electron-builder": "^22.10.5",
+    "electron-updater": "^4.3.8",
+    "eslint": "^7.21.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^4.1.0",
+    "fs-extra": "^9.1.0",
+    "glob": "^7.1.6",
+    "handlebars": "^4.7.7",
+    "html-minifier": "^4.0.0",
+    "javascript-obfuscator": "^2.11.0",
+    "jimp": "^0.16.1",
+    "js-beautify": "^1.13.5",
+    "jsdom": "^16.5.0",
+    "node-fetch": "^2.6.1",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^5.24.4",
+    "webpack-cli": "^4.5.0",
+    "webpack-node-externals": "^2.5.2",
+    "webpack-obfuscator": "^3.3.0"
+  },
+  "ava": {
+    "files": [
+      "src/test/**/*.spec.js"
+    ],
+    "require": [
+      "./src/test/jsdom.js"
+    ],
+    "verbose": true
+  },
+  "build": {
+    "appId": "com.desech.desech-studio",
+    "productName": "Desech Studio",
+    "copyright": "Desech Studio SRL",
+    "directories": {
+      "app": "app",
+      "buildResources": "build/resource",
+      "output": "dist"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "rpm",
+        "pacman"
+      ],
+      "executableArgs": [
+        "--no-sandbox"
+      ],
+      "icon": "icon.icns",
+      "category": "Development",
+      "description": "Professional web editor"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.png",
+      "publish": [
+        {
+          "provider": "generic",
+          "url": "https://download.desech.com/win"
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": "false",
+      "allowToChangeInstallationDirectory": "true"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg"
+      ],
+      "type": "distribution",
+      "icon": "icon.icns"
+    }
+  }
+}

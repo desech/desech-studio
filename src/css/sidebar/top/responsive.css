@@ -1,0 +1,85 @@
+.sidebar-top .responsive-mode-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  height: 20px;
+}
+
+.sidebar-top .responsive-unit {
+  height: 20px;  
+}
+
+.sidebar-top #responsive-mode-list {
+  display: flex;
+}
+
+.sidebar-top .responsive-mode-container .responsive-unit {
+  margin-right: 3px;
+}
+
+.sidebar-top .responsive-edit-container .responsive-overlay-container {
+  display: none;
+}
+
+.sidebar-top .responsive-edit-container:hover .responsive-overlay-container {
+  display: block;
+}
+
+.sidebar-top .responsive-add {
+  margin-top: -1px;
+}
+
+.sidebar-top #canvas-size-form {
+  display: grid;
+  grid-template-columns: auto 12px auto;
+  justify-items: center;
+  font-size: 12px;
+}
+
+.sidebar-top #canvas-size-form input {
+  width: 31px;
+  height: 20px;
+  padding: 0 2px;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.sidebar-top #canvas-size-form:hover input {
+  box-shadow: var(--field-shadow) 0 0 1px 0;
+}
+
+.sidebar-top #responsive-width.unmatched .responsive-edit.selected {
+  color: var(--error);
+}
+
+.sidebar-top .overlay .responsive-overlay-add {
+  height: 85px;
+  margin-bottom: calc(-85px - 8px);
+}
+
+.sidebar-top .overlay .responsive-overlay-edit {
+  height: 115px;
+  margin-bottom: calc(-115px - 8px);
+}
+
+.sidebar-top .responsive-overlay .inputs {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-top .responsive-overlay .component-input-unit {
+  width: 65px;
+}
+
+.sidebar-top .responsive-overlay .responsive-delete {
+  width: 50px;
+  margin-top: 10px;
+}
+
+.sidebar-top .responsive-overlay .responsive-delete>div {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 2px;
+  align-items: center;
+}

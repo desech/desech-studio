@@ -1,0 +1,35 @@
+<template id="template-contextmenu-file-folder">
+  <div>
+    {{> mainLeftFileContextmenuGeneral }}
+  </div>
+</template>
+
+<template id="template-contextmenu-file-file">
+  <div>
+    <ul class="menu-list">
+      <li class="panel-option panel-option-open-file">{{#i18n}} Open file {{/i18n}}</li>
+    </ul>
+    {{> mainLeftFileContextmenuGeneral }}
+  </div>
+</template>
+
+<template id="template-contextmenu-file-html">
+  <div>
+    <ul class="menu-list">
+      <li class="panel-option panel-option-load-html">{{#i18n}} Load html file {{/i18n}}</li>
+      <li class="panel-option panel-option-open-file">{{#i18n}} Open file {{/i18n}}</li>
+    </ul>
+    {{> mainLeftFileContextmenuGeneral }}
+  </div>
+</template>
+
+<template id="template-contextmenu-file-component">
+  <div>
+    <ul class="menu-list">
+      <li class="panel-option panel-option-load-html">{{#i18n}} Load component file {{/i18n}}</li>
+      <li class="panel-option panel-option-add-component">{{#i18n}} Add component to canvas {{/i18n}}</li>
+      <li class="panel-option panel-option-open-file">{{#i18n}} Open file {{/i18n}}</li>
+    </ul>
+    {{> mainLeftFileContextmenuGeneral }}
+  </div>
+</template>

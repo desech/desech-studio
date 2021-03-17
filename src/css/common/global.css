@@ -1,0 +1,86 @@
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--body-bg) !important; /* to overwrite reset.css */
+  color: var(--body-txt) !important; /* to overwrite reset.css */
+  overflow: hidden;
+}
+
+.canvas-defaults {
+  background-color: #FFF;
+  color: #000;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+:focus {
+  outline: none;
+}
+
+input,
+textarea {
+  cursor: default;
+}
+
+.element.editable {
+  cursor: text !important; /* overwrite the manually set cursor */
+}
+
+.desech-studio {
+  font-family: Roboto;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.desech-studio * {
+  box-sizing: content-box;
+}
+
+.desech-studio svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.desech-studio .sort-button {
+  cursor: move;
+}
+
+.desech-studio .loader svg {
+  display: block;
+  /*animation: 2s linear 0s infinite normal none running rotate-center;*/
+}
+
+.desech-studio svg,
+.desech-studio img,
+.desech-studio video {
+  width: auto;
+  height: auto;
+}
+
+.desech-studio .error {
+  color: var(--error);
+}
+
+.desech-studio .select-text,
+.desech-studio .select-text * {
+  user-select: text;
+}
+
+.desech-studio li {
+  display: block;
+}
+
+.desech-studio a.desech-external-link {
+  margin: 0 3px;
+  font-weight: 500;
+  color: var(--link-hover);
+}
+
+.desech-studio a.desech-external-link:hover {
+  text-decoration: underline;
+}

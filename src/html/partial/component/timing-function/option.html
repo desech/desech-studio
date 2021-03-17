@@ -1,0 +1,34 @@
+<template id="template-timing-cubic-bezier">
+  <div class="grid" style="grid-template-columns: 20px 1fr;">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Point {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path fill="none" d="M24 24H0V0h24v24z"/>
+        <circle cx="12" cy="12" r="8"/>
+      </svg>
+    </div>
+    <div class="input-split">
+      <input name="x1" class="timing-field timing-input" type="number" step="0.01" min="0" max="1" placeholder="x1">
+      <input name="y1" class="timing-field timing-input" type="number" step="0.01" placeholder="y1">
+      <input name="x2" class="timing-field timing-input" type="number" step="0.01" min="0" max="1" placeholder="x2">
+      <input name="y2" class="timing-field timing-input" type="number" step="0.01" placeholder="y2">
+    </div>
+  </div>
+</template>
+
+<template id="template-timing-steps">
+  <div class="grid" style="grid-template-columns: 20px 1fr 1fr;">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Step {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"/>
+      </svg>
+    </div>
+    <input name="step" class="timing-field timing-input" type="number" step="1" min="1" placeholder="{{#i18n}} Auto {{/i18n}}">
+
+    <select name="position" class="timing-field timing-select">
+      <option value="">{{#i18n}} - Position - {{/i18n}}</option>
+      <option value="start">{{#i18n}} Start {{/i18n}}</option>
+      <option value="end">{{#i18n}} End {{/i18n}}</option>
+    </select>
+  </div>
+</template>

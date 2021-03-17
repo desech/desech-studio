@@ -1,0 +1,116 @@
+.sidebar-top {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  background-color: var(--main-bg);
+  box-shadow: var(--main-shadow) 0 1px 1px 0 inset, var(--main-shadow) 0 -1px 1px 0 inset;
+  color: var(--main-txt);
+}
+
+.sidebar-top .sidebar-top-left {
+  width: 300px;
+}
+
+.sidebar-top .sidebar-top-middle,
+.sidebar-top .sidebar-top-right {
+  height: 40px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.sidebar-top .sidebar-action-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  column-gap: 10px;
+  align-items: center;
+  height: 20px;
+}
+
+.sidebar-top .page-name {
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.sidebar-top .page-name-text {
+  width: 100px;
+  text-overflow: ellipsis;
+  height: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar-top #save-button {
+  height: 20px;
+}
+
+.sidebar-top .history {
+  display: none;
+  position: relative;
+  z-index: 2;
+  margin-top: 9px;
+  padding: 5px 0;
+  font-size: 12px;
+  background-color: var(--overlay-bg);
+  color: var(--overlay-txt);
+  box-shadow: var(--overlay-shadow) 0 0 3px 1px;
+}
+
+.sidebar-top .sidebar-top-middle:hover .history {
+  display: block;
+}
+
+.sidebar-top ul.history-queue {
+	width: 100%;
+	max-height: 100px;
+	overflow: auto;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.sidebar-top ul.history-queue li {
+	padding: 3px 10px;
+}
+
+.sidebar-top ul.history-queue li.previous {
+	color: var(--main-txt-disabled);
+}
+
+.sidebar-top ul.history-queue li.current-command {
+  color: var(--main-txt-highlight);
+}
+
+.sidebar-top .sidebar-top-right {
+  margin-right: 10px;
+  display: grid;
+  grid-template-columns: 30px auto auto auto auto;
+  column-gap: 7px;
+  align-items: center;
+}
+
+.sidebar-top button.top-preview-button {
+  height: 20px;
+  padding: 0;
+}
+
+.sidebar-top button.responsive-mode {
+  padding: 0 2px;
+}
+
+.sidebar-top .canvas-zoom {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  font-size: 12px;
+}
+
+.sidebar-top .canvas-zoom .canvas-zoom-reset {
+  cursor: pointer;
+}
+
+.sidebar-top .canvas-zoom .canvas-zoom-reset:hover {
+  color: var(--btn-txt-hover);
+}

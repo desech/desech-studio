@@ -1,0 +1,28 @@
+<template id="template-responsive-overlay-edit">
+  <div class="overlay">
+    <div class="overlay-arrow-container">
+      <div class="overlay-arrow"></div>
+    </div>
+    <form class="overlay-content responsive-overlay responsive-overlay-edit">
+      <div class="overlay-title">{{#i18n}} Responsive width {{/i18n}}</div>
+      <div class="inputs">
+        <div class="input-container-min bottom" data-tooltip="{{#i18n}} Check Project Settings {{/i18n}}">
+          {{> componentInputUnit class="responsive-input-edit" name="min-width" length="1" placeholder="Min" }}
+        </div>
+        - 
+        <div class="input-container-max bottom" data-tooltip="{{#i18n}} Check Project Settings {{/i18n}}">
+          {{> componentInputUnit class="responsive-input-edit" name="max-width" length="1" placeholder="Max" }}
+        </div>
+      </div>
+      <button type="button" class="responsive-delete composed small" type="button">
+        <div>
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+            <path d="M0 0h24v24H0z" fill="none"></path>
+          </svg>
+          {{#i18n}} Delete {{/i18n}}
+        </div>
+      </button>
+    </form>
+  </div>
+</template>

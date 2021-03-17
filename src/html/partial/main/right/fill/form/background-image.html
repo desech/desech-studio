@@ -1,0 +1,72 @@
+<form class="fill-background-image">
+  <div class="subtitle">{{#i18n}} Background {{/i18n}}</div>
+
+  <div class="grid">
+    <select name="size" class="background-image-size">
+      <option value="">{{#i18n}} - Size - {{/i18n}}</option>
+      <option value="cover">{{#i18n}} Cover {{/i18n}}</option>
+      <option value="contain">{{#i18n}} Contain {{/i18n}}</option>
+      <option value="length">{{#i18n}} Custom Length {{/i18n}}</option>
+    </select>
+    <select name="repeat" class="background-image-select" data-type="background-repeat">
+      <option value="">{{#i18n}} - Repeat - {{/i18n}}</option>
+      <option value="no-repeat">{{#i18n}} No repeat {{/i18n}}</option>
+      <option value="repeat">{{#i18n}} Repeat {{/i18n}}</option>
+      <option value="repeat-x">{{#i18n}} Repeat X {{/i18n}}</option>
+      <option value="repeat-y">{{#i18n}} Repeat Y {{/i18n}}</option>
+      <option value="round">{{#i18n}} Round {{/i18n}}</option>
+      <option value="space">{{#i18n}} Space {{/i18n}}</option>
+    </select>
+  </div>
+
+  <div class="grid background-size-length" style="grid-template-columns: 30px 1fr 30px 1fr" hidden>
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size width {{/i18n}}">{{#i18n}} Width {{/i18n}}</div>
+    {{> componentInputUnit name="width" class="background-image-size-length" length="1" percent="1" }}
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size height {{/i18n}}">{{#i18n}} Height {{/i18n}}</div>
+    {{> componentInputUnit name="height" class="background-image-size-length" length="1" percent="1" }}
+  </div>
+
+  <div class="grid" style="grid-template-columns:30px 1fr 30px 1fr">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Position X {{/i18n}}" style="padding-left: 5px;">X</div>
+    {{> componentInputUnit name="x" class="background-image-position" length="1" percent="1" position="1" }}
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Position Y {{/i18n}}" style="padding-left: 5px;">Y</div>
+    {{> componentInputUnit name="y" class="background-image-position" length="1" percent="1" position="1" }}
+  </div>
+
+  <div class="grid">
+    <select name="attachment" class="background-image-select" data-type="background-attachment">
+      <option value="">{{#i18n}} - Attachment - {{/i18n}}</option>
+      <option value="local">{{#i18n}} Local {{/i18n}}</option>
+      <option value="scroll">{{#i18n}} Scroll {{/i18n}}</option>
+      <option value="fixed">{{#i18n}} Fixed* {{/i18n}}</option>
+    </select>
+    <select name="origin" class="background-image-select" data-type="background-origin">
+      <option value="">{{#i18n}} - Origin - {{/i18n}}</option>
+      <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
+      <option value="padding-box">{{#i18n}} Padding box {{/i18n}}</option>
+      <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
+    </select>
+  </div>
+
+  <div class="grid">
+    <select name="blendmode" class="background-image-select" data-type="background-blend-mode">
+      <option value="">{{#i18n}} - Blend Mode - {{/i18n}}</option>
+      <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+      <option value="multiply">{{#i18n}} Multiply {{/i18n}}</option>
+      <option value="screen">{{#i18n}} Screen {{/i18n}}</option>
+      <option value="overlay">{{#i18n}} Overlay {{/i18n}}</option>
+      <option value="darken">{{#i18n}} Darken {{/i18n}}</option>
+      <option value="lighten">{{#i18n}} Lighten {{/i18n}}</option>
+      <option value="color-dodge">{{#i18n}} Color dodge {{/i18n}}</option>
+      <option value="color-burn">{{#i18n}} Color burn {{/i18n}}</option>
+      <option value="hard-light">{{#i18n}} Hard light {{/i18n}}</option>
+      <option value="soft-light">{{#i18n}} Soft light {{/i18n}}</option>
+      <option value="difference">{{#i18n}} Difference {{/i18n}}</option>
+      <option value="exclusion">{{#i18n}} Exclusion {{/i18n}}</option>
+      <option value="hue">{{#i18n}} Hue {{/i18n}}</option>
+      <option value="saturation">{{#i18n}} Saturation {{/i18n}}</option>
+      <option value="color">{{#i18n}} Color {{/i18n}}</option>
+      <option value="luminosity">{{#i18n}} Luminosity {{/i18n}}</option>
+    </select>
+  </div>
+</form>

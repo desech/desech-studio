@@ -1,0 +1,27 @@
+import HelperEvent from '../../helper/HelperEvent.js'
+import DialogComponent from '../DialogComponent.js'
+
+export default {
+  getEvents () {
+    return {
+      click: ['clickCloseEvent'],
+      keydown: ['keydownCloseEvent']
+    }
+  },
+
+  handleEvent (event) {
+    HelperEvent.handleEvents(this, event)
+  },
+
+  clickCloseEvent (event) {
+    if (event.target.closest('.dialog-close')) {
+      event.target.closest('dialog').remove()
+    }
+  },
+
+  keydownCloseEvent (event) {
+    if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'Escape') {
+      DialogComponent.closeAllDialogs(event)
+    }
+  }
+}

@@ -1,0 +1,35 @@
+<div class="grid grid-cell">
+  <div class="grid-title">
+    <div>{{#i18n}} Rows {{/i18n}}</div>
+    <button type="button" data-type="row" class="add-grid-cell small tooltip left" data-tooltip="{{#i18n}} Add Row {{/i18n}}">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="grid grid-gap">
+    <div>{{#i18n}} Gap {{/i18n}}</div>
+    {{> componentInputUnit name="row-gap" class="change-style" length="1" percent="1" }}
+  </div>
+  <select class="change-style" name="align-items">
+    <option value="">{{#i18n}} - Align Rows - {{/i18n}}</option>
+    <option value="start">{{#i18n}} Start {{/i18n}}</option>
+    <option value="center">{{#i18n}} Center {{/i18n}}</option>
+    <option value="end">{{#i18n}} End {{/i18n}}</option>
+    <option value="stretch">{{#i18n}} Stretch {{/i18n}}</option>
+    <option value="baseline">{{#i18n}} Baseline {{/i18n}}</option>
+  </select>
+  <select class="change-style" name="align-content">
+    <option value="">{{#i18n}} - Align Grid - {{/i18n}}</option>
+    <option value="start">{{#i18n}} Start {{/i18n}}</option>
+    <option value="center">{{#i18n}} Center {{/i18n}}</option>
+    <option value="end">{{#i18n}} End {{/i18n}}</option>
+    <option value="stretch">{{#i18n}} Stretch {{/i18n}}</option>
+    <option value="space-between">{{#i18n}} Space between {{/i18n}}</option>
+    <option value="space-around">{{#i18n}} Space around {{/i18n}}</option>
+    <option value="space-evenly">{{#i18n}} Space evenly {{/i18n}}</option>
+    <option value="baseline">{{#i18n}} Baseline {{/i18n}}</option>
+  </select>
+  <div class="grid-rows-list grid-list"></div>
+</div>

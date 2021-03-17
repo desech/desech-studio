@@ -1,0 +1,15 @@
+import Electron from '../lib/Electron.js'
+
+export default {
+  async handleEvent (obj, method, ...args) {
+    try {
+      return await obj[method](...args)
+    } catch (error) {
+      this.ipcMainInvoke('mainError', error)
+    }
+  },
+
+  ipcMainInvoke (name, ...args) {
+    Electron.getCurrentWeb().send(name, ...args)
+  }
+}

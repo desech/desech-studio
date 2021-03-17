@@ -1,0 +1,95 @@
+.desech-studio ul.panel-list {
+  font-size: 13px;
+}
+
+.desech-studio ul.panel-list>li {
+  height: 25px;
+  display: flex;
+  padding: 0 5px;
+  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desech-studio ul.panel-list>li:hover,
+.desech-studio ul.panel-list>li.active,
+.desech-studio ul.panel-list>li.dragdrop-start {
+  background-color: var(--list-bg-hover);
+  color: var(--list-txt-hover);
+}
+
+.desech-studio ul.panel-list>li:hover svg,
+.desech-studio ul.panel-list>li.active svg,
+.desech-studio ul.panel-list>li.dragdrop-start svg {
+  color: var(--list-txt-hover);
+}
+
+.desech-studio ul.panel-list>li.dragdrop-over-top {
+  margin-top: 3px;
+  box-shadow: 0 -3px 0 0 var(--list-bg-hover);
+}
+
+.desech-studio ul.panel-list>li.dragdrop-over-bottom {
+  margin-bottom: 3px;
+  box-shadow: 0 3px 0 0 var(--list-bg-hover);
+}
+
+.desech-studio ul.panel-list>li.dragdrop-over-inside {
+  box-shadow: inset 0 0 8px 2px var(--list-bg-hover);
+}
+
+.desech-studio ul.panel-list .list-space {
+  display: inline-block;
+  width: 12px;
+}
+
+.desech-studio ul.panel-list>li .list-elem-buttons {
+  visibility: hidden;
+  display: flex;
+}
+
+.desech-studio ul.panel-list>li:hover .list-elem-buttons {
+  visibility: visible;
+}
+
+.desech-studio ul.panel-list>li .list-elem-buttons>button {
+  margin-right: 5px;
+}
+
+.desech-studio ul.panel-list>li .no-move {
+  display: inline-block;
+  width: 12px;
+}
+
+.desech-studio ul.panel-list>li .list-elem-data button {
+  padding: 0;
+  margin: 0;
+}
+
+.desech-studio ul.panel-list>li .list-elem-title {
+  display: inline-block;
+  width: 160px;
+  height: 17px;
+  line-height: 17px;
+  padding: 0 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.desech-studio ul.panel-list>li.list-item-grid {
+  display: grid;
+  grid-template-columns: 18px 1fr 18px;
+  align-items: center;
+}
+
+.desech-studio ul.panel-list>li.list-item-grid .list-item-title {
+  height: 18px;
+  line-height: 18px;
+  overflow: hidden;
+}
+
+.desech-studio ul.panel-list>li.selector-element:last-child,
+.desech-studio ul.panel-list>li.effect-element:last-child {
+  margin-bottom: 10px;
+}

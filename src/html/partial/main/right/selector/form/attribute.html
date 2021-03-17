@@ -1,0 +1,19 @@
+<template id="template-dialog-selector-add-attribute">
+  <div class="selector-grid" style="grid-template-columns: auto auto auto;">
+    <!-- match the pattern with RightHtmlAttribute.isNameValid() -->
+    <input name="attr_name" required placeholder="{{#i18n}} Attribute name {{/i18n}}"
+      pattern="^[a-zA-Z]([a-zA-Z0-9-])+">
+
+    <select name="attr_sign" style="width: 90px;">
+      <option value="="> &nbsp; = ({{#i18n}} Equals {{/i18n}})</option>
+      <option value="^=">^= ({{#i18n}} Starts with {{/i18n}})</option>
+      <option value="$=">$= ({{#i18n}} Ends with {{/i18n}})</option>
+      <option value="*=">*= ({{#i18n}} Contains {{/i18n}})</option>
+      <option value="~=">~= ({{#i18n}} Equals one word - whitespace separated {{/i18n}})</option>
+      <option value="|="> &nbsp; |= ({{#i18n}} Equals one word - dash separated {{/i18n}})</option>
+    </select>
+
+    <input name="attr_value" placeholder="{{#i18n}} Attribute value {{/i18n}}" pattern='([^"])+'
+     style="width: 100px;">
+  </div>
+</template>

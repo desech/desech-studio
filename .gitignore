@@ -1,0 +1,8 @@
+node_modules
+.DS_Store
+config.json
+dist
+app/css
+app/html
+app/js
+app/index.js

@@ -1,0 +1,153 @@
+<select class="add-css-dropdown button" style="width: 85px;">
+  <option value="">{{#i18n}} - Property - {{/i18n}}</option>
+  <option value="custom">{{#i18n}} Custom {{/i18n}}</option>
+  <optgroup label="{{#i18n}} SVG {{/i18n}}">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation -->
+    <!-- https://www.w3.org/TR/SVG11/styling.html -->
+    <!-- @todo add the rest and check the browser support -->
+    <option value="fill" data-template="color">fill</option>
+    <option value="stroke" data-template="color">stroke</option>
+    <option value="stroke-width" data-template="length-percent">stroke-width</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Position {{/i18n}}">
+    <option value="display">display</option>
+    <option value="position">position</option>
+    <option value="float">float</option>
+    <option value="clear">clear</option>
+    <option value="top" data-template="length-percent">top</option>
+    <option value="bottom" data-template="length-percent">bottom</option>
+    <option value="left" data-template="length-percent">left</option>
+    <option value="right" data-template="length-percent">right</option>
+    <option value="vertical-align">vertical-align</option>
+    <option value="z-index" data-template="number">z-index</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Size {{/i18n}}">
+    <option value="overflow-x" data-template="overflow">overflow-x</option>
+    <option value="overflow-y" data-template="overflow">overflow-y</option>
+    <option value="overflow-wrap">overflow-wrap</option>
+    <option value="box-sizing">box-sizing</option>
+    <option value="resize">resize</option>
+    <option value="block-size" data-template="width-height">block-size</option>
+    <option value="inline-size" data-template="width-height">inline-size</option>
+    <option value="min-block-size" data-template="width-height">min-block-size</option>
+    <option value="max-block-size" data-template="width-height">max-block-size</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Outline {{/i18n}}">
+    <option value="outline-width" data-template="border-width">outline-width</option>
+    <option value="outline-style" data-template="border-style">outline-style</option>
+    <option value="outline-color" data-template="color">outline-color</option>
+    <option value="outline-offset" data-template="length">outline-offset</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Text {{/i18n}}">
+    <option value="-webkit-background-clip">background-clip</option>
+    <option value="text-overflow">text-overflow</option>
+    <option value="user-select">user-select</option>
+    <option value="hyphens">hyphens</option>
+    <option value="caret-color" data-template="color">caret-color</option>
+    <option value="quotes" data-template="custom">quotes</option>
+    <option value="text-emphasis-style">text-emphasis-style</option>
+    <option value="text-emphasis-color" data-template="color">text-emphasis-color</option>
+    <option value="text-emphasis-position">text-emphasis-position</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Text spacing {{/i18n}}">
+    <option value="white-space">white-space</option>
+    <option value="word-break">word-break</option>
+    <option value="line-break">line-break</option>
+    <option value="word-spacing" data-template="length-percent">word-spacing</option>
+    <option value="text-indent" data-template="length-percent">text-indent</option>
+    <option value="tab-size" data-template="number-length">tab-size</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Font {{/i18n}}">
+    <option value="font-kerning">font-kerning</option>
+    <option value="font-optical-sizing">font-optical-sizing</option>
+    <option value="font-stretch">font-stretch</option>
+    <option value="font-variant-numeric">font-variant-numeric</option>
+    <option value="font-variant-ligatures">font-variant-ligatures</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Localization {{/i18n}}">
+    <option value="direction">direction</option>
+    <option value="text-orientation">text-orientation</option>
+    <option value="writing-mode">writing-mode</option>
+    <option value="text-combine-upright" data-template="custom">text-combine-upright</option>
+    <option value="unicode-bidi">unicode-bidi</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Columns {{/i18n}}">
+    <option value="column-count" data-template="number">column-count</option>
+    <option value="column-width" data-template="length">column-width</option>
+    <option value="column-gap" data-template="length-percent">column-gap</option>
+    <option value="column-rule-width" data-template="border-width">column-rule-width</option>
+    <option value="column-rule-style" data-template="border-style">column-rule-style</option>
+    <option value="column-rule-color" data-template="color">column-rule-color</option>
+    <option value="column-fill">column-fill</option>
+    <option value="column-span">column-span</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Image {{/i18n}}">
+    <option value="image-rendering">image-rendering</option>
+    <option value="shape-outside" data-template="custom">shape-outside</option>
+    <option value="shape-margin" data-template="length-percent">shape-margin</option>
+    <option value="shape-image-threshold" data-template="number-percent">shape-image-threshold</option>
+    <option value="clip-path" data-template="custom">clip-path</option>
+    <option value="-webkit-mask-image" data-template="custom">mask-image</option>
+    <option value="object-fit">object-fit</option>
+    <option value="object-position" data-template="custom">object-position</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Lists {{/i18n}}">
+    <option value="list-style" data-template="custom">list-style</option>
+    <option value="content" data-template="custom">content</option>
+    <option value="counter-increment" data-template="custom">counter-increment</option>
+    <option value="counter-reset" data-template="custom">counter-reset</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Grid {{/i18n}}">
+    <option value="grid-template-areas" data-template="custom">grid-template-areas</option>
+    <option value="grid-area" data-template="custom">grid-area</option>
+    <option value="grid-column" data-template="custom">grid-column</option>
+    <option value="grid-row" data-template="custom">grid-row</option>
+    <option value="grid-auto-columns" data-template="custom">grid-auto-columns</option>
+    <option value="grid-auto-rows" data-template="custom">grid-auto-rows</option>
+    <option value="grid-auto-flow">grid-auto-flow</option>
+    <option value="order" data-template="number">order</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Effects {{/i18n}}">
+    <option value="opacity" data-template="number-percent">opacity</option>
+    <option value="visibility">visibility</option>
+    <option value="backface-visibility" data-template="visibility">backface-visibility</option>
+    <option value="isolation">isolation</option>
+    <option value="perspective" data-template="length">perspective</option>
+    <option value="perspective-origin" data-template="custom">perspective-origin</option>
+    <option value="transform-box">transform-box</option>
+    <option value="transform-origin" data-template="custom">transform-origin</option>
+    <option value="transform-style">transform-style</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Scroll {{/i18n}}">
+    <option value="scroll-margin-top" data-template="length">scroll-margin-top</option>
+    <option value="scroll-margin-bottom" data-template="length">scroll-margin-bottom</option>
+    <option value="scroll-margin-left" data-template="length">scroll-margin-left</option>
+    <option value="scroll-margin-right" data-template="length">scroll-margin-right</option>
+    <option value="scroll-margin-block-start" data-template="length">scroll-margin-block-start</option>
+    <option value="scroll-margin-block-end" data-template="length">scroll-margin-block-end</option>
+    <option value="scroll-margin-inline-start" data-template="length">scroll-margin-inline-start</option>
+    <option value="scroll-margin-inline-end" data-template="length">scroll-margin-inline-end</option>
+    <option value="scroll-padding-top" data-template="length">scroll-padding-top</option>
+    <option value="scroll-padding-bottom" data-template="length">scroll-padding-bottom</option>
+    <option value="scroll-padding-left" data-template="length">scroll-padding-left</option>
+    <option value="scroll-padding-right" data-template="length">scroll-padding-right</option>
+    <option value="scroll-padding-block-start" data-template="length">scroll-padding-block-start</option>
+    <option value="scroll-padding-block-end" data-template="length">scroll-padding-block-end</option>
+    <option value="scroll-padding-inline-start" data-template="length">scroll-padding-inline-start</option>
+    <option value="scroll-padding-inline-end" data-template="length">scroll-padding-inline-end</option>
+    <option value="scroll-snap-align">scroll-snap-align</option>
+    <option value="scroll-snap-type" data-template="custom">scroll-snap-type</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Print {{/i18n}}">
+    <option value="break-before">break-before</option>
+    <option value="break-after" data-template="break-before">break-after</option>
+    <option value="break-inside">break-inside</option>
+    <option value="-webkit-print-color-adjust">color-adjust</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Other {{/i18n}}">
+    <option value="-webkit-appearance">appearance</option>
+    <option value="cursor">cursor</option>
+    <option value="pointer-events">pointer-events</option>
+    <option value="touch-action">touch-action</option>
+  </optgroup>
+</select>

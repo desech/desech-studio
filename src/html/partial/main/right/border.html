@@ -1,0 +1,24 @@
+<template id="template-style-border">
+  <form id="border-section" class="sidebar-section toggle active" data-type="border">
+    <div class="sidebar-title">
+      <div class="sidebar-title-text">
+        <span>{{#i18n}} Border {{/i18n}}</span>
+        <svg width="12" height="12" viewBox="0 0 24 24">
+          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
+          <path fill="none" d="M0 0h24v24H0V0z"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="sidebar-content sidebar-content-list">
+      {{> mainRightBorderRadius }}
+      {{> mainRightBorderMain }}
+    </div>
+  </form>
+</template>
+
+{{> mainRightBorderContainer }}
+{{> mainRightBorderContainer }}
+{{> mainRightBorderContainer }}
+{{> mainRightBorderContainer }}
+{{> mainRightBorderContainer }}
+{{> mainRightBorderFill }}

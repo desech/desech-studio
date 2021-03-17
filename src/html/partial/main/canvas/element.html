@@ -1,0 +1,73 @@
+<template id="template-canvas-block">
+  <div class="element block"></div>
+</template>
+
+<template id="template-canvas-text">
+  <p class="element text">{{#i18n}} Enter some text {{/i18n}}</p>
+</template>
+
+<template id="template-canvas-button">
+  <button type="button" class="element button" type="button">{{#i18n}} Button text {{/i18n}}</button>
+</template>
+
+<template id="template-canvas-icon">
+  <svg class="element icon" viewBox="0 0 24 24">
+    <path d="M0 0h24v24H0z" fill="none"/>
+    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/>
+  </svg>
+</template>
+
+<template id="template-canvas-image">
+  <img class="element image">
+</template>
+
+<!-- @copyright - https://pixabay.com/videos/mountains-clouds-4k-nature-cold-31175/ -->
+<template id="template-canvas-video">
+  <video class="element video" controls data-ss-controls></video>
+</template>
+
+<!-- @copyright - https://notificationsounds.com/notification-sounds/when-604 -->
+<!-- we use a wrapping div because hiding the controls un-renders the element and we can't click it anymore  -->
+<template id="template-canvas-audio">
+  <div class="element audio" controls data-ss-controls>
+    <audio controls></audio>
+  </div>
+</template>
+
+<template id="template-canvas-input">
+  <input class="element input" type="text" placeholder="{{#i18n}} Input text {{/i18n}}">
+</template>
+
+<template id="template-canvas-dropdown">
+  <select class="element dropdown">
+    <option value="">{{#i18n}} Dropdown {{/i18n}}</option>
+  </select>
+</template>
+
+<template id="template-canvas-textarea">
+  <textarea class="element textarea" placeholder="{{#i18n}} Text area {{/i18n}}"></textarea>
+</template>
+
+<template id="template-canvas-checkbox">
+  <input class="element checkbox" type="checkbox" checked>
+</template>
+
+<template id="template-canvas-range">
+  <input class="element range" type="range">
+</template>
+
+<template id="template-canvas-color">
+  <input class="element color" type="color">
+</template>
+
+<template id="template-canvas-file">
+  <input class="element file" type="file">
+</template>
+
+<template id="template-canvas-component">
+  <div class="element component"></div>>
+</template>
+
+<template id="template-canvas-component-children">
+  <div class="element component-children"></div>>
+</template>

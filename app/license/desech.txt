@@ -1,0 +1,4 @@
+Copyright Desech Studio SRL - All Rights Reserved
+Unauthorized copying of this repository (files and folders), via any medium is strictly prohibited
+Proprietary and confidential
+Written by Catalin Luntraru <contact@desech.com>

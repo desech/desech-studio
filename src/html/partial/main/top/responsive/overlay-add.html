@@ -1,0 +1,19 @@
+<template id="template-responsive-overlay-add">
+  <div class="overlay">
+    <div class="overlay-arrow-container">
+      <div class="overlay-arrow"></div>
+    </div>
+    <div class="overlay-content responsive-overlay responsive-overlay-add">
+      <div class="overlay-title">{{#i18n}} Add responsive width {{/i18n}}</div>
+      <form class="inputs">
+        <div class="input-container-min bottom" data-tooltip="{{#i18n}} Check Project Settings {{/i18n}}">
+          {{> componentInputUnit class="responsive-input-add" name="min-width" length="1" placeholder="Min" }}
+        </div>
+        - 
+        <div class="input-container-max bottom" data-tooltip="{{#i18n}} Check Project Settings {{/i18n}}">
+          {{> componentInputUnit class="responsive-input-add" name="max-width" length="1" placeholder="Max" }}
+        </div>
+      </form>
+    </div>
+  </div>
+</template>

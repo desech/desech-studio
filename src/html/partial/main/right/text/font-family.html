@@ -1,0 +1,27 @@
+<select name="font-family" class="font-family">
+  <option value="">{{#i18n}} - Font - {{/i18n}}</option>
+    <option class="font-family-add-font" value="{{#i18n}} Custom Font {{/i18n}}">
+      {{#i18n}} Add Custom Font {{/i18n}}
+    </option>
+
+    <optgroup class="font-family-my-fonts" hidden label="{{#i18n}} My Fonts {{/i18n}}"></optgroup>
+
+    <optgroup label="{{#i18n}} Popular {{/i18n}}">
+      {{#popularFonts}}
+        <option class="font-family-add-font" value="{{family}}" data-url="{{url}}"
+          style="font-family: '{{family}}';">
+          {{family}}
+        </option>
+      {{/popularFonts}}
+    </optgroup>
+
+    {{#categoryFonts}}
+      <optgroup label="{{category}}">
+        {{#fonts}}
+          <option class="font-family-add-font" value="{{family}}" data-url="{{url}}">
+            {{family}}
+          </option>
+        {{/fonts}}
+      </optgroup>
+    {{/categoryFonts}}
+</select>

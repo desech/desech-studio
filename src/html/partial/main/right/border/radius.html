@@ -1,0 +1,27 @@
+<div class="border-radius-container tab-main">
+  <div class="grid" style="grid-template-columns: 40px auto 1fr;">
+    <div>{{#i18n}} Radius {{/i18n}}</div>
+    <div>
+      <button type="button" name="switch-radius" value="all" class="selected tab-button switch-radius small tooltip top" data-tab="border-radius-all-container" data-tooltip="{{#i18n}} All borders {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+          <path d="M0 0h24v24H0z" fill="none"/>
+        </svg>
+      </button>
+      <button type="button" name="switch-radius" value="each" class="tab-button switch-radius small tooltip top" data-tab="border-radius-each-container" data-tooltip="{{#i18n}} Each border {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="grid border-radius-all-container tab-container" style="grid-template-columns: 1fr auto 1fr; column-gap: 4px; padding: 0;">
+      {{> componentInputUnit name="border-radius" class="border-radius" length="1" percent="1" }}
+      /
+      {{> componentInputUnit name="border-radius-vertical" class="border-radius" length="1" percent="1" }}
+    </div>
+  </div>
+
+  {{> mainRightBorderRadiusEach }}
+</div>

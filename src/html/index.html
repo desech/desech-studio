@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Desech Studio">
+  <title>{{ pageTitle }}</title>
+  <base href="../">
+  <script src="js/script.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- the last one will be the design-system <style></style> css -->
+</head>
+
+<body data-theme="">
+  <div id="page"></div>
+
+  <div id="popups" class="desech-studio">
+    {{> tooltip }}
+    <div class="contextmenu" id="element-contextmenu"></div>
+    <div class="contextmenu" id="file-contextmenu"></div>
+  </div>
+
+  <div hidden>
+    {{> componentColorPickerTemplate }}
+    {{> componentTimingFunctionOption }}
+    {{> componentDialog }}
+    {{> start }}
+    {{> main }}
+  </div>
+</body>
+</html>

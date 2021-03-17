@@ -1,0 +1,70 @@
+<template id="template-style-html-attr-option">
+  <li class="style-html-list-elem dragdrop-element" draggable="true">
+    <form class="style-html-li-form" data-type="option">
+      <div class="dragdrop-handle" style="cursor: move">
+        <svg width="14" height="14" viewBox="0 0 24 24">
+          <path fill="none" d="M0 0h24v24H0V0z"></path>
+          <path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+        </svg>
+      </div>
+      <input class="style-html-option-input" type="text" name="text" placeholder="{{#i18n}} Option {{/i18n}}">
+      <input class="style-html-option-input" type="text" name="value" placeholder="{{#i18n}} Value {{/i18n}}">
+
+      <div>
+        <button type="button" name="selected" class="style-html-option-button check-button small tooltip top" data-tooltip="{{#i18n}} Selected {{/i18n}}">
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path fill="none" d="M0 0h24v24H0z"/>
+            <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <button type="button" name="disabled" class="style-html-option-button check-button small tooltip top" data-tooltip="{{#i18n}} Disabled {{/i18n}}">
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <button type="button" class="style-html-option-delete small tooltip left" type="button" data-tooltip="{{#i18n}} Delete option {{/i18n}}">
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+            <path d="M0 0h24v24H0z" fill="none"></path>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </li>
+</template>
+
+<template id="template-style-html-attr-optgroup">
+  <li class="style-html-list-elem dragdrop-element" draggable="true">
+    <form class="style-html-li-form" data-type="optgroup">
+      <div class="dragdrop-handle" style="cursor: move">
+        <svg width="14" height="14" viewBox="0 0 24 24">
+          <path fill="none" d="M0 0h24v24H0V0z"></path>
+          <path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+        </svg>
+      </div>
+      <input class="style-html-option-input" type="text" name="label" placeholder="{{#i18n}} Group {{/i18n}}">
+
+      <div>
+        <button type="button" name="disabled" class="style-html-option-button check-button small tooltip top" data-tooltip="{{#i18n}} Disabled {{/i18n}}">
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm6.31-3.1L7.1 5.69C8.45 4.63 10.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <button type="button" class="style-html-option-delete small tooltip left" type="button" data-tooltip="{{#i18n}} Delete group {{/i18n}}">
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+            <path d="M0 0h24v24H0z" fill="none"></path>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </li>
+</template>

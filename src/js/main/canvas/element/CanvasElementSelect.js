@@ -5,7 +5,6 @@ import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import LeftCommon from '../../left/LeftCommon.js'
-import HelperDOM from '../../../helper/HelperDOM.js'
 import CanvasCommon from '../CanvasCommon.js'
 
 export default {
@@ -145,10 +144,11 @@ export default {
   },
 
   scrollToItem (element) {
-    const pos = HelperElement.getPosition(element)
-    const container = element.closest('.canvas-container')
-    if (HelperDOM.isInView(pos.leftWithScroll, pos.topWithScroll, container)) return
-    const align = (pos.height < 300) ? 'center' : 'start'
-    element.scrollIntoView({ block: align, inline: align })
+    // doesn't work right, disable it for now
+    // const pos = HelperElement.getPosition(element)
+    // const container = element.closest('.canvas-container')
+    // if (HelperDOM.isInView(pos.leftWithScroll, pos.topWithScroll, container)) return
+    // const align = (pos.height < 300) ? 'center' : 'start'
+    // element.scrollIntoView({ block: align, inline: align })
   }
 }

@@ -141,11 +141,6 @@ export default {
     return this.isContainer(element.parentNode)
   },
 
-  isEditable (element) {
-    const type = this.getType(element)
-    return (type === 'text')
-  },
-
   hasSmallWidth (element) {
     const pos = this.getPosition(element)
     return pos.width <= 50

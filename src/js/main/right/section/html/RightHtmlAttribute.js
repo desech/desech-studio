@@ -104,7 +104,7 @@ export default {
   },
 
   isNameValid (value) {
-    // allow attribute names contain component {{variables}}
+    // allow attribute names that contain components {{variables}}
     const valid = /^[a-z{]([a-z0-9-{}])+$/gi.test(value)
     const list = RightHtmlCommon.getAllIgnoredAttributes()
     return valid && !list.includes(value)

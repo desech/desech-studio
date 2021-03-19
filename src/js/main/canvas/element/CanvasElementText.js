@@ -10,6 +10,7 @@ import HelperLocalStore from '../../../helper/HelperLocalStore.js'
 import HelperCrypto from '../../../helper/HelperCrypto.js'
 import CanvasCommon from '../CanvasCommon.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
+import CanvasElementSelect from './CanvasElementSelect.js'
 
 export default {
   _startWidth: null,
@@ -20,7 +21,8 @@ export default {
     return {
       dblclick: ['dblclickStartEditEvent', 'dblclickSelectWordEvent'],
       mousedown: ['mousedownEndEditEvent'],
-      keydown: ['keydownNewLineEvent', 'keydownButtonSpaceEvent', 'keydownFormatTextEvent'],
+      keydown: ['keydownEndEditEvent', 'keydownNewLineEvent', 'keydownButtonSpaceEvent',
+        'keydownFormatTextEvent'],
       keyup: ['keyupUpdateOverlayEvent'],
       paste: ['pasteTextEvent'],
       input: ['inputTextEvent'],
@@ -34,10 +36,10 @@ export default {
 
   dblclickStartEditEvent (event) {
     if (HelperCanvas.getOperation() !== 'editing' && !HelperCanvas.isPreview() &&
-      event.target.closest('.element')) {
+      event.target.closest('.element.text')) {
       const element = CanvasCommon.getClosestElementOrComponent(event.target.closest('.element'))
       if (!element.classList.contains('component')) {
-        this.startEditText(element)
+        this.startEditText(event.target.closest('.element.text'))
         // so we don't deselect the text
         event.preventDefault()
       }
@@ -47,6 +49,12 @@ export default {
   mousedownEndEditEvent (event) {
     if (HelperCanvas.getOperation() === 'editing' &&
       !event.target.closest('.element.editable') && !event.target.closest('#text-overlay')) {
+      this.cancelEditText()
+    }
+  },
+
+  keydownEndEditEvent () {
+    if (event.key && HelperCanvas.getOperation() === 'editing' && event.key === 'Escape') {
       this.cancelEditText()
     }
   },
@@ -112,7 +120,8 @@ export default {
   },
 
   startEditText (element) {
-    if (!HelperElement.isEditable(element)) return
+    if (!element) return
+    CanvasElementSelect.selectElement(element)
     this.prepareElementForUndo(element)
     this.makeElementEditable(element)
     HelperCanvas.setCanvasData('operation', 'editing')

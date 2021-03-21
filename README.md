@@ -213,12 +213,9 @@ sudo pacman -Syy desech-studio
 ```sh
 cd ~/dev/github
 git clone git@github.com:desech/studio-plugins.git
-git clone git@github.com:desech/studio-material-design.git
-git clone git@github.com:desech/studio-react.git
-git clone git@github.com:desech/studio-angular.git
-git clone git@github.com:desech/studio-vue.git
-ln -s studio-material-design ~/.config/Electron/plugin/desech-studio-material-design
-ln -s studio-react ~/.config/Electron/plugin/desech-studio-react
-ln -s studio-angular ~/.config/Electron/plugin/desech-studio-angular
-ln -s studio-vue ~/.config/Electron/plugin/desech-studio-vue
+cd ~/.config/Electron/plugin
+git clone git@github.com:desech/studio-material-design.git desech-studio-material-design
+git clone git@github.com:desech/studio-react.git desech-studio-react
+git clone git@github.com:desech/studio-angular.git desech-studio-angular
+git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```

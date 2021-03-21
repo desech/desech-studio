@@ -207,3 +207,18 @@ sudo pacman -Syy desech-studio
 - Copy the `latest.yml` and exe/dmg file to sftp
 - Delete the 2 versions behind file from sftp
 - Update the exe/dmg link and changelog in the download website page
+
+## Plugins
+
+```sh
+cd ~/dev/github
+git clone git@github.com:desech/studio-plugins.git
+git clone git@github.com:desech/studio-material-design.git
+git clone git@github.com:desech/studio-react.git
+git clone git@github.com:desech/studio-angular.git
+git clone git@github.com:desech/studio-vue.git
+ln -s studio-material-design ~/.config/Electron/plugin/desech-studio-material-design
+ln -s studio-react ~/.config/Electron/plugin/desech-studio-react
+ln -s studio-angular ~/.config/Electron/plugin/desech-studio-angular
+ln -s studio-vue ~/.config/Electron/plugin/desech-studio-vue
+```

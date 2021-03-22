@@ -127,7 +127,10 @@ export default {
   },
 
   cleanProjectCss (css, folder) {
-    const files = File.readFolder(folder, false, HelperFile.getIgnoredFileFolders())
+    const files = File.readFolder(folder, {
+      sort: false,
+      ignoreFiles: HelperFile.getIgnoredFileFolders()
+    })
     const htmlFiles = this.getHtmlFiles(files)
     const classes = this.getHtmlClasses(htmlFiles)
     this.removeClassesNotFoundInHtmlFiles(css, classes)

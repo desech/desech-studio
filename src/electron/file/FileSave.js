@@ -8,14 +8,22 @@ import HelperFile from '../../js/helper/HelperFile.js'
 import HelperProject from '../../js/helper/HelperProject.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import ExportStaticCode from '../export/ExportStaticCode.js'
+import ExportCommon from '../export/ExportCommon.js'
 
 export default {
   async saveCurrentFile (data) {
     // check TopCommandSave.getCurrentFileData() for data
+    this.prepareDataForExport(data)
     this.saveFileWithBackup(data.htmlFile, data.html)
     this.saveStyle(data.css, data.htmlFile, data.folder)
     await Plugin.triggerPlugin('designSystem', 'saveToFile', data)
     await this.exportCode(data)
+  },
+
+  prepareDataForExport (data) {
+    data.compiledCss = ExportCommon.getCompiledCss(data.folder)
+    data.rootMiscFiles = ExportCommon.getRootMiscFiles(data.folder)
+    data.htmlFiles = ExportCommon.getHtmlFiles(data.folder)
   },
 
   saveFileWithBackup (file, contents) {

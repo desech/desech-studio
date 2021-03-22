@@ -10,18 +10,27 @@ export default {
     return absPath.replaceAll('\\', '/')
   },
 
-  readFolder (folder, sort = false, ignoreFiles = []) {
+  readFolder (folder, options = {}) {
+    options = this.getReadFolderOptions(options)
     const results = []
     // `withFileTypes` doesn't work with asar
     const entries = fs.readdirSync(folder)
     for (const file of entries) {
-      if (ignoreFiles.length && ignoreFiles.includes(file)) continue
-      results.push(this.readFolderEntry(file, folder, sort, ignoreFiles))
+      if (options.ignoreFiles.length && options.ignoreFiles.includes(file)) continue
+      results.push(this.readFolderEntry(file, folder, options))
     }
-    return sort ? this.sortReadFolder(results) : results
+    return options.sort ? this.sortReadFolder(results) : results
   },
 
-  readFolderEntry (file, folder, sort, ignoreFiles) {
+  getReadFolderOptions (options) {
+    return {
+      sort: false,
+      ignoreFiles: [],
+      ...options
+    }
+  },
+
+  readFolderEntry (file, folder, options) {
     const absPath = path.resolve(folder, file)
     const isDir = fs.lstatSync(absPath).isDirectory()
     return {
@@ -29,7 +38,7 @@ export default {
       path: this.sanitizePath(absPath),
       type: isDir ? 'folder' : 'file',
       extension: isDir ? '' : path.extname(file).substring(1),
-      children: isDir ? this.readFolder(absPath, sort, ignoreFiles) : []
+      children: isDir ? this.readFolder(absPath, options) : []
     }
   },
 

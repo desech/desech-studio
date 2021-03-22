@@ -86,7 +86,10 @@ export default {
 
   async getFolder () {
     const folder = await Cookie.getCookie('currentFolder')
-    return File.readFolder(folder, true, HelperFile.getIgnoredFileFolders())
+    return File.readFolder(folder, {
+      sort: true,
+      ignoreFiles: HelperFile.getIgnoredFileFolders()
+    })
   },
 
   async moveToFolder (from, to) {

@@ -1,7 +1,16 @@
 module.exports = {
-  extends: 'standard',
-  env: {
-    browser: true,
-    node: true
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "standard"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
   }
 }

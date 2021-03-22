@@ -146,11 +146,11 @@ export default {
   async triggerPlugin (category, method, data = null) {
     const project = await ProjectCommon.getProjectSettings()
     if (!project[category]) return
-    const file = path.resolve(this._DIR, project[category], 'index.js') // eslint-disable-line
-    const module = eval('require(file)') // eslint-disable-line
+    const file = path.resolve(this._DIR, project[category], 'index.js')
+    const module = require(file)
     if (!(method in module)) {
       throw new Error(`Unknown "${method}" method for active plugin category "${category}"`)
     }
-    return await module[method](data) // webpack ignore
+    return await module[method](data)
   }
 }

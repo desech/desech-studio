@@ -13,9 +13,9 @@ import ExportCommon from '../export/ExportCommon.js'
 export default {
   async saveCurrentFile (data) {
     // check TopCommandSave.getCurrentFileData() for data
-    this.prepareDataForExport(data)
     this.saveFileWithBackup(data.htmlFile, data.html)
     this.saveStyle(data.css, data.htmlFile, data.folder)
+    this.prepareDataForExport(data)
     await Plugin.triggerPlugin('designSystem', 'saveToFile', data)
     await this.exportCode(data)
   },

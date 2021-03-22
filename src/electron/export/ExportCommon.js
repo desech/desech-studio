@@ -6,13 +6,14 @@ export default {
   getCompiledCss (folder) {
     const general = this.getCssContent(this.getGeneralCssFiles(folder))
     const page = this.getCssContent(this.getPageCssFiles(folder))
-    return general + '\n' + page
+    const animation = this.getAnimationCss(folder, general + page)
+    return general + '\n' + animation + '\n' + page
   },
 
   getGeneralCssFiles (folder) {
     const paths = []
     // order matters
-    const files = ['reset', 'animation', 'font', 'design-system', 'root', 'component-css',
+    const files = ['reset', 'font', 'design-system', 'root', 'component-css',
       'component-html']
     for (const file of files) {
       const filePath = path.resolve(folder, 'css/general', file + '.css')
@@ -37,6 +38,27 @@ export default {
       css += fs.readFileSync(file).toString()
     }
     return css
+  },
+
+  getAnimationCss (folder, css) {
+    let selectedCss = ''
+    const animations = this.getAnimationsUsed(css)
+    const file = path.resolve(folder, 'css/general/animation.css')
+    const animationCss = fs.readFileSync(file).toString() + '@'
+    for (const animation of animations) {
+      const regex = new RegExp(`(@keyframes ${animation} [\\s\\S]*?}[\\s]*)@`, 'g')
+      selectedCss += regex.exec(animationCss)[1]
+    }
+    return selectedCss
+  },
+
+  getAnimationsUsed (css) {
+    const list = []
+    const regex = css.matchAll(/animation:(.*?);/g)
+    for (const match of regex) {
+      list.push(match[1].substring(match[1].lastIndexOf(' ') + 1))
+    }
+    return list
   },
 
   getRootMiscFiles (folder) {

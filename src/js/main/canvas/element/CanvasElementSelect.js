@@ -99,7 +99,9 @@ export default {
 
   showMediaControls (element) {
     const node = HelperElement.getNode(element)
-    if (element.hasAttributeNS(null, 'data-ss-controls')) node.setAttributeNS(null, 'controls', '')
+    if (element.hasAttributeNS(null, 'data-ss-controls')) {
+      node.setAttributeNS(null, 'controls', '')
+    }
   },
 
   selectElementByRef (ref) {

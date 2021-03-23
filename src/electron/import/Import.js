@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import { dialog } from 'electron'
-import beautify from 'js-beautify'
 import Language from '../lib/Language.js'
 import Figma from './Figma.js'
 import File from '../file/File.js'
@@ -16,6 +15,7 @@ import Project from '../project/Project.js'
 import ParseCommon from './ParseCommon.js'
 import HelperStyle from '../../js/helper/HelperStyle.js'
 import Electron from '../lib/Electron.js'
+import FileParse from '../file/FileParse.js'
 
 export default {
   _tmpFileCss: {},
@@ -91,7 +91,7 @@ export default {
       { file: path.basename(file) })
     EventMain.ipcMainInvoke('mainImportProgress', msg)
     const html = this.getImportHtml(data, css, folder, locale)
-    return HelperFile.getFullHtml(file, this.beautifyHtml(html), {}, folder, hasDesignSystem)
+    return HelperFile.getFullHtml(file, FileParse.beautifyHtml(html), {}, folder, hasDesignSystem)
   },
 
   getImportHtml (data, css, folder, locale) {
@@ -235,14 +235,6 @@ export default {
     if (node.type === 'block' || node.type === 'text') cls += ' ' + node.type
     cls += ' ' + node.component.join(' ')
     return cls.trim()
-  },
-
-  beautifyHtml (body) {
-    return beautify.html(body, {
-      indent_size: 2,
-      inline: [],
-      preserve_newlines: false
-    })
   },
 
   saveGeneralCssFiles (css, folder, locale) {

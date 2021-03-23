@@ -81,7 +81,6 @@ export default {
       this.getDefaultAudio(),
       this.getDefaultBackgroundImage(),
       this.getDropdownImage(),
-      root + '/js/desech.js',
       root + '/js/design-system.js',
       root + '/index.html'
     ].includes(file) || this.isFolderFile(file, 'css')
@@ -131,7 +130,7 @@ export default {
   },
 
   getFullHtmlString (data) {
-    // change the /src/ui/index.html file too
+    // change the /app/ui/index.html file too
     data.meta = data.meta || `<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Desech Studio">`
@@ -141,7 +140,7 @@ export default {
   ${data.meta}
   <title>${data.title}</title>
   <base href="${data.baseHref}">
-  <script src="js/desech.js"></script>${data.jsDesignSystem}
+  <script src="js/script.js"></script>${data.jsDesignSystem}
   <link rel="stylesheet" href="css/general/reset.css">
   <link rel="stylesheet" href="css/general/animation.css">
   <link rel="stylesheet" href="css/general/font.css">${data.cssDesignSystem}

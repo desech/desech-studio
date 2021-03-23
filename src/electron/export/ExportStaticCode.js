@@ -5,7 +5,8 @@ import ExportStaticContent from './static/ExportStaticContent.js'
 
 export default {
   async saveToFile (data) {
-    await File.syncFolder(data.rootMiscFiles, data.folder, path.resolve(data.folder, '_export'))
+    const exportDir = File.createFolder(data.folder, '_export')
+    await File.syncFolder(data.rootMiscFiles, data.folder, exportDir)
     this.syncCss(data.folder, data.compiledCss)
     this.syncJs(data.folder)
     this.syncPages(data.folder, data.htmlFiles)

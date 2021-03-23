@@ -41,26 +41,26 @@ export default {
   },
 
   addComponent (node, css, designSystemClasses) {
-    const script = document.createElement('script')
-    script.setAttributeNS(null, 'type', 'text/html')
-    script.setAttributeNS(null, 'src', this.getRelPath(node.dataset.file))
-    this.addComponentProperties(script, node.dataset.properties)
-    this.addComponentChildren(script, node, css, designSystemClasses)
-    node.replaceWith(script)
+    const div = document.createElement('div')
+    div.setAttributeNS(null, 'class', 'component')
+    div.setAttributeNS(null, 'src', this.getRelPath(node.getAttributeNS(null, 'src')))
+    this.addComponentProperties(div, node.dataset.properties)
+    this.addComponentChildren(div, node, css, designSystemClasses)
+    node.replaceWith(div)
   },
 
-  addComponentProperties (script, properties) {
+  addComponentProperties (div, properties) {
     if (!properties) return
     for (const [name, value] of Object.entries(JSON.parse(properties))) {
-      script.setAttributeNS(null, 'data-' + ExtendJS.camelCaseToKebab(name), value)
+      div.setAttributeNS(null, 'data-' + ExtendJS.camelCaseToKebab(name), value)
     }
   },
 
-  addComponentChildren (script, node, css, designSystemClasses) {
+  addComponentChildren (div, node, css, designSystemClasses) {
     const container = HelperElement.getComponentChildren(node)
     if (!container || !container.children) return
     this.buildHtml(container.children, css, designSystemClasses)
-    script.innerHTML = container.innerHTML
+    div.innerHTML = container.innerHTML
   },
 
   setRelativeSource (node) {
@@ -143,7 +143,7 @@ export default {
   },
 
   filterClass (cls) {
-    // we allow `block`, `text` and `component-children`
+    // we allow `block`, `text`, `component` and `component-children`
     const ignore = ['selected', 'element', 'inline', 'icon', 'image', 'video', 'audio', 'input',
       'dropdown', 'textarea', 'checkbox', 'range', 'color', 'file']
     if (ignore.includes(cls)) return
@@ -182,14 +182,16 @@ export default {
 
   formatHtml (body) {
     if (!body) return ''
-    return this.formatBooleanAttributes(window.html_beautify(body, {
+    return this.formatHtmlString(window.html_beautify(body, {
       indent_size: 2,
       inline: [],
       preserve_newlines: false
     }))
   },
 
-  formatBooleanAttributes (html) {
-    return html.replace(/(hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g, '$1')
+  formatHtmlString (html) {
+    html = html.replace(/(hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g, '$1')
+    html = html.replace(/ style=".*?"/, '')
+    return html
   }
 }

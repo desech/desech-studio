@@ -13,10 +13,10 @@ export default {
   readFolder (folder, options = {}) {
     options = this.getReadFolderOptions(options)
     const results = []
-    // `withFileTypes` doesn't work with asar
-    const entries = fs.readdirSync(folder)
+    const entries = fs.readdirSync(folder, { withFileTypes: options.withFileTypes })
     for (const file of entries) {
-      if (options.ignoreFiles.length && options.ignoreFiles.includes(file)) continue
+      const fileName = options.withFileTypes ? file.name : file
+      if (options.ignoreFiles.length && options.ignoreFiles.includes(fileName)) continue
       results.push(this.readFolderEntry(file, folder, options))
     }
     return options.sort ? this.sortReadFolder(results) : results
@@ -24,6 +24,7 @@ export default {
 
   getReadFolderOptions (options) {
     return {
+      withFileTypes: true,
       sort: false,
       ignoreFiles: [],
       ...options
@@ -31,13 +32,14 @@ export default {
   },
 
   readFolderEntry (file, folder, options) {
-    const absPath = path.resolve(folder, file)
-    const isDir = fs.lstatSync(absPath).isDirectory()
+    const fileName = options.withFileTypes ? file.name : file
+    const absPath = path.resolve(folder, fileName)
+    const isDir = options.withFileTypes ? file.isDirectory() : fs.lstatSync(absPath).isDirectory()
     return {
-      name: file,
+      name: fileName,
       path: this.sanitizePath(absPath),
       type: isDir ? 'folder' : 'file',
-      extension: isDir ? '' : path.extname(file).substring(1),
+      extension: isDir ? '' : path.extname(fileName).substring(1),
       children: isDir ? this.readFolder(absPath, options) : []
     }
   },
@@ -87,7 +89,8 @@ export default {
 
   async syncUiFolder (destFolder) {
     const ui = this.sanitizePath(path.resolve(app.getAppPath(), 'ui'))
-    const files = this.readFolder(ui)
+    // `withFileTypes` doesn't work with asar
+    const files = this.readFolder(ui, { withFileTypes: false })
     await this.syncFolder(files, ui, destFolder)
   },
 

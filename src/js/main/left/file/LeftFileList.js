@@ -210,12 +210,12 @@ export default {
       await this.createRegularFile(file)
     } else {
       await this.createRegularFile(file, HelperFile.getFullHtml(file))
-      await this.createPageCssFile(file, folder)
+      await this.createPageCssFile(file)
     }
   },
 
-  async createPageCssFile (file, folder) {
-    const cssFile = folder + '/css/page/' + HelperFile.getPageCssFile(file)
+  async createPageCssFile (file) {
+    const cssFile = HelperProject.getFolder() + '/css/page/' + HelperFile.getPageCssFile(file)
     await this.createRegularFile(cssFile)
   },
 

@@ -105,9 +105,10 @@ export default {
   },
 
   injectComponentChildren (template, data) {
-    if (!HelperFile.isComponentFile(HelperProject.getFile())) return
-    const button = template.getElementsByClassName('style-html-component-children')[0]
-    HelperDOM.show(button)
+    if (data.type === 'block' && HelperFile.isComponentFile(HelperProject.getFile())) {
+      const button = template.getElementsByClassName('style-html-component-children')[0]
+      HelperDOM.show(button)
+    }
   },
 
   injectHidden (template, data) {

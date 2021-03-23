@@ -26,7 +26,7 @@ export default {
   },
 
   async loadComponent (element) {
-    await Page.loadMain(element.dataset.file)
+    await Page.loadMain(element.getAttributeNS(null, 'src'))
   },
 
   async createElement (file) {
@@ -45,7 +45,7 @@ export default {
   },
 
   async buildComponentElement (element, file) {
-    element.dataset.file = file
+    element.setAttributeNS(null, 'src', file)
     const html = await window.electron.invoke('rendererParseComponentFile', file)
     this.addHtml(element, html)
   },

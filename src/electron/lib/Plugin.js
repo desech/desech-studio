@@ -1,10 +1,14 @@
 import { app, shell } from 'electron'
-import fetch from 'node-fetch'
+import AdmZip from 'adm-zip'
+import archiver from 'archiver'
 import fse from 'fs-extra'
+import jimp from 'jimp'
+import beautify from 'js-beautify'
+import fetch from 'node-fetch'
+import jsdom from 'jsdom'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
-import AdmZip from 'adm-zip'
 import File from '../file/File.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import HelperPlugin from '../../js/helper/HelperPlugin.js'
@@ -151,6 +155,10 @@ export default {
     if (!(method in module)) {
       throw new Error(`Unknown "${method}" method for active plugin category "${category}"`)
     }
-    return await module[method](data)
+    return await module[method](data, this.getLibs())
+  },
+
+  getLibs () {
+    return { AdmZip, archiver, fse, jimp, beautify, jsdom, fetch }
   }
 }

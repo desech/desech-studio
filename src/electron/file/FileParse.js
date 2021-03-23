@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom'
 import { URL } from 'whatwg-url'
-import fs from 'fs'
 import path from 'path'
+import beautify from 'js-beautify'
 import ParseHtml from './parse/ParseHtml.js'
 import ParseCss from './parse/ParseCss.js'
 import CustomResourceLoader from './parse/CustomResourceLoader.js'
@@ -11,7 +11,8 @@ import Font from '../lib/Font.js'
 export default {
   async parseHtmlCssFile (file, parseElementCss = true) {
     const folder = await Cookie.getCookie('currentFolder')
-    const dom = new JSDOM(fs.readFileSync(file).toString(), {
+    const html = ParseHtml.getHtmlFromFile(file)
+    const dom = new JSDOM(html, {
       resources: new CustomResourceLoader(),
       url: new URL('file:' + path.resolve(file))
     })
@@ -54,5 +55,13 @@ export default {
     const index = path.resolve(folder, 'index.html')
     const data = await this.parseHtmlCssFile(index, false)
     return data.css
+  },
+
+  beautifyHtml (body) {
+    return beautify.html(body, {
+      indent_size: 2,
+      inline: [],
+      preserve_newlines: false
+    })
   }
 }

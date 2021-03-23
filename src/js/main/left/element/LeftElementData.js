@@ -49,7 +49,8 @@ export default {
   injectSearch (li, data) {
     if (data.classes.length) li.dataset.search += '-' + data.classes.join('-')
     if (data.type === 'component') {
-      li.dataset.search += '-' + HelperProject.getFileName(data.element.dataset.file)
+      const src = data.element.getAttributeNS(null, 'src')
+      li.dataset.search += '-' + HelperProject.getFileName(src)
     }
   },
 
@@ -68,7 +69,7 @@ export default {
   injectTitle (li, data) {
     const title = li.getElementsByClassName('panel-item-name')[0]
     if (data.type === 'component') {
-      title.textContent = HelperProject.getFileName(data.element.dataset.file)
+      title.textContent = HelperProject.getFileName(data.element.getAttributeNS(null, 'src'))
     } else if (data.type === 'component-children') {
       title.textContent = title.dataset.componentChildren
     } else {

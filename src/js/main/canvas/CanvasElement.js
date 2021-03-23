@@ -19,7 +19,9 @@ export default {
     clone.classList.remove('selected')
     const cloneAndChildren = [clone, ...clone.getElementsByClassName('element')]
     this.cloneElementNodes(cloneAndChildren)
-    if (clone.hasAttributeNS(null, 'list')) this.cloneDatalist(clone, HelperElement.getRef(element))
+    if (clone.hasAttributeNS(null, 'list')) {
+      this.cloneDatalist(clone, HelperElement.getRef(element))
+    }
     return clone
   },
 
@@ -37,6 +39,7 @@ export default {
 
   cloneElementNodes (elements) {
     for (const element of elements) {
+      if (element.classList.contains('component-element')) continue
       const newRef = HelperElement.generateElementRef()
       StateStyleSheet.transferStyle(element, newRef)
       const oldRef = HelperElement.getRef(element)

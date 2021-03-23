@@ -44,9 +44,11 @@ export default {
 
   getAllRefs (html) {
     const refs = []
-    const matches = html.matchAll(/e0[a-z0-9]+/g)
+    const matches = html.matchAll(/class="(.*?)"/g)
     for (const match of matches) {
-      refs.push(match[0])
+      if (match[1].includes('component-element')) continue
+      const ref = match[1].match(/e0[a-z0-9]+/g)
+      refs.push(ref[0])
     }
     return refs
   },
@@ -106,7 +108,7 @@ export default {
   },
 
   replaceMapValue (value, map) {
-    return value.replace(/e0[a-z0-9]+/g, match => map[match])
+    return value.replace(/e0[a-z0-9]+/g, match => map[match] || match)
   },
 
   cloneElementStyle (style, refMap) {

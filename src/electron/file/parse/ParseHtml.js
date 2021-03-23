@@ -8,9 +8,10 @@ import Cookie from '../../lib/Cookie.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 
 export default {
-  parseHtml (document, folder, componentProperties = null) {
+  parseHtml (document, folder, componentProperties = null, componentElem = false) {
     const datalist = document.createElement('div')
-    this.buildHtml(document.body.children, document, folder, datalist, componentProperties)
+    this.buildHtml(document.body.children, document, folder, datalist, componentProperties,
+      componentElem)
     this.removeDatalists(document)
     return {
       canvas: document.body.innerHTML.trim(),
@@ -24,64 +25,72 @@ export default {
     return { title: document.title, meta }
   },
 
-  buildHtml (nodes, document, folder, datalist, componentProperties = null) {
+  buildHtml (nodes, document, folder, datalist, componentProperties = null,
+    componentElem = false) {
     for (const node of nodes) {
-      this.buildElement(node, document, folder, datalist, componentProperties)
+      this.buildElement(node, document, folder, datalist, componentProperties, componentElem)
     }
   },
 
-  buildElement (node, document, folder, datalist, componentProperties) {
+  buildElement (node, document, folder, datalist, componentProperties, componentElem) {
     const tag = HelperDOM.getTag(node)
-    if (tag === 'script') {
-      return this.addComponent(node, document, folder, datalist, componentProperties)
-    }
-    if (tag === 'svg') return this.addBasic(node, 'icon')
-    if (tag === 'img') return this.buildImageElement(node, folder)
-    if (tag === 'video') return this.buildVideoElement(node)
-    if (tag === 'audio') return this.buildAudioElement(node, document)
-    if (tag === 'input') return this.addInputElement(node)
-    if (tag === 'select') return this.addBasic(node, 'dropdown')
-    if (tag === 'textarea') return this.addBasic(node, 'textarea')
+    if (tag === 'svg') return this.addBasic(node, 'icon', componentElem)
+    if (tag === 'img') return this.buildImageElement(node, folder, componentElem)
+    if (tag === 'video') return this.buildVideoElement(node, componentElem)
+    if (tag === 'audio') return this.buildAudioElement(node, document, componentElem)
+    if (tag === 'input') return this.addInputElement(node, componentElem)
+    if (tag === 'select') return this.addBasic(node, 'dropdown', componentElem)
+    if (tag === 'textarea') return this.addBasic(node, 'textarea', componentElem)
     if (tag === 'datalist') return this.addDatalist(node, datalist)
     if (node.classList.contains('text')) {
       return this.buildTagElement(node, 'text', 'p', document, folder, datalist,
-        componentProperties)
+        componentProperties, componentElem)
     }
     if (node.classList.contains('block')) {
       return this.buildTagElement(node, 'block', 'div', document, folder, datalist,
-        componentProperties)
+        componentProperties, componentElem)
+    }
+    if (node.classList.contains('component')) {
+      return this.addComponent(node, document, folder, datalist, componentProperties,
+        componentElem)
     }
     if (node.classList.contains('component-children')) {
-      return this.addBasic(node, 'component-children')
+      return this.addBasic(node, 'component-children', componentElem)
     }
     // inline check is done at the end
     if (this.isInlineElement(node)) {
-      return this.buildInlineElement(node, document, folder, datalist, componentProperties)
+      return this.buildInlineElement(node, document, folder, datalist, componentProperties,
+        componentElem)
     }
   },
 
-  addComponent (node, document, folder, datalist, componentProperties) {
-    // we don't use node.src because we don't want the file:/// path
+  addComponent (node, document, folder, datalist, componentProperties, componentElem) {
     const file = path.resolve(folder, node.getAttributeNS(null, 'src'))
     if (!fs.existsSync(file)) return node.remove()
-    const dom = new JSDOM(fs.readFileSync(file).toString())
+    const dom = new JSDOM(this.getHtmlFromFile(file))
     const isMainComponent = (componentProperties === null)
     if (!componentProperties) componentProperties = []
     const properties = JSON.stringify(node.dataset)
     if (properties !== '{}' || isMainComponent) componentProperties.unshift(node.dataset)
-    const html = this.parseHtml(dom.window.document, folder, componentProperties)
+    const html = this.parseHtml(dom.window.document, folder, componentProperties, true)
     const div = this.buildComponentDiv(html, file, dom.window.document, datalist,
-      properties, JSON.stringify(componentProperties), isMainComponent)
+      properties, JSON.stringify(componentProperties), isMainComponent, componentElem)
     const nodeHtml = node.innerHTML
     node.replaceWith(div)
     this.addComponentChildren(div, nodeHtml, document, folder, datalist)
   },
 
+  getHtmlFromFile (file) {
+    const html = fs.readFileSync(file).toString()
+    return html.indexOf('<body>') > 1 ? html : `<body>${html}</body`
+  },
+
   buildComponentDiv (html, file, document, datalist, properties, allProperties,
-    isMainComponent) {
+    isMainComponent, componentElem) {
     const div = document.createElement('div')
     div.className = 'element component ' + HelperElement.generateElementRef()
-    div.setAttributeNS(null, 'data-file', file)
+    if (componentElem) div.className += ' component-element'
+    div.setAttributeNS(null, 'src', file)
     if (properties !== '{}') div.setAttributeNS(null, 'data-properties', properties)
     if (isMainComponent && allProperties !== '[]') {
       div.setAttributeNS(null, 'data-all-properties', allProperties)
@@ -102,14 +111,14 @@ export default {
     this.buildHtml(childrenContainer.children, document, folder, datalist)
   },
 
-  addBasic (node, type) {
+  addBasic (node, type, componentElem = false) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
-    this.addCanvasClasses(node, type)
+    this.addCanvasClasses(node, type, componentElem)
   },
 
   errorEscapeHtml (text) {
@@ -162,20 +171,21 @@ export default {
       cls.startsWith('e0'))
   },
 
-  addCanvasClasses (node, type) {
+  addCanvasClasses (node, type, componentElem) {
     node.classList.add('element')
+    if (componentElem) node.classList.add('component-element')
     if (!['block', 'text', 'component-children'].includes(type)) {
       node.classList.add(type)
     }
   },
 
-  buildImageElement (node, folder) {
+  buildImageElement (node, folder, componentElem) {
     node.srcset = node.srcset.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${folder}/$3$4`)
-    this.addBasic(node, 'image')
+    this.addBasic(node, 'image', componentElem)
   },
 
-  buildVideoElement (node) {
-    this.addBasic(node, 'video')
+  buildVideoElement (node, componentElem) {
+    this.addBasic(node, 'video', componentElem)
     this.setTrackSource(node)
   },
 
@@ -185,8 +195,8 @@ export default {
     }
   },
 
-  buildAudioElement (node, document) {
-    this.addBasic(node, 'audio')
+  buildAudioElement (node, document, componentElem) {
+    this.addBasic(node, 'audio', componentElem)
     this.setTrackSource(node)
     this.buildAudioContainer(node, document)
   },
@@ -220,11 +230,15 @@ export default {
     }
   },
 
-  addInputElement (node) {
-    if (['range', 'color', 'file'].includes(node.type)) return this.addBasic(node, node.type)
-    if (node.type === 'checkbox' || node.type === 'radio') return this.addBasic(node, 'checkbox')
+  addInputElement (node, componentElem) {
+    if (['range', 'color', 'file'].includes(node.type)) {
+      return this.addBasic(node, node.type, componentElem)
+    }
+    if (node.type === 'checkbox' || node.type === 'radio') {
+      return this.addBasic(node, 'checkbox', componentElem)
+    }
     this.cleanDatalist(node)
-    this.addBasic(node, 'input')
+    this.addBasic(node, 'input', componentElem)
   },
 
   cleanDatalist (node) {
@@ -246,17 +260,20 @@ export default {
       '|var|kbd|bdo|ruby|rt|rb)'
   },
 
-  buildInlineElement (node, document, folder, datalist, componentProperties) {
-    this.addBasic(node, 'inline')
+  buildInlineElement (node, document, folder, datalist, componentProperties, componentElem) {
+    this.addBasic(node, 'inline', componentElem)
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentProperties)
+      this.buildHtml(node.children, document, folder, datalist, componentProperties,
+        componentElem)
     }
   },
 
-  buildTagElement (node, type, tag, document, folder, datalist, componentProperties) {
-    this.addBasic(node, type)
+  buildTagElement (node, type, tag, document, folder, datalist, componentProperties,
+    componentElem) {
+    this.addBasic(node, type, componentElem)
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentProperties)
+      this.buildHtml(node.children, document, folder, datalist, componentProperties,
+        componentElem)
     }
   },
 

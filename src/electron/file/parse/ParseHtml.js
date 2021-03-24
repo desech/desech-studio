@@ -8,7 +8,7 @@ import Cookie from '../../lib/Cookie.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 
 export default {
-  parseHtml (document, folder, componentProperties = null, componentElem = false) {
+  parseHtml (document, folder, componentProperties = [], componentElem = false) {
     const datalist = document.createElement('div')
     this.buildHtml(document.body.children, document, folder, datalist, componentProperties,
       componentElem)
@@ -25,7 +25,7 @@ export default {
     return { title: document.title, meta }
   },
 
-  buildHtml (nodes, document, folder, datalist, componentProperties = null,
+  buildHtml (nodes, document, folder, datalist, componentProperties = [],
     componentElem = false) {
     for (const node of nodes) {
       this.buildElement(node, document, folder, datalist, componentProperties, componentElem)
@@ -68,16 +68,16 @@ export default {
     const file = path.resolve(folder, node.getAttributeNS(null, 'src'))
     if (!fs.existsSync(file)) return node.remove()
     const dom = new JSDOM(this.getHtmlFromFile(file))
-    const isMainComponent = (componentProperties === null)
-    if (!componentProperties) componentProperties = []
-    const properties = JSON.stringify(node.dataset)
-    if (properties !== '{}' || isMainComponent) componentProperties.unshift(node.dataset)
+    if (!componentElem || node.dataset.properties) {
+      const props = node.dataset.properties ? JSON.parse(node.dataset.properties) : {}
+      componentProperties.unshift(props)
+    }
     const html = this.parseHtml(dom.window.document, folder, componentProperties, true)
     const div = this.buildComponentDiv(html, file, dom.window.document, datalist,
-      properties, JSON.stringify(componentProperties), isMainComponent, componentElem)
+      node.dataset.properties, componentProperties, componentElem)
     const nodeHtml = node.innerHTML
     node.replaceWith(div)
-    this.addComponentChildren(div, nodeHtml, document, folder, datalist)
+    this.addComponentChildren(div, nodeHtml, document, folder, datalist, componentElem)
   },
 
   getHtmlFromFile (file) {
@@ -85,15 +85,15 @@ export default {
     return html.indexOf('<body>') > 1 ? html : `<body>${html}</body`
   },
 
-  buildComponentDiv (html, file, document, datalist, properties, allProperties,
-    isMainComponent, componentElem) {
+  buildComponentDiv (html, file, document, datalist, properties, componentProperties,
+    componentElem) {
     const div = document.createElement('div')
     div.className = 'element component ' + HelperElement.generateElementRef()
     if (componentElem) div.className += ' component-element'
     div.setAttributeNS(null, 'src', file)
-    if (properties !== '{}') div.setAttributeNS(null, 'data-properties', properties)
-    if (isMainComponent && allProperties !== '[]') {
-      div.setAttributeNS(null, 'data-all-properties', allProperties)
+    if (properties) div.setAttributeNS(null, 'data-properties', properties)
+    if (!componentElem) {
+      div.setAttributeNS(null, 'data-all-properties', JSON.stringify(componentProperties))
     }
     this.addComponentHtml(div, html, datalist)
     return div
@@ -104,7 +104,7 @@ export default {
     if (html.datalist) datalist.insertAdjacentHTML('beforeend', html.datalist)
   },
 
-  addComponentChildren (div, nodeHtml, document, folder, datalist) {
+  addComponentChildren (div, nodeHtml, document, folder, datalist, componentElem) {
     const childrenContainer = HelperElement.getComponentChildren(div)
     if (!nodeHtml || !childrenContainer) return
     childrenContainer.insertAdjacentHTML('afterbegin', nodeHtml)

@@ -87,7 +87,7 @@ export default {
 
   validatePropertyName (field) {
     if (!field.value) return false
-    const valid = /^[a-z]([a-z0-9.])+$/gi.test(field.value)
+    const valid = /^([^ "'=])+$/g.test(field.value)
     this.validateForm(field, valid)
     return valid
   },

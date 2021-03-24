@@ -44,16 +44,11 @@ export default {
     const div = document.createElement('div')
     div.setAttributeNS(null, 'class', 'component')
     div.setAttributeNS(null, 'src', this.getRelPath(node.getAttributeNS(null, 'src')))
-    this.addComponentProperties(div, node.dataset.properties)
+    if (node.dataset.properties) {
+      div.setAttributeNS(null, 'data-properties', node.dataset.properties)
+    }
     this.addComponentChildren(div, node, css, designSystemClasses)
     node.replaceWith(div)
-  },
-
-  addComponentProperties (div, properties) {
-    if (!properties) return
-    for (const [name, value] of Object.entries(JSON.parse(properties))) {
-      div.setAttributeNS(null, 'data-' + ExtendJS.camelCaseToKebab(name), value)
-    }
   },
 
   addComponentChildren (div, node, css, designSystemClasses) {

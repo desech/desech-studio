@@ -57,15 +57,19 @@ export default {
     }
   },
 
+  renderComponents () {
+    // @todo fix bug where nested wrapper components show stale info after preview
+    // @todo fix bug where all nested content gets the component, instead of stopping at
+    // component-children element
+    // @todo too many bugs, comment out for now
+    // this.processComponents(element => this.renderComponent(element))
+  },
+
   processComponents (callback) {
     const list = document.querySelectorAll('.component[data-all-properties]')
     for (let i = list.length - 1; i >= 0; i--) {
       callback(list[i])
     }
-  },
-
-  renderComponents () {
-    this.processComponents(element => this.renderComponent(element))
   },
 
   renderComponent (element) {

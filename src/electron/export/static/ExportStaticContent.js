@@ -15,7 +15,8 @@ export default {
   buildComponents (folder, document, container, data = {}) {
     // don't mess with this, only with `querySelectorAll` and `replaceWith` it seems to work
     for (const comp of container.querySelectorAll('div.component')) {
-      data = { ...comp.dataset, ...data }
+      const properties = comp.dataset.properties ? JSON.parse(comp.dataset.properties) : null
+      data = { ...properties, ...data }
       const componentFile = path.resolve(folder, comp.getAttributeNS(null, 'src'))
       const html = fs.readFileSync(componentFile).toString()
       const div = document.createElement('div')
@@ -23,20 +24,18 @@ export default {
       const componentHtml = comp.innerHTML
       comp.replaceWith(div)
       this.buildComponents(folder, document, div, data)
-      this.buildComponentChildren(folder, document, div, componentHtml)
+      this.buildComponentChildren(folder, document, div, data, componentHtml)
     }
   },
 
   parseComponentHtml (html, data) {
-    return html.replace(/{{([a-z0-9]*)}}/gi, (match, property) => {
-      return data[property] || match
-    })
+    return html.replace(/{{(.*?)}}/g, (match, name) => data[name] || match)
   },
 
-  buildComponentChildren (folder, document, div, componentHtml) {
+  buildComponentChildren (folder, document, div, data, componentHtml) {
     const container = div.getElementsByClassName('component-children')[0]
     if (!container) return
-    container.innerHTML = componentHtml
+    container.innerHTML = this.parseComponentHtml(componentHtml, data)
     container.removeAttributeNS(null, 'class')
     this.buildComponents(folder, document, container)
   },

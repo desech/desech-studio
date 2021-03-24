@@ -118,7 +118,8 @@ export default {
 
   // is the element part of the ui (visible or not), not a hidden clone that is used for do/undo
   isCanvasElement (element) {
-    return element && (!element.hasAttributeNS(null, 'hidden') || element.hasAttributeNS(null, 'data-ss-hidden'))
+    return element && (!element.hasAttributeNS(null, 'hidden') ||
+      element.hasAttributeNS(null, 'data-ss-hidden'))
   },
 
   isComponent (element) {
@@ -126,7 +127,7 @@ export default {
   },
 
   getComponentChildren (element) {
-    return element.getElementsByClassName('component-children')[0]
+    return element.querySelector('.component-children:not(.component-element)')
   },
 
   isHidden (element) {

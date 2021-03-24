@@ -15,23 +15,22 @@ export default {
 
   getElementData (element) {
     const isComponent = HelperElement.isComponent(element)
-    const componentWithChildren = isComponent && HelperElement.getComponentChildren(element)
+    const componentChildren = isComponent ? HelperElement.getComponentChildren(element) : null
     return {
       element,
       ref: HelperElement.getRef(element),
       classes: HelperElement.getClasses(element, true),
       type: HelperElement.getType(element),
       tag: HelperDom.getTag(element),
-      isContainer: HelperElement.isContainer(element) || componentWithChildren,
+      isContainer: HelperElement.isContainer(element) || componentChildren,
       hidden: HelperElement.isHidden(element),
-      children: this.getChildren(element, isComponent, componentWithChildren)
+      children: this.getChildren(element, isComponent, componentChildren)
     }
   },
 
-  getChildren (element, isComponent, componentWithChildren) {
-    if (componentWithChildren) {
-      const children = HelperElement.getComponentChildren(element)
-      return children.children.length ? this.getElements(children) : []
+  getChildren (element, isComponent, componentChildren) {
+    if (componentChildren) {
+      return componentChildren.children.length ? this.getElements(componentChildren) : []
     } else if (isComponent) {
       return []
     } else {

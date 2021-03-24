@@ -68,22 +68,13 @@ export default {
   },
 
   getClosestElementOrComponentOrChildren (node) {
-    const component = node.closest('.component-children, .component')
-    if (component && component.classList.contains('component')) {
-      node = HelperDOM.furthest(node, '.component', '.component-children')
-    }
-    return node.closest('.element')
+    return node.closest('.element:not(.component-element), ' +
+      '.component:not(.component-element), ' +
+      '.component-children:not(.component-element)')
   },
 
-  getClosestElementOrComponent (element) {
-    const component = element.closest('.component-children, .component')
-    if (component && component.classList.contains('component')) {
-      return HelperDOM.furthest(element, '.component', '.component-children')
-    } else if (component && element.classList.contains('component-children')) {
-      const parent = HelperDOM.furthest(element.parentNode, '.component', '.component-children')
-      return parent || component
-    } else {
-      return element
-    }
+  getClosestElementOrComponent (node) {
+    return node.closest('.element:not(.component-element), ' +
+      '.component:not(.component-element)')
   }
 }

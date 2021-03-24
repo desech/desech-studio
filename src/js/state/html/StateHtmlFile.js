@@ -4,7 +4,6 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperDesignSystem from '../../helper/HelperDesignSystem.js'
 import HelperProject from '../../helper/HelperProject.js'
-import ExtendJS from '../../helper/ExtendJS.js'
 import HelperElement from '../../helper/HelperElement.js'
 import '../../compiled/beautify-html.js'
 

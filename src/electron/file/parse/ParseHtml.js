@@ -2,17 +2,25 @@ import os from 'os'
 import path from 'path'
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
+import Cookie from '../../lib/Cookie.js'
 import HelperFile from '../../../js/helper/HelperFile.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
-import Cookie from '../../lib/Cookie.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 
 export default {
+  async parseComponentFile (file) {
+    const folder = await Cookie.getCookie('currentFolder')
+    const dom = new JSDOM(fs.readFileSync(file).toString())
+    const html = this.parseHtml(dom.window.document, folder, true)
+    return html
+  },
+
   parseHtml (document, folder, componentElem = false) {
     const datalist = document.createElement('div')
     this.buildHtml(document.body.children, document, folder, datalist, componentElem)
     this.removeDatalists(document)
     return {
+      document,
       canvas: document.body.innerHTML.trim(),
       meta: this.getMeta(document),
       datalist: datalist.innerHTML.trim()
@@ -20,6 +28,7 @@ export default {
   },
 
   getMeta (document) {
+    if (!document.head) return
     const meta = document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
     return { title: document.title, meta }
   },
@@ -91,8 +100,8 @@ export default {
   },
 
   addComponentChildren (div, nodeHtml, document, folder, datalist, componentElem) {
-    const childrenContainer = HelperElement.getComponentChildren(div)
-    if (!nodeHtml || !childrenContainer) return
+    const childrenContainer = div.getElementsByClassName('component-children')[0]
+    if (!childrenContainer) return
     if (!componentElem) childrenContainer.classList.remove('component-element')
     childrenContainer.insertAdjacentHTML('afterbegin', nodeHtml)
     this.buildHtml(childrenContainer.children, document, folder, datalist, componentElem)
@@ -266,12 +275,5 @@ export default {
     while (nodes.length > 0) {
       nodes[0].remove()
     }
-  },
-
-  async parseComponentFile (file) {
-    const folder = await Cookie.getCookie('currentFolder')
-    const dom = new JSDOM(fs.readFileSync(file).toString())
-    const html = this.parseHtml(dom.window.document, folder)
-    return html
   }
 }

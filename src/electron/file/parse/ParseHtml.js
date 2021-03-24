@@ -8,10 +8,9 @@ import Cookie from '../../lib/Cookie.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 
 export default {
-  parseHtml (document, folder, componentProperties = [], componentElem = false) {
+  parseHtml (document, folder, componentElem = false) {
     const datalist = document.createElement('div')
-    this.buildHtml(document.body.children, document, folder, datalist, componentProperties,
-      componentElem)
+    this.buildHtml(document.body.children, document, folder, datalist, componentElem)
     this.removeDatalists(document)
     return {
       canvas: document.body.innerHTML.trim(),
@@ -25,14 +24,13 @@ export default {
     return { title: document.title, meta }
   },
 
-  buildHtml (nodes, document, folder, datalist, componentProperties = [],
-    componentElem = false) {
+  buildHtml (nodes, document, folder, datalist, componentElem) {
     for (const node of nodes) {
-      this.buildElement(node, document, folder, datalist, componentProperties, componentElem)
+      this.buildElement(node, document, folder, datalist, componentElem)
     }
   },
 
-  buildElement (node, document, folder, datalist, componentProperties, componentElem) {
+  buildElement (node, document, folder, datalist, componentElem) {
     const tag = HelperDOM.getTag(node)
     if (tag === 'svg') return this.addBasic(node, 'icon', componentElem)
     if (tag === 'img') return this.buildImageElement(node, folder, componentElem)
@@ -43,38 +41,30 @@ export default {
     if (tag === 'textarea') return this.addBasic(node, 'textarea', componentElem)
     if (tag === 'datalist') return this.addDatalist(node, datalist)
     if (node.classList.contains('text')) {
-      return this.buildTagElement(node, 'text', 'p', document, folder, datalist,
-        componentProperties, componentElem)
+      return this.buildTagElement(node, 'text', 'p', document, folder, datalist, componentElem)
     }
     if (node.classList.contains('block')) {
-      return this.buildTagElement(node, 'block', 'div', document, folder, datalist,
-        componentProperties, componentElem)
+      return this.buildTagElement(node, 'block', 'div', document, folder, datalist, componentElem)
     }
     if (node.classList.contains('component')) {
-      return this.addComponent(node, document, folder, datalist, componentProperties,
-        componentElem)
+      return this.addComponent(node, document, folder, datalist, componentElem)
     }
     if (node.classList.contains('component-children')) {
       return this.addBasic(node, 'component-children', componentElem)
     }
     // inline check is done at the end
     if (this.isInlineElement(node)) {
-      return this.buildInlineElement(node, document, folder, datalist, componentProperties,
-        componentElem)
+      return this.buildInlineElement(node, document, folder, datalist, componentElem)
     }
   },
 
-  addComponent (node, document, folder, datalist, componentProperties, componentElem) {
+  addComponent (node, document, folder, datalist, componentElem) {
     const file = path.resolve(folder, node.getAttributeNS(null, 'src'))
     if (!fs.existsSync(file)) return node.remove()
     const dom = new JSDOM(this.getHtmlFromFile(file))
-    if (!componentElem || node.dataset.properties) {
-      const props = node.dataset.properties ? JSON.parse(node.dataset.properties) : {}
-      componentProperties.unshift(props)
-    }
-    const html = this.parseHtml(dom.window.document, folder, componentProperties, true)
+    const html = this.parseHtml(dom.window.document, folder, true)
     const div = this.buildComponentDiv(html, file, dom.window.document, datalist,
-      node.dataset.properties, componentProperties, componentElem)
+      node.dataset.properties, componentElem)
     const nodeHtml = node.innerHTML
     node.replaceWith(div)
     this.addComponentChildren(div, nodeHtml, document, folder, datalist, componentElem)
@@ -85,16 +75,12 @@ export default {
     return html.indexOf('<body>') > 1 ? html : `<body>${html}</body`
   },
 
-  buildComponentDiv (html, file, document, datalist, properties, componentProperties,
-    componentElem) {
+  buildComponentDiv (html, file, document, datalist, properties, componentElem) {
     const div = document.createElement('div')
     div.className = 'element component ' + HelperElement.generateElementRef()
     if (componentElem) div.className += ' component-element'
     div.setAttributeNS(null, 'src', file)
     if (properties) div.setAttributeNS(null, 'data-properties', properties)
-    if (!componentElem) {
-      div.setAttributeNS(null, 'data-all-properties', JSON.stringify(componentProperties))
-    }
     this.addComponentHtml(div, html, datalist)
     return div
   },
@@ -107,11 +93,12 @@ export default {
   addComponentChildren (div, nodeHtml, document, folder, datalist, componentElem) {
     const childrenContainer = HelperElement.getComponentChildren(div)
     if (!nodeHtml || !childrenContainer) return
+    if (!componentElem) childrenContainer.classList.remove('component-element')
     childrenContainer.insertAdjacentHTML('afterbegin', nodeHtml)
-    this.buildHtml(childrenContainer.children, document, folder, datalist)
+    this.buildHtml(childrenContainer.children, document, folder, datalist, componentElem)
   },
 
-  addBasic (node, type, componentElem = false) {
+  addBasic (node, type, componentElem) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
@@ -260,20 +247,17 @@ export default {
       '|var|kbd|bdo|ruby|rt|rb)'
   },
 
-  buildInlineElement (node, document, folder, datalist, componentProperties, componentElem) {
+  buildInlineElement (node, document, folder, datalist, componentElem) {
     this.addBasic(node, 'inline', componentElem)
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentProperties,
-        componentElem)
+      this.buildHtml(node.children, document, folder, datalist, componentElem)
     }
   },
 
-  buildTagElement (node, type, tag, document, folder, datalist, componentProperties,
-    componentElem) {
+  buildTagElement (node, type, tag, document, folder, datalist, componentElem) {
     this.addBasic(node, type, componentElem)
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentProperties,
-        componentElem)
+      this.buildHtml(node.children, document, folder, datalist, componentElem)
     }
   },
 

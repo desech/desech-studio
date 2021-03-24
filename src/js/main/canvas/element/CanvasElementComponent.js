@@ -57,49 +57,6 @@ export default {
     }
   },
 
-  renderComponents () {
-    // @todo fix bug where nested wrapper components show stale info after preview
-    // @todo fix bug where all nested content gets the component, instead of stopping at
-    // component-children element
-    // @todo too many bugs, comment out for now
-    // this.processComponents(element => this.renderComponent(element))
-  },
-
-  processComponents (callback) {
-    const list = document.querySelectorAll('.component[data-all-properties]')
-    for (let i = list.length - 1; i >= 0; i--) {
-      callback(list[i])
-    }
-  },
-
-  renderComponent (element) {
-    if (!element.dataset.allProperties || !element.innerHTML) return
-    const properties = this.getAllProperties(element.dataset.allProperties)
-    const html = element.innerHTML
-    element.dataset.unrenderedHtml = html
-    element.innerHTML = html.replace(/{{(.*?)}}/g, (match, name) => properties[name] || match)
-  },
-
-  getAllProperties (properties) {
-    const all = {}
-    for (const list of JSON.parse(properties)) {
-      for (const [key, val] of Object.entries(list)) {
-        all[key] = val
-      }
-    }
-    return all
-  },
-
-  unrenderComponents () {
-    this.processComponents(element => this.unrenderComponent(element))
-  },
-
-  unrenderComponent (element) {
-    if (!element.dataset.unrenderedHtml) return
-    element.innerHTML = element.dataset.unrenderedHtml
-    delete element.dataset.unrenderedHtml
-  },
-
   insertComponentChildren () {
     CanvasElementManage.addPastedElementPlacement('inside')
     CanvasElementCreate.createElement('component-children')

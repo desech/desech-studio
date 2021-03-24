@@ -81,12 +81,5 @@ export default {
       const sheet = StateStyleSheet.getCreateSelectorSheet(selector)
       StyleSheetCommon.addRemoveRules(sheet, selector, rules)
     }
-  },
-
-  getComponentAllProperties (element) {
-    const allProperties = JSON.parse(element.dataset.allProperties)
-    const properties = element.dataset.properties ? JSON.parse(element.dataset.properties) : {}
-    allProperties[allProperties.length - 1] = properties
-    return allProperties
   }
 }

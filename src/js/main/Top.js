@@ -52,13 +52,11 @@ export default {
     CanvasElementSelect.deselectElement()
     button.classList.add('selected')
     HelperCanvas.addPreview()
-    CanvasElementComponent.renderComponents()
   },
 
   disablePreview (button) {
     button.classList.remove('selected')
     HelperCanvas.removePreview()
-    CanvasElementComponent.unrenderComponents()
   },
 
   clearResponsive () {

@@ -146,8 +146,6 @@ export default {
     } else {
       element.dataset.properties = JSON.stringify(data.properties)
     }
-    const allProperties = StateCommandCommon.getComponentAllProperties(element)
-    element.dataset.allProperties = JSON.stringify(allProperties)
   },
 
   addResponsive (data) {

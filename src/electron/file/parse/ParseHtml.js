@@ -10,18 +10,20 @@ import HelperDOM from '../../../js/helper/HelperDOM.js'
 export default {
   async parseComponentFile (file) {
     const folder = await Cookie.getCookie('currentFolder')
-    const dom = new JSDOM(fs.readFileSync(file).toString())
-    const html = this.parseHtml(dom.window.document, folder, true)
-    return html
+    // the purpose of the wrapping div is to properly add component-element
+    const html = '<div class="component">' + fs.readFileSync(file).toString() + '</div>'
+    const dom = new JSDOM(html)
+    const nodes = dom.window.document.body.children[0].children
+    return this.parseHtml(dom.window.document, folder, nodes)
   },
 
-  parseHtml (document, folder, componentElem = false) {
+  parseHtml (document, folder, nodes = null) {
+    if (!nodes) nodes = document.body.children
     const datalist = document.createElement('div')
-    this.buildHtml(document.body.children, document, folder, datalist, componentElem)
+    this.buildHtml(nodes, document, folder, datalist)
     this.removeDatalists(document)
     return {
-      document,
-      canvas: document.body.innerHTML.trim(),
+      canvas: nodes.length ? nodes[0].parentNode.innerHTML.trim() : '',
       meta: this.getMeta(document),
       datalist: datalist.innerHTML.trim()
     }
@@ -33,50 +35,49 @@ export default {
     return { title: document.title, meta }
   },
 
-  buildHtml (nodes, document, folder, datalist, componentElem) {
+  buildHtml (nodes, document, folder, datalist, componentChildren = null) {
     for (const node of nodes) {
-      this.buildElement(node, document, folder, datalist, componentElem)
+      this.buildElement(node, document, folder, datalist, componentChildren)
     }
   },
 
-  buildElement (node, document, folder, datalist, componentElem) {
+  buildElement (node, document, folder, datalist, componentChildren) {
     const tag = HelperDOM.getTag(node)
-    if (tag === 'svg') return this.addBasic(node, 'icon', componentElem)
-    if (tag === 'img') return this.buildImageElement(node, folder, componentElem)
-    if (tag === 'video') return this.buildVideoElement(node, componentElem)
-    if (tag === 'audio') return this.buildAudioElement(node, document, componentElem)
-    if (tag === 'input') return this.addInputElement(node, componentElem)
-    if (tag === 'select') return this.addBasic(node, 'dropdown', componentElem)
-    if (tag === 'textarea') return this.addBasic(node, 'textarea', componentElem)
+    if (tag === 'svg') return this.addBasic(node, 'icon')
+    if (tag === 'img') return this.buildImageElement(node, folder)
+    if (tag === 'video') return this.buildVideoElement(node)
+    if (tag === 'audio') return this.buildAudioElement(node, document)
+    if (tag === 'input') return this.addInputElement(node)
+    if (tag === 'select') return this.addBasic(node, 'dropdown')
+    if (tag === 'textarea') return this.addBasic(node, 'textarea')
     if (tag === 'datalist') return this.addDatalist(node, datalist)
     if (node.classList.contains('text')) {
-      return this.buildTagElement(node, 'text', 'p', document, folder, datalist, componentElem)
+      return this.buildTagElement(node, 'text', 'p', document, folder, datalist)
     }
     if (node.classList.contains('block')) {
-      return this.buildTagElement(node, 'block', 'div', document, folder, datalist, componentElem)
+      return this.buildTagElement(node, 'block', 'div', document, folder, datalist,
+        componentChildren)
     }
     if (node.classList.contains('component')) {
-      return this.addComponent(node, document, folder, datalist, componentElem)
+      return this.addComponent(node, document, folder, datalist)
     }
     if (node.classList.contains('component-children')) {
-      return this.addBasic(node, 'component-children', componentElem)
+      return this.addComponentChildren(node, document, folder, datalist, componentChildren)
     }
     // inline check is done at the end
     if (this.isInlineElement(node)) {
-      return this.buildInlineElement(node, document, folder, datalist, componentElem)
+      return this.buildInlineElement(node, document, folder, datalist)
     }
   },
 
-  addComponent (node, document, folder, datalist, componentElem) {
+  addComponent (node, document, folder, datalist) {
     const file = path.resolve(folder, node.getAttributeNS(null, 'src'))
     if (!fs.existsSync(file)) return node.remove()
-    const dom = new JSDOM(this.getHtmlFromFile(file))
-    const html = this.parseHtml(dom.window.document, folder, true)
-    const div = this.buildComponentDiv(html, file, dom.window.document, datalist,
-      node.dataset.properties, componentElem)
-    const nodeHtml = node.innerHTML
-    node.replaceWith(div)
-    this.addComponentChildren(div, nodeHtml, document, folder, datalist, componentElem)
+    node.classList.add(HelperElement.generateElementRef())
+    this.addCanvasClasses(node, 'component')
+    const componentChildren = node.innerHTML
+    node.innerHTML = this.getHtmlFromFile(file)
+    this.buildHtml(node.children, document, folder, datalist, componentChildren)
   },
 
   getHtmlFromFile (file) {
@@ -84,37 +85,20 @@ export default {
     return html.indexOf('<body>') > 1 ? html : `<body>${html}</body`
   },
 
-  buildComponentDiv (html, file, document, datalist, properties, componentElem) {
-    const div = document.createElement('div')
-    div.className = 'element component ' + HelperElement.generateElementRef()
-    if (componentElem) div.className += ' component-element'
-    div.setAttributeNS(null, 'src', file)
-    if (properties) div.setAttributeNS(null, 'data-properties', properties)
-    this.addComponentHtml(div, html, datalist)
-    return div
+  addComponentChildren (node, document, folder, datalist, componentChildren) {
+    this.addBasic(node, 'component-children')
+    if (componentChildren) node.innerHTML = componentChildren
+    this.buildHtml(node.children, document, folder, datalist)
   },
 
-  addComponentHtml (div, html, datalist) {
-    div.insertAdjacentHTML('afterbegin', html.canvas)
-    if (html.datalist) datalist.insertAdjacentHTML('beforeend', html.datalist)
-  },
-
-  addComponentChildren (div, nodeHtml, document, folder, datalist, componentElem) {
-    const childrenContainer = div.getElementsByClassName('component-children')[0]
-    if (!childrenContainer) return
-    if (!componentElem) childrenContainer.classList.remove('component-element')
-    childrenContainer.insertAdjacentHTML('afterbegin', nodeHtml)
-    this.buildHtml(childrenContainer.children, document, folder, datalist, componentElem)
-  },
-
-  addBasic (node, type, componentElem) {
+  addBasic (node, type) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
-    this.addCanvasClasses(node, type, componentElem)
+    this.addCanvasClasses(node, type)
   },
 
   errorEscapeHtml (text) {
@@ -133,9 +117,13 @@ export default {
     const add = ['hidden', 'controls', 'disabled']
     const remove = ['disabled']
     for (const attr of node.attributes) {
-      if (add.includes(attr.name)) node.setAttributeNS(null, `data-ss-${attr.name}`, attr.value)
+      if (add.includes(attr.name)) {
+        node.setAttributeNS(null, `data-ss-${attr.name}`, attr.value)
+      }
       // JSDOM doesn't use a live list
-      if (remove.includes(attr.name)) node.removeAttributeNS(null, attr.name)
+      if (remove.includes(attr.name)) {
+        node.removeAttributeNS(null, attr.name)
+      }
     }
   },
 
@@ -167,21 +155,43 @@ export default {
       cls.startsWith('e0'))
   },
 
-  addCanvasClasses (node, type, componentElem) {
+  addCanvasClasses (node, type) {
     node.classList.add('element')
-    if (componentElem) node.classList.add('component-element')
-    if (!['block', 'text', 'component-children'].includes(type)) {
+    if (this.isComponentElement(node)) node.classList.add('component-element')
+    if (!['block', 'text', 'component', 'component-children'].includes(type)) {
       node.classList.add(type)
     }
   },
 
-  buildImageElement (node, folder, componentElem) {
-    node.srcset = node.srcset.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${folder}/$3$4`)
-    this.addBasic(node, 'image', componentElem)
+  isComponentElement (node) {
+    if (!node.parentNode.closest('.component')) return false
+    if (node.classList.contains('component-children')) {
+      return this.getTotalParents(node, 'component') !==
+      this.getTotalParents(node, 'component-children')
+    } else {
+      return this.getTotalParents(node.parentNode, 'component') !==
+        this.getTotalParents(node.parentNode, 'component-children')
+    }
   },
 
-  buildVideoElement (node, componentElem) {
-    this.addBasic(node, 'video', componentElem)
+  getTotalParents (node, cls) {
+    let elem = node
+    let count = 0
+    while (elem = elem.closest('.' + cls)) { // eslint-disable-line
+      count++
+      elem = elem.parentNode
+      if (!elem) return count
+    }
+    return count
+  },
+
+  buildImageElement (node, folder) {
+    node.srcset = node.srcset.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${folder}/$3$4`)
+    this.addBasic(node, 'image')
+  },
+
+  buildVideoElement (node) {
+    this.addBasic(node, 'video')
     this.setTrackSource(node)
   },
 
@@ -191,8 +201,8 @@ export default {
     }
   },
 
-  buildAudioElement (node, document, componentElem) {
-    this.addBasic(node, 'audio', componentElem)
+  buildAudioElement (node, document) {
+    this.addBasic(node, 'audio')
     this.setTrackSource(node)
     this.buildAudioContainer(node, document)
   },
@@ -226,15 +236,15 @@ export default {
     }
   },
 
-  addInputElement (node, componentElem) {
+  addInputElement (node) {
     if (['range', 'color', 'file'].includes(node.type)) {
-      return this.addBasic(node, node.type, componentElem)
+      return this.addBasic(node, node.type)
     }
     if (node.type === 'checkbox' || node.type === 'radio') {
-      return this.addBasic(node, 'checkbox', componentElem)
+      return this.addBasic(node, 'checkbox')
     }
     this.cleanDatalist(node)
-    this.addBasic(node, 'input', componentElem)
+    this.addBasic(node, 'input')
   },
 
   cleanDatalist (node) {
@@ -256,17 +266,17 @@ export default {
       '|var|kbd|bdo|ruby|rt|rb)'
   },
 
-  buildInlineElement (node, document, folder, datalist, componentElem) {
-    this.addBasic(node, 'inline', componentElem)
+  buildInlineElement (node, document, folder, datalist) {
+    this.addBasic(node, 'inline')
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentElem)
+      this.buildHtml(node.children, document, folder, datalist)
     }
   },
 
-  buildTagElement (node, type, tag, document, folder, datalist, componentElem) {
-    this.addBasic(node, type, componentElem)
+  buildTagElement (node, type, tag, document, folder, datalist, componentChildren = null) {
+    this.addBasic(node, type)
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentElem)
+      this.buildHtml(node.children, document, folder, datalist, componentChildren)
     }
   },
 

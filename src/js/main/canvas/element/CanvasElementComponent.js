@@ -6,6 +6,7 @@ import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import Page from '../../../page/Page.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
+import HelperFile from '../../../helper/HelperFile.js'
 
 export default {
   getEvents () {
@@ -45,7 +46,7 @@ export default {
   },
 
   async buildComponentElement (element, file) {
-    element.setAttributeNS(null, 'src', file)
+    element.setAttributeNS(null, 'src', HelperFile.getRelPath(file))
     const html = await window.electron.invoke('rendererParseComponentFile', file)
     this.addHtml(element, html)
   },

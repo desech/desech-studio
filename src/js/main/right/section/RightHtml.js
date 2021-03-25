@@ -2,6 +2,7 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import RightHtmlMain from './html/RightHtmlMain.js'
 import RightHtmlDetail from './html/RightHtmlDetail.js'
 import RightHtmlAttribute from './html/RightHtmlAttribute.js'
+import RightHtmlProperty from './html/RightHtmlProperty.js'
 
 export default {
   getSection () {
@@ -18,5 +19,6 @@ export default {
     RightHtmlMain.injectMain(template)
     RightHtmlDetail.injectDetails(template)
     RightHtmlAttribute.injectAttributes(template)
+    RightHtmlProperty.injectProperties(template)
   }
 }

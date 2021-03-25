@@ -46,7 +46,7 @@ export default {
   },
 
   async buildComponentElement (element, file) {
-    element.setAttributeNS(null, 'src', HelperFile.getRelPath(file))
+    element.setAttributeNS(null, 'src', file)
     const html = await window.electron.invoke('rendererParseComponentFile', file)
     this.addHtml(element, html)
   },

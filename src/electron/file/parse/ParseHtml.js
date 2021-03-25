@@ -75,6 +75,7 @@ export default {
     if (!fs.existsSync(file)) return node.remove()
     node.classList.add(HelperElement.generateElementRef())
     this.addCanvasClasses(node, 'component')
+    node.setAttributeNS(null, 'src', file)
     const componentChildren = node.innerHTML
     node.innerHTML = this.getHtmlFromFile(file)
     this.buildHtml(node.children, document, folder, datalist, componentChildren)

@@ -11,3 +11,11 @@ Google Fonts
 SIL Open Font License, v1.1
 Apache 2 license
 Ubuntu Font License v1.0
+
+Video sample
+https://pixabay.com/videos/mountains-clouds-4k-nature-cold-31175/
+License: Free for commercial use, No attribution required 
+
+Audio sample
+https://notificationsounds.com/notification-sounds/when-604
+Creative Commons — Attribution 4.0 International — CC BY 4.0

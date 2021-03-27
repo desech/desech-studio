@@ -22,6 +22,8 @@ export default {
     const element = StateSelectedElement.getElement()
     const style = HelperStyle.getInlineStyle(element, ignoreZeroValues)
     element.removeAttributeNS(null, 'style')
+    // fix the bug where style is not removed
+    element.style = ''
     RightCommon.changeStyle(style, panelReload)
   }
 }

@@ -139,6 +139,15 @@ export default {
     element.innerHTML = data.svg
   },
 
+  changeProgrammingProperties (data) {
+    const element = HelperElement.getElement(data.ref)
+    if (ExtendJS.isEmpty(data.properties)) {
+      delete element.dataset.programmingProperties
+    } else {
+      element.dataset.programmingProperties = JSON.stringify(data.properties)
+    }
+  },
+
   changeComponentProperties (data) {
     const element = HelperElement.getElement(data.ref)
     if (ExtendJS.isEmpty(data.properties)) {

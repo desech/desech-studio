@@ -188,10 +188,11 @@ export default {
   },
 
   // special attributes:
-  //  data-ss-hidden, data-ss-disabled, data-ss-controls, type, list
+  //  data-ss-hidden, data-ss-disabled, data-ss-controls, data-programming-properties, type, list
   //  class, hidden, disabled, controls, viewBox, srcset
   getMainAttributes () {
-    return ['class', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset']
+    return ['class', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset',
+      'data-programming-properties']
   },
 
   getAllIgnoredAttributes () {

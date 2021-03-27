@@ -1,13 +1,14 @@
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
-import RightHtmlCommon from './RightHtmlCommon.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import HelperForm from '../../../../helper/HelperForm.js'
+import StateCommand from '../../../../state/StateCommand.js'
 
 export default {
   getEvents () {
     return {
       click: ['clickAddPropertyEvent', 'clickDeletePropertyEvent'],
+      input: ['inputResetPropertyEvent'],
       change: ['changeEditPropertyEvent']
     }
   },
@@ -28,54 +29,44 @@ export default {
     }
   },
 
+  inputResetPropertyEvent (event) {
+    if (event.target.classList.contains('style-html-prop-field')) {
+      this.resetProperty(event.target.closest('li'))
+    }
+  },
+
   changeEditPropertyEvent (event) {
     if (event.target.classList.contains('style-html-prop-field')) {
-      this.editProperty(event.target.closest('form'))
+      this.editProperty(event.target.closest('li'))
     }
   },
 
   injectProperties (template) {
-    const container = template.getElementsByClassName('html-details-container')[0]
-    const list = HelperDOM.getTemplate('template-style-html-property')
-    container.appendChild(list)
-    this.injectPropertyFields(container, list)
+    const details = template.getElementsByClassName('html-details-container')[0]
+    const container = HelperDOM.getTemplate('template-style-html-property')
+    details.appendChild(container)
+    this.injectPropertyFields(container)
   },
 
-  injectPropertyFields (container, form) {
+  injectPropertyFields (form) {
+    const properties = StateSelectedElement.getProgrammingProperties()
+    if (!properties) return
     const list = form.getElementsByClassName('style-html-prop-list')[0]
-    const fields = this.getExistingFields(container)
-    const element = StateSelectedElement.getElement()
-    this.addPropertyFields(list, fields, element)
-  },
-
-  getExistingFields (container) {
-    const ignore = RightHtmlCommon.getAllIgnoredProperties()
-    const fields = this.getDetailFields(container)
-    return [...ignore, ...fields]
-  },
-
-  getDetailFields (container) {
-    const form = container.getElementsByClassName('style-html-details')[0]
-    const fields = form ? Object.keys(HelperForm.getFormValues(form)) : []
-    return fields
-  },
-
-  addPropertyFields (list, fields, element) {
-    for (const prop of element.propertys) {
-      if (!fields.includes(prop.name)) this.addProperty(list, prop.name, prop.value)
+    for (const [name, value] of Object.entries(properties)) {
+      this.addProperty(list, name, value)
     }
   },
 
   addProperty (list, name = null, value = null) {
     const template = HelperDOM.getTemplate('template-style-html-prop-element')
-    const form = template.getElementsByClassName('style-html-element-form')[0]
-    if (name) this.injectProperty(form.elements, name, value)
+    const fields = template.getElementsByClassName('style-html-prop-field')
+    if (name) this.injectProperty(fields, name, value)
     list.appendChild(template)
   },
 
   injectProperty (fields, name, value) {
-    fields.name.value = name
-    fields.value.value = value
+    fields[0].value = name
+    fields[1].value = value
   },
 
   buttonAddProperty (form) {
@@ -84,30 +75,28 @@ export default {
   },
 
   deleteProperty (li) {
-    const form = li.getElementsByClassName('style-html-element-form')[0]
-    this.deletePropertyCommand(form.elements.name.value)
+    const form = li.closest('form')
     li.remove()
+    this.changePropertiesCommand(form)
   },
 
-  editProperty (form) {
-    const name = form.elements.name.value
-    const value = form.elements.value.value
-    const valid = this.validateAttrName(form.elements.name)
-    if (name && valid) this.savePropertyCommand(name, value)
+  resetProperty (li) {
+    const name = li.getElementsByClassName('style-html-prop-name')[0]
+    name.setCustomValidity('')
+    name.reportValidity()
   },
 
-  validateAttrName (name) {
-    if (!name.value) return false
-    const valid = this.isNameValid(name.value)
-    this.validateForm(name, valid)
+  editProperty (li) {
+    const name = li.getElementsByClassName('style-html-prop-name')[0]
+    const valid = this.validatePropertyName(name)
+    if (name.value && valid) this.changePropertiesCommand(li.closest('form'))
+  },
+
+  validatePropertyName (field) {
+    if (!field.value) return false
+    const valid = /^([^ "'=])+$/g.test(field.value)
+    this.validateForm(field, valid)
     return valid
-  },
-
-  isNameValid (value) {
-    // allow property names that contain components {{variables}}
-    const valid = /^[a-z]([a-zA-Z0-9-])+$/g.test(value)
-    const list = RightHtmlCommon.getAllIgnoredProperties()
-    return valid && !list.includes(value)
   },
 
   validateForm (name, valid) {
@@ -116,16 +105,36 @@ export default {
     name.reportValidity()
   },
 
-  savePropertyCommand (name, value) {
-    RightHtmlCommon.changePropertyCommand(StateSelectedElement.getRef(), {
-      // when the value is empty then we set a boolean value
-      [name]: value || true
-    })
+  changePropertiesCommand (form, execute = true) {
+    const properties = this.getFormProperties(form)
+    const command = this.getCommandData(properties)
+    StateCommand.stackCommand(command)
+    if (execute) StateCommand.executeCommand(command.do)
   },
 
-  deletePropertyCommand (name) {
-    RightHtmlCommon.changePropertyCommand(StateSelectedElement.getRef(), {
-      [name]: null
-    })
+  getFormProperties (form) {
+    const obj = {}
+    const fields = HelperForm.getFormValues(form)
+    if (!fields.name) return obj
+    for (let i = 0; i < fields.name.length; i++) {
+      obj[fields.name[i]] = fields.value[i]
+    }
+    return obj
+  },
+
+  getCommandData (properties) {
+    const ref = StateSelectedElement.getRef()
+    return {
+      do: {
+        command: 'changeProgrammingProperties',
+        ref,
+        properties
+      },
+      undo: {
+        command: 'changeProgrammingProperties',
+        ref,
+        properties: StateSelectedElement.getProgrammingProperties()
+      }
+    }
   }
 }

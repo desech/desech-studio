@@ -184,7 +184,7 @@ export default {
   },
 
   formatHtmlString (html) {
-    html = html.replace(/(hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g, '$1')
+    html = html.replace(/ (hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g, ' $1')
     html = html.replace(/ style=".*?"/, '')
     return html
   }

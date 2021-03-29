@@ -27,9 +27,9 @@ export default {
     }
   },
 
-  getProperties (data, dataProps) {
-    const props = dataProps ? JSON.parse(dataProps) : null
-    // order matters, so props overwrite the global data
+  getProperties (data, string) {
+    const props = string ? JSON.parse(string) : null
+    // order matters, in order for properties to overwrite each other
     return { ...props, ...data }
   },
 

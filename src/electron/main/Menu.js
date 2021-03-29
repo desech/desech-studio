@@ -162,9 +162,9 @@ export default {
       label: Language.localize('Help', locale),
       submenu: [
         {
-          label: Language.localize('Documentation', locale),
+          label: Language.localize('Support', locale),
           click: async () => {
-            const url = Config.getConfig('web') + '/documentation.html'
+            const url = Config.getConfig('web') + '/support.html'
             await EventMain.handleEvent(EventMenu, 'openLink', url)
           }
         },

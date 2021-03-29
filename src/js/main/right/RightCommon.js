@@ -6,6 +6,7 @@ import StyleSheetSelector from '../../state/stylesheet/StyleSheetSelector.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import CanvasCommon from '../canvas/CanvasCommon.js'
+import StateSelectedElement from '../../state/StateSelectedElement.js'
 
 export default {
   changeStyle (properties, panelReload = false, doCommand = 'changeStyle') {
@@ -97,5 +98,26 @@ export default {
   getToggleKey (container) {
     const type = container.dataset.type
     return `right-section-${type}-collapse`
+  },
+
+  injectPropertyFields (form) {
+    const properties = StateSelectedElement.getElementProperties()
+    if (!properties) return
+    const list = form.getElementsByClassName('style-component-list')[0]
+    for (const [name, value] of Object.entries(properties)) {
+      this.injectPropertyElement(list, name, value)
+    }
+  },
+
+  injectPropertyElement (list, name = null, value = null) {
+    const template = HelperDOM.getTemplate('template-style-component-property')
+    const fields = template.getElementsByClassName('style-component-property-field')
+    if (name) this.setPropertyInputs(fields, name, value)
+    list.appendChild(template)
+  },
+
+  setPropertyInputs (fields, name, value) {
+    fields[0].value = name
+    fields[1].value = value
   }
 }

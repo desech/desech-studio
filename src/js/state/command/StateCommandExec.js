@@ -139,21 +139,12 @@ export default {
     element.innerHTML = data.svg
   },
 
-  changeProgrammingProperties (data) {
+  changeProperties (data) {
     const element = HelperElement.getElement(data.ref)
     if (ExtendJS.isEmpty(data.properties)) {
-      delete element.dataset.programmingProperties
+      delete element.dataset.elementProperties
     } else {
-      element.dataset.programmingProperties = JSON.stringify(data.properties)
-    }
-  },
-
-  changeComponentProperties (data) {
-    const element = HelperElement.getElement(data.ref)
-    if (ExtendJS.isEmpty(data.properties)) {
-      delete element.dataset.properties
-    } else {
-      element.dataset.properties = JSON.stringify(data.properties)
+      element.dataset.elementProperties = JSON.stringify(data.properties)
     }
   },
 

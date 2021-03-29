@@ -43,8 +43,8 @@ export default {
     const div = document.createElement('div')
     div.setAttributeNS(null, 'class', 'component')
     div.setAttributeNS(null, 'src', this.getRelPath(node.getAttributeNS(null, 'src')))
-    if (node.dataset.properties) {
-      div.setAttributeNS(null, 'data-properties', node.dataset.properties)
+    if (node.dataset.elementProperties) {
+      div.setAttributeNS(null, 'data-element-properties', node.dataset.elementProperties)
     }
     this.addComponentChildren(div, node, css, designSystemClasses)
     node.replaceWith(div)

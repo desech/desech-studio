@@ -1,8 +1,8 @@
 import HelperEvent from '../../../../helper/HelperEvent.js'
-import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
+import RightCommon from '../../RightCommon.js'
 
 export default {
   getEvents () {
@@ -41,34 +41,13 @@ export default {
     }
   },
 
-  injectProperties (form) {
-    const properties = StateSelectedElement.getComponentProperties()
-    if (!properties) return
-    const list = form.getElementsByClassName('style-component-list')[0]
-    for (const [name, value] of Object.entries(properties)) {
-      this.addProperty(list, name, value)
-    }
-  },
-
-  addProperty (list, name = null, value = null) {
-    const template = HelperDOM.getTemplate('template-style-component-property')
-    const fields = template.getElementsByClassName('style-component-property-field')
-    if (name) this.injectProperty(fields, name, value)
-    list.appendChild(template)
-  },
-
-  injectProperty (fields, name, value) {
-    fields[0].value = name
-    fields[1].value = value
-  },
-
   buttonAddProperty (form) {
     const list = form.getElementsByClassName('style-component-list')[0]
-    this.addProperty(list)
+    RightCommon.injectPropertyElement(list)
   },
 
   deleteProperty (li) {
-    const form = li.closest('.sidebar-section')
+    const form = li.closest('form')
     li.remove()
     this.changePropertiesCommand(form)
   },
@@ -82,7 +61,7 @@ export default {
   editProperty (li) {
     const name = li.getElementsByClassName('style-component-property-name')[0]
     const valid = this.validatePropertyName(name)
-    if (name.value && valid) this.changePropertiesCommand(li.closest('.sidebar-section'))
+    if (name.value && valid) this.changePropertiesCommand(li.closest('form'))
   },
 
   validatePropertyName (field) {
@@ -119,14 +98,14 @@ export default {
     const ref = StateSelectedElement.getRef()
     return {
       do: {
-        command: 'changeComponentProperties',
+        command: 'changeProperties',
         ref,
         properties
       },
       undo: {
-        command: 'changeComponentProperties',
+        command: 'changeProperties',
         ref,
-        properties: StateSelectedElement.getComponentProperties()
+        properties: StateSelectedElement.getElementProperties()
       }
     }
   }

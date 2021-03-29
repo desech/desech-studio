@@ -20,15 +20,9 @@ export default {
     return style.getPropertyValue(property) || ''
   },
 
-  getProgrammingProperties (element = null) {
+  getElementProperties (element = null) {
     element = element || this.getElement()
-    const props = element.dataset.programmingProperties
+    const props = element.dataset.elementProperties
     return props ? JSON.parse(props) : null
-  },
-
-  getComponentProperties (element = null) {
-    element = element || this.getElement()
-    const data = element.dataset.properties ? JSON.parse(element.dataset.properties) : null
-    return data
   }
 }

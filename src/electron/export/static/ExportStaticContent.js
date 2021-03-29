@@ -15,7 +15,7 @@ export default {
   buildComponents (folder, document, container, data = null) {
     // don't mess with this, only with `querySelectorAll` and `replaceWith` it seems to work
     for (const comp of container.querySelectorAll('div.component')) {
-      const properties = this.getProperties(data, comp.dataset.properties)
+      const properties = this.getProperties(data, comp.dataset.elementProperties)
       const componentFile = path.resolve(folder, comp.getAttributeNS(null, 'src'))
       const html = fs.readFileSync(componentFile).toString()
       const div = document.createElement('div')

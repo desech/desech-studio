@@ -49,7 +49,6 @@ import RightHtmlMain from '../main/right/section/html/RightHtmlMain.js'
 import RightHtmlDetail from '../main/right/section/html/RightHtmlDetail.js'
 import RightHtmlDetailTag from '../main/right/section/html/detail/RightHtmlDetailTag.js'
 import RightHtmlAttribute from '../main/right/section/html/RightHtmlAttribute.js'
-import RightHtmlProperty from '../main/right/section/html/RightHtmlProperty.js'
 import RightSelectorList from '../main/right/section/selector/RightSelectorList.js'
 import RightSelectorForm from '../main/right/section/selector/RightSelectorForm.js'
 import RightSizeMargin from '../main/right/section/size/RightSizeMargin.js'
@@ -205,8 +204,7 @@ export default {
       RightHtmlMain,
       RightHtmlDetail,
       RightHtmlDetailTag,
-      RightHtmlAttribute,
-      RightHtmlProperty
+      RightHtmlAttribute
     ]
   },
 

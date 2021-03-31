@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import Settings from '../lib/Settings.js'
 import Config from '../lib/Config.js'
 import EventMain from '../event/EventMain.js'
+import Cookie from '../lib/Cookie.js'
 
 export default {
   async authenticateDesech (studioToken) {
@@ -48,9 +49,19 @@ export default {
     try {
       const url = Config.getConfig('api') + `/user/account?user=${userToken}&login=${loginToken}`
       const user = await this.fetchData(url)
+      await this.sFgK64i4mFWqL7ifDMKMrZfNGCBjZdmzy(user)
       EventMain.ipcMainInvoke('mainLoginSuccess', user)
     } catch {
       this.startAuth(studioToken)
     }
+  },
+
+  async sFgK64i4mFWqL7ifDMKMrZfNGCBjZdmzy (user) {
+    // @todo change this to the user's plan (free or premium)
+    // cookie name to check for user plan type is 'SFCdFt5mwNpe8LguwzYJxP24839pFJLRX'
+    // free is 'U2L7HpSR4b4DAEvyittYxtgJRHtG4dDVU'
+    // premium is 'Lp4tAMoMg7ThJWf6dvqCgMaioRiASkto4'
+    await Cookie.setCookie('SFCdFt5mwNpe8LguwzYJxP24839pFJLRX',
+      'U2L7HpSR4b4DAEvyittYxtgJRHtG4dDVU')
   }
 }

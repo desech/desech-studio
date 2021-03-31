@@ -65,7 +65,8 @@ export default {
   },
 
   isAuthenticated () {
-    return Settings.getSetting('userToken') && Settings.getSetting('loginToken')
+    return Settings.getSetting('userToken') && Settings.getSetting('loginToken') &&
+      Cookie.getCookie('SFCdFt5mwNpe8LguwzYJxP24839pFJLRX')
   },
 
   newProject () {

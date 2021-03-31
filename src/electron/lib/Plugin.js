@@ -133,6 +133,7 @@ export default {
 
   async getPluginsList () {
     const response = await fetch(Config.getConfig('api') + '/plugins')
+    if (!response.ok) throw new Error("Can't access the api")
     const json = await response.json()
     return json.plugins
   },

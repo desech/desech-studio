@@ -8,13 +8,13 @@ export default {
   },
 
   hasDesignSystem () {
-    return document.styleSheets[2] // 0 = style, 1 = fonts, 2 = design system
+    return document.styleSheets[1] // 0 = style, 1 = design system
   },
 
   getDesignSystemClasses () {
     if (!this.hasDesignSystem()) return
     const classes = []
-    for (const rule of document.styleSheets[2].cssRules) {
+    for (const rule of document.styleSheets[1].cssRules) {
       if (rule.constructor.name !== 'CSSStyleRule') continue
       HelperStyle.addSelectorClass(rule.selectorText, classes)
     }

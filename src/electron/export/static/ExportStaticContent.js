@@ -8,6 +8,7 @@ export default {
     const dom = new JSDOM(fs.readFileSync(file).toString())
     this.buildComponents(folder, dom.window.document, dom.window.document)
     this.replaceCssLinks(dom.window.document)
+    this.replaceJsScripts(dom.window.document)
     const html = dom.serialize()
     return FileParse.beautifyHtml(html)
   },
@@ -50,5 +51,10 @@ export default {
     document.querySelectorAll('link[rel="stylesheet"]').forEach(el => el.remove())
     const cssLink = '<link rel="stylesheet" href="css/compiled/style.css">'
     document.head.insertAdjacentHTML('beforeend', cssLink)
+  },
+
+  replaceJsScripts (document) {
+    const script = document.querySelector('script[src="js/design-system.js"]')
+    if (script) script.remove()
   }
 }

@@ -33,6 +33,10 @@ dialog.dialog .dialog-footer {
   box-shadow: var(--dialog-header-shadow) -1px 1px 0 0 inset;
 }
 
+dialog.dialog[data-locked] .dialog-close {
+  display: none;
+}
+
 dialog.dialog .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -41,6 +45,12 @@ dialog.dialog .grid {
 
 
 /* specific dialogs */
+
+dialog.dialog .dialog-premium {
+  width: 300px;
+  font-size: 15px;
+  line-height: 24px;
+}
 
 dialog.dialog .dialog-auth {
   padding: 20px;

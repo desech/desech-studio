@@ -32,13 +32,10 @@ export default {
 
   async fetchData (url) {
     const response = await fetch(url)
-    try {
-      const json = await response.json()
-      if (json.error) throw new Error(json.error)
-      return json
-    } catch (error) {
-      throw new Error(`${error} - ${url}`)
-    }
+    if (!response.ok) throw new Error("Can't access api.desech.com")
+    const json = await response.json()
+    if (json.error) throw new Error(json.error)
+    return json
   },
 
   saveTokens (userToken, loginToken) {
@@ -49,19 +46,25 @@ export default {
     try {
       const url = Config.getConfig('api') + `/user/account?user=${userToken}&login=${loginToken}`
       const user = await this.fetchData(url)
-      await this.sFgK64i4mFWqL7ifDMKMrZfNGCBjZdmzy(user)
+      if (!this.isPremium(user.account_type)) {
+        EventMain.ipcMainInvoke('mainPremiumPrompt')
+      }
+      await Cookie.setCookie('accountType', user.account_type)
       EventMain.ipcMainInvoke('mainLoginSuccess', user)
     } catch {
       this.startAuth(studioToken)
     }
   },
 
-  async sFgK64i4mFWqL7ifDMKMrZfNGCBjZdmzy (user) {
-    // @todo change this to the user's plan (free or premium)
-    // cookie name to check for user plan type is 'SFCdFt5mwNpe8LguwzYJxP24839pFJLRX'
-    // free is 'U2L7HpSR4b4DAEvyittYxtgJRHtG4dDVU'
-    // premium is 'Lp4tAMoMg7ThJWf6dvqCgMaioRiASkto4'
-    await Cookie.setCookie('SFCdFt5mwNpe8LguwzYJxP24839pFJLRX',
-      'U2L7HpSR4b4DAEvyittYxtgJRHtG4dDVU')
+  isPremium (accountType) {
+    return (accountType === 'Professional' || accountType === 'Business')
+  },
+
+  async purchasePremium () {
+    const api = Config.getConfig('api')
+    const userToken = Settings.getSetting('userToken')
+    const loginToken = Settings.getSetting('loginToken')
+    const url = `${api}/ecommerce/purchase?user=${userToken}&login=${loginToken}`
+    await shell.openExternal(url)
   }
 }

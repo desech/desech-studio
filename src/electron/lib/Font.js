@@ -26,6 +26,7 @@ export default {
   async getZipFile (url, file) {
     if (url) {
       const response = await fetch(url)
+      if (!response.ok) throw new Error("Can't access download.desech.com")
       return await response.buffer()
     } else {
       return fs.readFileSync(file)

@@ -8,6 +8,7 @@ import pjson from '../../package.json'
 async function buildHtml (locale) {
   // sort the fonts by category
   const response = await fetch('https://download.desech.com/font/list.json')
+  if (!response.ok) throw new Error("Can't access download.desech.com")
   const fonts = await response.json()
   // first 20 from https://fonts.google.com/?sort=popularity
   const popularCategory = [

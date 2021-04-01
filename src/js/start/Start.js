@@ -8,7 +8,7 @@ import Project from './Project.js'
 export default {
   getEvents () {
     return {
-      click: ['clickNewProjectEvent', 'clickNewProjectSubmitEvent',
+      click: ['clickPremiumButton', 'clickNewProjectEvent', 'clickNewProjectSubmitEvent',
         'clickSaveProjectSettingsEvent', 'clickOpenProjectEvent', 'clickImportFilePromptEvent',
         'clickImportFileEvent', 'clickImportFigmaEvent', 'clickFinishImportEvent',
         'clickContinueFigmaAuthEvent']
@@ -17,6 +17,12 @@ export default {
 
   handleEvent (event) {
     HelperEvent.handleEvents(this, event)
+  },
+
+  async clickPremiumButton (event) {
+    if (event.target.classList.contains('premium-prompt-button')) {
+      await this.pressPremiumButton(event.target)
+    }
   },
 
   async clickNewProjectEvent (event) {
@@ -71,6 +77,13 @@ export default {
     if (event.target.classList.contains('dialog-figma-continue')) {
       await this.continueFigma(event.target)
     }
+  },
+
+  async pressPremiumButton (button) {
+    if (button.dataset.type === 'yes') {
+      await window.electron.invoke('rendererPurchasePremium')
+    }
+    window.close()
   },
 
   async triggerOpenProject (folder = null) {

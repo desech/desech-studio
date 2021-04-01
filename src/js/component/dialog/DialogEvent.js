@@ -15,7 +15,7 @@ export default {
 
   clickCloseEvent (event) {
     if (event.target.closest('.dialog-close')) {
-      event.target.closest('dialog').remove()
+      this.closeDialog(event.target.closest('dialog'))
     }
   },
 
@@ -23,5 +23,9 @@ export default {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'Escape') {
       DialogComponent.closeAllDialogs(event)
     }
+  },
+
+  closeDialog (dialog) {
+    if (!dialog.dataset.locked) dialog.remove()
   }
 }

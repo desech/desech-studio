@@ -6,11 +6,24 @@ import Figma from '../import/Figma.js'
 
 export default {
   addEvents () {
+    this.rendererLogoutDesechEvent()
+    this.rendererPurchasePremiumEvent()
     this.rendererImportFigmaFileEvent()
     this.rendererFetchFigmaEvent()
     this.rendererAuthenticateDesechEvent()
     this.rendererFetchAuthDesechEvent()
-    this.rendererLogoutDesechEvent()
+  },
+
+  rendererLogoutDesechEvent () {
+    ipcMain.handle('rendererLogoutDesech', async (event) => {
+      return await EventMain.handleEvent(Auth, 'logoutDesech')
+    })
+  },
+
+  rendererPurchasePremiumEvent () {
+    ipcMain.handle('rendererPurchasePremium', async (event) => {
+      return await EventMain.handleEvent(Auth, 'purchasePremium')
+    })
   },
 
   rendererImportFigmaFileEvent () {
@@ -36,12 +49,6 @@ export default {
   rendererFetchAuthDesechEvent () {
     ipcMain.handle('rendererFetchAuthDesech', async (event, token) => {
       return await EventMain.handleEvent(Auth, 'fetchAuthDesech', token)
-    })
-  },
-
-  rendererLogoutDesechEvent () {
-    ipcMain.handle('rendererLogoutDesech', async (event) => {
-      return await EventMain.handleEvent(Auth, 'logoutDesech')
     })
   }
 }

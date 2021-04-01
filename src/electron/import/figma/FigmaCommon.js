@@ -19,7 +19,9 @@ export default {
   async getResponse (method, token) {
     const headers = { headers: { Authorization: `Bearer ${token}` } }
     const url = `https://api.figma.com/v1/${method}`
-    return await fetch(url, headers)
+    const response = await fetch(url, headers)
+    if (!response.ok) throw new Error(Language.localize("Can't access api.figma.com"))
+    return response
   },
 
   error (error, res, method) {
@@ -161,6 +163,7 @@ export default {
 
   async saveApiImage (url, file, ext) {
     const response = await fetch(url)
+    if (!response.ok) throw new Error(Language.localize("Can't access the figma image"))
     const content = (ext === 'svg') ? await response.text() : await response.buffer()
     fs.writeFileSync(file, content)
     return content

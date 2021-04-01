@@ -44,6 +44,7 @@ export default {
     const url = repoUrl.replace('github.com', 'raw.githubusercontent.com') +
       '/master/package.json'
     const response = await fetch(url)
+    if (!response.ok) throw new Error("Can't access raw.githubusercontent.com")
     return await response.json()
   },
 
@@ -70,6 +71,7 @@ export default {
   async getApiZip (url) {
     // const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/zipball'
     const response = await fetch(url + '/archive/master.zip')
+    if (!response.ok) throw new Error("Can't access api.github.com")
     return await response.buffer()
   },
 
@@ -133,7 +135,7 @@ export default {
 
   async getPluginsList () {
     const response = await fetch(Config.getConfig('api') + '/plugins')
-    if (!response.ok) throw new Error("Can't access the api")
+    if (!response.ok) throw new Error("Can't access api.desech.com")
     const json = await response.json()
     return json.plugins
   },

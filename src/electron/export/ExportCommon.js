@@ -42,7 +42,7 @@ export default {
 
   getDesignSystemCss (folder) {
     const file = path.resolve(folder, 'css/general/design-system.css')
-    return fs.readFileSync(file).toString()
+    return fs.existsSync(file) ? fs.readFileSync(file).toString() : ''
   },
 
   getAnimationCss (folder, css) {

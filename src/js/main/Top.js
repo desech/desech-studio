@@ -1,9 +1,6 @@
 import HelperEvent from '../helper/HelperEvent.js'
-import HelperCanvas from '../helper/HelperCanvas.js'
 import TopCommon from './top/TopCommon.js'
 import HelperDOM from '../helper/HelperDOM.js'
-import CanvasCommon from './canvas/CanvasCommon.js'
-import CanvasElementSelect from './canvas/element/CanvasElementSelect.js'
 import HelperProject from '../helper/HelperProject.js'
 import InputUnitField from '../component/InputUnitField.js'
 import HelperStyle from '../helper/HelperStyle.js'
@@ -11,9 +8,7 @@ import HelperStyle from '../helper/HelperStyle.js'
 export default {
   getEvents () {
     return {
-      reloadcontainer: ['reloadcontainerEvent'],
-      click: ['clickSwitchPreviewEvent'],
-      keydown: ['keydownSwitchPreviewEvent']
+      reloadcontainer: ['reloadcontainerEvent']
     }
   },
 
@@ -25,37 +20,6 @@ export default {
     if (event.target.id === 'responsive-mode-list') {
       this.reloadResponsive()
     }
-  },
-
-  clickSwitchPreviewEvent (event) {
-    if (event.target.closest('.top-preview-button')) {
-      this.switchPreview()
-    }
-  },
-
-  keydownSwitchPreviewEvent (event) {
-    if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
-      HelperEvent.isNotCtrlAltShift(event) && event.key.toLowerCase() === 'p') {
-      this.switchPreview()
-    }
-  },
-
-  switchPreview () {
-    const button = document.getElementById('top-preview-button')
-    const enabled = button.classList.contains('selected')
-    enabled ? this.disablePreview(button) : this.enablePreview(button)
-  },
-
-  enablePreview (button) {
-    CanvasCommon.enablePanelButton('select')
-    CanvasElementSelect.deselectElement()
-    button.classList.add('selected')
-    HelperCanvas.addPreview()
-  },
-
-  disablePreview (button) {
-    button.classList.remove('selected')
-    HelperCanvas.removePreview()
   },
 
   clearResponsive () {

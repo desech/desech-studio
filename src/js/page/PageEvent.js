@@ -33,6 +33,7 @@ import CanvasTextOverlayEvent from '../main/canvas/text-overlay/CanvasTextOverla
 import TopCommand from '../main/top/TopCommand.js'
 import TopCommandSave from '../main/top/command/TopCommandSave.js'
 import Top from '../main/Top.js'
+import TopPreview from '../main/top/TopPreview.js'
 import TopResponsive from '../main/top/TopResponsive.js'
 import TopZoom from '../main/top/TopZoom.js'
 import Left from '../main/Left.js'
@@ -162,6 +163,7 @@ export default {
       TopCommand,
       TopCommandSave,
       Top,
+      TopPreview,
       TopResponsive,
       TopZoom
     ]

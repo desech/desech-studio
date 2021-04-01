@@ -13,37 +13,35 @@ export default {
     return FileParse.beautifyHtml(html)
   },
 
-  buildComponents (folder, document, container, data = null) {
+  buildComponents (folder, document, container) {
     // don't mess with this, only with `querySelectorAll` and `replaceWith` it seems to work
     for (const comp of container.querySelectorAll('div.component')) {
-      const properties = this.getProperties(data, comp.dataset.elementProperties)
+      const properties = this.getProperties(comp)
       const componentFile = path.resolve(folder, comp.getAttributeNS(null, 'src'))
       const html = fs.readFileSync(componentFile).toString()
       const div = document.createElement('div')
       div.innerHTML = this.parseComponentHtml(html, properties)
       const componentHtml = comp.innerHTML
       comp.replaceWith(div)
-      this.buildComponents(folder, document, div, properties)
+      this.buildComponents(folder, document, div)
       this.buildComponentChildren(folder, document, div, properties, componentHtml)
     }
   },
 
-  getProperties (data, string) {
-    const props = string ? JSON.parse(string) : null
-    // order matters, in order for properties to overwrite each other
-    return { ...props, ...data }
+  getProperties (div) {
+    const string = div.dataset.elementProperties
+    return string ? JSON.parse(string) : {}
   },
 
-  parseComponentHtml (html, data) {
-    return html.replace(/{{(.*?)}}/g, (match, name) => data[name] || match)
+  parseComponentHtml (html, properties) {
+    return html.replace(/{{(.*?)}}/g, (match, name) => properties[name] || match)
   },
 
-  buildComponentChildren (folder, document, div, data, componentHtml) {
+  buildComponentChildren (folder, document, div, properties, componentHtml) {
     const container = div.getElementsByClassName('component-children')[0]
     if (!container) return
-    container.innerHTML = this.parseComponentHtml(componentHtml, data)
+    container.innerHTML = this.parseComponentHtml(componentHtml, properties)
     container.removeAttributeNS(null, 'class')
-    // we don't pass the data here because the higher up wrapper will overwrite everything
     this.buildComponents(folder, document, container)
   },
 

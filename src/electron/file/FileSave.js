@@ -15,15 +15,9 @@ export default {
     // check TopCommandSave.getCurrentFileData() for data
     this.saveFileWithBackup(data.htmlFile, data.html)
     this.saveStyle(data.css, data.htmlFile, data.folder)
-    this.prepareDataForExport(data)
     await Plugin.triggerPlugin('designSystem', 'saveToFile', data)
+    // we want the design system to trigger early to copy the css/js files
     await this.exportCode(data)
-  },
-
-  prepareDataForExport (data) {
-    data.compiledCss = ExportCommon.getCompiledCss(data.folder)
-    data.rootMiscFiles = ExportCommon.getRootMiscFiles(data.folder)
-    data.htmlFiles = ExportCommon.getHtmlFiles(data.folder)
   },
 
   saveFileWithBackup (file, contents) {
@@ -110,11 +104,18 @@ export default {
   },
 
   async exportCode (data) {
+    this.prepareDataForExport(data)
     const project = await ProjectCommon.getProjectSettings()
     if (project.exportCode === 'static') {
       await ExportStaticCode.saveToFile(data)
     } else if (project.exportCode) {
       await Plugin.triggerPlugin('exportCode', 'saveToFile', data)
     }
+  },
+
+  prepareDataForExport (data) {
+    data.compiledCss = ExportCommon.getCompiledCss(data.folder)
+    data.rootMiscFiles = ExportCommon.getRootMiscFiles(data.folder)
+    data.htmlFiles = ExportCommon.getHtmlFiles(data.folder)
   }
 }

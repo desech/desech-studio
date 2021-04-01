@@ -5,6 +5,7 @@ export default {
     try {
       return await obj[method](...args)
     } catch (error) {
+      console.error(error)
       this.ipcMainInvoke('mainError', error)
     }
   },

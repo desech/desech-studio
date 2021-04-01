@@ -6,12 +6,24 @@ import Figma from '../import/Figma.js'
 
 export default {
   addEvents () {
+    this.rendererAuthenticateDesechEvent()
+    this.rendererFetchAuthDesechEvent()
     this.rendererLogoutDesechEvent()
     this.rendererPurchasePremiumEvent()
     this.rendererImportFigmaFileEvent()
     this.rendererFetchFigmaEvent()
-    this.rendererAuthenticateDesechEvent()
-    this.rendererFetchAuthDesechEvent()
+  },
+
+  rendererAuthenticateDesechEvent () {
+    ipcMain.handle('rendererAuthenticateDesech', async (event, token) => {
+      return await EventMain.handleEvent(Auth, 'authenticateDesech', token)
+    })
+  },
+
+  rendererFetchAuthDesechEvent () {
+    ipcMain.handle('rendererFetchAuthDesech', async (event, token) => {
+      return await EventMain.handleEvent(Auth, 'fetchAuthDesech', token)
+    })
   },
 
   rendererLogoutDesechEvent () {
@@ -37,18 +49,6 @@ export default {
   rendererFetchFigmaEvent () {
     ipcMain.handle('rendererFetchFigma', async (event) => {
       return await EventMain.handleEvent(Figma, 'fetchToken')
-    })
-  },
-
-  rendererAuthenticateDesechEvent () {
-    ipcMain.handle('rendererAuthenticateDesech', async (event, token) => {
-      return await EventMain.handleEvent(Auth, 'authenticateDesech', token)
-    })
-  },
-
-  rendererFetchAuthDesechEvent () {
-    ipcMain.handle('rendererFetchAuthDesech', async (event, token) => {
-      return await EventMain.handleEvent(Auth, 'fetchAuthDesech', token)
     })
   }
 }

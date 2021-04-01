@@ -65,7 +65,7 @@ export default {
 
   injectAuthData () {
     const container = document.getElementsByClassName('start-user')[0]
-    if (document.body.dataset.email) {
+    if (container && document.body.dataset.email) {
       container.children[0].textContent = document.body.dataset.email
       HelperDOM.show(container)
     } else {

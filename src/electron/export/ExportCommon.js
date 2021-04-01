@@ -5,16 +5,16 @@ import File from '../file/File.js'
 export default {
   getCompiledCss (folder) {
     const general = this.getCssContent(this.getGeneralCssFiles(folder))
+    const designSystem = this.getDesignSystemCss(folder)
     const page = this.getCssContent(this.getPageCssFiles(folder))
     const animation = this.getAnimationCss(folder, general + page)
-    return general + '\n' + animation + '\n' + page
+    return general + '\n' + animation + '\n' + designSystem + '\n' + page
   },
 
   getGeneralCssFiles (folder) {
     const paths = []
     // order matters
-    const files = ['reset', 'font', 'design-system', 'root', 'component-css',
-      'component-html']
+    const files = ['reset', 'font', 'root', 'component-css', 'component-html']
     for (const file of files) {
       const filePath = path.resolve(folder, 'css/general', file + '.css')
       if (fs.existsSync(filePath)) paths.push(filePath)
@@ -40,9 +40,15 @@ export default {
     return css
   },
 
+  getDesignSystemCss (folder) {
+    const file = path.resolve(folder, 'css/general/design-system.css')
+    return fs.readFileSync(file).toString()
+  },
+
   getAnimationCss (folder, css) {
     let selectedCss = ''
     const animations = this.getAnimationsUsed(css)
+    if (!animations.length) return ''
     const file = path.resolve(folder, 'css/general/animation.css')
     const animationCss = fs.readFileSync(file).toString() + '@'
     for (const animation of animations) {
@@ -65,6 +71,7 @@ export default {
     const list = []
     const files = File.readFolder(folder)
     for (const file of files) {
+      // we don't look inside children, only at the top root folder
       if ((file.type === 'folder' && ['asset', 'font'].includes(file.name)) ||
         (file.type === 'file' && file.extension !== 'html')) {
         list.push(file)

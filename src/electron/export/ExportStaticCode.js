@@ -19,11 +19,10 @@ export default {
 
   syncJs (folder) {
     const scriptFile = path.resolve(folder, '_export/js/script.js')
-    if (!fs.existsSync(scriptFile)) File.createFile(scriptFile)
+    if (fs.existsSync(scriptFile)) return
     const dsFile = path.resolve(folder, 'js/design-system.js')
-    if (fs.existsSync(dsFile)) {
-      fs.copyFileSync(dsFile, path.resolve(folder, '_export/js/design-system.js'))
-    }
+    const js = fs.existsSync(dsFile) ? fs.readFileSync(dsFile).toString() : ''
+    File.createFile(scriptFile, js)
   },
 
   syncPages (folder, htmlFiles) {

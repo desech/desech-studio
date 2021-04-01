@@ -17,7 +17,7 @@ export default {
 
   injectData (template) {
     this.injectDefaultSelector(template)
-    const selectors = StyleSheetSelector.getSelectedElementSelectors()
+    const selectors = StyleSheetSelector.getDisplayElementSelectors()
     this.injectSelectors(selectors, template)
   },
 

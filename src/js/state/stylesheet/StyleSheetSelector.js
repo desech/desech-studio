@@ -5,7 +5,7 @@ import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 
 export default {
-  getSelectedElementSelectors () {
+  getDisplayElementSelectors () {
     const element = StateSelectedElement.getElement()
     return this.getElementSelectors(element)
   },
@@ -19,6 +19,7 @@ export default {
       const rules = this.getElementSelector(sheet, ref, classes, filter)
       if (rules) selectors.push(rules)
     }
+    this.addOrphanClassesToSelectors(selectors, classes)
     return selectors
   },
 
@@ -31,6 +32,14 @@ export default {
       return selector
     }
     return null
+  },
+
+  addOrphanClassesToSelectors (selectors, classes) {
+    // these come from the design system or a class that was deleted, but it's still attached
+    for (const cls of classes) {
+      const clsSelector = '.' + cls
+      if (!selectors.includes(clsSelector)) selectors.push(clsSelector)
+    }
   },
 
   getCurrentSelectorLi (container = document) {

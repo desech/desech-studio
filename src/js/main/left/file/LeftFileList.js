@@ -5,6 +5,7 @@ import LeftFileCommon from './LeftFileCommon.js'
 import HelperError from '../../../helper/HelperError.js'
 import HelperFile from '../../../helper/HelperFile.js'
 import HelperProject from '../../../helper/HelperProject.js'
+import HelperForm from '../../../helper/HelperForm.js'
 
 export default {
   getEvents () {
@@ -74,7 +75,9 @@ export default {
 
   createOverlay (button, folder = null) {
     this.closeOverlay()
-    this.showOverlay(button.nextElementSibling, button.dataset.type, folder)
+    const container = button.nextElementSibling
+    this.showOverlay(container, button.dataset.type, folder)
+    HelperForm.focusFirstInput(container)
   },
 
   closeOverlay () {

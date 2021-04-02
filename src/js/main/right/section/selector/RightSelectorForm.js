@@ -69,6 +69,7 @@ export default {
     const fields = HelperDOM.getTemplate(`template-dialog-selector-add-${type}`)
     HelperDOM.replaceOnlyChild(details, fields)
     if (type === 'component') this.generateComponentDatalist(form)
+    HelperForm.focusFirstInput(form)
   },
 
   generateComponentDatalist (form) {

@@ -49,10 +49,10 @@ export default {
   },
 
   turnPropertiesOn () {
-    console.log('on')
+    // @todo finish it
   },
 
   turnPropertiesOff () {
-    console.log('off')
+    // @todo finish it
   }
 }

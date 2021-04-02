@@ -52,5 +52,10 @@ export default {
       }
     }
     return true
+  },
+
+  focusFirstInput (container) {
+    const input = container.getElementsByTagName('input')[0]
+    if (input) input.focus()
   }
 }

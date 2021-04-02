@@ -8,10 +8,10 @@ import Project from './Project.js'
 export default {
   getEvents () {
     return {
-      click: ['clickPremiumButton', 'clickNewProjectEvent', 'clickNewProjectSubmitEvent',
-        'clickSaveProjectSettingsEvent', 'clickOpenProjectEvent', 'clickImportFilePromptEvent',
-        'clickImportFileEvent', 'clickImportFigmaEvent', 'clickFinishImportEvent',
-        'clickContinueFigmaAuthEvent']
+      click: ['clickPremiumButton', 'clickNewTutorialProjectEvent', 'clickNewProjectEvent',
+        'clickNewProjectSubmitEvent', 'clickSaveProjectSettingsEvent', 'clickOpenProjectEvent',
+        'clickImportFilePromptEvent', 'clickImportFileEvent', 'clickImportFigmaEvent',
+        'clickFinishImportEvent', 'clickContinueFigmaAuthEvent']
     }
   },
 
@@ -22,6 +22,12 @@ export default {
   async clickPremiumButton (event) {
     if (event.target.classList.contains('premium-prompt-button')) {
       await this.pressPremiumButton(event.target)
+    }
+  },
+
+  async clickNewTutorialProjectEvent (event) {
+    if (event.target.closest('.start-new-tutorial-project')) {
+      await window.electron.invoke('rendererNewTutorialProject')
     }
   },
 

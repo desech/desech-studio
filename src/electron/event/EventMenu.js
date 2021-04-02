@@ -13,6 +13,7 @@ import Electron from '../lib/Electron.js'
 
 export default {
   addEvents () {
+    this.rendererNewTutorialProjectEvent()
     this.rendererNewProjectEvent()
     this.rendererOpenProjectEvent()
     this.rendererSaveProjectSettingsEvent()
@@ -20,6 +21,12 @@ export default {
     this.rendererInstallPluginEvent()
     this.rendererRemovePluginEvent()
     this.rendererGetDesignSystemCssEvent()
+  },
+
+  rendererNewTutorialProjectEvent () {
+    ipcMain.handle('rendererNewTutorialProject', async (event, locale) => {
+      return await EventMain.handleEvent(this, 'newTutorialProject', locale)
+    })
   },
 
   rendererNewProjectEvent () {
@@ -67,6 +74,11 @@ export default {
   isAuthenticated () {
     return Settings.getSetting('userToken') && Settings.getSetting('loginToken') &&
       Cookie.getCookie('accountType')
+  },
+
+  newTutorialProject () {
+    if (!this.isAuthenticated()) return
+    console.log('tutorial')
   },
 
   newProject () {

@@ -78,8 +78,10 @@ export default {
   },
 
   changePropertiesCommand (form, execute = true) {
+    const ref = StateSelectedElement.getRef()
+    if (!ref) return
     const properties = this.getFormProperties(form)
-    const command = this.getCommandData(properties)
+    const command = this.getCommandData(properties, ref)
     StateCommand.stackCommand(command)
     if (execute) StateCommand.executeCommand(command.do)
   },
@@ -94,8 +96,7 @@ export default {
     return obj
   },
 
-  getCommandData (properties) {
-    const ref = StateSelectedElement.getRef()
+  getCommandData (properties, ref) {
     return {
       do: {
         command: 'changeProperties',

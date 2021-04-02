@@ -186,6 +186,7 @@ export default {
   },
 
   cancelElementEditable (element) {
+    // @todo sometimes it's not canceled and we end up with contenteditable
     element.classList.remove('editable')
     element.removeAttributeNS(null, 'contenteditable')
     this.fixContent(element)

@@ -28,9 +28,9 @@ export default {
 
   getCssFiles (document, folder) {
     const files = []
-    const links = document.getElementsByTagName('link')
-    for (const link of links) {
-      const file = HelperFile.getSourceFile(link.href, os.platform()).replace(folder, '')
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]')
+    for (const cssLink of cssLinks) {
+      const file = HelperFile.getSourceFile(cssLink.href, os.platform()).replace(folder, '')
       files.push(file)
     }
     return files
@@ -41,8 +41,7 @@ export default {
       '/css/general/reset.css',
       '/css/general/animation.css',
       '/css/general/font.css',
-      '/css/general/design-system.css',
-      '/css/general/custom.css'
+      '/css/general/design-system.css'
     ]
     return (parseElementCss || !file.startsWith('/css/page/')) && !files.includes(file)
   },

@@ -30,14 +30,14 @@ export default {
     return {
       label: Language.localize('File', locale),
       submenu: [
+        // {
+        //   label: Language.localize('New Tutorial Project', locale),
+        //   click: async () => {
+        //     await EventMain.handleEvent(EventMenu, 'newTutorialProject')
+        //   }
+        // },
         {
-          label: Language.localize('New Tutorial Project', locale),
-          click: async () => {
-            await EventMain.handleEvent(EventMenu, 'newTutorialProject')
-          }
-        },
-        {
-          label: Language.localize('New Empty Project', locale),
+          label: Language.localize('New Project', locale),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'newProject')
           }

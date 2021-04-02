@@ -210,16 +210,14 @@ dialog.dialog .dialog-figma-import .figma-warning {
 
 /* font dialog */
 
-dialog.dialog .dialog-font-title {
-  padding-bottom: 15px;
-  font-size: 15px;
-  font-weight: 500;
+dialog.dialog .dialog-font {
+  min-width: 300px;
 }
 
 dialog.dialog .dialog-font .grid {
   grid-template-columns: 50px 150px 20px auto;
   align-items: center;
-  padding-bottom: 15px;
+  font-size: 13px;
 }
 
 dialog.dialog .dialog-font-or {
@@ -227,9 +225,20 @@ dialog.dialog .dialog-font-or {
 }
 
 dialog.dialog .dialog-font-custom {
-  padding: 5px 0 15px 0;
+  margin-top: 15px;
+  font-size: 13px;
 }
 
 dialog.dialog .dialog-font-submit {
+  margin-top: 15px;
   width: auto;
+}
+
+dialog.dialog .dialog-font:not(.custom) .dialog-font-form-custom,
+dialog.dialog .dialog-font:not(.custom) .dialog-font-custom {
+  display: none;
+}
+
+dialog.dialog .dialog-font:not(.custom) .grid {
+  grid-template-columns: 50px auto;
 }

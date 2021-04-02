@@ -6,6 +6,7 @@ import DialogComponent from '../component/DialogComponent.js'
 import HelperProject from '../helper/HelperProject.js'
 import Project from '../start/Project.js'
 import Auth from '../start/Auth.js'
+import TopZoom from '../main/top/TopZoom.js'
 
 export default {
   loadStart () {
@@ -31,8 +32,9 @@ export default {
     this.loadPage('main')
     HelperTrigger.triggerReload('responsive-mode-list')
     await Project.injectDesignSystemCss()
-    HelperLocalStore.removeAllBut(['panel-file-expand', 'right-html-details-expand'])
+    HelperLocalStore.removeAllTemporary()
     this.loadFilePanel(file)
+    TopZoom.setSavedZoomLevel()
   },
 
   loadFilePanel (file) {

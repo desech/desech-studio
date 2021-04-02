@@ -1,6 +1,7 @@
 import HelperEvent from '../../helper/HelperEvent.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
+import HelperLocalStore from '../../helper/HelperLocalStore.js'
 
 export default {
   getEvents () {
@@ -81,13 +82,23 @@ export default {
   },
 
   setZoom (value) {
+    this.setZoomValue(value)
+    HelperTrigger.triggerReload('element-overlay', { panelReload: false })
+  },
+
+  setZoomValue (value) {
     HelperCanvas.getCanvas().style.zoom = value + '%'
     this.updateZoomLevel(value + '%')
-    HelperTrigger.triggerReload('element-overlay', { panelReload: false })
+    HelperLocalStore.setItem('top-canvas-zoom-level', value)
   },
 
   updateZoomLevel (text) {
     const block = document.getElementsByClassName('canvas-zoom-reset')[0]
     block.textContent = text
+  },
+
+  setSavedZoomLevel () {
+    const value = HelperLocalStore.getItem('top-canvas-zoom-level') || 100
+    this.setZoomValue(value)
   }
 }

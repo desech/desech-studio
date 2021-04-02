@@ -39,7 +39,7 @@
 
 #sidebar-left-panel .panel-search {
   padding: 0 80px 0 22px;
-  background-image: url('../asset/image/icon/search.svg');
+  background-image: var(--list-svg-search);
   background-size: 16px;
   background-position: 2px;
   background-repeat: no-repeat;

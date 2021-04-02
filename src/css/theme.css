@@ -74,6 +74,7 @@ body[data-theme="light"] {
   --list-txt-hover: rgb(255, 255, 255);
   --list-tree: rgba(0, 0, 0, 0.1);
   --list-fields-txt: rgb(70, 70, 70);
+  --list-svg-search: url('../asset/image/search-black.svg');
   --scroll-thumb: rgba(0, 0, 0, 0.2);
   --btn-txt: rgb(70, 70, 70);
   --btn-shadow: rgb(0, 0, 0, 0.5);
@@ -121,6 +122,7 @@ body[data-theme="dark"] {
   --list-txt-hover:rgb(255, 255, 255);
   --list-tree: rgba(255, 255, 255, 0.3);
   --list-fields-txt: rgb(255, 255, 255);
+  --list-svg-search: url('../asset/image/search-white.svg');
   --scroll-thumb: rgba(255, 255, 255, 0.2);
   --btn-txt: rgb(255, 255, 255);
   --btn-shadow: rgb(255, 255, 255);

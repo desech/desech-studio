@@ -1,24 +1,27 @@
 <template id="template-dialog-font">
   <div>
-    <div class="dialog-header">{{#i18n}} Add new font {{/i18n}}</div>
+    <div class="dialog-header">
+      <div class="dialog-font-title">
+        <div>{{#i18n}} Install font {{/i18n}}&nbsp;<b></b></div>
+        <div hidden>{{#i18n}} Install custom font {{/i18n}}</div>
+      </div>
+    </div>
     <div class="dialog-body">
       <form class="dialog-font">
-        <div class="dialog-font-title"></div>
-
         <div class="grid">
           <div>{{#i18n}} Zip Url {{/i18n}}</div>
           <input name="url" placeholder="https://example.com/font.zip">
-          <div hidden class="dialog-font-form-custom dialog-font-or">{{#i18n}} OR {{/i18n}}</div>
-          <label hidden class="dialog-font-form-custom upload-button" for="font-upload-file">
+          <div class="dialog-font-form-custom dialog-font-or">{{#i18n}} OR {{/i18n}}</div>
+          <label class="dialog-font-form-custom upload-button" for="font-upload-file">
             {{#i18n}} Choose zip file {{/i18n}}
           </label>
           <input hidden id="font-upload-file" name="file" type="file">
         </div>
 
-        <div class="dialog-font-custom" hidden>{{#i18n}} As an example, please have a look at <a class="desech-external-link" href="https://download.desech.com/font/Roboto+Mono.zip">this file</a>{{/i18n}}</div>
+        <div class="dialog-font-custom">{{#i18n}} As an example, please have a look at <a class="desech-external-link" href="https://download.desech.com/font/Roboto+Mono.zip">this file</a>{{/i18n}}</div>
 
         <button name="submit" type="button" class="dialog-font-submit composed highlighted fill">
-          {{#i18n}} Confirm {{/i18n}}
+          {{#i18n}} Install {{/i18n}}
         </button>
       </form>
     </div>

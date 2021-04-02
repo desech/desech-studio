@@ -72,12 +72,14 @@ export default {
 
   injectFontData (dialog, family, url) {
     const form = dialog.getElementsByClassName('dialog-font')[0]
-    dialog.getElementsByClassName('dialog-font-title')[0].textContent = family
+    const title = dialog.getElementsByClassName('dialog-font-title')[0]
     if (url) {
+      title.children[0].children[0].textContent = family
       form.elements.url.value = url
     } else {
-      HelperDOM.show(dialog.getElementsByClassName('dialog-font-form-custom'))
-      HelperDOM.show(dialog.getElementsByClassName('dialog-font-custom')[0])
+      HelperDOM.hide(title.children[0])
+      HelperDOM.show(title.children[1])
+      form.classList.add('custom')
     }
   },
 

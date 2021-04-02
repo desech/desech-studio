@@ -20,9 +20,14 @@ export default {
     localStorage.removeItem(key)
   },
 
-  removeAllBut (exceptions) {
+  removeAllTemporary () {
+    const persistent = this.getPersistentSettings()
     for (const key of Object.keys(localStorage)) {
-      if (!exceptions.includes(key)) this.removeItem(key)
+      if (!persistent.includes(key)) this.removeItem(key)
     }
+  },
+
+  getPersistentSettings () {
+    return ['panel-file-expand', 'right-html-details-expand', 'top-canvas-zoom-level']
   }
 }

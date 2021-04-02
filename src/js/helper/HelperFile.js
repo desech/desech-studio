@@ -131,6 +131,7 @@ export default {
 
   getFullHtmlString (data) {
     // change the /app/ui/index.html file too
+    data.title = data.title || 'Desech Studio Page'
     data.meta = data.meta || `<meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Desech Studio">`

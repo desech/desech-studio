@@ -9,6 +9,7 @@ export default {
   newProject (plugins) {
     const dialog = this.openProjectSettingsDialog('project-create')
     this.addInstalledPlugins(dialog, plugins)
+    this.setNewDefaults(dialog)
   },
 
   openProjectSettingsDialog (template) {
@@ -39,6 +40,11 @@ export default {
     option.textContent = plugin.title
     option.setAttributeNS(null, 'value', HelperPlugin.getPluginName(plugin.url))
     return option
+  },
+
+  setNewDefaults (dialog) {
+    const fields = dialog.getElementsByClassName('dialog-project')[0].elements
+    fields.exportCode.value = 'static'
   },
 
   async newProjectSubmit (form) {

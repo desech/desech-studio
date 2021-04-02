@@ -44,7 +44,7 @@ export default {
 
   openContainer (container) {
     container.classList.add('opened')
-    HelperLocalStore.setItem('right-html-details-expand', 'opened') // ui preference
+    HelperLocalStore.setItem('right-html-details-expand', 'opened')
   },
 
   closeContainer (container) {

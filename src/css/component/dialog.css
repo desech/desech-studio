@@ -16,7 +16,7 @@ dialog.dialog .dialog-header {
   column-gap: 10px;
   align-items: center;
   min-height: 50px;
-  font-size: 16px;
+  font-size: 15px;
   padding: 0 8px 0 15px;
   box-shadow: var(--dialog-header-shadow) 0 -1px 1px 0 inset;
 }
@@ -148,7 +148,7 @@ dialog.dialog .dialog-import {
 }
 
 dialog.dialog .dialog-import-prompt ul {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.7;
 }
 

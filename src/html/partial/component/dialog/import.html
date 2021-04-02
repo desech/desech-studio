@@ -5,7 +5,7 @@
         <div class="dialog-import-prompt">
           <ul class="select-text">
             <li>{{#i18n}} Pages will be converted to folders. {{/i18n}}</li>
-            <li>{{#i18n}} Top level groups or frames/artboards will be converted to files. Please make sure only relevant top level elements are visible. {{/i18n}}</li>
+            <li>{{#i18n}} Top level visible groups or frames/artboards will be converted to files. Please make sure only relevant top level elements are visible. {{/i18n}}</li>
             <li>{{#i18n}} Only images/paths marked for export will be processed. If your images are built with groups and masks you will need to flatten them first. For backup you can keep your original image, but keep it hidden. {{/i18n}}</li>
             <li>{{#i18n}} AdobeXD drawn paths are mostly ignored except polygons. {{/i18n}}</li>
             <li>{{#i18n}} Elements that clip/intersect each other are sometimes ignored. When the import finishes you will see how many were ignored. {{/i18n}}</li>
@@ -16,7 +16,7 @@
 
         <div class="dialog-import-loader" hidden>
           <div class="loader">
-            <svg width="24" height="24" viewBox="0 0 24 24" style="margin: 20px auto 30px auto;">
+            <svg class="svg-loader" width="24" height="24" viewBox="0 0 24 24" style="margin: 20px auto 30px auto;">
               <path d="M0 0h24v24H0z" fill="none"/>
               <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
             </svg>

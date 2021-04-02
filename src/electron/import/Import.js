@@ -129,6 +129,7 @@ export default {
   },
 
   addNodeCss (node, css) {
+    if (!css.element[node.ref]) return
     this._tmpFileCss[node.ref] = css.element[node.ref]
     // we prefer to manually set these values in desech
     if (node.type !== 'icon') delete this._tmpFileCss[node.ref].width

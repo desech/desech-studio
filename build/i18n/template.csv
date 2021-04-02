@@ -1494,7 +1494,7 @@
 "Top",
 "Top border",
 "Top left corner",
-"Top level groups or frames/artboards will be converted to files. Please make sure only relevant top level elements are visible.",
+"Top level visible groups or frames/artboards will be converted to files. Please make sure only relevant top level elements are visible.",
 "Top right corner",
 "Tracking in",
 "Tracking in contract",

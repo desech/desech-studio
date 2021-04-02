@@ -91,6 +91,7 @@ export default {
   },
 
   markImportFinished (container, folder) {
+    HelperDOM.hide(container.getElementsByClassName('svg-loader')[0])
     const button = container.getElementsByClassName('dialog-import-finished')[0]
     button.dataset.folder = folder
     HelperDOM.show(button)

@@ -53,12 +53,13 @@ export default {
     if (selection.anchorNode.parentNode.tagName === tagName ||
       selection.focusNode.parentNode.tagName === tagName) {
       this.prefillTagButtonOrOption(tag)
-      clearButton.classList.add('inactive')
+      clearButton.classList.add('selected')
     }
   },
 
   prefillTagButtonOrOption (tag) {
-    (tag.tagName === 'BUTTON') ? tag.classList.add('inactive')
+    (tag.tagName === 'BUTTON')
+      ? tag.classList.add('selected')
       : tag.closest('select').value = tag.value
   },
 

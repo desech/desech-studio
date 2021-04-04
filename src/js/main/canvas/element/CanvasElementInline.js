@@ -12,6 +12,8 @@ export default {
   insertElementInSelection (type, selection) {
     const ref = HelperElement.generateElementRef()
     const html = this.getHtmlForTag(type, selection, ref)
+    // @todo fix bug: when using span on a selection on the end of the string,
+    // chrome will ignore it
     document.execCommand('insertHTML', false, html)
     return ref
   },

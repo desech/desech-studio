@@ -6,10 +6,11 @@ import FileParse from '../../file/FileParse.js'
 export default {
   getPageHtml (folder, file) {
     const dom = new JSDOM(fs.readFileSync(file).toString())
-    this.buildComponents(folder, dom.window.document, dom.window.document)
-    this.replaceCssLinks(dom.window.document)
-    this.replaceJsScripts(dom.window.document)
-    const html = dom.serialize()
+    const document = dom.window.document
+    this.buildComponents(folder, document, document)
+    this.replaceCssLinks(document)
+    this.replaceJsScripts(document)
+    const html = this.regexHtmlRender(dom.serialize())
     return FileParse.beautifyHtml(html)
   },
 
@@ -19,7 +20,8 @@ export default {
       const properties = this.getProperties(comp)
       const componentFile = path.resolve(folder, comp.getAttributeNS(null, 'src'))
       const html = fs.readFileSync(componentFile).toString()
-      const div = document.createElement('div')
+      const div = document.createElementNS('https://www.w3.org/XML/1998/namespace', 'div')
+      this.setElementProperties(comp, div)
       div.innerHTML = this.parseComponentHtml(html, properties)
       const componentHtml = comp.innerHTML
       comp.replaceWith(div)
@@ -28,9 +30,16 @@ export default {
     }
   },
 
-  getProperties (div) {
-    const string = div.dataset.elementProperties
+  getProperties (node) {
+    const string = node.getAttributeNS(null, 'data-element-properties')
     return string ? JSON.parse(string) : {}
+  },
+
+  setElementProperties (old, newNode) {
+    if (old.hasAttributeNS(null, 'data-element-properties')) {
+      const props = old.getAttributeNS(null, 'data-element-properties')
+      newNode.setAttributeNS(null, 'data-element-properties', props)
+    }
   },
 
   parseComponentHtml (html, properties) {
@@ -54,5 +63,30 @@ export default {
   replaceJsScripts (document) {
     const script = document.querySelector('script[src="js/design-system.js"]')
     if (script) script.remove()
+  },
+
+  regexHtmlRender (html) {
+    return this.addElementProperties(html)
+  },
+
+  addElementProperties (html) {
+    // we can't add attributes with setAttributeNS because we allow invalid html/xml attributes
+    return html.replace(/(class="(.*?)"([^><]*?))?data-element-properties="(.*?)"/g,
+      (match, extraBlock, cls, extra, json) => {
+        const props = JSON.parse(json.replaceAll('&quot;', '"'))
+        const attrs = this.getPropertyAttributes(props, cls)
+        return extraBlock ? attrs + ' ' + extra.trim() : attrs
+      }
+    )
+  },
+
+  getPropertyAttributes (props, cls) {
+    const attrs = []
+    for (let [name, value] of Object.entries(props)) {
+      value = value.replaceAll('"', '&quot;')
+      if (name === 'class') value = ((cls || '') + ' ' + value).trim()
+      attrs.push(`${name}="${value}"`)
+    }
+    return attrs.join(' ')
   }
 }

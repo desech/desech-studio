@@ -46,9 +46,7 @@ export default {
     try {
       const url = Config.getConfig('api') + `/user/account?user=${userToken}&login=${loginToken}`
       const user = await this.fetchData(url)
-      if (!this.isPremium(user.account_type)) {
-        EventMain.ipcMainInvoke('mainPremiumPrompt')
-      }
+      if (!user.is_premium) EventMain.ipcMainInvoke('mainPremiumPrompt')
       await Cookie.setCookie('accountType', user.account_type)
       EventMain.ipcMainInvoke('mainLoginSuccess', user)
     } catch {
@@ -56,15 +54,11 @@ export default {
     }
   },
 
-  isPremium (accountType) {
-    return (accountType === 'Professional' || accountType === 'Business')
-  },
-
   async purchasePremium () {
-    const api = Config.getConfig('api')
+    const web = Config.getConfig('web')
     const userToken = Settings.getSetting('userToken')
     const loginToken = Settings.getSetting('loginToken')
-    const url = `${api}/ecommerce/purchase?user=${userToken}&login=${loginToken}`
+    const url = `${web}/ecommerce/purchase?user=${userToken}&login=${loginToken}`
     await shell.openExternal(url)
   }
 }

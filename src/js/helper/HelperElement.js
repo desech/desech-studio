@@ -1,6 +1,7 @@
 import HelperStyle from './HelperStyle.js'
 import HelperCrypto from './HelperCrypto.js'
 import HelperCanvas from './HelperCanvas.js'
+import HelperFile from './HelperFile.js'
 
 export default {
   generateElementRef () {
@@ -128,6 +129,12 @@ export default {
 
   getComponentChildren (element) {
     return element.querySelector('.component-children:not(.component-element)')
+  },
+
+  getComponentName (element) {
+    const file = element.getAttributeNS(null, 'src')
+    const name = HelperFile.getBasename(file)
+    return name.replace('.html', '')
   },
 
   isHidden (element) {

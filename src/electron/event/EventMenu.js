@@ -78,7 +78,7 @@ export default {
 
   newTutorialProject () {
     if (!this.isAuthenticated()) return
-    console.log('tutorial')
+    // @todo do the tutorial code
   },
 
   newProject () {

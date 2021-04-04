@@ -44,6 +44,10 @@ export default {
     return file.substring(0, file.lastIndexOf('/'))
   },
 
+  getBasename (file) {
+    return file.substring(file.lastIndexOf('/') + 1)
+  },
+
   getDefaultImage () {
     const root = HelperProject.getFolder()
     return root + '/asset/image/image.jpg'

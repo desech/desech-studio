@@ -47,13 +47,13 @@ export default {
 
   clickHideElementEvent (event) {
     if (event.target.closest('.style-html-hide')) {
-      this.hideElement(event.target.closest('.style-html-hide'))
+      this.hideElement(event.target.closest('.style-html-top-line'))
     }
   },
 
   clickShowElementEvent (event) {
     if (event.target.closest('.style-html-show')) {
-      this.showElement(event.target.closest('.style-html-show'))
+      this.showElement(event.target.closest('.style-html-top-line'))
     }
   },
 
@@ -68,8 +68,7 @@ export default {
     this.injectTitle(template, data)
     this.injectTag(template.getElementsByClassName('tag-container')[0], data)
     this.injectRef(template, data)
-    this.injectComponentChildren(template, data)
-    this.injectHidden(template, data)
+    this.injectTopLine(template, data)
   },
 
   injectTitle (template, data) {
@@ -104,19 +103,23 @@ export default {
     div.textContent = data.ref
   },
 
-  injectComponentChildren (template, data) {
+  injectTopLine (template, data) {
+    const container = template.getElementsByClassName('style-html-top-line')[0]
+    this.injectComponentChildren(container, data)
+    this.injectHidden(container, data)
+    if (data.type === 'inline') container.classList.add('inline')
+  },
+
+  injectComponentChildren (container, data) {
     if (data.type === 'block' && HelperFile.isComponentFile(HelperProject.getFile())) {
-      const button = template.getElementsByClassName('style-html-component-children')[0]
-      HelperDOM.show(button)
+      container.classList.add('component-children')
     }
   },
 
-  injectHidden (template, data) {
-    if (!data.element.hasAttributeNS(null, 'data-ss-hidden')) return
-    const buttonHide = template.getElementsByClassName('style-html-hide')[0]
-    const buttonShow = buttonHide.nextElementSibling
-    HelperDOM.hide(buttonHide)
-    HelperDOM.show(buttonShow)
+  injectHidden (container, data) {
+    if (data.element.hasAttributeNS(null, 'data-ss-hidden')) {
+      container.classList.add('hidden')
+    }
   },
 
   setTagFromSelect (select) {
@@ -157,13 +160,15 @@ export default {
     await navigator.clipboard.writeText(div.textContent)
   },
 
-  hideElement (button) {
-    RightHtmlCommon.hideElement(button)
+  hideElement (container) {
+    RightHtmlCommon.setHidden(true)
+    container.classList.add('hidden')
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  showElement (button) {
-    RightHtmlCommon.showElement(button)
+  showElement (container) {
+    RightHtmlCommon.setHidden(false)
+    container.classList.remove('hidden')
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 

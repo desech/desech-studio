@@ -148,26 +148,11 @@ export default {
     field.textContent = HelperProject.getFileName(file)
   },
 
-  hideElement (button) {
-    this.setHidden(true)
-    this.toggleHiddenButtons(true, button, button.nextElementSibling)
-  },
-
-  showElement (button) {
-    this.setHidden(false)
-    this.toggleHiddenButtons(false, button.previousElementSibling, button)
-  },
-
   setHidden (value) {
     this.changeAttributeCommand(StateSelectedElement.getRef(), {
       hidden: value,
       'data-ss-hidden': value
     })
-  },
-
-  toggleHiddenButtons (value, hideButton, showButton) {
-    HelperDOM.toggle(hideButton, !value)
-    HelperDOM.toggle(showButton, value)
   },
 
   getRemovableAttributes (element) {

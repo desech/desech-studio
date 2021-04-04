@@ -75,7 +75,7 @@ export default {
       (match, extraBlock, cls, extra, json) => {
         const props = JSON.parse(json.replaceAll('&quot;', '"'))
         const attrs = this.getPropertyAttributes(props, cls)
-        return extraBlock ? attrs + ' ' + extra.trim() : attrs
+        return extraBlock ? (attrs + ' ' + extra).trim() : attrs
       }
     )
   },

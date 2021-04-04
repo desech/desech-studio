@@ -43,7 +43,8 @@ export default {
   },
 
   parseComponentHtml (html, properties) {
-    return html.replace(/{{(.*?)}}/g, (match, name) => properties[name] || match)
+    // we don't want to see the unmapped properties
+    return html.replace(/{{(.*?)}}/g, (match, name) => properties[name] || '')
   },
 
   buildComponentChildren (folder, document, div, properties, componentHtml) {
@@ -71,11 +72,13 @@ export default {
 
   addElementProperties (html) {
     // we can't add attributes with setAttributeNS because we allow invalid html/xml attributes
-    return html.replace(/(class="(.*?)"([^><]*?))?data-element-properties="(.*?)"/g,
+    return html.replace(/(class="([^><]*?)"([^><]*?))?data-element-properties="(.*?)"/g,
       (match, extraBlock, cls, extra, json) => {
         const props = JSON.parse(json.replaceAll('&quot;', '"'))
         const attrs = this.getPropertyAttributes(props, cls)
-        return extraBlock ? (attrs + ' ' + extra).trim() : attrs
+        const x = extraBlock ? (attrs + ' ' + extra).trim() : attrs
+        console.log(extraBlock, ' - ', cls, ' - ', extra, ' - ', json, ' - ', x)
+        return x
       }
     )
   },

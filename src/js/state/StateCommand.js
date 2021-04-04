@@ -3,7 +3,7 @@ import ExtendJS from '../helper/ExtendJS.js'
 import HelperTrigger from '../helper/HelperTrigger.js'
 
 export default {
-  _DELAY: 500, // ms
+  _DELAY: 250, // ms
   _timeout: null,
   _command: null,
 

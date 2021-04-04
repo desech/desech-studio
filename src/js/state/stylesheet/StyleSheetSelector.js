@@ -3,6 +3,7 @@ import HelperElement from '../../helper/HelperElement.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
+import ExtendJS from '../../helper/ExtendJS.js'
 
 export default {
   getDisplayElementSelectors () {
@@ -20,7 +21,7 @@ export default {
       if (rules) selectors.push(rules)
     }
     this.addOrphanClassesToSelectors(selectors, classes)
-    return selectors
+    return ExtendJS.unique(selectors)
   },
 
   getElementSelector (sheet, ref, classes, filter) {

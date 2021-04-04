@@ -147,30 +147,22 @@ export default {
   getMenuOptions (element) {
     const type = HelperElement.getType(element)
     const template = this.getMenuOptionsTemplate(type)
-    this.toggleVisibleInMenu(template, element, type)
-    this.toggleComponentChildren(template, type)
+    const menu = template.getElementsByClassName('menu-list')[0]
+    this.toggleComponentChildren(menu, type)
+    if (!HelperDOM.isVisible(element)) menu.classList.add('hidden')
     return template
   },
 
   getMenuOptionsTemplate (type) {
-    const fragment = (type === 'component' || type === 'component-children') ? type : 'general'
+    const special = ['inline', 'component', 'component-children']
+    const fragment = special.includes(type) ? type : 'general'
     return HelperDOM.getTemplate(`template-contextmenu-element-${fragment}`)
   },
 
-  toggleVisibleInMenu (menu, element, type) {
-    if (HelperDOM.isVisible(element)) return
-    const item = menu.getElementsByClassName('element-menu-hide')[0]
-    HelperDOM.hide(item)
-    HelperDOM.show(item.nextElementSibling)
-  },
-
   toggleComponentChildren (menu, type) {
-    if (type === 'component' || type === 'component-children' ||
-      !HelperFile.isComponentFile(HelperProject.getFile())) {
-      return
+    if (type === 'block' && HelperFile.isComponentFile(HelperProject.getFile())) {
+      menu.classList.add('component-children')
     }
-    const item = menu.getElementsByClassName('element-menu-component-children')[0]
-    HelperDOM.show(item)
   },
 
   showSidebarContextmenu (li, x, y) {

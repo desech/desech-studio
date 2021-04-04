@@ -168,34 +168,3 @@ main#page-main.preview .main-container {
 main#page-main.preview .canvas-container {
   padding: 0;
 }
-
-/* contextmenu */
-
-.desech-studio .contextmenu {
-  position: absolute;
-  border-radius: 2px;
-  font-size: 13px;
-  background-color: var(--menu-bg);
-  color: var(--menu-txt);
-  box-shadow: #FFF 0 0 2px 0, #000 0 0 2px 0; /* the bg can be white or black */
-  z-index: 3;
-}
-
-.desech-studio .contextmenu ul.menu-list {
-  border-bottom: 1px solid var(--menu-separator);
-}
-
-.desech-studio .contextmenu ul.menu-list:last-child {
-  border: none;
-}
-
-.desech-studio .contextmenu ul.menu-list li {
-  height: 20px;
-  line-height: 20px;
-  padding: 5px 10px;
-}
-
-.desech-studio .contextmenu ul.menu-list li:hover {
-  background-color: var(--menu-bg-hover);
-  color: var(--menu-txt-hover);
-}

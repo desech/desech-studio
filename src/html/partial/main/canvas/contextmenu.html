@@ -1,12 +1,22 @@
 <template id="template-contextmenu-element-general">
   <div>
     <ul class="menu-list">
-      <li class="element-menu-component-children" hidden>{{#i18n}} Insert component children {{/i18n}}</li>
+      <li class="element-menu-component-children">{{#i18n}} Insert component children {{/i18n}}</li>
       <li class="element-menu-hide">{{#i18n}} Hide element {{/i18n}}</li>
-      <li class="element-menu-show" hidden>{{#i18n}} Show element {{/i18n}}</li>
+      <li class="element-menu-show">{{#i18n}} Show element {{/i18n}}</li>
       <li class="element-menu-delete">{{#i18n}} Delete element {{/i18n}} (DEL)</li>
     </ul>
     {{> mainCanvasContextmenuCopy }}
+    {{> mainCanvasContextmenuCopyCss }}
+  </div>
+</template>
+
+<template id="template-contextmenu-element-inline">
+  <div>
+    <ul class="menu-list">
+      <li class="element-menu-hide">{{#i18n}} Hide element {{/i18n}}</li>
+      <li class="element-menu-show">{{#i18n}} Show element {{/i18n}}</li>
+    </ul>
     {{> mainCanvasContextmenuCopyCss }}
   </div>
 </template>

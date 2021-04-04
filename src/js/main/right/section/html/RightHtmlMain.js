@@ -59,7 +59,7 @@ export default {
 
   clickDeleteElementEvent (event) {
     if (event.target.closest('.style-html-delete')) {
-      this.deleteElement()
+      CanvasElementManage.deleteElement()
     }
   },
 
@@ -106,19 +106,13 @@ export default {
   injectTopLine (template, data) {
     const container = template.getElementsByClassName('style-html-top-line')[0]
     this.injectComponentChildren(container, data)
-    this.injectHidden(container, data)
+    if (!HelperDOM.isVisible(data.element)) container.classList.add('hidden')
     if (data.type === 'inline') container.classList.add('inline')
   },
 
   injectComponentChildren (container, data) {
     if (data.type === 'block' && HelperFile.isComponentFile(HelperProject.getFile())) {
       container.classList.add('component-children')
-    }
-  },
-
-  injectHidden (container, data) {
-    if (data.element.hasAttributeNS(null, 'data-ss-hidden')) {
-      container.classList.add('hidden')
     }
   },
 
@@ -170,9 +164,5 @@ export default {
     RightHtmlCommon.setHidden(false)
     container.classList.remove('hidden')
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-  },
-
-  deleteElement () {
-    CanvasElementManage.deleteElement()
   }
 }

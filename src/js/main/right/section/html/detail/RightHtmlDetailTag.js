@@ -150,7 +150,7 @@ export default {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svg.setAttributeNS(null, 'viewBox', element.getAttributeNS(null, 'viewBox'))
     svg.innerHTML = element.innerHTML
-    textarea.value = svg.outerHTML
+    textarea.value = svg.outerHTML.replace(/\s\s+/g, '')
   },
 
   updateSvgCode (textarea) {

@@ -29,6 +29,6 @@ export default {
     const data = HelperProject.getFileMeta()
     if (!data) return
     fields.title.value = data.title
-    fields.meta.value = data.meta
+    fields.meta.value = data.meta.replace(/  +/g, '')
   }
 }

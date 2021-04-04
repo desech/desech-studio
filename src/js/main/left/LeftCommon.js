@@ -10,7 +10,7 @@ export default {
 
   finishPanelLoad (container, type) {
     this.fixListWidth(container)
-    const li = container.querySelector('.panel-item.loaded')
+    const li = container.querySelector('.panel-file-item.loaded, .panel-element-item.active')
     this.selectItem(li)
   },
 
@@ -167,12 +167,13 @@ export default {
   },
 
   selectItem (li, cls = 'active') {
-    if (!li || li.classList.contains(cls)) return
-    this.deselectItem(cls)
-    li.classList.add(cls)
+    if (!li) return
+    if (!li.classList.contains(cls)) {
+      this.deselectItem(cls)
+      li.classList.add(cls)
+    }
     if (!HelperDOM.isVisible(li)) this.expandParents(li)
-    const container = li.closest('.panel-list-box')
-    if (!HelperDOM.isInView(li.offsetLeft, li.offsetTop, container)) {
+    if (!HelperDOM.isInView(li.offsetLeft, li.offsetTop, li.closest('.panel-list-box'))) {
       li.scrollIntoView({ block: 'center' })
     }
   },

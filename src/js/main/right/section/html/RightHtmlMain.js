@@ -7,6 +7,7 @@ import CanvasElementManage from '../../../canvas/element/CanvasElementManage.js'
 import HelperFile from '../../../../helper/HelperFile.js'
 import HelperProject from '../../../../helper/HelperProject.js'
 import CanvasElementComponent from '../../../canvas/element/CanvasElementComponent.js'
+import HelperElement from '../../../../helper/HelperElement.js'
 
 export default {
   getEvents () {
@@ -66,7 +67,7 @@ export default {
   injectMain (template) {
     const data = RightHtmlCommon.getSelectedElementData()
     this.injectTitle(template, data)
-    this.injectTag(template.getElementsByClassName('tag-container')[0], data)
+    this.injectTagInDropdown(template, data)
     this.injectRef(template, data)
     this.injectTopLine(template, data)
   },
@@ -76,7 +77,8 @@ export default {
     title.textContent = data.tag.toUpperCase()
   },
 
-  injectTag (container, data) {
+  injectTagInDropdown (main, data) {
+    const container = main.getElementsByClassName('tag-container')[0]
     if (data.type !== 'block' && data.type !== 'text') return
     const template = HelperDOM.getTemplate('template-style-tag-dropdown')
     if (data.tag) this.prefillTag(template, data.tag)
@@ -85,10 +87,10 @@ export default {
 
   prefillTag (template, tag) {
     const select = template.getElementsByClassName('style-tag-dropdown')[0]
-    if (!HelperDOM.optionExists(select, tag)) {
-      this.prefillCustomTag(select, tag)
-    } else {
+    if (HelperElement.isNormalTag(tag) || HelperElement.isSpecialTag(tag)) {
       select.value = tag
+    } else {
+      this.prefillCustomTag(select, tag)
     }
   },
 
@@ -137,6 +139,7 @@ export default {
   showCustomTagInput (container, input) {
     container.classList.add('custom')
     HelperDOM.show(input)
+    input.focus()
   },
 
   hideCustomTagInput (container, input) {

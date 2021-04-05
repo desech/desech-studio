@@ -2,6 +2,7 @@ import HelperStyle from './HelperStyle.js'
 import HelperCrypto from './HelperCrypto.js'
 import HelperCanvas from './HelperCanvas.js'
 import HelperFile from './HelperFile.js'
+import HelperDOM from './HelperDOM.js'
 
 export default {
   generateElementRef () {
@@ -157,5 +158,31 @@ export default {
   hasSmallHeight (element) {
     const pos = this.getPosition(element)
     return pos.height <= 40
+  },
+
+  getTag (node) {
+    if (node.hasAttributeNS(null, 'data-ss-tag')) {
+      return node.getAttributeNS(null, 'data-ss-tag').toLowerCase()
+    } else {
+      return HelperDOM.getTag(node)
+    }
+  },
+
+  isNormalTag (tag) {
+    return this.getNormalTags().includes(tag)
+  },
+
+  getNormalTags () {
+    return ['div', 'p', 'button', 'a', 'main', 'article', 'section', 'nav', 'aside', 'header',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'footer', 'address', 'pre', 'blockquote', 'figure',
+      'figcaption', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'form', 'label', 'output']
+  },
+
+  isSpecialTag (tag) {
+    return this.getSpecialTags().includes(tag)
+  },
+
+  getSpecialTags () {
+    return ['template', 'slot', 'noscript']
   }
 }

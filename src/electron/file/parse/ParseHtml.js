@@ -165,6 +165,7 @@ export default {
   },
 
   isComponentElement (node) {
+    if (node.parentNode.constructor.name === 'DocumentFragment') return false
     if (!node.parentNode.closest('.component')) return false
     if (node.classList.contains('component-children')) {
       return this.getTotalParents(node, 'component') !==
@@ -276,9 +277,17 @@ export default {
 
   buildTagElement (node, type, tag, document, folder, datalist, componentChildren = null) {
     this.addBasic(node, type)
-    if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist, componentChildren)
-    }
+    node = this.changeNodeSpecialTag(node, document)
+    const children = HelperDOM.getChildren(node)
+    if (children) this.buildHtml(children, document, folder, datalist, componentChildren)
+  },
+
+  changeNodeSpecialTag (node, document) {
+    const tag = HelperDOM.getTag(node)
+    if (HelperElement.isNormalTag(tag)) return node
+    node = HelperDOM.changeTag(node, 'div', document)
+    node.setAttributeNS(null, 'data-ss-tag', tag)
+    return node
   },
 
   removeDatalists (document) {

@@ -39,7 +39,9 @@ export default {
   },
 
   toggleContainer (container) {
-    container.classList.contains('opened') ? this.closeContainer(container) : this.openContainer(container)
+    container.classList.contains('opened')
+      ? this.closeContainer(container)
+      : this.openContainer(container)
   },
 
   openContainer (container) {
@@ -85,7 +87,8 @@ export default {
     if (data.tag === 'input') return data.type
     if (data.type === 'video' || data.type === 'audio') return 'media'
     if (data.tag === 'ins' || data.tag === 'del') return 'ins-del'
-    const tags = ['a', 'button', 'form', 'img', 'label', 'ol', 'select', 'svg', 'textarea', 'time', 'q', 'bdo']
+    const tags = ['a', 'button', 'form', 'img', 'label', 'ol', 'select', 'svg', 'textarea',
+      'time', 'q', 'bdo']
     if (tags.includes(data.tag)) return data.tag
   },
 
@@ -124,7 +127,8 @@ export default {
   },
 
   injectFormFieldButton (field, data) {
-    if (field.classList.contains('style-html-button') && data.element.hasAttributeNS(null, field.name) &&
+    if (field.classList.contains('style-html-button') &&
+      data.element.hasAttributeNS(null, field.name) &&
       (!field.value || field.value === data.element.getAttributeNS(null, field.name))) {
       field.classList.add('selected')
     }

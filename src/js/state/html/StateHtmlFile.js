@@ -30,11 +30,10 @@ export default {
     if (node.classList.contains('component')) {
       return this.addComponent(node, css, designSystemClasses)
     }
-    if (HelperDOM.getTag(node) === 'template') {
-      return this.addTemplate(node, css, designSystemClasses)
+    if (node.classList.contains('audio')) {
+      node = this.replaceAudio(node, css, designSystemClasses)
     }
     this.setRelativeSource(node)
-    if (node.classList.contains('audio')) this.cleanAudio(node, css, designSystemClasses)
     if (node.classList.contains('input')) this.addDatalist(node)
     this.setBasic(node, css, designSystemClasses)
   },
@@ -83,20 +82,11 @@ export default {
     return attr.replace(folder + '/', '')
   },
 
-  addTemplate (node, css, designSystemClasses) {
-    this.cleanAttributes(node)
-    this.cleanClasses(node, css, designSystemClasses)
-    if (node.content.children.length) {
-      this.buildHtml(node.content.children, css, designSystemClasses)
-    }
-  },
-
-  cleanAudio (div, css, designSystemClasses) {
+  replaceAudio (div) {
     const audio = div.children[0]
     this.copyAttributes(div, audio)
     div.replaceWith(audio)
-    this.setRelativeSource(audio)
-    this.setBasic(audio, css, designSystemClasses)
+    return audio
   },
 
   copyAttributes (from, to) {
@@ -106,9 +96,19 @@ export default {
   },
 
   setBasic (node, css, designSystemClasses) {
+    node = this.changeTag(node)
     this.cleanAttributes(node)
     this.cleanClasses(node, css, designSystemClasses)
-    if (node.children.length) this.buildHtml(node.children, css, designSystemClasses)
+    // noscript can't have children
+    const children = HelperDOM.getChildren(node)
+    if (children) this.buildHtml(children, css, designSystemClasses)
+  },
+
+  changeTag (node) {
+    if (!node.hasAttributeNS(null, 'data-ss-tag')) return node
+    const tag = node.getAttributeNS(null, 'data-ss-tag')
+    node.removeAttributeNS(null, 'data-ss-tag')
+    return HelperDOM.changeTag(node, tag, document)
   },
 
   cleanAttributes (node) {

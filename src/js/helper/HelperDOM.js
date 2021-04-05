@@ -169,7 +169,7 @@ export default {
     return node.tagName.toLowerCase()
   },
 
-  createElement (tag) {
+  createElement (tag, document) {
     if (tag === 'svg') {
       return document.createElementNS('http://www.w3.org/2000/svg', tag)
     } else {
@@ -177,13 +177,24 @@ export default {
     }
   },
 
-  changeTag (node, tag) {
-    const clone = this.createElement(tag)
+  changeTag (node, tag, document) {
+    const clone = this.createElement(tag, document)
     for (const attr of node.attributes) {
       clone.setAttributeNS(null, attr.name, attr.value)
     }
     clone.innerHTML = node.innerHTML
     node.replaceWith(clone)
+    return clone
+  },
+
+  getChildren (node) {
+    if (node.content && node.content.children && node.content.children.length) {
+      // only used by the `template`` node
+      return node.content.children
+    } else if (node.children && node.children.length) {
+      return node.children
+    }
+    return null
   },
 
   reflow () {

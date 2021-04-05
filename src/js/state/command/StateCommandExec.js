@@ -118,8 +118,14 @@ export default {
   },
 
   changeTag (data) {
-    const element = HelperElement.getElement(data.ref)
-    HelperDOM.changeTag(element, data.tag)
+    let element = HelperElement.getElement(data.ref)
+    if (HelperElement.isNormalTag(data.tag)) {
+      element = HelperDOM.changeTag(element, data.tag, document)
+      element.removeAttributeNS(null, 'data-ss-tag')
+    } else {
+      element = HelperDOM.changeTag(element, 'div', document)
+      element.setAttributeNS(null, 'data-ss-tag', data.tag)
+    }
   },
 
   setOptions (data) {

@@ -89,7 +89,7 @@ export default {
 
   cloneElement (data) {
     const refMap = this.generateNewRefs(data.refs)
-    const node = HelperDOM.createElement(data.tag)
+    const node = HelperDOM.createElement(data.tag, document)
     for (let [name, value] of Object.entries(data.attributes)) {
       if (name === 'class') value = value.replace('selected', '').trim()
       node.setAttributeNS(null, name, this.replaceMapValue(value, refMap))

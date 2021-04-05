@@ -14,7 +14,7 @@ export default {
       element,
       node,
       type: HelperElement.getType(element),
-      tag: HelperDOM.getTag(node)
+      tag: HelperElement.getTag(node)
     }
   },
 
@@ -172,11 +172,8 @@ export default {
     return list
   },
 
-  // special attributes:
-  //  data-ss-hidden, data-ss-disabled, data-ss-controls, data-element-properties, type, list
-  //  class, style, hidden, disabled, controls, viewBox, srcset
   getMainAttributes () {
-    return ['class', 'style', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset',
+    return ['data-ss-tag', 'class', 'style', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset',
       'data-element-properties']
   },
 
@@ -192,7 +189,7 @@ export default {
     const command = 'changeTag'
     const cmd = {
       do: { command, ref, tag },
-      undo: { command, ref, tag: HelperDOM.getTag(element) }
+      undo: { command, ref, tag: HelperElement.getTag(element) }
     }
     StateCommand.stackCommand(cmd)
     if (execute) StateCommand.executeCommand(cmd.do)

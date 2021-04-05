@@ -9,7 +9,8 @@ body {
   min-height: 100vh;
 }
 
-[hidden] {
+template, [hidden] {
+  /* template inherits from .block which has `display: grid;` and we need to overwrite that */
   display: none !important;
 }
 

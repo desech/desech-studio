@@ -46,6 +46,8 @@ export default {
     for (const field of fields) {
       if (field.name.indexOf('-top') > 0) continue
       HelperDOM.toggleAttribute(field, disable, 'disabled')
+      // also disable the unit measure dropdown
+      HelperDOM.toggleAttribute(field.nextElementSibling, disable, 'disabled')
     }
   },
 

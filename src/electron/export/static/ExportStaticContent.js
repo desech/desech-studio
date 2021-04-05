@@ -67,6 +67,8 @@ export default {
   },
 
   regexHtmlRender (html) {
+    html = html.replace(/ (hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g,
+      ' $1')
     return this.addElementProperties(html)
   },
 

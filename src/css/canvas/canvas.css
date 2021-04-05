@@ -112,12 +112,18 @@
   overflow: hidden;
 }
 
+#canvas div[data-ss-tag="template"],
+#canvas div[data-ss-tag="noscript"] {
+  display: none;
+}
+
 #canvas .component-children {
   min-height: 24px;
 }
 
+/* to fix the displaying bug; we can't have a high specificity */
 .audio {
-  height: 54px; /* to fix the displaying bug */
+  height: 54px;
 }
 
 /* we see the outlines when we are creating, moving or hovering over an element */

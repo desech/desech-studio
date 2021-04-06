@@ -75,6 +75,7 @@ export default {
 
   injectAttribute (fields, name, value) {
     fields.name.value = name
+    fields.name.setAttributeNS(null, 'disabled', '')
     fields.value.value = value
   },
 

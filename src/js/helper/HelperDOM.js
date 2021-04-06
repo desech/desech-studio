@@ -20,7 +20,7 @@ export default {
   },
 
   isNodeList (node) {
-    return (node instanceof HTMLCollection || node instanceof NodeList)
+    return (Array.isArray(node) || node instanceof HTMLCollection || node instanceof NodeList)
   },
 
   isVisible (node, deep = false) {

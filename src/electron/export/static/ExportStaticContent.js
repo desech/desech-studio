@@ -85,6 +85,7 @@ export default {
 
   getPropertyAttributes (props, cls) {
     const attrs = []
+    if (!props.class) attrs.push(`class="${cls}"`)
     for (let [name, value] of Object.entries(props)) {
       value = value.replaceAll('"', '&quot;')
       if (name === 'class') value = ((cls || '') + ' ' + value).trim()

@@ -77,7 +77,7 @@ export default {
     return html.replace(/(class="([^><]*?)"([^><]*?))?data-element-properties="(.*?)"/g,
       (match, extraBlock, cls, extra, json) => {
         const props = JSON.parse(json.replaceAll('&quot;', '"'))
-        const attrs = this.getPropertyAttributes(props, cls)
+        const attrs = this.getPropertyAttributes(props, cls || '')
         return extraBlock ? (attrs + ' ' + extra).trim() : attrs
       }
     )
@@ -85,10 +85,10 @@ export default {
 
   getPropertyAttributes (props, cls) {
     const attrs = []
-    if (!props.class) attrs.push(`class="${cls}"`)
+    if (!props.class && cls) attrs.push(`class="${cls}"`)
     for (let [name, value] of Object.entries(props)) {
       value = value.replaceAll('"', '&quot;')
-      if (name === 'class') value = ((cls || '') + ' ' + value).trim()
+      if (name === 'class') value = (cls + ' ' + value).trim()
       attrs.push(`${name}="${value}"`)
     }
     return attrs.join(' ')

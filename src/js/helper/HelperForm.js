@@ -14,20 +14,20 @@ export default {
     const fields = {}
     for (const field of form.elements) {
       if (!field.name || !HelperDOM.isVisible(field, true)) continue
-      this.setFormField(fields, field)
+      this.getFormField(fields, field)
     }
     return fields
   },
 
-  setFormField (fields, field) {
+  getFormField (fields, field) {
     if (field.name.indexOf('[]') > 0) {
-      this.setArrayFormField(fields, field)
+      this.getArrayFormField(fields, field)
     } else {
       fields[field.name] = field
     }
   },
 
-  setArrayFormField (fields, field) {
+  getArrayFormField (fields, field) {
     const name = field.name.replace('[]', '')
     if (fields[name]) {
       fields[name].push(field)

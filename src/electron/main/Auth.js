@@ -55,10 +55,7 @@ export default {
   },
 
   async purchasePremium () {
-    const web = Config.getConfig('web')
-    const userToken = Settings.getSetting('userToken')
-    const loginToken = Settings.getSetting('loginToken')
-    const url = `${web}/ecommerce/purchase?user=${userToken}&login=${loginToken}`
+    const url = `${Config.getConfig('web')}/purchase.html`
     await shell.openExternal(url)
   }
 }

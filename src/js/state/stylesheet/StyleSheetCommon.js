@@ -56,6 +56,7 @@ export default {
   },
 
   deleteExistingRule (sheet, property, responsive) {
+    if (!sheet.cssRules || !sheet.cssRules.length) return
     for (let i = 0; i < sheet.cssRules.length; i++) {
       const rule = sheet.cssRules[i] ? sheet.cssRules[i].cssRules[0] : null
       if (rule && this.equalResponsiveRules(rule, responsive) && rule.style[property]) {

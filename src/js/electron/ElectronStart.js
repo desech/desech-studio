@@ -56,7 +56,7 @@ export default {
     setTimeout(async () => {
       await TopCommandSave.save()
       this.showPremiumPrompt()
-    }, 1000 * 60 * 20)
+    }, 1000 * 1)
   },
 
   showPremiumPrompt () {

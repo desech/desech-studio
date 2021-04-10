@@ -28,6 +28,7 @@ export default {
     const fields = container.getElementsByClassName('right-page-form')[0].elements
     const data = HelperProject.getFileMeta()
     if (!data) return
+    fields.language.value = data.language
     fields.title.value = data.title
     fields.meta.value = data.meta.replace(/  +/g, '')
   }

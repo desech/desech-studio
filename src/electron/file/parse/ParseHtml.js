@@ -32,7 +32,11 @@ export default {
   getMeta (document) {
     if (!document.head) return
     const meta = document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
-    return { title: document.title, meta }
+    return {
+      language: document.documentElement.lang,
+      title: document.title,
+      meta
+    }
   },
 
   buildHtml (nodes, document, folder, datalist, componentChildren = null) {

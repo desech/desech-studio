@@ -5,13 +5,17 @@
     </div>
     <div class="sidebar-content">
       <form class="right-page-form">
-        <div class="grid">
-          <div>{{#i18n}} Title {{/i18n}}</div>
-          <textarea name="title" class="right-page-field scrollbar" style="height: 60px;"></textarea>
+        <div class="grid" style="grid-template-columns: auto; gap: 5px;">
+          <div>{{#i18n}} Language {{/i18n}}</div>
+          <input name="language" class="right-page-field">
         </div>
-        <div class="grid">
+        <div class="grid" style="grid-template-columns: auto; gap: 5px;">
+          <div>{{#i18n}} Title {{/i18n}}</div>
+          <textarea name="title" class="right-page-field scrollbar"></textarea>
+        </div>
+        <div class="grid" style="grid-template-columns: auto; gap: 5px;">
           <div>{{#i18n}} Meta {{/i18n}}</div>
-          <textarea name="meta" class="right-page-field scrollbar" style="height: 150px;"></textarea>
+          <textarea name="meta" class="right-page-field scrollbar" style="height: 250px;"></textarea>
         </div>
       </form>
     </div>

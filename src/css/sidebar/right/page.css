@@ -1,10 +1,6 @@
-.sidebar-right #page-section .right-page-form {
-  padding: 10px 0;
-}
-
 .sidebar-right #page-section .grid {
   align-items: start;
-  grid-template-columns: 40px auto;
+  grid-template-columns: 60px auto;
 }
 
 .sidebar-right #page-section textarea {

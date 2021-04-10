@@ -20,7 +20,11 @@ export default {
   },
 
   editMeta (fields) {
-    const meta = { title: fields.title.value, meta: fields.meta.value }
+    const meta = {
+      language: fields.language.value,
+      title: fields.title.value,
+      meta: fields.meta.value
+    }
     const command = {
       do: {
         command: 'changeMeta',

@@ -120,6 +120,7 @@ export default {
     return this.getFullHtmlString({
       body,
       baseHref: this.getBaseHref(htmlFile, rootFolder),
+      language: meta.language || '',
       title: meta.title || '',
       meta: meta.meta || '',
       pageCssFile: this.getPageCssFile(htmlFile, rootFolder),
@@ -135,12 +136,14 @@ export default {
 
   getFullHtmlString (data) {
     // change the /app/ui/index.html file too
-    data.title = data.title || 'Desech Studio Page'
+    data.language = data.language || 'en'
+    data.title = data.title || 'Desech Studio page'
     data.meta = data.meta || `<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Desech Studio">`
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Desech Studio">
+<meta name="description" content="Desech Studio page">`
     return `<!doctype html>
-<html>
+<html lang="${data.language}">
 <head>
   ${data.meta}
   <title>${data.title}</title>

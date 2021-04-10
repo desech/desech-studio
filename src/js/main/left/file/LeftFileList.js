@@ -13,7 +13,8 @@ export default {
       click: ['clickCreateFolderOverlayEvent', 'clickCreateFileOverlayEvent',
         'clickCloseOverlayEvent'], // order matters
       input: ['inputSearchEvent'],
-      keydown: ['keydownCycleNextSearchEvent', 'keydownCyclePreviousSearchEvent'],
+      keydown: ['keydownCycleNextSearchEvent', 'keydownCyclePreviousSearchEvent',
+        'keydownClearOverlayEvent'],
       change: ['changeCreateFolderEvent', 'changeCreateFileEvent']
     }
   },
@@ -57,6 +58,12 @@ export default {
   keydownCyclePreviousSearchEvent (event) {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'F2') {
       this.cycleSearch('previous')
+    }
+  },
+
+  keydownClearOverlayEvent (event) {
+    if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'Escape') {
+      this.closeOverlay()
     }
   },
 

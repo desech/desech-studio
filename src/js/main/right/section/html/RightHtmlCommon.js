@@ -173,7 +173,7 @@ export default {
   },
 
   getMainAttributes () {
-    return ['data-ss-tag', 'class', 'style', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset',
+    return ['data-ss-tag', 'class', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset',
       'data-element-properties']
   },
 

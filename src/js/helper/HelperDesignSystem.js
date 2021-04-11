@@ -1,4 +1,5 @@
 import HelperStyle from '../helper/HelperStyle.js'
+import HelperProject from './HelperProject.js'
 
 export default {
   injectDesignSystemCss (css) {
@@ -8,7 +9,7 @@ export default {
   },
 
   hasDesignSystem () {
-    return document.styleSheets[1] // 0 = style, 1 = design system
+    return (HelperProject.getProjectSettings().designSystem !== '')
   },
 
   getDesignSystemClasses () {

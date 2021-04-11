@@ -11,9 +11,13 @@ import HelperFile from '../../../../../helper/HelperFile.js'
 export default {
   getEvents () {
     return {
-      click: ['clickSelectAddOptionEvent', 'clickSelectDeleteOptionEvent', 'clickSelectOptionButtonEvent', 'clickMediaControlsButtonEvent', 'clickTrackAddEvent', 'clickTrackDeleteEvent', 'clickTrackButtonEvent'],
-      change: ['changeButtonTypeEvent', 'changeSelectOptionInputEvent', 'changeSvgCodeEvent', 'changeTrackInputEvent', 'changeInputTextTypeEvent'],
-      setsource: ['setsourceImageEvent', 'setsourceVideoEvent', 'setsourcePosterEvent', 'setsourceTrackEvent'],
+      click: ['clickSelectAddOptionEvent', 'clickSelectDeleteOptionEvent',
+        'clickSelectOptionButtonEvent', 'clickMediaControlsButtonEvent', 'clickTrackAddEvent',
+        'clickTrackDeleteEvent', 'clickTrackButtonEvent'],
+      change: ['changeButtonTypeEvent', 'changeSelectOptionInputEvent', 'changeSvgCodeEvent',
+        'changeTrackInputEvent', 'changeInputTextTypeEvent'],
+      setsource: ['setsourceImageEvent', 'setsourceVideoEvent', 'setsourcePosterEvent',
+        'setsourceTrackEvent'],
       dragdropafter: ['dragdropafterSelectSortOptionEvent']
     }
   },
@@ -163,7 +167,8 @@ export default {
   injectImageSrcset (fields, srcset) {
     for (const set of srcset.split(', ')) {
       const [file, scaling] = set.split(' ')
-      if (scaling) RightHtmlCommon.setFileName(fields[`srcset${scaling}`], HelperFile.getSourceFile(file))
+      if (!scaling) continue
+      RightHtmlCommon.setFileName(fields[`srcset${scaling}`], HelperFile.getSourceFile(file))
     }
   },
 

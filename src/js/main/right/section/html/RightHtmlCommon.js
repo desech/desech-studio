@@ -102,7 +102,7 @@ export default {
       do: {
         command: 'changeSvg',
         ref: HelperElement.getRef(element),
-        svg: svg.innerHTML,
+        svg: svg.innerHTML.replace(/ xmlns(:.*?)?=".*?"/g, ''),
         viewBox: svg.getAttributeNS(null, 'viewBox')
       },
       undo: {

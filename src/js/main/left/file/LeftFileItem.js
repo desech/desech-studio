@@ -12,7 +12,9 @@ export default {
 
   getEvents () {
     return {
-      click: ['clickCollapseExpandEvent', 'clickSelectSourceFileEvent', 'clickChooseSourceFileEvent', 'clickHighlightSourceFileEvent', 'clickSetActiveItemEvent'], // order matters
+      click: ['clickCollapseExpandEvent', 'clickSelectSourceFileEvent',
+        'clickChooseSourceFileEvent', 'clickHighlightSourceFileEvent',
+        'clickSetActiveItemEvent'], // order matters
       dblclick: ['dblclickCollapseExpandEvent', 'dblclickExecuteFileEvent'],
       keydown: ['keydownClearSourceFileEvent'],
       dragstart: ['dragstartMoveItemEvent'],
@@ -28,26 +30,30 @@ export default {
   clickCollapseExpandEvent (event) {
     if (event.target.closest('.panel-item-expand-button[data-type="file"]')) {
       this.collapseExpand(event.target.closest('li'))
-      event.preventDefault() // ignore all click events
+      // ignore all click events
+      event.preventDefault()
     }
   },
 
   dblclickCollapseExpandEvent (event) {
     if (event.target.closest('.panel-file-item[data-type="folder"]:not(.editing)')) {
       this.collapseExpand(event.target.closest('li'))
-      event.preventDefault() // ignore all click events
+      // ignore all click events
+      event.preventDefault()
     }
   },
 
   async dblclickExecuteFileEvent (event) {
     if (event.target.closest('.panel-file-item[data-type="file"]:not(.editing)')) {
       await this.executeFile(event.target.closest('li'))
-      event.preventDefault() // ignore all click events
+      // ignore all click events
+      event.preventDefault()
     }
   },
 
   clickSetActiveItemEvent (event) {
-    // use a timer and the event.detail check, to prevent the click events firing twice for double click
+    // use a timer and the event.detail check, to prevent the click events firing twice
+    // for double click
     if (event.detail !== 1) return
     this._timer = setTimeout(() => {
       if (event.target.closest('.panel-file-item')) {
@@ -61,7 +67,8 @@ export default {
   clickSelectSourceFileEvent (event) {
     if (event.target.closest('.panel-file-list[data-select-file]')) {
       this.selectSourceFile(event.target.closest('li'))
-      event.preventDefault() // ignore all click events
+      // ignore all click events
+      event.preventDefault()
     }
   },
 
@@ -84,7 +91,8 @@ export default {
   },
 
   dragstartMoveItemEvent (event) {
-    if (event.target.nodeType !== Node.TEXT_NODE && event.target.closest('.panel-file-item:not(.editing)')) {
+    if (event.target.nodeType !== Node.TEXT_NODE &&
+      event.target.closest('.panel-file-item:not(.editing)')) {
       this.startMoveItem(event.target.closest('.panel-file-item'))
     }
   },

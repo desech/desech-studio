@@ -7,7 +7,8 @@ export default {
   setOptions (list) {
     const type = list.closest('.style-html-options').dataset.type
     const select = this.buildSelectOptions(list.getElementsByClassName('style-html-li-form'))
-    RightHtmlCommon.setListHtmlCommand('setOptions', StateSelectedElement.getElement(), select, type)
+    const element = StateSelectedElement.getElement()
+    RightHtmlCommon.setListHtmlCommand('setOptions', element, select, type)
   },
 
   buildSelectOptions (forms) {
@@ -74,9 +75,11 @@ export default {
     if (element.hasAttributeNS(null, 'list')) {
       // 2 inputs can use the same datalist after copy/paste attributes
       // @todo the datalists will be duplicated in the exported html file, using the same id
-      return element.list ? element.list.children : [] // input
+      // input
+      return element.list ? element.list.children : []
     } else {
-      return element.children // select
+      // select
+      return element.children
     }
   },
 

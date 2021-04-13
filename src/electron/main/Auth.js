@@ -46,7 +46,7 @@ export default {
     try {
       const url = Config.getConfig('api') + `/user/account?user=${userToken}&login=${loginToken}`
       const user = await this.fetchData(url)
-      if (!user.is_premium) EventMain.ipcMainInvoke('mainPremiumPrompt')
+      if (!user.active_subscription) EventMain.ipcMainInvoke('mainPremiumPrompt')
       await Cookie.setCookie('accountType', user.account_type)
       EventMain.ipcMainInvoke('mainLoginSuccess', user)
     } catch {

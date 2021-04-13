@@ -77,6 +77,7 @@
   "build": {
     "appId": "com.desech.desech-studio",
     "productName": "Desech Studio",
+    "artifactName": "desech-studio-${version}.${ext}",
     "copyright": "Desech Studio SRL",
     "directories": {
       "app": "app",
@@ -114,7 +115,6 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "artifactName": "desech-studio-${version}.${ext}",
       "target": [
         "dmg",
         "zip"

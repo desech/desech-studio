@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 config.json
 dist
+electron-builder.env
 app/css
 app/html
 app/js

@@ -30,7 +30,8 @@ npm run build-all-prod
 DEBUG=electron-builder npm run pack-linux-x86
 npm run build-linux-x86
 npm run build-win
-npm run build-mac
+APPLEID=catalin.luntraru@desech.com APPLEIDPASS=[check bitwarden] npm run build-mac
+  make sure you have xcode installed for the notarizing tools
 ```
 
 Utilities
@@ -204,7 +205,8 @@ sudo pacman -Syy desech-studio
 ## Windows/Mac Updates
 
 - Build the new file
-- Copy the `latest.yml` and exe/dmg file to sftp
+- For windows copy the `latest.yml` and exe file to sftp
+- For mac copy the `latest-mac.yml`, dmg and zip file to sftp
 - Delete the 2 versions behind file from sftp
 - Update the exe/dmg link and changelog in the download website page
 

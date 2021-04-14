@@ -30,7 +30,7 @@ npm run build-all-prod
 DEBUG=electron-builder npm run pack-linux-x86
 npm run build-linux-x86
 npm run build-win
-APPLEID=catalin.luntraru@desech.com APPLEIDPASS=[check bitwarden] npm run build-mac
+npm run build-mac
   make sure you have xcode installed for the notarizing tools
 ```
 

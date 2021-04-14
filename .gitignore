@@ -3,6 +3,7 @@ node_modules
 config.json
 dist
 electron-builder.env
+build/mac/application.p12
 app/css
 app/html
 app/js

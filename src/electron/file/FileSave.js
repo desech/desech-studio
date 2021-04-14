@@ -115,7 +115,7 @@ export default {
 
   prepareDataForExport (data) {
     data.compiledCss = ExportCommon.getCompiledCss(data.folder)
-    data.rootMiscFiles = ExportCommon.getRootMiscFiles(data.folder)
     data.htmlFiles = ExportCommon.getHtmlFiles(data.folder)
+    data.rootMiscFiles = ExportCommon.getRootMiscFiles(data.folder, data.htmlFiles)
   }
 }

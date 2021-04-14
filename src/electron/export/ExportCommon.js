@@ -67,19 +67,6 @@ export default {
     return list
   },
 
-  getRootMiscFiles (folder) {
-    const list = []
-    const files = File.readFolder(folder)
-    for (const file of files) {
-      // we don't look inside children, only at the top root folder
-      if ((file.type === 'folder' && ['asset', 'font'].includes(file.name)) ||
-        (file.type === 'file' && file.extension !== 'html')) {
-        list.push(file)
-      }
-    }
-    return list
-  },
-
   getHtmlFiles (folder) {
     const files = File.readFolder(folder)
     const list = []
@@ -105,5 +92,32 @@ export default {
       if (name === val) return false
     }
     return true
+  },
+
+  getRootMiscFiles (folder, htmlFiles) {
+    const list = []
+    const files = File.readFolder(folder)
+    for (const file of files) {
+      // we don't look inside children, only at the top root folder
+      if (this.isRootMiscFolder(file, htmlFiles) ||
+        (file.type === 'file' && file.extension !== 'html')) {
+        list.push(file)
+      }
+    }
+    return list
+  },
+
+  isRootMiscFolder (file, htmlFiles) {
+    if (file.type !== 'folder') return false
+    return ['asset', 'font'].includes(file.name) ||
+      (!['css', 'js', '_desech', '_export'].includes(file.name) &&
+      !this.isHtmlRootFolder(file.path, htmlFiles))
+  },
+
+  isHtmlRootFolder (filePath, htmlFiles) {
+    for (const htmlFile of htmlFiles) {
+      if (htmlFile.path.startsWith(filePath)) return true
+    }
+    return false
   }
 }

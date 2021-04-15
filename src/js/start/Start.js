@@ -2,7 +2,6 @@ import HelperEvent from '../helper/HelperEvent.js'
 import HelperRegex from '../helper/HelperRegex.js'
 import DialogComponent from '../component/DialogComponent.js'
 import HelperDOM from '../helper/HelperDOM.js'
-import HelperSettings from '../helper/HelperSettings.js'
 import Project from './Project.js'
 
 export default {
@@ -93,7 +92,7 @@ export default {
   },
 
   async triggerOpenProject (folder = null) {
-    await window.electron.invoke('rendererOpenProject', HelperSettings.getLang(), null, folder)
+    await window.electron.invoke('rendererOpenProject', null, folder)
   },
 
   importFilePrompt (type) {
@@ -149,8 +148,7 @@ export default {
     const valid = this.validateFigmaFile(input, file)
     if (!valid) return
     this.switchImportToLoading(input.closest('.dialog-import'))
-    await window.electron.invoke('rendererImportFigmaFile', file, token,
-      HelperSettings.getLang())
+    await window.electron.invoke('rendererImportFigmaFile', file, token)
   },
 
   getFigmaInputFile (value) {

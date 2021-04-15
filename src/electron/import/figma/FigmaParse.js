@@ -18,15 +18,13 @@ export default {
   _folder: '',
   _token: '',
   _figma: {},
-  _locale: '',
   _figmaImages: {},
   _existingImages: {},
   _components: {},
   _zIndex: 0,
 
   async parseFigma (params) {
-    EventMain.ipcMainInvoke('mainImportProgress',
-      Language.localize('Parsing started', params.locale))
+    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Parsing started'))
     this.reset(params)
     await this.parsePages(params.data.document.children)
     return {
@@ -44,7 +42,6 @@ export default {
     this._file = data.file
     this._folder = data.folder
     this._token = data.token
-    this._locale = data.locale
     this._components = {}
     this._html = {}
     this._zIndex = 0
@@ -166,7 +163,6 @@ export default {
       folder: this._folder,
       projectFile: this._file,
       token: this._token,
-      locale: this._locale,
       ...params
     }
   },

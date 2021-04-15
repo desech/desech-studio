@@ -24,20 +24,20 @@ export default {
   },
 
   rendererNewTutorialProjectEvent () {
-    ipcMain.handle('rendererNewTutorialProject', async (event, locale) => {
-      return await EventMain.handleEvent(this, 'newTutorialProject', locale)
+    ipcMain.handle('rendererNewTutorialProject', async (event) => {
+      return await EventMain.handleEvent(this, 'newTutorialProject')
     })
   },
 
   rendererNewProjectEvent () {
-    ipcMain.handle('rendererNewProject', async (event, locale) => {
-      return await EventMain.handleEvent(this, 'newProject', locale)
+    ipcMain.handle('rendererNewProject', async (event) => {
+      return await EventMain.handleEvent(this, 'newProject')
     })
   },
 
   rendererOpenProjectEvent () {
-    ipcMain.handle('rendererOpenProject', async (event, locale, settings, folder) => {
-      return await EventMain.handleEvent(this, 'openProject', locale, settings, folder)
+    ipcMain.handle('rendererOpenProject', async (event, settings, folder) => {
+      return await EventMain.handleEvent(this, 'openProject', settings, folder)
     })
   },
 
@@ -77,7 +77,7 @@ export default {
   },
 
   newTutorialProject () {
-    if (!this.isAuthenticated()) return
+    // if (!this.isAuthenticated()) return
     // @todo do the tutorial code
   },
 
@@ -87,21 +87,21 @@ export default {
     EventMain.ipcMainInvoke('mainNewProject', plugins)
   },
 
-  async openProject (locale, newSettings = null, folder = null) {
+  async openProject (newSettings = null, folder = null) {
     if (!this.isAuthenticated()) return
     // the folder is when we are importing and we already have it
     if (!folder) {
-      const folders = this.getChooseFolder(locale)
+      const folders = this.getChooseFolder()
       if (!folders) return
       folder = File.sanitizePath(folders[0])
     }
     await Project.openProject(folder, newSettings)
   },
 
-  getChooseFolder (locale) {
+  getChooseFolder () {
     return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
-      title: Language.localize('Open a folder / project', locale),
-      buttonLabel: Language.localize('Open folder', locale),
+      title: Language.localize('Open a folder / project'),
+      buttonLabel: Language.localize('Open folder'),
       properties: ['openDirectory', 'createDirectory']
     })
   },
@@ -135,19 +135,19 @@ export default {
     EventMain.ipcMainInvoke('mainCloseProject')
   },
 
-  async exportFolder (locale) {
+  async exportFolder () {
     const currentFolder = await Cookie.getCookie('currentFolder')
     if (!currentFolder) return
-    const folders = this.getExportFolder(locale)
+    const folders = this.getExportFolder()
     if (!folders) return
     const zipFolder = File.sanitizePath(folders[0])
     await File.exportFolder(zipFolder, currentFolder)
   },
 
-  getExportFolder (locale) {
+  getExportFolder () {
     return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
-      title: Language.localize('Save zip file', locale),
-      buttonLabel: Language.localize('Save file', locale),
+      title: Language.localize('Save zip file'),
+      buttonLabel: Language.localize('Save file'),
       properties: ['openDirectory', 'createDirectory']
     })
   },

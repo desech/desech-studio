@@ -1,16 +1,29 @@
 import en from '../i18n/en.json'
 import ro from '../i18n/ro.json'
+import electron from 'electron'
 
 export default {
   en: en,
   ro: ro,
 
-  localize (text, locale, vars = null) {
-    if (!locale) throw new Error('No locale found')
-    return this.localizeIndex(this[locale], text.trim(), locale, vars)
+  getLocales () {
+    return ['en', 'ro']
   },
 
-  localizeIndex (data, index, locale, vars) {
+  getOSLocale () {
+    let locale = electron.app.getLocale()
+    if (locale.indexOf('-') > 0) locale = locale.substring(0, locale.indexOf('-'))
+    if (!this.getLocales().includes(locale)) locale = 'en'
+    return locale
+  },
+
+  localize (text, vars = null, locale = null) {
+    locale = locale || global.locale
+    if (!locale) throw new Error('No locale found')
+    return this.localizeIndex(this[locale], text.trim(), vars, locale)
+  },
+
+  localizeIndex (data, index, vars, locale) {
     if (!data[index]) {
       throw new Error(`Element "${index}" does not exist for locale ${locale}`)
     }

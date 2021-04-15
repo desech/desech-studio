@@ -1,10 +1,10 @@
 import { app, nativeTheme } from 'electron'
 import fs from 'fs'
 import path from 'path'
+import Language from './Language.js'
 
 export default {
   _FILE: '',
-  _locales: ['en', 'ro'],
 
   initSettings () {
     this._FILE = path.resolve(app.getPath('userData'), 'settings.json')
@@ -14,16 +14,9 @@ export default {
 
   createInitialFile () {
     this.saveToFile({
-      locale: this.getOSLocale(),
+      locale: Language.getOSLocale(),
       theme: nativeTheme.shouldUseDarkColors ? 'dark' : 'light'
     })
-  },
-
-  getOSLocale () {
-    let locale = app.getLocale()
-    if (locale.indexOf('-') > 0) locale = locale.substring(0, locale.indexOf('-'))
-    if (!this._locales.includes(locale)) locale = 'en'
-    return locale
   },
 
   saveToFile (json) {

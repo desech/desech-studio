@@ -5,66 +5,66 @@ import EventMenu from '../event/EventMenu.js'
 import Config from '../lib/Config.js'
 
 export default {
-  setMenu (locale) {
-    const menu = Menu.buildFromTemplate(this.getMenu(locale))
+  setMenu () {
+    const menu = Menu.buildFromTemplate(this.getMenu())
     Menu.setApplicationMenu(menu)
   },
 
-  getMenu (locale) {
-    const menu = this.getTemplate(locale)
-    this.adjustForMac(menu, locale)
+  getMenu () {
+    const menu = this.getTemplate()
+    this.adjustForMac(menu)
     return menu
   },
 
-  getTemplate (locale) {
+  getTemplate () {
     return [
-      this.getMenuFile(locale),
-      this.getMenuImport(locale),
-      this.getMenuSettings(locale),
-      this.getMenuView(locale),
-      this.getMenuHelp(locale)
+      this.getMenuFile(),
+      this.getMenuImport(),
+      this.getMenuSettings(),
+      this.getMenuView(),
+      this.getMenuHelp()
     ]
   },
 
-  getMenuFile (locale) {
+  getMenuFile () {
     return {
-      label: Language.localize('File', locale),
+      label: Language.localize('File'),
       submenu: [
         // {
-        //   label: Language.localize('New Tutorial Project', locale),
+        //   label: Language.localize('New Tutorial Project'),
         //   click: async () => {
         //     await EventMain.handleEvent(EventMenu, 'newTutorialProject')
         //   }
         // },
         {
-          label: Language.localize('New Project', locale),
+          label: Language.localize('New Project'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'newProject')
           }
         },
         {
-          label: Language.localize('Open Project', locale),
+          label: Language.localize('Open Project'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'openProject', locale)
+            await EventMain.handleEvent(EventMenu, 'openProject')
           }
         },
         { type: 'separator' },
         {
-          label: Language.localize('Project Settings', locale),
+          label: Language.localize('Project Settings'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'openProjectSettings')
           }
         },
         {
-          label: Language.localize('Close Project', locale),
+          label: Language.localize('Close Project'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'closeProject')
           }
         },
         {
-          label: Language.localize('Export Project', locale),
+          label: Language.localize('Export Project'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'exportFolder', locale)
+            await EventMain.handleEvent(EventMenu, 'exportFolder')
           }
         },
         { type: 'separator' },
@@ -73,24 +73,24 @@ export default {
     }
   },
 
-  getMenuImport (locale) {
+  getMenuImport () {
     return {
-      label: Language.localize('Import', locale),
+      label: Language.localize('Import'),
       submenu: [
         {
-          label: Language.localize('Import Sketch', locale),
+          label: Language.localize('Import Sketch'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'sketch')
           }
         },
         {
-          label: Language.localize('Import Figma', locale),
+          label: Language.localize('Import Figma'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'figma')
           }
         },
         {
-          label: Language.localize('Import Adobe XD', locale),
+          label: Language.localize('Import Adobe XD'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'adobexd')
           }
@@ -99,12 +99,12 @@ export default {
     }
   },
 
-  getMenuSettings (locale) {
+  getMenuSettings () {
     return {
-      label: Language.localize('Settings', locale),
+      label: Language.localize('Settings'),
       submenu: [
         // {
-        //   label: Language.localize('Language', locale),
+        //   label: Language.localize('Language'),
         //   submenu: [
         //     {
         //       label: 'English',
@@ -121,7 +121,7 @@ export default {
         //   ]
         // },
         {
-          label: Language.localize('Theme', locale),
+          label: Language.localize('Theme'),
           submenu: [
             {
               label: 'Light',
@@ -138,7 +138,7 @@ export default {
           ]
         },
         {
-          label: Language.localize('Plugins', locale),
+          label: Language.localize('Plugins'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'openPlugins')
           }
@@ -147,9 +147,9 @@ export default {
     }
   },
 
-  getMenuView (locale) {
+  getMenuView () {
     return {
-      label: Language.localize('View', locale),
+      label: Language.localize('View'),
       submenu: [
         { role: 'reload' },
         { role: 'forcereload' },
@@ -163,25 +163,25 @@ export default {
     }
   },
 
-  getMenuHelp (locale) {
+  getMenuHelp () {
     return {
-      label: Language.localize('Help', locale),
+      label: Language.localize('Help'),
       submenu: [
         {
-          label: Language.localize('Support', locale),
+          label: Language.localize('Support'),
           click: async () => {
             const url = Config.getConfig('web') + '/support.html'
             await EventMain.handleEvent(EventMenu, 'openLink', url)
           }
         },
         {
-          label: Language.localize('Shortcuts', locale),
+          label: Language.localize('Shortcuts'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'showShortcuts')
           }
         },
         {
-          label: Language.localize('About', locale),
+          label: Language.localize('About'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'showAbout')
           }
@@ -190,10 +190,10 @@ export default {
     }
   },
 
-  adjustForMac (menu, locale) {
+  adjustForMac (menu) {
     if (process.platform !== 'darwin') return
     this.injectAboutMacMenu(menu)
-    this.injectEditMacMenu(menu, locale)
+    this.injectEditMacMenu(menu)
   },
 
   injectAboutMacMenu (menu) {
@@ -224,38 +224,38 @@ export default {
     delete menu[1].submenu[7]
   },
 
-  injectEditMacMenu (menu, locale) {
+  injectEditMacMenu (menu) {
     menu.splice(2, 0, {
-      label: Language.localize('Edit', locale),
+      label: Language.localize('Edit'),
       submenu: [
         {
-          label: Language.localize('Undo', locale),
+          label: Language.localize('Undo'),
           accelerator: 'CmdOrCtrl+Z',
           selector: 'undo:'
         },
         {
-          label: Language.localize('Redo', locale),
+          label: Language.localize('Redo'),
           accelerator: 'Shift+CmdOrCtrl+Z',
           selector: 'redo:'
         },
         { type: 'separator' },
         {
-          label: Language.localize('Cut', locale),
+          label: Language.localize('Cut'),
           accelerator: 'CmdOrCtrl+X',
           selector: 'cut:'
         },
         {
-          label: Language.localize('Copy', locale),
+          label: Language.localize('Copy'),
           accelerator: 'CmdOrCtrl+C',
           selector: 'copy:'
         },
         {
-          label: Language.localize('Paste', locale),
+          label: Language.localize('Paste'),
           accelerator: 'CmdOrCtrl+V',
           selector: 'paste:'
         },
         {
-          label: Language.localize('Select All', locale),
+          label: Language.localize('Select All'),
           accelerator: 'CmdOrCtrl+A',
           selector: 'selectAll:'
         }

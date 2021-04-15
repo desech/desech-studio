@@ -39,7 +39,7 @@ export default {
   },
 
   async getImportData (params) {
-    const data = await FigmaCommon.apiCall(`files/${params.file}`, params.token, params.locale)
+    const data = await FigmaCommon.apiCall(`files/${params.file}`, params.token)
     const existingImages = await this.initExistingImages(params.folder)
     return await FigmaParse.parseFigma({
       existingImages,

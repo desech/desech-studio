@@ -8,7 +8,8 @@ export default {
   getHtmlTemplate (file, options = {}) {
     // options: vars, partialFiles, partialDir
     const template = Handlebars.compile(this.getHtmlFromFile(file))
-    this.setHelpers(options.locale || 'en')
+    const locale = options.locale || global.locale
+    this.setHelpers(locale)
     this.setPartials(options)
     return template(options.vars || {})
   },

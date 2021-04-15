@@ -21,23 +21,22 @@ export default {
   _tmpFileCss: {},
 
   async importFile (params) {
-    const folders = this.getChooseFolder(params.locale)
+    const folders = this.getChooseFolder()
     if (!folders) return
     const folder = File.sanitizePath(folders[0])
     const data = await this.getImportData({ ...params, folder })
     this.backupImportFile(folder, params.type, data)
     this.setProjectSettings(folder, data)
     const hasDesignSystem = await ProjectCommon.getDesignSystem()
-    this.saveGeneralCssFiles(data.css, folder, params.locale)
-    this.saveHtmlFiles(data.html, data.css, folder, folder, hasDesignSystem, params.locale)
-    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished',
-      params.locale), folder)
+    this.saveGeneralCssFiles(data.css, folder)
+    this.saveHtmlFiles(data.html, data.css, folder, folder, hasDesignSystem)
+    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'), folder)
   },
 
-  getChooseFolder (locale) {
+  getChooseFolder () {
     return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
-      title: Language.localize('Save files here', locale),
-      buttonLabel: Language.localize('Choose folder', locale),
+      title: Language.localize('Save files here'),
+      buttonLabel: Language.localize('Choose folder'),
       properties: ['openDirectory', 'createDirectory']
     })
   },
@@ -65,41 +64,41 @@ export default {
     Project.saveDefaultWidthHeight(folder, css.width, css.height)
   },
 
-  saveHtmlFiles (html, css, folder, mainFolder, hasDesignSystem, locale) {
+  saveHtmlFiles (html, css, folder, mainFolder, hasDesignSystem) {
     for (const file of Object.values(html)) {
       const filePath = path.resolve(folder, file.name)
       if (file.type === 'folder') {
         File.createFolder(filePath)
-        this.saveHtmlFiles(file.files, css, filePath, mainFolder, hasDesignSystem, locale)
+        this.saveHtmlFiles(file.files, css, filePath, mainFolder, hasDesignSystem)
       } else { // file
-        this.saveHtmlFileAndCss(file, css, filePath + '.html', mainFolder, hasDesignSystem,
-          locale)
+        this.saveHtmlFileAndCss(file, css, filePath + '.html', mainFolder, hasDesignSystem)
       }
     }
   },
 
-  saveHtmlFileAndCss (file, css, htmlFile, mainFolder, hasDesignSystem, locale) {
-    const html = this.getHtml(file, css, htmlFile, mainFolder, hasDesignSystem, locale)
+  saveHtmlFileAndCss (file, css, htmlFile, mainFolder, hasDesignSystem) {
+    const html = this.getHtml(file, css, htmlFile, mainFolder, hasDesignSystem)
     fs.writeFileSync(htmlFile, html)
     const pageCssFile = HelperFile.getPageCssFile(htmlFile, mainFolder)
     const pageCss = this.prepareCss(this._tmpFileCss)
     FileSave.saveStyleToFile(pageCss, css.color, mainFolder, `css/page/${pageCssFile}`)
   },
 
-  getHtml (data, css, file, folder, hasDesignSystem, locale) {
-    const msg = Language.localize('Saving html file <b>{{file}}</b>', locale,
+  getHtml (data, css, file, folder, hasDesignSystem) {
+    const msg = Language.localize('Saving html file <b>{{file}}</b>',
       { file: path.basename(file) })
     EventMain.ipcMainInvoke('mainImportProgress', msg)
-    const html = this.getImportHtml(data, css, folder, locale)
-    return HelperFile.getFullHtml(file, FileParse.beautifyHtml(html), {}, folder, hasDesignSystem)
+    const html = this.getImportHtml(data, css, folder)
+    const beauty = FileParse.beautifyHtml(html)
+    return HelperFile.getFullHtml(file, beauty, {}, folder, hasDesignSystem)
   },
 
-  getImportHtml (data, css, folder, locale) {
+  getImportHtml (data, css, folder) {
     if (!data.nodes) return ''
     const body = ImportPosition.buildStructure(data.nodes, data.ref, css)
     if (data.nodes.length) {
-      const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored</span>',
-        locale, { count: data.nodes.length })
+      const msg = Language.localize(`<span class="error">{{count}} element(s) have been
+        ignored</span>`, { count: data.nodes.length })
       EventMain.ipcMainInvoke('mainImportProgress', msg)
     }
     this._tmpFileCss = {}
@@ -115,7 +114,8 @@ export default {
     const tag = node.tag || this.getHtmlTag(node.type)
     const href = node.href ? ` href="${node.href}"` : ''
     const children = (node.children && node.children.length)
-      ? this.getHtmlNodes(node.children, css, folder) : node.content
+      ? this.getHtmlNodes(node.children, css, folder)
+      : node.content
     if (node.type === 'block' && node.content) this.saveSvgBgImage(node, css, folder)
     return `<${tag} class="${cls}"${href}>${children}</${tag}>`
   },
@@ -238,8 +238,8 @@ export default {
     return cls.trim()
   },
 
-  saveGeneralCssFiles (css, folder, locale) {
-    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Saving css files', locale))
+  saveGeneralCssFiles (css, folder) {
+    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Saving css files'))
     File.createFolder(folder, 'css')
     File.createFolder(folder, 'font')
     // we no longer import components, so no need to save them

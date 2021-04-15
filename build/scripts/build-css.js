@@ -17,7 +17,7 @@ function buildCss () {
   for (const file of files) {
     const contents = fs.readFileSync(file).toString()
     // fix dir paths in font css
-    css += contents.replace(/\.\.\/\.\.\//gm, '../')
+    css += contents.replace(/\.\.\/\.\.\//g, '../')
   }
 
   // minify the css - https://github.com/jakubpawlowicz/clean-css

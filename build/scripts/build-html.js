@@ -6,6 +6,7 @@ import Language from '../../src/electron/lib/Language.js'
 import pjson from '../../package.json'
 
 async function buildHtml (locale) {
+  global.locale = locale
   // sort the fonts by category
   const response = await fetch('https://download.desech.com/font/list.json')
   if (!response.ok) throw new Error("Can't access download.desech.com")
@@ -36,23 +37,23 @@ async function buildHtml (locale) {
   const popularFonts = []
   const categoryFonts = [
     {
-      category: Language.localize('Serif', locale),
+      category: Language.localize('Serif'),
       fonts: []
     },
     {
-      category: Language.localize('Sans Serif', locale),
+      category: Language.localize('Sans Serif'),
       fonts: []
     },
     {
-      category: Language.localize('Display', locale),
+      category: Language.localize('Display'),
       fonts: []
     },
     {
-      category: Language.localize('Handwriting', locale),
+      category: Language.localize('Handwriting'),
       fonts: []
     },
     {
-      category: Language.localize('Monospace', locale),
+      category: Language.localize('Monospace'),
       fonts: []
     }
   ]
@@ -71,28 +72,28 @@ async function buildHtml (locale) {
 
   // effects list
   const effects = {
-    filter: Language.localize('Filter', locale),
-    transform: Language.localize('Transform', locale),
-    'drop-shadow': Language.localize('Drop shadow', locale),
-    opacity: Language.localize('Opacity', locale),
-    blur: Language.localize('Blur', locale),
-    brightness: Language.localize('Brightness', locale),
-    contrast: Language.localize('Contrast', locale),
-    'hue-rotate': Language.localize('Hue', locale),
-    saturate: Language.localize('Saturation', locale),
-    grayscale: Language.localize('Grayscale', locale),
-    sepia: Language.localize('Sepia', locale),
-    invert: Language.localize('Invert', locale),
-    shadow: Language.localize('Box shadow', locale),
-    perspective: Language.localize('Perspective', locale),
-    translate3d: Language.localize('Move', locale),
-    scale3d: Language.localize('Scale', locale),
-    rotate: Language.localize('Rotate', locale),
-    skew: Language.localize('Skew', locale),
-    matrix: Language.localize('Matrix', locale),
-    matrix3d: Language.localize('Matrix 3D', locale),
-    transition: Language.localize('Transition', locale),
-    blend: Language.localize('Blend mode', locale)
+    filter: Language.localize('Filter'),
+    transform: Language.localize('Transform'),
+    'drop-shadow': Language.localize('Drop shadow'),
+    opacity: Language.localize('Opacity'),
+    blur: Language.localize('Blur'),
+    brightness: Language.localize('Brightness'),
+    contrast: Language.localize('Contrast'),
+    'hue-rotate': Language.localize('Hue'),
+    saturate: Language.localize('Saturation'),
+    grayscale: Language.localize('Grayscale'),
+    sepia: Language.localize('Sepia'),
+    invert: Language.localize('Invert'),
+    shadow: Language.localize('Box shadow'),
+    perspective: Language.localize('Perspective'),
+    translate3d: Language.localize('Move'),
+    scale3d: Language.localize('Scale'),
+    rotate: Language.localize('Rotate'),
+    skew: Language.localize('Skew'),
+    matrix: Language.localize('Matrix'),
+    matrix3d: Language.localize('Matrix 3D'),
+    transition: Language.localize('Transition'),
+    blend: Language.localize('Blend mode')
   }
 
   // about details
@@ -103,7 +104,6 @@ async function buildHtml (locale) {
 
   // generate the html contents
   const html = Template.getHtmlTemplate('./src/html/index.html', {
-    locale,
     partialDir: './src/html/partial',
     vars: {
       pageTitle: 'Desech Studio',

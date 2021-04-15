@@ -57,7 +57,8 @@ export default {
   async prepareWindow () {
     await Plugin.initPlugins()
     const settings = Settings.initSettings()
-    Menu.setMenu(settings.locale)
+    global.locale = settings.locale
+    Menu.setMenu()
     this.addEvents()
     return settings
   },

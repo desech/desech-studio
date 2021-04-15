@@ -28,7 +28,9 @@ function extractJS () {
   const array = []
   for (const file of extractFiles('js')) {
     const js = fs.readFileSync(file).toString()
-    array.push(...extractLocalize(js, /Language\.localize\('(?<txt>.*?)'(,.*)?/gi))
+    const lines = extractLocalize(js,
+      /Language\.localize\(['`](?<txt>[\s\S]*?)['`](,[\s\S]*?)?\)/g)
+    array.push(...lines)
   }
   return array
 }
@@ -51,7 +53,7 @@ function extractLocalize (string, regex) {
   const array = []
   const data = HelperRegex.getMatchingGroups(string, regex)
   for (const val of data) {
-    array.push(val.txt.trim())
+    array.push(val.txt.replace(/\s\s+/g, ' ').trim())
   }
   return array
 }
@@ -82,8 +84,9 @@ function convertJsonToCsv (data) {
 }
 
 function mergeTemplateWithCsv (locale) {
+  const file = `./build/i18n/${locale}.csv`
   const templateString = fs.readFileSync('./build/i18n/template.csv').toString()
-  const localeString = fs.readFileSync(`./build/i18n/${locale}.csv`).toString()
+  const localeString = fs.existsSync(file) ? fs.readFileSync(file).toString() : ''
   const templateData = csvParse(templateString, { columns: true })
   const localeData = csvParse(localeString, { columns: true })
 

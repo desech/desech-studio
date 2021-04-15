@@ -6,8 +6,8 @@ import EventMain from '../../event/EventMain.js'
 import Language from '../../lib/Language.js'
 
 export default {
-  async apiCall (method, token, locale) {
-    const msg = Language.localize('Fetching <b>{{method}}</b>', locale, { method })
+  async apiCall (method, token) {
+    const msg = Language.localize('Fetching <b>{{method}}</b>', { method })
     EventMain.ipcMainInvoke('mainImportProgress', msg)
     const res = await this.getResponse(method, token)
     const json = await res.json()
@@ -122,8 +122,7 @@ export default {
     return ParseCommon.getRoundedBorders(rect)
   },
 
-  // data = elementId, fileName, fileExt, scale, existingImages, folder, projectFile, token,
-  // locale
+  // data = elementId, fileName, fileExt, scale, existingImages, folder, projectFile, token
   async processImageFile (data) {
     const file = this.imageExists(data.existingImages, data.fileName + '.' + data.fileExt)
     if (file) {
@@ -142,19 +141,19 @@ export default {
   async downloadImageFile (data) {
     const url = `images/${data.projectFile}?ids=${data.elementId}&scale=${data.scale}` +
       `&format=${data.fileExt}`
-    const json = await this.apiCall(url, data.token, data.locale)
+    const json = await this.apiCall(url, data.token)
     const file = path.resolve(data.folder, data.fileName + '.' + data.fileExt)
     let content
     if (!json.images[data.elementId]) {
-      content = this.saveEmptyImage(file, data.locale)
+      content = this.saveEmptyImage(file)
     } else {
       content = await this.saveApiImage(json.images[data.elementId], file, data.fileExt)
     }
     return { file, content }
   },
 
-  saveEmptyImage (file, locale) {
-    const msg = Language.localize('<span class="error">Image is empty</span>', locale)
+  saveEmptyImage (file) {
+    const msg = Language.localize('<span class="error">Image is empty</span>')
     EventMain.ipcMainInvoke('mainImportProgress', msg)
     // save the empty image so we don't call the api url again
     fs.writeFileSync(file, '')

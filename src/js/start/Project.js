@@ -1,7 +1,6 @@
 import DialogComponent from '../component/DialogComponent.js'
 import HelperPlugin from '../helper/HelperPlugin.js'
 import HelperForm from '../helper/HelperForm.js'
-import HelperSettings from '../helper/HelperSettings.js'
 import HelperDesignSystem from '../helper/HelperDesignSystem.js'
 import HelperProject from '../helper/HelperProject.js'
 
@@ -49,7 +48,7 @@ export default {
 
   async newProjectSubmit (form) {
     const settings = HelperForm.getFormValues(form)
-    await window.electron.invoke('rendererOpenProject', HelperSettings.getLang(), settings)
+    await window.electron.invoke('rendererOpenProject', settings)
   },
 
   async injectDesignSystemCss () {
@@ -71,9 +70,8 @@ export default {
   },
 
   async saveProjectSettings (form) {
-    const lang = HelperSettings.getLang()
     const settings = HelperForm.getFormValues(form)
     const folder = HelperProject.getFolder()
-    await window.electron.invoke('rendererOpenProject', lang, settings, folder)
+    await window.electron.invoke('rendererOpenProject', settings, folder)
   }
 }

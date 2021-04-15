@@ -39,9 +39,9 @@ export default {
   },
 
   rendererImportFigmaFileEvent () {
-    ipcMain.handle('rendererImportFigmaFile', async (event, file, token, locale) => {
+    ipcMain.handle('rendererImportFigmaFile', async (event, file, token) => {
       return await EventMain.handleEvent(Import, 'importFile', {
-        type: 'figma', file, token, locale
+        type: 'figma', file, token
       })
     })
   },

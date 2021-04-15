@@ -25,7 +25,8 @@ export default {
 
   localizeIndex (data, index, vars, locale) {
     if (!data[index]) {
-      throw new Error(`Element "${index}" does not exist for locale ${locale}`)
+      return index
+      // throw new Error(`Element "${index}" does not exist for locale ${locale}`)
     }
     if (!vars) return data[index]
     return this.replaceVars(data[index], vars)

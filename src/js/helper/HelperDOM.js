@@ -54,6 +54,14 @@ export default {
     }
   },
 
+  toggleChild (parent, child) {
+    if (parent.children.length) {
+      this.deleteChildren(parent)
+    } else {
+      parent.appendChild(child)
+    }
+  },
+
   addClasses (node, classes) {
     for (const cls of classes) {
       node.classList.add(cls)

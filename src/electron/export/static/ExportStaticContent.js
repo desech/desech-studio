@@ -2,16 +2,29 @@ import fs from 'fs'
 import path from 'path'
 import { JSDOM } from 'jsdom'
 import FileParse from '../../file/FileParse.js'
+import HelperCrypto from '../../../js/helper/HelperCrypto.js'
 
 export default {
   getPageHtml (folder, file) {
-    const dom = new JSDOM(fs.readFileSync(file).toString())
+    const rand = HelperCrypto.generateSmallHash()
+    const initialHtml = this.replaceTemplate(fs.readFileSync(file).toString(), rand)
+    const dom = new JSDOM(initialHtml)
     const document = dom.window.document
     this.buildComponents(folder, document, document)
     this.replaceCssLinks(document)
     this.replaceJsScripts(document)
-    const html = this.regexHtmlRender(dom.serialize())
+    const html = this.replaceTemplateBack(this.regexHtmlRender(dom.serialize()), rand)
     return FileParse.beautifyHtml(html)
+  },
+
+  replaceTemplate (html, rand) {
+    return html.replaceAll('<template', `<template-${rand}`)
+      .replaceAll('</template>', `</template-${rand}>`)
+  },
+
+  replaceTemplateBack (html, rand) {
+    return html.replaceAll(`<template-${rand}`, '<template')
+      .replaceAll(`</template-${rand}>`, '</template>')
   },
 
   buildComponents (folder, document, container) {

@@ -68,12 +68,12 @@ export default {
 
   copyFile (data) {
     const newPath = path.resolve(data.root, path.basename(data.file))
-    fs.copyFileSync(data.file, newPath)
+    if (!fs.existsSync(newPath)) fs.copyFileSync(data.file, newPath)
   },
 
   createFile (file, content = '') {
     this.createMissingDir(path.dirname(file))
-    fs.writeFileSync(file, content)
+    if (!fs.existsSync(file)) fs.writeFileSync(file, content)
   },
 
   createMissingDir (dir) {

@@ -9,6 +9,8 @@ import CanvasElementSelect from './CanvasElementSelect.js'
 import HelperFile from '../../../helper/HelperFile.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import CanvasElementComponent from './CanvasElementComponent.js'
+import Page from '../../../page/Page.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
 
 export default {
   getEvents () {
@@ -18,7 +20,7 @@ export default {
         'clickDuplicateElementEvent', 'clickDeleteElementEvent', 'clickCopyAllEvent',
         'clickCopyAttributesEvent', 'clickCopyStyleEvent', 'clickPasteAllEvent',
         'clickCopySelectorEvent', 'clickCutSelectorEvent', 'clickPasteSelectorEvent',
-        'clickInsertComponentChildrenEvent'],
+        'clickInsertComponentChildrenEvent', 'clickLoadComponentEvent'],
       contextmenu: ['contextmenuCanvasShowMenuEvent', 'contextmenuSidebarShowMenuEvent']
     }
   },
@@ -136,6 +138,12 @@ export default {
     }
   },
 
+  clickLoadComponentEvent () {
+    if (event.target.classList.contains('element-menu-component-load')) {
+      this.loadComponent()
+    }
+  },
+
   showContextmenu (element, x, y) {
     // select the correct element when dealing with components
     element = CanvasElementSelect.selectElement(element)
@@ -175,5 +183,10 @@ export default {
     RightHtmlCommon.setHidden(hidden)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
     HelperTrigger.triggerReload('right-panel-style')
+  },
+
+  loadComponent () {
+    const element = StateSelectedElement.getElement()
+    Page.loadMain(element.getAttributeNS(null, 'src'))
   }
 }

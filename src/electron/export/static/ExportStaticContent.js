@@ -56,6 +56,8 @@ export default {
   },
 
   parseComponentHtml (html, properties) {
+    // jsdom fails with innerHTML when having non self closing tags
+    html = html.replace(/<(img|input|track)(.*?)>/g, '<$1$2 />')
     // we don't want to see the unmapped properties
     return html.replace(/{{(.*?)}}/g, (match, name) => properties[name] || '')
   },

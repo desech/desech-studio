@@ -44,13 +44,13 @@ export default {
 
   rendererCopyFileEvent () {
     ipcMain.handle('rendererCopyFile', async (event, data) => {
-      return await EventMain.handleEvent(File, 'copyFile', data)
+      return await EventMain.handleEvent(File, 'copyFileIfMissing', data)
     })
   },
 
   rendererCreateFileEvent () {
     ipcMain.handle('rendererCreateFile', async (event, data) => {
-      return await EventMain.handleEvent(File, 'createFile', data.file, data.contents)
+      return await EventMain.handleEvent(File, 'createFileIfMissing', data.file, data.contents)
     })
   },
 

@@ -66,14 +66,19 @@ export default {
     return dirPath
   },
 
-  copyFile (data) {
+  copyFileIfMissing (data) {
     const newPath = path.resolve(data.root, path.basename(data.file))
     if (!fs.existsSync(newPath)) fs.copyFileSync(data.file, newPath)
   },
 
-  createFile (file, content = '') {
+  createFileIfMissing (file, content = '') {
     this.createMissingDir(path.dirname(file))
     if (!fs.existsSync(file)) fs.writeFileSync(file, content)
+  },
+
+  createFile (file, content = '') {
+    this.createMissingDir(path.dirname(file))
+    fs.writeFileSync(file, content)
   },
 
   createMissingDir (dir) {

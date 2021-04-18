@@ -138,7 +138,7 @@ export default {
     }
   },
 
-  clickLoadComponentEvent () {
+  clickLoadComponentEvent (event) {
     if (event.target.classList.contains('element-menu-component-load')) {
       this.loadComponent()
     }

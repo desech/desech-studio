@@ -21,20 +21,7 @@ png2icns build/resource/icon.icns build/resource/icon.png
 icotool -c -o build/resource/icon.ico build/resource/icon.png
 ```
 
-## Build Studio
-
-```sh
-- change version in `package.json` and `app/package.json`
-cd ~/dev/desech-studio
-npm run build-all-prod
-DEBUG=electron-builder npm run pack-linux-x86
-npm run build-linux-x86
-npm run build-win
-npm run build-mac
-  make sure you have xcode installed for the notarizing tools
-```
-
-Utilities
+## Build Studio Utilities
 
 ```sh
 sudo apt install rpm alien libarchive-tools
@@ -202,14 +189,6 @@ echo -e "\n[desech-studio]\nSigLevel = Optional TrustAll\nServer = https://downl
 sudo pacman -Syy desech-studio
 ```
 
-## Windows/Mac Updates
-
-- Build the new file
-- For windows copy the `latest.yml` and exe file to sftp
-- For mac copy the `latest-mac.yml`, dmg and zip file to sftp
-- Delete the 2 versions behind file from sftp
-- Update the exe/dmg link and changelog in the download website page
-
 ## Plugins
 
 ```sh
@@ -221,3 +200,24 @@ git clone git@github.com:desech/studio-react.git desech-studio-react
 git clone git@github.com:desech/studio-angular.git desech-studio-angular
 git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```
+
+## Build Studio
+
+```sh
+- change version in `package.json` and `app/package.json`
+cd ~/dev/desech-studio
+npm run build-all-prod
+DEBUG=electron-builder npm run pack-linux-x86
+npm run build-linux-x86
+npm run build-win
+npm run build-mac
+  make sure you have xcode installed for the notarizing tools
+```
+
+## Windows/Mac Updates
+
+- Build the new file
+- For windows copy the `latest.yml` and exe file to sftp
+- For mac copy the `latest-mac.yml`, dmg and zip file to sftp
+- Delete the 2 versions behind file from sftp
+- Update the exe/dmg link and changelog in the download website page

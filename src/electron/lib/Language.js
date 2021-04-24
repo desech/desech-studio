@@ -18,7 +18,7 @@ export default {
   },
 
   localize (text, vars = null, locale = null) {
-    locale = locale || global.locale
+    locale = locale || global.locale || 'en'
     if (!locale) throw new Error('No locale found')
     return this.localizeIndex(this[locale], text.trim(), vars, locale)
   },

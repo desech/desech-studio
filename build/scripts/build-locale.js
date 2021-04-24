@@ -29,7 +29,7 @@ function extractJS () {
   for (const file of extractFiles('js')) {
     const js = fs.readFileSync(file).toString()
     const lines = extractLocalize(js,
-      /Language\.localize\(['`](?<txt>[\s\S]*?)['`](,[\s\S]*?)?\)/g)
+      /Language\.localize\(['"`](?<txt>[\s\S]*?)['"`](,[\s\S]*?)?\)/g)
     array.push(...lines)
   }
   return array

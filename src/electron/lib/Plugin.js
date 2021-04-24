@@ -16,6 +16,7 @@ import Zip from '../file/Zip.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import Config from './Config.js'
 import Electron from './Electron.js'
+import Language from './Language.js'
 
 export default {
   _DIR: null,
@@ -42,9 +43,9 @@ export default {
 
   async fetchPluginData (repoUrl) {
     const url = repoUrl.replace('github.com', 'raw.githubusercontent.com') +
-      '/master/package.json'
+      '/main/package.json'
     const response = await fetch(url)
-    if (!response.ok) throw new Error("Can't access raw.githubusercontent.com")
+    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
     return await response.json()
   },
 
@@ -56,7 +57,9 @@ export default {
   async copyPlugin (url) {
     const folder = await this.unzipTemp(url)
     const data = this.getFolderPluginData(folder)
-    if (!data) throw new Error(`No package.json data found for ${url}`)
+    if (!data) {
+      throw new Error(Language.localize('No package.json data found for {{url}}', { url }))
+    }
     this.moveTmpFolder(folder, url)
   },
 
@@ -70,8 +73,9 @@ export default {
 
   async getApiZip (url) {
     // const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/zipball'
-    const response = await fetch(url + '/archive/master.zip')
-    if (!response.ok) throw new Error("Can't access api.github.com")
+    url += '/archive/refs/heads/main.zip'
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
     return await response.buffer()
   },
 
@@ -134,8 +138,9 @@ export default {
   },
 
   async getPluginsList () {
-    const response = await fetch(Config.getConfig('api') + '/plugins')
-    if (!response.ok) throw new Error("Can't access api.desech.com")
+    const url = Config.getConfig('api') + '/plugins'
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
     const json = await response.json()
     return json.plugins
   },
@@ -156,7 +161,8 @@ export default {
     const file = path.resolve(this._DIR, project[category], 'index.js')
     const module = require(file)
     if (!(method in module)) {
-      throw new Error(`Unknown "${method}" method for active plugin category "${category}"`)
+      throw new Error(Language.localize('Unknown "{{method}}" method for active plugin ' +
+        'category "{{category}}"', { method, category }))
     }
     return await module[method](data, this.getLibs())
   },

@@ -2,11 +2,14 @@ import os from 'os'
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import Cookie from '../../lib/Cookie.js'
-import HelperFile from '../../../js/helper/HelperFile.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 
 export default {
+  _document: null,
+  _folder: null,
+  _datalist: null,
+
   async parseComponentFile (file) {
     const folder = await Cookie.getCookie('currentFolder')
     // the purpose of the wrapping div is to properly add component-element
@@ -19,70 +22,76 @@ export default {
   parseHtml (document, folder, nodes = null) {
     if (!nodes) nodes = document.body.children
     const datalist = document.createElement('div')
-    this.buildHtml(nodes, document, folder, datalist)
-    this.removeDatalists(document)
+    this.init(document, folder, datalist)
+    this.buildHtml(nodes)
+    this.removeDatalists()
     return {
       canvas: nodes.length ? nodes[0].parentNode.innerHTML.trim() : '',
-      meta: this.getMeta(document),
+      meta: this.getMeta(),
       datalist: datalist.innerHTML.trim()
     }
   },
 
-  getMeta (document) {
-    if (!document.head) return
-    const meta = document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
+  init (document, folder, datalist) {
+    this._document = document
+    this._folder = folder
+    this._datalist = datalist
+  },
+
+  getMeta () {
+    if (!this._document.head) return
+    const meta = this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
     return {
-      language: document.documentElement.lang,
-      title: document.title,
+      language: this._document.documentElement.lang,
+      title: this._document.title,
       meta
     }
   },
 
-  buildHtml (nodes, document, folder, datalist, componentChildren = null) {
+  buildHtml (nodes, componentChildren = null) {
     for (const node of nodes) {
-      this.buildElement(node, document, folder, datalist, componentChildren)
+      this.buildElement(node, componentChildren)
     }
   },
 
-  buildElement (node, document, folder, datalist, componentChildren) {
+  buildElement (node, componentChildren) {
     const tag = HelperDOM.getTag(node)
     if (tag === 'svg') return this.addBasic(node, 'icon')
-    if (tag === 'img') return this.buildImageElement(node, folder)
+    if (tag === 'img') return this.buildImageElement(node)
     if (tag === 'video') return this.buildVideoElement(node)
-    if (tag === 'audio') return this.buildAudioElement(node, document)
+    if (tag === 'audio') return this.buildAudioElement(node)
     if (tag === 'input') return this.addInputElement(node)
     if (tag === 'select') return this.addBasic(node, 'dropdown')
     if (tag === 'textarea') return this.addBasic(node, 'textarea')
-    if (tag === 'datalist') return this.addDatalist(node, datalist)
+    if (tag === 'datalist') return this.addDatalist(node)
     if (node.classList.contains('text')) {
-      return this.buildTagElement(node, 'text', 'p', document, folder, datalist)
+      return this.buildTagElement(node, 'text', 'p')
     }
     if (node.classList.contains('block')) {
-      return this.buildTagElement(node, 'block', 'div', document, folder, datalist,
-        componentChildren)
+      return this.buildTagElement(node, 'block', 'div', componentChildren)
     }
     if (node.classList.contains('component')) {
-      return this.addComponent(node, document, folder, datalist)
+      return this.addComponent(node)
     }
     if (node.classList.contains('component-children')) {
-      return this.addComponentChildren(node, document, folder, datalist, componentChildren)
+      return this.addComponentChildren(node, componentChildren)
     }
     // inline check is done at the end
     if (this.isInlineElement(node)) {
-      return this.buildInlineElement(node, document, folder, datalist)
+      return this.buildInlineElement(node)
     }
   },
 
-  addComponent (node, document, folder, datalist) {
+  addComponent (node) {
     // we don't want path.resolve because of windows
-    const file = folder + '/' + node.getAttributeNS(null, 'src')
+    const file = this._folder + '/' + node.getAttributeNS(null, 'src')
     if (!fs.existsSync(file)) return node.remove()
     node.classList.add(HelperElement.generateElementRef())
     this.addCanvasClasses(node, 'component')
     node.setAttributeNS(null, 'src', file)
     const componentChildren = node.innerHTML
     node.innerHTML = this.getHtmlFromFile(file)
-    this.buildHtml(node.children, document, folder, datalist, componentChildren)
+    this.buildHtml(node.children, componentChildren)
   },
 
   getHtmlFromFile (file) {
@@ -90,10 +99,10 @@ export default {
     return html.indexOf('<body>') > 1 ? html : `<body>${html}</body`
   },
 
-  addComponentChildren (node, document, folder, datalist, componentChildren) {
+  addComponentChildren (node, componentChildren) {
     this.addBasic(node, 'component-children')
     if (componentChildren) node.innerHTML = componentChildren
-    this.buildHtml(node.children, document, folder, datalist)
+    this.buildHtml(node.children)
   },
 
   addBasic (node, type) {
@@ -135,12 +144,10 @@ export default {
   setAbsoluteSource (node) {
     for (const attr of ['src', 'poster']) {
       // srcset is done separately
-      if (node[attr]) this.setAbsoluteSourceAttr(node, attr)
+      if (node[attr]) {
+        node[attr] = this._folder + '/' + node.getAttributeNS(null, attr)
+      }
     }
-  },
-
-  setAbsoluteSourceAttr (node, attr) {
-    node[attr] = HelperFile.getSourceFile(node[attr], os.platform())
   },
 
   cleanClasses (node) {
@@ -191,8 +198,8 @@ export default {
     return count
   },
 
-  buildImageElement (node, folder) {
-    node.srcset = node.srcset.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${folder}/$3$4`)
+  buildImageElement (node) {
+    node.srcset = node.srcset.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${this._folder}/$3$4`)
     this.addBasic(node, 'image')
   },
 
@@ -207,14 +214,14 @@ export default {
     }
   },
 
-  buildAudioElement (node, document) {
+  buildAudioElement (node) {
     this.addBasic(node, 'audio')
     this.setTrackSource(node)
-    this.buildAudioContainer(node, document)
+    this.buildAudioContainer(node)
   },
 
-  buildAudioContainer (audio, document) {
-    const div = document.createElement('div')
+  buildAudioContainer (audio) {
+    const div = this._document.createElement('div')
     this.transferAllAttributes(audio, div, ['src', 'controls', 'autoplay', 'loop', 'muted'])
     audio.parentNode.replaceChild(div, audio)
     div.appendChild(audio)
@@ -257,8 +264,8 @@ export default {
     if (node.hasAttributeNS(null, 'list') && !node.list) node.removeAttributeNS(null, 'list')
   },
 
-  addDatalist (node, datalist) {
-    datalist.appendChild(node.cloneNode(true))
+  addDatalist (node) {
+    this._datalist.appendChild(node.cloneNode(true))
   },
 
   isInlineElement (node) {
@@ -272,30 +279,30 @@ export default {
       '|var|kbd|bdo|ruby|rt|rb)'
   },
 
-  buildInlineElement (node, document, folder, datalist) {
+  buildInlineElement (node) {
     this.addBasic(node, 'inline')
     if (node.children.length) {
-      this.buildHtml(node.children, document, folder, datalist)
+      this.buildHtml(node.children)
     }
   },
 
-  buildTagElement (node, type, tag, document, folder, datalist, componentChildren = null) {
+  buildTagElement (node, type, tag, componentChildren = null) {
     this.addBasic(node, type)
-    node = this.changeNodeSpecialTag(node, document)
+    node = this.changeNodeSpecialTag(node)
     const children = HelperDOM.getChildren(node)
-    if (children) this.buildHtml(children, document, folder, datalist, componentChildren)
+    if (children) this.buildHtml(children, componentChildren)
   },
 
-  changeNodeSpecialTag (node, document) {
+  changeNodeSpecialTag (node) {
     const tag = HelperDOM.getTag(node)
     if (HelperElement.isNormalTag(tag)) return node
-    node = HelperDOM.changeTag(node, 'div', document)
+    node = HelperDOM.changeTag(node, 'div')
     node.setAttributeNS(null, 'data-ss-tag', tag)
     return node
   },
 
-  removeDatalists (document) {
-    const nodes = document.getElementsByTagName('datalist')
+  removeDatalists () {
+    const nodes = this._document.getElementsByTagName('datalist')
     while (nodes.length > 0) {
       nodes[0].remove()
     }

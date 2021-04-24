@@ -30,20 +30,19 @@ export default {
     const files = []
     const cssLinks = document.querySelectorAll('link[rel="stylesheet"]')
     for (const cssLink of cssLinks) {
-      const file = HelperFile.getSourceFile(cssLink.href, os.platform()).replace(folder, '')
-      files.push(file)
+      files.push(cssLink.getAttributeNS(null, 'href'))
     }
     return files
   },
 
   isCssFileAllowed (file, parseElementCss) {
     const files = [
-      '/css/general/reset.css',
-      '/css/general/animation.css',
-      '/css/general/font.css',
-      '/css/general/design-system.css'
+      'css/general/reset.css',
+      'css/general/animation.css',
+      'css/general/font.css',
+      'css/general/design-system.css'
     ]
-    return (parseElementCss || !file.startsWith('/css/page/')) && !files.includes(file)
+    return (parseElementCss || !file.startsWith('css/page/')) && !files.includes(file)
   },
 
   buildRules (sheet, css, folder) {

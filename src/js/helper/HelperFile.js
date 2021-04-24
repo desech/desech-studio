@@ -11,11 +11,6 @@ export default {
     return (os.toLowerCase() === 'win32') ? file.replaceAll('/', '\\') : file
   },
 
-  getSourceFile (file, os = navigator.platform) {
-    const separator = (os.toLowerCase() === 'win32') ? '' : '/'
-    return decodeURI(file.replace('file:///', separator))
-  },
-
   getFileExtension (file) {
     if (file.includes('.')) {
       return file.substring(file.lastIndexOf('.') + 1)

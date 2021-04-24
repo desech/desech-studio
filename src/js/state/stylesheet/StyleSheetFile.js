@@ -131,8 +131,7 @@ export default {
 
   fixFileUrl (value) {
     return value.replace(/url\("(.*?)"\)/g, (match, file) => {
-      const path = '../' + HelperFile.getRelPath(HelperFile.getSourceFile(file))
-      return `url("${path}")`
+      return `url("../${HelperFile.getRelPath(file)}")`
     })
   },
 

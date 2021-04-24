@@ -64,7 +64,7 @@ export default {
   },
 
   setRelativeSourceSrcset (node) {
-    const src = HelperFile.getSourceFile(node.srcset)
+    const src = node.getAttributeNS(null, 'srcset')
     const values = []
     for (const set of src.split(', ')) {
       values.push(this.getRelPath(set))
@@ -73,7 +73,7 @@ export default {
   },
 
   setRelativeSourceAttr (node, attr) {
-    const src = HelperFile.getSourceFile(node[attr])
+    const src = node.getAttributeNS(null, attr)
     node[attr] = this.getRelPath(src)
   },
 

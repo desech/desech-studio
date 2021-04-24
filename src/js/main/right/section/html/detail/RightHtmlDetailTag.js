@@ -168,14 +168,14 @@ export default {
     for (const set of srcset.split(', ')) {
       const [file, scaling] = set.split(' ')
       if (!scaling) continue
-      RightHtmlCommon.setFileName(fields[`srcset${scaling}`], HelperFile.getSourceFile(file))
+      RightHtmlCommon.setFileName(fields[`srcset${scaling}`], file)
     }
   },
 
   injectMediaFiles (fields, element) {
-    RightHtmlCommon.setFileName(fields.src, HelperFile.getSourceFile(element.src))
+    RightHtmlCommon.setFileName(fields.src, element.getAttributeNS(null, 'src'))
     if (fields.poster && element.poster) {
-      RightHtmlCommon.setFileName(fields.poster, HelperFile.getSourceFile(element.poster))
+      RightHtmlCommon.setFileName(fields.poster, element.getAttributeNS(null, 'poster'))
     }
   },
 

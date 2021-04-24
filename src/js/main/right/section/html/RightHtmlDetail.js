@@ -153,7 +153,8 @@ export default {
   },
 
   injectFormImg (form, data) {
-    RightHtmlDetailTag.injectImageSrcset(form.elements, data.element.srcset)
+    const srcset = data.element.getAttributeNS(null, 'srcset')
+    RightHtmlDetailTag.injectImageSrcset(form.elements, srcset)
   },
 
   injectFormMedia (form, data) {

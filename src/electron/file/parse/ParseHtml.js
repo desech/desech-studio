@@ -58,8 +58,7 @@ export default {
     const tag = HelperDOM.getTag(node)
     if (tag === 'svg') return this.addBasic(node, 'icon')
     if (tag === 'img') return this.buildImageElement(node)
-    if (tag === 'video') return this.buildVideoElement(node)
-    if (tag === 'audio') return this.buildAudioElement(node)
+    if (tag === 'video' || tag === 'audio') return this.buildMediaElement(node, tag)
     if (tag === 'input') return this.addInputElement(node)
     if (tag === 'select') return this.addBasic(node, 'dropdown')
     if (tag === 'textarea') return this.addBasic(node, 'textarea')
@@ -199,53 +198,20 @@ export default {
   },
 
   buildImageElement (node) {
-    node.srcset = node.srcset.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${this._folder}/$3$4`)
+    const srcset = node.getAttributeNS(null, 'srcset')
+      .replace(/(,)?( )?(.+?)( .x)/g, `$1$2${this._folder}/$3$4`)
+    node.setAttributeNS(null, 'srcset', srcset)
     this.addBasic(node, 'image')
   },
 
-  buildVideoElement (node) {
-    this.addBasic(node, 'video')
+  buildMediaElement (node, tag) {
+    this.addBasic(node, tag)
     this.setTrackSource(node)
   },
 
   setTrackSource (node) {
     for (const child of node.children) {
       this.setAbsoluteSource(child)
-    }
-  },
-
-  buildAudioElement (node) {
-    this.addBasic(node, 'audio')
-    this.setTrackSource(node)
-    this.buildAudioContainer(node)
-  },
-
-  buildAudioContainer (audio) {
-    const div = this._document.createElement('div')
-    this.transferAllAttributes(audio, div, ['src', 'controls', 'autoplay', 'loop', 'muted'])
-    audio.parentNode.replaceChild(div, audio)
-    div.appendChild(audio)
-  },
-
-  transferAllAttributes (from, to, skipDelete) {
-    this.transferAttributes(from, to, skipDelete)
-    this.transferData(from, to)
-  },
-
-  transferAttributes (from, to, skipDelete = true) {
-    for (const attr of from.attributes) {
-      to.setAttributeNS(null, attr.name, attr.value)
-      if (skipDelete !== true && !skipDelete.includes(attr.name)) {
-        // JSDOM doesn't use a live list
-        from.removeAttributeNS(null, attr.name)
-      }
-    }
-  },
-
-  transferData (from, to) {
-    for (const [key, val] of Object.entries(from.dataset)) {
-      to.dataset[key] = val
-      delete from.dataset[key]
     }
   },
 

@@ -8,13 +8,11 @@ import HelperProject from '../../../../helper/HelperProject.js'
 export default {
   getSelectedElementData () {
     const element = StateSelectedElement.getElement()
-    const node = HelperElement.getNode(element)
     return {
-      ref: HelperElement.getRef(element),
       element,
-      node,
+      ref: HelperElement.getRef(element),
       type: HelperElement.getType(element),
-      tag: HelperElement.getTag(node)
+      tag: HelperElement.getTag(element)
     }
   },
 

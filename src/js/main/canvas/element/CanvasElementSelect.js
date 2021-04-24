@@ -12,8 +12,8 @@ export default {
 
   getEvents () {
     return {
-      mouseover: ['mouseoverHideMediaControlsEvent'],
-      mouseout: ['mouseoutShowMediaControlsEvent'],
+      // mouseover: ['mouseoverHideMediaControlsEvent'],
+      // mouseout: ['mouseoutShowMediaControlsEvent'],
       mousedown: ['mousedownStartOperationEvent', 'ignoreElementEvent'],
       mouseup: ['mouseupEndSelectElementEvent', 'mouseupEndDeselectElementEvent'],
       click: ['ignoreElementEvent'],
@@ -52,19 +52,18 @@ export default {
     }
   },
 
+  // @todo we should use mouseenter and mouseleave but they don't bubble
   // prevent interacting with video/audio canvas elements by removing the controls attribute
-  mouseoverHideMediaControlsEvent (event) {
-    if (!HelperCanvas.isPreview() && (event.target.closest('#canvas .video') ||
-      event.target.closest('#canvas .audio'))) {
-      this.hideMediaControls(event.target.closest('.element'))
-    }
-  },
-  mouseoutShowMediaControlsEvent (event) {
-    if (!HelperCanvas.isPreview() && (event.target.closest('#canvas .video') ||
-      event.target.closest('#canvas .audio'))) {
-      this.showMediaControls(event.target.closest('.element'))
-    }
-  },
+  // mouseoverHideMediaControlsEvent (event) {
+  //   if (!HelperCanvas.isPreview() && event.target.closest('.video, .audio')) {
+  //     this.hideMediaControls(event.target.closest('.element'))
+  //   }
+  // },
+  // mouseoutShowMediaControlsEvent (event) {
+  //   if (!HelperCanvas.isPreview() && event.target.closest('.video, .audio')) {
+  //     this.showMediaControls(event.target.closest('.element'))
+  //   }
+  // },
 
   keydownDeselectElementEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
@@ -92,17 +91,15 @@ export default {
   },
 
   // ignore interacting with audio/video by hiding the controls
-  hideMediaControls (element) {
-    const node = HelperElement.getNode(element)
-    node.removeAttributeNS(null, 'controls')
-  },
+  // hideMediaControls (element) {
+  //   element.removeAttributeNS(null, 'controls')
+  // },
 
-  showMediaControls (element) {
-    const node = HelperElement.getNode(element)
-    if (element.hasAttributeNS(null, 'data-ss-controls')) {
-      node.setAttributeNS(null, 'controls', '')
-    }
-  },
+  // showMediaControls (element) {
+  //   if (element.hasAttributeNS(null, 'data-ss-controls')) {
+  //     element.setAttributeNS(null, 'controls', '')
+  //   }
+  // },
 
   selectElementByRef (ref) {
     const element = HelperElement.getElement(ref)

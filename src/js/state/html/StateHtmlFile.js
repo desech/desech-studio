@@ -30,9 +30,6 @@ export default {
     if (node.classList.contains('component')) {
       return this.addComponent(node, css, designSystemClasses)
     }
-    if (node.classList.contains('audio')) {
-      node = this.replaceAudio(node, css, designSystemClasses)
-    }
     this.setRelativeSource(node)
     if (node.classList.contains('input')) this.addDatalist(node)
     this.setBasic(node, css, designSystemClasses)
@@ -80,19 +77,6 @@ export default {
   getRelPath (attr) {
     const folder = HelperProject.getFolder()
     return attr.replace(folder + '/', '')
-  },
-
-  replaceAudio (div) {
-    const audio = div.children[0]
-    this.copyAttributes(div, audio)
-    div.replaceWith(audio)
-    return audio
-  },
-
-  copyAttributes (from, to) {
-    for (const attr of from.attributes) {
-      to.setAttributeNS(null, attr.name, attr.value)
-    }
   },
 
   setBasic (node, css, designSystemClasses) {

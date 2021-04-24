@@ -158,9 +158,9 @@ export default {
   },
 
   injectFormMedia (form, data) {
-    RightHtmlDetailTag.injectMediaFiles(form.elements, data.node)
-    RightHtmlDetailTag.injectMediaControlsButton(form.elements.controls, data.node)
-    RightHtmlDetailTrack.injectTracks(form, data.node)
+    RightHtmlDetailTag.injectMediaFiles(form.elements, data.element)
+    RightHtmlDetailTag.injectMediaControlsButton(form.elements.controls, data.element)
+    RightHtmlDetailTrack.injectTracks(form, data.element)
   },
 
   injectFormInput (form, data) {

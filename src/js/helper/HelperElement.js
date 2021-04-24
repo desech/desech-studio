@@ -20,12 +20,8 @@ export default {
     return document.getElementsByClassName(ref)[0]
   },
 
-  getNode (element) {
-    return element.classList.contains('audio') ? element.children[0] : element
-  },
-
   getAttributes (element) {
-    return this.getNode(element).attributes
+    return element.attributes
   },
 
   getClasses (element, viewable = false) {

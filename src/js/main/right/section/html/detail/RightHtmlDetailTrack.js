@@ -1,15 +1,16 @@
 import RightHtmlCommon from '../RightHtmlCommon.js'
 import StateSelectedElement from '../../../../../state/StateSelectedElement.js'
-import HelperElement from '../../../../../helper/HelperElement.js'
 
 export default {
   setTracks (list) {
+    const element = StateSelectedElement.getElement()
     const node = this.buildTracks(list.getElementsByClassName('style-html-track-element'))
-    RightHtmlCommon.setListHtmlCommand('setTracks', StateSelectedElement.getElement(), node, 'track')
+    RightHtmlCommon.setListHtmlCommand('setTracks', element, node, 'track')
   },
 
   buildTracks (forms) {
-    const node = document.createElement('video') // the tag doesn't matter; works for audio too
+    // the tag doesn't matter; works for audio too
+    const node = document.createElement('video')
     for (const form of forms) {
       node.appendChild(this.createTrack(form))
     }
@@ -30,9 +31,8 @@ export default {
   },
 
   injectTracks (container, element) {
-    const node = HelperElement.getNode(element)
     const list = container.getElementsByClassName('style-html-track-list')[0]
-    for (const child of node.children) {
+    for (const child of element.children) {
       const data = this.getTrackData(child)
       RightHtmlCommon.addTrackToList(list, data)
     }

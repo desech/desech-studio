@@ -199,7 +199,6 @@ export default {
     const ref = HelperElement.getRef(element)
     const attributes = {}
     for (const attr of element.attributes) {
-      // we want the audio container attrs not <audio>
       attributes[attr.name] = this.getAttributeValue(attr, ref)
     }
     return attributes
@@ -215,7 +214,6 @@ export default {
 
   getContent (element, type) {
     if (!['icon', 'video', 'audio', 'dropdown'].includes(type)) return
-    // return the whole audio chunk
     return element.innerHTML
   },
 

@@ -228,7 +228,7 @@ export default {
         if (!element.src) element.src = HelperFile.getDefaultVideo()
         break
       case 'audio':
-        if (!element.children[0].src) element.children[0].src = HelperFile.getDefaultAudio()
+        if (!element.src) element.src = HelperFile.getDefaultAudio()
         break
     }
   }

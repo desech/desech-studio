@@ -113,7 +113,6 @@ export default {
     const element = HelperElement.getElement(data.ref)
     for (const [name, value] of Object.entries(data.attributes)) {
       StateCommandCommon.setElementAttribute(element, name, value)
-      StateCommandCommon.setAudioAttributes(element, name, value)
     }
   },
 
@@ -135,8 +134,7 @@ export default {
 
   setTracks (data) {
     const element = HelperElement.getElement(data.ref)
-    const node = HelperElement.getNode(element)
-    node.innerHTML = data.html
+    element.innerHTML = data.html
   },
 
   changeSvg (data) {

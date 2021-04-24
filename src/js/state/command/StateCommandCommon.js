@@ -24,14 +24,6 @@ export default {
     }
   },
 
-  // for some audio attributes, we set the node value too
-  setAudioAttributes (element, name, value) {
-    const attrs = ['src', 'autoplay', 'loop', 'muted', 'controls']
-    if (!element.classList.contains('audio') || !attrs.includes(name)) return
-    const node = HelperElement.getNode(element)
-    this.setElementAttribute(node, name, value)
-  },
-
   getOptionsNode (data) {
     if (data.type === 'datalist') {
       return document.getElementById(`datalist-${data.ref}`)
@@ -58,7 +50,6 @@ export default {
   },
 
   pasteContent (element, content) {
-    // overwrites the whole audio chunk
     if (content) element.innerHTML = content
   },
 

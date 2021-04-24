@@ -1,5 +1,4 @@
 import os from 'os'
-import path from 'path'
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import Cookie from '../../lib/Cookie.js'
@@ -75,7 +74,8 @@ export default {
   },
 
   addComponent (node, document, folder, datalist) {
-    const file = path.resolve(folder, node.getAttributeNS(null, 'src'))
+    // we don't want path.resolve because of windows
+    const file = folder + '/' + node.getAttributeNS(null, 'src')
     if (!fs.existsSync(file)) return node.remove()
     node.classList.add(HelperElement.generateElementRef())
     this.addCanvasClasses(node, 'component')

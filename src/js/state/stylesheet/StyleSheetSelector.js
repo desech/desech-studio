@@ -39,8 +39,18 @@ export default {
     // these come from the design system or a class that was deleted, but it's still attached
     for (const cls of classes) {
       const clsSelector = '.' + cls
-      if (!selectors.includes(clsSelector)) selectors.push(clsSelector)
+      if (this.findClassSelector(selectors, clsSelector)) continue
+      selectors.push(clsSelector)
     }
+  },
+
+  findClassSelector (selectors, clsSelector) {
+    for (const selector of selectors) {
+      if (HelperStyle.removeResponsive(selector) === clsSelector) {
+        return true
+      }
+    }
+    return false
   },
 
   getCurrentSelectorLi (container = document) {

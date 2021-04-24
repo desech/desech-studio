@@ -44,7 +44,11 @@ export default {
   },
 
   sanitizeSelector (value) {
-    return value.replace(/.responsive-(.*?) /, '').replaceAll('._ss_', '.')
+    return this.removeResponsive(value).replaceAll('._ss_', '.')
+  },
+
+  removeResponsive (value) {
+    return value.replace(/.responsive-(.*?) /, '')
   },
 
   extractClassSelector (selector) {

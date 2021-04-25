@@ -200,11 +200,9 @@ git clone git@github.com:desech/studio-angular.git desech-studio-angular
 git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```
 
-## Build Studio
+## Build Studio Linux
 
 - change version in `package.json` and `app/package.json`
-
-Linux
 
 ```sh
 cd ~/dev/desech-studio
@@ -233,20 +231,32 @@ repoctl status -a
 
 - copy everything from `~/share` to sftp
 
-Windows
+## Build Studio Windows
+
+- fetch the latest updates from git
 
 ```sh
 cd C:\Users\vioi\Documents\dev\desech-studio
+npm i
+cd app
+npm i
+cd ..
 npm run build-all-prod
 npm run build-win
 ```
 
 - copy the `latest.yml` and exe file to sftp
 
-Mac
+## Build Studio Mac
+
+- fetch the latest updates from git
 
 ```sh
 cd C:\Users\vioi\Documents\dev\desech-studio
+npm i
+cd app
+npm i
+cd ..
 npm run build-all-prod
 npm run build-mac
 ```

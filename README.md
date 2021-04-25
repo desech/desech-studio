@@ -84,7 +84,7 @@ nano conf/distributions
 Add/upgrade the deb file
 
 ```sh
-reprepro -b /home/vioi/share/download.desech.com/apt includedeb apt /home/vioi/dev/desech-studio/dist/desech-studio_1.0.0_amd64.deb
+reprepro -b /home/vioi/share/download.desech.com/apt includedeb apt /home/vioi/dev/desech-studio/dist/desech-studio-1.0.0-amd64.deb
   [use the passphrase from bitwarden only once]
 reprepro -b /home/vioi/share/download.desech.com/apt list apt
 # reprepro -b /home/vioi/share/download.desech.com/apt remove apt desech-studio
@@ -141,7 +141,6 @@ How to install
 ```sh
 sudo dnf config-manager --add-repo https://download.desech.com/dnf/desech-studio.repo
 sudo dnf update && sudo dnf install -y desech-studio
-
 sudo nano /etc/yum.repos.d/desech-studio.repo
 ```
 
@@ -203,21 +202,53 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 
 ## Build Studio
 
-```sh
 - change version in `package.json` and `app/package.json`
+
+Linux
+
+```sh
 cd ~/dev/desech-studio
 npm run build-all-prod
-DEBUG=electron-builder npm run pack-linux-x86
 npm run build-linux-x86
-npm run build-win
-npm run build-mac
-  make sure you have xcode installed for the notarizing tools
+reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.0-amd64.deb
+reprepro -b /home/vioi/share/download.desech.com/apt list apt
+cp ./dist/desech-studio-1.0.0-x86_64.rpm ~/share/download.desech.com/dnf
+cp ./dist/desech-studio-1.0.0-x64.pacman ~/share/download.desech.com/pacman
 ```
 
-## Windows/Mac Updates
+Fedora
 
-- Build the new file
-- For windows copy the `latest.yml` and exe file to sftp
-- For mac copy the `latest-mac.yml`, dmg and zip file to sftp
-- Delete the 2 versions behind file from sftp
-- Update the exe/dmg link and changelog in the download website page
+```sh
+sudo createrepo -v ~/share/download.desech.com/dnf
+```
+
+Manjaro
+
+```sh
+sudo -s
+repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.0.0-x64.pacman
+  at some point CTRL+C because it hangs forever
+repoctl status -a
+```
+
+- copy everything from `~/share` to sftp
+
+Windows
+
+```sh
+cd C:\Users\vioi\Documents\dev\desech-studio
+npm run build-all-prod
+npm run build-win
+```
+
+- copy the `latest.yml` and exe file to sftp
+
+Mac
+
+```sh
+cd C:\Users\vioi\Documents\dev\desech-studio
+npm run build-all-prod
+npm run build-mac
+```
+
+- copy the `latest-mac.yml`, dmg and zip file to sftp

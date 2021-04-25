@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import File from '../file/File.js'
 import ExportStaticContent from './static/ExportStaticContent.js'
 
@@ -12,14 +13,14 @@ export default {
   },
 
   syncCss (folder, css) {
-    const cssFile = folder + '/_export/css/compiled/style.css'
+    const cssFile = path.resolve(folder, '_export/css/compiled/style.css')
     File.createFile(cssFile, css)
   },
 
   syncJs (folder) {
-    const scriptFile = folder + '/_export/js/script.js'
+    const scriptFile = path.resolve(folder, '_export/js/script.js')
     if (fs.existsSync(scriptFile)) return
-    const dsFile = folder + '/js/design-system.js'
+    const dsFile = path.resolve(folder, 'js/design-system.js')
     const js = fs.existsSync(dsFile) ? fs.readFileSync(dsFile).toString() : ''
     File.createFile(scriptFile, js)
   },

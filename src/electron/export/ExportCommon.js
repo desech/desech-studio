@@ -1,3 +1,4 @@
+import path from 'path'
 import fs from 'fs'
 import File from '../file/File.js'
 
@@ -15,7 +16,7 @@ export default {
     // order matters
     const files = ['reset', 'font', 'root', 'component-css', 'component-html']
     for (const file of files) {
-      const filePath = folder + '/css/general/' + file + '.css'
+      const filePath = path.resolve(folder, 'css/general', file + '.css')
       if (fs.existsSync(filePath)) paths.push(filePath)
     }
     return paths
@@ -23,7 +24,7 @@ export default {
 
   getPageCssFiles (folder) {
     const paths = []
-    const files = File.readFolder(folder + '/css/page')
+    const files = File.readFolder(path.resolve(folder, 'css/page'))
     for (const file of files) {
       if (file.extension === 'css') paths.push(file.path)
     }
@@ -40,7 +41,7 @@ export default {
   },
 
   getDesignSystemCss (folder) {
-    const file = folder + '/css/general/design-system.css'
+    const file = path.resolve(folder, 'css/general/design-system.css')
     return fs.existsSync(file) ? fs.readFileSync(file).toString() : ''
   },
 
@@ -48,7 +49,7 @@ export default {
     let selectedCss = ''
     const animations = this.getAnimationsUsed(css)
     if (!animations.length) return ''
-    const file = folder + '/css/general/animation.css'
+    const file = path.resolve(folder, 'css/general/animation.css')
     const animationCss = fs.readFileSync(file).toString() + '@'
     for (const animation of animations) {
       const regex = new RegExp(`(@keyframes ${animation} [\\s\\S]*?}[\\s]*)@`, 'g')
@@ -78,7 +79,7 @@ export default {
       if (file.type === 'folder' && !this.checkAllowedHtmlFolder(file.name)) continue
       if (file.type === 'folder') this.addHtmlFolderFiles(file.children, folder, list)
       if (file.extension !== 'html') continue
-      if (file.path.startsWith(folder + '/component')) {
+      if (file.path.startsWith(path.resolve(folder, 'component'))) {
         file.isComponent = true
       }
       list.push(file)

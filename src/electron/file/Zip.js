@@ -39,5 +39,11 @@ export default {
     const folder = File.resolve(app.getPath('temp'), rand)
     zip.extractAllTo(folder, true)
     return folder
+  },
+
+  async exportFolder (zipFolder, currentFolder) {
+    const timestamp = Math.floor(Date.now() / 1000)
+    const zipFile = `${File.basename(currentFolder)}-${timestamp}.zip`
+    await this.createZip(File.resolve(zipFolder, zipFile), currentFolder)
   }
 }

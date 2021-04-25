@@ -261,7 +261,7 @@ export default {
   changeNodeSpecialTag (node) {
     const tag = HelperDOM.getTag(node)
     if (HelperElement.isNormalTag(tag)) return node
-    node = HelperDOM.changeTag(node, 'div')
+    node = HelperDOM.changeTag(node, 'div', this._document)
     node.setAttributeNS(null, 'data-ss-tag', tag)
     return node
   },

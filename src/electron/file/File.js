@@ -2,7 +2,6 @@ import fs from 'fs'
 import crypto from 'crypto'
 import path from 'path'
 import { app } from 'electron'
-import Zip from './Zip.js'
 
 export default {
   extname (file) {
@@ -166,16 +165,6 @@ export default {
         reject(error)
       }
     })
-  },
-
-  async exportFolder (zipFolder, currentFolder) {
-    const zipFile = this.resolve(zipFolder, this.getZipFile(currentFolder))
-    await Zip.createZip(zipFile, currentFolder)
-  },
-
-  getZipFile (folder) {
-    const timestamp = Math.floor(Date.now() / 1000)
-    return `${this.basename(folder)}-${timestamp}.zip`
   },
 
   getContentTypeExtension (type) {

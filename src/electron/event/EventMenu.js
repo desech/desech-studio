@@ -10,6 +10,7 @@ import Plugin from '../lib/Plugin.js'
 import Project from '../project/Project.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import Electron from '../lib/Electron.js'
+import Zip from '../file/Zip.js'
 
 export default {
   addEvents () {
@@ -141,7 +142,7 @@ export default {
     const folders = this.getExportFolder()
     if (!folders) return
     const zipFolder = File.sanitizePath(folders[0])
-    await File.exportFolder(zipFolder, currentFolder)
+    await Zip.exportFolder(zipFolder, currentFolder)
   },
 
   getExportFolder () {

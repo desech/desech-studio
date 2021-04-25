@@ -13,6 +13,11 @@ export default {
     return this.sanitizePath(Array.from(arguments).join('/').replace('//', '/'))
   },
 
+  normalize () {
+    const file = this.resolve(...arguments)
+    return this.sanitizePath(path.normalize(file))
+  },
+
   basename (file, ext = '') {
     return this.sanitizePath(path.basename(file, ext))
   },
@@ -21,12 +26,8 @@ export default {
     return this.sanitizePath(path.dirname(file))
   },
 
-  normalize (file) {
-    return this.sanitizePath(path.normalize(file))
-  },
-
-  relative (file1, file2) {
-    return this.sanitizePath(path.relative(path.resolve(file1), path.resolve(file2)))
+  relative (from, to) {
+    return this.sanitizePath(path.relative(path.resolve(from), path.resolve(to)))
   },
 
   sanitizePath (absPath) {

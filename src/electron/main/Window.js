@@ -1,4 +1,3 @@
-import path from 'path'
 import { app, BrowserWindow } from 'electron'
 import Menu from './Menu.js'
 import Settings from '../lib/Settings.js'
@@ -9,6 +8,7 @@ import EventFile from '../event/EventFile.js'
 import EventMain from '../event/EventMain.js'
 import EventApi from '../event/EventApi.js'
 import Plugin from '../lib/Plugin.js'
+import File from '../file/File.js'
 
 export default {
   _window: null,
@@ -27,7 +27,7 @@ export default {
   createWindow () {
     this._window = new BrowserWindow({
       webPreferences: {
-        preload: path.resolve(app.getAppPath(), 'preload.js')
+        preload: File.resolve(app.getAppPath(), 'preload.js')
       }
     })
     this._window.maximize()

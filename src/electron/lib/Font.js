@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 import fetch from 'node-fetch'
 import AdmZip from 'adm-zip'
 import Cookie from './Cookie.js'
@@ -18,7 +17,7 @@ export default {
   async copyFontFolder (folder, url, file) {
     const buffer = await this.getZipFile(url, file)
     const zip = new AdmZip(buffer)
-    const fontDir = path.resolve(folder, 'font')
+    const fontDir = File.resolve(folder, 'font')
     zip.extractAllTo(fontDir, true)
     return zip
   },
@@ -35,7 +34,7 @@ export default {
 
   getFontCss (folder, zip) {
     for (const entry of zip.getEntries()) {
-      if (path.basename(entry.entryName) === 'font.css') {
+      if (File.basename(entry.entryName) === 'font.css') {
         return zip.readAsText(entry)
       }
     }
@@ -43,19 +42,19 @@ export default {
   },
 
   addFontCss (folder, css) {
-    const file = path.resolve(folder, 'css/general/font.css')
+    const file = File.resolve(folder, 'css/general/font.css')
     fs.appendFileSync(file, css + '\n\n')
   },
 
   rebuildFonts (folder) {
     const css = this.getAllFontCss(folder)
-    const file = path.resolve(folder, 'css/general/font.css')
+    const file = File.resolve(folder, 'css/general/font.css')
     fs.writeFileSync(file, css)
   },
 
   getAllFontCss (folder) {
     let css = ''
-    const files = File.readFolder(path.resolve(folder, 'font'))
+    const files = File.readFolder(File.resolve(folder, 'font'))
     for (const entry of files) {
       if (entry.type !== 'folder') continue
       for (const file of entry.children) {
@@ -69,7 +68,7 @@ export default {
 
   getFontsList (folder) {
     const list = []
-    const files = File.readFolder(path.resolve(folder, 'font'))
+    const files = File.readFolder(File.resolve(folder, 'font'))
     for (const entry of files) {
       if (entry.type === 'folder') {
         list.push(entry.name.replaceAll('+', ' '))

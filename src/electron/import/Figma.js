@@ -1,4 +1,3 @@
-import path from 'path'
 import { shell } from 'electron'
 import Config from '../lib/Config.js'
 import Settings from '../lib/Settings.js'
@@ -50,8 +49,8 @@ export default {
 
   async initExistingImages (folder) {
     await ParseCommon.prepareProjectFolder(folder)
-    const imageFolder = path.resolve(folder, 'asset/image')
-    const cacheFolder = path.resolve(folder, '_desech/cache')
+    const imageFolder = File.resolve(folder, 'asset/image')
+    const cacheFolder = File.resolve(folder, '_desech/cache')
     return [
       ...File.readFolder(imageFolder),
       ...File.readFolder(cacheFolder)

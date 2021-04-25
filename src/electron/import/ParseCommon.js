@@ -1,7 +1,5 @@
-import path from 'path'
 import fs from 'fs'
 import jimp from 'jimp'
-import { app } from 'electron'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 import HelperCrypto from '../../js/helper/HelperCrypto.js'
 import HelperColor from '../../js/helper/HelperColor.js'
@@ -239,14 +237,14 @@ export default {
   async processLocalImages (imagePath, ext, extra) {
     const id = this.getImageId(imagePath)
     const fileName = this.getImageName(extra.element.name, id, extra.processImages)
-    const src = path.resolve(extra.importFolder, imagePath)
+    const src = File.resolve(extra.importFolder, imagePath)
     const dest1x = await this.copyResizeImages(src, extra.projectFolder, fileName, ext,
       extra.data)
     return this.getImageUrl(dest1x, extra.projectFolder)
   },
 
   getImageId (imagePath) {
-    const fileName = path.basename(imagePath)
+    const fileName = File.basename(imagePath)
     return (fileName.indexOf('.') > 0) ? fileName.substring(0, fileName.indexOf('.')) : fileName
   },
 
@@ -267,7 +265,7 @@ export default {
   },
 
   async copyResizeImage (src, projectFolder, name, ext, width) {
-    const dest = path.resolve(projectFolder, 'asset/image/' + name + '.' + ext)
+    const dest = File.resolve(projectFolder, 'asset/image/' + name + '.' + ext)
     if (fs.existsSync(dest)) return dest
     const image = await jimp.read(src)
     await image.resize(width, jimp.AUTO)

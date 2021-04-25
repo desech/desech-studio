@@ -1,8 +1,8 @@
-import path from 'path'
 import AdobexdCommon from './AdobexdCommon.js'
 import ParseCommon from '../ParseCommon.js'
 import HelperStyle from '../../../js/helper/HelperStyle.js'
 import HelperColor from '../../../js/helper/HelperColor.js'
+import File from '../../file/File.js'
 
 export default {
   async getCssFill (extra) {
@@ -69,7 +69,7 @@ export default {
 
   async getFillBgImage (fill, extra) {
     const imagePath = 'resources/' + fill.pattern.meta.ux.uid
-    const ext = path.extname(fill.pattern.href).substring(1)
+    const ext = File.extname(fill.pattern.href).substring(1)
     return await ParseCommon.processLocalImages(imagePath, ext, extra)
   },
 

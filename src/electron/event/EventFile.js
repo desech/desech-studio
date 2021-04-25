@@ -1,5 +1,4 @@
 import { ipcMain } from 'electron'
-import path from 'path'
 import fs from 'fs'
 import EventMain from './EventMain.js'
 import Cookie from '../lib/Cookie.js'
@@ -94,19 +93,19 @@ export default {
 
   async moveToFolder (from, to) {
     const newPath = File.moveToFolder(from, to)
-    if (path.extname(from) === '.html') await this.updateCssFile(from, newPath)
+    if (File.extname(from) === '.html') await this.updateCssFile(from, newPath)
   },
 
   async renamePath (file, name) {
     const newPath = File.renamePath(file, name)
-    if (path.extname(file) === '.html') await this.updateCssFile(file, newPath)
+    if (File.extname(file) === '.html') await this.updateCssFile(file, newPath)
   },
 
   async updateCssFile (oldPath, newPath) {
     const folder = await Cookie.getCookie('currentFolder')
     const oldCssFile = HelperFile.getPageCssFile(oldPath, folder)
     const newCssFile = HelperFile.getPageCssFile(newPath, folder)
-    File.renamePath(path.resolve(folder, 'css/page', oldCssFile), newCssFile)
+    File.renamePath(File.resolve(folder, 'css/page', oldCssFile), newCssFile)
     this.updateMovedHtml(newPath, oldCssFile, newCssFile, folder)
   },
 

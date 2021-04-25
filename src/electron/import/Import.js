@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 import { dialog } from 'electron'
 import Language from '../lib/Language.js'
 import Figma from './Figma.js'
@@ -55,7 +54,7 @@ export default {
   },
 
   backupImportFile (folder, type, data) {
-    const file = path.resolve(folder, '_desech', type + '-import.json')
+    const file = File.resolve(folder, '_desech', type + '-import.json')
     fs.writeFileSync(file, JSON.stringify(data, null, 2))
   },
 
@@ -66,7 +65,7 @@ export default {
 
   saveHtmlFiles (html, css, folder, mainFolder, hasDesignSystem) {
     for (const file of Object.values(html)) {
-      const filePath = path.resolve(folder, file.name)
+      const filePath = File.resolve(folder, file.name)
       if (file.type === 'folder') {
         File.createFolder(filePath)
         this.saveHtmlFiles(file.files, css, filePath, mainFolder, hasDesignSystem)
@@ -86,7 +85,7 @@ export default {
 
   getHtml (data, css, file, folder, hasDesignSystem) {
     const msg = Language.localize('Saving html file <b>{{file}}</b>',
-      { file: path.basename(file) })
+      { file: File.basename(file) })
     EventMain.ipcMainInvoke('mainImportProgress', msg)
     const html = this.getImportHtml(data, css, folder)
     const beauty = FileParse.beautifyHtml(html)
@@ -178,7 +177,7 @@ export default {
   },
 
   getScaledSrcset (image, scale) {
-    const ext = path.extname(image)
+    const ext = File.extname(image)
     return image.replace(ext, `@${scale}x${ext} ${scale}x`)
   },
 
@@ -191,7 +190,7 @@ export default {
 
   saveSvgBgImage (node, css, folder) {
     const file = `${ParseCommon.getName(node.name)}-${node.width}-${node.height}.svg`
-    const filePath = path.resolve(folder, 'asset/image', file)
+    const filePath = File.resolve(folder, 'asset/image', file)
     if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, node.content)
     this.addSvgBgImageCss(node.ref, file, css)
   },

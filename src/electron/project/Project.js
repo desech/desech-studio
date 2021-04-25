@@ -1,4 +1,3 @@
-import path from 'path'
 import fs from 'fs'
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
@@ -18,7 +17,7 @@ export default {
   },
 
   getProjectSettings (folder) {
-    const file = path.resolve(folder, '_desech/project.json')
+    const file = File.resolve(folder, '_desech/project.json')
     if (fs.existsSync(file) && fs.statSync(file).size) {
       return File.getFileData('_desech/project.json', folder)
     } else {
@@ -54,7 +53,7 @@ export default {
   },
 
   saveProjectSettings (folder, settings) {
-    const file = path.resolve(folder, '_desech/project.json')
+    const file = File.resolve(folder, '_desech/project.json')
     fs.writeFileSync(file, JSON.stringify(settings, null, 2))
   },
 

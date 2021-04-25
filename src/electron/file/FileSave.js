@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 import os from 'os'
 import { shell } from 'electron'
 import Plugin from '../lib/Plugin.js'
@@ -9,6 +8,7 @@ import HelperProject from '../../js/helper/HelperProject.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import ExportStaticCode from '../export/ExportStaticCode.js'
 import ExportCommon from '../export/ExportCommon.js'
+import File from './File.js'
 
 export default {
   async saveCurrentFile (data) {
@@ -36,7 +36,7 @@ export default {
   },
 
   saveStyleToFile (data, colors, folder, file) {
-    const filePath = path.resolve(folder, file)
+    const filePath = File.resolve(folder, file)
     const css = this.getStyle(data, colors)
     this.saveFileWithBackup(filePath, css)
   },

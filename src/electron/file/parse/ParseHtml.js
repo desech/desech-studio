@@ -1,9 +1,9 @@
-import os from 'os'
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import Cookie from '../../lib/Cookie.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
+import File from '../File.js'
 
 export default {
   _document: null,
@@ -82,8 +82,7 @@ export default {
   },
 
   addComponent (node) {
-    // we don't want path.resolve because of windows
-    const file = this._folder + '/' + node.getAttributeNS(null, 'src')
+    const file = File.resolve(this._folder, node.getAttributeNS(null, 'src'))
     if (!fs.existsSync(file)) return node.remove()
     node.classList.add(HelperElement.generateElementRef())
     this.addCanvasClasses(node, 'component')
@@ -144,7 +143,7 @@ export default {
     for (const attr of ['src', 'poster']) {
       // srcset is done separately
       if (node[attr]) {
-        node[attr] = this._folder + '/' + node.getAttributeNS(null, attr)
+        node[attr] = File.resolve(this._folder, node.getAttributeNS(null, attr))
       }
     }
   },

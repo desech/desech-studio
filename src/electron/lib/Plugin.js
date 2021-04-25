@@ -6,7 +6,6 @@ import jimp from 'jimp'
 import beautify from 'js-beautify'
 import fetch from 'node-fetch'
 import jsdom from 'jsdom'
-import path from 'path'
 import fs from 'fs'
 import os from 'os'
 import File from '../file/File.js'
@@ -22,7 +21,7 @@ export default {
   _DIR: null,
 
   async initPlugins () {
-    this._DIR = path.resolve(app.getPath('userData'), 'plugin')
+    this._DIR = File.resolve(app.getPath('userData'), 'plugin')
     File.createFolder(this._DIR)
     await this.updatePlugins()
   },
@@ -68,7 +67,7 @@ export default {
     const zip = new AdmZip(buffer)
     const folder = Zip.unzipInstanceTmp(zip)
     // we want the subfolder
-    return path.resolve(folder, fs.readdirSync(folder)[0])
+    return File.resolve(folder, fs.readdirSync(folder)[0])
   },
 
   async getApiZip (url) {
@@ -89,7 +88,7 @@ export default {
 
   moveTmpFolder (folder, url) {
     const pluginName = HelperPlugin.getPluginName(url)
-    let dest = path.resolve(this._DIR, pluginName)
+    let dest = File.resolve(this._DIR, pluginName)
     if (fs.existsSync(dest)) {
       dest = HelperFile.convertPathForWin(dest, os.platform())
       // clean it up if it exists (when upgrading)
@@ -110,8 +109,8 @@ export default {
 
   getInstalledPluginData (entry) {
     if (!entry.isDirectory()) return
-    const folder = path.resolve(this._DIR, entry.name)
-    if (!fs.existsSync(path.resolve(folder, 'package.json'))) return
+    const folder = File.resolve(this._DIR, entry.name)
+    if (!fs.existsSync(File.resolve(folder, 'package.json'))) return
     const data = File.getFileData('package.json', folder)
     if (!data.desech) return
     return {
@@ -147,7 +146,7 @@ export default {
 
   removePlugin (url) {
     const pluginName = HelperPlugin.getPluginName(url)
-    let pluginPath = path.resolve(this._DIR, pluginName)
+    let pluginPath = File.resolve(this._DIR, pluginName)
     if (fs.existsSync(pluginPath)) {
       pluginPath = HelperFile.convertPathForWin(pluginPath, os.platform())
       shell.moveItemToTrash(pluginPath)
@@ -158,7 +157,7 @@ export default {
   async triggerPlugin (category, method, data = null) {
     const project = await ProjectCommon.getProjectSettings()
     if (!project[category]) return
-    const file = path.resolve(this._DIR, project[category], 'index.js')
+    const file = File.resolve(this._DIR, project[category], 'index.js')
     const module = require(file)
     if (!(method in module)) {
       throw new Error(Language.localize('Unknown "{{method}}" method for active plugin ' +

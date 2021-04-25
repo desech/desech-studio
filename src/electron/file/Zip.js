@@ -1,9 +1,9 @@
 import { app } from 'electron'
 import fs from 'fs'
-import path from 'path'
 import crypto from 'crypto'
 import archiver from 'archiver'
 import AdmZip from 'adm-zip'
+import File from './File.js'
 
 export default {
   createZip (zipFile, folder, options = {}) {
@@ -17,7 +17,7 @@ export default {
         reject(error)
       })
       archive.pipe(output)
-      archive.directory(folder, options.includeFolder ? path.basename(folder) : false)
+      archive.directory(folder, options.includeFolder ? File.basename(folder) : false)
       archive.finalize()
     })
   },
@@ -29,14 +29,14 @@ export default {
 
   unzipFileTmp (file) {
     const rand = crypto.randomBytes(32).toString('hex')
-    const folder = path.resolve(app.getPath('temp'), rand)
+    const folder = File.resolve(app.getPath('temp'), rand)
     this.unzip(file, folder)
     return folder
   },
 
   unzipInstanceTmp (zip) {
     const rand = crypto.randomBytes(32).toString('hex')
-    const folder = path.resolve(app.getPath('temp'), rand)
+    const folder = File.resolve(app.getPath('temp'), rand)
     zip.extractAllTo(folder, true)
     return folder
   }

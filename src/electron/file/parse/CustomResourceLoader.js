@@ -1,16 +1,16 @@
-import path from 'path'
 import { ResourceLoader } from 'jsdom'
+import File from '../File.js'
 
 export default class CustomResourceLoader extends ResourceLoader {
   async fetch (url, options) {
-    if (path.extname(url) === '.css') {
+    if (File.extname(url) === '.css') {
       return await this.formatCssFile(url, options)
     }
     return await super.fetch(url, options)
   }
 
   async formatCssFile (url, options) {
-    const file = path.basename(url)
+    const file = File.basename(url)
     if (file === 'reset.css') {
       // ignore this file
       return Promise.resolve(Buffer.from(''))

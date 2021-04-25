@@ -1,6 +1,4 @@
-import os from 'os'
 import fs from 'fs'
-import path from 'path'
 import File from '../File.js'
 import HelperFile from '../../../js/helper/HelperFile.js'
 import HelperStyle from '../../../js/helper/HelperStyle.js'
@@ -94,8 +92,7 @@ export default {
   fixFileUrl (value, folder) {
     if (!value.includes('url(')) return value
     return value.replace(/url\("(.*?)"\)/g, (match, file) => {
-      let absFile = path.resolve(folder, file.replace(/\.\.\//g, ''))
-      absFile = File.sanitizePath(absFile, os.platform())
+      const absFile = File.sanitizePath(File.resolve(folder, file.replace(/\.\.\//g, '')))
       return `url("${absFile}")`
     })
   },

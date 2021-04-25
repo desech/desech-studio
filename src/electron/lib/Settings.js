@@ -1,13 +1,13 @@
 import { app, nativeTheme } from 'electron'
 import fs from 'fs'
-import path from 'path'
 import Language from './Language.js'
+import File from '../file/File.js'
 
 export default {
   _FILE: '',
 
   initSettings () {
-    this._FILE = path.resolve(app.getPath('userData'), 'settings.json')
+    this._FILE = File.resolve(app.getPath('userData'), 'settings.json')
     if (!fs.existsSync(this._FILE)) this.createInitialFile()
     return this.getSettings()
   },

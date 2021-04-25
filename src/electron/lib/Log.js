@@ -1,9 +1,9 @@
 import { app } from 'electron'
 import fs from 'fs'
 import os from 'os'
-import path from 'path'
 import crypto from 'crypto'
 import Cookie from './Cookie.js'
+import File from '../file/File.js'
 
 export default {
   _FILE: 'app.log',
@@ -11,7 +11,7 @@ export default {
   _MAX_EXTRA_FILES: 5,
 
   async initLogs () {
-    const dir = path.resolve(app.getPath('userData'), 'log')
+    const dir = File.resolve(app.getPath('userData'), 'log')
     app.setAppLogsPath(dir)
   },
 
@@ -22,14 +22,14 @@ export default {
 
   getFolder () {
     if (app) {
-      return app.getPath('logs') + '/'
+      return app.getPath('logs')
     } else {
-      return path.join(process.cwd(), '/build/logs/')
+      return File.resolve(process.cwd(), 'build/logs')
     }
   },
 
   getFile () {
-    return this.getFolder() + this._FILE
+    return File.resolve(this.getFolder(), this._FILE)
   },
 
   async error (errorObj) {
@@ -69,7 +69,7 @@ export default {
   },
 
   getExtraFile (index) {
-    return this.getFolder() + this._FILE.replace('.', index + '.')
+    return File.resolve(this.getFolder(), this._FILE.replace('.', index + '.'))
   },
 
   shiftFiles () {

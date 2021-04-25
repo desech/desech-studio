@@ -1,9 +1,9 @@
-import path from 'path'
 import ExtendJS from '../../../js/helper/ExtendJS.js'
 import FigmaCommon from './FigmaCommon.js'
 import ParseCommon from '../ParseCommon.js'
 import HelperStyle from '../../../js/helper/HelperStyle.js'
 import HelperColor from '../../../js/helper/HelperColor.js'
+import File from '../../file/File.js'
 
 export default {
   async getCssFill (element, extra) {
@@ -114,7 +114,7 @@ export default {
       fileName,
       fileExt: element.exportSettings[0].format.toLowerCase(),
       scale,
-      folder: path.resolve(extra.folder, 'asset/image')
+      folder: File.resolve(extra.folder, 'asset/image')
     })
   },
 

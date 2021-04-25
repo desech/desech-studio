@@ -1,12 +1,12 @@
 import { JSDOM } from 'jsdom'
 import { URL } from 'whatwg-url'
-import path from 'path'
 import beautify from 'js-beautify'
 import ParseHtml from './parse/ParseHtml.js'
 import ParseCss from './parse/ParseCss.js'
 import CustomResourceLoader from './parse/CustomResourceLoader.js'
 import Cookie from '../lib/Cookie.js'
 import Font from '../lib/Font.js'
+import File from './File.js'
 
 export default {
   async parseHtmlCssFile (file, parseElementCss = true) {
@@ -14,7 +14,7 @@ export default {
     const html = ParseHtml.getHtmlFromFile(file)
     const dom = new JSDOM(html, {
       resources: new CustomResourceLoader(),
-      url: new URL('file:' + path.resolve(file))
+      url: new URL('file:' + File.resolve(file))
     })
     const data = await this.parseFileType(dom.window.document, file, folder, parseElementCss)
     data.font = Font.getFontsList(folder)
@@ -52,7 +52,7 @@ export default {
       return ParseCss.parseCss(document, folder, parseElementCss)
     }
     // parse index.html for css, but ignore its element css file
-    const index = path.resolve(folder, 'index.html')
+    const index = File.resolve(folder, 'index.html')
     const data = await this.parseHtmlCssFile(index, false)
     return data.css
   },

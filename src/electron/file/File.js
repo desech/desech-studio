@@ -5,9 +5,33 @@ import { app } from 'electron'
 import Zip from './Zip.js'
 
 export default {
+  extname (file) {
+    return path.extname(file)
+  },
+
+  resolve () {
+    return this.sanitizePath(Array.from(arguments).join('/').replace('//', '/'))
+  },
+
+  basename (file, ext = '') {
+    return this.sanitizePath(path.basename(file, ext))
+  },
+
+  dirname (file) {
+    return this.sanitizePath(path.dirname(file))
+  },
+
+  normalize (file) {
+    return this.sanitizePath(path.normalize(file))
+  },
+
+  relative (file1, file2) {
+    return this.sanitizePath(path.relative(path.resolve(file1), path.resolve(file2)))
+  },
+
   sanitizePath (absPath) {
     // fix windows separator
-    return absPath.replaceAll('\\', '/')
+    return absPath.replaceAll(path.sep, '/')
   },
 
   readFolder (folder, options = {}) {
@@ -33,13 +57,13 @@ export default {
 
   readFolderEntry (file, folder, options) {
     const fileName = options.withFileTypes ? file.name : file
-    const absPath = path.resolve(folder, fileName)
+    const absPath = this.resolve(folder, fileName)
     const isDir = options.withFileTypes ? file.isDirectory() : fs.lstatSync(absPath).isDirectory()
     return {
       name: fileName,
       path: this.sanitizePath(absPath),
       type: isDir ? 'folder' : 'file',
-      extension: isDir ? '' : path.extname(fileName).substring(1),
+      extension: isDir ? '' : this.extname(fileName).substring(1),
       children: isDir ? this.readFolder(absPath, options) : []
     }
   },
@@ -55,29 +79,29 @@ export default {
   },
 
   moveToFolder (from, to) {
-    const newPath = path.resolve(to, path.basename(from))
+    const newPath = this.resolve(to, this.basename(from))
     fs.renameSync(from, newPath)
     return newPath
   },
 
   createFolder (root, folder = null) {
-    const dirPath = folder ? path.resolve(root, folder) : root
+    const dirPath = folder ? this.resolve(root, folder) : root
     if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath)
     return dirPath
   },
 
   copyFileIfMissing (data) {
-    const newPath = path.resolve(data.root, path.basename(data.file))
+    const newPath = this.resolve(data.root, this.basename(data.file))
     if (!fs.existsSync(newPath)) fs.copyFileSync(data.file, newPath)
   },
 
   createFileIfMissing (file, content = '') {
-    this.createMissingDir(path.dirname(file))
+    this.createMissingDir(this.dirname(file))
     if (!fs.existsSync(file)) fs.writeFileSync(file, content)
   },
 
   createFile (file, content = '') {
-    this.createMissingDir(path.dirname(file))
+    this.createMissingDir(this.dirname(file))
     fs.writeFileSync(file, content)
   },
 
@@ -87,13 +111,13 @@ export default {
 
   renamePath (file, name) {
     if (!fs.existsSync(file)) return
-    const newPath = path.resolve(path.dirname(file), name)
+    const newPath = this.resolve(this.dirname(file), name)
     fs.renameSync(file, newPath)
     return newPath
   },
 
   async syncUiFolder (destFolder) {
-    const ui = this.sanitizePath(path.resolve(app.getAppPath(), 'ui'))
+    const ui = this.sanitizePath(this.resolve(app.getAppPath(), 'ui'))
     // `withFileTypes` doesn't work with asar
     const files = this.readFolder(ui, { withFileTypes: false })
     await this.syncFolder(files, ui, destFolder)
@@ -144,13 +168,13 @@ export default {
   },
 
   async exportFolder (zipFolder, currentFolder) {
-    const zipFile = path.resolve(zipFolder, this.getZipFile(currentFolder))
+    const zipFile = this.resolve(zipFolder, this.getZipFile(currentFolder))
     await Zip.createZip(zipFile, currentFolder)
   },
 
   getZipFile (folder) {
     const timestamp = Math.floor(Date.now() / 1000)
-    return `${path.basename(folder)}-${timestamp}.zip`
+    return `${this.basename(folder)}-${timestamp}.zip`
   },
 
   getContentTypeExtension (type) {
@@ -167,7 +191,7 @@ export default {
   },
 
   getFileData (file, folder = null) {
-    if (folder) file = path.resolve(folder, file)
+    if (folder) file = this.resolve(folder, file)
     const string = fs.readFileSync(file).toString()
     return JSON.parse(string)
   }

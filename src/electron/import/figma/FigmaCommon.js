@@ -1,9 +1,9 @@
 import fs from 'fs'
-import path from 'path'
 import fetch from 'node-fetch'
 import ParseCommon from '../ParseCommon.js'
 import EventMain from '../../event/EventMain.js'
 import Language from '../../lib/Language.js'
+import File from '../../file/File.js'
 
 export default {
   async apiCall (method, token) {
@@ -142,7 +142,7 @@ export default {
     const url = `images/${data.projectFile}?ids=${data.elementId}&scale=${data.scale}` +
       `&format=${data.fileExt}`
     const json = await this.apiCall(url, data.token)
-    const file = path.resolve(data.folder, data.fileName + '.' + data.fileExt)
+    const file = File.resolve(data.folder, data.fileName + '.' + data.fileExt)
     let content
     if (!json.images[data.elementId]) {
       content = this.saveEmptyImage(file)

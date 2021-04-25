@@ -1,6 +1,6 @@
-import path from 'path'
 import ParseCommon from '../ParseCommon.js'
 import FigmaCommon from './FigmaCommon.js'
+import File from '../../file/File.js'
 
 export default {
   async getSvgContent (element, type, extra) {
@@ -12,7 +12,7 @@ export default {
       fileName: ParseCommon.getName(element.id),
       fileExt: 'svg',
       scale: 1,
-      folder: path.resolve(extra.folder, '_desech/cache')
+      folder: File.resolve(extra.folder, '_desech/cache')
     })
     return { content: data.content }
   },

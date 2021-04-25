@@ -231,6 +231,30 @@ repoctl status -a
 
 - copy everything from `~/share` to sftp
 
+Ubuntu
+
+```sh
+sudo apt update && sudo apt upgrade
+```
+
+- open Desech Studio and see if it updated
+
+Fedora
+
+```sh
+sudo dnf update && sudo dnf upgrade
+```
+
+- open Desech Studio and see if it updated
+
+Manjaro
+
+```sh
+sudo pacman -Syy
+```
+
+- open Desech Studio and see if it updated
+
 ## Build Studio Windows
 
 - fetch the latest updates from git
@@ -246,13 +270,14 @@ npm run build-win
 ```
 
 - copy the `latest.yml` and exe file to sftp
+- open Desech Studio and see if it auto updates
 
 ## Build Studio Mac
 
 - fetch the latest updates from git
 
 ```sh
-cd C:\Users\vioi\Documents\dev\desech-studio
+cd Documents/dev/desech-studio
 npm i
 cd app
 npm i
@@ -262,3 +287,4 @@ npm run build-mac
 ```
 
 - copy the `latest-mac.yml`, dmg and zip file to sftp
+- open Desech Studio and see if it auto updates

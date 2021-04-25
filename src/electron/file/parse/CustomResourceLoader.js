@@ -24,7 +24,7 @@ export default class CustomResourceLoader extends ResourceLoader {
   async formatComponentCss (url, options) {
     const css = (await super.fetch(url, options)).toString()
     // add "_ss_" to selectors
-    const formatted = css.replaceAll('.', '._ss_')
+    const formatted = css.replace(/\.(.*?) {/g, '._ss_$1 {')
     return Promise.resolve(Buffer.from(formatted))
   }
 }

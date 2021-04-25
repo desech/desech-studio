@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 import { JSDOM } from 'jsdom'
 import FileParse from '../../file/FileParse.js'
 import HelperCrypto from '../../../js/helper/HelperCrypto.js'
@@ -31,7 +30,7 @@ export default {
     // don't mess with this, only with `querySelectorAll` and `replaceWith` it seems to work
     for (const comp of container.querySelectorAll('div.component')) {
       const properties = this.getProperties(comp)
-      const componentFile = path.resolve(folder, comp.getAttributeNS(null, 'src'))
+      const componentFile = folder + '/' + comp.getAttributeNS(null, 'src')
       const html = fs.readFileSync(componentFile).toString()
       const div = document.createElementNS('https://www.w3.org/XML/1998/namespace', 'div')
       this.setElementProperties(comp, div)

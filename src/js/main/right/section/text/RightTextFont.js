@@ -12,20 +12,14 @@ import HelperProject from '../../../../helper/HelperProject.js'
 export default {
   getEvents () {
     return {
-      click: ['clickChangeFontEvent', 'clickAddColorEvent', 'clickRemoveColorEvent',
-        'clickAddFontEvent'],
+      click: ['clickAddColorEvent', 'clickRemoveColorEvent', 'clickAddFontEvent'],
+      change: ['changeSetFontEvent'],
       colorchange: ['colorChangeColorEvent']
     }
   },
 
   handleEvent (event) {
     HelperEvent.handleEvents(this, event)
-  },
-
-  clickChangeFontEvent (event) {
-    if (event.target.classList.contains('font-family')) {
-      this.changeFont(event.target)
-    }
   },
 
   clickAddColorEvent (event) {
@@ -46,13 +40,19 @@ export default {
     }
   },
 
+  changeSetFontEvent (event) {
+    if (event.target.classList.contains('font-family')) {
+      this.setFont(event.target)
+    }
+  },
+
   colorChangeColorEvent (event) {
     if (event.target.closest('.text-color-container .color-picker')) {
       this.changeTextColor(event.target, event.detail)
     }
   },
 
-  changeFont (select) {
+  setFont (select) {
     const option = select.selectedOptions[0]
     if (option.classList.contains('font-family-add-font')) {
       this.installFont(select.value, option.dataset.url || null)

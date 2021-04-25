@@ -96,8 +96,8 @@ export default {
     if (!data.nodes) return ''
     const body = ImportPosition.buildStructure(data.nodes, data.ref, css)
     if (data.nodes.length) {
-      const msg = Language.localize(`<span class="error">{{count}} element(s) have been
-        ignored</span>`, { count: data.nodes.length })
+      const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored</span>',
+        { count: data.nodes.length })
       EventMain.ipcMainInvoke('mainImportProgress', msg)
     }
     this._tmpFileCss = {}

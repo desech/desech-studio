@@ -12,6 +12,7 @@ export default {
   positionOverlay () {
     const overlay = document.getElementById('element-overlay')
     const element = StateSelectedElement.getElement()
+    if (!element) return
     const pos = HelperElement.getPosition(element)
     this.setPosition(overlay, pos)
     this.setBorders(element, overlay)
@@ -35,6 +36,7 @@ export default {
 
   setSizeBorders (overlay) {
     const box = overlay.getElementsByClassName('resize-size')[0]
+    if (!box) return
     const selector = StyleSheetSelector.getDefaultSelector()
     for (const dir of ['top', 'bottom', 'left', 'right']) {
       this.setSizeBorder(box, dir, selector)
@@ -50,6 +52,7 @@ export default {
   setPaddingBorders (overlay) {
     const padding = overlay.getElementsByClassName('resize-padding')[0]
     const size = overlay.getElementsByClassName('resize-size')[0]
+    if (!padding || !size) return
     this.setPaddingBordersStyle(padding, size)
   },
 

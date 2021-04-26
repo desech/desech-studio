@@ -109,7 +109,7 @@ export default {
 
   finalizeElementMove (altKey) {
     HelperCanvas.deleteCanvasData('operation')
-    this._element.removeAttributeNS(null, 'style')
+    HelperDOM.clearStyle(this._element)
     this._element.classList.remove('moving')
     this.moveElementInCanvas(this._element, altKey)
   },

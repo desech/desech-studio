@@ -2,6 +2,7 @@ import StateSelectedElement from './StateSelectedElement.js'
 import RightCommon from '../main/right/RightCommon.js'
 import HelperStyle from '../helper/HelperStyle.js'
 import CanvasCommon from '../main/canvas/CanvasCommon.js'
+import HelperDOM from '../helper/HelperDOM.js'
 
 export default {
   setStyles (properties) {
@@ -21,9 +22,7 @@ export default {
   applyStyleValue (panelReload = false, ignoreZeroValues = false) {
     const element = StateSelectedElement.getElement()
     const style = HelperStyle.getInlineStyle(element, ignoreZeroValues)
-    element.removeAttributeNS(null, 'style')
-    // fix the bug where style is not removed
-    element.style = ''
+    HelperDOM.clearStyle(element)
     RightCommon.changeStyle(style, panelReload)
   }
 }

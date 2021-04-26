@@ -205,6 +205,14 @@ export default {
     return null
   },
 
+  clearStyle (node) {
+    // sometimes it still leaves a style="" attribute, which we remove on save
+    // check StateHtmlFile.formatHtmlString(), RightHtmlCommon.getAllIgnoredAttributes()
+    node.style = ''
+    delete node.style
+    node.removeAttributeNS(null, 'style')
+  },
+
   reflow () {
     // @todo we need to reflow the dom when we reorder css classes
     // const canvas = document.getElementById('canvas')

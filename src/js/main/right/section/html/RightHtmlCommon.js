@@ -178,7 +178,7 @@ export default {
   getAllIgnoredAttributes () {
     return [
       ...this.getMainAttributes(),
-      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'type', 'list'
+      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'type', 'list', 'style'
     ]
   },
 

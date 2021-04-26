@@ -15,9 +15,12 @@ export default {
   getDesignSystemClasses () {
     if (!this.hasDesignSystem()) return
     const classes = []
-    for (const rule of document.styleSheets[1].cssRules) {
-      if (rule.constructor.name !== 'CSSStyleRule') continue
-      HelperStyle.addSelectorClass(rule.selectorText, classes)
+    for (const sheet of document.styleSheets) {
+      if (!sheet.cssRules[0].selectorText.startsWith('._ss_')) continue
+      for (const rule of sheet.cssRules) {
+        if (rule.constructor.name !== 'CSSStyleRule') continue
+        HelperStyle.addSelectorClass(rule.selectorText, classes)
+      }
     }
     return classes.sort()
   },

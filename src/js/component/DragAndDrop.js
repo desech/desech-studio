@@ -9,8 +9,7 @@ export default {
     return {
       dragstart: ['dragstartEvent'],
       dragend: ['dragendEvent'],
-      dragover: ['dragoverEvent'],
-      drop: ['dropEvent']
+      dragover: ['dragoverEvent']
     }
   },
 
@@ -32,15 +31,11 @@ export default {
 
   dragoverEvent (event) {
     const element = event.target.closest('.dragdrop-element')
-    if (element && element.parentNode === this._dragged.parentNode) { // only allow dropping in the same container
+    if (element && element.parentNode === this._dragged.parentNode) {
+      // only allow dropping in the same container
       this.dragOver(element, event.clientY)
-      event.preventDefault() // stop other events
-    }
-  },
-
-  dropEvent (event) {
-    if (event.target.closest('.dragdrop-element')) {
-      this.dragDrop()
+      // stop other events
+      event.preventDefault()
     }
   },
 
@@ -50,6 +45,7 @@ export default {
   },
 
   dragEnd () {
+    this.dragDrop()
     if (this._dragged) this._dragged.classList.remove('dragdrop-start')
     if (this._over) this._over.classList.remove('dragdrop-over')
     this.removeDragOverClasses(this._dragged.parentNode)
@@ -57,7 +53,7 @@ export default {
   },
 
   clearState () {
-    // it's important to clear our state at the end, otherwise we have leftovers spilling
+    // it's important to clear our the state at the end, otherwise we have leftovers spilling
     this._dragged = null
     this._over = null
   },
@@ -72,20 +68,26 @@ export default {
 
   addOverClass (element, y) {
     if (element.parentNode.dataset.containerOnly) {
-      if (element.dataset.container) this.attachOverClass(element, 'inside') // container only
+      // container only
+      if (element.dataset.container) this.attachOverClass(element, 'inside')
     } else if (element.dataset.container) {
-      this.addContainerOverClass(element, y) // container and top/bottom
+      // container and top/bottom
+      this.addContainerOverClass(element, y)
     } else {
-      this.addElementOverClass(element, y) // top/bottom only
+      // top/bottom only
+      this.addElementOverClass(element, y)
     }
   },
 
   addContainerOverClass (element, y) {
-    if (y <= element.offsetHeight * 0.2) { // the first 20%
+    if (y <= element.offsetHeight * 0.2) {
+      // the first 20%
       this.attachOverClass(element, 'top')
-    } else if (y >= element.offsetHeight * 0.8) { // the first 80%
+    } else if (y >= element.offsetHeight * 0.8) {
+      // the first 80%
       this.attachOverClass(element, 'bottom')
-    } else { // inside
+    } else {
+      // inside
       this.attachOverClass(element, 'inside')
     }
   },

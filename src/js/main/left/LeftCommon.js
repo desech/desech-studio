@@ -208,6 +208,7 @@ export default {
   },
 
   startSortItem (item) {
+    this.deselectItem()
     const button = item.getElementsByClassName('panel-item-expand-button')[0]
     if (button.classList.contains('opened')) this.collapseItem(button)
   }

@@ -7,8 +7,7 @@ export default {
   getEvents () {
     return {
       click: ['clickZoomInEvent', 'clickZoomOutEvent', 'clickZoomResetEvent'],
-      wheel: ['wheelZoomInOutEvent'],
-      auxclick: ['auxclickZoomResetEvent']
+      wheel: ['wheelZoomInOutEvent']
     }
   },
 
@@ -41,12 +40,6 @@ export default {
       } else {
         this.zoomOut(event.clientX, event.clientY)
       }
-    }
-  },
-
-  auxclickZoomResetEvent (event) {
-    if (event.button === 1 && HelperEvent.isCtrlCmd(event) && !event.altKey && !event.shiftKey) {
-      this.zoomReset()
     }
   },
 

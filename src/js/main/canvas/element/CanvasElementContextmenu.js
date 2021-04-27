@@ -11,6 +11,7 @@ import HelperProject from '../../../helper/HelperProject.js'
 import CanvasElementComponent from './CanvasElementComponent.js'
 import Page from '../../../page/Page.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
+import HelperCanvas from '../../../helper/HelperCanvas.js'
 
 export default {
   getEvents () {
@@ -36,7 +37,7 @@ export default {
   },
 
   contextmenuCanvasShowMenuEvent (event) {
-    if (event.target.closest('.element')) {
+    if (!HelperCanvas.isPreview() && event.target.closest('.element')) {
       this.showContextmenu(event.target.closest('.element'), event.clientX, event.clientY)
     }
   },

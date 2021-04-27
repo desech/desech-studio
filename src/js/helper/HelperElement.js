@@ -103,14 +103,11 @@ export default {
 
   getContainerPosition () {
     const container = document.getElementsByClassName('canvas-container')[0]
-    const style = getComputedStyle(container)
     return {
       scrollLeft: container.scrollLeft,
       scrollTop: container.scrollTop,
       offsetLeft: container.offsetLeft,
-      offsetTop: container.offsetTop,
-      paddingLeft: parseInt(style.getPropertyValue('padding-left')),
-      paddingTop: parseInt(style.getPropertyValue('padding-top'))
+      offsetTop: container.offsetTop
     }
   },
 

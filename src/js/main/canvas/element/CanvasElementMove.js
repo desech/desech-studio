@@ -76,10 +76,12 @@ export default {
 
   setPositions (clientX, clientY) {
     const pos = HelperElement.getPosition(this._element)
+    const canvas = HelperCanvas.getCanvas()
+    const zoom = HelperCanvas.getZoomFactor()
     this._startX = clientX
     this._startY = clientY
-    this._grabX = clientX - pos.relativeLeft + pos.container.paddingLeft
-    this._grabY = clientY - pos.relativeTop + pos.container.paddingTop
+    this._grabX = clientX - pos.relativeLeft + Math.round(canvas.offsetLeft * zoom)
+    this._grabY = clientY - pos.relativeTop + Math.round(canvas.offsetTop * zoom)
   },
 
   initMovement (target, clientX, clientY) {
@@ -101,9 +103,9 @@ export default {
   },
 
   moveElement (target, clientX, clientY) {
-    // @todo fix moving elements on different zoom levels
-    this._element.style.left = clientX - this._grabX + 'px'
-    this._element.style.top = clientY - this._grabY + 'px'
+    const zoom = HelperCanvas.getZoomFactor()
+    this._element.style.left = Math.round((clientX - this._grabX) / zoom) + 'px'
+    this._element.style.top = Math.round((clientY - this._grabY) / zoom) + 'px'
     CanvasElementCreate.addPlacementMarker(target, clientX, clientY)
   },
 

@@ -274,7 +274,7 @@ npm run build-win
 ```
 
 - copy the `latest.yml` and exe file to sftp
-- open Desech Studio and see if it auto updates
+- open Desech Studio without logging in and see if it auto updates
 
 ## Build Studio Mac
 
@@ -291,7 +291,7 @@ npm run build-mac
 ```
 
 - copy the `latest-mac.yml`, dmg and zip file to sftp
-- open Desech Studio and see if it auto updates
+- open Desech Studio without logging in and see if it auto updates
 
 ## Website update
 

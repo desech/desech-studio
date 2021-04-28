@@ -296,3 +296,4 @@ npm run build-mac
 ## Website update
 
 - change the version numbers for Windows and Mac in the website
+- deploy the website updates on the server

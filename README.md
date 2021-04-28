@@ -206,6 +206,10 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 
 ```sh
 cd ~/dev/desech-studio
+npm i
+cd app
+npm i
+cd ..
 npm run build-all-prod
 npm run build-linux-x86
 reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.1-amd64.deb

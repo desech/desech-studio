@@ -208,10 +208,10 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86
-reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.0-amd64.deb
+reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.1-amd64.deb
 reprepro -b /home/vioi/share/download.desech.com/apt list apt
-cp ./dist/desech-studio-1.0.0-x86_64.rpm ~/share/download.desech.com/dnf
-cp ./dist/desech-studio-1.0.0-x64.pacman ~/share/download.desech.com/pacman
+cp ./dist/desech-studio-1.0.1-x86_64.rpm ~/share/download.desech.com/dnf
+cp ./dist/desech-studio-1.0.1-x64.pacman ~/share/download.desech.com/pacman
 ```
 
 Fedora
@@ -224,7 +224,7 @@ Manjaro
 
 ```sh
 sudo -s
-repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.0.0-x64.pacman
+repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.0.1-x64.pacman
   at some point CTRL+C because it hangs forever
 repoctl status -a
 ```
@@ -245,15 +245,15 @@ Fedora
 sudo dnf update && sudo dnf upgrade
 ```
 
-- open Desech Studio and see if it updated
+- open Desech Studio without logging in and see if it updated
 
 Manjaro
 
 ```sh
-sudo pacman -Syy
+sudo pacman -Syu
 ```
 
-- open Desech Studio and see if it updated
+- open Desech Studio without logging in and see if it updated
 
 ## Build Studio Windows
 

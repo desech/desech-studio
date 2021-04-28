@@ -292,3 +292,7 @@ npm run build-mac
 
 - copy the `latest-mac.yml`, dmg and zip file to sftp
 - open Desech Studio and see if it auto updates
+
+## Website update
+
+- change the version numbers for Windows and Mac in the website

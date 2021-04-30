@@ -48,6 +48,7 @@ export default {
     for (const match of matches) {
       if (match[1].includes('component-element')) continue
       const ref = match[1].match(/e0[a-z0-9]+/g)
+      if (!ref) continue
       refs.push(ref[0])
     }
     return refs

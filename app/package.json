@@ -7,7 +7,7 @@
     "name": "Desech Studio SRL",
     "email": "contact@desech.com"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "license.txt",
   "repository": {
     "type": "git",
@@ -17,13 +17,13 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^12.0.5"
+    "electron": "^12.0.7"
   },
   "dependencies": {
     "adm-zip": "^0.5.5",
     "archiver": "^5.3.0",
     "electron-updater": "^4.3.8",
-    "fs-extra": "^9.1.0",
+    "fs-extra": "^10.0.0",
     "jimp": "^0.16.1",
     "js-beautify": "^1.13.13",
     "jsdom": "^16.5.3",

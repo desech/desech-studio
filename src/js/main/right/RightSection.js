@@ -60,8 +60,8 @@ export default {
   // this sets the order in which they appear in the style panel
   getSubSectionClasses () {
     return {
-      position: RightPosition,
       size: RightSize,
+      position: RightPosition,
       grid: RightGrid,
       text: RightText,
       border: RightBorder,

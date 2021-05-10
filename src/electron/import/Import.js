@@ -15,6 +15,7 @@ import ParseCommon from './ParseCommon.js'
 import HelperStyle from '../../js/helper/HelperStyle.js'
 import Electron from '../lib/Electron.js'
 import FileParse from '../file/FileParse.js'
+import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
   _tmpFileCss: {},
@@ -25,6 +26,9 @@ export default {
     const folder = File.sanitizePath(folders[0])
     const data = await this.getImportData({ ...params, folder })
     this.backupImportFile(folder, params.type, data)
+    if (ExtendJS.isEmpty(data.html)) {
+      throw new Error(Language.localize('There are no valid top level visible elements to be imported'))
+    }
     this.setProjectSettings(folder, data)
     const hasDesignSystem = await ProjectCommon.getDesignSystem()
     this.saveGeneralCssFiles(data.css, folder)
@@ -69,7 +73,8 @@ export default {
       if (file.type === 'folder') {
         File.createFolder(filePath)
         this.saveHtmlFiles(file.files, css, filePath, mainFolder, hasDesignSystem)
-      } else { // file
+      } else {
+        // file
         this.saveHtmlFileAndCss(file, css, filePath + '.html', mainFolder, hasDesignSystem)
       }
     }

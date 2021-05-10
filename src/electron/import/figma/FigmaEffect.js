@@ -13,7 +13,9 @@ export default {
   processEffect (elemType, effect, effects) {
     if (effect.visible === false) return
     const data = this.getEffectData(elemType, effect)
-    const record = (data.type === 'filter') ? this.getFilter(effect, data) : this.getBoxShadow(effect)
+    const record = (data.type === 'filter')
+      ? this.getFilter(effect, data)
+      : this.getBoxShadow(effect)
     if (record) effects[data.type].push(record)
   },
 
@@ -32,7 +34,8 @@ export default {
   getEffectType (effect) {
     if (effect.type === 'LAYER_BLUR' || effect.type === 'BACKGROUND_BLUR') {
       return 'blur'
-    } else { // DROP_SHADOW, INNER_SHADOW
+    } else {
+      // DROP_SHADOW, INNER_SHADOW
       return 'drop-shadow'
     }
   },
@@ -40,7 +43,8 @@ export default {
   getFilter (effect, data) {
     if (data.method === 'blur') {
       return { filter: this.getFilterBlur(effect) }
-    } else { // drop-shadow
+    } else {
+      // drop-shadow
       return { filter: this.getFilterShadow(effect) }
     }
   },
@@ -51,6 +55,7 @@ export default {
 
   getFilterShadow (effect) {
     const data = this.getShadowData(effect)
+    // drop-shadow has no spread, only box-shadow
     return `drop-shadow(${data.color} ${data.x}px ${data.y}px ${data.radius}px)`
   },
 
@@ -59,16 +64,17 @@ export default {
       color: FigmaCommon.getColor(effect.color.r, effect.color.g, effect.color.b, effect.color.a),
       x: Math.round(effect.offset.x),
       y: Math.round(effect.offset.y),
-      radius: Math.round(effect.radius)
+      radius: Math.round(effect.radius),
+      spread: Math.round(effect.spread) || 0
     }
   },
 
   getBoxShadow (effect) {
     const data = this.getShadowData(effect)
     const inner = (effect.type === 'INNER_SHADOW') ? ' inset' : ''
-    const spread = '0px' // @todo the api is missing the spread value; add it in the future maybe ?!
     return {
-      'box-shadow': `${data.color} ${data.x}px ${data.y}px ${data.radius}px ${spread}${inner}`
+      'box-shadow': `${data.color} ${data.x}px ${data.y}px ${data.radius}px ` +
+        `${data.spread}px${inner}`
     }
   },
 

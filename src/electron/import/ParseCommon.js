@@ -48,7 +48,7 @@ export default {
       'border-top-left-radius': '50%',
       'border-top-right-radius': '50%',
       'border-bottom-right-radius': '50%',
-      'border-bottom-left-radius': '50%',
+      'border-bottom-left-radius': '50%'
     }
   },
 
@@ -190,7 +190,8 @@ export default {
     const keys = Object.keys(data._html)
     if (data._html[keys[0]].type === 'file') {
       this.convertToIndexFile(data, keys[0])
-    } else { // folder
+    } else {
+      // folder
       this.convertFolderFileToIndex(data)
     }
   },

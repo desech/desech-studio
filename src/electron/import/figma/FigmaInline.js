@@ -19,7 +19,7 @@ export default {
     for (let i = 0; i < element.characterStyleOverrides.length; i++) {
       const id = element.characterStyleOverrides[i]
       // id = 0 refers to the parent text
-      if (!id) continue
+      if (!id && !lastId) continue
       if (!lastId) {
         lastId = id
         startPos = i

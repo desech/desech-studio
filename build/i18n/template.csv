@@ -1469,6 +1469,7 @@
 "The Z axis requires the perspective transform",
 "The Z axis requires the perspective transform and only works in combination with other transforms",
 "Theme",
+"There are no valid top level visible elements to be imported",
 "Thick",
 "Thin",
 "Tilt in",

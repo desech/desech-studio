@@ -4,8 +4,12 @@ import SketchCommon from './SketchCommon.js'
 
 export default {
   getCssStroke (elementType, element) {
-    if (elementType === 'icon') return SketchCommon.getIconStroke(element.style.borders)
-    if (!SketchCommon.isStrokeAvailable(elementType, element.style.borders)) return
+    if (elementType === 'icon') {
+      return SketchCommon.getIconStroke(element.style.borders)
+    }
+    if (!SketchCommon.isStrokeAvailable(elementType, element.style.borders)) {
+      return
+    }
     for (const stroke of element.style.borders) {
       const type = SketchCommon.getFillType(stroke)
       // we only allow one stroke; there's no image stroke

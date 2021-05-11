@@ -5,8 +5,12 @@ import HelperColor from '../../../js/helper/HelperColor.js'
 
 export default {
   async getCssFill (extra) {
-    if (extra.data.type === 'icon') return SketchCommon.getIconFill(extra.element.style.fills)
-    if (this.ignoreFill(extra.data.type, extra.element.style.fills)) return
+    if (extra.data.type === 'icon') {
+      return SketchCommon.getIconFill(extra.element.style.fills)
+    }
+    if (this.ignoreFill(extra.data.type, extra.element.style.fills)) {
+      return
+    }
     const array = []
     await this.addBitmapFill(array, extra)
     await this.addFillRecords(array, extra)
@@ -15,12 +19,16 @@ export default {
 
   ignoreFill (type, fills) {
     if (type === 'text' && fills && fills.length === 1 && fills[0].isEnabled &&
-      SketchCommon.getFillType(fills[0]) === 'Solid') return true
+      SketchCommon.getFillType(fills[0]) === 'Solid') {
+      return true
+    }
     return false
   },
 
   async addBitmapFill (array, extra) {
-    if (extra.element._class !== 'bitmap' || !this.isFillAllowed('Image', extra.element)) return
+    if (extra.element._class !== 'bitmap' || !this.isFillAllowed('Image', extra.element)) {
+      return
+    }
     const source = await this.processLocalImages(extra.element.image._ref, extra)
     const record = this.getFillProperties('Image', source, extra.element.style.contextSettings)
     array.push(record)

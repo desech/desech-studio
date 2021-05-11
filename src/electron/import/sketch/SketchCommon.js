@@ -31,8 +31,12 @@ export default {
   },
 
   isStrokeAvailable (elementType, strokes) {
-    if (elementType === 'text' || !strokes || !strokes.length) return false
-    if (strokes.length === 1 && !strokes[0].isEnabled) return false
+    if (elementType === 'text' || !strokes || !strokes.length) {
+      return false
+    }
+    if (strokes.length === 1 && !strokes[0].isEnabled) {
+      return false
+    }
     return true
   },
 
@@ -58,9 +62,11 @@ export default {
   },
 
   getCssMixBlendMode (element) {
-    if (!element.style.contextSettings || element._class === 'bitmap') return
-    const value = element.style.contextSettings.blendMode
-    return value ? { 'mix-blend-mode': this.getBlendMode(value) } : null
+    if (!element.style.contextSettings || element._class === 'bitmap') {
+      return
+    }
+    const settings = element.style.contextSettings
+    return settings.blendMode ? { 'mix-blend-mode': this.getBlendMode(settings) } : null
   },
 
   getBlendMode (settings) {

@@ -43,7 +43,7 @@ export default {
   getTextAlign (style) {
     if (!style.paragraphStyle) return
     const value = style.paragraphStyle.alignment
-    const aligns = { 0: 'left', 1: 'right', 2: 'center', 3: 'justify'}
+    const aligns = { 0: 'left', 1: 'right', 2: 'center', 3: 'justify' }
     return aligns[value]
   },
 
@@ -108,7 +108,7 @@ export default {
 
   getTransform (style) {
     const value = style.MSAttributedStringTextTransformAttribute
-    // no capitalize :)
+    // title case is only supported by lunacy with "com.icons8.lunacy" and "isTitleCase"
     const transforms = { 1: 'uppercase', 2: 'lowercase' }
     return value ? transforms[value] : null
   },

@@ -14,7 +14,9 @@ export default {
     const data = []
     const elemString = element.attributedString.string
     for (const text of element.attributedString.attributes) {
-      if (text.location === 0 && text.length === elemString.length) continue
+      if (text.location === 0 && text.length === elemString.length) {
+        continue
+      }
       const inline = this.processInlineElement(elemString, text, css)
       if (inline) data.push(inline)
     }

@@ -10,7 +10,9 @@ export default {
   },
 
   addBitmapEffects (filterEffects, element) {
-    if (!element.style.colorControls || element._class !== 'bitmap') return
+    if (!element.style.colorControls || element._class !== 'bitmap') {
+      return
+    }
     const controls = element.style.colorControls
     // -1, 0, 1 <--> 0, 1, 2
     this.addFilterValue('brightness', controls.brightness + 1, 1, filterEffects)

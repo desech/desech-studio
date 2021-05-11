@@ -39,7 +39,8 @@ export default {
 
   getOffset (borders) {
     return (borders && borders.length > 0 && borders[0].thickness)
-      ? parseInt(borders[0].thickness) : 0
+      ? parseInt(borders[0].thickness)
+      : 0
   },
 
   getAttributes (style) {
@@ -88,7 +89,8 @@ export default {
     const from = this.parsePoint(element, item.curveFrom, data.offset)
     const to = this.parsePoint(element, item.curveTo, data.offset)
     const point = this.parsePoint(element, item.point, data.offset)
-    return (from.x === to.x && from.y === to.y) ? `L ${data.x + point.x} ${data.y + point.y}`
+    return (from.x === to.x && from.y === to.y)
+      ? `L ${data.x + point.x} ${data.y + point.y}`
       : `S ${data.x + to.x} ${data.y + to.y}, ${data.x + point.x} ${data.y + point.y}`
   },
 

@@ -207,12 +207,6 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```sh
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 cd ~/dev/desech-studio
-ncu -u
-npm i
-cd app
-ncu -u
-npm i
-cd ..
 npm run build-all-prod
 npm run build-linux-x86
 reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.3-amd64.deb
@@ -270,13 +264,15 @@ sudo pacman -Syu
 
 ## Build Studio Windows
 
+- make sure windows doesn't need any restart because of auto-updates
 - fetch the latest updates from git
+- open a command prompt as admin
 
 ```sh
 cd C:\Users\vioi\Documents\dev\desech-studio
-npm i
+npm i -f
 cd app
-npm i
+npm i -f
 cd ..
 npm run build-all-prod
 npm run build-win
@@ -291,9 +287,9 @@ npm run build-win
 
 ```sh
 cd Documents/dev/desech-studio
-npm i
+npm i -f
 cd app
-npm i
+npm i -f
 cd ..
 npm run build-all-prod
 npm run build-mac

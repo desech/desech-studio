@@ -17,7 +17,8 @@ export default {
     for (const paragraph of element.text.paragraphs) {
       for (const line of paragraph.lines) {
         for (const string of line) {
-          const inline = this.processInlineTextElem(string, element.meta.ux.rangedStyles, element.text.rawText, tmp, css)
+          const inline = this.processInlineTextElem(string, element.meta.ux.rangedStyles,
+            element.text.rawText, tmp, css)
           if (inline) data.push(inline)
         }
       }
@@ -26,8 +27,10 @@ export default {
   },
 
   processInlineTextElem (string, styles, text, tmp, css) {
-    // @todo \n are ignored, so when present, the `string.to` value is reduced by 1 which breaks the entire code
-    const start = (tmp.last !== null) ? tmp.last : string.from // ignore the incremental `from` and use our stored value
+    // @todo \n are ignored, so when present, the `string.to` value is reduced by 1
+    // which breaks the entire code
+    // ignore the incremental `from` and use our stored value
+    const start = (tmp.last !== null) ? tmp.last : string.from
     if (string.to - start === styles[tmp.index].length || string.to === text.length) {
       const inline = this.processInlineElement(string, start, styles[tmp.index], text, css)
       tmp.last = null
@@ -39,7 +42,10 @@ export default {
   },
 
   processInlineElement (string, start, style, text, css) {
-    if (start === 0 && string.to === text.length) return // skip inline elements that cover the whole text
+    // skip inline elements that cover the whole text
+    if (start === 0 && string.to === text.length) {
+      return
+    }
     const elemId = HelperElement.generateElementRef()
     const data = this.getInlineData(string, start, style, text, elemId)
     if (data) {

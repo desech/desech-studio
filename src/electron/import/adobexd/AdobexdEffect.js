@@ -12,8 +12,11 @@ export default {
 
   addEffect (type, effect, props) {
     if (effect.visible === false) return
-    if (effect.type === 'dropShadow') this.addShadow(type, effect.params.dropShadows[0], props)
-    if (effect.type === 'uxdesign#blur') this.addBlur(effect.params, props)
+    if (effect.type === 'dropShadow') {
+      this.addShadow(type, effect.params.dropShadows[0], props)
+    } else if (effect.type === 'uxdesign#blur') {
+      this.addBlur(effect.params, props)
+    }
   },
 
   addShadow (type, shadow, props) {

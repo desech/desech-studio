@@ -3,8 +3,9 @@ import AdobexdCommon from './AdobexdCommon.js'
 
 export default {
   getCssStroke (type, element) {
-    if (!AdobexdCommon.isStrokeAvailable(type, element.style)) return
-    return this.getStrokeData(type, element)
+    if (AdobexdCommon.isStrokeAvailable(type, element.style)) {
+      return this.getStrokeData(type, element)
+    }
   },
 
   getStrokeData (type, element) {

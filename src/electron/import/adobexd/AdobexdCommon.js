@@ -47,8 +47,8 @@ export default {
   getTextWidth (element) {
     if (element.text.frame.type === 'area') {
       return parseInt(element.text.frame.width)
-    } else { // positioned
-      // @todo better approximation
+    } else {
+      // positioned - @todo better approximation
       return Math.round(element.style.font.size / 2 * element.text.rawText.length)
     }
   },
@@ -56,8 +56,9 @@ export default {
   getTextHeight (element) {
     if (element.text.frame.type === 'area') {
       return parseInt(element.text.frame.height)
-    } else { // positioned
-      // @todo some fonts have a line height of 1.33, some of 0.5; use a value of 1 for our case
+    } else {
+      // positioned - @todo some fonts have a line height of 1.33, some of 0.5
+      // use a value of 1 for our case
       return Math.round(element.style.font.size * 1)
     }
   },
@@ -100,17 +101,24 @@ export default {
   },
 
   getStroke (elementType, element) {
-    if (!this.isStrokeAvailable(elementType, element.style)) return {}
+    if (!this.isStrokeAvailable(elementType, element.style)) {
+      return {}
+    }
     return {
-      type: (element.shape && element.shape.type === 'line') ? 'outside'
+      type: (element.shape && element.shape.type === 'line')
+        ? 'outside'
         : (element.style.stroke.align || 'center'),
       size: element.style.stroke.width
     }
   },
 
   isStrokeAvailable (elementType, style) {
-    if (elementType === 'icon' || elementType === 'text') return false
-    if (!style || !style.stroke || style.stroke.type === 'none') return false
+    if (elementType === 'icon' || elementType === 'text') {
+      return false
+    }
+    if (!style || !style.stroke || style.stroke.type === 'none') {
+      return false
+    }
     return true
   },
 
@@ -131,7 +139,9 @@ export default {
   },
 
   getCssRoundedCorners (shape) {
-    if (shape && shape.type === 'ellipse') return ParseCommon.getCircleRoundedBorders()
+    if (shape && shape.type === 'ellipse') {
+      return ParseCommon.getCircleRoundedBorders()
+    }
     if (!shape || !shape.r) return
     return ParseCommon.getRoundedBorders(shape.r)
   },

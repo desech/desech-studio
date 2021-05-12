@@ -39,9 +39,11 @@ export default {
     return {
       'background-image': await this[`getFillBg${type}`](fill, extra),
       'background-blend-mode': HelperStyle.getDefaultProperty('background-blend-mode'),
-      'background-size': (type === 'Image') ? 'contain'
+      'background-size': (type === 'Image')
+        ? 'contain'
         : HelperStyle.getDefaultProperty('background-size'),
-      'background-repeat': (type === 'Image') ? 'no-repeat'
+      'background-repeat': (type === 'Image')
+        ? 'no-repeat'
         : HelperStyle.getDefaultProperty('background-repeat'),
       'background-position': HelperStyle.getDefaultProperty('background-position'),
       'background-attachment': HelperStyle.getDefaultProperty('background-attachment'),

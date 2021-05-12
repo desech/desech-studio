@@ -133,9 +133,11 @@ export default {
   getElementPos (artboard, parent, pos) {
     const data = {}
     if (parent && parent.transform) {
-      data.x = Math.round((parent.meta.ux.localTransform) ? parent.transform.tx - artboard.x
+      data.x = Math.round(parent.meta.ux.localTransform
+        ? parent.transform.tx - artboard.x
         : parent.transform.tx + pos.x)
-      data.y = Math.round((parent.meta.ux.localTransform) ? parent.transform.ty - artboard.y
+      data.y = Math.round(parent.meta.ux.localTransform
+        ? parent.transform.ty - artboard.y
         : parent.transform.ty + pos.y)
     } else {
       data.x = Math.round(-artboard.x)
@@ -145,7 +147,9 @@ export default {
   },
 
   async parseElement (element, nodes, pos) {
-    if (!this.acceptElement(element) || ParseCommon.isHidden(element.visible)) return
+    if (!this.acceptElement(element) || ParseCommon.isHidden(element.visible)) {
+      return
+    }
     const type = this.getElementType(element)
     if (!type) return
     this.processSymbolInstance(element)
@@ -156,7 +160,9 @@ export default {
 
   acceptElement (element) {
     // ignore groups except the ones with symbols
-    if (element.type === 'group' && !element.meta.ux.symbolId) return false
+    if (element.type === 'group' && !element.meta.ux.symbolId) {
+      return false
+    }
     return true
   },
 
@@ -182,9 +188,11 @@ export default {
 
   processSymbolInstance (element) {
     const id = element.meta.ux.symbolId
-    if (!id || !this._symbols[id] || element.group.children[0].type !== 'syncRef') return
-    // we can use element.meta.ux.states depending on stateId, but we don't know the pseudo class
-    // selector
+    if (!id || !this._symbols[id] || element.group.children[0].type !== 'syncRef') {
+      return
+    }
+    // we can use element.meta.ux.states depending on stateId,
+    //  but we don't know the pseudo class selector
     // meta.ux.interactions[0].data.triggerEvent is always 'hover' and we can't set our own
     element.group.children = ExtendJS.cloneData(this._symbols[id].group.children)
   },

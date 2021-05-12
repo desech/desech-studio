@@ -193,6 +193,30 @@ echo -e "\n[desech-studio]\nSigLevel = Optional TrustAll\nServer = https://downl
 sudo pacman -Syy desech-studio
 ```
 
+## Docker windows [not finished]
+
+- Install docker
+
+```sh
+sudo apt update && sudo apt install apt-transport-https ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update && sudo apt install docker-ce docker-ce-cli containerd.io
+```
+
+```sh
+sudo docker pull electronuserland/builder:wine
+sudo docker run --rm -ti \
+ --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS_TAG|TRAVIS|TRAVIS_REPO_|TRAVIS_BUILD_|TRAVIS_BRANCH|TRAVIS_PULL_REQUEST_|APPVEYOR_|CSC_|GH_|GITHUB_|BT_|AWS_|STRIP|BUILD_') \
+ --env ELECTRON_CACHE="/root/.cache/electron" \
+ --env ELECTRON_BUILDER_CACHE="/root/.cache/electron-builder" \
+ -v ${PWD}:/project \
+ -v ${PWD##*/}-node-modules:/project/node_modules \
+ -v ~/.cache/electron:/root/.cache/electron \
+ -v ~/.cache/electron-builder:/root/.cache/electron-builder \
+ electronuserland/builder:wine
+```
+
 ## Plugins
 
 ```sh
@@ -205,12 +229,17 @@ git clone git@github.com:desech/studio-angular.git desech-studio-angular
 git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```
 
+
+
+-------------------------------------------------------------------------------
+
+
+
 ## Build Studio Linux
 
 - change version in `package.json` and `app/package.json`
 
 ```sh
-sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86

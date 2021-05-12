@@ -298,15 +298,13 @@ sudo pacman -Syu
 
 ## Build Studio Windows
 
-- make sure windows doesn't need any restart because of auto-updates
 - fetch the latest updates from git
-- open a command prompt as admin
 
 ```sh
-cd C:\Users\vioi\Documents\dev\desech-studio
-npm i -f
+cd Documents/dev/desech-studio
+npm i
 cd app
-npm i -f
+npm i
 cd ..
 npm run build-all-prod
 npm run build-win
@@ -321,9 +319,9 @@ npm run build-win
 
 ```sh
 cd Documents/dev/desech-studio
-npm i -f
+npm i
 cd app
-npm i -f
+npm i
 cd ..
 npm run build-all-prod
 npm run build-mac

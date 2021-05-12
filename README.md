@@ -5,6 +5,11 @@
 ```sh
 cd ~/dev/desech-studio
 cp .config.json config.json
+cp .electron-builder.env electron-builder.env
+  enable/disable for win/mac
+  copy the `desech.pfx` file from bitwarden to `build/win/desech.pfx`
+  copy the `application.p12` file from bitwarden to `build/mac/application.p12`
+  add the certificate password from bitwarden
 npm install
 cd app
 npm install

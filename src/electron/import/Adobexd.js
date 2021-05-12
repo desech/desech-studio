@@ -9,6 +9,7 @@ import AdobexdInline from './adobexd/AdobexdInline.js'
 import Zip from '../file/Zip.js'
 import File from '../file/File.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
+import AdobexdIcon from './adobexd/AdobexdIcon.js'
 
 export default {
   _html: {},
@@ -214,25 +215,9 @@ export default {
       component: [],
       content: '',
       ...AdobexdInline.processTextContent(element, type, this._css),
-      ...this.getSvgContent(element, type, width, height),
+      ...AdobexdIcon.getSvgContent(element, type, width, height),
       children: []
     }
-  },
-
-  getSvgContent (element, type, width, height) {
-    if (type !== 'icon') return
-    let content
-    // polygon has x/y/width/height, 3 points and style.stroke.width
-    // path/compound has no x/y/width/height, but has the path value: <path d="..."/>
-    if (element.shape.path) {
-      content = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">` +
-        `<path d="${element.shape.path}"/></svg>`
-    } else {
-      content = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
-        '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>' +
-      '</svg>'
-    }
-    return { content }
   },
 
   async getCssProperties (data, element) {

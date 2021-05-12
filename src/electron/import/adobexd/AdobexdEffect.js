@@ -38,6 +38,7 @@ export default {
   },
 
   addBlur (blur, props) {
+    // ignore background blur, allow object blur
     if (blur.backgroundEffect) return
     props.filter = props.filter || ''
     props.filter += ` blur(${Math.round(blur.blurAmount)}px)`

@@ -205,6 +205,7 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 - change version in `package.json` and `app/package.json`
 
 ```sh
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 cd ~/dev/desech-studio
 ncu -u
 npm i
@@ -214,10 +215,10 @@ npm i
 cd ..
 npm run build-all-prod
 npm run build-linux-x86
-reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.2-amd64.deb
+reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.3-amd64.deb
 reprepro -b /home/vioi/share/download.desech.com/apt list apt
-cp ./dist/desech-studio-1.0.2-x86_64.rpm ~/share/download.desech.com/dnf
-cp ./dist/desech-studio-1.0.2-x64.pacman ~/share/download.desech.com/pacman
+cp ./dist/desech-studio-1.0.3-x86_64.rpm ~/share/download.desech.com/dnf
+cp ./dist/desech-studio-1.0.3-x64.pacman ~/share/download.desech.com/pacman
 ```
 
 Fedora
@@ -232,12 +233,14 @@ Manjaro
 
 ```sh
 sudo -s
-repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.0.2-x64.pacman
-  wait till the lock file disappears
+repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.0.3-x64.pacman
+  - go to `/home/manjaro/share/download.desech.com/pacman/`
+  - when the lock file dissapears cancel the process
 repoctl status -a
 ```
 
 - copy everything from `~/share` to sftp
+- leave only the last 2 versions in `dnf` and `pacman` for both our folder and the sftp
 
 Ubuntu
 
@@ -279,7 +282,7 @@ npm run build-all-prod
 npm run build-win
 ```
 
-- copy the `latest.yml` and exe file to sftp
+- copy the `latest.yml` and exe file to sftp and leave only the last 2 versions
 - open Desech Studio without logging in and see if it auto updates
 
 ## Build Studio Mac
@@ -296,7 +299,7 @@ npm run build-all-prod
 npm run build-mac
 ```
 
-- copy the `latest-mac.yml`, dmg and zip file to sftp
+- copy the `latest-mac.yml`, dmg and zip file to sftp and leave only the last 2 versions
 - open Desech Studio without logging in and see if it auto updates
 
 ## Website update

@@ -67,9 +67,9 @@ export default {
   },
 
   addOverClass (element, y) {
-    if (element.parentNode.dataset.containerOnly) {
+    if (element.parentNode.dataset.containerOnly && element.dataset.container) {
       // container only
-      if (element.dataset.container) this.attachOverClass(element, 'inside')
+      this.attachOverClass(element, 'inside')
     } else if (element.dataset.container) {
       // container and top/bottom
       this.addContainerOverClass(element, y)
@@ -114,7 +114,7 @@ export default {
 
   getMouseY (element, clientY) {
     const sidebar = document.getElementById('sidebar-right')
-    const panel = document.getElementById('right-panel-style')
+    const panel = element.closest('.scrollbar')
     return (clientY + panel.scrollTop) - (sidebar.offsetTop + element.offsetTop)
   },
 

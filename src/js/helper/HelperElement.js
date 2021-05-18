@@ -168,7 +168,7 @@ export default {
   getNormalTags () {
     return ['div', 'p', 'button', 'a', 'main', 'article', 'section', 'nav', 'aside', 'header',
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'footer', 'address', 'pre', 'blockquote', 'figure',
-      'figcaption', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'form', 'label', 'output']
+      'figcaption', 'hr', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'form', 'label', 'output']
   },
 
   isSpecialTag (tag) {

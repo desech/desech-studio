@@ -182,7 +182,8 @@ svg {
 
 hr {
   border: none;
-  border-top: 1px solid #000;
+  border-top: 1px solid rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
 }
 
 .block {
@@ -192,5 +193,6 @@ hr {
 }
 
 hr.block {
+  display: block;
   min-height: auto;
 }

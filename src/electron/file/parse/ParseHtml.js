@@ -241,7 +241,7 @@ export default {
 
   getInlineTagRegex () {
     return '(b|i|a|span|strong|em|time|ins|u|del|s|mark|small|sub|sup|q|abbr|' +
-      'cite|dfn|samp|data|code|var|kbd|bdo|ruby|rt|rb)'
+      'cite|dfn|samp|data|code|var|kbd|bdo|bdi|ruby|rt|rb)'
   },
 
   buildInlineElement (node) {

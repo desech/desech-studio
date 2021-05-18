@@ -87,8 +87,9 @@ export default {
     if (data.tag === 'input') return data.type
     if (data.type === 'video' || data.type === 'audio') return 'media'
     if (data.tag === 'ins' || data.tag === 'del') return 'ins-del'
+    if (data.tag === 'bdo' || data.tag === 'bdi') return 'bdo-bdi'
     const tags = ['a', 'button', 'form', 'img', 'label', 'ol', 'select', 'svg', 'textarea',
-      'time', 'data', 'q', 'bdo']
+      'time', 'data', 'q']
     if (tags.includes(data.tag)) return data.tag
   },
 

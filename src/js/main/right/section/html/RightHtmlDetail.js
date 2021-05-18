@@ -88,7 +88,7 @@ export default {
     if (data.type === 'video' || data.type === 'audio') return 'media'
     if (data.tag === 'ins' || data.tag === 'del') return 'ins-del'
     const tags = ['a', 'button', 'form', 'img', 'label', 'ol', 'select', 'svg', 'textarea',
-      'time', 'q', 'bdo']
+      'time', 'data', 'q', 'bdo']
     if (tags.includes(data.tag)) return data.tag
   },
 

@@ -1,6 +1,6 @@
 <template id="template-style-css-name-custom">
   <!-- @todo if the property or value is not recognized by chrome, then it will disappear; maybe show a warning -->
-  <input class="css-property" type="text"" placeholder="{{#i18n}} Property {{/i18n}}">
+  <input class="css-property" type="text" placeholder="{{#i18n}} Property {{/i18n}}">
 </template>
 
 <template id="template-style-css-value-custom">
@@ -33,6 +33,10 @@
 
 <template id="template-style-css-value-number-percent">
   {{> componentInputUnit class="change-style" number="1" percent="1" }}
+</template>
+
+<template id="template-style-css-value-flex-basis">
+  {{> componentInputUnit class="change-style" length="1" flexBasis="1" }}
 </template>
 
 <template id="template-style-css-value-color">
@@ -360,6 +364,23 @@
     <option value="dense">dense</option>
     <option value="row dense">row dense</option>
     <option value="column dense">column dense</option>
+  </select>
+</template>
+
+<template id="template-style-css-value-flex-direction">
+  <select class="change-style">
+    <option value="row">row</option>
+    <option selected value="column">column</option>
+    <option value="row-reverse">row-reverse</option>
+    <option value="column-reverse">column-reverse</option>
+  </select>
+</template>
+
+<template id="template-style-css-value-flex-wrap">
+  <select class="change-style">
+    <option selected value="nowrap">nowrap</option>
+    <option value="wrap">wrap</option>
+    <option value="wrap-reverse">wrap-reverse</option>
   </select>
 </template>
 

@@ -1,14 +1,6 @@
 <select class="add-css-dropdown button" style="width: 85px;">
   <option value="">{{#i18n}} - Property - {{/i18n}}</option>
   <option value="custom">{{#i18n}} Custom {{/i18n}}</option>
-  <optgroup label="{{#i18n}} SVG {{/i18n}}">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation -->
-    <!-- https://www.w3.org/TR/SVG11/styling.html -->
-    <!-- @todo add the rest and check the browser support -->
-    <option value="fill" data-template="color">fill</option>
-    <option value="stroke" data-template="color">stroke</option>
-    <option value="stroke-width" data-template="length-percent">stroke-width</option>
-  </optgroup>
   <optgroup label="{{#i18n}} Position {{/i18n}}">
     <option value="display">display</option>
     <option value="position">position</option>
@@ -21,6 +13,23 @@
     <option value="vertical-align">vertical-align</option>
     <option value="z-index" data-template="number">z-index</option>
   </optgroup>
+  <optgroup label="{{#i18n}} Grid {{/i18n}}">
+    <option value="grid-auto-flow">grid-auto-flow</option>
+    <option value="grid-auto-columns" data-template="custom">grid-auto-columns</option>
+    <option value="grid-auto-rows" data-template="custom">grid-auto-rows</option>
+    <option value="grid-template-areas" data-template="custom">grid-template-areas</option>
+    <option value="grid-area" data-template="custom">grid-area</option>
+    <option value="grid-column" data-template="custom">grid-column</option>
+    <option value="grid-row" data-template="custom">grid-row</option>
+    <option value="order" data-template="number">order</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Flex {{/i18n}}">
+    <option value="flex-grow" data-template="number">flex-grow</option>
+    <option value="flex-shrink" data-template="number">flex-shrink</option>
+    <option value="flex-basis" data-template="flex-basis">flex-basis</option>
+    <option value="flex-direction" data-template="flex-direction">flex-direction</option>
+    <option value="flex-wrap" data-template="flex-wrap">flex-wrap</option>
+  </optgroup>
   <optgroup label="{{#i18n}} Size {{/i18n}}">
     <option value="overflow-x" data-template="overflow">overflow-x</option>
     <option value="overflow-y" data-template="overflow">overflow-y</option>
@@ -31,6 +40,14 @@
     <option value="inline-size" data-template="width-height">inline-size</option>
     <option value="min-block-size" data-template="width-height">min-block-size</option>
     <option value="max-block-size" data-template="width-height">max-block-size</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} SVG {{/i18n}}">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/Presentation -->
+    <!-- https://www.w3.org/TR/SVG11/styling.html -->
+    <!-- @todo add the rest and check the browser support -->
+    <option value="fill" data-template="color">fill</option>
+    <option value="stroke" data-template="color">stroke</option>
+    <option value="stroke-width" data-template="length-percent">stroke-width</option>
   </optgroup>
   <optgroup label="{{#i18n}} Outline {{/i18n}}">
     <option value="outline-width" data-template="border-width">outline-width</option>
@@ -96,16 +113,6 @@
     <option value="content" data-template="custom">content</option>
     <option value="counter-increment" data-template="custom">counter-increment</option>
     <option value="counter-reset" data-template="custom">counter-reset</option>
-  </optgroup>
-  <optgroup label="{{#i18n}} Grid {{/i18n}}">
-    <option value="grid-template-areas" data-template="custom">grid-template-areas</option>
-    <option value="grid-area" data-template="custom">grid-area</option>
-    <option value="grid-column" data-template="custom">grid-column</option>
-    <option value="grid-row" data-template="custom">grid-row</option>
-    <option value="grid-auto-columns" data-template="custom">grid-auto-columns</option>
-    <option value="grid-auto-rows" data-template="custom">grid-auto-rows</option>
-    <option value="grid-auto-flow">grid-auto-flow</option>
-    <option value="order" data-template="number">order</option>
   </optgroup>
   <optgroup label="{{#i18n}} Effects {{/i18n}}">
     <option value="opacity" data-template="number-percent">opacity</option>

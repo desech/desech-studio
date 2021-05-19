@@ -111,5 +111,14 @@
         <option value="-" hidden>-</option>
       </optgroup>
     {{/if}}
+
+    {{#if flexBasis }}
+      <optgroup label="{{#i18n}} Advanced {{/i18n}}">
+        <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+        <option value="fill">{{#i18n}} Fill {{/i18n}}</option>
+        <option value="fit-content">{{#i18n}} Fit content {{/i18n}}</option>
+        <option value="-" hidden>-</option>
+      </optgroup>
+    {{/if}}
   </select>
 </div>

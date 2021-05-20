@@ -16,14 +16,20 @@ import HelperFile from '../../js/helper/HelperFile.js'
 import Config from './Config.js'
 import Electron from './Electron.js'
 import Language from './Language.js'
+import Log from './Log.js'
 
 export default {
   _DIR: null,
 
   async initPlugins () {
-    this._DIR = File.resolve(app.getPath('userData'), 'plugin')
-    File.createFolder(this._DIR)
-    await this.updatePlugins()
+    // this is async, but will not be called as such, because we want it to be run in parallel
+    try {
+      this._DIR = File.resolve(app.getPath('userData'), 'plugin')
+      File.createFolder(this._DIR)
+      await this.updatePlugins()
+    } catch (error) {
+      await Log.error(error)
+    }
   },
 
   async updatePlugins () {

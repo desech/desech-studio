@@ -55,7 +55,8 @@ export default {
   },
 
   async prepareWindow () {
-    await Plugin.initPlugins()
+    // we don't want the plugins update to stop the electron loading
+    Plugin.initPlugins()
     const settings = Settings.initSettings()
     global.locale = settings.locale
     Menu.setMenu()

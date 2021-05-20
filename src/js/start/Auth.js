@@ -45,7 +45,7 @@ export default {
     const dialog = this.loadAuthDialog()
     const token = HelperCrypto.generateHash()
     this.loadAuthButton(dialog, token)
-    await window.electron.invoke('rendererAuthenticateDesech', token)
+    await this.triggerOpenAuthPage(token)
   },
 
   loadAuthDialog () {
@@ -58,9 +58,22 @@ export default {
   loadAuthButton (dialog, token) {
     const button = dialog.getElementsByClassName('dialog-auth-button')[0]
     button.dataset.token = token
+    // wait 3 seconds before showing the confirm login button
     setTimeout(() => {
       HelperDOM.show(button)
     }, 3000)
+  },
+
+  triggerOpenAuthPage (token) {
+    // wait 2 seconds before opening the browser for login
+    return new Promise((resolve, reject) => setTimeout(async () => {
+      try {
+        await window.electron.invoke('rendererAuthenticateDesech', token)
+        resolve()
+      } catch (e) {
+        reject(e)
+      }
+    }, 2000))
   },
 
   injectAuthData () {

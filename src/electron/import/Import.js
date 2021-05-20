@@ -38,8 +38,8 @@ export default {
 
   getChooseFolder () {
     return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
-      title: Language.localize('Save files here'),
-      buttonLabel: Language.localize('Choose folder'),
+      title: Language.localize('Save files to this empty folder'),
+      buttonLabel: Language.localize('Save files to this empty folder'),
       properties: ['openDirectory', 'createDirectory']
     })
   },

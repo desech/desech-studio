@@ -15,7 +15,7 @@ export default {
   getChooseFile () {
     return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
       title: Language.localize('Choose an import file'),
-      buttonLabel: Language.localize('Choose file')
+      buttonLabel: Language.localize('Import this file')
     })
   }
 }

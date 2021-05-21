@@ -44,6 +44,8 @@ export default {
   buttonAddProperty (form) {
     const list = form.getElementsByClassName('style-component-list')[0]
     RightCommon.injectPropertyElement(list)
+    const input = list.lastElementChild.getElementsByTagName('textarea')[0]
+    input.focus()
   },
 
   deleteProperty (li) {

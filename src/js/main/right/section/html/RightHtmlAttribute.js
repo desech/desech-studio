@@ -98,7 +98,10 @@ export default {
     const name = form.elements.name.value
     const value = form.elements.value.value
     const valid = this.validateAttrName(form.elements.name)
-    if (name && valid) this.saveAttributeCommand(name, value)
+    if (name && valid) {
+      this.saveAttributeCommand(name, value)
+      form.elements.name.setAttributeNS(null, 'disabled', '')
+    }
   },
 
   validateAttrName (name) {

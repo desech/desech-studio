@@ -58,10 +58,10 @@ export default {
   loadAuthButton (dialog, token) {
     const button = dialog.getElementsByClassName('dialog-auth-button')[0]
     button.dataset.token = token
-    // wait 3 seconds before showing the confirm login button
+    // wait 2 seconds before showing the confirm login button
     setTimeout(() => {
       HelperDOM.show(button)
-    }, 3000)
+    }, 2000)
   },
 
   triggerOpenAuthPage (token) {

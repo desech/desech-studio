@@ -214,8 +214,9 @@ export default {
   },
 
   getContent (element, type) {
-    if (!['icon', 'video', 'audio', 'dropdown'].includes(type)) return
-    return element.innerHTML
+    if (['icon', 'video', 'audio', 'dropdown'].includes(type)) {
+      return element.innerHTML
+    }
   },
 
   getStyle (element) {

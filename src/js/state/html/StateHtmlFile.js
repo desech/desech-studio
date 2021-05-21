@@ -54,10 +54,11 @@ export default {
   },
 
   setRelativeSource (node) {
+    const tag = HelperDOM.getTag(node)
     if (node.srcset) this.setRelativeSourceSrcset(node)
-    for (const attr of ['src', 'poster']) {
-      if (node[attr]) this.setRelativeSourceAttr(node, attr)
-    }
+    if (tag !== 'iframe' && node.src) this.setRelativeSourceAttr(node, 'src')
+    if (node.poster) this.setRelativeSourceAttr(node, 'poster')
+    if (tag === 'object' && node.data) this.setRelativeSourceAttr(node, 'data')
   },
 
   setRelativeSourceSrcset (node) {
@@ -70,8 +71,8 @@ export default {
   },
 
   setRelativeSourceAttr (node, attr) {
-    const src = node.getAttributeNS(null, attr)
-    node[attr] = this.getRelPath(src)
+    const source = node.getAttributeNS(null, attr)
+    node[attr] = this.getRelPath(source)
   },
 
   getRelPath (attr) {
@@ -122,8 +123,8 @@ export default {
 
   filterClass (cls) {
     // we allow `block`, `text`, `component` and `component-children`
-    const ignore = ['selected', 'element', 'inline', 'icon', 'image', 'video', 'audio', 'input',
-      'dropdown', 'textarea', 'checkbox', 'range', 'color', 'file']
+    const ignore = ['selected', 'element', 'inline', 'icon', 'image', 'video', 'audio', 'iframe',
+      'object', 'input', 'dropdown', 'textarea', 'checkbox', 'range', 'color', 'file']
     if (ignore.includes(cls)) return
     return cls.replace('_ss_', '')
   },

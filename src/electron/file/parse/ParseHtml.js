@@ -57,6 +57,7 @@ export default {
   buildElement (node, componentChildren) {
     const tag = HelperDOM.getTag(node)
     if (tag === 'svg') return this.addBasic(node, 'icon')
+    if (tag === 'iframe' || tag === 'object') return this.addBasic(node, tag)
     if (tag === 'img') return this.buildImageElement(node)
     if (tag === 'video' || tag === 'audio') return this.buildMediaElement(node, tag)
     if (tag === 'input') return this.addInputElement(node)
@@ -140,12 +141,14 @@ export default {
   },
 
   setAbsoluteSource (node) {
-    for (const attr of ['src', 'poster']) {
-      // srcset is done separately
-      if (node[attr]) {
-        node[attr] = File.resolve(this._folder, node.getAttributeNS(null, attr))
-      }
-    }
+    const tag = HelperDOM.getTag(node)
+    if (tag !== 'iframe' && node.src) node.src = this.getAbsPath(node, 'src')
+    if (node.poster) node.poster = this.getAbsPath(node, 'poster')
+    if (tag === 'object' && node.data) node.data = this.getAbsPath(node, 'data')
+  },
+
+  getAbsPath (node, attr) {
+    return File.resolve(this._folder, node.getAttributeNS(null, attr))
   },
 
   cleanClasses (node) {

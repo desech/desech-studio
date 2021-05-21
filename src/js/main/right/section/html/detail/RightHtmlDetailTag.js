@@ -6,7 +6,6 @@ import StateSelectedElement from '../../../../../state/StateSelectedElement.js'
 import RightHtmlDetailTrack from './RightHtmlDetailTrack.js'
 import HelperElement from '../../../../../helper/HelperElement.js'
 import HelperTrigger from '../../../../../helper/HelperTrigger.js'
-import HelperFile from '../../../../../helper/HelperFile.js'
 
 export default {
   getEvents () {
@@ -17,7 +16,7 @@ export default {
       change: ['changeButtonTypeEvent', 'changeSelectOptionInputEvent', 'changeSvgCodeEvent',
         'changeTrackInputEvent', 'changeInputTextTypeEvent'],
       setsource: ['setsourceImageEvent', 'setsourceVideoEvent', 'setsourcePosterEvent',
-        'setsourceTrackEvent'],
+        'setsourceTrackEvent', 'setsourceObjectEvent'],
       dragdropafter: ['dragdropafterSelectSortOptionEvent']
     }
   },
@@ -112,19 +111,25 @@ export default {
 
   setsourceVideoEvent (event) {
     if (event.target.id === 'source-media-detail') {
-      this.setMediaSource(event.target, event.detail, 'src')
+      this.setAttrSource(event.target, event.detail, 'src')
     }
   },
 
   setsourcePosterEvent (event) {
     if (event.target.id === 'source-poster-detail') {
-      this.setMediaSource(event.target, event.detail, 'poster')
+      this.setAttrSource(event.target, event.detail, 'poster')
     }
   },
 
   setsourceTrackEvent (event) {
     if (event.target.id.startsWith('source-track-detail-')) {
       this.setTrackSource(event.target, event.detail)
+    }
+  },
+
+  setsourceObjectEvent (event) {
+    if (event.target.id === 'source-object-detail') {
+      this.setAttrSource(event.target, event.detail, 'data')
     }
   },
 
@@ -264,12 +269,8 @@ export default {
     return src
   },
 
-  setMediaSource (button, file, attr) {
+  setAttrSource (button, file, attr) {
     this.addFileName(button.closest('.grid'), file)
-    this.saveMediaSource(file, attr)
-  },
-
-  saveMediaSource (file, attr) {
     RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
       [attr]: file
     })

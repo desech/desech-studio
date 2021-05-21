@@ -16,7 +16,7 @@ template, [hidden] {
 
 div, main, article, section, nav, aside, header, h1, h2, h3, h4, h5, h6, footer,address, p,
 pre, blockquote, figure, figcaption, hr, ul, ol, li, dl, dt, dd, form, label, output, slot,
-button, svg, img, video, audio, input, select, textarea {
+button, svg, img, video, audio, iframe, object, input, select, textarea {
   display: block;
   margin: 0;
   padding: 0;

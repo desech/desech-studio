@@ -59,6 +59,8 @@ export default {
       i: 'image',
       w: 'video',
       a: 'audio',
+      m: 'iframe',
+      b: 'object',
       n: 'input', // input text
       d: 'dropdown',
       x: 'textarea',

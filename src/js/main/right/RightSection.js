@@ -129,6 +129,8 @@ export default {
 
       case 'image':
       case 'video':
+      case 'iframe':
+      case 'object':
         return top + ['border'] + bottom
 
       case 'file':

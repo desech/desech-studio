@@ -54,6 +54,14 @@
   cursor: url(../asset/image/icon-cursor/audio.svg) 15 15, crosshair;
 }
 
+#canvas[data-tool="iframe"] {
+  cursor: url(../asset/image/icon-cursor/iframe.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="object"] {
+  cursor: url(../asset/image/icon-cursor/object.svg) 15 15, crosshair;
+}
+
 #canvas[data-tool="input"] {
   cursor: url(../asset/image/icon-cursor/input.svg) 15 15, crosshair;
 }

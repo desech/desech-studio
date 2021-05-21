@@ -88,8 +88,8 @@ export default {
     if (data.type === 'video' || data.type === 'audio') return 'media'
     if (data.tag === 'ins' || data.tag === 'del') return 'ins-del'
     if (data.tag === 'bdo' || data.tag === 'bdi') return 'bdo-bdi'
-    const tags = ['a', 'button', 'form', 'img', 'label', 'ol', 'select', 'svg', 'textarea',
-      'time', 'data', 'q']
+    const tags = ['a', 'button', 'form', 'svg', 'img', 'iframe', 'object', 'label', 'ol',
+      'select', 'textarea', 'time', 'data', 'q']
     if (tags.includes(data.tag)) return data.tag
   },
 
@@ -156,6 +156,11 @@ export default {
   injectFormImg (form, data) {
     const srcset = data.element.getAttributeNS(null, 'srcset')
     RightHtmlDetailTag.injectImageSrcset(form.elements, srcset)
+  },
+
+  injectFormObject (form, data) {
+    const value = data.element.getAttributeNS(null, 'data')
+    RightHtmlCommon.setFileName(form.elements.data, value)
   },
 
   injectFormMedia (form, data) {

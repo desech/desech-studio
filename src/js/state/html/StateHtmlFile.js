@@ -146,7 +146,8 @@ export default {
   },
 
   addDatalist (node) {
-    if (!node.list) return
+    // ignore empty lists so we can clean them up
+    if (!node.list || !node.list.children.length) return
     const datalist = node.list.cloneNode(true)
     HelperDOM.insertAfter(datalist, node)
   },

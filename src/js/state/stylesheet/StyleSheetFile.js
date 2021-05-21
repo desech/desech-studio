@@ -1,6 +1,5 @@
 import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperFile from '../../helper/HelperFile.js'
-import ExtendJS from '../../helper/ExtendJS.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperElement from '../../helper/HelperElement.js'
 import HelperProject from '../../helper/HelperProject.js'

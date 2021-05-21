@@ -62,7 +62,9 @@ export default {
 
   addAttributeFields (list, fields, element) {
     for (const attr of element.attributes) {
-      if (!fields.includes(attr.name)) this.addAttribute(list, attr.name, attr.value)
+      if (!fields.includes(attr.name)) {
+        this.addAttribute(list, attr.name, attr.value)
+      }
     }
   },
 
@@ -82,6 +84,8 @@ export default {
   buttonAddAttribute (form) {
     const list = form.getElementsByClassName('style-html-attr-list')[0]
     this.addAttribute(list)
+    const input = list.lastElementChild.getElementsByTagName('input')[0]
+    input.focus()
   },
 
   deleteAttribute (li) {

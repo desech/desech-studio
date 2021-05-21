@@ -58,14 +58,14 @@ export default {
   loadAuthButton (dialog, token) {
     const button = dialog.getElementsByClassName('dialog-auth-button')[0]
     button.dataset.token = token
-    // wait 2 seconds before showing the confirm login button
+    // wait 1 second before showing the confirm login button
     setTimeout(() => {
       HelperDOM.show(button)
-    }, 2000)
+    }, 1000)
   },
 
   triggerOpenAuthPage (token) {
-    // wait 2 seconds before opening the browser for login
+    // wait 1 second before opening the browser for login
     return new Promise((resolve, reject) => setTimeout(async () => {
       try {
         await window.electron.invoke('rendererAuthenticateDesech', token)
@@ -73,7 +73,7 @@ export default {
       } catch (e) {
         reject(e)
       }
-    }, 2000))
+    }, 1000))
   },
 
   injectAuthData () {

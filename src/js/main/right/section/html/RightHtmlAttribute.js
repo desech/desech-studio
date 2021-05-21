@@ -43,13 +43,13 @@ export default {
 
   injectAttributeFields (container, form) {
     const list = form.getElementsByClassName('style-html-attr-list')[0]
-    const fields = this.getExistingFields(container)
     const element = StateSelectedElement.getElement()
+    const fields = this.getExistingFields(container, element)
     this.addAttributeFields(list, fields, element)
   },
 
-  getExistingFields (container) {
-    const ignore = RightHtmlCommon.getAllIgnoredAttributes()
+  getExistingFields (container, element) {
+    const ignore = RightHtmlCommon.getIgnoredAttributes(element)
     const fields = this.getDetailFields(container)
     return [...ignore, ...fields]
   },
@@ -107,7 +107,8 @@ export default {
   isNameValid (value) {
     // allow attribute names that contain components {{variables}}
     const valid = /^[a-z]([a-zA-Z0-9-])+$/g.test(value)
-    const list = RightHtmlCommon.getAllIgnoredAttributes()
+    const element = StateSelectedElement.getElement()
+    const list = RightHtmlCommon.getIgnoredAttributes(element)
     return valid && !list.includes(value)
   },
 

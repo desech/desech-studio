@@ -154,8 +154,8 @@ export default {
   },
 
   getRemovableAttributes (element) {
-    const ignore = this.getIgnoredAttributes(element)
     const remove = {}
+    const ignore = this.getIgnoredAttributes()
     for (const attr of HelperElement.getAttributes(element)) {
       if (!ignore.includes(attr.name)) {
         remove[attr.name] = attr.value ? '' : false
@@ -164,21 +164,11 @@ export default {
     return remove
   },
 
-  getIgnoredAttributes (element) {
-    let list = this.getMainAttributes()
-    if (element.tagName === 'INPUT') list = [...list, 'type', 'placeholder', 'list']
-    return list
-  },
-
-  getMainAttributes () {
-    return ['data-ss-tag', 'class', 'hidden', 'data-ss-hidden', 'viewBox', 'srcset',
-      'data-element-properties']
-  },
-
-  getAllIgnoredAttributes () {
+  getIgnoredAttributes () {
     return [
-      ...this.getMainAttributes(),
-      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'type', 'list', 'style'
+      'data-ss-tag', 'class', 'style', 'hidden', 'data-ss-hidden', 'data-element-properties',
+      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'list',
+      'viewBox', 'srcset'
     ]
   },
 

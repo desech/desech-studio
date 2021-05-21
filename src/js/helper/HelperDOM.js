@@ -207,7 +207,7 @@ export default {
 
   clearStyle (node) {
     // sometimes it still leaves a style="" attribute, which we remove on save
-    // check StateHtmlFile.formatHtmlString(), RightHtmlCommon.getAllIgnoredAttributes()
+    // check StateHtmlFile.formatHtmlString(), RightHtmlCommon.getIgnoredAttributes()
     node.style = ''
     delete node.style
     node.removeAttributeNS(null, 'style')

@@ -57,20 +57,21 @@ export default {
       t: 'text',
       s: 'icon', // svg icon
       i: 'image',
-      w: 'video',
-      a: 'audio',
-      m: 'iframe',
-      b: 'object',
+      // w: 'video',
+      // a: 'audio',
+      // m: 'iframe',
+      // b: 'object',
       n: 'input', // input text
       d: 'dropdown',
       x: 'textarea',
       c: 'checkbox', // input
-      e: 'range', // input
-      o: 'color', // input
-      f: 'file', // input
       l: 'datalist',
+      // e: 'range', // input
+      // o: 'color', // input
+      // f: 'file', // input
       h: 'hand'
       // "g" is used by switching the overlays
+      // "p" is used for preview
     }
   },
 

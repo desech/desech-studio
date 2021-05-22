@@ -51,14 +51,13 @@ export default {
 
   buildElement (node, componentChildren) {
     const tag = HelperDOM.getTag(node)
-    if (tag === 'svg') return this.addBasic(node, 'icon')
-    if (tag === 'iframe' || tag === 'object') return this.addBasic(node, tag)
-    if (tag === 'img') return this.buildImageElement(node)
-    if (tag === 'video' || tag === 'audio') return this.buildMediaElement(node, tag)
+    const elemName = this.getTagElement(tag)
+    if (elemName) return this.addBasic(node, elemName)
     if (tag === 'input') return this.addInputElement(node)
-    if (tag === 'select') return this.addBasic(node, 'dropdown')
-    if (tag === 'textarea') return this.addBasic(node, 'textarea')
-    if (tag === 'datalist') return this.addBasic(node, 'datalist')
+    if (tag === 'img') return this.buildImageElement(node)
+    if (tag === 'video' || tag === 'audio') {
+      return this.buildMediaElement(node, tag)
+    }
     if (node.classList.contains('text')) {
       return this.buildTagElement(node, 'text', 'p')
     }
@@ -75,6 +74,18 @@ export default {
     if (this.isInlineElement(node)) {
       return this.buildInlineElement(node)
     }
+  },
+
+  getTagElement (tag) {
+    const map = {
+      svg: 'icon',
+      iframe: 'iframe',
+      object: 'object',
+      textarea: 'textarea',
+      select: 'dropdown',
+      datalist: 'datalist'
+    }
+    return map[tag] || null
   },
 
   addComponent (node) {

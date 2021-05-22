@@ -136,13 +136,12 @@ export default {
       case 'file':
         return top + ['fill'] + bottom
 
-      case 'audio':
-      case 'range':
-      case 'datalist':
-        return top + bottom
-
       case 'inline':
         return ['html', 'selector', 'size'] + ['text', 'border', 'fill'] + bottom
+
+      // audio, range, datalist, progress, meter
+      default:
+        return top + bottom
     }
   },
 

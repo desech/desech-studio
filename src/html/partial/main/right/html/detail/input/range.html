@@ -50,10 +50,10 @@
 
       <div class="grid" style="grid-template-columns: 24px 1fr 24px 1fr;">
         <div style="font-size: 11px;">{{#i18n}} Min {{/i18n}}</div>
-        <input class="style-html-field" type="text" name="min" placeholder="{{#i18n}} Number {{/i18n}}">
-        
+        <input type="number" step="1" name="min" class="style-html-field" placeholder="{{#i18n}} Number {{/i18n}}">
+
         <div style="font-size: 11px;">{{#i18n}} Max {{/i18n}}</div>
-        <input class="style-html-field" type="text" name="max" placeholder="{{#i18n}} Number {{/i18n}}">
+        <input type="number" step="1" name="max" class="style-html-field" placeholder="{{#i18n}} Number {{/i18n}}">
       </div>
     </div>
   </form>

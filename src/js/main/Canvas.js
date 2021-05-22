@@ -32,7 +32,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
       HelperElement.getKeys().includes(event.key.toLowerCase())) {
-      this.enableButton(HelperElement.getKeyTypeMap()[event.key.toLowerCase()])
+      this.enableButton(HelperElement.getElementByKey(event.key.toLowerCase()))
     }
   },
 

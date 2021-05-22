@@ -124,7 +124,7 @@ export default {
     // we allow `block`, `text`, `component` and `component-children`
     const ignore = ['selected', 'element', 'inline', 'icon', 'image', 'video', 'audio', 'iframe',
       'object', 'input', 'datalist', 'dropdown', 'textarea', 'checkbox', 'range', 'color',
-      'file']
+      'file', 'progress', 'meter']
     if (ignore.includes(cls)) return
     return cls.replace('_ss_', '')
   },

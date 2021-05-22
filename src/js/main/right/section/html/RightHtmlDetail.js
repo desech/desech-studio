@@ -89,7 +89,7 @@ export default {
     if (data.tag === 'ins' || data.tag === 'del') return 'ins-del'
     if (data.tag === 'bdo' || data.tag === 'bdi') return 'bdo-bdi'
     const tags = ['a', 'button', 'form', 'svg', 'img', 'iframe', 'object', 'label', 'ol',
-      'select', 'textarea', 'datalist', 'time', 'data', 'q', 'map', 'area']
+      'select', 'textarea', 'datalist', 'time', 'data', 'q', 'map', 'area', 'progress', 'meter']
     if (tags.includes(data.tag)) return data.tag
   },
 

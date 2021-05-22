@@ -83,7 +83,9 @@ export default {
       object: 'object',
       textarea: 'textarea',
       select: 'dropdown',
-      datalist: 'datalist'
+      datalist: 'datalist',
+      progress: 'progress',
+      meter: 'meter'
     }
     return map[tag] || null
   },

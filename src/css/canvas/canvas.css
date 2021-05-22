@@ -78,6 +78,10 @@
   cursor: url(../asset/image/icon-cursor/checkbox.svg) 15 15, crosshair;
 }
 
+#canvas[data-tool="datalist"] {
+  cursor: url(../asset/image/icon-cursor/datalist.svg) 15 15, crosshair;
+}
+
 #canvas[data-tool="range"] {
   cursor: url(../asset/image/icon-cursor/range.svg) 15 15, crosshair;
 }
@@ -90,8 +94,12 @@
   cursor: url(../asset/image/icon-cursor/file.svg) 15 15, crosshair;
 }
 
-#canvas[data-tool="datalist"] {
-  cursor: url(../asset/image/icon-cursor/datalist.svg) 15 15, crosshair;
+#canvas[data-tool="progress"] {
+  cursor: url(../asset/image/icon-cursor/progress.svg) 15 15, crosshair;
+}
+
+#canvas[data-tool="meter"] {
+  cursor: url(../asset/image/icon-cursor/meter.svg) 15 15, crosshair;
 }
 
 #canvas[data-tool="hand"],

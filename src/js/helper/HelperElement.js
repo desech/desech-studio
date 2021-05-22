@@ -50,6 +50,14 @@ export default {
     return this.getType(element)
   },
 
+  getKeys () {
+    return Object.keys(this.getKeyTypeMap())
+  },
+
+  getElementByKey (type) {
+    return this.getKeyTypeMap()[type]
+  },
+
   getKeyTypeMap () {
     return {
       v: 'select', // same as figma, sketch, xd
@@ -57,32 +65,21 @@ export default {
       t: 'text',
       s: 'icon', // svg icon
       i: 'image',
-      // w: 'video',
-      // a: 'audio',
-      // m: 'iframe',
-      // b: 'object',
       n: 'input', // input text
       d: 'dropdown',
       x: 'textarea',
       c: 'checkbox', // input
       l: 'datalist',
-      // e: 'range', // input
-      // o: 'color', // input
-      // f: 'file', // input
       h: 'hand'
       // "g" is used by switching the overlays
       // "p" is used for preview
     }
   },
 
-  getKeys () {
-    return Object.keys(this.getKeyTypeMap())
-  },
-
   getTypes () {
-    const general = Object.values(this.getKeyTypeMap())
-    const special = ['inline', 'component', 'component-children']
-    return general + special
+    return ['block', 'text', 'icon', 'image', 'video', 'audio', 'iframe', 'object',
+      'input', 'dropdown', 'textarea', 'checkbox', 'datalist', 'range', 'color', 'file',
+      'progress', 'meter', 'inline', 'component', 'component-children']
   },
 
   getPosition (element) {

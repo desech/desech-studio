@@ -156,7 +156,7 @@ export default {
 
   injectFormObject (form, data) {
     const value = data.element.getAttributeNS(null, 'data')
-    RightHtmlCommon.setFileName(form.elements.data, value)
+    if (value) RightHtmlCommon.setFileName(form.elements.data, value)
   },
 
   injectFormMedia (form, data) {

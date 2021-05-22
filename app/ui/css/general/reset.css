@@ -234,3 +234,8 @@ col.block, col.text {
 caption.block, caption.text {
   display: table-caption;
 }
+
+map.block, map.text,
+area.block, area.text {
+  display: inline;
+}

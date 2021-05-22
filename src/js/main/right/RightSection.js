@@ -125,6 +125,7 @@ export default {
       case 'icon':
       case 'checkbox':
       case 'color':
+      case 'canvas':
         return top + ['border', 'fill'] + bottom
 
       case 'image':

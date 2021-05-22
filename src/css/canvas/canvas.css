@@ -62,6 +62,10 @@
   cursor: url(../asset/image/icon-cursor/object.svg) 15 15, crosshair;
 }
 
+#canvas[data-tool="canvas"] {
+  cursor: url(../asset/image/icon-cursor/canvas.svg) 15 15, crosshair;
+}
+
 #canvas[data-tool="input"] {
   cursor: url(../asset/image/icon-cursor/input.svg) 15 15, crosshair;
 }

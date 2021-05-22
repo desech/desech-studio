@@ -77,7 +77,7 @@ export default {
   },
 
   getTypes () {
-    return ['block', 'text', 'icon', 'image', 'video', 'audio', 'iframe', 'object',
+    return ['block', 'text', 'icon', 'image', 'video', 'audio', 'iframe', 'object', 'canvas',
       'input', 'dropdown', 'textarea', 'checkbox', 'datalist', 'range', 'color', 'file',
       'progress', 'meter', 'inline', 'component', 'component-children']
   },

@@ -81,6 +81,7 @@ export default {
       svg: 'icon',
       iframe: 'iframe',
       object: 'object',
+      canvas: 'canvas',
       textarea: 'textarea',
       select: 'dropdown',
       datalist: 'datalist',

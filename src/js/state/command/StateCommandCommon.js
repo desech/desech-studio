@@ -24,14 +24,6 @@ export default {
     }
   },
 
-  getOptionsNode (data) {
-    if (data.type === 'datalist') {
-      return document.getElementById(`datalist-${data.ref}`)
-    } else {
-      return HelperElement.getElement(data.ref)
-    }
-  },
-
   pasteAttributes (element, ref, data) {
     if (!data) return
     const type = HelperElement.getType(element)

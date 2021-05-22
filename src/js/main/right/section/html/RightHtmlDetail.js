@@ -89,7 +89,7 @@ export default {
     if (data.tag === 'ins' || data.tag === 'del') return 'ins-del'
     if (data.tag === 'bdo' || data.tag === 'bdi') return 'bdo-bdi'
     const tags = ['a', 'button', 'form', 'svg', 'img', 'iframe', 'object', 'label', 'ol',
-      'select', 'textarea', 'time', 'data', 'q']
+      'select', 'textarea', 'datalist', 'time', 'data', 'q']
     if (tags.includes(data.tag)) return data.tag
   },
 
@@ -145,10 +145,6 @@ export default {
     RightHtmlDetailTag.updateButtonType(form.elements.type)
   },
 
-  injectFormSelect (form, data) {
-    RightHtmlDetailOption.injectOptions(form, data.element)
-  },
-
   injectFormSvg (form, data) {
     RightHtmlDetailTag.injectSvg(data.element, form.elements.code)
   },
@@ -171,6 +167,13 @@ export default {
 
   injectFormInput (form, data) {
     RightHtmlDetailTag.injectInputText(form.elements.type, data.element)
+  },
+
+  injectFormDatalist (form, data) {
+    RightHtmlDetailOption.injectOptions(form, data.element)
+  },
+
+  injectFormSelect (form, data) {
     RightHtmlDetailOption.injectOptions(form, data.element)
   }
 }

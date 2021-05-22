@@ -64,22 +64,10 @@ export default {
 
   injectOptions (container, element) {
     const list = container.getElementsByClassName('style-html-option-list')[0]
-    for (const child of this.getOptions(element)) {
+    for (const child of element.children) {
       const data = this.getOptionData(child)
       RightHtmlCommon.addSelectOptionToList(list, data)
       if (data.type === 'optgroup') this.addOptgroupOptions(list, child.children)
-    }
-  },
-
-  getOptions (element) {
-    if (element.hasAttributeNS(null, 'list')) {
-      // 2 inputs can use the same datalist after copy/paste attributes
-      // @todo the datalists will be duplicated in the exported html file, using the same id
-      // input
-      return element.list ? element.list.children : []
-    } else {
-      // select
-      return element.children
     }
   },
 
@@ -99,22 +87,5 @@ export default {
       const data = this.getOptionData(child)
       RightHtmlCommon.addSelectOptionToList(list, data)
     }
-  },
-
-  initDatalist () {
-    const element = StateSelectedElement.getElement()
-    if (!element.getAttributeNS(null, 'list')) this.addDatalist(element)
-  },
-
-  addDatalist (element) {
-    const listId = `datalist-${HelperElement.getRef(element)}`
-    this.createDatalist(listId)
-    element.setAttributeNS(null, 'list', listId)
-  },
-
-  createDatalist (listId) {
-    const datalist = document.createElement('datalist')
-    datalist.id = listId
-    document.getElementById('datalist').appendChild(datalist)
   }
 }

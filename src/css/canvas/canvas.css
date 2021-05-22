@@ -90,6 +90,10 @@
   cursor: url(../asset/image/icon-cursor/file.svg) 15 15, crosshair;
 }
 
+#canvas[data-tool="datalist"] {
+  cursor: url(../asset/image/icon-cursor/datalist.svg) 15 15, crosshair;
+}
+
 #canvas[data-tool="hand"],
 #canvas[data-operation="panning"] {
   cursor: url(../asset/image/icon-cursor/hand.svg) 15 15, crosshair;

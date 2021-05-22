@@ -8,7 +8,6 @@ import File from '../File.js'
 export default {
   _document: null,
   _folder: null,
-  _datalist: null,
 
   async parseComponentFile (file) {
     const folder = await Cookie.getCookie('currentFolder')
@@ -21,21 +20,17 @@ export default {
 
   parseHtml (document, folder, nodes = null) {
     if (!nodes) nodes = document.body.children
-    const datalist = document.createElement('div')
-    this.init(document, folder, datalist)
+    this.init(document, folder)
     this.buildHtml(nodes)
-    this.removeDatalists()
     return {
       canvas: nodes.length ? nodes[0].parentNode.innerHTML.trim() : '',
-      meta: this.getMeta(),
-      datalist: datalist.innerHTML.trim()
+      meta: this.getMeta()
     }
   },
 
-  init (document, folder, datalist) {
+  init (document, folder) {
     this._document = document
     this._folder = folder
-    this._datalist = datalist
   },
 
   getMeta () {
@@ -63,7 +58,7 @@ export default {
     if (tag === 'input') return this.addInputElement(node)
     if (tag === 'select') return this.addBasic(node, 'dropdown')
     if (tag === 'textarea') return this.addBasic(node, 'textarea')
-    if (tag === 'datalist') return this.addDatalist(node)
+    if (tag === 'datalist') return this.addBasic(node, 'datalist')
     if (node.classList.contains('text')) {
       return this.buildTagElement(node, 'text', 'p')
     }
@@ -224,16 +219,7 @@ export default {
     if (node.type === 'checkbox' || node.type === 'radio') {
       return this.addBasic(node, 'checkbox')
     }
-    this.cleanDatalist(node)
     this.addBasic(node, 'input')
-  },
-
-  cleanDatalist (node) {
-    if (node.hasAttributeNS(null, 'list') && !node.list) node.removeAttributeNS(null, 'list')
-  },
-
-  addDatalist (node) {
-    this._datalist.appendChild(node.cloneNode(true))
   },
 
   isInlineElement (node) {
@@ -267,12 +253,5 @@ export default {
     node = HelperDOM.changeTag(node, 'div', this._document)
     node.setAttributeNS(null, 'data-ss-tag', tag)
     return node
-  },
-
-  removeDatalists () {
-    const nodes = this._document.getElementsByTagName('datalist')
-    while (nodes.length > 0) {
-      nodes[0].remove()
-    }
   }
 }

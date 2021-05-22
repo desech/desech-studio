@@ -146,6 +146,12 @@
         <path d="M0 0h24v24H0V0z" fill="none"/>
       </svg>
     </button>
+    <button type="button" hidden class="tool-button" data-type="datalist">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 12l-4-4h8l-4 4z"/>
+      </svg>
+    </button>
   </div>
   <button type="button" class="tool-button-dropdown">
     <svg width="14" height="14" viewBox="0 0 24 24">
@@ -201,6 +207,13 @@
           <path d="M0 0h24v24H0V0z" fill="none"/>
         </svg>
         <div>{{#i18n}} File {{/i18n}} (F)</div>
+      </div>
+      <div class="tool-button-list-elem" data-type="datalist">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 12l-4-4h8l-4 4z"/>
+        </svg>
+        <div>{{#i18n}} Datalist {{/i18n}} (L)</div>
       </div>
     </div>
   </button>

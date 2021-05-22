@@ -128,7 +128,7 @@ export default {
   },
 
   setOptions (data) {
-    const node = StateCommandCommon.getOptionsNode(data)
+    const node = HelperElement.getElement(data.ref)
     node.innerHTML = data.html
   },
 

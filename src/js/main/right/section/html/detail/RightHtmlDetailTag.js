@@ -142,7 +142,8 @@ export default {
     const container = button.closest('.style-html-options')
     const list = container.getElementsByClassName('style-html-option-list')[0]
     RightHtmlCommon.addSelectOptionToList(list, { type: button.dataset.type })
-    if (container.dataset.type === 'datalist') RightHtmlDetailOption.initDatalist()
+    const input = list.lastElementChild.getElementsByTagName('input')[0]
+    input.focus()
   },
 
   deleteSelectOption (li) {

@@ -17,7 +17,6 @@ export default {
 
   loadHtml (html) {
     HelperCanvas.getCanvas().innerHTML = html.canvas
-    document.getElementById('datalist').innerHTML = html.datalist
   },
 
   loadCss (css) {

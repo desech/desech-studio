@@ -68,6 +68,7 @@ export default {
       e: 'range', // input
       o: 'color', // input
       f: 'file', // input
+      l: 'datalist',
       h: 'hand'
       // "g" is used by switching the overlays
     }

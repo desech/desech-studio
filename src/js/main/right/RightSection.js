@@ -138,6 +138,7 @@ export default {
 
       case 'audio':
       case 'range':
+      case 'datalist':
         return top + bottom
 
       case 'inline':

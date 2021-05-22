@@ -19,22 +19,7 @@ export default {
     clone.classList.remove('selected')
     const cloneAndChildren = [clone, ...clone.getElementsByClassName('element')]
     this.cloneElementNodes(cloneAndChildren)
-    if (clone.hasAttributeNS(null, 'list')) {
-      this.cloneDatalist(clone, HelperElement.getRef(element))
-    }
     return clone
-  },
-
-  cloneDatalist (current, previousRef) {
-    const datalist = document.getElementById(`datalist-${previousRef}`)
-    const clone = datalist.cloneNode(true)
-    this.setDatalistIds(clone, current)
-    HelperDOM.insertAfter(clone, datalist)
-  },
-
-  setDatalistIds (datalist, current) {
-    datalist.id = `datalist-${HelperElement.getRef(current)}`
-    current.setAttributeNS(null, 'list', datalist.id)
   },
 
   cloneElementNodes (elements) {

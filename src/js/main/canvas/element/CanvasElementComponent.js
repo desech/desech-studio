@@ -53,9 +53,6 @@ export default {
 
   addHtml (element, html) {
     element.insertAdjacentHTML('afterbegin', html.canvas)
-    if (html.datalist) {
-      document.getElementById('datalist').insertAdjacentHTML('beforeend', html.datalist)
-    }
   },
 
   insertComponentChildren () {

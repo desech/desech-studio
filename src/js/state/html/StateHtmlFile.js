@@ -31,7 +31,6 @@ export default {
       return this.addComponent(node, css, designSystemClasses)
     }
     this.setRelativeSource(node)
-    if (node.classList.contains('input')) this.addDatalist(node)
     this.setBasic(node, css, designSystemClasses)
   },
 
@@ -124,7 +123,8 @@ export default {
   filterClass (cls) {
     // we allow `block`, `text`, `component` and `component-children`
     const ignore = ['selected', 'element', 'inline', 'icon', 'image', 'video', 'audio', 'iframe',
-      'object', 'input', 'dropdown', 'textarea', 'checkbox', 'range', 'color', 'file']
+      'object', 'input', 'datalist', 'dropdown', 'textarea', 'checkbox', 'range', 'color',
+      'file']
     if (ignore.includes(cls)) return
     return cls.replace('_ss_', '')
   },
@@ -146,13 +146,6 @@ export default {
     return false
   },
 
-  addDatalist (node) {
-    // ignore empty lists so we can clean them up
-    if (!node.list || !node.list.children.length) return
-    const datalist = node.list.cloneNode(true)
-    HelperDOM.insertAfter(datalist, node)
-  },
-
   returnHtml (canvas, file) {
     const html = this.formatHtml(canvas)
     const isComponent = HelperFile.isComponentFile(file)
@@ -171,8 +164,9 @@ export default {
 
   formatHtmlString (html) {
     html = html.replace(/ style=""/g, '')
-    html = html.replace(/ (hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g,
-      ' $1')
+    const regex = new RegExp(' (hidden|checked|selected|disabled|readonly|required|multiple|' +
+      'controls|autoplay|loop|muted|default|reversed)=".*?"', 'g')
+    html = html.replace(regex, ' $1')
     return html
   }
 }

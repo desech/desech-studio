@@ -75,18 +75,9 @@ export default {
         command,
         ref,
         type,
-        html: this.getListHtml(element, type)
+        html: element.innerHTML
       }
     }
-  },
-
-  getListHtml (element, type) {
-    const ref = HelperElement.getRef(element)
-    return (type === 'datalist') ? this.getDatalistHtml(ref) : element.innerHTML
-  },
-
-  getDatalistHtml (ref) {
-    return document.getElementById(`datalist-${ref}`).innerHTML
   },
 
   setSvgCommand (element, svg, execute = true) {
@@ -167,8 +158,7 @@ export default {
   getIgnoredAttributes () {
     return [
       'data-ss-tag', 'class', 'style', 'hidden', 'data-ss-hidden', 'data-element-properties',
-      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'list',
-      'viewBox', 'srcset'
+      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'viewBox', 'srcset'
     ]
   },
 

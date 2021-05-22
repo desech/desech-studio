@@ -167,11 +167,13 @@ export default {
   },
 
   getNormalTags () {
+    // fieldset and legend are not allowed because fieldset doesn't support grids inside
+    //  elements, in chrome
     return ['div', 'p', 'button', 'a', 'main', 'article', 'section', 'nav', 'aside', 'header',
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'footer', 'address', 'pre', 'blockquote', 'figure',
       'figcaption', 'hr', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'form', 'label', 'output',
       'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col',
-      'map', 'area']
+      'map', 'area', 'details', 'summary']
   },
 
   isSpecialTag (tag) {

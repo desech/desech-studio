@@ -16,8 +16,12 @@ template, [hidden] {
 
 div, main, article, section, nav, aside, header, h1, h2, h3, h4, h5, h6, footer,address, p,
 pre, blockquote, figure, figcaption, hr, ul, ol, li, dl, dt, dd, form, label, output, slot,
-button, svg, img, video, audio, iframe, object, input, select, textarea, table, thead, tbody,
-tfoot, tr, td, th, caption, colgroup, col, progress, meter {
+button, svg, img, video, audio, iframe, object, input, select, textarea, progress, meter,
+details,
+summary,
+table, thead, tbody, tfoot, tr, td, th, caption, colgroup, col,
+b, i, a, span, strong, em, time, ins, del, s, mark, small, sub, sup, q, abbr, cite, dfn, samp,
+code, var, kbd, bdo, ruby, rt, rb {
   display: block;
   margin: 0;
   padding: 0;
@@ -27,13 +31,6 @@ tfoot, tr, td, th, caption, colgroup, col, progress, meter {
 b, i, a, span, strong, em, time, ins, del, s, mark, small, sub, sup, q, abbr, cite, dfn, samp,
 code, var, kbd, bdo, ruby, rt, rb {
   display: inline;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-a.text, a.block {
-  display: block;
 }
 
 a {
@@ -48,10 +45,6 @@ h1, h2, h3, h4, h5, h6 {
 
 pre {
   font-family: Arial, Helvetica, sans-serif;
-}
-
-li {
-  display: list-item;
 }
 
 button, input, select, textarea {
@@ -193,49 +186,58 @@ hr {
   min-height: 24px;
 }
 
+a, a.text, a.block {
+  display: block;
+}
+
+li, li.block,
+summary, summary.block {
+  display: list-item;
+}
+
 hr.block {
   display: block;
   min-height: auto;
 }
 
-table.block, table.text {
+table, table.block {
   display: table;
 }
 
-thead.block, thead.text {
+thead, thead.block {
   display: table-header-group;
 }
 
-tfoot.block, tfoot.text {
+tfoot, tfoot.block {
   display: table-footer-group;
 }
 
-tbody.block, tbody.text {
+tbody, tbody.block {
   display: table-row-group;
 }
 
-tr.block, tr.text {
+tr, tr.block {
   display: table-row;
 }
 
-td.block, td.text,
-th.block, th.text {
+td, td.block,
+th, th.block {
   display: table-cell;
 }
 
-colgroup.block, colgroup.text {
+colgroup, colgroup.block {
   display: table-column-group;
 }
 
-col.block, col.text {
+col, col.block {
   display: table-column;
 }
 
-caption.block, caption.text {
+caption, caption.block {
   display: table-caption;
 }
 
-map.block, map.text,
-area.block, area.text {
+map, map.block, map.text,
+area, area.block, area.text {
   display: inline;
 }

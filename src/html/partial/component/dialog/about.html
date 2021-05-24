@@ -3,8 +3,14 @@
     <div class="dialog-header">{{pageTitle}}</div>
     <div class="dialog-body">
       <div class="dialog-about">
-        <p>{{#i18n}} Version {{/i18n}}: <span>{{ about.version }}</span></p>
-        <p>{{#i18n}} Electron {{/i18n}}: <span>{{ about.electron }}</span></p>
+        <p>
+          {{#i18n}} Version {{/i18n}}: &nbsp;
+          <a href="https://www.desech.com/download.html" class="desech-external-link">{{ about.version }}</a>
+        </p>
+        <p>
+          {{#i18n}} Electron {{/i18n}}: &nbsp;
+          <a href="https://www.electronjs.org/releases/stable" class="desech-external-link">{{ about.electron }}</a>
+        </p>
         <p style="font-size: 14px; padding-top: 5px;">
           {{#i18n}} Copyright Desech Studio SRL{{/i18n}}
         </p>

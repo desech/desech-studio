@@ -19,10 +19,6 @@
   font-size: 13px;
 }
 
-#page-start .start-user-logout:hover {
-  color: var(--btn-txt-hover);
-}
-
 #page-start .start-container {
   width: 700px;
   height: 300px;

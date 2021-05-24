@@ -107,35 +107,35 @@ body[data-theme="light"] {
 /* theme dark */
 
 body[data-theme="dark"] {
-  --body-bg: rgb(0, 0, 0);
-  --body-txt: rgb(255, 255, 255);
-  --main-bg: rgb(0, 0, 0);
+  --body-bg: rgb(18, 18, 18);
+  --body-txt: rgba(255, 255, 255, 0.9);
+  --main-bg: rgb(18, 18, 18);
   --main-shadow: rgba(255, 255, 255, 0.3);
-  --main-txt: rgb(255, 255, 255);
+  --main-txt: rgba(255, 255, 255, 0.9);
   --main-txt-disabled: rgba(255, 255, 255, 0.5);
   --tooltip-bg: rgb(255, 255, 255);
-  --tooltip-txt: rgb(0, 0, 0);
+  --tooltip-txt: rgb(18, 18, 18);
   --menu-bg: rgb(255, 255, 255);
-  --menu-txt: rgb(0, 0, 0);
+  --menu-txt: rgb(18, 18, 18);
   --menu-shadow: rgba(255, 255, 255, 0.5);
   --menu-separator: rgba(0, 0, 0, 0.1);
-  --list-txt-hover:rgb(255, 255, 255);
+  --list-txt-hover:rgba(255, 255, 255, 0.9);
   --list-tree: rgba(255, 255, 255, 0.3);
-  --list-fields-txt: rgb(255, 255, 255);
+  --list-fields-txt: rgba(255, 255, 255, 0.9);
   --list-svg-search: url('../asset/image/search-white.svg');
   --scroll-thumb: rgba(255, 255, 255, 0.2);
-  --btn-txt: rgb(255, 255, 255);
-  --btn-shadow: rgb(255, 255, 255);
-  --field-bg-select: rgb(0, 0, 0);
+  --btn-txt: rgba(255, 255, 255, 0.9);
+  --btn-shadow: rgba(255, 255, 255, 0.9);
+  --field-bg-select: rgb(18, 18, 18);
   --field-bg-svg-select: url('../asset/image/arrow-down-white.svg');
   --field-shadow: rgb(255, 255, 255);
-  --field-txt: rgb(255, 255, 255);
-  --field-txt-hover: rgb(0, 0, 0);
+  --field-txt: rgba(255, 255, 255, 0.9);
+  --field-txt-hover: rgb(18, 18, 18);
   --field-txt-disabled: rgb(255, 255, 255, 0.5);
   --field-bg-disabled: rgb(50, 50, 50);
-  --field-edit-bg: rgb(0, 0, 0);
+  --field-edit-bg: rgb(18, 18, 18);
   --prompt-shadow: rgba(255, 255, 255, 0.3);
-  --grid-cell-bg: rgb(0, 0, 0);
+  --grid-cell-bg: rgb(18, 18, 18);
   --grid-cell-shadow: rgba(255, 255, 255, 0.3);
   --grid-cell-hover: rgba(15, 15, 15);
   --section-border: rgba(255, 255, 255, 0.3);
@@ -143,11 +143,11 @@ body[data-theme="dark"] {
   --picker-btn-shadow: rgb(255, 255, 255, 0.3);
   --image-btn-shadow: rgb(255, 255, 255, 0.3);
   --start-shadow: rgba(255, 255, 255, 0.3);
-  --overlay-bg: rgb(0, 0, 0);
+  --overlay-bg: rgb(18, 18, 18);
   --overlay-shadow: rgba(255, 255, 255, 0.3);
-  --overlay-txt: rgb(255, 255, 255);
-  --dialog-bg: rgb(0, 0, 0);
-  --dialog-txt: rgb(255, 255, 255);
+  --overlay-txt: rgba(255, 255, 255, 0.9);
+  --dialog-bg: rgb(18, 18, 18);
+  --dialog-txt: rgba(255, 255, 255, 0.9);
   --dialog-shadow: rgba(255, 255, 255, 0.3);
   --dialog-header-shadow: rgba(255, 255, 255, 0.3);
 }

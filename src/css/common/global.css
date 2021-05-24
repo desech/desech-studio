@@ -10,6 +10,15 @@ body {
   overflow: hidden;
 }
 
+.desech-studio a {
+  display:  inline-block;
+  color: var(--body-txt);
+}
+
+.desech-studio a:hover {
+  color: var(--btn-txt-hover);
+}
+
 .canvas-defaults {
   background-color: #FFF;
   color: #000;

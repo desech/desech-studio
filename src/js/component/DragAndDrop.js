@@ -119,7 +119,7 @@ export default {
   },
 
   dragDrop () {
-    if (this._dragged === this._over) return
+    if (!this._over || this._dragged === this._over) return
     const direction = this.getDirection(this._over)
     this.dropWithDirection(direction)
   },

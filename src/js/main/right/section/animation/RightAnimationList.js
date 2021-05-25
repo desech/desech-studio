@@ -48,7 +48,7 @@ export default {
     this.addElementLi(list)
     this.showAnimationForm(section)
     RightAnimationForm.setAnimation(section)
-    RightCommon.enableToggle(section)
+    RightCommon.toggleSidebarSection(section)
   },
 
   addElementLi (list) {
@@ -118,7 +118,7 @@ export default {
     const container = li.closest('.sidebar-section')
     this.deleteAnimation(li)
     this.deleteListElement(li)
-    RightCommon.enableToggle(container)
+    RightCommon.toggleSidebarSection(container)
   },
 
   deleteAnimation (li) {

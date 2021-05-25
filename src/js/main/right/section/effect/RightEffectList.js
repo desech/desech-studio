@@ -56,7 +56,7 @@ export default {
     this.addElementLi(list, this.getDefaultType(), this.getDefaultSubtype())
     this.showEffectForm(section)
     RightEffectType.setEffect(section, this.getDefaultType(), this.getDefaultSubtype())
-    RightCommon.enableToggle(section)
+    RightCommon.toggleSidebarSection(section)
   },
 
   addElementLi (list, type, subtype) {
@@ -119,7 +119,7 @@ export default {
     const container = li.closest('.sidebar-section')
     this.deleteEffect(li)
     this.deleteListElement(li)
-    RightCommon.enableToggle(container)
+    RightCommon.toggleSidebarSection(container)
   },
 
   deleteEffect (li) {

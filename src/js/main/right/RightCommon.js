@@ -51,13 +51,13 @@ export default {
   },
 
   processToggle (container) {
-    this.enableToggle(container)
+    this.toggleSidebarSection(container)
     if (HelperLocalStore.getItem(this.getToggleKey(container))) {
       this.toggleSection(container)
     }
   },
 
-  enableToggle (container) {
+  toggleSidebarSection (container) {
     const content = this.sidebarHasContent(container)
     HelperDOM.toggleClass(container, 'toggle', content)
   },

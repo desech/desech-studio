@@ -43,6 +43,7 @@ export default {
 
   getNodes (container) {
     return {
+      property: container.dataset.property,
       select: container.getElementsByClassName('color-button-select')[0],
       buttonMain: container.getElementsByClassName('color-button-main')[0],
       button: container.getElementsByClassName('color-button')[0],
@@ -51,10 +52,9 @@ export default {
     }
   },
 
-  injectPropertyColor (container, property) {
-    const main = container.querySelector(`.color-button-wrapper[data-property="${property}"]`)
-    const nodes = this.getNodes(main)
-    const color = StateStyleSheet.getPropertyValue(property)
+  injectPropertyColor (container) {
+    const nodes = this.getNodes(container)
+    const color = StateStyleSheet.getPropertyValue(nodes.property)
     if (color.startsWith('rgb')) {
       nodes.select.value = 'choose'
       nodes.button.style.backgroundColor = color
@@ -79,7 +79,7 @@ export default {
     this.injectColorInPicker(colorPicker, color)
     if (update) {
       nodes.select.value = 'choose'
-      RightCommon.changeStyle({ [nodes.select.name]: color })
+      RightCommon.changeStyle({ [nodes.property]: color })
     }
   },
 
@@ -107,7 +107,7 @@ export default {
     if (nodes.select.value === 'choose') {
       this.showColorPicker(nodes, true)
     } else {
-      RightCommon.changeStyle({ [nodes.select.name]: nodes.select.value })
+      RightCommon.changeStyle({ [nodes.property]: nodes.select.value })
       this.hideColorPicker(nodes)
     }
   },
@@ -116,6 +116,6 @@ export default {
     const nodes = this.getNodes(container)
     const color = ColorPicker.getColorPickerValue(nodes.picker)
     nodes.button.style.backgroundColor = color
-    ColorPickerCommon.setColor({ [container.dataset.property]: color }, options)
+    ColorPickerCommon.setColor({ [nodes.property]: color }, options)
   }
 }

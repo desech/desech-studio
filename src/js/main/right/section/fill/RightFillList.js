@@ -50,7 +50,7 @@ export default {
     RightFillProperty.updateBackgroundImage(form)
     RightFillImage.incrementBackgroundProperties()
     this.showColorPicker(form)
-    RightCommon.enableToggle(form)
+    RightCommon.toggleSidebarSection(form)
   },
 
   showColorPicker (container) {
@@ -114,7 +114,7 @@ export default {
     const container = li.closest('.sidebar-section')
     this.deleteBackgroundFill(li)
     this.deleteListElement(li)
-    RightCommon.enableToggle(container)
+    RightCommon.toggleSidebarSection(container)
   },
 
   deleteBackgroundFill (li) {

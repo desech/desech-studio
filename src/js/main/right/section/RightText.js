@@ -20,7 +20,8 @@ export default {
     ChangeStyleField.injectFields(template, style)
     RightTextFont.injectFontList(template)
     RightTextFont.injectFontFamily(template)
-    ColorPickerButton.injectPropertyColor(template, 'color')
+    const colorContainer = template.querySelector('.color-button-wrapper[data-property="color"]')
+    ColorPickerButton.injectPropertyColor(colorContainer)
     RightTextDecoration.injectTextDecorationLine(template)
     SliderComponent.setOpened(template)
   }

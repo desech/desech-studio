@@ -3,6 +3,8 @@ import RightCSSProperty from './RightCSSProperty.js'
 import ChangeStyleField from '../../../../component/ChangeStyleField.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
+import ColorPickerButton from '../../../../component/color-picker/ColorPickerButton.js'
+import ExtendJS from '../../../../helper/ExtendJS.js'
 
 export default {
   getEvents () {
@@ -28,108 +30,107 @@ export default {
     }
   },
 
-  createProperty (select) {
-    const element = this.addPropertyToList(select)
-    select.value = ''
-    RightCSSProperty.setProperty(element.getElementsByClassName('change-style')[0])
-    RightCommon.enableToggle(select.closest('.sidebar-section'))
+  createProperty (createSelect) {
+    const element = this.addPropertyToList(createSelect)
+    createSelect.value = ''
+    const field = element.getElementsByClassName('style-css-field')[0]
+    RightCSSProperty.setPropertyStyle(field)
+    RightCommon.toggleSidebarSection(createSelect.closest('.sidebar-section'))
   },
 
-  addPropertyToList (select, property = {}) {
-    const element = this.prepareCreateElement(select, property)
-    const list = select.closest('#css-section').getElementsByClassName('style-css-list')[0]
+  addPropertyToList (createSelect, data = {}) {
+    const element = this.prepareCreateElement(createSelect, data)
+    const list = createSelect.closest('#css-section').getElementsByClassName('style-css-list')[0]
     list.appendChild(element)
+    if (ExtendJS.isEmpty(data) && createSelect.value === 'custom') {
+      element.getElementsByClassName('style-css-name')[0].focus()
+    }
     return element
   },
 
-  prepareCreateElement (select, property = {}) {
+  prepareCreateElement (createSelect, data) {
     const template = HelperDOM.getTemplate('template-style-css-element')
-    const data = this.getSelectPropertyData(select, property)
-    this.injectElementData(template, data)
+    const allData = this.getSelectPropertyData(createSelect, data)
+    this.injectElementData(template, allData)
     return template
   },
 
-  getSelectPropertyData (select, property = {}) {
-    return {
-      name: select.value,
-      label: select.value.replace('-webkit-', ''),
-      valueTemplate: select.selectedOptions[0].dataset.template || select.value,
-      property: property
-    }
+  getSelectPropertyData (createSelect, data) {console.log(createSelect.value, data)
+    const info = {}
+    info.name = data.name || ((createSelect.value !== 'custom') ? createSelect.value : '')
+    info.value = data.value || ''
+    info.label = info.name ? info.name.replace('-webkit-', '') : ''
+    info.template = createSelect.selectedOptions[0].dataset.template || createSelect.value
+    console.log(info)
+    return info
   },
 
   injectElementData (element, data) {
-    const property = element.getElementsByClassName('style-css-elem-property')[0]
-    this.injectElementProperty(property, data.label)
-    const template = HelperDOM.getTemplate(`template-style-css-value-${data.valueTemplate}`)
+    const label = element.getElementsByClassName('style-css-elem-label')[0]
+    this.injectElementProperty(label, data)
+    const template = HelperDOM.getTemplate(`template-style-css-value-${data.template}`)
     element.getElementsByClassName('style-css-elem-value')[0].appendChild(template)
-    this.setElementValue(element.getElementsByClassName('change-style')[0], data)
+    this.setFieldNameValue(element.getElementsByClassName('style-css-field')[0], data)
   },
 
-  injectElementProperty (container, label) {
-    if (label === 'custom') {
-      container.appendChild(HelperDOM.getTemplate('template-style-css-name-custom'))
+  injectElementProperty (node, data) {
+    if (data.template === 'custom') {
+      const template = HelperDOM.getTemplate('template-style-css-name-custom')
+      node.appendChild(template)
     } else {
-      container.textContent = label
+      node.textContent = data.label
     }
   },
 
-  setElementValue (field, data) {
-    if (data.name !== 'custom') field.name = data.name
-    if (data.property.value) {
-      this.setPropertyElementValue(field, data)
-      if (data.name === 'custom') {
-        field.closest('li').getElementsByClassName('css-property')[0].value = data.property.name
-      }
-    }
-  },
-
-  setPropertyElementValue (field, data) {
-    switch (data.valueTemplate) {
+  setFieldNameValue (field, data) {
+    const li = field.closest('li')
+    if (data.name) field.name = data.name
+    switch (data.template) {
       case 'custom':
-        field.value = data.property.value
-        field.name = data.property.name
+        this.setFieldNameValueCustom(li, field, data)
         break
       case 'color':
-        field.value = data.property.value
-        this.setColor(field.closest('li'), data.property.value)
+        li.dataset.property = data.name
+        if (data.value) ColorPickerButton.injectPropertyColor(li)
         break
       default:
-        ChangeStyleField.setValue(field, data.property.value)
+        if (data.value) ChangeStyleField.setValue(field, data.value)
         break
     }
   },
 
-  setColor (li, color) {
-    const buttons = li.getElementsByClassName('color-button-main')
-    HelperDOM.toggleClass(buttons[0], 'selected', color === 'inherit')
-    HelperDOM.toggleClass(buttons[1], 'selected', color !== 'inherit')
-    li.getElementsByClassName('color-button')[0].style.backgroundColor = color
+  setFieldNameValueCustom (li, field, data) {
+    if (data.name) {
+      const nameField = li.getElementsByClassName('style-css-name')[0]
+      nameField.value = data.name
+      nameField.setAttributeNS(null, 'disabled', '')
+    }
+    if (data.value) field.value = data.value
   },
 
   deleteProperty (element) {
-    const container = element.closest('.sidebar-section')
-    RightCSSProperty.removeProperty(element.getElementsByClassName('change-style')[0].name)
+    const field = element.getElementsByClassName('style-css-field')[0]
+    RightCSSProperty.removePropertyStyle(field.name)
+    const section = element.closest('.sidebar-section')
     element.remove()
-    RightCommon.enableToggle(container)
+    RightCommon.toggleSidebarSection(section)
   },
 
-  injectList (select, properties) {
+  injectList (createSelect, properties) {
     for (const property of Object.entries(properties)) {
       const data = {
         name: property[0],
         value: property[1]
       }
-      this.prepareSelectForProperty(select, data)
-      this.addPropertyToList(select, data)
+      this.prepareSelectForElementCreate(createSelect, data)
+      this.addPropertyToList(createSelect, data)
     }
-    // make sure our select is reset
-    select.value = ''
+    createSelect.value = ''
   },
 
-  prepareSelectForProperty (select, data) {
-    select.value = data.name
+  prepareSelectForElementCreate (createSelect, data) {
+    createSelect.value = data.name
     // if the option is not found, then it's a custom property
-    if (!select.selectedOptions[0]) select.value = 'custom'
+    if (!createSelect.selectedOptions[0]) createSelect.value = 'custom'
   }
 }

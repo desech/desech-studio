@@ -17,18 +17,18 @@
 </template>
 
 <template id="template-style-css-element">
-  <li class="style-css-element color-button-wrapper">
+  <li class="style-css-element color-button-wrapper" data-property="">
     <div class="grid" style="grid-template-columns: 1fr 1fr 18px; column-gap: 5px">
-      <div class="style-css-elem-property"></div>
+      <div class="style-css-elem-label"></div>
       <div class="style-css-elem-value"></div>
-      <button type="button" class="style-css-delete-button small tooltip left" data-tooltip="{{#i18n}} Delete {{/i18n}}" type="button">
+      <button type="button" class="style-css-delete-button small tooltip left" data-tooltip="{{#i18n}} Delete {{/i18n}}">
         <svg width="16" height="16" viewBox="0 0 24 24">
           <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
           <path d="M0 0h24v24H0z" fill="none"></path>
         </svg>
       </button>
     </div>
-    <div class="color-button-picker style-css-color-picker"></div>
+    <div class="color-button-picker"></div>
   </li>
 </template>
 

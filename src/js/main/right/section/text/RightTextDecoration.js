@@ -52,7 +52,7 @@ export default {
 
   injectTextDecorationLine (container) {
     this.injectDecorationLine(container)
-    ColorPickerButton.injectPropertyColor(container, 'text-decoration-color')
+    this.injectDecorationColor(container)
   },
 
   injectDecorationLine (container) {
@@ -66,5 +66,11 @@ export default {
   getStyleValues () {
     const value = StateStyleSheet.getPropertyValue('text-decoration-line')
     return value ? value.split(' ') : null
+  },
+
+  injectDecorationColor (container) {
+    const query = '.color-button-wrapper[data-property="text-decoration-color"]'
+    const colorContainer = container.querySelector(query)
+    ColorPickerButton.injectPropertyColor(colorContainer)
   }
 }

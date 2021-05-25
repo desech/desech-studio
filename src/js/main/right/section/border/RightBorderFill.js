@@ -75,11 +75,6 @@ export default {
     }
   },
 
-  removeFill (container) {
-    // RightBorderFillProperty.updateFill(container, '')
-    // RightBorderFillCommon.hideFillContainer(container)
-  },
-
   injectFill (container, type) {
     const select = container.getElementsByClassName('color-button-select')[0]
     const value = RightBorderFillCommon.getFillValue(type)

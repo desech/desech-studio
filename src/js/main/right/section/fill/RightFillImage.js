@@ -11,7 +11,8 @@ import HelperStyle from '../../../../helper/HelperStyle.js'
 export default {
   getEvents () {
     return {
-      change: ['changeSizeLengthEvent', 'changePositionEvent', 'changeSizeEvent', 'changeSelectEvent'],
+      change: ['changeSizeLengthEvent', 'changePositionEvent', 'changeSizeEvent',
+        'changeSelectEvent'],
       setsource: ['setsourceImageEvent']
     }
   },
@@ -99,7 +100,8 @@ export default {
 
   incrementBackgroundProperties () {
     const selector = StyleSheetSelector.getCurrentSelector()
-    for (const property of ['size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']) {
+    const props = ['size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']
+    for (const property of props) {
       RightFillProperty.insertBackgroundProperty('background-' + property, selector)
     }
   },
@@ -122,10 +124,12 @@ export default {
   },
 
   injectBackgroundSize (container, fields, selector, elemIndex) {
-    const value = RightFillProperty.getBackgroundPropertyAtIndex(selector, 'background-size', elemIndex)
+    const value = RightFillProperty.getBackgroundPropertyAtIndex(selector, 'background-size',
+      elemIndex)
     if (['cover', 'contain'].includes(value)) {
       fields.size.value = value
-    } else if (value !== 'auto') { // ignore the default auto value
+    } else if (value !== 'auto') {
+      // ignore the default auto value
       this.injectBackgroundSizeLength(container, fields, value.split(' '))
     }
   },
@@ -138,13 +142,15 @@ export default {
   },
 
   injectBackgroundPosition (fields, selector, elemIndex) {
-    const value = RightFillProperty.getBackgroundPropertyAtIndex(selector, 'background-position', elemIndex)
+    const value = RightFillProperty.getBackgroundPropertyAtIndex(selector, 'background-position',
+      elemIndex)
     const values = value.split(' ')
     InputUnitField.setValue(fields.x, values[0])
     InputUnitField.setValue(fields.y, values[1] || values[0])
   },
 
   injectBackgroundSelect (select, selector, elemIndex) {
-    select.value = RightFillProperty.getBackgroundPropertyAtIndex(selector, select.dataset.type, elemIndex)
+    select.value = RightFillProperty.getBackgroundPropertyAtIndex(selector, select.dataset.type,
+      elemIndex)
   }
 }

@@ -8,6 +8,7 @@ import RightFillImage from './RightFillImage.js'
 import RightFillCommon from './RightFillCommon.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import HelperFile from '../../../../helper/HelperFile.js'
+import RightCommon from '../../RightCommon.js'
 
 export default {
   getEvents () {
@@ -27,10 +28,26 @@ export default {
   },
 
   changeFillType (select) {
+    if (this.validateFillNone(select)) return
     const form = select.closest('form.slide-container')
     const elemIndex = RightFillCommon.getActiveElementIndex(form.closest('#fill-section'))
     this.addMain(form, { type: select.value, value: '' }, elemIndex)
     this.updateFill(form)
+  },
+
+  validateFillNone (select) {
+    if (select.value !== 'none') return
+    this.cleanForFillNone(select.closest('.sidebar-section'))
+    RightCommon.changeStyle({ 'background-image': 'none' })
+    return true
+  },
+
+  cleanForFillNone (container) {
+    const list = container.getElementsByClassName('fill-list')[0]
+    HelperDOM.deleteChildren(list)
+    RightFillCommon.insertElement(list, 'none')
+    const picker = container.getElementsByClassName('background-fill-container')[0]
+    HelperDOM.deleteChildren(picker)
   },
 
   buildForm (form, elemIndex) {
@@ -71,14 +88,16 @@ export default {
 
   addSolidColor (container, value, elemIndex) {
     const template = HelperDOM.getTemplate('template-fill-solid-color')
-    HelperDOM.replaceOnlyChild(container, template) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    HelperDOM.replaceOnlyChild(container, template)
     RightFillProperty.injectColor(template, value)
     RightFillImage.injectBackgroundImage(template, elemIndex)
   },
 
   addGradient (container, background, elemIndex) {
     const template = HelperDOM.getTemplate(`template-fill-${background.type}`)
-    HelperDOM.replaceOnlyChild(container, template) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    HelperDOM.replaceOnlyChild(container, template)
     if (background.value) this.injectGradient(template, background.value)
     RightFillImage.injectBackgroundImage(template, elemIndex)
   },
@@ -93,7 +112,8 @@ export default {
   addImage (container, value, elemIndex) {
     const template = HelperDOM.getTemplate('template-fill-image')
     HelperDOM.replaceOnlyChild(container, template)
-    this.injectImage(container, value) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    this.injectImage(container, value)
     RightFillImage.injectBackgroundImage(template, elemIndex)
   },
 

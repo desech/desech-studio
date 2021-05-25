@@ -45,9 +45,12 @@ export default {
 
   getBackgroundValue (form) {
     const picker = form.getElementsByClassName('color-picker')[0]
-    const value = picker ? ColorPicker.getColorPickerValue(picker) : this.getEmptyBackgroundValue(form)
+    const value = picker
+      ? ColorPicker.getColorPickerValue(picker)
+      : this.getEmptyBackgroundValue(form)
     if (HelperColor.isSolidColor(value)) {
-      return HelperColor.getBackgroundSolidColor(value) // convert solid color to gradient so it can be used as bgimage and sorted in the list
+      // convert solid color to gradient so it can be used as bgimage and sorted in the list
+      return HelperColor.getBackgroundSolidColor(value)
     } else {
       return value
     }
@@ -112,8 +115,10 @@ export default {
   deleteBackgroundFill (index) {
     const properties = {}
     const selector = StyleSheetSelector.getCurrentSelector()
-    for (const property of ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']) {
-      properties['background-' + property] = this.removeBackgroundProperty('background-' + property, selector, index)
+    const props = ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']
+    for (const property of props) {
+      properties['background-' + property] = this.removeBackgroundProperty('background-' +
+        property, selector, index)
     }
     RightCommon.changeStyle(properties)
   },
@@ -125,14 +130,18 @@ export default {
   },
 
   getBackgroundPropertyArray (property, selector) {
-    return (property === 'background-image') ? this.getBackgrounds(selector) : StateStyleSheet.getPropertyValue(property, selector).split(',')
+    return (property === 'background-image')
+      ? this.getBackgrounds(selector)
+      : StateStyleSheet.getPropertyValue(property, selector).split(',')
   },
 
   sortBackgroundFill (from, to) {
     const properties = {}
     const selector = StyleSheetSelector.getCurrentSelector()
-    for (const property of ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']) {
-      properties['background-' + property] = this.replaceBackgroundProperty('background-' + property, selector, from, to)
+    const props = ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']
+    for (const property of props) {
+      properties['background-' + property] = this.replaceBackgroundProperty('background-' +
+        property, selector, from, to)
     }
     RightCommon.changeStyle(properties)
   },

@@ -12,12 +12,20 @@ export default {
     return container.querySelector('.fill-element.active')
   },
 
+  insertElement (list, value = '') {
+    const template = HelperDOM.getTemplate('template-fill-element')
+    list.appendChild(template)
+    if (value) this.setElementData(template, value)
+    return template
+  },
+
   setElementData (elem, value) {
     elem.getElementsByClassName('fill-color')[0].style.backgroundImage = value
     elem.getElementsByClassName('fill-name')[0].textContent = this.getElementName(elem, value)
   },
 
   getElementName (elem, value) {
+    if (value === 'none') return 'None'
     const solid = HelperParserBackground.convertBgToColor(value)
     if (HelperColor.isSolidColor(solid)) {
       return this.getBgImageColor(solid)
@@ -25,7 +33,8 @@ export default {
       return this.getBgImageText(elem, 'linearGradient')
     } else if (value.includes('radial-gradient(')) {
       return this.getBgImageText(elem, 'radialGradient')
-    } else { // image
+    } else {
+      // image
       return this.getBgImageText(elem, 'image')
     }
   },
@@ -36,6 +45,7 @@ export default {
   },
 
   getBgImageText (elem, type) {
-    return elem.parentNode.dataset[type] // type = linearGradient, radialGradient, image
+    // type = linearGradient, radialGradient, image
+    return elem.parentNode.dataset[type]
   }
 }

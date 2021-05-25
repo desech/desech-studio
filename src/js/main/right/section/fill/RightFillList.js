@@ -5,6 +5,7 @@ import RightFillProperty from './RightFillProperty.js'
 import RightFillImage from './RightFillImage.js'
 import RightFillCommon from './RightFillCommon.js'
 import RightCommon from '../../RightCommon.js'
+import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 
 export default {
   getEvents () {
@@ -27,7 +28,8 @@ export default {
   clickDeleteElementEvent (event) {
     if (event.target.closest('.delete-fill-button')) {
       this.deleteElement(event.target.closest('li'))
-      event.preventDefault() // don't let the edit button trigger
+      // don't let the edit button trigger
+      event.preventDefault()
     }
   },
 
@@ -44,6 +46,7 @@ export default {
   },
 
   addElement (button) {
+    if (this.fillIsNone()) return
     const form = button.closest('form#fill-section')
     const list = form.getElementsByClassName('panel-list')[0]
     this.addElementLi(list)
@@ -53,35 +56,30 @@ export default {
     RightCommon.toggleSidebarSection(form)
   },
 
+  fillIsNone () {
+    // don't allow other backgrounds when we have set it to none
+    // you will have to delete this one before adding other backgrounds
+    const bg = StateStyleSheet.getPropertyValue('background-image')
+    return (bg === 'none')
+  },
+
   showColorPicker (container) {
     this.hideColorPicker(container)
     this.addColorPicker(container)
   },
 
   hideColorPicker (container) {
-    this.deselectAddButton(container.getElementsByClassName('add-fill-button')[0])
-    const fill = this.getFillContainer(container)
-    this.clearContainer(fill)
-  },
-
-  deselectAddButton (button) {
-    button.classList.remove('selected')
-  },
-
-  getFillContainer (container) {
-    return container.getElementsByClassName('background-fill-container')[0]
-  },
-
-  clearContainer (container) {
-    HelperDOM.deleteChildren(container)
+    const fill = container.getElementsByClassName('background-fill-container')[0]
+    HelperDOM.deleteChildren(fill)
   },
 
   addColorPicker (container) {
     const form = HelperDOM.getTemplate('template-fill-form')
-    const fill = this.getFillContainer(container)
+    const fill = container.getElementsByClassName('background-fill-container')[0]
     this.addFormToContainer(form, fill)
     const index = RightFillCommon.getActiveElementIndex(container)
-    RightFillForm.buildForm(form, index) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    RightFillForm.buildForm(form, index)
   },
 
   addFormToContainer (form, container) {
@@ -89,15 +87,8 @@ export default {
   },
 
   addElementLi (list) {
-    const li = this.insertElement(list)
+    const li = RightFillCommon.insertElement(list)
     this.activateElement(li)
-  },
-
-  insertElement (list, background = '') {
-    const template = HelperDOM.getTemplate('template-fill-element')
-    list.appendChild(template)
-    if (background) RightFillCommon.setElementData(template, background)
-    return template
   },
 
   activateElement (li) {
@@ -129,6 +120,7 @@ export default {
   },
 
   editElement (li) {
+    if (this.fillIsNone()) return
     if (!li.classList.contains('active')) {
       this.enableEditElement(li)
     } else {
@@ -156,9 +148,13 @@ export default {
 
   injectList (container) {
     const list = container.getElementsByClassName('fill-list')[0]
-    const backgrounds = RightFillProperty.getBackgrounds()
-    for (const background of backgrounds) {
-      this.insertElement(list, background)
+    if (this.fillIsNone()) {
+      RightFillCommon.insertElement(list, 'none')
+    } else {
+      const backgrounds = RightFillProperty.getBackgrounds()
+      for (const background of backgrounds) {
+        RightFillCommon.insertElement(list, background)
+      }
     }
   }
 }

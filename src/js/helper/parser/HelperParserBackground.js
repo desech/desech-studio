@@ -59,11 +59,13 @@ export default {
   },
 
   getBackgrounds (string) {
-    return HelperRegex.getMatchingGroups(string, /((?<repeating>repeating)-)?(?<type>(linear)?(radial)?-gradient|url)\((?<value>.*?(%|\.jpg|\.png|\.gif|\.svg))\)/gi)
+    return HelperRegex.getMatchingGroups(string,
+      /((?<repeating>repeating)-)?(?<type>(linear)?(radial)?-gradient|url)\((?<value>.*?(%|\.jpg|\.png|\.gif|\.svg))\)/gi)
   },
 
   getBackgroundValues (string) {
-    const backgrounds = HelperRegex.getMatchingGroups(string, /(?<value>(repeating-)?((linear)?(radial)?-gradient|url)\(.*?(%|\.jpg|\.png|\.gif|\.svg)(")?\))/gi)
+    const backgrounds = HelperRegex.getMatchingGroups(string,
+      /(?<value>(repeating-)?((linear)?(radial)?-gradient|url)\(.*?(%|\.jpg|\.png|\.gif|\.svg)(")?\))/gi)
     const result = []
     for (const val of backgrounds) {
       result.push(val.value)
@@ -72,7 +74,8 @@ export default {
   },
 
   getColors (string) {
-    return HelperRegex.getMatchingGroups(string, /((?<rgb>rgb(a)?\(.*?\)) (?<position>(.*?%)))/gi)
+    return HelperRegex.getMatchingGroups(string,
+      /((?<rgb>rgb(a)?\(.*?\)) (?<position>(.*?%)))/gi)
   },
 
   getGradientLine (string, type) {
@@ -98,13 +101,17 @@ export default {
     const sides = value.split('at ')
     const first = sides[0] ? sides[0].trim() : ''
     const second = sides[1] ? sides[1].trim() : ''
-    return { ...this.getRadialGradientFirstLine(first), ...this.getRadialGradientSecondLine(second) }
+    return {
+      ...this.getRadialGradientFirstLine(first),
+      ...this.getRadialGradientSecondLine(second)
+    }
   },
 
   getRadialGradientFirstLine (value) {
     const data = {}
     if (value) {
-      if (['closest-side', 'farthest-side', 'closest-corner', 'farthest-corner'].includes(value)) {
+      const props = ['closest-side', 'farthest-side', 'closest-corner', 'farthest-corner']
+      if (props.includes(value)) {
         data.size = value
       } else {
         data.size = 'length'
@@ -128,7 +135,8 @@ export default {
 
   convertBgToColor (string) {
     const colors = this.getColors(string)
-    if (colors.length === 2 && colors[0].rgb === colors[1].rgb && colors[0].position === '0%' && colors[1].position === '100%') {
+    if (colors.length === 2 && colors[0].rgb === colors[1].rgb && colors[0].position === '0%' &&
+      colors[1].position === '100%') {
       return colors[0].rgb
     } else {
       return string

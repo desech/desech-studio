@@ -52,10 +52,9 @@ export default {
       } else if (image.includes('url(')) {
         return 'image'
       }
-      throw new Error('Unknown fill type')
-    } else {
-      return 'solid-color'
     }
+    // show the solid color of colors and also select values like inherit, etc
+    return 'solid-color'
   },
 
   addSwitch (form, fillType) {

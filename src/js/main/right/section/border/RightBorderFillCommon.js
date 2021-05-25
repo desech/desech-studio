@@ -23,18 +23,10 @@ export default {
     }
   },
 
-  hideFillContainer (container, button = null) {
-    this.deselectButton(container, button)
+  hideFillContainer (container) {
+    const button = container.getElementsByClassName('color-button-main')[0]
+    button.classList.remove('active')
     const fill = container.getElementsByClassName('border-fill-container')[0]
     HelperDOM.deleteChildren(fill)
-  },
-
-  deselectButton (container, button) {
-    if (button) {
-      button.classList.remove('active')
-    } else {
-      const activeButton = container.querySelector('.border-fill-button .active')
-      if (activeButton) activeButton.classList.remove('active')
-    }
   }
 }

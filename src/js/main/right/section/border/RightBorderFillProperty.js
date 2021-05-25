@@ -66,6 +66,13 @@ export default {
     }
   },
 
+  getAllBorderFillProperties (borderType, value) {
+    return {
+      ...this.getBorderFillPropertiesByName(borderType, value, 'color'),
+      'border-image-source': value
+    }
+  },
+
   getBorderFillPropertiesByName (borderType, value, name) {
     if (borderType === 'all') {
       return {

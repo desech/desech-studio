@@ -40,7 +40,7 @@ export default {
 
   changeRepeatEvent (event) {
     if (event.target.classList.contains('border-image-repeat')) {
-      this.changeRepeat(event.target)
+      this.changeRepeat(event.target.closest('form').elements)
     }
   },
 
@@ -84,31 +84,13 @@ export default {
     RightCommon.changeStyle({ 'border-image-slice': finalValue })
   },
 
-  changeRepeat (select) {
-    // @todo simplify this by using form fields instead of state fields, check RightFillImage
-    const value = select.value || 'stretch'
-    // can be empty or both types set
-    const fullValue = StateStyleSheet.getPropertyValue('border-image-repeat')
-    const finalValue = this.getRepeatValue(value, select.dataset.type, fullValue)
-    RightCommon.changeStyle({ 'border-image-repeat': finalValue })
-  },
-
-  getRepeatValue (value, type, fullValue) {
-    const parts = this.getRepeatParts(fullValue)
-    if (type === 'horizontal') {
-      parts[0] = value
-    } else {
-      // vertical
-      parts[1] = value
+  changeRepeat (fields) {
+    let value = (fields.repeat1.value || 'stretch') + ' ' +
+      (fields.repeat2.value || 'stretch')
+    for (const check of ['inherit', 'initial', 'unset']) {
+      if (value.includes(check)) value = check
     }
-    return (parts[0] === parts[1]) ? parts[0] : parts.join(' ')
-  },
-
-  getRepeatParts (fullValue) {
-    const parts = fullValue ? fullValue.split(' ') : ['stretch', 'stretch']
-    // when we have one value, we need to set it to the 2nd too
-    parts[1] = parts[1] || parts[0]
-    return parts
+    RightCommon.changeStyle({ 'border-image-repeat': value })
   },
 
   setImageSource (button, file) {
@@ -152,9 +134,9 @@ export default {
   },
 
   injectRepeat (fields, selector) {
-    const fullValue = StateStyleSheet.getPropertyValue('border-image-repeat', selector)
-    const parts = this.getRepeatParts(fullValue)
-    fields.repeat1.value = parts[0]
-    fields.repeat2.value = parts[1]
+    const repeat = StateStyleSheet.getPropertyValue('border-image-repeat', selector)
+    const parts = repeat.split(' ')
+    fields.repeat1.value = parts[0] || ''
+    fields.repeat2.value = parts[1] || ''
   }
 }

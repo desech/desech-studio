@@ -3,12 +3,13 @@ import RightBorderFillForm from './RightBorderFillForm.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
 import RightBorderFillProperty from './RightBorderFillProperty.js'
+import RightCommon from '../../RightCommon.js'
 
 export default {
   getEvents () {
     return {
-      // order matters
-      click: ['clickSwitchFillEvent', 'clickRemoveFillEvent', 'clickToggleFillEvent']
+      click: ['clickSetBorderFillEvent'],
+      change: ['changeSelectColorEvent']
     }
   },
 
@@ -16,44 +17,35 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickSwitchFillEvent (event) {
-    if (event.target.closest('.border-fill-button .color-button-main')) {
-      this.switchFill(event.target.closest('form'))
-      // then clickToggleFillEvent() happens
+  clickSetBorderFillEvent (event) {
+    if (event.target.closest('.border-details-container .color-button-main')) {
+      this.setBorderFill(event.target.closest('form'))
     }
   },
 
-  clickRemoveFillEvent (event) {
-    if (event.target.closest('.border-fill-button .color-button-off')) {
-      this.removeFill(event.target.closest('form'))
+  changeSelectColorEvent () {
+    if (event.target.closest('.border-details-container .color-button-select')) {
+      this.setSelectColor(event.target, event.target.closest('form'))
     }
   },
 
-  clickToggleFillEvent (event) {
-    if (event.target.closest('.border-fill-button .color-button-main')) {
-      this.toggleFill(event.target.closest('.color-button-main'))
-    }
-  },
-
-  switchFill (container) {
+  setBorderFill (container) {
     const type = container.getElementsByClassName('border-details-container')[0].dataset.type
     const cssFill = RightBorderFillCommon.getFillValue(type)
     const button = container.getElementsByClassName('color-button')[0]
     const buttonFill = button.style.backgroundColor || button.style.backgroundImage
     if (!cssFill && buttonFill) RightBorderFillProperty.updateFill(container, buttonFill)
-  },
-
-  removeFill (container) {
-    RightBorderFillProperty.updateFill(container, '')
-    RightBorderFillCommon.hideFillContainer(container)
+    this.toggleFill(container.getElementsByClassName('color-button-main')[0])
   },
 
   toggleFill (button) {
     const container = button.closest('form')
     if (!button.classList.contains('active')) {
       this.showFillContainer(container, button)
+      const select = container.getElementsByClassName('color-button-select')[0]
+      select.value = 'choose'
     } else {
-      RightBorderFillCommon.hideFillContainer(container, button)
+      RightBorderFillCommon.hideFillContainer(container)
     }
   },
 
@@ -72,21 +64,31 @@ export default {
     fill.dataset.type = type
   },
 
+  setSelectColor (select, container) {
+    if (select.value === 'choose') {
+      this.setBorderFill(container)
+    } else {
+      const type = container.getElementsByClassName('border-details-container')[0].dataset.type
+      const properties = RightBorderFillProperty.getAllBorderFillProperties(type, select.value)
+      RightCommon.changeStyle(properties)
+      RightBorderFillCommon.hideFillContainer(container)
+    }
+  },
+
+  removeFill (container) {
+    // RightBorderFillProperty.updateFill(container, '')
+    // RightBorderFillCommon.hideFillContainer(container)
+  },
+
   injectFill (container, type) {
-    const fill = RightBorderFillCommon.getFillValue(type)
-    this.injectButtons(container, fill)
-    this.injectPreview(container, fill)
-  },
-
-  injectButtons (container, fill) {
-    if (!fill) return
-    const buttons = container.getElementsByClassName('color-button-main')
-    HelperDOM.toggleClass(buttons[0], 'selected', !fill)
-    HelperDOM.toggleClass(buttons[1], 'selected', fill)
-  },
-
-  injectPreview (container, fill) {
-    const preview = container.getElementsByClassName('color-button')[0]
-    RightBorderFillCommon.setFillValue(preview, fill)
+    const select = container.getElementsByClassName('color-button-select')[0]
+    const value = RightBorderFillCommon.getFillValue(type)
+    if (value.includes('rgb') || value.includes('url')) {
+      select.value = 'choose'
+      const preview = container.getElementsByClassName('color-button')[0]
+      RightBorderFillCommon.setFillValue(preview, value)
+    } else if (value) {
+      select.value = value
+    }
   }
 }

@@ -55,13 +55,12 @@ export default {
     return template
   },
 
-  getSelectPropertyData (createSelect, data) {console.log(createSelect.value, data)
+  getSelectPropertyData (createSelect, data) {
     const info = {}
     info.name = data.name || ((createSelect.value !== 'custom') ? createSelect.value : '')
     info.value = data.value || ''
     info.label = info.name ? info.name.replace('-webkit-', '') : ''
     info.template = createSelect.selectedOptions[0].dataset.template || createSelect.value
-    console.log(info)
     return info
   },
 

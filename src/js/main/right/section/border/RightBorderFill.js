@@ -7,7 +7,8 @@ import RightBorderFillProperty from './RightBorderFillProperty.js'
 export default {
   getEvents () {
     return {
-      click: ['clickSwitchFillEvent', 'clickRemoveFillEvent', 'clickToggleFillEvent'] // order matters
+      // order matters
+      click: ['clickSwitchFillEvent', 'clickRemoveFillEvent', 'clickToggleFillEvent']
     }
   },
 
@@ -16,7 +17,7 @@ export default {
   },
 
   clickSwitchFillEvent (event) {
-    if (event.target.closest('.border-fill-button .color-button-on')) {
+    if (event.target.closest('.border-fill-button .color-button-main')) {
       this.switchFill(event.target.closest('form'))
       // then clickToggleFillEvent() happens
     }
@@ -29,8 +30,8 @@ export default {
   },
 
   clickToggleFillEvent (event) {
-    if (event.target.closest('.border-fill-button .color-button-on')) {
-      this.toggleFill(event.target.closest('.color-button-on'))
+    if (event.target.closest('.border-fill-button .color-button-main')) {
+      this.toggleFill(event.target.closest('.color-button-main'))
     }
   },
 
@@ -78,7 +79,7 @@ export default {
 
   injectButtons (container, fill) {
     if (!fill) return
-    const buttons = container.getElementsByClassName('color-button-check')
+    const buttons = container.getElementsByClassName('color-button-main')
     HelperDOM.toggleClass(buttons[0], 'selected', !fill)
     HelperDOM.toggleClass(buttons[1], 'selected', fill)
   },

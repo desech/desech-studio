@@ -7,6 +7,7 @@ import DragAndDrop from '../component/DragAndDrop.js'
 import TimingFunction from '../component/TimingFunction.js'
 import TooltipComponent from '../component/TooltipComponent.js'
 import DialogEvent from '../component/dialog/DialogEvent.js'
+import SliderComponent from '../component/SliderComponent.js'
 import ColorPicker from '../component/ColorPicker.js'
 import ColorPickerButton from '../component/color-picker/ColorPickerButton.js'
 import ColorPickerInput from '../component/color-picker/ColorPickerInput.js'
@@ -106,6 +107,7 @@ export default {
       TimingFunction,
       TooltipComponent,
       DialogEvent,
+      SliderComponent,
       ...this.getColorPickerEvents()
     ]
   },

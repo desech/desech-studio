@@ -19,7 +19,7 @@ export default {
   },
 
   clickAddColorEvent (event) {
-    if (event.target.closest('.style-css-color-button .color-button-on')) {
+    if (event.target.closest('.style-css-color-button .color-button-main')) {
       this.switchColor(event.target.closest('li'))
     }
   },

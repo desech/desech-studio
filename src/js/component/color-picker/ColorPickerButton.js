@@ -3,11 +3,17 @@ import ColorPickerSwatch from './ColorPickerSwatch.js'
 import HelperColor from '../../helper/HelperColor.js'
 import ColorPickerSolidColor from './ColorPickerSolidColor.js'
 import HelperEvent from '../../helper/HelperEvent.js'
+import StateStyleSheet from '../../state/StateStyleSheet.js'
+import ColorPicker from '../ColorPicker.js'
+import ColorPickerCommon from './ColorPickerCommon.js'
+import RightCommon from '../../main/right/RightCommon.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickButtonEvent']
+      click: ['clickButtonEvent'],
+      change: ['changeSelectColorEvent'],
+      colorchange: ['colorChangeColorEvent']
     }
   },
 
@@ -16,41 +22,65 @@ export default {
   },
 
   clickButtonEvent (event) {
-    if (event.target.closest('.color-button-wrapper:not([data-noclick]) .color-button-check')) {
-      this.toggleButton(event.target.closest('.color-button-check'))
+    const query = '.color-button-wrapper:not([data-no-interact]) .color-button-main'
+    if (event.target.closest(query)) {
+      this.toggleButton(event.target.closest('.color-button-wrapper'))
     }
   },
 
-  toggleButton (button) {
-    const container = this.getPickerContainer(button)
-    if (button.classList.contains('color-button-off')) {
-      this.hideColorPicker(container, button.nextElementSibling)
+  changeSelectColorEvent () {
+    const query = '.color-button-wrapper:not([data-no-interact]) .color-button-select'
+    if (event.target.closest(query)) {
+      this.setSelectColor(event.target.closest('.color-button-wrapper'))
+    }
+  },
+
+  colorChangeColorEvent (event) {
+    if (event.target.closest('.color-button-wrapper:not([data-no-interact]) .color-picker')) {
+      this.changeColor(event.target.closest('.color-button-wrapper'), event.detail)
+    }
+  },
+
+  getNodes (container) {
+    return {
+      select: container.getElementsByClassName('color-button-select')[0],
+      buttonMain: container.getElementsByClassName('color-button-main')[0],
+      button: container.getElementsByClassName('color-button')[0],
+      pickerContainer: container.getElementsByClassName('color-button-picker')[0],
+      picker: container.getElementsByClassName('color-picker')[0]
+    }
+  },
+
+  injectPropertyColor (container, property) {
+    const main = container.querySelector(`.color-button-wrapper[data-property="${property}"]`)
+    const nodes = this.getNodes(main)
+    const color = StateStyleSheet.getPropertyValue(property)
+    if (color.startsWith('rgb')) {
+      nodes.select.value = 'choose'
+      nodes.button.style.backgroundColor = color
+    } else if (color) {
+      nodes.select.value = color
+    }
+  },
+
+  toggleButton (container) {
+    const nodes = this.getNodes(container)
+    if (!nodes.buttonMain.classList.contains('active')) {
+      this.showColorPicker(nodes, nodes.select.value !== 'choose')
     } else {
-      this.toggleOnButton(container, button)
+      this.hideColorPicker(nodes)
     }
   },
 
-  getPickerContainer (button) {
-    return button.closest('.color-button-wrapper').getElementsByClassName('color-button-picker')[0]
-  },
-
-  toggleOnButton (container, button) {
-    const color = button.getElementsByClassName('color-button')[0].style.backgroundColor
-    this.toggleColorPicker(container, button, color)
-  },
-
-  toggleColorPicker (container, button, color = '') {
-    if (!button.classList.contains('active')) {
-      this.showColorPicker(container, button, color)
-    } else {
-      this.hideColorPicker(container, button)
+  showColorPicker (nodes, update) {
+    nodes.buttonMain.classList.add('active')
+    const colorPicker = this.buildColorPicker(nodes.pickerContainer)
+    const color = nodes.button.style.backgroundColor
+    this.injectColorInPicker(colorPicker, color)
+    if (update) {
+      nodes.select.value = 'choose'
+      RightCommon.changeStyle({ [nodes.select.name]: color })
     }
-  },
-
-  showColorPicker (container, button, color) {
-    button.classList.add('active')
-    const colorPicker = this.buildColorPicker(container)
-    this.injectColor(colorPicker, color)
   },
 
   buildColorPicker (container) {
@@ -59,7 +89,7 @@ export default {
     return template
   },
 
-  injectColor (colorPicker, color) {
+  injectColorInPicker (colorPicker, color) {
     ColorPickerSwatch.injectSwatches(colorPicker)
     if (color) {
       const rgb = HelperColor.extractRgb(color)
@@ -67,8 +97,25 @@ export default {
     }
   },
 
-  hideColorPicker (container, button) {
-    button.classList.remove('active')
-    HelperDOM.deleteChildren(container)
+  hideColorPicker (nodes) {
+    nodes.buttonMain.classList.remove('active')
+    HelperDOM.deleteChildren(nodes.pickerContainer)
+  },
+
+  setSelectColor (container) {
+    const nodes = this.getNodes(container)
+    if (nodes.select.value === 'choose') {
+      this.showColorPicker(nodes, true)
+    } else {
+      RightCommon.changeStyle({ [nodes.select.name]: nodes.select.value })
+      this.hideColorPicker(nodes)
+    }
+  },
+
+  changeColor (container, options = {}) {
+    const nodes = this.getNodes(container)
+    const color = ColorPicker.getColorPickerValue(nodes.picker)
+    nodes.button.style.backgroundColor = color
+    ColorPickerCommon.setColor({ [container.dataset.property]: color }, options)
   }
 }

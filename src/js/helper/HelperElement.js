@@ -140,10 +140,6 @@ export default {
     return element.classList.contains('block')
   },
 
-  isContainerChild (element) {
-    return this.isContainer(element.parentNode)
-  },
-
   hasSmallWidth (element) {
     const pos = this.getPosition(element)
     return pos.width <= 50

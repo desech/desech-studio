@@ -1,0 +1,56 @@
+<div class="grid">
+  <div class="grid" style="grid-template-columns: 18px 1fr; padding: 0">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/>
+      </svg>
+    </div>
+    {{> componentInputUnit name="font-size" class="change-style" length="1" percent="1" fontSize="1" }}
+  </div>
+
+  <select class="change-style" name="font-weight">
+    <option value="">{{#i18n}} - Weight - {{/i18n}}</option>
+    <option value="100" style="font-weight:100">100 - {{#i18n}} Thin {{/i18n}}</option>
+    <option value="200" style="font-weight:200">200 - {{#i18n}} Extra Light {{/i18n}}</option>
+    <option value="300" style="font-weight:300">300 - {{#i18n}} Light {{/i18n}}</option>
+    <option value="400">400 - {{#i18n}} Normal {{/i18n}}</option>
+    <option value="500" style="font-weight:500">500 - {{#i18n}} Medium {{/i18n}}</option>
+    <option value="600" style="font-weight:600">600 - {{#i18n}} Semi Bold {{/i18n}}</option>
+    <option value="700" style="font-weight:700">700 - {{#i18n}} Bold {{/i18n}}</option>
+    <option value="800" style="font-weight:800">800 - {{#i18n}} Extra Bold {{/i18n}}</option>
+    <option value="900" style="font-weight:900">900 - {{#i18n}} Black {{/i18n}}</option>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="lighter">{{#i18n}} Lighter {{/i18n}}</option>
+      <option value="bolder">{{#i18n}} Bolder {{/i18n}}</option>
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+    </optgroup>
+  </select>
+</div>
+
+<div class="grid">
+  <div class="grid" style="grid-template-columns: 18px 1fr; padding: 0">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Line height {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path d="M6 7h2.5L5 3.5 1.5 7H4v10H1.5L5 20.5 8.5 17H6V7zm4-2v2h12V5H10zm0 14h12v-2H10v2zm0-6h12v-2H10v2z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+      </svg>
+    </div>
+    {{> componentInputUnit name="line-height" class="change-style" length="1" percent="1" number="1" normal="1" }}
+  </div>
+
+  <select class="change-style" name="text-align">
+    <option value="">{{#i18n}} - Align - {{/i18n}}</option>
+    <option value="left">{{#i18n}} Left {{/i18n}}</option>
+    <option value="center">{{#i18n}} Center {{/i18n}}</option>
+    <option value="right">{{#i18n}} Right {{/i18n}}</option>
+    <option value="justify">{{#i18n}} Justify {{/i18n}}</option>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+    </optgroup>
+  </select>
+</div>

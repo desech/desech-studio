@@ -26,36 +26,6 @@
   grid-template-columns: 1fr;
 }
 
-.sidebar-right #html-section .html-details-button {
-  padding: 15px 15px 7px 15px;
-  font-size: 12px;
-}
-
-.sidebar-right #html-section .html-details-button:hover {
-  color: var(--section-title-hover);
-}
-
-.sidebar-right #html-section .html-details-button span {
-  display: inline-block;
-  cursor: pointer;
-}
-
-.sidebar-right #html-section .html-details-button svg {
-  transform: rotate(-90deg);
-}
-
-.sidebar-right #html-section .html-details-main.opened .html-details-button svg {
-  transform: none;
-}
-
-.sidebar-right #html-section .html-details-main:not(.opened) .html-details-container {
-  display: none;
-}
-
-.sidebar-right #html-section .html-details-container .grid {
-  gap: 5px;
-}
-
 .sidebar-right #html-section .style-html-source-button svg {
   display: inline-block;
   margin-top: -2px;
@@ -77,12 +47,16 @@
   white-space: nowrap;
 }
 
-.sidebar-right #html-section .html-details-container form:not([data-type="email"]) .html-show-email,
-.sidebar-right #html-section .html-details-container form:not([data-type="number"]) .html-show-number,
-.sidebar-right #html-section .html-details-container form[data-type="password"] .html-hide-password,
-.sidebar-right #html-section .html-details-container form[data-type="number"] .html-hide-number,
-.sidebar-right #html-section .html-details-container form[data-type="hidden"] .html-hide-hidden,
-.sidebar-right #html-section .html-details-container[data-type="audio"] form .html-hide-audio {
+.sidebar-right #html-section .slider-extra-container .grid {
+  gap: 5px;
+}
+
+.sidebar-right #html-section .slider-extra-container form:not([data-type="email"]) .html-show-email,
+.sidebar-right #html-section .slider-extra-container form:not([data-type="number"]) .html-show-number,
+.sidebar-right #html-section .slider-extra-container form[data-type="password"] .html-hide-password,
+.sidebar-right #html-section .slider-extra-container form[data-type="number"] .html-hide-number,
+.sidebar-right #html-section .slider-extra-container form[data-type="hidden"] .html-hide-hidden,
+.sidebar-right #html-section .slider-extra-container[data-type="audio"] form .html-hide-audio {
   display: none;
 }
 

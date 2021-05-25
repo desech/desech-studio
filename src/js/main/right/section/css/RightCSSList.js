@@ -101,7 +101,7 @@ export default {
   },
 
   setColor (li, color) {
-    const buttons = li.getElementsByClassName('color-button-check')
+    const buttons = li.getElementsByClassName('color-button-main')
     HelperDOM.toggleClass(buttons[0], 'selected', color === 'inherit')
     HelperDOM.toggleClass(buttons[1], 'selected', color !== 'inherit')
     li.getElementsByClassName('color-button')[0].style.backgroundColor = color

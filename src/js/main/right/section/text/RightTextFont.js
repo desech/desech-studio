@@ -1,9 +1,6 @@
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
-import ColorPicker from '../../../../component/ColorPicker.js'
-import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import RightCommon from '../../RightCommon.js'
-import RightTextCommon from './RightTextCommon.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import Page from '../../../../page/Page.js'
@@ -12,26 +9,13 @@ import HelperProject from '../../../../helper/HelperProject.js'
 export default {
   getEvents () {
     return {
-      click: ['clickAddColorEvent', 'clickRemoveColorEvent', 'clickAddFontEvent'],
-      change: ['changeSetFontEvent'],
-      colorchange: ['colorChangeColorEvent']
+      click: ['clickAddFontEvent'],
+      change: ['changeSetFontEvent']
     }
   },
 
   handleEvent (event) {
     HelperEvent.handleEvents(this, event)
-  },
-
-  clickAddColorEvent (event) {
-    if (event.target.closest('.text-color-button .color-button-on')) {
-      RightTextCommon.switchTextColor(event.target.closest('form'), 'color')
-    }
-  },
-
-  clickRemoveColorEvent (event) {
-    if (event.target.closest('.text-color-button .color-button-off')) {
-      RightCommon.changeStyle({ color: '' })
-    }
   },
 
   async clickAddFontEvent (event) {
@@ -43,12 +27,6 @@ export default {
   changeSetFontEvent (event) {
     if (event.target.classList.contains('font-family')) {
       this.setFont(event.target)
-    }
-  },
-
-  colorChangeColorEvent (event) {
-    if (event.target.closest('.text-color-container .color-picker')) {
-      this.changeTextColor(event.target, event.detail)
     }
   },
 
@@ -89,13 +67,6 @@ export default {
     if (!url && !file) return
     const sucess = await window.electron.invoke('rendererAddFont', url, file)
     if (sucess) await Page.loadMain(HelperProject.getFile())
-  },
-
-  changeTextColor (container, options = {}) {
-    const color = ColorPicker.getColorPickerValue(container)
-    const section = container.closest('#text-section')
-    RightTextCommon.getColorButton(section, 'color').style.backgroundColor = color
-    ColorPickerCommon.setColor({ color: color }, options)
   },
 
   injectFontList (container) {

@@ -1,0 +1,25 @@
+.sidebar-right .slider-extra-button {
+  padding: 15px 15px 7px 15px;
+  font-size: 12px;
+}
+
+.sidebar-right .slider-extra-button span {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.sidebar-right .slider-extra-button span:hover {
+  color: var(--section-title-hover);
+}
+
+.sidebar-right .slider-extra-button svg {
+  transform: rotate(-90deg);
+}
+
+.sidebar-right .slider-extra-main.opened .slider-extra-button svg {
+  transform: none;
+}
+
+.sidebar-right .slider-extra-main:not(.opened) .slider-extra-container {
+  display: none;
+}

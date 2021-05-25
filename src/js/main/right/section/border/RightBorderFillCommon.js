@@ -6,14 +6,18 @@ import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 export default {
   getFillValue (type) {
     const selector = StyleSheetSelector.getCurrentSelector()
-    return StateStyleSheet.getPropertyValue('border-image-source', selector) || StateStyleSheet.getPropertyValue((type === 'all') ? 'border-top-color' : `border-${type}-color`, selector)
+    return StateStyleSheet.getPropertyValue('border-image-source', selector) ||
+      StateStyleSheet.getPropertyValue((type === 'all')
+        ? 'border-top-color'
+        : `border-${type}-color`, selector)
   },
 
   setFillValue (preview, background) {
     if (HelperColor.isSolidColor(background)) {
       preview.style.backgroundColor = background
       preview.style.backgroundImage = ''
-    } else { // gradient, image
+    } else {
+      // gradient, image
       preview.style.backgroundImage = background
       preview.style.backgroundColor = ''
     }

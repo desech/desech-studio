@@ -1,27 +1,32 @@
-<select name="font-family" class="font-family">
-  <option value="">{{#i18n}} - Font - {{/i18n}}</option>
-    <option class="font-family-add-font" value="{{#i18n}} Custom Font {{/i18n}}">
-      {{#i18n}} Install Custom Font {{/i18n}}
-    </option>
+<div class="grid" style="grid-template-columns: 1fr;">
+  <select name="font-family" class="font-family">
+    <option value="">{{#i18n}} - Font - {{/i18n}}</option>
+      <option class="font-family-add-font" value="{{#i18n}} Custom Font {{/i18n}}">
+        {{#i18n}} Install Custom Font {{/i18n}}
+      </option>
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
 
-    <optgroup class="font-family-my-fonts" hidden label="{{#i18n}} My Fonts {{/i18n}}"></optgroup>
+      <optgroup class="font-family-my-fonts" hidden label="{{#i18n}} My Fonts {{/i18n}}"></optgroup>
 
-    <optgroup label="{{#i18n}} Popular {{/i18n}}">
-      {{#popularFonts}}
-        <option class="font-family-add-font" value="{{family}}" data-url="{{url}}"
-          style="font-family: '{{family}}';">
-          {{family}}
-        </option>
-      {{/popularFonts}}
-    </optgroup>
-
-    {{#categoryFonts}}
-      <optgroup label="{{category}}">
-        {{#fonts}}
-          <option class="font-family-add-font" value="{{family}}" data-url="{{url}}">
+      <optgroup label="{{#i18n}} Popular {{/i18n}}">
+        {{#popularFonts}}
+          <option class="font-family-add-font" value="{{family}}" data-url="{{url}}"
+            style="font-family: '{{family}}';">
             {{family}}
           </option>
-        {{/fonts}}
+        {{/popularFonts}}
       </optgroup>
-    {{/categoryFonts}}
-</select>
+
+      {{#categoryFonts}}
+        <optgroup label="{{category}}">
+          {{#fonts}}
+            <option class="font-family-add-font" value="{{family}}" data-url="{{url}}">
+              {{family}}
+            </option>
+          {{/fonts}}
+        </optgroup>
+      {{/categoryFonts}}
+  </select>
+</div>

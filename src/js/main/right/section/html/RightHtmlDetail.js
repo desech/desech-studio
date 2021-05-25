@@ -1,29 +1,23 @@
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightHtmlCommon from './RightHtmlCommon.js'
-import HelperLocalStore from '../../../../helper/HelperLocalStore.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
 import RightHtmlDetailTag from './detail/RightHtmlDetailTag.js'
 import RightHtmlDetailOption from './detail/RightHtmlDetailOption.js'
 import RightHtmlDetailTrack from './detail/RightHtmlDetailTrack.js'
+import SliderComponent from '../../../../component/SliderComponent.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickToggleContainerEvent', 'clickAttrButtonEvent'],
+      click: ['clickAttrButtonEvent'],
       change: ['changeAttrFieldEvent']
     }
   },
 
   handleEvent (event) {
     HelperEvent.handleEvents(this, event)
-  },
-
-  clickToggleContainerEvent (event) {
-    if (event.target.closest('.html-details-button')) {
-      this.toggleContainer(event.target.closest('.html-details-main'))
-    }
   },
 
   clickAttrButtonEvent (event) {
@@ -36,22 +30,6 @@ export default {
     if (event.target.classList.contains('style-html-field')) {
       this.setFieldAttribute(event.target)
     }
-  },
-
-  toggleContainer (container) {
-    container.classList.contains('opened')
-      ? this.closeContainer(container)
-      : this.openContainer(container)
-  },
-
-  openContainer (container) {
-    container.classList.add('opened')
-    HelperLocalStore.setItem('right-html-details-expand', 'opened')
-  },
-
-  closeContainer (container) {
-    container.classList.remove('opened')
-    HelperLocalStore.removeItem('right-html-details-expand')
   },
 
   setButtonAttribute (button) {
@@ -78,7 +56,7 @@ export default {
   injectDetails (template) {
     const data = RightHtmlCommon.getSelectedElementData()
     data.template = this.getTemplateType(data)
-    this.setOpened(template)
+    SliderComponent.setOpened(template)
     const container = this.prepareContainer(template, data)
     if (data.template) this.injectDetailsTemplate(container, data)
   },
@@ -94,15 +72,8 @@ export default {
     if (tags.includes(data.tag)) return data.tag
   },
 
-  setOpened (template) {
-    const main = template.getElementsByClassName('html-details-main')[0]
-    if (HelperLocalStore.getItem('right-html-details-expand')) {
-      main.classList.add('opened')
-    }
-  },
-
   prepareContainer (template, data) {
-    const container = template.getElementsByClassName('html-details-container')[0]
+    const container = template.getElementsByClassName('slider-extra-container')[0]
     container.dataset.type = data.type
     container.dataset.template = data.template || ''
     return container

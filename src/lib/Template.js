@@ -20,7 +20,8 @@ export default {
 
   setHelpers (locale) {
     this.setLanguageHelper(locale)
-    this.setIfHelper()
+    this.setIfEqualHelper()
+    this.setIfOrHelper()
   },
 
   setLanguageHelper (locale) {
@@ -29,9 +30,20 @@ export default {
     })
   },
 
-  setIfHelper () {
-    Handlebars.registerHelper('if_eq', (a, b, options) => {
+  setIfEqualHelper () {
+    Handlebars.registerHelper('ifeq', (a, b, options) => {
       if (a === b) {
+        return options.fn(this)
+      } else {
+        return options.inverse(this)
+      }
+    })
+  },
+
+  setIfOrHelper () {
+    Handlebars.registerHelper('ifor', (...args) => {
+      const options = args.pop()
+      if (args.every(arg => arg)) {
         return options.fn(this)
       } else {
         return options.inverse(this)

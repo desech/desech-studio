@@ -23,7 +23,7 @@ export default {
   },
 
   injectProperties (template) {
-    const details = template.getElementsByClassName('html-details-container')[0]
+    const details = template.getElementsByClassName('slider-extra-container')[0]
     const container = HelperDOM.getTemplate('template-style-html-property')
     details.appendChild(container)
     RightCommon.injectPropertyFields(container)

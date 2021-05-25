@@ -19,7 +19,6 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  // @todo option for background: none, effect: none, italic/text-transform/text-decoration: none
   reloadcontainerEvent (event) {
     if (event.target.id === 'right-panel-style') {
       this.reloadPanel()

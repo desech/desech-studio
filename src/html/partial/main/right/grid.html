@@ -18,7 +18,7 @@
 
 <template id="template-style-grid-row">
   <div class="cell grid">
-    {{> componentInputUnit name="grid-template-row" class="grid-track-cell" length="1" percent="1" flex="1" gridTemplate="1" }}
+    {{> componentInputUnit name="grid-template-row" class="grid-track-cell" length="1" percent="1" grid="1" content="1" none="1" }}
     <button type="button" class="delete-grid-cell small tooltip left" data-type="row" data-tooltip="{{#i18n}} Delete Row {{/i18n}}">
       <svg width="16" height="16" viewBox="0 0 24 24">
         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
@@ -30,7 +30,7 @@
 
 <template id="template-style-grid-column">
   <div class="cell grid">
-    {{> componentInputUnit name="grid-template-column" class="grid-track-cell" length="1" percent="1" flex="1" gridTemplate="1" }}
+    {{> componentInputUnit name="grid-template-column" class="grid-track-cell" length="1" percent="1" grid="1" content="1" none="1" }}
     <button type="button" class="delete-grid-cell small tooltip top" data-type="column" data-tooltip="{{#i18n}} Delete Column {{/i18n}}">
       <svg width="16" height="16" viewBox="0 0 24 24">
         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>

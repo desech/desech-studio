@@ -35,7 +35,7 @@ export default {
   },
 
   injectAttributes (template) {
-    const container = template.getElementsByClassName('html-details-container')[0]
+    const container = template.getElementsByClassName('slider-extra-container')[0]
     const list = HelperDOM.getTemplate('template-style-html-attribute')
     container.appendChild(list)
     this.injectAttributeFields(container, list)

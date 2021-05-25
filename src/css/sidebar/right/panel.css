@@ -184,50 +184,6 @@
   padding-top: 5px;
 }
 
-.sidebar-right .color-button-main {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-  column-gap: 3px;
-}
-
-.sidebar-right .color-button-on {
-  width: 32px;
-  cursor: pointer;
-}
-
-.sidebar-right .color-button-on .color-button-container {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  border-radius: 2px;
-  margin-left: 1px;
-  overflow: hidden;
-  background: url(../asset/image/alpha.png) 0 0/7px repeat;
-  box-shadow: var(--picker-btn-shadow) 0 0 1px 1px;
-}
-
-.sidebar-right .color-button-on:hover .color-button-container,
-.sidebar-right .color-button-on.selected .color-button-container,
-.sidebar-right .color-button-on.active .color-button-container {
-  box-shadow: var(--picker-btn-shadow-hover) 0 0 3px 2px;
-}
-
-.sidebar-right .color-button-on .color-button {
-  height: 100%;
-  background-position: center;
-  background-size: cover;
-}
-
-.sidebar-right .color-button-on svg {
-  transform: rotate(-90deg);
-}
-
-.sidebar-right .color-button-on.active svg {
-  transform: none;
-}
-
 .sidebar-right .switch-radius {
   margin: 0 2px;
 }

@@ -2,7 +2,8 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import ChangeStyleField from '../../../component/ChangeStyleField.js'
 import RightTextFont from './text/RightTextFont.js'
 import RightTextDecoration from './text/RightTextDecoration.js'
-import RightTextCommon from './text/RightTextCommon.js'
+import SliderComponent from '../../../component/SliderComponent.js'
+import ColorPickerButton from '../../../component/color-picker/ColorPickerButton.js'
 
 export default {
   getSection (style) {
@@ -19,7 +20,8 @@ export default {
     ChangeStyleField.injectFields(template, style)
     RightTextFont.injectFontList(template)
     RightTextFont.injectFontFamily(template)
-    RightTextCommon.injectTextColor(template, 'color')
+    ColorPickerButton.injectPropertyColor(template, 'color')
     RightTextDecoration.injectTextDecorationLine(template)
+    SliderComponent.setOpened(template)
   }
 }

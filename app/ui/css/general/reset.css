@@ -171,7 +171,7 @@ img {
 }
 
 svg {
-  fill: currentColor;
+  fill: currentcolor;
 }
 
 hr {
@@ -186,11 +186,6 @@ hr {
   min-height: 24px;
 }
 
-a, a.text, a.block {
-  display: block;
-}
-
-li, li.block,
 summary, summary.block {
   display: list-item;
 }

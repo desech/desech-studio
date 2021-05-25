@@ -65,10 +65,9 @@ export default {
 
   inputSlice (input) {
     const fullValue = StateStyleSheet.getPropertyValue('border-image-slice')
-    const value = this.getInput4SidesValue(input, this.removeFill(fullValue)) + (this.hasFill(fullValue) ? ' fill' : '')
-    RightCommon.changeStyle({
-      'border-image-slice': value
-    })
+    const allSides = this.getInput4SidesValue(input, this.removeFill(fullValue))
+    const value = allSides + (this.hasFill(fullValue) ? ' fill' : '')
+    RightCommon.changeStyle({ 'border-image-slice': value })
   },
 
   removeFill (value) {
@@ -82,26 +81,24 @@ export default {
   clickSliceFill (button) {
     const value = this.removeFill(StateStyleSheet.getPropertyValue('border-image-slice'))
     const finalValue = button.classList.contains('selected') ? value + ' fill' : value
-    RightCommon.changeStyle({
-      'border-image-slice': finalValue
-    })
+    RightCommon.changeStyle({ 'border-image-slice': finalValue })
   },
 
   changeRepeat (select) {
     // @todo simplify this by using form fields instead of state fields, check RightFillImage
     const value = select.value || 'stretch'
-    const fullValue = StateStyleSheet.getPropertyValue('border-image-repeat') // can be empty or both types set
+    // can be empty or both types set
+    const fullValue = StateStyleSheet.getPropertyValue('border-image-repeat')
     const finalValue = this.getRepeatValue(value, select.dataset.type, fullValue)
-    RightCommon.changeStyle({
-      'border-image-repeat': finalValue
-    })
+    RightCommon.changeStyle({ 'border-image-repeat': finalValue })
   },
 
   getRepeatValue (value, type, fullValue) {
     const parts = this.getRepeatParts(fullValue)
     if (type === 'horizontal') {
       parts[0] = value
-    } else { // vertical
+    } else {
+      // vertical
       parts[1] = value
     }
     return (parts[0] === parts[1]) ? parts[0] : parts.join(' ')
@@ -109,7 +106,8 @@ export default {
 
   getRepeatParts (fullValue) {
     const parts = fullValue ? fullValue.split(' ') : ['stretch', 'stretch']
-    parts[1] = parts[1] || parts[0] // when we have one value, we need to set it to the 2nd too
+    // when we have one value, we need to set it to the 2nd too
+    parts[1] = parts[1] || parts[0]
     return parts
   },
 
@@ -122,9 +120,7 @@ export default {
   saveImageSource (button, file) {
     const background = `url("${file}")`
     RightBorderFillProperty.updatePreviewSwatch(button.closest('#border-section'), background)
-    RightCommon.changeStyle({
-      'border-image-source': background
-    })
+    RightCommon.changeStyle({ 'border-image-source': background })
   },
 
   injectBorderImage (container) {
@@ -144,7 +140,8 @@ export default {
   },
 
   injectSlice (field, type, selector) {
-    const fullValue = this.removeFill(StateStyleSheet.getPropertyValue('border-image-slice', selector))
+    const slice = StateStyleSheet.getPropertyValue('border-image-slice', selector)
+    const fullValue = this.removeFill(slice)
     const value = HelperStyle.get4SidesValue(type, fullValue)
     InputUnitField.setValue(field, value)
   },

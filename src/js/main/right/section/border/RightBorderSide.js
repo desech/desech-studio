@@ -117,15 +117,23 @@ export default {
   },
 
   injectSize (form, style, type) {
+    // style has all the computed style properties, while css contains the element sheet css
     const css = StateStyleSheet.getCurrentStyleObject()
     if (type === 'all') {
-      const name = 'border-top-width'
-      InputUnitField.setValue(form.elements['border-width'], css[name], style[name])
+      this.injectSizeAll(form.elements['border-width'], css, style)
       return form.elements['border-width']
-    } else { // top, bottom, left, right
+    } else {
+      // top, bottom, left, right
       const name = `border-${type}-width`
       InputUnitField.setValue(form.elements[name], css[name], style[name])
       return form.elements[name]
+    }
+  },
+
+  injectSizeAll (field, css, style) {
+    if (css['border-top-width'] && css['border-right-width'] && css['border-bottom-width'] &&
+      css['border-left-width']) {
+      InputUnitField.setValue(field, css['border-top-width'], style['border-top-width'])
     }
   }
 }

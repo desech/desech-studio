@@ -105,9 +105,7 @@ export default {
   getRadiusType () {
     const values = this.getRadiusTypeValues()
     for (const val of values) {
-      if (val !== values[0]) {
-        return 'each'
-      }
+      if (val !== values[0]) return 'each'
     }
     return 'all'
   },
@@ -130,8 +128,11 @@ export default {
   injectInputs (container, style, type) {
     const selector = StyleSheetSelector.getCurrentSelector()
     for (const field of container.elements) {
-      if ((type === 'all' && field.classList.contains('border-radius')) || (type !== 'all' && field.classList.contains('border-radius-each'))) {
-        const name = field.classList.contains('border-radius') ? 'border-top-left-radius' : this.getInputName(field)
+      if ((type === 'all' && field.classList.contains('border-radius')) ||
+        (type !== 'all' && field.classList.contains('border-radius-each'))) {
+        const name = field.classList.contains('border-radius')
+          ? 'border-top-left-radius'
+          : this.getInputName(field)
         const cssValues = StateStyleSheet.getPropertyValue(name, selector).split(' ')
         const styleValues = style[name].split(' ')
         this.injectInput(field, cssValues, styleValues)

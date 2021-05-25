@@ -41,7 +41,9 @@ export default {
   updateFill (container, value, options = {}) {
     const type = container.getElementsByClassName('border-details-container')[0].dataset.type
     const properties = this.getBorderFillProperties(type, value)
-    ColorPickerCommon.setColor(properties, options) // we don't use the properties when we apply the temporary style (we take them from style, directly)
+    // we don't use the properties when we apply the temporary style,
+    // we take them from style, directly
+    ColorPickerCommon.setColor(properties, options)
   },
 
   updatePreviewSwatch (container, fill) {
@@ -52,43 +54,35 @@ export default {
   getBorderFillProperties (borderType, value) {
     if (HelperColor.isSolidColor(value)) {
       return {
-        ...this.getBorderFillPropertiesColor(borderType, value),
+        ...this.getBorderFillPropertiesByName(borderType, value, 'color'),
         'border-image-source': ''
       }
-    } else { // gradient or image
+    } else {
+      // gradient or image
       return {
-        ...this.getBorderFillPropertiesColor(borderType, ''),
+        ...this.getBorderFillPropertiesByName(borderType, '', 'color'),
         'border-image-source': value
       }
     }
   },
 
-  getBorderFillPropertiesColor (borderType, value) {
-    return (borderType === 'all') ? {
-      'border-top-color': value,
-      'border-bottom-color': value,
-      'border-left-color': value,
-      'border-right-color': value
-    } : {
-      [`border-${borderType}-color`]: value
+  getBorderFillPropertiesByName (borderType, value, name) {
+    if (borderType === 'all') {
+      return {
+        [`border-top-${name}`]: value,
+        [`border-bottom-${name}`]: value,
+        [`border-left-${name}`]: value,
+        [`border-right-${name}`]: value
+      }
+    } else {
+      return { [`border-${borderType}-${name}`]: value }
     }
   },
 
   changeBorderStyle (select) {
     const type = select.closest('.border-fill-container').dataset.type
-    const properties = this.getBorderStyleProperties(type, select.value)
+    const properties = this.getBorderFillPropertiesByName(type, select.value, 'style')
     RightCommon.changeStyle(properties)
-  },
-
-  getBorderStyleProperties (borderType, value = '') {
-    return (borderType === 'all') ? {
-      'border-top-style': value,
-      'border-bottom-style': value,
-      'border-left-style': value,
-      'border-right-style': value
-    } : {
-      [`border-${borderType}-style`]: value
-    }
   },
 
   injectColor (container, borderType) {
@@ -104,8 +98,9 @@ export default {
 
   injectBorderStyle (template, borderType, selector) {
     const select = this.getBorderStyleSelect(template)
-    const properties = this.getBorderStyleProperties(borderType)
-    select.value = StateStyleSheet.getPropertyValue(Object.keys(properties)[0], selector) // there's only 1 property for border sides and 4 properties for all (only need the 1st one)
+    const properties = this.getBorderFillPropertiesByName(borderType, null, 'style')
+    // there's only 1 property for border sides and 4 properties for all (only need the 1st one)
+    select.value = StateStyleSheet.getPropertyValue(Object.keys(properties)[0], selector)
   },
 
   getBorderStyleSelect (container) {

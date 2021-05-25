@@ -97,7 +97,8 @@ export default {
   addSolidColor (container, borderType) {
     const template = HelperDOM.getTemplate('template-border-fill-solid-color')
     HelperDOM.replaceOnlyChild(container, template)
-    this.injectSolidColor(template, borderType) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    this.injectSolidColor(template, borderType)
   },
 
   injectSolidColor (template, borderType) {
@@ -109,14 +110,16 @@ export default {
   addGradient (container, type) {
     const template = HelperDOM.getTemplate(`template-border-fill-${type}-gradient`)
     HelperDOM.replaceOnlyChild(container, template)
-    this.injectGradient(template) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    this.injectGradient(template)
     RightBorderImage.injectBorderImage(template)
   },
 
   injectGradient (template) {
     const source = StateStyleSheet.getPropertyValue('border-image-source')
     if (HelperColor.isGradient(source)) {
-      const data = HelperParserBackground.parse(source)[0] // we only want the first and only gradient
+      // we only want the first and only gradient
+      const data = HelperParserBackground.parse(source)[0]
       ColorPickerGradient.injectGradient(template, data)
       ColorPickerGradient.injectGradientForm(template, data)
       ColorPickerGradient.injectRadialSizeToggle(template, data.line)
@@ -126,7 +129,8 @@ export default {
   addImage (container) {
     const template = HelperDOM.getTemplate('template-border-fill-image')
     HelperDOM.replaceOnlyChild(container, template)
-    this.injectImage(container) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    this.injectImage(container)
     RightBorderImage.injectBorderImage(template)
   },
 

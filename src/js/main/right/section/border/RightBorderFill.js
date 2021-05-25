@@ -62,7 +62,8 @@ export default {
     const form = HelperDOM.getTemplate('template-border-fill')
     const type = button.closest('.border-details-container').dataset.type
     this.addPickerToFill(container, form, type)
-    RightBorderFillForm.buildForm(form, type) // the color picker needs the dom to be updated before we do any color changes
+    // the color picker needs the dom to be updated before we do any color changes
+    RightBorderFillForm.buildForm(form, type)
   },
 
   addPickerToFill (container, form, type) {

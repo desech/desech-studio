@@ -7,6 +7,12 @@
       <option value="cover">{{#i18n}} Cover {{/i18n}}</option>
       <option value="contain">{{#i18n}} Contain {{/i18n}}</option>
       <option value="length">{{#i18n}} Custom Length {{/i18n}}</option>
+      <optgroup label="{{#i18n}} General {{/i18n}}">
+        <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+      </optgroup>
     </select>
     <select name="repeat" class="background-image-select" data-type="background-repeat">
       <option value="">{{#i18n}} - Repeat - {{/i18n}}</option>
@@ -16,35 +22,50 @@
       <option value="repeat-y">{{#i18n}} Repeat Y {{/i18n}}</option>
       <option value="round">{{#i18n}} Round {{/i18n}}</option>
       <option value="space">{{#i18n}} Space {{/i18n}}</option>
+      <optgroup label="{{#i18n}} General {{/i18n}}">
+        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+      </optgroup>
     </select>
   </div>
 
   <div class="grid background-size-length" style="grid-template-columns: 30px 1fr 30px 1fr" hidden>
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size width {{/i18n}}">{{#i18n}} Width {{/i18n}}</div>
-    {{> componentInputUnit name="width" class="background-image-size-length" length="1" percent="1" }}
+    {{> componentInputUnit name="width" class="background-image-size-length" length="1" percent="1" noGeneralOption="1" auto="1" }}
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size height {{/i18n}}">{{#i18n}} Height {{/i18n}}</div>
-    {{> componentInputUnit name="height" class="background-image-size-length" length="1" percent="1" }}
+    {{> componentInputUnit name="height" class="background-image-size-length" length="1" percent="1" noGeneralOption="1" auto="1" }}
   </div>
 
   <div class="grid" style="grid-template-columns:30px 1fr 30px 1fr">
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Position X {{/i18n}}" style="padding-left: 5px;">X</div>
-    {{> componentInputUnit name="x" class="background-image-position" length="1" percent="1" position="1" }}
+    {{> componentInputUnit name="x" class="background-image-position" length="1" percent="1" positionX="1" }}
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Position Y {{/i18n}}" style="padding-left: 5px;">Y</div>
-    {{> componentInputUnit name="y" class="background-image-position" length="1" percent="1" position="1" }}
+    {{> componentInputUnit name="y" class="background-image-position" length="1" percent="1" positionY="1" }}
   </div>
 
   <div class="grid">
     <select name="attachment" class="background-image-select" data-type="background-attachment">
       <option value="">{{#i18n}} - Attachment - {{/i18n}}</option>
       <option value="local">{{#i18n}} Local {{/i18n}}</option>
-      <option value="scroll">{{#i18n}} Scroll {{/i18n}}</option>
-      <option value="fixed">{{#i18n}} Fixed* {{/i18n}}</option>
+      <option value="scroll">{{#i18n}} Scroll (no Safari) {{/i18n}}</option>
+      <option value="fixed">{{#i18n}} Fixed (no Safari) {{/i18n}}</option>
+      <optgroup label="{{#i18n}} General {{/i18n}}">
+        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+      </optgroup>
     </select>
     <select name="origin" class="background-image-select" data-type="background-origin">
       <option value="">{{#i18n}} - Origin - {{/i18n}}</option>
       <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
       <option value="padding-box">{{#i18n}} Padding box {{/i18n}}</option>
       <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
+      <optgroup label="{{#i18n}} General {{/i18n}}">
+        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+      </optgroup>
     </select>
   </div>
 
@@ -67,6 +88,11 @@
       <option value="saturation">{{#i18n}} Saturation {{/i18n}}</option>
       <option value="color">{{#i18n}} Color {{/i18n}}</option>
       <option value="luminosity">{{#i18n}} Luminosity {{/i18n}}</option>
+      <optgroup label="{{#i18n}} General {{/i18n}}">
+        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+      </optgroup>
     </select>
   </div>
 </form>

@@ -20,15 +20,15 @@
 
   <div class="grid gradient-size-length" style="grid-template-columns: 30px 1fr 30px 1fr" hidden>
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size width {{/i18n}}">{{#i18n}} Width {{/i18n}}</div>
-    {{> componentInputUnit name="width" class="gradient-field gradient-field-input" length="1" percent="1" }}
+    {{> componentInputUnit name="width" class="gradient-field gradient-field-input" length="1" percent="1" noGeneral="1" }}
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Size height {{/i18n}}">{{#i18n}} Height {{/i18n}}</div>
-    {{> componentInputUnit name="height" class="gradient-field gradient-field-input" length="1" percent="1" }}
+    {{> componentInputUnit name="height" class="gradient-field gradient-field-input" length="1" percent="1" noGeneral="1" }}
   </div>
 
   <div class="grid" style="grid-template-columns:30px 1fr 30px 1fr">
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Position X {{/i18n}}" style="padding-left: 5px;">X</div>
-    {{> componentInputUnit name="x" class="gradient-field gradient-field-input" length="1" percent="1" position="1" }}
+    {{> componentInputUnit name="x" class="gradient-field gradient-field-input" length="1" percent="1" positionX="1" noGeneral="1" }}
     <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Position Y {{/i18n}}" style="padding-left: 5px;">Y</div>
-    {{> componentInputUnit name="y" class="gradient-field gradient-field-input" length="1" percent="1" position="1" }}
+    {{> componentInputUnit name="y" class="gradient-field gradient-field-input" length="1" percent="1" positionY="1" noGeneral="1" }}
   </div>
 </form>

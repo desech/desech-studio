@@ -73,18 +73,16 @@ export default {
     return this.getDoubleFields(fields.width, fields.height)
   },
 
-  getDoubleFields (first, second) {
-    const value1 = InputUnitField.getValue(first)
-    const value2 = InputUnitField.getValue(second)
+  getDoubleFields (width, height) {
+    const value1 = InputUnitField.getValue(width)
+    const value2 = InputUnitField.getValue(height)
     return (value1 + ' ' + value2).trim()
   },
 
   setBackgroundProperty (property, index, value) {
     value = value || HelperStyle.getDefaultProperty(property)
     const fullValue = RightFillProperty.replaceBackgroundPropertyAtIndex(property, index, value)
-    RightCommon.changeStyle({
-      [property]: fullValue
-    })
+    RightCommon.changeStyle({ [property]: fullValue })
   },
 
   setBackgroundPosition (form) {
@@ -126,7 +124,7 @@ export default {
   injectBackgroundSize (container, fields, selector, elemIndex) {
     const value = RightFillProperty.getBackgroundPropertyAtIndex(selector, 'background-size',
       elemIndex)
-    if (['cover', 'contain'].includes(value)) {
+    if (['cover', 'contain', 'inherit', 'initial', 'unset'].includes(value)) {
       fields.size.value = value
     } else if (value !== 'auto') {
       // ignore the default auto value

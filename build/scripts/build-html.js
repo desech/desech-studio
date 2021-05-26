@@ -93,7 +93,11 @@ async function buildHtml (locale) {
     matrix: Language.localize('Matrix'),
     matrix3d: Language.localize('Matrix 3D'),
     transition: Language.localize('Transition'),
-    blend: Language.localize('Blend mode')
+    blend: Language.localize('Blend mode'),
+    none: Language.localize('None'),
+    inherit: Language.localize('Inherit'),
+    initial: Language.localize('Initial'),
+    unset: Language.localize('Unset')
   }
 
   // about details

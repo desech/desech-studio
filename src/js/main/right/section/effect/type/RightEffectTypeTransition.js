@@ -11,6 +11,9 @@ export default {
 
   getParsedValues () {
     const source = StateStyleSheet.getPropertyValue('transition')
+    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
+      return [{ function: source }]
+    }
     return this.parseCSS(source)
   },
 
@@ -29,10 +32,14 @@ export default {
   },
 
   injectMainOptions (fields, data) {
-    fields.property.value = HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('property')
-    InputUnitField.setValue(fields.duration, HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('duration'))
+    fields.property.value = HelperStyle.getParsedCSSParam(data, 0) ||
+      this.getDefaultFieldValue('property')
+    const duration = HelperStyle.getParsedCSSParam(data, 1) ||
+      this.getDefaultFieldValue('duration')
+    const delay = HelperStyle.getParsedCSSParam(data, 3) || this.getDefaultFieldValue('delay')
+    InputUnitField.setValue(fields.duration, duration)
     TimingFunction.injectTimingFunction(fields, data, 2)
-    InputUnitField.setValue(fields.delay, HelperStyle.getParsedCSSParam(data, 3) || this.getDefaultFieldValue('delay'))
+    InputUnitField.setValue(fields.delay, delay)
   },
 
   getDefaultFieldValue (name) {

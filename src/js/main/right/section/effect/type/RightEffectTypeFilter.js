@@ -7,12 +7,15 @@ import RightEffectCommon from './RightEffectCommon.js'
 
 export default {
   getTemplate (type) {
-    const name = (type === 'drop-shadow' || type === 'hue-rotate' || type === 'blur') ? type : 'other'
+    const name = ['drop-shadow', 'hue-rotate', 'blur'].includes(type) ? type : 'other'
     return HelperDOM.getTemplate(`template-effect-filter-${name}`)
   },
 
   getParsedValues () {
     const source = StateStyleSheet.getPropertyValue('filter')
+    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
+      return [{ function: source }]
+    }
     return this.parseCSS(source)
   },
 
@@ -24,20 +27,34 @@ export default {
   },
 
   injectData (container, data, type) {
-    if (type === 'drop-shadow') RightEffectCommon.injectColor(container, HelperStyle.getParsedCSSParam(data, 0))
+    if (type === 'drop-shadow') {
+      const rgb = HelperStyle.getParsedCSSParam(data, 0)
+      RightEffectCommon.injectColor(container, rgb)
+    }
     this.injectOptions(container.closest('form').elements, data, type)
   },
 
   injectOptions (fields, data, type) {
-    InputUnitField.setValue(fields.x, HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultShadowValue('x'))
-    InputUnitField.setValue(fields.y, HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultShadowValue('y'))
-    InputUnitField.setValue(fields.blur, HelperStyle.getParsedCSSParam(data, 3) || this.getDefaultShadowValue('blur'))
-    InputUnitField.setValue(fields.amount, HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFilterValue(type))
+    const values = this.getOptionValues(data, type)
+    InputUnitField.setValue(fields.x, values.x)
+    InputUnitField.setValue(fields.y, values.y)
+    InputUnitField.setValue(fields.blur, values.blur)
+    InputUnitField.setValue(fields.amount, values.amount)
+  },
+
+  getOptionValues (data, type) {
+    return {
+      x: HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultShadowValue('x'),
+      y: HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultShadowValue('y'),
+      blur: HelperStyle.getParsedCSSParam(data, 3) || this.getDefaultShadowValue('blur'),
+      amount: HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFilterValue(type)
+    }
   },
 
   getDefaultShadowValue (name) {
     switch (name) {
-      case 'x': case 'y':
+      case 'x':
+      case 'y':
         return '1px'
       case 'blur':
         return '3px'
@@ -69,11 +86,14 @@ export default {
 
   getDisplayedValue (section, type) {
     const fields = section.getElementsByClassName('slide-container')[0].elements
-    return (type === 'drop-shadow') ? this.getDropShadowFilterValue(section, fields) : this.getFilterValue(type, fields)
+    return (type === 'drop-shadow')
+      ? this.getDropShadowFilterValue(section, fields)
+      : this.getFilterValue(type, fields)
   },
 
   getDropShadowFilterValue (section, fields) {
-    const color = ColorPicker.getColorPickerValue(section.getElementsByClassName('color-picker')[0])
+    const picker = section.getElementsByClassName('color-picker')[0]
+    const color = ColorPicker.getColorPickerValue(picker)
     const { x, y, blur } = this.getDropShadowFilterOptions(fields)
     return `drop-shadow(${color} ${x} ${y} ${blur})`
   },
@@ -87,12 +107,15 @@ export default {
   },
 
   getFilterValue (type, fields) {
-    const amount = InputUnitField.getValue(fields.amount) || this.getDefaultFilterValue(type)
+    const amount = InputUnitField.getValue(fields.amount) ||
+      this.getDefaultFilterValue(type)
     return `${type}(${amount})`
   },
 
   getElementName (data, name) {
     const first = HelperStyle.getParsedCSSParam(data, 0)
-    return (data.function === 'drop-shadow') ? `${name} ${RightEffectCommon.getColorHex(first)}` : `${name} ${first}`
+    return (data.function === 'drop-shadow')
+      ? `${name} ${RightEffectCommon.getColorHex(first)}`
+      : `${name} ${first}`
   }
 }

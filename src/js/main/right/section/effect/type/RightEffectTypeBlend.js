@@ -3,7 +3,7 @@ import HelperDOM from '../../../../../helper/HelperDOM.js'
 
 export default {
   getTemplate () {
-    return HelperDOM.getTemplate('template-effect-blend')
+    return HelperDOM.getTemplate('template-effect-mix-blend-mode')
   },
 
   getParsedValues () {

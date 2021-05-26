@@ -11,6 +11,9 @@ export default {
 
   getParsedValues () {
     const source = StateStyleSheet.getPropertyValue('transform')
+    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
+      return [{ function: source }]
+    }
     return this.parseCSS(source)
   },
 
@@ -50,53 +53,70 @@ export default {
   },
 
   injectPerspective (fields, data) {
-    InputUnitField.setValue(fields.distance, HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('perspective'))
+    const value = HelperStyle.getParsedCSSParam(data, 0) ||
+      this.getDefaultFieldValue('perspective')
+    InputUnitField.setValue(fields.distance, value)
   },
 
   injectTranslate3d (fields, data) {
-    InputUnitField.setValue(fields.x, HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('translate3d'))
-    InputUnitField.setValue(fields.y, HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('translate3d'))
-    InputUnitField.setValue(fields.z, HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('translate3d'))
+    const x = HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('translate3d')
+    const y = HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('translate3d')
+    const z = HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('translate3d')
+    InputUnitField.setValue(fields.x, x)
+    InputUnitField.setValue(fields.y, y)
+    InputUnitField.setValue(fields.z, z)
   },
 
   injectScale3d (fields, data) {
-    fields.x.value = HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('scale3d')
-    fields.y.value = HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('scale3d')
-    fields.z.value = HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('scale3d')
+    fields.x.value = HelperStyle.getParsedCSSParam(data, 0) ||
+      this.getDefaultFieldValue('scale3d')
+    fields.y.value = HelperStyle.getParsedCSSParam(data, 1) ||
+      this.getDefaultFieldValue('scale3d')
+    fields.z.value = HelperStyle.getParsedCSSParam(data, 2) ||
+      this.getDefaultFieldValue('scale3d')
   },
 
   injectRotate (fields, data) {
-    InputUnitField.setValue(fields.x, HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('rotate'))
-    InputUnitField.setValue(fields.y, HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('rotate'))
-    InputUnitField.setValue(fields.z, HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('rotate'))
+    const x = HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('rotate')
+    const y = HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('rotate')
+    const z = HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('rotate')
+    InputUnitField.setValue(fields.x, x)
+    InputUnitField.setValue(fields.y, y)
+    InputUnitField.setValue(fields.z, z)
   },
 
   injectSkew (fields, data) {
-    InputUnitField.setValue(fields.x, HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('skew'))
-    InputUnitField.setValue(fields.y, HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('skew'))
+    const x = HelperStyle.getParsedCSSParam(data, 0) || this.getDefaultFieldValue('skew')
+    const y = HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('skew')
+    InputUnitField.setValue(fields.x, x)
+    InputUnitField.setValue(fields.y, y)
   },
 
   injectMatrix (fields, data) {
     for (const [i, name] of ['a', 'b', 'c', 'd', 'x', 'y'].entries()) {
-      fields[name].value = HelperStyle.getParsedCSSParam(data, i) || this.getDefaultFieldValue('matrix', name)
+      fields[name].value = HelperStyle.getParsedCSSParam(data, i) ||
+        this.getDefaultFieldValue('matrix', name)
     }
   },
 
   injectMatrix3d (fields, data) {
     for (let i = 0; i < 4; i++) {
       for (const [j, name] of ['a', 'b', 'c', 'd'].entries()) {
-        fields[name + (i + 1)].value = HelperStyle.getParsedCSSParam(data, j + (i * 4)) || this.getDefaultFieldValue('matrix3d', name + (i + 1))
+        fields[name + (i + 1)].value = HelperStyle.getParsedCSSParam(data, j + (i * 4)) ||
+          this.getDefaultFieldValue('matrix3d', name + (i + 1))
       }
     }
   },
 
   getDefaultFieldValue (type, name = null) {
     switch (type) {
-      case 'perspective': case 'translate3d':
+      case 'perspective':
+      case 'translate3d':
         return '0px'
       case 'scale3d':
         return '1'
-      case 'rotate': case 'skew':
+      case 'rotate':
+      case 'skew':
         return '0deg'
       case 'matrix':
         return (name === 'a' || name === 'd') ? '1' : '0'
@@ -111,7 +131,8 @@ export default {
   },
 
   getValuePerspective (fields) {
-    const distance = InputUnitField.getValue(fields.distance) || this.getDefaultFieldValue('perspective')
+    const distance = InputUnitField.getValue(fields.distance) ||
+      this.getDefaultFieldValue('perspective')
     return `perspective(${distance})`
   },
 
@@ -157,7 +178,10 @@ export default {
         data[name + i] = fields[name + i].value || this.getDefaultFieldValue('matrix3d', name + i)
       }
     }
-    return `matrix3d(${data.a1}, ${data.b1}, ${data.c1}, ${data.d1}, ${data.a2}, ${data.b2}, ${data.c2}, ${data.d2}, ${data.a3}, ${data.b3}, ${data.c3}, ${data.d3}, ${data.a4}, ${data.b4}, ${data.c4}, ${data.d4})`
+    return `matrix3d(${data.a1}, ${data.b1}, ${data.c1}, ${data.d1}, ` +
+      `${data.a2}, ${data.b2}, ${data.c2}, ${data.d2}, ` +
+      `${data.a3}, ${data.b3}, ${data.c3}, ${data.d3}, ` +
+      `${data.a4}, ${data.b4}, ${data.c4}, ${data.d4})`
   },
 
   getElementName (data, name) {

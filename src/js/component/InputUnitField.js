@@ -99,14 +99,14 @@ export default {
     }
   },
 
-  setValue (field, css, style = null) {
+  setValue (field, value, style = null) {
     if (!field) return
-    if (css) {
-      this.setValueField(field, css)
+    if (value) {
+      this.setValueField(field, value)
     } else if (style !== null) {
       this.setUnitValue(field, style)
       field.value = ''
-      this.injectInputPlaceholder(field, css, style)
+      this.injectInputPlaceholder(field, style)
     }
   },
 
@@ -119,7 +119,7 @@ export default {
     }
   },
 
-  injectInputPlaceholder (input, css, style) {
+  injectInputPlaceholder (input, style) {
     const value = ExtendJS.startsNumeric(style) ? ExtendJS.roundToTwo(style) : style
     if (value) input.placeholder = value
   },

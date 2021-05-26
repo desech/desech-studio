@@ -14,10 +14,10 @@ export default {
   getModule (type) {
     const modules = {
       filter: RightEffectTypeFilter,
-      shadow: RightEffectTypeShadow,
+      'box-shadow': RightEffectTypeShadow,
       transform: RightEffectTypeTransform,
       transition: RightEffectTypeTransition,
-      blend: RightEffectTypeBlend
+      'mix-blend-mode': RightEffectTypeBlend
     }
     return modules[type]
   },
@@ -41,7 +41,8 @@ export default {
   },
 
   changeEffectFieldsEvent (event) {
-    if (event.target.closest('.effect-form-container .effect-field') || event.target.closest('.effect-form-container .timing-field')) {
+    if (event.target.closest('.effect-form-container .effect-field') ||
+      event.target.closest('.effect-form-container .timing-field')) {
       this.changeEffectFields(event.target.closest('#effect-section'))
     }
   },
@@ -69,22 +70,7 @@ export default {
     const value = this.getModule(type).getDisplayedValue(section, subtype)
     const data = this.getModule(type).parseCSS(value)[0]
     this.setElementData(current, type, subtype, data)
-    RightCommon.changeStyle(this.getProperty(type, subtype, current, value))
-  },
-
-  getPropertyName (type, subtype) {
-    return (type === 'shadow' || type === 'blend') ? subtype : type
-  },
-
-  getDefaultSubtype (type) {
-    switch (type) {
-      case 'shadow':
-        return 'box-shadow'
-      case 'transition':
-        return 'transition'
-      case 'blend':
-        return 'mix-blend-mode'
-    }
+    RightCommon.changeStyle(this.getProperty(type, current, value))
   },
 
   getDelimiter (type) {
@@ -119,9 +105,10 @@ export default {
     ]
   },
 
-  getProperty (type, subtype, current, value) {
+  getProperty (property, current, value) {
+    const index = HelperDOM.getElementIndex(current)
     return {
-      [this.getPropertyName(type, subtype)]: this.setEffectAtIndex(value, type, HelperDOM.getElementIndex(current))
+      [property]: this.setEffectAtIndex(value, property, index)
     }
   },
 
@@ -132,12 +119,12 @@ export default {
     const data = this.getModule(type).parseCSS(value)[0]
     const current = RightEffectCommon.getActiveElement(section)
     this.setElementData(current, type, subtype, data)
-    ColorPickerCommon.setColor(this.getProperty(type, subtype, current, value), options)
+    ColorPickerCommon.setColor(this.getProperty(type, current, value), options)
   },
 
-  deleteEffect (type, subtype, index) {
+  deleteEffect (property, index) {
     RightCommon.changeStyle({
-      [this.getPropertyName(type, subtype)]: this.removeEffectAtIndex(type, index)
+      [property]: this.removeEffectAtIndex(property, index)
     })
   },
 
@@ -147,9 +134,9 @@ export default {
     return values.join(this.getDelimiter(type))
   },
 
-  sortEffects (type, subtype, from, to) {
+  sortEffects (property, from, to) {
     RightCommon.changeStyle({
-      [this.getPropertyName(type, subtype)]: this.replaceEffectAtIndex(type, from, to)
+      [property]: this.replaceEffectAtIndex(property, from, to)
     })
   },
 
@@ -162,37 +149,42 @@ export default {
   moveEffect (section, type) {
     const li = RightEffectCommon.getActiveElement(section)
     if (li.dataset.type !== type) {
-      this.deleteEffect(li.dataset.type, li.dataset.subtype, HelperDOM.getElementIndex(li))
+      this.deleteEffect(li.dataset.type, HelperDOM.getElementIndex(li))
       RightEffectCommon.moveActiveElement(section, li, type)
     }
   },
 
-  injectListType (section, type) {
-    const list = section.getElementsByClassName(`effect-list-${type}`)[0]
-    const values = this.getModule(type).getParsedValues()
+  injectListType (section, property) {
+    const list = section.getElementsByClassName(`effect-list-${property}`)[0]
+    const values = this.getModule(property).getParsedValues()
+    console.log(values)
     for (const data of values) {
-      const subtype = data.function || this.getDefaultSubtype(type)
-      this.insertElement(list, type, subtype, data)
+      const value = data.function || property
+      this.insertElement(list, property, value, data)
     }
   },
 
-  insertElement (list, type, subtype, data = {}) {
+  insertElement (list, property, value, data = {}) {
     const template = HelperDOM.getTemplate('template-effect-element')
     list.appendChild(template)
-    if (!ExtendJS.isEmpty(data)) this.setElementData(template, type, subtype, data)
+    if (!ExtendJS.isEmpty(data)) this.setElementData(template, property, value, data)
     return template
   },
 
-  setElementData (elem, type, subtype, data) {
-    elem.dataset.type = type
-    elem.dataset.subtype = subtype
-    const name = this.getEffectName(elem, type, data.function)
-    elem.getElementsByClassName('effect-name')[0].textContent = this.getElementName(type, data, name)
+  setElementData (elem, property, value, data) {
+    elem.dataset.type = property
+    elem.dataset.subtype = value
+    const node = elem.getElementsByClassName('effect-name')[0]
+    const name = this.getEffectName(elem, property, data.function)
+    console.log(name)
+    node.textContent = this.getElementName(property, data, name)
   },
 
   getEffectName (elem, type, subtype) {
     const data = JSON.parse(elem.closest('.effect-lists').dataset.names)
-    return (type === 'filter' || type === 'transform') ? `${data[type]} ${data[subtype]}` : data[type]
+    return (type === 'filter' || type === 'transform')
+      ? `${data[type]} ${data[subtype]}`
+      : data[type]
   },
 
   getElementName (type, data, name) {

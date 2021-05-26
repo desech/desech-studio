@@ -2,9 +2,7 @@
   <!-- filter: drop-shadow(rgb(0, 0, 0) 0px 0px 0px) -->
   <div class="effect-filter">
     {{> componentColorPicker }}
-
     {{> mainRightEffectFormShadowOffset }}
-
     <div class="grid" style="grid-template-columns: 20px 1fr 20px 1fr 24px;">
       {{> mainRightEffectFormShadowBlur }}
     </div>
@@ -21,7 +19,7 @@
           <path d="M10 9c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zM7 9.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm3 7c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm-3-3c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm3-6c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM14 9c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-1.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm3 6c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm0-4c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm2-3.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm0-3.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/>
         </svg>
       </div>
-      {{> componentInputUnit name="amount" class="effect-field effect-input" length="1" }}
+      {{> componentInputUnit name="amount" class="effect-field effect-input" length="1" noGeneral="1" }}
     </div>
   </div>
 </template>
@@ -44,7 +42,7 @@
           </g>
         </svg>
       </div>
-      {{> componentInputUnit name="amount" class="effect-field effect-input" angle="1" }}
+      {{> componentInputUnit name="amount" class="effect-field effect-input" angle="1" noGeneral="1" }}
     </div>
   </div>
 </template>
@@ -64,7 +62,7 @@
           <path clip-path="url(#b)" d="M19.5 9.5c-1.03 0-1.9.62-2.29 1.5h-2.92c-.39-.88-1.26-1.5-2.29-1.5s-1.9.62-2.29 1.5H6.79c-.39-.88-1.26-1.5-2.29-1.5C3.12 9.5 2 10.62 2 12s1.12 2.5 2.5 2.5c1.03 0 1.9-.62 2.29-1.5h2.92c.39.88 1.26 1.5 2.29 1.5s1.9-.62 2.29-1.5h2.92c.39.88 1.26 1.5 2.29 1.5 1.38 0 2.5-1.12 2.5-2.5s-1.12-2.5-2.5-2.5z"/>
         </svg>
       </div>
-      {{> componentInputUnit name="amount" class="effect-field effect-input" number="1" percent="1" }}
+      {{> componentInputUnit name="amount" class="effect-field effect-input" number="1" percent="1" noGeneral="1" }}
     </div>
   </div>
 </template>

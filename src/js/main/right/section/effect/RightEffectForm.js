@@ -1,6 +1,7 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightEffectType from './RightEffectType.js'
+import RightCommon from '../../RightCommon.js'
 
 export default {
   getEvents () {
@@ -20,11 +21,28 @@ export default {
   },
 
   changeEffectType (select) {
-    const type = select.selectedOptions[0].dataset.type
-    const subtype = select.value
-    RightEffectType.moveEffect(select.closest('#effect-section'), type)
-    this.addMain(select.closest('form'), type, subtype)
-    RightEffectType.setEffect(select.closest('#effect-section'), type, subtype)
+    const property = select.selectedOptions[0].dataset.type
+    const container = select.closest('#effect-section')
+    if (this.validateGeneralValue(container, property, select.value)) return
+    RightEffectType.moveEffect(container, property)
+    this.addMain(select.closest('form'), property, select.value)
+    RightEffectType.setEffect(container, property, select.value)
+  },
+
+  validateGeneralValue (container, property, value) {
+    const values = ['none', 'inherit', ' initial', 'unset']
+    if (!values.includes(value)) return
+    this.cleanForGeneralValue(container, property, value)
+    RightCommon.changeStyle({ [property]: value })
+    return true
+  },
+
+  cleanForGeneralValue (container, property, value) {
+    const list = container.getElementsByClassName(`effect-list-${property}`)[0]
+    HelperDOM.deleteChildren(list)
+    RightEffectType.insertElement(list, property, value, { function: value })
+    const options = container.getElementsByClassName('effect-form-container')[0]
+    HelperDOM.deleteChildren(options)
   },
 
   buildForm (form, type, subtype, elemIndex) {

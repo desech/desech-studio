@@ -8,11 +8,14 @@ import ColorPicker from '../../../../../component/ColorPicker.js'
 
 export default {
   getTemplate () {
-    return HelperDOM.getTemplate('template-effect-shadow')
+    return HelperDOM.getTemplate('template-effect-box-shadow')
   },
 
   getParsedValues () {
     const source = StateStyleSheet.getPropertyValue('box-shadow')
+    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
+      return [{ function: source }]
+    }
     return this.parseCSS(source)
   },
 
@@ -29,11 +32,22 @@ export default {
   },
 
   injectOptions (fields, data) {
-    InputUnitField.setValue(fields.x, HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('x'))
-    InputUnitField.setValue(fields.y, HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('y'))
-    InputUnitField.setValue(fields.blur, HelperStyle.getParsedCSSParam(data, 3) || this.getDefaultFieldValue('blur'))
-    InputUnitField.setValue(fields.spread, HelperStyle.getParsedCSSParam(data, 4) || this.getDefaultFieldValue('spread'))
-    CheckButtonField.setValue(fields.inset, HelperStyle.getParsedCSSParam(data, 5))
+    const values = this.getOptionValues(data)
+    InputUnitField.setValue(fields.x, values.x)
+    InputUnitField.setValue(fields.y, values.y)
+    InputUnitField.setValue(fields.blur, values.blue)
+    InputUnitField.setValue(fields.spread, values.spread)
+    CheckButtonField.setValue(fields.inset, values.inset)
+  },
+
+  getOptionValues (data) {
+    return {
+      x: HelperStyle.getParsedCSSParam(data, 1) || this.getDefaultFieldValue('x'),
+      y: HelperStyle.getParsedCSSParam(data, 2) || this.getDefaultFieldValue('y'),
+      blue: HelperStyle.getParsedCSSParam(data, 3) || this.getDefaultFieldValue('blur'),
+      spread: HelperStyle.getParsedCSSParam(data, 4) || this.getDefaultFieldValue('spread'),
+      inset: HelperStyle.getParsedCSSParam(data, 5)
+    }
   },
 
   getDefaultFieldValue (name) {
@@ -61,6 +75,7 @@ export default {
 
   getElementName (data, name) {
     const first = HelperStyle.getParsedCSSParam(data, 0)
-    return `${name} ${RightEffectCommon.getColorHex(first)}`
+    const color = first ? RightEffectCommon.getColorHex(first) : ''
+    return `${name} ${color}`
   }
 }

@@ -52,7 +52,8 @@ export default {
     const animationCss = fs.readFileSync(file).toString() + '@'
     for (const animation of animations) {
       const regex = new RegExp(`(@keyframes ${animation} [\\s\\S]*?}[\\s]*)@`, 'g')
-      selectedCss += regex.exec(animationCss)[1]
+      const match = regex.exec(animationCss)
+      if (match) selectedCss += match[1]
     }
     return selectedCss
   },
@@ -61,7 +62,8 @@ export default {
     const list = []
     const regex = css.matchAll(/animation:(.*?);/g)
     for (const match of regex) {
-      list.push(match[1].substring(match[1].lastIndexOf(' ') + 1))
+      const value = match[1].substring(match[1].lastIndexOf(' ') + 1)
+      list.push(value)
     }
     return list
   },

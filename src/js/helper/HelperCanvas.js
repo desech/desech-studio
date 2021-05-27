@@ -92,5 +92,20 @@ export default {
 
   getZoomFactor () {
     return this.getZoom() / 100
+  },
+
+  isAnimationRunning () {
+    const canvas = this.getCanvas()
+    return !canvas.classList.contains('stop-animation')
+  },
+
+  stopAnimation () {
+    const canvas = this.getCanvas()
+    canvas.classList.add('stop-animation')
+  },
+
+  playAnimation () {
+    const canvas = this.getCanvas()
+    canvas.classList.remove('stop-animation')
   }
 }

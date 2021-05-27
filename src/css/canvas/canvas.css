@@ -150,6 +150,10 @@
   height: 54px;
 }
 
+#canvas.stop-animation .element {
+  animation: none !important;
+}
+
 /* we see the outlines when we are creating, moving or hovering over an element */
 /* we see the inline element outlines when we are hovering over the main parent */
 /* also see the outlines when */

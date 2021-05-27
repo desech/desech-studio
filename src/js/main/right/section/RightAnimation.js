@@ -13,6 +13,7 @@ export default {
   },
 
   injectData (template, style) {
+    RightAnimationList.injectPlayButtons(template)
     RightAnimationList.injectList(template)
   }
 }

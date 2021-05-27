@@ -4,11 +4,13 @@ import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightAnimationForm from './RightAnimationForm.js'
 import RightAnimationCommon from './RightAnimationCommon.js'
 import RightCommon from '../../RightCommon.js'
+import HelperCanvas from '../../../../helper/HelperCanvas.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickAddElementEvent', 'clickDeleteElementEvent', 'clickEditElementEvent'],
+      click: ['clickAddElementEvent', 'clickDeleteElementEvent', 'clickEditElementEvent',
+        'clickStopAnimationEvent', 'clickPlayAnimationEvent'],
       dragdropbefore: ['dragdropbeforeElementEvent']
     }
   },
@@ -26,13 +28,26 @@ export default {
   clickDeleteElementEvent (event) {
     if (event.target.closest('.delete-animation-button')) {
       this.deleteElement(event.target.closest('li'))
-      event.preventDefault() // don't let the edit button trigger
+      // don't let the edit button trigger
+      event.preventDefault()
     }
   },
 
   clickEditElementEvent (event) {
     if (event.target.closest('.animation-element')) {
       this.editElement(event.target.closest('li'))
+    }
+  },
+
+  clickStopAnimationEvent (event) {
+    if (event.target.closest('.stop-animation-button')) {
+      this.stopAnimation(event.target.closest('.animation-buttons'))
+    }
+  },
+
+  clickPlayAnimationEvent (event) {
+    if (event.target.closest('.play-animation-button')) {
+      this.playAnimation(event.target.closest('.animation-buttons'))
     }
   },
 
@@ -150,8 +165,27 @@ export default {
     this.hideAnimationForm(li.closest('#animation-section'))
   },
 
+  stopAnimation (container) {
+    HelperCanvas.stopAnimation()
+    HelperDOM.hide(container.children[0])
+    HelperDOM.show(container.children[1])
+  },
+
+  playAnimation (container) {
+    HelperCanvas.playAnimation()
+    HelperDOM.hide(container.children[1])
+    HelperDOM.show(container.children[0])
+  },
+
   dragdropElement (data) {
     RightAnimationForm.sortAnimations(data.from.index, data.to.index)
+  },
+
+  injectPlayButtons (section) {
+    if (HelperCanvas.isAnimationRunning()) return
+    const container = section.getElementsByClassName('animation-buttons')[0]
+    HelperDOM.hide(container.children[0])
+    HelperDOM.show(container.children[1])
   },
 
   injectList (section) {

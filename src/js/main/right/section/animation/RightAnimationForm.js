@@ -22,7 +22,8 @@ export default {
   },
 
   changeAnimationFieldsEvent (event) {
-    if (event.target.closest('.animation-form-container .animation-field') || event.target.closest('.animation-form-container .timing-field')) {
+    if (event.target.closest('.animation-form-container .animation-field') ||
+      event.target.closest('.animation-form-container .timing-field')) {
       this.changeAnimationFields(event.target.closest('#animation-section'))
     }
   },
@@ -57,18 +58,26 @@ export default {
   },
 
   injectOptions (fields, data) {
-    InputUnitField.setValue(fields.duration, HelperStyle.getParsedCSSParam(data, 0) || RightAnimationCommon.getDefaultFieldValue('duration'))
+    InputUnitField.setValue(fields.duration, HelperStyle.getParsedCSSParam(data, 0) ||
+      RightAnimationCommon.getDefaultFieldValue('duration'))
     TimingFunction.injectTimingFunction(fields, data, 1)
-    InputUnitField.setValue(fields.delay, HelperStyle.getParsedCSSParam(data, 2) || RightAnimationCommon.getDefaultFieldValue('delay'))
-    fields.iteration.value = HelperStyle.getParsedCSSParam(data, 3) // since this is a number field we can't add the "infinite" default value
-    fields.direction.value = HelperStyle.getParsedCSSParam(data, 4) || RightAnimationCommon.getDefaultFieldValue('direction')
-    fields.fill.value = HelperStyle.getParsedCSSParam(data, 5) || RightAnimationCommon.getDefaultFieldValue('fill')
-    fields.state.value = HelperStyle.getParsedCSSParam(data, 6) || RightAnimationCommon.getDefaultFieldValue('state')
+    InputUnitField.setValue(fields.delay, HelperStyle.getParsedCSSParam(data, 2) ||
+      RightAnimationCommon.getDefaultFieldValue('delay'))
+    // since this is a number field we can't add the "infinite" default value
+    fields.iteration.value = HelperStyle.getParsedCSSParam(data, 3)
+    fields.direction.value = HelperStyle.getParsedCSSParam(data, 4) ||
+      RightAnimationCommon.getDefaultFieldValue('direction')
+    fields.fill.value = HelperStyle.getParsedCSSParam(data, 5) ||
+      RightAnimationCommon.getDefaultFieldValue('fill')
+    fields.state.value = HelperStyle.getParsedCSSParam(data, 6) ||
+      RightAnimationCommon.getDefaultFieldValue('state')
   },
 
   injectAnimationType (fields, data) {
     const elemType = HelperElement.getType(StateSelectedElement.getElement())
-    if (elemType === 'text') HelperDOM.show(fields.type.getElementsByClassName('text-animation')[0])
+    if (elemType === 'text') {
+      HelperDOM.show(fields.type.getElementsByClassName('text-animation')[0])
+    }
     fields.type.value = RightAnimationCommon.getAnimationType(data, elemType)
   },
 
@@ -85,8 +94,10 @@ export default {
 
   getDisplayedValue (fields) {
     return [
-      InputUnitField.getValue(fields.duration) || RightAnimationCommon.getDefaultFieldValue('duration'),
-      TimingFunction.getTimingFormValue(fields) || RightAnimationCommon.getDefaultFieldValue('timing'),
+      InputUnitField.getValue(fields.duration) ||
+        RightAnimationCommon.getDefaultFieldValue('duration'),
+      TimingFunction.getTimingFormValue(fields) ||
+        RightAnimationCommon.getDefaultFieldValue('timing'),
       InputUnitField.getValue(fields.delay) || RightAnimationCommon.getDefaultFieldValue('delay'),
       fields.iteration.value || RightAnimationCommon.getDefaultFieldValue('iteration'),
       fields.direction.value || RightAnimationCommon.getDefaultFieldValue('direction'),

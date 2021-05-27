@@ -15,7 +15,8 @@ export default {
   getAnimationName (data) {
     const value = this.getAnimationType(data)
     const option = this.getAnimationNameOption(value)
-    return option.textContent.replace(/\s\s/gi, '') // remove the white space from the select padding
+    // remove the white space from the select padding
+    return option.textContent.replace(/\s\s/gi, '')
   },
 
   getAnimationNameOption (value) {

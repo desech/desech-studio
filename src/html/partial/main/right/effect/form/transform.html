@@ -13,7 +13,7 @@
           <path clip-path="url(#b)" d="M19.5 9.5c-1.03 0-1.9.62-2.29 1.5h-2.92c-.39-.88-1.26-1.5-2.29-1.5s-1.9.62-2.29 1.5H6.79c-.39-.88-1.26-1.5-2.29-1.5C3.12 9.5 2 10.62 2 12s1.12 2.5 2.5 2.5c1.03 0 1.9-.62 2.29-1.5h2.92c.39.88 1.26 1.5 2.29 1.5s1.9-.62 2.29-1.5h2.92c.39.88 1.26 1.5 2.29 1.5 1.38 0 2.5-1.12 2.5-2.5s-1.12-2.5-2.5-2.5z"/>
         </svg>
       </div>
-      {{> componentInputUnit name="distance" class="effect-field effect-input" length="1" }}
+      {{> componentInputUnit name="distance" class="effect-field effect-input" length="1" noGeneral="1" }}
     </div>
 
     <div class="alert">
@@ -31,14 +31,14 @@
   <div class="effect-transform">
     <div class="grid" style="grid-template-columns:20px 1fr 20px 1fr">
       <div class="input-option-label" style="padding-left: 5px;">X</div>
-      {{> componentInputUnit name="x" class="effect-field effect-input" length="1" percent="1" }}
+      {{> componentInputUnit name="x" class="effect-field effect-input" length="1" percent="1" noGeneral="1" }}
       <div class="input-option-label" style="padding-left: 5px;">Y</div>
-      {{> componentInputUnit name="y" class="effect-field effect-input" length="1" percent="1" }}
+      {{> componentInputUnit name="y" class="effect-field effect-input" length="1" percent="1" noGeneral="1" }}
     </div>
 
     <div class="grid" style="grid-template-columns:20px 1fr 20px 1fr">
       <div class="input-option-label" style="padding-left: 5px;">Z</div>
-      {{> componentInputUnit name="z" class="effect-field effect-input" length="1" }}
+      {{> componentInputUnit name="z" class="effect-field effect-input" length="1" noGeneral="1" }}
     </div>
     
     <div class="alert">
@@ -83,14 +83,14 @@
   <div class="effect-transform">
     <div class="grid" style="grid-template-columns:20px 1fr 20px 1fr">
       <div class="input-option-label" style="padding-left: 5px;">X</div>
-      {{> componentInputUnit name="x" class="effect-field effect-input" angle="1" }}
+      {{> componentInputUnit name="x" class="effect-field effect-input" angle="1" noGeneral="1" }}
       <div class="input-option-label" style="padding-left: 5px;">Y</div>
-      {{> componentInputUnit name="y" class="effect-field effect-input" angle="1" }}
+      {{> componentInputUnit name="y" class="effect-field effect-input" angle="1" noGeneral="1" }}
     </div>
 
     <div class="grid" style="grid-template-columns:20px 1fr 20px 1fr">
       <div class="input-option-label" style="padding-left: 5px;">Z</div>
-      {{> componentInputUnit name="z" class="effect-field effect-input" angle="1" }}
+      {{> componentInputUnit name="z" class="effect-field effect-input" angle="1" noGeneral="1" }}
     </div>
   </div>
 </template>
@@ -100,9 +100,9 @@
   <div class="effect-transform">
     <div class="grid" style="grid-template-columns:20px 1fr 20px 1fr">
       <div class="input-option-label" style="padding-left: 5px;">X</div>
-      {{> componentInputUnit name="x" class="effect-field effect-input" angle="1" }}
+      {{> componentInputUnit name="x" class="effect-field effect-input" angle="1" noGeneral="1" }}
       <div class="input-option-label" style="padding-left: 5px;">Y</div>
-      {{> componentInputUnit name="y" class="effect-field -input" angle="1" }}
+      {{> componentInputUnit name="y" class="effect-field -input" angle="1" noGeneral="1" }}
     </div>
   </div>
 </template>
@@ -137,7 +137,7 @@
   <!-- transform: matrix3d(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4) matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) -->
   <div class="effect-transform">
     <div class="grid" style="grid-template-columns: 24px 1fr;">
-      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Linear transformation {{/i18n}}">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} 1st Linear transformation {{/i18n}}">
         <svg width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none"/>
           <path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>
@@ -151,7 +151,7 @@
       </div>
     </div>
     <div class="grid" style="grid-template-columns: 24px 1fr;">
-      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Linear transformation {{/i18n}}">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} 2nd Linear transformation {{/i18n}}">
         <svg width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none"/>
           <path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>
@@ -165,7 +165,7 @@
       </div>
     </div>
     <div class="grid" style="grid-template-columns: 24px 1fr;">
-      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Linear transformation {{/i18n}}">
+      <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} 3rd Linear transformation {{/i18n}}">
         <svg width="18" height="18" viewBox="0 0 24 24">
           <path d="M0 0h24v24H0z" fill="none"/>
           <path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>

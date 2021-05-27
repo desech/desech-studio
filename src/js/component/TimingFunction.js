@@ -45,13 +45,21 @@ export default {
   },
 
   injectTimingFunction (fields, data, index) {
-    const value = HelperStyle.getParsedCSSParam(data, index, 'function') || HelperStyle.getParsedCSSParam(data, index, 'value') || this.getDefaultFieldValue('timing')
-    const customBezier = (value === 'cubic-bezier') ? this.getBezierCustomFunction(fields.timing, index, data) : ''
+    const value = HelperStyle.getParsedCSSParam(data, index, 'function') ||
+      HelperStyle.getParsedCSSParam(data, index, 'value') || this.getDefaultFieldValue('timing')
+    const customBezier = (value === 'cubic-bezier')
+      ? this.getBezierCustomFunction(fields.timing, index, data)
+      : ''
     fields.timing.value = customBezier || value
   },
 
   getBezierCustomFunction (select, index, data) {
-    const dataValues = [HelperStyle.getParsedCSSSubParam(data, index, 0), HelperStyle.getParsedCSSSubParam(data, index, 1), HelperStyle.getParsedCSSSubParam(data, index, 2), HelperStyle.getParsedCSSSubParam(data, index, 3)].join(', ')
+    const dataValues = [
+      HelperStyle.getParsedCSSSubParam(data, index, 0),
+      HelperStyle.getParsedCSSSubParam(data, index, 1),
+      HelperStyle.getParsedCSSSubParam(data, index, 2),
+      HelperStyle.getParsedCSSSubParam(data, index, 3)
+    ].join(', ')
     for (const option of select.querySelectorAll('option[data-bezier]')) {
       if (option.dataset.bezier === dataValues) return option.value
     }
@@ -64,19 +72,29 @@ export default {
   },
 
   injectStepsData (fields, data, index) {
-    InputUnitField.setValue(fields.step, HelperStyle.getParsedCSSSubParam(data, index, 0) || this.getDefaultFieldValue('step'))
-    fields.position.value = HelperStyle.getParsedCSSSubParam(data, index, 1) || this.getDefaultFieldValue('position')
+    const step = HelperStyle.getParsedCSSSubParam(data, index, 0) ||
+      this.getDefaultFieldValue('step')
+    InputUnitField.setValue(fields.step, step)
+    fields.position.value = HelperStyle.getParsedCSSSubParam(data, index, 1) ||
+      this.getDefaultFieldValue('position')
   },
 
   injectBezierData (fields, data, index) {
-    InputUnitField.setValue(fields.x1, this.getBezierDataValue(fields.timing, data, index, 0, 'x1'))
-    InputUnitField.setValue(fields.y1, this.getBezierDataValue(fields.timing, data, index, 1, 'y1'))
-    InputUnitField.setValue(fields.x2, this.getBezierDataValue(fields.timing, data, index, 2, 'x2'))
-    InputUnitField.setValue(fields.y2, this.getBezierDataValue(fields.timing, data, index, 3, 'y2'))
+    const x1 = this.getBezierDataValue(fields.timing, data, index, 0, 'x1')
+    const y1 = this.getBezierDataValue(fields.timing, data, index, 1, 'y1')
+    const x2 = this.getBezierDataValue(fields.timing, data, index, 2, 'x2')
+    const y2 = this.getBezierDataValue(fields.timing, data, index, 3, 'y2')
+    InputUnitField.setValue(fields.x1, x1)
+    InputUnitField.setValue(fields.y1, y1)
+    InputUnitField.setValue(fields.x2, x2)
+    InputUnitField.setValue(fields.y2, y2)
   },
 
   getBezierDataValue (select, data, index, subIndex, name) {
-    if (select.value === 'cubic-bezier') return HelperStyle.getParsedCSSSubParam(data, index, subIndex) || this.getDefaultFieldValue(name)
+    if (select.value === 'cubic-bezier') {
+      return HelperStyle.getParsedCSSSubParam(data, index, subIndex) ||
+      this.getDefaultFieldValue(name)
+    }
     const params = select.selectedOptions[0].dataset.bezier.split(', ')
     return params[subIndex]
   },
@@ -88,7 +106,7 @@ export default {
       case 'step':
         return '1'
       case 'position':
-        return 'end'
+        return 'jump-end'
       case 'x1': case 'y1': case 'x2': case 'y2':
         return '0'
     }

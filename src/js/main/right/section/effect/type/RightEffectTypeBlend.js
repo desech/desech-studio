@@ -17,15 +17,15 @@ export default {
 
   injectData (container, data) {
     const fields = container.closest('form').elements
-    fields.blend.value = data.value || 'normal'
+    fields['mix-blend-mode'].value = data.value || 'normal'
   },
 
   getDisplayedValue (section) {
     const fields = section.getElementsByClassName('slide-container')[0].elements
-    return fields.blend.value
+    return fields['mix-blend-mode'].value
   },
 
-  getElementName (data, name) {
-    return `${name} ${data.value}`
+  getLabelExtra (data) {
+    return data.value
   }
 }

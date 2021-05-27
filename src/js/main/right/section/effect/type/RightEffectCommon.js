@@ -23,5 +23,32 @@ export default {
   moveActiveElement (section, li, type) {
     const newList = section.getElementsByClassName(`effect-list-${type}`)[0]
     newList.appendChild(li)
+  },
+
+  getEffectProperties () {
+    return ['filter', 'box-shadow', 'transform', 'transition', 'mix-blend-mode']
+  },
+
+  getGeneralValues () {
+    return ['none', 'inherit', 'initial', 'unset']
+  },
+
+  isGeneralValue (value) {
+    return this.getGeneralValues().includes(value)
+  },
+
+  getDefaultCreateValue (property) {
+    switch (property) {
+      case 'filter':
+        return 'drop-shadow'
+      case 'box-shadow':
+        return 'box-shadow'
+      case 'transform':
+        return 'perspective'
+      case 'transition':
+        return 'transition'
+      case 'mix-blend-mode':
+        return 'mix-blend-mode'
+    }
   }
 }

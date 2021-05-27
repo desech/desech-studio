@@ -74,7 +74,7 @@ export default {
   },
 
   getDelimiter (type) {
-    return (type === 'shadow' || type === 'transition') ? ', ' : ' '
+    return (type === 'box-shadow' || type === 'transition') ? ', ' : ' '
   },
 
   setEffectAtIndex (value, type, index) {
@@ -157,10 +157,8 @@ export default {
   injectListType (section, property) {
     const list = section.getElementsByClassName(`effect-list-${property}`)[0]
     const values = this.getModule(property).getParsedValues()
-    console.log(values)
     for (const data of values) {
-      const value = data.function || property
-      this.insertElement(list, property, value, data)
+      this.insertElement(list, property, data.function || data.value, data)
     }
   },
 
@@ -175,19 +173,18 @@ export default {
     elem.dataset.type = property
     elem.dataset.subtype = value
     const node = elem.getElementsByClassName('effect-name')[0]
-    const name = this.getEffectName(elem, property, data.function)
-    console.log(name)
-    node.textContent = this.getElementName(property, data, name)
+    node.textContent = this.getEffectName(elem, property, value, data)
   },
 
-  getEffectName (elem, type, subtype) {
-    const data = JSON.parse(elem.closest('.effect-lists').dataset.names)
-    return (type === 'filter' || type === 'transform')
-      ? `${data[type]} ${data[subtype]}`
-      : data[type]
-  },
-
-  getElementName (type, data, name) {
-    return this.getModule(type).getElementName(data, name)
+  getEffectName (elem, property, value, data) {
+    const text = JSON.parse(elem.closest('.effect-lists').dataset.names)
+    if (RightEffectCommon.isGeneralValue(value)) {
+      return `${text[property]} ${text[value]}`
+    }
+    const label = (['filter', 'transform'].includes(property))
+      ? `${text[property]} ${text[value]}`
+      : text[property]
+    const extra = this.getModule(property).getLabelExtra(data)
+    return `${label} ${extra}`
   }
 }

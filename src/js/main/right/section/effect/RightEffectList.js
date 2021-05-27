@@ -4,6 +4,7 @@ import RightEffectForm from './RightEffectForm.js'
 import RightEffectType from './RightEffectType.js'
 import RightEffectCommon from './type/RightEffectCommon.js'
 import RightCommon from '../../RightCommon.js'
+import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 
 export default {
   getEvents () {
@@ -43,29 +44,28 @@ export default {
     }
   },
 
-  getDefaultType () {
-    return 'filter'
-  },
-
-  getDefaultSubtype () {
-    return 'drop-shadow'
-  },
-
   addElement (button) {
-    if (this.effectIsGeneral()) return
+    const def = this.getDefaultEffectOnCreate()
+    if (!def) return
     const section = button.closest('form')
-    const list = section.getElementsByClassName(`effect-list-${this.getDefaultType()}`)[0]
-    this.addElementLi(list, this.getDefaultType(), this.getDefaultSubtype())
-    this.showEffectForm(section)
-    RightEffectType.setEffect(section, this.getDefaultType(), this.getDefaultSubtype())
+    const list = section.getElementsByClassName(`effect-list-${def.property}`)[0]
+    this.addElementLi(list, def.property, def.value)
+    this.showEffectForm(section, def.property, def.value)
+    RightEffectType.setEffect(section, def.property, def.value)
     RightCommon.toggleSidebarSection(section)
   },
 
-  effectIsGeneral () {
-    // don't allow other effects of the same type when we have set it to a general value
-    // you will have to delete this one before adding other effects of the same type
-    const bg = StateStyleSheet.getPropertyValue('background-image')
-    return (bg === 'none')
+  getDefaultEffectOnCreate () {
+    const css = StateStyleSheet.getCurrentStyleObject()
+    const general = RightEffectCommon.getGeneralValues()
+    const effects = RightEffectCommon.getEffectProperties()
+    for (const property of effects) {
+      if (general.includes(css[property])) continue
+      return {
+        property,
+        value: RightEffectCommon.getDefaultCreateValue(property)
+      }
+    }
   },
 
   addElementLi (list, type, subtype) {
@@ -84,9 +84,9 @@ export default {
     }
   },
 
-  showEffectForm (section) {
+  showEffectForm (section, defaultType = null, defaultSubtype = null) {
     this.hideEffectForm(section)
-    this.addEffectForm(section)
+    this.addEffectForm(section, defaultType, defaultSubtype)
   },
 
   hideEffectForm (section) {
@@ -107,13 +107,13 @@ export default {
     HelperDOM.deleteChildren(container)
   },
 
-  addEffectForm (section) {
+  addEffectForm (section, defaultType, defaultSubtype) {
     const form = HelperDOM.getTemplate('template-effect-form')
     const container = this.getFormContainer(section)
     this.addFormToContainer(form, container)
     const current = RightEffectCommon.getActiveElement(section)
-    const type = current.dataset.type || this.getDefaultType()
-    const subtype = current.dataset.subtype || this.getDefaultSubtype()
+    const type = current.dataset.type || defaultType
+    const subtype = current.dataset.subtype || defaultSubtype
     RightEffectForm.buildForm(form, type, subtype, HelperDOM.getElementIndex(current))
   },
 
@@ -145,6 +145,9 @@ export default {
   },
 
   editElement (li) {
+    if (RightEffectCommon.isGeneralValue(li.dataset.subtype)) {
+      return
+    }
     if (!li.classList.contains('active')) {
       this.enableEditElement(li)
     } else {
@@ -168,7 +171,7 @@ export default {
   },
 
   injectList (section) {
-    const effects = ['filter', 'box-shadow', 'transform', 'transition', 'mix-blend-mode']
+    const effects = RightEffectCommon.getEffectProperties()
     for (const type of effects) {
       RightEffectType.injectListType(section, type)
     }

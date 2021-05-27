@@ -12,11 +12,9 @@ export default {
   },
 
   getParsedValues () {
-    const source = StateStyleSheet.getPropertyValue('box-shadow')
-    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
-      return [{ function: source }]
-    }
-    return this.parseCSS(source)
+    const value = StateStyleSheet.getPropertyValue('box-shadow')
+    if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
+    return this.parseCSS(value)
   },
 
   parseCSS (source) {
@@ -73,9 +71,8 @@ export default {
     ].join(' ')
   },
 
-  getElementName (data, name) {
+  getLabelExtra (data) {
     const first = HelperStyle.getParsedCSSParam(data, 0)
-    const color = first ? RightEffectCommon.getColorHex(first) : ''
-    return `${name} ${color}`
+    return RightEffectCommon.getColorHex(first)
   }
 }

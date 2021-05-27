@@ -3,6 +3,7 @@ import HelperStyle from '../../../../../helper/HelperStyle.js'
 import InputUnitField from '../../../../../component/InputUnitField.js'
 import HelperDOM from '../../../../../helper/HelperDOM.js'
 import TimingFunction from '../../../../../component/TimingFunction.js'
+import RightEffectCommon from './RightEffectCommon.js'
 
 export default {
   getTemplate () {
@@ -10,11 +11,9 @@ export default {
   },
 
   getParsedValues () {
-    const source = StateStyleSheet.getPropertyValue('transition')
-    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
-      return [{ function: source }]
-    }
-    return this.parseCSS(source)
+    const value = StateStyleSheet.getPropertyValue('transition')
+    if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
+    return this.parseCSS(value)
   },
 
   parseCSS (source) {
@@ -63,8 +62,7 @@ export default {
     ].join(' ')
   },
 
-  getElementName (data, name) {
-    const properties = HelperStyle.getParsedCSSParam(data, 0)
-    return `${name} ${properties}`
+  getLabelExtra (data) {
+    return HelperStyle.getParsedCSSParam(data, 0)
   }
 }

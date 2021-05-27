@@ -3,6 +3,7 @@ import HelperStyle from '../../../../../helper/HelperStyle.js'
 import HelperDOM from '../../../../../helper/HelperDOM.js'
 import InputUnitField from '../../../../../component/InputUnitField.js'
 import ExtendJS from '../../../../../helper/ExtendJS.js'
+import RightEffectCommon from './RightEffectCommon.js'
 
 export default {
   getTemplate (type) {
@@ -10,11 +11,9 @@ export default {
   },
 
   getParsedValues () {
-    const source = StateStyleSheet.getPropertyValue('transform')
-    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
-      return [{ function: source }]
-    }
-    return this.parseCSS(source)
+    const value = StateStyleSheet.getPropertyValue('transform')
+    if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
+    return this.parseCSS(value)
   },
 
   parseCSS (source) {
@@ -184,8 +183,7 @@ export default {
       `${data.a4}, ${data.b4}, ${data.c4}, ${data.d4})`
   },
 
-  getElementName (data, name) {
-    if (data.function.startsWith('matrix')) return name
-    return `${name} ${data.paramsString}`
+  getLabelExtra (data) {
+    return (!data.function.startsWith('matrix')) ? data.paramsString : ''
   }
 }

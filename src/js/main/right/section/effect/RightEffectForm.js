@@ -2,6 +2,8 @@ import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightEffectType from './RightEffectType.js'
 import RightCommon from '../../RightCommon.js'
+import RightEffectCommon from './type/RightEffectCommon.js'
+import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 
 export default {
   getEvents () {
@@ -30,7 +32,7 @@ export default {
   },
 
   validateGeneralValue (container, property, value) {
-    const values = ['none', 'inherit', ' initial', 'unset']
+    const values = RightEffectCommon.getGeneralValues()
     if (!values.includes(value)) return
     this.cleanForGeneralValue(container, property, value)
     RightCommon.changeStyle({ [property]: value })
@@ -58,14 +60,29 @@ export default {
     HelperDOM.replaceOnlyChild(container, template)
   },
 
-  injectSwitch (template, subtype) {
-    template.getElementsByClassName('effect-type')[0].value = subtype
+  injectSwitch (template, value) {
+    const select = template.getElementsByClassName('effect-type')[0]
+    select.value = value
+    this.disableSwitchOptions(select)
+  },
+
+  disableSwitchOptions (select) {
+    // disable the option groups for effects with general values like `none`, `inherit` etc
+    const css = StateStyleSheet.getCurrentStyleObject()
+    const general = RightEffectCommon.getGeneralValues()
+    const effects = RightEffectCommon.getEffectProperties()
+    for (const property of effects) {
+      if (!general.includes(css[property])) continue
+      const group = select.querySelector(`optgroup[data-type="${property}"]`)
+      group.setAttributeNS(null, 'disabled', '')
+    }
   },
 
   addMain (form, type, subtype, value = {}) {
     const container = form.getElementsByClassName('effect-details-container')[0]
     const template = RightEffectType.getTemplate(type, subtype)
-    HelperDOM.replaceOnlyChild(container, template) // we need the form to exist before manipulating it
+    // we need the form to exist before manipulating it
+    HelperDOM.replaceOnlyChild(container, template)
     RightEffectType.injectData(type, template, value, subtype)
   }
 }

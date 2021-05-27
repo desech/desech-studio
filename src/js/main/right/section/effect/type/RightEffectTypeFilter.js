@@ -12,11 +12,9 @@ export default {
   },
 
   getParsedValues () {
-    const source = StateStyleSheet.getPropertyValue('filter')
-    if (['none', 'inherit', ' initial', 'unset'].includes(source)) {
-      return [{ function: source }]
-    }
-    return this.parseCSS(source)
+    const value = StateStyleSheet.getPropertyValue('filter')
+    if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
+    return this.parseCSS(value)
   },
 
   parseCSS (source) {
@@ -112,10 +110,8 @@ export default {
     return `${type}(${amount})`
   },
 
-  getElementName (data, name) {
+  getLabelExtra (data) {
     const first = HelperStyle.getParsedCSSParam(data, 0)
-    return (data.function === 'drop-shadow')
-      ? `${name} ${RightEffectCommon.getColorHex(first)}`
-      : `${name} ${first}`
+    return (data.function === 'drop-shadow') ? RightEffectCommon.getColorHex(first) : first
   }
 }

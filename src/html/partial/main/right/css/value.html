@@ -1,56 +1,3 @@
-<template id="template-style-css-name-custom">
-  <!-- @todo if the property or value is not recognized by chrome, then it will disappear; maybe show a warning -->
-  <input class="style-css-name" type="text" placeholder="{{#i18n}} Property {{/i18n}}">
-</template>
-
-<template id="template-style-css-value-custom">
-  <input class="change-style style-css-field" type="text" placeholder="{{#i18n}} Value {{/i18n}}">
-</template>
-
-<template id="template-style-css-value-length">
-  {{> componentInputUnit class="change-style style-css-field" length="1" }}
-</template>
-
-<template id="template-style-css-value-length-percent">
-  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" }}
-</template>
-
-<template id="template-style-css-value-length-percent-auto">
-  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" auto="1" }}
-</template>
-
-<template id="template-style-css-value-width-height">
-  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" content="1" }}
-</template>
-
-<template id="template-style-css-value-border-width">
-  {{> componentInputUnit class="change-style style-css-field" length="1" borderWidth="1" }}
-</template>
-
-<template id="template-style-css-value-number">
-  {{> componentInputUnit class="change-style style-css-field" number="1" }}
-</template>
-
-<template id="template-style-css-value-number-auto">
-  {{> componentInputUnit class="change-style style-css-field" number="1" auto="1" }}
-</template>
-
-<template id="template-style-css-value-number-length">
-  {{> componentInputUnit class="change-style style-css-field" number="1" length="1" }}
-</template>
-
-<template id="template-style-css-value-number-percent">
-  {{> componentInputUnit class="change-style style-css-field" number="1" percent="1" }}
-</template>
-
-<template id="template-style-css-value-flex-basis">
-  {{> componentInputUnit class="change-style style-css-field" length="1" flexBasis="1" }}
-</template>
-
-<template id="template-style-css-value-vertical-align">
-  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" verticalAlign="1" }}
-</template>
-
 <template id="template-style-css-value-color">
   <div class="grid" style="grid-template-columns: 1fr 26px; padding: 0;">
     <select class="color-button-select style-css-field">
@@ -65,7 +12,7 @@
 
 <template id="template-style-css-value-display">
   <select class="change-style style-css-field">
-    <optgroup label="{{#i18n}} General {{/i18n}}">
+    <optgroup label="{{#i18n}} Common {{/i18n}}">
       <option value="none">{{#i18n}} None {{/i18n}}</option>
       <option value="block">{{#i18n}} Block {{/i18n}}</option>
       <option value="grid">{{#i18n}} Grid {{/i18n}}</option>
@@ -91,11 +38,7 @@
       <option value="table-column-group">{{#i18n}} Column group {{/i18n}} &lt;colgroup&gt;</option>
       <option value="table-column">{{#i18n}} Column cell {{/i18n}} &lt;col&gt;</option>
     </optgroup>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -106,11 +49,7 @@
     <option selected value="absolute">{{#i18n}} Absolute {{/i18n}}</option>
     <option value="fixed">{{#i18n}} Fixed {{/i18n}}</option>
     <option value="sticky">{{#i18n}} Sticky {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -119,11 +58,7 @@
     <option selected value="left">{{#i18n}} Left {{/i18n}}</option>
     <option value="right">{{#i18n}} Right {{/i18n}}</option>
     <option value="none">{{#i18n}} None {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -133,11 +68,7 @@
     <option value="right">{{#i18n}} Right {{/i18n}}</option>
     <option selected value="both">{{#i18n}} Both {{/i18n}}</option>
     <option value="none">{{#i18n}} None {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -146,7 +77,8 @@
     <option selected value="hidden">{{#i18n}} Hidden {{/i18n}}</option>
     <option value="visible">{{#i18n}} Visible {{/i18n}}</option>
     <option value="scroll">{{#i18n}} Scroll {{/i18n}}</option>
-    <option value="auto">{{#i18n}} Auo {{/i18n}}</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -154,6 +86,15 @@
   <select class="change-style style-css-field">
     <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
     <option selected value="break-word">{{#i18n}} Break word {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
+  </select>
+</template>
+
+<template id="template-style-css-value-box-sizing">
+  <select class="change-style style-css-field">
+    <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
+    <option selected value="border-box">{{#i18n}} Border box {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -163,13 +104,7 @@
     <option selected value="both">{{#i18n}} Both {{/i18n}}</option>
     <option value="horizontal">{{#i18n}} Horizontal {{/i18n}}</option>
     <option value="vertical">{{#i18n}} Vertical {{/i18n}}</option>
-  </select>
-</template>
-
-<template id="template-style-css-value-box-sizing">
-  <select class="change-style style-css-field">
-    <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
-    <option selected value="border-box">{{#i18n}} Border box {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -187,11 +122,7 @@
     <option value="ridge">{{#i18n}} Ridge {{/i18n}}</option>
     <option value="inset">{{#i18n}} Inset {{/i18n}}</option>
     <option value="outset">{{#i18n}} Outset {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -201,6 +132,7 @@
     <option value="padding-box">{{#i18n}} Padding box {{/i18n}}</option>
     <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
     <option selected value="text">{{#i18n}} Text {{/i18n}}*</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -208,6 +140,7 @@
   <select class="change-style style-css-field">
     <option value="clip">{{#i18n}} Clip {{/i18n}}</option>
     <option selected value="ellipsis">{{#i18n}} Ellipsis {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -216,6 +149,7 @@
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
     <option value="text">{{#i18n}} Text {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -226,6 +160,7 @@
     <option value="pre">{{#i18n}} Preserved {{/i18n}}</option>
     <option value="pre-wrap">{{#i18n}} Preserved wrap {{/i18n}}</option>
     <option value="pre-line">{{#i18n}} Preserved line {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -234,6 +169,7 @@
     <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
     <option selected value="break-all">{{#i18n}} Break all {{/i18n}}</option>
     <option value="keep-all">{{#i18n}} Keep all {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -242,6 +178,7 @@
     <option selected value="balance">{{#i18n}} Balance {{/i18n}}</option>
     <option value="balance-all">{{#i18n}} Balance all {{/i18n}}</option>
     <option value="all">{{#i18n}} All {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -249,6 +186,7 @@
   <select class="change-style style-css-field">
     <option value="none">{{#i18n}} None {{/i18n}}</option>
     <option selected value="all">{{#i18n}} All {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -256,6 +194,7 @@
   <select class="change-style style-css-field">
     <option value="ltr">{{#i18n}} Left to right {{/i18n}}</option>
     <option selected value="rtl">{{#i18n}} Right to left {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -264,6 +203,7 @@
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -271,6 +211,7 @@
   <select class="change-style style-css-field">
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -285,6 +226,7 @@
     <option value="expanded">{{#i18n}} Expanded {{/i18n}}</option>
     <option value="extra-expanded">{{#i18n}} Extra expanded {{/i18n}}</option>
     <option value="ultra-expanded">{{#i18n}} Ultra expanded {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -299,6 +241,7 @@
     <option value="tabular-nums">{{#i18n}} Tabular numerics {{/i18n}}</option>
     <option value="diagonal-fractions">{{#i18n}} Diagonal fractions {{/i18n}}</option>
     <option value="stacked-fractions">{{#i18n}} Stacked fractions {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -314,6 +257,7 @@
     <option value="no-historical-ligatures">{{#i18n}} No historical ligatures {{/i18n}}</option>
     <option value="contextual">{{#i18n}} Contextual {{/i18n}}</option>
     <option value="no-contextual">{{#i18n}} No contextual {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -321,6 +265,7 @@
   <select class="change-style style-css-field">
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
     <option value="manual">{{#i18n}} Manual {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -331,6 +276,7 @@
     <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
     <option value="strict">{{#i18n}} Strict {{/i18n}}</option>
     <option value="anywhere">{{#i18n}} Anywhere {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -344,6 +290,7 @@
     <option value="double-circle">{{#i18n}} Double circle {{/i18n}}</option>
     <option value="triangle">{{#i18n}} Triangle {{/i18n}}</option>
     <option value="sesame">{{#i18n}} Sesame {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -353,6 +300,7 @@
     <option value="under right">{{#i18n}} Under right {{/i18n}}</option>
     <option selected value="over left">{{#i18n}} Over left {{/i18n}}</option>
     <option value="under left">{{#i18n}} Under left {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -362,6 +310,7 @@
     <option selected value="upright">{{#i18n}} Upright {{/i18n}}</option>
     <option value="sideways-right">{{#i18n}} Sideways right {{/i18n}}</option>
     <option value="use-glyph-orientation">{{#i18n}} Use glyph orientation {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -370,6 +319,7 @@
     <option value="horizontal-tb">{{#i18n}} Horizontal top bottom {{/i18n}}</option>
     <option selected value="vertical-lr">{{#i18n}} Vertical left right {{/i18n}}</option>
     <option value="vertical-rl">{{#i18n}} Vertical right left {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -380,6 +330,7 @@
     <option value="fill">{{#i18n}} Fill {{/i18n}}</option>
     <option value="none">{{#i18n}} None {{/i18n}}</option>
     <option value="scale-down">{{#i18n}} Scale down {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -388,6 +339,7 @@
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option value="crisp-edges">{{#i18n}} Crisp edges {{/i18n}}</option>
     <option selected value="pixelated">{{#i18n}} Pixelated {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -398,11 +350,7 @@
     <option value="dense">{{#i18n}} Dense {{/i18n}}</option>
     <option value="row dense">{{#i18n}} Row dense {{/i18n}}</option>
     <option value="column dense">{{#i18n}} Column dense {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -412,6 +360,7 @@
     <option selected value="column">{{#i18n}} Column {{/i18n}}</option>
     <option value="row-reverse">{{#i18n}} Row reverse {{/i18n}}</option>
     <option value="column-reverse">{{#i18n}} Column reverse {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -420,6 +369,7 @@
     <option selected value="nowrap">{{#i18n}} No wrap {{/i18n}}</option>
     <option value="wrap">{{#i18n}} Wrap {{/i18n}}</option>
     <option value="wrap-reverse">{{#i18n}} Wrap reverse {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -427,6 +377,7 @@
   <select class="change-style style-css-field">
     <option value="visible">{{#i18n}} Visible {{/i18n}}</option>
     <option selected value="hidden">{{#i18n}} Hidden {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -434,6 +385,7 @@
   <select class="change-style style-css-field">
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="isolate">{{#i18n}} Isolate {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -442,6 +394,7 @@
     <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
     <option selected value="fill-box">Fill box</option>
     <option value="view-box">{{#i18n}} View box {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -449,6 +402,7 @@
   <select class="change-style style-css-field">
     <option value="flat">{{#i18n}} Flat {{/i18n}}</option>
     <option selected value="preserve-3d">{{#i18n}} Preserve 3D {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -458,6 +412,7 @@
     <option selected value="start">{{#i18n}} Start {{/i18n}}</option>
     <option value="end">{{#i18n}} End {{/i18n}}</option>
     <option value="center">{{#i18n}} Center {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -471,6 +426,7 @@
     <option value="region">{{#i18n}} Region {{/i18n}}</option>
     <option value="left">{{#i18n}} Left {{/i18n}}</option>
     <option value="right">{{#i18n}} Right {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -479,6 +435,7 @@
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="avoid">{{#i18n}} Avoid {{/i18n}}</option>
     <option value="avoid-region">{{#i18n}} Avoid region {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -486,6 +443,7 @@
   <select class="change-style style-css-field">
     <option value="economy">{{#i18n}} Economy {{/i18n}}</option>
     <option selected value="exact">{{#i18n}} Exact {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -494,6 +452,7 @@
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
     <option value="button">{{#i18n}} Button {{/i18n}}</option>
     <option value="textfield">{{#i18n}} Text field {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -546,6 +505,7 @@
       <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
       <option value="default">{{#i18n}} Default {{/i18n}}</option>
       <option value="none">{{#i18n}} None {{/i18n}}</option>
+      {{> componentSelectGeneralOption }}
     </optgroup>
   </select>
 </template>
@@ -554,6 +514,7 @@
   <select class="change-style style-css-field">
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -564,6 +525,7 @@
     <option value="pan-x">{{#i18n}} Pan X {{/i18n}}</option>
     <option value="pan-y">{{#i18n}} Pan Y {{/i18n}}</option>
     <option value="manipulation">{{#i18n}} Manipulation {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>
 
@@ -573,5 +535,6 @@
     <option value="embed">{{#i18n}} Embed {{/i18n}}</option>
     <option selected value="bidi-override">{{#i18n}} Bidi override {{/i18n}}</option>
     <option value="isolate">{{#i18n}} Isolate {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
   </select>
 </template>

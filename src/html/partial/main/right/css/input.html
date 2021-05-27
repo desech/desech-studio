@@ -1,0 +1,52 @@
+<template id="template-style-css-name-custom">
+  <!-- @todo if the property or value is not recognized by chrome, then it will disappear; maybe show a warning -->
+  <input class="style-css-name" type="text" placeholder="{{#i18n}} Property {{/i18n}}">
+</template>
+
+<template id="template-style-css-value-custom">
+  <input class="change-style style-css-field" type="text" placeholder="{{#i18n}} Value {{/i18n}}">
+</template>
+
+<template id="template-style-css-value-length">
+  {{> componentInputUnit class="change-style style-css-field" length="1" }}
+</template>
+
+<template id="template-style-css-value-length-percent">
+  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" }}
+</template>
+
+<template id="template-style-css-value-length-percent-auto">
+  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" auto="1" }}
+</template>
+
+<template id="template-style-css-value-width-height">
+  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" content="1" }}
+</template>
+
+<template id="template-style-css-value-border-width">
+  {{> componentInputUnit class="change-style style-css-field" length="1" borderWidth="1" }}
+</template>
+
+<template id="template-style-css-value-number">
+  {{> componentInputUnit class="change-style style-css-field" number="1" }}
+</template>
+
+<template id="template-style-css-value-number-auto">
+  {{> componentInputUnit class="change-style style-css-field" number="1" auto="1" }}
+</template>
+
+<template id="template-style-css-value-number-length">
+  {{> componentInputUnit class="change-style style-css-field" number="1" length="1" }}
+</template>
+
+<template id="template-style-css-value-number-percent">
+  {{> componentInputUnit class="change-style style-css-field" number="1" percent="1" }}
+</template>
+
+<template id="template-style-css-value-flex-basis">
+  {{> componentInputUnit class="change-style style-css-field" length="1" flexBasis="1" auto="1" }}
+</template>
+
+<template id="template-style-css-value-vertical-align">
+  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" verticalAlign="1" }}
+</template>

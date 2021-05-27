@@ -4,11 +4,7 @@
     <option value="italic">{{#i18n}} Italic {{/i18n}}</option>
     <option value="oblique">{{#i18n}} Oblique {{/i18n}}</option>
     <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 
   <select class="change-style" name="text-transform">
@@ -17,11 +13,7 @@
     <option value="capitalize">{{#i18n}} Capitalize {{/i18n}}</option>
     <option value="uppercase">{{#i18n}} Uppercase {{/i18n}}</option>
     <option value="lowercase">{{#i18n}} Lowercase {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </div>
 
@@ -62,11 +54,7 @@
       <option value="dotted">{{#i18n}} Dotted {{/i18n}}</option>
       <option value="dashed">{{#i18n}} Dashed {{/i18n}}</option>
       <option value="wavy">{{#i18n}} Wavy {{/i18n}}</option>
-      <optgroup label="{{#i18n}} General {{/i18n}}">
-        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-      </optgroup>
+      {{> componentSelectGeneralGroup }}
     </select>
 
     <div class="grid" style="grid-template-columns: 1fr 18px; padding: 0;">

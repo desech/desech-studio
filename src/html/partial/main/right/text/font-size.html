@@ -23,9 +23,7 @@
     <optgroup label="{{#i18n}} General {{/i18n}}">
       <option value="lighter">{{#i18n}} Lighter {{/i18n}}</option>
       <option value="bolder">{{#i18n}} Bolder {{/i18n}}</option>
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+      {{> componentSelectGeneralOption }}
     </optgroup>
   </select>
 </div>
@@ -47,10 +45,6 @@
     <option value="center">{{#i18n}} Center {{/i18n}}</option>
     <option value="right">{{#i18n}} Right {{/i18n}}</option>
     <option value="justify">{{#i18n}} Justify {{/i18n}}</option>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-    </optgroup>
+    {{> componentSelectGeneralGroup }}
   </select>
 </div>

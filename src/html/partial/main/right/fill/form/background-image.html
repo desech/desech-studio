@@ -9,9 +9,7 @@
       <option value="length">{{#i18n}} Custom Length {{/i18n}}</option>
       <optgroup label="{{#i18n}} General {{/i18n}}">
         <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
-        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+        {{> componentSelectGeneralOption }}
       </optgroup>
     </select>
     <select name="repeat" class="background-image-select" data-type="background-repeat">
@@ -22,11 +20,7 @@
       <option value="repeat-y">{{#i18n}} Repeat Y {{/i18n}}</option>
       <option value="round">{{#i18n}} Round {{/i18n}}</option>
       <option value="space">{{#i18n}} Space {{/i18n}}</option>
-      <optgroup label="{{#i18n}} General {{/i18n}}">
-        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-      </optgroup>
+      {{> componentSelectGeneralGroup }}
     </select>
   </div>
 
@@ -50,22 +44,14 @@
       <option value="local">{{#i18n}} Local {{/i18n}}</option>
       <option value="scroll">{{#i18n}} Scroll (no Safari) {{/i18n}}</option>
       <option value="fixed">{{#i18n}} Fixed (no Safari) {{/i18n}}</option>
-      <optgroup label="{{#i18n}} General {{/i18n}}">
-        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-      </optgroup>
+      {{> componentSelectGeneralGroup }}
     </select>
     <select name="origin" class="background-image-select" data-type="background-origin">
       <option value="">{{#i18n}} - Origin - {{/i18n}}</option>
       <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
       <option value="padding-box">{{#i18n}} Padding box {{/i18n}}</option>
       <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
-      <optgroup label="{{#i18n}} General {{/i18n}}">
-        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-      </optgroup>
+      {{> componentSelectGeneralGroup }}
     </select>
   </div>
 
@@ -88,11 +74,7 @@
       <option value="saturation">{{#i18n}} Saturation {{/i18n}}</option>
       <option value="color">{{#i18n}} Color {{/i18n}}</option>
       <option value="luminosity">{{#i18n}} Luminosity {{/i18n}}</option>
-      <optgroup label="{{#i18n}} General {{/i18n}}">
-        <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
-        <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
-        <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
-      </optgroup>
+      {{> componentSelectGeneralGroup }}
     </select>
   </div>
 </form>

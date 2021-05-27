@@ -158,7 +158,18 @@ export default {
     const list = section.getElementsByClassName(`effect-list-${property}`)[0]
     const values = this.getModule(property).getParsedValues()
     for (const data of values) {
-      this.insertElement(list, property, data.function || data.value, data)
+      const subtype = this.getSubtype(property, data)
+      this.insertElement(list, property, subtype, data)
+    }
+  },
+
+  getSubtype (property, data) {
+    if (RightEffectCommon.isGeneralValue(data.value)) {
+      return data.value
+    } else if (property === 'filter' || property === 'transform') {
+      return data.function
+    } else {
+      return property
     }
   },
 

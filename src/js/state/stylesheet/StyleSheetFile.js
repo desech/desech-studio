@@ -154,8 +154,7 @@ export default {
       'text-orientation': ['-webkit-text-orientation'], // safari
       'shape-margin': ['-webkit-shape-margin'], // desktop safari
       '-webkit-mask-image': ['mask-image'], // safari, chrome
-      '-webkit-print-color-adjust': ['color-adjust'], // safari, chrome
-      '-webkit-appearance': ['-moz-appearance', 'appearance'], // safari, chrome, firefox
+      appearance: ['-webkit-appearance'], // safari
       'user-select': ['-webkit-user-select'], // safari
       'tab-size': ['-moz-tab-size'] // firefox
     }

@@ -119,6 +119,20 @@
       </optgroup>
     {{/if}}
 
+    {{#if fontStretch }}
+      <optgroup label="{{#i18n}} Specific {{/i18n}}">
+        <option value="ultra-condensed">{{#i18n}} Ultra condensed {{/i18n}}</option>
+        <option value="extra-condensed">{{#i18n}} Extra condensed {{/i18n}}</option>
+        <option value="condensed">{{#i18n}} Condensed {{/i18n}}</option>
+        <option value="semi-condensed">{{#i18n}} Semi condensed {{/i18n}}</option>
+        <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+        <option value="semi-expanded">{{#i18n}} Semi expanded {{/i18n}}</option>
+        <option value="expanded">{{#i18n}} Expanded {{/i18n}}</option>
+        <option value="extra-expanded">{{#i18n}} Extra expanded {{/i18n}}</option>
+        <option value="ultra-expanded">{{#i18n}} Ultra expanded {{/i18n}}</option>
+      </optgroup>
+    {{/if}}
+
     <optgroup label="{{#i18n}} Math {{/i18n}}">
       <option value="calc(10px)">{{#i18n}} Calculate {{/i18n}}</option>
       <option value="min(10vw, 10px)">{{#i18n}} Minimum {{/i18n}}</option>

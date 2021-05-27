@@ -108,7 +108,6 @@
   </select>
 </template>
 
-<!-- used by outline-style -->
 <template id="template-style-css-value-border-style">
   <select class="change-style style-css-field">
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
@@ -160,6 +159,7 @@
     <option value="pre">{{#i18n}} Preserved {{/i18n}}</option>
     <option value="pre-wrap">{{#i18n}} Preserved wrap {{/i18n}}</option>
     <option value="pre-line">{{#i18n}} Preserved line {{/i18n}}</option>
+    <option value="break-spaces">{{#i18n}} Break spaces {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
 </template>
@@ -175,9 +175,8 @@
 
 <template id="template-style-css-value-column-fill">
   <select class="change-style style-css-field">
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="balance">{{#i18n}} Balance {{/i18n}}</option>
-    <option value="balance-all">{{#i18n}} Balance all {{/i18n}}</option>
-    <option value="all">{{#i18n}} All {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
 </template>
@@ -211,21 +210,6 @@
   <select class="change-style style-css-field">
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
-    {{> componentSelectGeneralGroup }}
-  </select>
-</template>
-
-<template id="template-style-css-value-font-stretch">
-  <select class="change-style style-css-field">
-    <option value="ultra-condensed">{{#i18n}} Ultra condensed {{/i18n}}</option>
-    <option value="extra-condensed">{{#i18n}} Extra condensed {{/i18n}}</option>
-    <option selected value="condensed">{{#i18n}} Condensed {{/i18n}}</option>
-    <option value="semi-condensed">{{#i18n}} Semi condensed {{/i18n}}</option>
-    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-    <option value="semi-expanded">{{#i18n}} Semi expanded {{/i18n}}</option>
-    <option value="expanded">{{#i18n}} Expanded {{/i18n}}</option>
-    <option value="extra-expanded">{{#i18n}} Extra expanded {{/i18n}}</option>
-    <option value="ultra-expanded">{{#i18n}} Ultra expanded {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
 </template>
@@ -294,16 +278,6 @@
   </select>
 </template>
 
-<template id="template-style-css-value-text-emphasis-position">
-  <select class="change-style style-css-field">
-    <option value="over right">{{#i18n}} Over right {{/i18n}}</option>
-    <option value="under right">{{#i18n}} Under right {{/i18n}}</option>
-    <option selected value="over left">{{#i18n}} Over left {{/i18n}}</option>
-    <option value="under left">{{#i18n}} Under left {{/i18n}}</option>
-    {{> componentSelectGeneralGroup }}
-  </select>
-</template>
-
 <template id="template-style-css-value-text-orientation">
   <select class="change-style style-css-field">
     <option value="mixed">{{#i18n}} Mixed {{/i18n}}</option>
@@ -338,7 +312,6 @@
   <select class="change-style style-css-field">
     <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
     <option value="crisp-edges">{{#i18n}} Crisp edges {{/i18n}}</option>
-    <option selected value="pixelated">{{#i18n}} Pixelated {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
 </template>
@@ -391,8 +364,10 @@
 
 <template id="template-style-css-value-transform-box">
   <select class="change-style style-css-field">
+    <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
     <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
-    <option selected value="fill-box">Fill box</option>
+    <option selected value="fill-box">{{#i18n}} Fill box {{/i18n}}</option>
+    <option value="stroke-box">{{#i18n}} Stroke box {{/i18n}}</option>
     <option value="view-box">{{#i18n}} View box {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
@@ -439,19 +414,12 @@
   </select>
 </template>
 
-<template id="template-style-css-value--webkit-print-color-adjust">
-  <select class="change-style style-css-field">
-    <option value="economy">{{#i18n}} Economy {{/i18n}}</option>
-    <option selected value="exact">{{#i18n}} Exact {{/i18n}}</option>
-    {{> componentSelectGeneralGroup }}
-  </select>
-</template>
-
-<template id="template-style-css-value--webkit-appearance">
+<template id="template-style-css-value-appearance">
   <select class="change-style style-css-field">
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
     <option value="button">{{#i18n}} Button {{/i18n}}</option>
     <option value="textfield">{{#i18n}} Text field {{/i18n}}</option>
+    <option value="menulist-button">{{#i18n}} Menu list button {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
 </template>
@@ -524,17 +492,8 @@
     <option selected value="none">{{#i18n}} None {{/i18n}}</option>
     <option value="pan-x">{{#i18n}} Pan X {{/i18n}}</option>
     <option value="pan-y">{{#i18n}} Pan Y {{/i18n}}</option>
+    <option value="pinch-zoom">{{#i18n}} Pinch zoom {{/i18n}}</option>
     <option value="manipulation">{{#i18n}} Manipulation {{/i18n}}</option>
-    {{> componentSelectGeneralGroup }}
-  </select>
-</template>
-
-<template id="template-style-css-value-unicode-bidi">
-  <select class="change-style style-css-field">
-    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-    <option value="embed">{{#i18n}} Embed {{/i18n}}</option>
-    <option selected value="bidi-override">{{#i18n}} Bidi override {{/i18n}}</option>
-    <option value="isolate">{{#i18n}} Isolate {{/i18n}}</option>
     {{> componentSelectGeneralGroup }}
   </select>
 </template>

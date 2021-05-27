@@ -146,7 +146,6 @@ export default {
 
   getUnsupportedProperties () {
     return {
-      position: ['-webkit-position'], // safari; for `sticky` only
       'background-clip': ['-webkit-background-clip'], // safari, chrome; for `text` only
       'font-kerning': ['-webkit-font-kerning'], // ios safari
       hyphens: ['-webkit-hyphens'], // safari

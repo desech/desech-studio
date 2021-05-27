@@ -1,18 +1,6 @@
 <select class="add-css-dropdown button" style="width: 85px;">
   <option value="">{{#i18n}} - Property - {{/i18n}}</option>
   <option value="custom">{{#i18n}} Custom {{/i18n}}</option>
-  <optgroup label="{{#i18n}} Position {{/i18n}}">
-    <option value="display">display</option>
-    <option value="position">position</option>
-    <option value="float">float</option>
-    <option value="clear">clear</option>
-    <option value="top" data-template="length-percent">top</option>
-    <option value="bottom" data-template="length-percent">bottom</option>
-    <option value="left" data-template="length-percent">left</option>
-    <option value="right" data-template="length-percent">right</option>
-    <option value="vertical-align">vertical-align</option>
-    <option value="z-index" data-template="number">z-index</option>
-  </optgroup>
   <optgroup label="{{#i18n}} Grid {{/i18n}}">
     <option value="grid-auto-flow">grid-auto-flow</option>
     <option value="grid-auto-columns" data-template="custom">grid-auto-columns</option>
@@ -29,6 +17,18 @@
     <option value="flex-basis" data-template="flex-basis">flex-basis</option>
     <option value="flex-direction" data-template="flex-direction">flex-direction</option>
     <option value="flex-wrap" data-template="flex-wrap">flex-wrap</option>
+  </optgroup>
+  <optgroup label="{{#i18n}} Position {{/i18n}}">
+    <option value="display">display</option>
+    <option value="position">position</option>
+    <option value="float">float</option>
+    <option value="clear">clear</option>
+    <option value="top" data-template="length-percent-auto">top</option>
+    <option value="bottom" data-template="length-percent-auto">bottom</option>
+    <option value="left" data-template="length-percent-auto">left</option>
+    <option value="right" data-template="length-percent-auto">right</option>
+    <option value="vertical-align">vertical-align</option>
+    <option value="z-index" data-template="number-auto">z-index</option>
   </optgroup>
   <optgroup label="{{#i18n}} Size {{/i18n}}">
     <option value="overflow-x" data-template="overflow">overflow-x</option>

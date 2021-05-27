@@ -7,10 +7,6 @@
   <input class="change-style style-css-field" type="text" placeholder="{{#i18n}} Value {{/i18n}}">
 </template>
 
-<template id="template-style-css-value-number">
-  <input class="change-style style-css-field" type="number" step="0.01" placeholder="{{#i18n}} Number {{/i18n}}">
-</template>
-
 <template id="template-style-css-value-length">
   {{> componentInputUnit class="change-style style-css-field" length="1" }}
 </template>
@@ -19,12 +15,24 @@
   {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" }}
 </template>
 
+<template id="template-style-css-value-length-percent-auto">
+  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" auto="1" }}
+</template>
+
 <template id="template-style-css-value-width-height">
   {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" content="1" }}
 </template>
 
 <template id="template-style-css-value-border-width">
   {{> componentInputUnit class="change-style style-css-field" length="1" borderWidth="1" }}
+</template>
+
+<template id="template-style-css-value-number">
+  {{> componentInputUnit class="change-style style-css-field" number="1" }}
+</template>
+
+<template id="template-style-css-value-number-auto">
+  {{> componentInputUnit class="change-style style-css-field" number="1" auto="1" }}
 </template>
 
 <template id="template-style-css-value-number-length">
@@ -37,6 +45,10 @@
 
 <template id="template-style-css-value-flex-basis">
   {{> componentInputUnit class="change-style style-css-field" length="1" flexBasis="1" }}
+</template>
+
+<template id="template-style-css-value-vertical-align">
+  {{> componentInputUnit class="change-style style-css-field" length="1" percent="1" verticalAlign="1" }}
 </template>
 
 <template id="template-style-css-value-color">
@@ -54,102 +66,110 @@
 <template id="template-style-css-value-display">
   <select class="change-style style-css-field">
     <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="none">none</option>
-      <option value="block">block</option>
-      <option value="grid">grid</option>
-      <option value="flex">flex</option>
-      <option value="list-item">list-item</option>
+      <option value="none">{{#i18n}} None {{/i18n}}</option>
+      <option value="block">{{#i18n}} Block {{/i18n}}</option>
+      <option value="grid">{{#i18n}} Grid {{/i18n}}</option>
+      <option value="flex">{{#i18n}} Flex {{/i18n}}</option>
+      <option value="contents">{{#i18n}} Contents {{/i18n}}</option>
+      <option value="list-item">{{#i18n}} List item {{/i18n}}</option>
     </optgroup>
     <optgroup label="{{#i18n}} Inline {{/i18n}}">
-      <option value="inline">inline</option>
-      <option value="inline-block">inline-block</option>
-      <option value="inline-grid">inline-grid</option>
-      <option value="inline-flex">inline-flex</option>
-      <option value="inline-table">inline-table</option>
+      <option value="inline">{{#i18n}} Inline {{/i18n}}</option>
+      <option value="inline-block">{{#i18n}} Inline block {{/i18n}}</option>
+      <option value="inline-grid">{{#i18n}} Inline grid {{/i18n}}</option>
+      <option value="inline-flex">{{#i18n}} Inline flex {{/i18n}}</option>
+      <option value="inline-table">{{#i18n}} Inline table {{/i18n}}</option>
     </optgroup>
     <optgroup label="{{#i18n}} Table {{/i18n}}">
-      <option value="table">table</option>
-      <option value="table-row">table-row &lt;tr&gt;</option>
-      <option value="table-cell">table-cell &lt;td/th&gt;</option>
-      <option value="table-header-group">table-header-group &lt;thead&gt;</option>
-      <option value="table-footer-group">table-footer-group &lt;tfoot&gt;</option>
-      <option value="table-row-group">table-row-group &lt;tbody&gt;</option>
-      <option value="table-column-group">table-column-group &lt;colgroup&gt;</option>
-      <option value="table-column">table-column &lt;col&gt;</option>
-      <option value="table-caption">table-caption &lt;caption&gt;</option>
+      <option value="table">{{#i18n}} Table {{/i18n}}</option>
+      <option value="table-row">{{#i18n}} Table row {{/i18n}} &lt;tr&gt;</option>
+      <option value="table-cell">{{#i18n}} Table cell {{/i18n}} &lt;td/th&gt;</option>
+      <option value="table-header-group">{{#i18n}} Table header {{/i18n}} &lt;thead&gt;</option>
+      <option value="table-footer-group">{{#i18n}} Table footer {{/i18n}} &lt;tfoot&gt;</option>
+      <option value="table-row-group">{{#i18n}} Table body {{/i18n}} &lt;tbody&gt;</option>
+      <option value="table-caption">{{#i18n}} Table caption {{/i18n}} &lt;caption&gt;</option>
+      <option value="table-column-group">{{#i18n}} Column group {{/i18n}} &lt;colgroup&gt;</option>
+      <option value="table-column">{{#i18n}} Column cell {{/i18n}} &lt;col&gt;</option>
+    </optgroup>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
     </optgroup>
   </select>
 </template>
 
 <template id="template-style-css-value-position">
   <select class="change-style style-css-field">
-    <option value="static">static</option>
-    <option value="relative">relative</option>
-    <option selected value="absolute">absolute</option>
-    <option value="fixed">fixed</option>
-    <option value="sticky">sticky*</option>
+    <option value="static">{{#i18n}} Static {{/i18n}}</option>
+    <option value="relative">{{#i18n}} Relative {{/i18n}}</option>
+    <option selected value="absolute">{{#i18n}} Absolute {{/i18n}}</option>
+    <option value="fixed">{{#i18n}} Fixed {{/i18n}}</option>
+    <option value="sticky">{{#i18n}} Sticky {{/i18n}}</option>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+    </optgroup>
   </select>
 </template>
 
 <template id="template-style-css-value-float">
   <select class="change-style style-css-field">
-    <option selected value="left">left</option>
-    <option value="right">right</option>
-    <option value="none">none</option>
+    <option selected value="left">{{#i18n}} Left {{/i18n}}</option>
+    <option value="right">{{#i18n}} Right {{/i18n}}</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+    </optgroup>
   </select>
 </template>
 
 <template id="template-style-css-value-clear">
   <select class="change-style style-css-field">
-    <option value="left">left</option>
-    <option value="right">right</option>
-    <option selected value="both">both</option>
-    <option value="none">none</option>
-  </select>
-</template>
-
-<template id="template-style-css-value-vertical-align">
-  <select class="change-style style-css-field">
-    <option value="top">top</option>
-    <option selected value="middle">middle</option>
-    <option value="bottom">bottom</option>
-    <option value="baseline">baseline</option>
-    <option value="sub">sub</option>
-    <option value="super">super</option>
-    <option value="text-top">text-top</option>
-    <option value="text-bottom">text-bottom</option>
+    <option value="left">{{#i18n}} Left {{/i18n}}</option>
+    <option value="right">{{#i18n}} Right {{/i18n}}</option>
+    <option selected value="both">{{#i18n}} Both {{/i18n}}</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+    </optgroup>
   </select>
 </template>
 
 <template id="template-style-css-value-overflow">
   <select class="change-style style-css-field">
-    <option selected value="hidden">hidden</option>
-    <option value="visible">visible</option>
-    <option value="scroll">scroll</option>
-    <option value="auto">auto</option>
+    <option selected value="hidden">{{#i18n}} Hidden {{/i18n}}</option>
+    <option value="visible">{{#i18n}} Visible {{/i18n}}</option>
+    <option value="scroll">{{#i18n}} Scroll {{/i18n}}</option>
+    <option value="auto">{{#i18n}} Auo {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-overflow-wrap">
   <select class="change-style style-css-field">
-    <option value="normal">normal</option>
-    <option selected value="break-word">break-word</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option selected value="break-word">{{#i18n}} Break word {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-resize">
   <select class="change-style style-css-field">
-    <option value="none">none</option>
-    <option selected value="both">both</option>
-    <option value="horizontal">horizontal</option>
-    <option value="vertical">vertical</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <option selected value="both">{{#i18n}} Both {{/i18n}}</option>
+    <option value="horizontal">{{#i18n}} Horizontal {{/i18n}}</option>
+    <option value="vertical">{{#i18n}} Vertical {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-box-sizing">
   <select class="change-style style-css-field">
-    <option value="content-box">content-box</option>
-    <option selected value="border-box">border-box</option>
+    <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
+    <option selected value="border-box">{{#i18n}} Border box {{/i18n}}</option>
   </select>
 </template>
 
@@ -177,376 +197,381 @@
 
 <template id="template-style-css-value--webkit-background-clip">
   <select class="change-style style-css-field">
-    <option value="border-box">border-box</option>
-    <option value="padding-box">padding-box</option>
-    <option value="content-box">content-box</option>
-    <option selected value="text">text*</option>
+    <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
+    <option value="padding-box">{{#i18n}} Padding box {{/i18n}}</option>
+    <option value="content-box">{{#i18n}} Content box {{/i18n}}</option>
+    <option selected value="text">{{#i18n}} Text {{/i18n}}*</option>
   </select>
 </template>
 
 <template id="template-style-css-value-text-overflow">
   <select class="change-style style-css-field">
-    <option value="clip">clip</option>
-    <option selected value="ellipsis">ellipsis</option>
+    <option value="clip">{{#i18n}} Clip {{/i18n}}</option>
+    <option selected value="ellipsis">{{#i18n}} Ellipsis {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-user-select">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="none">none</option>
-    <option value="text">text</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="text">{{#i18n}} Text {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-white-space">
   <select class="change-style style-css-field">
-    <option value="normal">normal</option>
-    <option selected value="nowrap">nowrap</option>
-    <option value="pre">pre</option>
-    <option value="pre-wrap">pre-wrap</option>
-    <option value="pre-line">pre-line</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option selected value="nowrap">{{#i18n}} No wrap {{/i18n}}</option>
+    <option value="pre">{{#i18n}} Preserved {{/i18n}}</option>
+    <option value="pre-wrap">{{#i18n}} Preserved wrap {{/i18n}}</option>
+    <option value="pre-line">{{#i18n}} Preserved line {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-word-break">
   <select class="change-style style-css-field">
-    <option value="normal">normal</option>
-    <option selected value="break-all">break-all</option>
-    <option value="keep-all">keep-all</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option selected value="break-all">{{#i18n}} Break all {{/i18n}}</option>
+    <option value="keep-all">{{#i18n}} Keep all {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-column-fill">
   <select class="change-style style-css-field">
-    <option selected value="balance">balance</option>
-    <option value="balance-all">balance-all</option>
-    <option value="all">all</option>
+    <option selected value="balance">{{#i18n}} Balance {{/i18n}}</option>
+    <option value="balance-all">{{#i18n}} Balance all {{/i18n}}</option>
+    <option value="all">{{#i18n}} All {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-column-span">
   <select class="change-style style-css-field">
-    <option value="none">none</option>
-    <option selected value="all">all</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <option selected value="all">{{#i18n}} All {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-direction">
   <select class="change-style style-css-field">
-    <option value="ltr">ltr</option>
-    <option selected value="rtl">rtl</option>
+    <option value="ltr">{{#i18n}} Left to right {{/i18n}}</option>
+    <option selected value="rtl">{{#i18n}} Right to left {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-font-kerning">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option value="normal">normal</option>
-    <option selected value="none">none</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-font-optical-sizing">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="none">none</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-font-stretch">
   <select class="change-style style-css-field">
-    <option value="ultra-condensed">ultra-condensed</option>
-    <option value="extra-condensed">extra-condensed</option>
-    <option selected value="condensed">condensed</option>
-    <option value="semi-condensed">semi-condensed</option>
-    <option value="normal">normal</option>
-    <option value="semi-expanded">semi-expanded</option>
-    <option value="expanded">expanded</option>
-    <option value="extra-expanded">extra-expanded</option>
-    <option value="ultra-expanded">ultra-expanded</option>
+    <option value="ultra-condensed">{{#i18n}} Ultra condensed {{/i18n}}</option>
+    <option value="extra-condensed">{{#i18n}} Extra condensed {{/i18n}}</option>
+    <option selected value="condensed">{{#i18n}} Condensed {{/i18n}}</option>
+    <option value="semi-condensed">{{#i18n}} Semi condensed {{/i18n}}</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option value="semi-expanded">{{#i18n}} Semi expanded {{/i18n}}</option>
+    <option value="expanded">{{#i18n}} Expanded {{/i18n}}</option>
+    <option value="extra-expanded">{{#i18n}} Extra expanded {{/i18n}}</option>
+    <option value="ultra-expanded">{{#i18n}} Ultra expanded {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-font-variant-numeric">
   <select class="change-style style-css-field">
-    <option value="normal">normal</option>
-    <option value="ordinal">ordinal</option>
-    <option selected value="slashed-zero">slashed-zero</option>
-    <option value="lining-nums">lining-nums</option>
-    <option value="oldstyle-nums">oldstyle-nums</option>
-    <option value="proportional-nums">proportional-nums</option>
-    <option value="tabular-nums">tabular-nums</option>
-    <option value="diagonal-fractions">diagonal-fractions</option>
-    <option value="stacked-fractions">stacked-fractions</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option value="ordinal">{{#i18n}} Ordinal {{/i18n}}</option>
+    <option selected value="slashed-zero">{{#i18n}} Slashed zero {{/i18n}}</option>
+    <option value="lining-nums">{{#i18n}} Lining numerics {{/i18n}}</option>
+    <option value="oldstyle-nums">{{#i18n}} Old style numerics {{/i18n}}</option>
+    <option value="proportional-nums">{{#i18n}} Proportional numerics {{/i18n}}</option>
+    <option value="tabular-nums">{{#i18n}} Tabular numerics {{/i18n}}</option>
+    <option value="diagonal-fractions">{{#i18n}} Diagonal fractions {{/i18n}}</option>
+    <option value="stacked-fractions">{{#i18n}} Stacked fractions {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-font-variant-ligatures">
   <select class="change-style style-css-field">
-    <option value="normal">normal</option>
-    <option value="none">none</option>
-    <option value="common-ligatures">common-ligatures</option>
-    <option selected value="no-common-ligatures">no-common-ligatures</option>
-    <option value="discretionary-ligatures">discretionary-ligatures</option>
-    <option value="no-discretionary-ligatures">no-discretionary-ligatures</option>
-    <option value="historical-ligatures">historical-ligatures</option>
-    <option value="no-historical-ligatures">no-historical-ligatures</option>
-    <option value="contextual">contextual</option>
-    <option value="no-contextual">no-contextual</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="common-ligatures">{{#i18n}} Common ligatures {{/i18n}}</option>
+    <option selected value="no-common-ligatures">{{#i18n}} No common ligatures {{/i18n}}</option>
+    <option value="discretionary-ligatures">{{#i18n}} Discretionary ligatures {{/i18n}}</option>
+    <option value="no-discretionary-ligatures">{{#i18n}} No discretionary ligatures {{/i18n}}</option>
+    <option value="historical-ligatures">{{#i18n}} Historical ligatures {{/i18n}}</option>
+    <option value="no-historical-ligatures">{{#i18n}} No historical ligatures {{/i18n}}</option>
+    <option value="contextual">{{#i18n}} Contextual {{/i18n}}</option>
+    <option value="no-contextual">{{#i18n}} No contextual {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-hyphens">
   <select class="change-style style-css-field">
-    <option selected value="none">none</option>
-    <option value="manual">manual</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="manual">{{#i18n}} Manual {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-line-break">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="loose">loose</option>
-    <option value="normal">normal</option>
-    <option value="strict">strict</option>
-    <option value="anywhere">anywhere</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="loose">{{#i18n}} Loose {{/i18n}}</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option value="strict">{{#i18n}} Strict {{/i18n}}</option>
+    <option value="anywhere">{{#i18n}} Anywhere {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-text-emphasis-style">
   <select class="change-style style-css-field">
-    <option value="none">none</option>
-    <option value="filled">filled</option>
-    <option value="open">open</option>
-    <option selected value="dot">dot</option>
-    <option value="circle">circle</option>
-    <option value="double-circle">double-circle</option>
-    <option value="triangle">triangle</option>
-    <option value="sesame">sesame</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="filled">{{#i18n}} Filled {{/i18n}}</option>
+    <option value="open">{{#i18n}} Open {{/i18n}}</option>
+    <option selected value="dot">{{#i18n}} Dot {{/i18n}}</option>
+    <option value="circle">{{#i18n}} Circle {{/i18n}}</option>
+    <option value="double-circle">{{#i18n}} Double circle {{/i18n}}</option>
+    <option value="triangle">{{#i18n}} Triangle {{/i18n}}</option>
+    <option value="sesame">{{#i18n}} Sesame {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-text-emphasis-position">
   <select class="change-style style-css-field">
-    <option value="over right">over right</option>
-    <option value="under right">under right</option>
-    <option selected value="over left">over left</option>
-    <option value="under left">under left</option>
+    <option value="over right">{{#i18n}} Over right {{/i18n}}</option>
+    <option value="under right">{{#i18n}} Under right {{/i18n}}</option>
+    <option selected value="over left">{{#i18n}} Over left {{/i18n}}</option>
+    <option value="under left">{{#i18n}} Under left {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-text-orientation">
   <select class="change-style style-css-field">
-    <option value="mixed">mixed</option>
-    <option selected value="upright">upright</option>
-    <option value="sideways-right">sideways-right</option>
-    <option value="use-glyph-orientation">use-glyph-orientation</option>
+    <option value="mixed">{{#i18n}} Mixed {{/i18n}}</option>
+    <option selected value="upright">{{#i18n}} Upright {{/i18n}}</option>
+    <option value="sideways-right">{{#i18n}} Sideways right {{/i18n}}</option>
+    <option value="use-glyph-orientation">{{#i18n}} Use glyph orientation {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-writing-mode">
   <select class="change-style style-css-field">
-    <option value="horizontal-tb">horizontal-tb</option>
-    <option selected value="vertical-lr">vertical-lr</option>
-    <option value="vertical-rl">vertical-rl</option>
+    <option value="horizontal-tb">{{#i18n}} Horizontal top bottom {{/i18n}}</option>
+    <option selected value="vertical-lr">{{#i18n}} Vertical left right {{/i18n}}</option>
+    <option value="vertical-rl">{{#i18n}} Vertical right left {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-object-fit">
   <select class="change-style style-css-field">
-    <option value="contain">contain</option>
-    <option selected value="cover">cover</option>
-    <option value="fill">fill</option>
-    <option value="none">none</option>
-    <option value="scale-down">scale-down</option>
+    <option value="contain">{{#i18n}} Contain {{/i18n}}</option>
+    <option selected value="cover">{{#i18n}} Cover {{/i18n}}</option>
+    <option value="fill">{{#i18n}} Fill {{/i18n}}</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="scale-down">{{#i18n}} Scale down {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-image-rendering">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option value="crisp-edges">crisp-edges</option>
-    <option selected value="pixelated">pixelated</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option value="crisp-edges">{{#i18n}} Crisp edges {{/i18n}}</option>
+    <option selected value="pixelated">{{#i18n}} Pixelated {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-grid-auto-flow">
   <select class="change-style style-css-field">
-    <option value="row">row</option>
-    <option selected value="column">column</option>
-    <option value="dense">dense</option>
-    <option value="row dense">row dense</option>
-    <option value="column dense">column dense</option>
+    <option value="row">{{#i18n}} Row {{/i18n}}</option>
+    <option selected value="column">{{#i18n}} Column {{/i18n}}</option>
+    <option value="dense">{{#i18n}} Dense {{/i18n}}</option>
+    <option value="row dense">{{#i18n}} Row dense {{/i18n}}</option>
+    <option value="column dense">{{#i18n}} Column dense {{/i18n}}</option>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>
+      <option value="initial">{{#i18n}} Initial {{/i18n}}</option>
+      <option value="unset">{{#i18n}} Unset {{/i18n}}</option>
+    </optgroup>
   </select>
 </template>
 
 <template id="template-style-css-value-flex-direction">
   <select class="change-style style-css-field">
-    <option value="row">row</option>
-    <option selected value="column">column</option>
-    <option value="row-reverse">row-reverse</option>
-    <option value="column-reverse">column-reverse</option>
+    <option value="row">{{#i18n}} Row {{/i18n}}</option>
+    <option selected value="column">{{#i18n}} Column {{/i18n}}</option>
+    <option value="row-reverse">{{#i18n}} Row reverse {{/i18n}}</option>
+    <option value="column-reverse">{{#i18n}} Column reverse {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-flex-wrap">
   <select class="change-style style-css-field">
-    <option selected value="nowrap">nowrap</option>
-    <option value="wrap">wrap</option>
-    <option value="wrap-reverse">wrap-reverse</option>
+    <option selected value="nowrap">{{#i18n}} No wrap {{/i18n}}</option>
+    <option value="wrap">{{#i18n}} Wrap {{/i18n}}</option>
+    <option value="wrap-reverse">{{#i18n}} Wrap reverse {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-visibility">
   <select class="change-style style-css-field">
-    <option value="visible">visible</option>
-    <option selected value="hidden">hidden</option>
+    <option value="visible">{{#i18n}} Visible {{/i18n}}</option>
+    <option selected value="hidden">{{#i18n}} Hidden {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-isolation">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="isolate">isolate</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="isolate">{{#i18n}} Isolate {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-transform-box">
   <select class="change-style style-css-field">
-    <option value="border-box">border-box</option>
-    <option selected value="fill-box">fill-box</option>
-    <option value="view-box">view-box</option>
+    <option value="border-box">{{#i18n}} Border box {{/i18n}}</option>
+    <option selected value="fill-box">Fill box</option>
+    <option value="view-box">{{#i18n}} View box {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-transform-style">
   <select class="change-style style-css-field">
-    <option value="flat">flat</option>
-    <option selected value="preserve-3d">preserve-3d</option>
+    <option value="flat">{{#i18n}} Flat {{/i18n}}</option>
+    <option selected value="preserve-3d">{{#i18n}} Preserve 3D {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-scroll-snap-align">
   <select class="change-style style-css-field">
-    <option value="none">none</option>
-    <option selected value="start">start</option>
-    <option value="end">end</option>
-    <option value="center">center</option>
+    <option value="none">{{#i18n}} None {{/i18n}}</option>
+    <option selected value="start">{{#i18n}} Start {{/i18n}}</option>
+    <option value="end">{{#i18n}} End {{/i18n}}</option>
+    <option value="center">{{#i18n}} Center {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-break-before">
   <select class="change-style style-css-field">
-    <option value="all">all</option>
-    <option selected value="avoid">avoid</option>
-    <option value="avoid-page">avoid-page</option>
-    <option value="avoid-region">avoid-region</option>
-    <option value="page">page</option>
-    <option value="region">region</option>
-    <option value="left">left</option>
-    <option value="right">right</option>
+    <option value="all">{{#i18n}} All {{/i18n}}</option>
+    <option selected value="avoid">{{#i18n}} Avoid {{/i18n}}</option>
+    <option value="avoid-page">{{#i18n}} Avoid page {{/i18n}}</option>
+    <option value="avoid-region">{{#i18n}} Avoid region {{/i18n}}</option>
+    <option value="page">{{#i18n}} Page {{/i18n}}</option>
+    <option value="region">{{#i18n}} Region {{/i18n}}</option>
+    <option value="left">{{#i18n}} Left {{/i18n}}</option>
+    <option value="right">{{#i18n}} Right {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-break-inside">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="avoid">avoid</option>
-    <option value="avoid-region">avoid-region</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="avoid">{{#i18n}} Avoid {{/i18n}}</option>
+    <option value="avoid-region">{{#i18n}} Avoid region {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value--webkit-print-color-adjust">
   <select class="change-style style-css-field">
-    <option value="economy">economy</option>
-    <option selected value="exact">exact</option>
+    <option value="economy">{{#i18n}} Economy {{/i18n}}</option>
+    <option selected value="exact">{{#i18n}} Exact {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value--webkit-appearance">
   <select class="change-style style-css-field">
-    <option selected value="none">none</option>
-    <option value="button">button</option>
-    <option value="textfield">textfield</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="button">{{#i18n}} Button {{/i18n}}</option>
+    <option value="textfield">{{#i18n}} Text field {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-cursor">
   <select class="change-style style-css-field">
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="auto">auto</option>
-      <option value="default">default</option>
-      <option value="none">none</option>
-    </optgroup>
     <optgroup label="{{#i18n}} Links & status {{/i18n}}">
-      <option value="context-menu">context-menu</option>
-      <option value="help">help</option>
-      <option selected value="pointer">pointer</option>
-      <option value="progress">progress</option>
-      <option value="wait">wait</option>
+      <option selected value="pointer">{{#i18n}} Pointer {{/i18n}}</option>
+      <option value="help">{{#i18n}} Help {{/i18n}}</option>
+      <option value="progress">{{#i18n}} Progress {{/i18n}}</option>
+      <option value="wait">{{#i18n}} Wait {{/i18n}}</option>
+      <option value="context-menu">{{#i18n}} Context menu {{/i18n}}</option>
     </optgroup>
     <optgroup label="{{#i18n}} Selection {{/i18n}}">
-      <option value="cell">cell</option>
-      <option value="crosshair">crosshair</option>
-      <option value="text">text</option>
-      <option value="vertical-text">vertical-text</option>      
+      <option value="cell">{{#i18n}} Cell {{/i18n}}</option>
+      <option value="crosshair">{{#i18n}} Crosshair {{/i18n}}</option>
+      <option value="text">{{#i18n}} Text {{/i18n}}</option>
+      <option value="vertical-text">{{#i18n}} Vertical text {{/i18n}}</option>      
     </optgroup>
     <optgroup label="{{#i18n}} Drag & drop {{/i18n}}">
-      <option value="alias">alias</option>
-      <option value="copy">copy</option>
-      <option value="move">move</option>
-      <option value="no-drop">no-drop</option>
-      <option value="not-allowed">not-allowed</option>
-      <option value="grab">grab</option>
-      <option value="grabbing">grabbing</option>      
+      <option value="alias">{{#i18n}} Alias {{/i18n}}</option>
+      <option value="copy">{{#i18n}} Copy {{/i18n}}</option>
+      <option value="move">{{#i18n}} Move {{/i18n}}</option>
+      <option value="no-drop">{{#i18n}} No drop {{/i18n}}</option>
+      <option value="not-allowed">{{#i18n}} Not allowed {{/i18n}}</option>
+      <option value="grab">{{#i18n}} Grab {{/i18n}}</option>
+      <option value="grabbing">{{#i18n}} Grabbing {{/i18n}}</option>      
     </optgroup>
     <optgroup label="{{#i18n}} Resizing & scrolling {{/i18n}}">
-      <option value="all-scroll">all-scroll</option>
-      <option value="col-resize">col-resize</option>
-      <option value="row-resize">row-resize</option>
-      <option value="n-resize">n-resize</option>
-      <option value="e-resize">e-resize</option>
-      <option value="s-resize">s-resize</option>
-      <option value="w-resize">w-resize</option>
-      <option value="ne-resize">ne-resize</option>
-      <option value="nw-resize">nw-resize</option>
-      <option value="se-resize">se-resize</option>
-      <option value="sw-resize">sw-resize</option>
-      <option value="ew-resize">ew-resize</option>
-      <option value="ns-resize">ns-resize</option>
-      <option value="nesw-resize">nesw-resize</option>
-      <option value="nwse-resize">nwse-resize</option>
+      <option value="all-scroll">{{#i18n}} All scroll {{/i18n}}</option>
+      <option value="col-resize">{{#i18n}} Column resize {{/i18n}}</option>
+      <option value="row-resize">{{#i18n}} Row resize {{/i18n}}</option>
+      <option value="n-resize">{{#i18n}} North resize {{/i18n}}</option>
+      <option value="e-resize">{{#i18n}} East resize {{/i18n}}</option>
+      <option value="s-resize">{{#i18n}} South resize {{/i18n}}</option>
+      <option value="w-resize">{{#i18n}} West resize {{/i18n}}</option>
+      <option value="ne-resize">{{#i18n}} North-east resize {{/i18n}}</option>
+      <option value="nw-resize">{{#i18n}} North-west resize {{/i18n}}</option>
+      <option value="se-resize">{{#i18n}} South-east resize {{/i18n}}</option>
+      <option value="sw-resize">{{#i18n}} South-west resize {{/i18n}}</option>
+      <option value="ew-resize">{{#i18n}} East-west resize {{/i18n}}</option>
+      <option value="ns-resize">{{#i18n}} North-south resize {{/i18n}}</option>
+      <option value="nesw-resize">{{#i18n}} NESW resize {{/i18n}}</option>
+      <option value="nwse-resize">{{#i18n}} NWSE resize {{/i18n}}</option>
     </optgroup>
     <optgroup label="{{#i18n}} Zooming {{/i18n}}">
-      <option value="zoom-in">zoom-in</option>
-      <option value="zoom-out">zoom-out</option>
+      <option value="zoom-in">{{#i18n}} Zoom in {{/i18n}}</option>
+      <option value="zoom-out">{{#i18n}} Zoom out {{/i18n}}</option>
+    </optgroup>
+    <optgroup label="{{#i18n}} General {{/i18n}}">
+      <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+      <option value="default">{{#i18n}} Default {{/i18n}}</option>
+      <option value="none">{{#i18n}} None {{/i18n}}</option>
     </optgroup>
   </select>
 </template>
 
 <template id="template-style-css-value-pointer-events">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="none">none</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-touch-action">
   <select class="change-style style-css-field">
-    <option value="auto">auto</option>
-    <option selected value="none">none</option>
-    <option value="pan-x">pan-x</option>
-    <option value="pan-y">pan-y</option>
-    <option value="manipulation">manipulation</option>
+    <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
+    <option selected value="none">{{#i18n}} None {{/i18n}}</option>
+    <option value="pan-x">{{#i18n}} Pan X {{/i18n}}</option>
+    <option value="pan-y">{{#i18n}} Pan Y {{/i18n}}</option>
+    <option value="manipulation">{{#i18n}} Manipulation {{/i18n}}</option>
   </select>
 </template>
 
 <template id="template-style-css-value-unicode-bidi">
   <select class="change-style style-css-field">
-    <option value="normal">normal</option>
-    <option value="embed">embed</option>
-    <option selected value="bidi-override">bidi-override</option>
-    <option value="isolate">isolate</option>
+    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
+    <option value="embed">{{#i18n}} Embed {{/i18n}}</option>
+    <option selected value="bidi-override">{{#i18n}} Bidi override {{/i18n}}</option>
+    <option value="isolate">{{#i18n}} Isolate {{/i18n}}</option>
   </select>
 </template>

@@ -106,6 +106,19 @@
       </optgroup>
     {{/if}}
 
+    {{#if verticalAlign }}
+      <optgroup label="{{#i18n}} Specific {{/i18n}}">
+        <option value="top">top</option>
+        <option value="middle">middle</option>
+        <option value="bottom">bottom</option>
+        <option value="baseline">baseline</option>
+        <option value="sub">sub</option>
+        <option value="super">super</option>
+        <option value="text-top">text-top</option>
+        <option value="text-bottom">text-bottom</option>
+      </optgroup>
+    {{/if}}
+
     <optgroup label="{{#i18n}} Math {{/i18n}}">
       <option value="calc(10px)">{{#i18n}} Calculate {{/i18n}}</option>
       <option value="min(10vw, 10px)">{{#i18n}} Minimum {{/i18n}}</option>

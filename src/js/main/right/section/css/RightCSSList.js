@@ -42,10 +42,16 @@ export default {
     const element = this.prepareCreateElement(createSelect, data)
     const list = createSelect.closest('#css-section').getElementsByClassName('style-css-list')[0]
     list.appendChild(element)
-    if (ExtendJS.isEmpty(data) && createSelect.value === 'custom') {
-      element.getElementsByClassName('style-css-name')[0].focus()
-    }
+    if (ExtendJS.isEmpty(data)) this.focusFields(createSelect.value, element)
     return element
+  },
+
+  focusFields (type, element) {
+    if (type === 'custom') {
+      element.getElementsByClassName('style-css-name')[0].focus()
+    } else {
+      element.getElementsByClassName('style-css-field')[0].focus()
+    }
   },
 
   prepareCreateElement (createSelect, data) {

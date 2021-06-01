@@ -49,10 +49,11 @@ export default {
     if (this.fillIsNone()) return
     const form = button.closest('form#fill-section')
     const list = form.getElementsByClassName('panel-list')[0]
+    this.hideColorPicker(form)
     this.addElementLi(list)
     RightFillProperty.updateBackgroundImage(form)
     RightFillImage.incrementBackgroundProperties()
-    this.showColorPicker(form)
+    this.addColorPicker(form)
     RightCommon.toggleSidebarSection(form)
   },
 

@@ -21,7 +21,7 @@ export default {
   },
 
   focusinInputEvent (event) {
-    if (event.target.tagName === 'INPUT') {
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
       event.target.select()
     }
   },

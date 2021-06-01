@@ -25,7 +25,9 @@ export default {
   },
 
   updateCounter (value, counter, direction) {
-    if (this.shouldShowCounter(direction)) CanvasOverlayCommon.updateResizeCounter(counter, value)
+    if (this.shouldShowCounter(direction)) {
+      CanvasOverlayCommon.updateResizeCounter(counter, value)
+    }
   },
 
   shouldShowCounter (direction) {

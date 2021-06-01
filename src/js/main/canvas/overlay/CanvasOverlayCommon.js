@@ -46,7 +46,8 @@ export default {
   setSizeBorder (box, dir, selector) {
     const property = `border-${dir}-width`
     const value = StateStyleSheet.getPropertyValue(property, selector)
-    box.style[property] = parseInt(value) > 1 ? value : '1px' // min value is 1px
+    // min value is 1px
+    box.style[property] = parseInt(value) > 1 ? value : '1px'
   },
 
   setPaddingBorders (overlay) {

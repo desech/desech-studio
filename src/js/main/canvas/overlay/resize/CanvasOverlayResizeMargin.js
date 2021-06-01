@@ -14,7 +14,8 @@ export default {
   getValue (direction, changeX, changeY) {
     const change = (direction === 'left' || direction === 'right') ? changeX : changeY
     let value = parseInt(StateSelectedElement.getComputed('margin-' + direction) || 0)
-    value = value < 0 ? 0 : value // don't allow negative margin/padding
+    // don't allow negative margin/padding
+    value = value < 0 ? 0 : value
     return value + change
   },
 

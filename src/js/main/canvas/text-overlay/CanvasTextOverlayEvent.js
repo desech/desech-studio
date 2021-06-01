@@ -24,7 +24,8 @@ export default {
   },
 
   keydownHideTextOverlayEvent (event) {
-    if (event.key && HelperCanvas.getOperation() === 'editing' && !event.target.closest('#text-overlay')) {
+    if (event.key && HelperCanvas.getOperation() === 'editing' &&
+      !event.target.closest('#text-overlay')) {
       this.hideTextOverlay()
     }
   },

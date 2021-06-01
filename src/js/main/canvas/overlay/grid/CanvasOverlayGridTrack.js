@@ -12,9 +12,10 @@ export default {
   },
 
   changeStyle (property, value, reloadPanel) {
+    // this reloads the overlay and potentially the right panel too
     RightCommon.changeStyle({
       [property]: value
-    }, reloadPanel) // this reloads the overlay and potentially the right panel too
+    }, reloadPanel)
   },
 
   deleteCell (index, reloadPanel = true) {

@@ -116,20 +116,24 @@ export default {
   },
 
   setOverlaySmall (container, element) {
-    HelperElement.hasSmallWidth(element) ? container.classList.add('small-width')
+    HelperElement.hasSmallWidth(element)
+      ? container.classList.add('small-width')
       : container.classList.remove('small-width')
-    HelperElement.hasSmallHeight(element) ? container.classList.add('small-height')
+    HelperElement.hasSmallHeight(element)
+      ? container.classList.add('small-height')
       : container.classList.remove('small-height')
   },
 
   setOverlayContainer (container, element) {
-    HelperElement.isContainer(element) ? container.classList.add('container')
+    HelperElement.isContainer(element)
+      ? container.classList.add('container')
       : container.classList.remove('container')
   },
 
   setOverlayEditing () {
     const container = this.getOverlayContainer()
-    HelperCanvas.getOperation() === 'editing' ? container.classList.add('editing')
+    HelperCanvas.getOperation() === 'editing'
+      ? container.classList.add('editing')
       : container.classList.remove('editing')
   },
 

@@ -105,12 +105,17 @@ textarea {
   resize: none;
 }
 
-b, strong {
+b {
   font-weight: 700;
 }
 
-i, em, cite, dfn, var {
+i {
   font-style: italic;
+}
+
+/* spans are buggy so we need another element that is neutral */
+em {
+  font-style: normal;
 }
 
 ins {

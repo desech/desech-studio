@@ -7,10 +7,10 @@
       </svg>
     </div>
     <div class="input-split">
-      <input name="x1" class="timing-field timing-input" type="number" min="0" max="1" placeholder="x1">
-      <input name="y1" class="timing-field timing-input" type="number" placeholder="y1">
-      <input name="x2" class="timing-field timing-input" type="number" min="0" max="1" placeholder="x2">
-      <input name="y2" class="timing-field timing-input" type="number" placeholder="y2">
+      <input name="x1" class="timing-field timing-input" type="text" placeholder="x1">
+      <input name="y1" class="timing-field timing-input" type="text" placeholder="y1">
+      <input name="x2" class="timing-field timing-input" type="text" placeholder="x2">
+      <input name="y2" class="timing-field timing-input" type="text" placeholder="y2">
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@
         <path d="M17 4h3v16h-3zM5 14h3v6H5zm6-5h3v11h-3z"/>
       </svg>
     </div>
-    <input name="step" class="timing-field timing-input" type="number" step="1" min="1" placeholder="{{#i18n}} Auto {{/i18n}}">
+    <input name="step" class="timing-field timing-input" type="text" placeholder="{{#i18n}} Auto {{/i18n}}">
 
     <select name="position" class="timing-field timing-select">
       <option value="">{{#i18n}} - Jump - {{/i18n}}</option>

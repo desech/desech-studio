@@ -24,7 +24,7 @@ export default {
   changeAnimationFieldsEvent (event) {
     if (event.target.closest('.animation-form-container .animation-field') ||
       event.target.closest('.animation-form-container .timing-field')) {
-      this.changeAnimationFields(event.target.closest('#animation-section'))
+      this.changeAnimationFields(event.target, event.target.closest('#animation-section'))
     }
   },
 
@@ -85,14 +85,18 @@ export default {
     const current = RightAnimationCommon.getActiveElement(section)
     const fields = section.getElementsByClassName('slide-container')[0].elements
     const value = this.getDisplayedValue(fields)
-    RightCommon.changeStyle({
-      animation: this.setAnimationAtIndex(value, HelperDOM.getElementIndex(current))
-    })
-    const data = this.parseCSS(value)[0]
-    RightAnimationCommon.setElementData(current, data)
+    if (value === 'none') {
+      RightCommon.changeStyle({ animation: '0s ease 0s 1 normal none running none' })
+      RightAnimationCommon.setElementData(current, value)
+    } else {
+      const animation = this.setAnimationAtIndex(value, HelperDOM.getElementIndex(current))
+      RightCommon.changeStyle({ animation })
+      RightAnimationCommon.setElementData(current, this.parseCSS(value)[0])
+    }
   },
 
   getDisplayedValue (fields) {
+    if (fields.type.value === 'none') return 'none'
     return [
       InputUnitField.getValue(fields.duration) ||
         RightAnimationCommon.getDefaultFieldValue('duration'),
@@ -122,8 +126,19 @@ export default {
     return results
   },
 
-  changeAnimationFields (section) {
+  changeAnimationFields (field, section) {
     this.setAnimation(section)
+    if (field.name === 'type' && field.value === 'none') {
+      this.setAnimationNone(section)
+    }
+  },
+
+  setAnimationNone (section) {
+    const list = section.getElementsByClassName('animation-list')[0]
+    list.querySelectorAll('.animation-element:not(.active)').forEach(el => el.remove())
+    list.children[0].classList.remove('active')
+    const container = section.getElementsByClassName('animation-form-container')[0]
+    HelperDOM.deleteChildren(container)
   },
 
   deleteAnimation (index) {

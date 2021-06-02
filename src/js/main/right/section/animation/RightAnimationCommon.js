@@ -9,25 +9,27 @@ export default {
   },
 
   setElementData (elem, data) {
-    elem.getElementsByClassName('animation-name')[0].textContent = this.getAnimationName(data)
+    const node = elem.getElementsByClassName('animation-name')[0]
+    node.textContent = this.getAnimationName(data)
   },
 
   getAnimationName (data) {
     const value = this.getAnimationType(data)
     const option = this.getAnimationNameOption(value)
-    // remove the white space from the select padding
+    // remove the white space from the select value padding
     return option.textContent.replace(/\s\s/gi, '')
+  },
+
+  getAnimationType (data, elemType = null) {
+    if (data === 'none') return 'none'
+    elemType = elemType || HelperElement.getType(StateSelectedElement.getElement())
+    return HelperStyle.getParsedCSSParam(data, 7) || this.getDefaultFieldValue('type', elemType)
   },
 
   getAnimationNameOption (value) {
     const form = HelperDOM.getTemplate('template-animation-form')
     const select = form.getElementsByClassName('animation-type')[0]
     return select.querySelector(`option[value="${value}"]`)
-  },
-
-  getAnimationType (data, elemType = null) {
-    elemType = elemType || HelperElement.getType(StateSelectedElement.getElement())
-    return HelperStyle.getParsedCSSParam(data, 7) || this.getDefaultFieldValue('type', elemType)
   },
 
   getDefaultFieldValue (name, elemType) {

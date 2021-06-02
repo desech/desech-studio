@@ -5,6 +5,7 @@ import RightAnimationForm from './RightAnimationForm.js'
 import RightAnimationCommon from './RightAnimationCommon.js'
 import RightCommon from '../../RightCommon.js'
 import HelperCanvas from '../../../../helper/HelperCanvas.js'
+import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 
 export default {
   getEvents () {
@@ -148,11 +149,17 @@ export default {
   },
 
   editElement (li) {
+    if (this.isAnimationNone()) return
     if (!li.classList.contains('active')) {
       this.enableEditElement(li)
     } else {
       this.disableEditElement(li)
     }
+  },
+
+  isAnimationNone () {
+    const value = StateStyleSheet.getPropertyValue('animation')
+    return (value === '0s ease 0s 1 normal none running none')
   },
 
   enableEditElement (li) {

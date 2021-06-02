@@ -104,14 +104,10 @@ export default {
 
   deleteElement (li) {
     const container = li.closest('.sidebar-section')
-    this.deleteBackgroundFill(li)
+    const index = HelperDOM.getElementIndex(li)
+    RightFillProperty.deleteBackgroundFill(index, li.parentNode.children.length === 1)
     this.deleteListElement(li)
     RightCommon.toggleSidebarSection(container)
-  },
-
-  deleteBackgroundFill (li) {
-    const index = HelperDOM.getElementIndex(li)
-    RightFillProperty.deleteBackgroundFill(index)
   },
 
   deleteListElement (li) {

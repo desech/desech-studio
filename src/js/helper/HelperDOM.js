@@ -189,7 +189,7 @@ export default {
 
   getChildren (node) {
     if (node.content && node.content.children && node.content.children.length) {
-      // only used by the `template`` node
+      // only used by the `template` node
       return node.content.children
     } else if (node.children && node.children.length) {
       return node.children

@@ -112,13 +112,13 @@ export default {
     }, true)
   },
 
-  deleteBackgroundFill (index) {
-    const properties = {}
+  deleteBackgroundFill (index, clear) {
+    const properties = RightFillCommon.getAllBlankProperties()
     const selector = StyleSheetSelector.getCurrentSelector()
-    const props = ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']
-    for (const property of props) {
-      properties['background-' + property] = this.removeBackgroundProperty('background-' +
-        property, selector, index)
+    if (!clear) {
+      for (const name of Object.keys(properties)) {
+        properties[name] = this.removeBackgroundProperty(name, selector, index)
+      }
     }
     RightCommon.changeStyle(properties)
   },

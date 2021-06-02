@@ -47,5 +47,14 @@ export default {
   getBgImageText (elem, type) {
     // type = linearGradient, radialGradient, image
     return elem.parentNode.dataset[type]
+  },
+
+  getAllBlankProperties () {
+    const properties = {}
+    const props = ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']
+    for (const property of props) {
+      properties['background-' + property] = ''
+    }
+    return properties
   }
 }

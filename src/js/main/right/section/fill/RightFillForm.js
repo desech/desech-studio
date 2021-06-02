@@ -38,7 +38,9 @@ export default {
   validateFillNone (select) {
     if (select.value !== 'none') return
     this.cleanForFillNone(select.closest('.sidebar-section'))
-    RightCommon.changeStyle({ 'background-image': 'none' })
+    const properties = RightFillCommon.getAllBlankProperties()
+    properties['background-image'] = 'none'
+    RightCommon.changeStyle(properties)
     return true
   },
 

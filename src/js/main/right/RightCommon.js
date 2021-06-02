@@ -58,8 +58,8 @@ export default {
   },
 
   toggleSidebarSection (container) {
-    const content = this.sidebarHasContent(container)
-    HelperDOM.toggleClass(container, 'toggle', content)
+    const check = this.sidebarHasContent(container)
+    container.classList.toggle('toggle', check)
   },
 
   sidebarHasContent (container) {

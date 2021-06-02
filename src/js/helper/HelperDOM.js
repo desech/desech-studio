@@ -38,14 +38,6 @@ export default {
     visible ? this.show(node) : this.hide(node)
   },
 
-  toggleClass (node, cls, add) {
-    if (add) {
-      node.classList.add(cls)
-    } else {
-      node.classList.remove(cls)
-    }
-  },
-
   toggleAttribute (node, add, name, value = '') {
     if (add) {
       node.setAttributeNS(null, name, value)

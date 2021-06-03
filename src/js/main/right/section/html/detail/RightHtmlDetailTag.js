@@ -61,9 +61,9 @@ export default {
     }
   },
 
-  changeSvgCodeEvent (event) {
+  async changeSvgCodeEvent (event) {
     if (event.target.classList.contains('style-html-svg-code')) {
-      this.updateSvgCode(event.target)
+      await this.updateSvgCode(event.target)
     }
   },
 
@@ -163,11 +163,18 @@ export default {
     textarea.value = svg.outerHTML.replace(/\s\s+/g, '')
   },
 
-  updateSvgCode (textarea) {
+  async updateSvgCode (textarea) {
+    await this.processSvgUrl(textarea)
     const svg = new DOMParser().parseFromString(textarea.value, 'image/svg+xml').children[0]
     if (svg.tagName !== 'svg') return
     const element = StateSelectedElement.getElement()
     RightHtmlCommon.setSvgCommand(element, svg)
+  },
+
+  async processSvgUrl (textarea) {
+    if (!textarea.value.startsWith('http')) return
+    const response = await fetch(textarea.value)
+    textarea.value = await response.text()
   },
 
   injectImageSrcset (fields, srcset) {

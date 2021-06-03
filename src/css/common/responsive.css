@@ -38,11 +38,11 @@
 @media (max-width: 1250px) {
   #page-main.left-panel-open:not(.preview) .sidebar-top {
     display: block;
-    height: 92px;
+    height: 80px;
   }
 
   #page-main.left-panel-open:not(.preview) .canvas-container {
-    height: calc(100vh - 92px - 20px);
+    height: calc(100vh - 80px);
   }
 
   #page-main.left-panel-open:not(.preview) .sidebar-top .sidebar-top-middle {

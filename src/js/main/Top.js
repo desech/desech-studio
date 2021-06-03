@@ -22,31 +22,24 @@ export default {
     }
   },
 
-  clearResponsive () {
-    HelperDOM.deleteChildren(this.getContainer())
+  reloadResponsive () {
+    const node = document.querySelector('.responsive-mode.selected')
+    this.clearResponsive()
+    this.loadResponsive(node.dataset.ref)
   },
 
-  loadResponsive (selectedMode) {
-    const list = this.getContainer()
+  clearResponsive () {
+    const container = document.getElementById('responsive-mode-list')
+    HelperDOM.deleteChildren(container)
+  },
+
+  loadResponsive (selected) {
+    const list = document.getElementById('responsive-mode-list')
     const settings = HelperProject.getProjectSettings()
     this.setDefaultResponsiveData(settings)
     this.addResponsiveModes(list)
-    if (selectedMode) {
-      const data = this.selectPreviousMode(list, selectedMode)
-      TopCommon.resizeCanvas(data)
-    } else {
-      TopCommon.resizeCanvas(settings.responsive.default)
-    }
-  },
-
-  reloadResponsive () {
-    const selectedMode = document.querySelector('.responsive-mode.selected')
-    this.clearResponsive()
-    this.loadResponsive(selectedMode.dataset.ref)
-  },
-
-  getContainer () {
-    return document.getElementById('responsive-mode-list')
+    const mode = selected ? this.selectModeOrDefault(list, selected) : null
+    TopCommon.resizeCanvas(mode || settings.responsive.default)
   },
 
   setDefaultResponsiveData (settings) {
@@ -135,9 +128,14 @@ export default {
     if (data['max-width']) InputUnitField.setValue(fields['max-width'], data['max-width'])
   },
 
-  selectPreviousMode (list, selectedMode) {
-    const button = list.querySelector(`.responsive-mode[data-ref="${selectedMode}"]`)
-    button.classList.add('selected')
-    return JSON.parse(button.dataset.data)
+  selectModeOrDefault (list, selected) {
+    const button = list.querySelector(`.responsive-mode[data-ref="${selected}"]`)
+    if (button) {
+      button.classList.add('selected')
+      return JSON.parse(button.dataset.data)
+    } else {
+      const defaultButton = document.getElementById('responsive-mode-default')
+      defaultButton.classList.add('selected')
+    }
   }
 }

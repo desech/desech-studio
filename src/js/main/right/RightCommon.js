@@ -60,6 +60,7 @@ export default {
   toggleSidebarSection (container) {
     const check = this.sidebarHasContent(container)
     container.classList.toggle('toggle', check)
+    container.classList.add('active')
   },
 
   sidebarHasContent (container) {

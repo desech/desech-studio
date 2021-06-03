@@ -86,7 +86,6 @@ export default {
 
   pushSectionToList (sections, name, obj) {
     const node = this.getSection(obj)
-    if (!node) return
     if (!this.isSectionAllowed(name)) this.disableSection(node)
     sections.push(node)
   },
@@ -100,6 +99,7 @@ export default {
 
   isSectionAllowed (name) {
     const elementType = HelperElement.getType(StateSelectedElement.getElement())
+    if (elementType.startsWith('component')) return true
     const panels = this.getSubPanelsByType(elementType)
     return !panels || panels.includes(name)
   },

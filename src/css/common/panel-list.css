@@ -25,12 +25,10 @@
 }
 
 .desech-studio ul.panel-list>li.dragdrop-over-top {
-  margin-top: 3px;
   box-shadow: 0 -3px 0 0 var(--list-bg-hover);
 }
 
 .desech-studio ul.panel-list>li.dragdrop-over-bottom {
-  margin-bottom: 3px;
   box-shadow: 0 3px 0 0 var(--list-bg-hover);
 }
 

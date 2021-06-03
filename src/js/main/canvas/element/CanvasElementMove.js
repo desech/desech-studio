@@ -24,8 +24,7 @@ export default {
     return {
       mousedown: ['mousedownStartMoveEvent'],
       mousemove: ['mousemoveContinueMoveEvent'],
-      mouseup: ['mouseupEndMoveEvent'],
-      wheel: ['wheelAdjustPositionEvent']
+      mouseup: ['mouseupEndMoveEvent']
     }
   },
 
@@ -56,13 +55,6 @@ export default {
       }
       // clear it when moving was initialized but not executed
       this.clearState()
-    }
-  },
-
-  wheelAdjustPositionEvent (event) {
-    if (HelperCanvas.getOperation() === 'moving' && this._element && event.buttons) {
-      // @todo fix the element position when scrolling during element movement
-      // this.moveElement(event.target, event.clientX, event.clientY)
     }
   },
 
@@ -103,9 +95,10 @@ export default {
   },
 
   moveElement (target, clientX, clientY) {
-    const zoom = HelperCanvas.getZoomFactor()
-    this._element.style.left = Math.round((clientX - this._grabX) / zoom) + 'px'
-    this._element.style.top = Math.round((clientY - this._grabY) / zoom) + 'px'
+    // don't move the element along the cursor
+    // const zoom = HelperCanvas.getZoomFactor()
+    // this._element.style.left = Math.round((clientX - this._grabX) / zoom) + 'px'
+    // this._element.style.top = Math.round((clientY - this._grabY) / zoom) + 'px'
     CanvasElementCreate.addPlacementMarker(target, clientX, clientY)
   },
 

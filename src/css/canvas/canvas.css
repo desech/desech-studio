@@ -106,35 +106,27 @@
   cursor: url(../asset/image/icon-cursor/meter.svg) 15 15, crosshair;
 }
 
-#canvas[data-tool="hand"],
-#canvas[data-operation="panning"] {
-  cursor: url(../asset/image/icon-cursor/hand.svg) 15 15, crosshair;
+#canvas[data-tool="hand"] {
+  cursor: grab;
 }
 
-#canvas .element.dragdrop-start {
-  background-color: var(--move-color);
-}
-
-#canvas .element.dragdrop-over-top {
-  margin-top: 3px;
-  box-shadow: 0 -3px 0 0 var(--move-color);
-}
-
-#canvas .element.dragdrop-over-bottom {
-  margin-bottom: 3px;
-  box-shadow: 0 3px 0 0 var(--move-color);
+#canvas[data-operation="panning"],
+#canvas[data-operation="moving"] {
+  cursor: grabbing;
 }
 
 #canvas .element.moving {
-  position: absolute;
+  /*position: absolute;*/
   opacity: 0.5;
+  filter: sepia(100%);
   pointer-events: none; /* used to fetch what's behind the element, so we can position it */
 }
 
-#canvas .block.moving {
+/* no need since we are not moving the element anymore */
+/*#canvas .block.moving {
   width: 300px;
   overflow: hidden;
-}
+}*/
 
 #canvas div[data-ss-tag="template"],
 #canvas div[data-ss-tag="noscript"] {
@@ -168,18 +160,16 @@ main#page-main:not(.preview) .canvas-container:hover #canvas:not([data-operation
 }
 
 main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.moving).top {
-  margin-top: 3px;
-  box-shadow: 0 -3px 0 0 var(--move-color);
+  box-shadow: 0 -3px 0 0 var(--move-color) !important;
 }
 
 main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.moving).bottom {
-  margin-bottom: 3px;
-  box-shadow: 0 3px 0 0 var(--move-color);
+  box-shadow: 0 3px 0 0 var(--move-color) !important;
 }
 
 main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.moving).inside {
-  box-shadow: inset 0 0 8px 2px var(--move-color);
-  outline-color: var(--move-color);
+  box-shadow: inset 0 0 8px 2px var(--move-color) !important;
+  outline-color: var(--move-color) !important;
 }
 
 /* don't show anything for component element children */

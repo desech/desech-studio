@@ -106,5 +106,11 @@ export default {
   getVisualValue (value) {
     const zoom = HelperCanvas.getZoomFactor()
     return Math.round(value * zoom)
+  },
+
+  isOverlaySmall () {
+    const container = document.getElementsByClassName('element-overlay-container')[0]
+    return (container.classList.contains('small-width') ||
+      container.classList.contains('small-height'))
   }
 }

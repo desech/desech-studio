@@ -4,6 +4,7 @@ import CanvasOverlayGridSetup from './grid/CanvasOverlayGridSetup.js'
 import CanvasOverlayGridTrack from './grid/CanvasOverlayGridTrack.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperElement from '../../../helper/HelperElement.js'
+import CanvasOverlayCommon from './CanvasOverlayCommon.js'
 
 export default {
   getEvents () {
@@ -72,6 +73,7 @@ export default {
 
   setOverlayMode (type) {
     const overlay = document.getElementById('element-overlay')
+    if (CanvasOverlayCommon.isOverlaySmall()) return
     overlay.dataset.mode = type
     const element = StateSelectedElement.getElement()
     if (!HelperElement.isContainer(element)) return

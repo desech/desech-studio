@@ -1,7 +1,6 @@
 import StateCommand from '../../state/StateCommand.js'
 import HelperElement from '../../helper/HelperElement.js'
 import StateStyleSheet from '../../state/StateStyleSheet.js'
-import HelperDOM from '../../helper/HelperDOM.js'
 
 export default {
   getMouseX (x) {

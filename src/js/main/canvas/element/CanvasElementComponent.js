@@ -6,7 +6,6 @@ import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import Page from '../../../page/Page.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
-import HelperFile from '../../../helper/HelperFile.js'
 
 export default {
   getEvents () {

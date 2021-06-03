@@ -47,7 +47,8 @@ export default {
     container.dataset.index = cell.dataset.index
     if (cell.classList.contains('track-column')) {
       this.setColumnOptions(container, cell)
-    } else { // row
+    } else {
+      // row
       this.setRowOptions(container, cell)
     }
   },

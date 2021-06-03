@@ -139,7 +139,8 @@ export default {
     track.style[`${type}-gap`] = grid.style[`${type}-gap`]
     if (type === 'column') {
       track.style['justify-content'] = grid.style['justify-content']
-    } else { // row
+    } else {
+      // row
       track.style['align-content'] = grid.style['align-content']
     }
   },

@@ -82,16 +82,18 @@ export default {
   },
 
   getCurrentResponsiveData () {
-    const responsive = document.querySelector('.responsive-mode.selected')
-    return JSON.parse(responsive.dataset.data)
+    const button = document.querySelector('.responsive-mode.selected')
+    return JSON.parse(button.dataset.data)
   },
 
-  getZoom () {
-    return parseInt(this.getCanvas().style.zoom) || 100
+  getZoom (canvas = null) {
+    if (!canvas) canvas = this.getCanvas()
+    return parseInt(canvas.style.zoom) || 100
   },
 
-  getZoomFactor () {
-    return this.getZoom() / 100
+  getZoomFactor (canvas = null) {
+    if (!canvas) canvas = this.getCanvas()
+    return this.getZoom(canvas) / 100
   },
 
   isAnimationRunning () {

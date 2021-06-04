@@ -6,14 +6,24 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import ExtendJS from '../../helper/ExtendJS.js'
+import CheckButtonField from '../../component/CheckButtonField.js'
+import CanvasElementSelect from '../canvas/element/CanvasElementSelect.js'
 
 export default {
+  _resize: null,
+  // needed because resize window events are triggered more than once
+  _resizeWindowTimer: null,
+
   getEvents () {
     return {
       click: ['clickAddOverlayEvent', 'clickClearCreateOverlayEvent',
         'clickSwitchResponsiveEvent', 'clickDeleteResponsiveEvent'],
       change: ['changeAddResponsiveEvent', 'changeEditResponsiveEvent', 'changeCanvasSizeEvent'],
-      keydown: ['keydownClearCreateOverlayEvent']
+      keydown: ['keydownClearCreateOverlayEvent'],
+      mousedown: ['mousedownStartDragResizeEvent'],
+      mousemove: ['mousemoveContinueDragResizeEvent'],
+      mouseup: ['mouseupEndDragResizeEvent'],
+      resize: ['resizeWindowEvent']
     }
   },
 
@@ -70,6 +80,35 @@ export default {
     }
   },
 
+  mousedownStartDragResizeEvent (event) {
+    if (event.target.closest('#canvas-resize')) {
+      this.startDragResize(event.clientX)
+    }
+  },
+
+  mousemoveContinueDragResizeEvent (event) {
+    if (this._resize && this._resize.startX && event.buttons) {
+      if (!this._resize.moving) {
+        this.initDragResize(event.clientX)
+      } else {
+        this.continueDragResize(event.clientX)
+      }
+    }
+  },
+
+  mouseupEndDragResizeEvent (event) {
+    if (this._resize && this._resize.startX) {
+      this.endDragResize()
+    }
+  },
+
+  resizeWindowEvent (event) {
+    clearTimeout(this._resizeWindowTimer)
+    this._resizeWindowTimer = setTimeout(() => {
+      TopCommon.positionDragHandle()
+    }, 100)
+  },
+
   clearCreateOverlay () {
     const container = document.getElementsByClassName('responsive-create-overlay-container')[0]
     if (container && container.children.length) HelperDOM.deleteChildren(container)
@@ -85,7 +124,7 @@ export default {
 
   switchResponsive (button) {
     const data = JSON.parse(button.dataset.data)
-    TopCommon.resizeCanvas(data)
+    TopCommon.setResponsiveSizeCanvas(data)
     HelperTrigger.triggerReload('element-overlay')
   },
 
@@ -160,7 +199,8 @@ export default {
   getCurrentCanvasSizeData (input, data) {
     if (input.name === 'width') {
       return this.getCurrentData(data, input.value + 'px')
-    } else { // height
+    } else {
+      // height
       return this.getCurrentData(data, null, input.value + 'px')
     }
   },
@@ -181,5 +221,79 @@ export default {
       width: data.width,
       height: data.height
     }
+  },
+
+  startDragResize (clientX) {
+    const canvas = HelperCanvas.getCanvas()
+    const responsive = HelperCanvas.getCurrentResponsiveData() || {}
+    this._resize = {
+      canvas,
+      startX: clientX,
+      startWidth: canvas.offsetWidth,
+      zoom: HelperCanvas.getZoomFactor(canvas),
+      handle: document.getElementById('canvas-resize'),
+      modes: TopCommon.getResponsiveModes(),
+      initialResponsive: responsive,
+      currentResponsive: responsive,
+      moving: false
+    }
+  },
+
+  initDragResize (clientX) {
+    if (Math.abs(this._resize.startX - clientX) > 10) {
+      CanvasElementSelect.deselectElement()
+      this._resize.moving = true
+    }
+  },
+
+  continueDragResize (clientX) {
+    const width = this._resize.startWidth - (this._resize.startX - clientX)
+    const handleLeft = TopCommon.getDragHandleLeftPost(this._resize.canvas, this._resize.zoom)
+    if (width < 100) return
+    this._resize.canvas.style.width = width + 'px'
+    this._resize.handle.style.left = handleLeft
+    this.switchResizeResponsiveClasses(width)
+  },
+
+  switchResizeResponsiveClasses (width) {
+    for (const data of this._resize.modes) {
+      if (width >= data.range[0] && width <= data.range[1]) {
+        if (this._resize.currentResponsive.value !== data.value) {
+          TopCommon.addCanvasResponsiveClass(data)
+          this._resize.currentResponsive = data
+          return
+        }
+        return
+      }
+    }
+    // no modes were compatible, so this must be the default mode without responsiveness
+    if (this._resize.currentResponsive.value) {
+      TopCommon.addCanvasResponsiveClass()
+      this._resize.currentResponsive = {}
+    }
+  },
+
+  endDragResize () {
+    if (this._resize.initialResponsive.value !== this._resize.currentResponsive.value) {
+      if (this._resize.currentResponsive.ref) {
+        this.switchQuickResponsive(this._resize.currentResponsive)
+      } else {
+        this.switchQuickDefaltMode()
+      }
+    }
+    this._resize = null
+  },
+
+  switchQuickResponsive (data) {
+    const button = document.querySelector(`.responsive-mode[data-ref="${data.ref}"]`)
+    CheckButtonField.toggleButton(button)
+    TopCommon.updateSizeText(data.width, data.height)
+  },
+
+  switchQuickDefaltMode () {
+    const button = document.getElementById('responsive-mode-default')
+    CheckButtonField.toggleButton(button)
+    const data = JSON.parse(button.dataset.data)
+    TopCommon.updateSizeText(data.width, data.height)
   }
 }

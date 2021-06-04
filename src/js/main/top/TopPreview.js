@@ -2,6 +2,7 @@ import HelperEvent from '../../helper/HelperEvent.js'
 import CanvasCommon from '../canvas/CanvasCommon.js'
 import CanvasElementSelect from '../canvas/element/CanvasElementSelect.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
+import TopCommon from './TopCommon.js'
 
 export default {
   getEvents () {
@@ -32,6 +33,7 @@ export default {
     const button = document.getElementsByClassName('top-preview-button')[0]
     const enabled = button.classList.contains('selected')
     enabled ? this.disablePreview(button) : this.enablePreview(button)
+    TopCommon.positionDragHandle()
   },
 
   enablePreview (button) {

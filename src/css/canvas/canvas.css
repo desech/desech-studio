@@ -24,8 +24,8 @@
 
 #canvas {
   position: relative;
-  width: 1280px; /* defaults in case the custom value fails */
-  height: 2000px; /* defaults in case the custom value fails */
+  width: 1366px; /* defaults in case the custom value fails */
+  height: 3000px; /* defaults in case the custom value fails */
   box-shadow: 0 0 4px 0 var(--canvas-shadow);
   overflow: auto;
 }
@@ -185,10 +185,16 @@ main#page-main.preview #sidebar-left-panel {
   display: none;
 }
 
-main#page-main.preview .main-container {
+main#page-main.preview .main-container,
+main#page-main.preview .canvas-container {
   padding: 0;
 }
 
-main#page-main.preview .canvas-container {
-  padding: 0;
+#canvas-resize {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  z-index: 1;
+  cursor: ew-resize;
+  overflow: hidden;
 }

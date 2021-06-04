@@ -5,6 +5,7 @@ import LeftFileData from './left/file/LeftFileData.js'
 import LeftElementData from './left/element/LeftElementData.js'
 import HelperCanvas from '../helper/HelperCanvas.js'
 import HelperError from '../helper/HelperError.js'
+import TopCommon from './top/TopCommon.js'
 
 export default {
   getList () {
@@ -80,6 +81,7 @@ export default {
     const container = document.getElementById('sidebar-left-panel')
     this.showHidePanel(container, type, options)
     HelperTrigger.triggerReload('element-overlay', { panelReload: false })
+    TopCommon.positionDragHandle()
   },
 
   showHidePanel (container, type, options) {

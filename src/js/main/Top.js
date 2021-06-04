@@ -39,7 +39,7 @@ export default {
     this.setDefaultResponsiveData(settings)
     this.addResponsiveModes(list)
     const mode = selected ? this.selectModeOrDefault(list, selected) : null
-    TopCommon.resizeCanvas(mode || settings.responsive.default)
+    TopCommon.setResponsiveSizeCanvas(mode || settings.responsive.default)
   },
 
   setDefaultResponsiveData (settings) {
@@ -48,45 +48,11 @@ export default {
   },
 
   addResponsiveModes (list) {
-    const modes = this.getSortedModes()
-    this.addInheritData(modes)
+    const modes = TopCommon.getResponsiveModes()
     for (const data of modes) {
       const block = this.getResponsiveBlock(data)
       list.appendChild(block)
     }
-  },
-
-  getSortedModes () {
-    const responsiveType = HelperProject.getProjectSettings().responsiveType
-    return this.getModes().sort((a, b) => {
-      // desktop - descending, mobile - ascending
-      return (responsiveType === 'desktop') ? b.value - a.value : a.value - b.value
-    })
-  },
-
-  getModes () {
-    const data = []
-    const settings = HelperProject.getProjectSettings()
-    for (const responsive of settings.responsive.list) {
-      this.addMode(data, responsive)
-    }
-    return data
-  },
-
-  addMode (data, responsive) {
-    // min-width, max-height, width, height, value, type
-    data.push({
-      ...responsive,
-      ...TopCommon.getResponsiveModeData(responsive)
-    })
-  },
-
-  addInheritData (list) {
-    for (let i = 0; i < list.length; i++) {
-      // all previous siblings are inherited media queries which we will need to add to the canvas
-      list[i].inherit = list.slice(0, i + 1).map(mode => mode['min-width'] || mode['max-width'])
-    }
-    return list
   },
 
   getResponsiveBlock (data) {
@@ -101,21 +67,13 @@ export default {
     this.addButtonSvg(button, data)
     const value = data['min-width'] || data['max-width']
     button.dataset.ref = HelperStyle.getResponsiveClass(value)
-    const inheritClasses = this.getInheritClasses(data)
-    button.dataset.data = JSON.stringify({ ...data, inheritClasses })
+    button.dataset.data = JSON.stringify(data)
     return button
   },
 
   addButtonSvg (button, data) {
     const svg = HelperDOM.getTemplate(`template-responsive-mode-${data.type}`)
     button.appendChild(svg)
-  },
-
-  getInheritClasses (data) {
-    const value = data['min-width'] || data['max-width']
-    const ref = HelperStyle.getResponsiveClass(value)
-    const inherit = data.inherit.map(value => HelperStyle.getResponsiveClass(value)).join(' ')
-    return (ref + ' ' + inherit).trim()
   },
 
   buildEditOverlay (button, data) {

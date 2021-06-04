@@ -2,6 +2,7 @@ import HelperEvent from '../../helper/HelperEvent.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
+import TopCommon from './TopCommon.js'
 
 export default {
   getEvents () {
@@ -76,6 +77,7 @@ export default {
 
   setZoom (value) {
     this.setZoomValue(value)
+    TopCommon.positionDragHandle()
     HelperTrigger.triggerReload('element-overlay', { panelReload: false })
   },
 

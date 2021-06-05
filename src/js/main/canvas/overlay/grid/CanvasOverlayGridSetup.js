@@ -148,6 +148,7 @@ export default {
   reloadTrackCells (track, type, total) {
     this.clearCells(track)
     const trackArray = CanvasOverlayCommon.getTrackArray(type)
+    if (!trackArray) return
     this.loadCells(track, `template-grid-track-${type}s`, total, (cell, i) => {
       cell.textContent = trackArray[i]
       cell.dataset.index = type.substring(0, 1) + i

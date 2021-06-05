@@ -82,7 +82,7 @@ export default {
   getTrackArray (type) {
     const property = `grid-template-${type}s`
     const track = StateStyleSheet.getPropertyValue(property)
-    if (!track) return ['']
+    if (!track) return
     const array = HelperRegex.splitNoParenthesis(track)
     return this.formatArray(array)
   },

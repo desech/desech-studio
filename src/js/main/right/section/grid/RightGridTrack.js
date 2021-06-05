@@ -61,6 +61,7 @@ export default {
   injectTrack (template, type) {
     const container = this.getTrackContainer(template, type)
     const cells = CanvasOverlayCommon.getTrackArray(type)
+    if (!cells) return
     for (let i = 0; i < cells.length; i++) {
       this.injectCell(container, {
         type: type,

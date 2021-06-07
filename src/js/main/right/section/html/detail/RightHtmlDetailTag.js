@@ -229,8 +229,8 @@ export default {
   setInputTextType (type) {
     const element = StateSelectedElement.getElement()
     RightHtmlCommon.changeAttributeCommand(HelperElement.getRef(element), {
-      type: type,
-      ...RightHtmlCommon.getRemovableAttributes(element)
+      ...RightHtmlCommon.getRemovableAttributes(element),
+      type
     })
   },
 

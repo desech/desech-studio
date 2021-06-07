@@ -47,7 +47,15 @@ export default {
   disablePreview (button) {
     button.classList.remove('selected')
     HelperCanvas.removePreview()
+    this.resetForms()
     this.turnPropertiesOff()
+  },
+
+  resetForms () {
+    const canvas = HelperCanvas.getCanvas()
+    for (const form of canvas.getElementsByTagName('form')) {
+      form.reset()
+    }
   },
 
   turnPropertiesOn () {

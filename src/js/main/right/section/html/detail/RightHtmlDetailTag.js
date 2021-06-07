@@ -12,7 +12,7 @@ export default {
     return {
       click: ['clickSelectAddOptionEvent', 'clickSelectDeleteOptionEvent',
         'clickSelectOptionButtonEvent', 'clickTrackAddEvent', 'clickTrackDeleteEvent',
-        'clickTrackButtonEvent'],
+        'clickTrackButtonEvent', 'clickToggleMediaButtonEvent'],
       change: ['changeButtonTypeEvent', 'changeSelectOptionInputEvent', 'changeSvgCodeEvent',
         'changeTrackInputEvent', 'changeInputTextTypeEvent'],
       setsource: ['setsourceImageEvent', 'setsourceVideoEvent', 'setsourcePosterEvent',
@@ -46,6 +46,12 @@ export default {
   clickSelectOptionButtonEvent (event) {
     if (event.target.closest('.style-html-option-button')) {
       this.updateSelect(event.target.closest('ul'))
+    }
+  },
+
+  clickToggleMediaButtonEvent (event) {
+    if (event.target.closest('.style-media-button')) {
+      this.toggleMediaButton(event.target.closest('.style-media-button'))
     }
   },
 
@@ -269,5 +275,10 @@ export default {
   setTrackSource (button, file) {
     this.addFileName(button.closest('.grid'), file)
     this.updateTrackField(button.closest('.style-html-track-list'))
+  },
+
+  toggleMediaButton (button) {
+    const element = StateSelectedElement.getElement()
+    element[button.name] = button.classList.contains('selected')
   }
 }

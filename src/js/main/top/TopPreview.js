@@ -48,6 +48,7 @@ export default {
     button.classList.remove('selected')
     HelperCanvas.removePreview()
     this.resetForms()
+    this.resetResize()
     this.turnPropertiesOff()
   },
 
@@ -55,6 +56,13 @@ export default {
     const canvas = HelperCanvas.getCanvas()
     for (const form of canvas.getElementsByTagName('form')) {
       form.reset()
+    }
+  },
+
+  resetResize () {
+    const canvas = HelperCanvas.getCanvas()
+    for (const element of canvas.querySelectorAll('[style]')) {
+      element.removeAttributeNS(null, 'style')
     }
   },
 

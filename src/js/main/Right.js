@@ -67,9 +67,15 @@ export default {
   selectPreviousSelector (container, selector) {
     if (!container) return
     const defaultLi = container.querySelector('.selector-element.active')
-    const selectorLi = container.querySelector(`.selector-element[data-selector="${selector}"]`)
+    const selectorLi = this.getCurrentSelector(container, selector)
     if (!defaultLi || !selectorLi) return
     defaultLi.classList.remove('active')
     selectorLi.classList.add('active')
+  },
+
+  getCurrentSelector (container, selector) {
+    for (const li of container.getElementsByClassName('selector-element')) {
+      if (li.dataset.selector === selector) return li
+    }
   }
 }

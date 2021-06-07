@@ -76,7 +76,6 @@ input[type="checkbox"], input[type="radio"] {
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  -moz-appearance: none
 }
 
 input[type="radio"] {
@@ -98,7 +97,6 @@ select {
   background: url(../../asset/image/arrow-down.svg) no-repeat right center;
   appearance: none;
   -webkit-appearance: none;
-  -moz-appearance: none
 }
 
 textarea {

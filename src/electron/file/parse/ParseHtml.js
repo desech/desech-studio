@@ -134,17 +134,11 @@ export default {
     return text.replace(/[&<>"']/g, m => map[m])
   },
 
+  // check RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
-    // check RightHtmlCommon.js for details
-    const add = ['hidden', 'controls', 'disabled']
-    const remove = ['disabled']
     for (const attr of node.attributes) {
-      if (add.includes(attr.name)) {
+      if (attr.name === 'hidden') {
         node.setAttributeNS(null, `data-ss-${attr.name}`, attr.value)
-      }
-      // JSDOM doesn't use a live list
-      if (remove.includes(attr.name)) {
-        node.removeAttributeNS(null, attr.name)
       }
     }
   },

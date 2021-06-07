@@ -11,8 +11,8 @@ export default {
   getEvents () {
     return {
       click: ['clickSelectAddOptionEvent', 'clickSelectDeleteOptionEvent',
-        'clickSelectOptionButtonEvent', 'clickMediaControlsButtonEvent', 'clickTrackAddEvent',
-        'clickTrackDeleteEvent', 'clickTrackButtonEvent'],
+        'clickSelectOptionButtonEvent', 'clickTrackAddEvent', 'clickTrackDeleteEvent',
+        'clickTrackButtonEvent'],
       change: ['changeButtonTypeEvent', 'changeSelectOptionInputEvent', 'changeSvgCodeEvent',
         'changeTrackInputEvent', 'changeInputTextTypeEvent'],
       setsource: ['setsourceImageEvent', 'setsourceVideoEvent', 'setsourcePosterEvent',
@@ -64,12 +64,6 @@ export default {
   async changeSvgCodeEvent (event) {
     if (event.target.classList.contains('style-html-svg-code')) {
       await this.updateSvgCode(event.target)
-    }
-  },
-
-  clickMediaControlsButtonEvent (event) {
-    if (event.target.closest('.style-html-media-controls')) {
-      this.changeMediaControlsButton(event.target.closest('.style-html-media-controls'))
     }
   },
 
@@ -192,21 +186,9 @@ export default {
     }
   },
 
-  injectMediaControlsButton (button, element) {
-    if (element.hasAttributeNS(null, 'data-ss-controls')) button.classList.add('selected')
-  },
-
   injectInputText (select, element) {
     select.value = element.type
     this.updateInputTypeForm(select)
-  },
-
-  changeMediaControlsButton (button) {
-    const value = button.classList.contains('selected')
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
-      controls: value,
-      'data-ss-controls': value
-    })
   },
 
   addTrack (container) {

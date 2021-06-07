@@ -12,8 +12,6 @@ export default {
 
   getEvents () {
     return {
-      // mouseover: ['mouseoverHideMediaControlsEvent'],
-      // mouseout: ['mouseoutShowMediaControlsEvent'],
       mousedown: ['mousedownStartOperationEvent', 'ignoreElementEvent'],
       mouseup: ['mouseupEndSelectElementEvent', 'mouseupEndDeselectElementEvent'],
       click: ['ignoreElementEvent'],
@@ -52,19 +50,6 @@ export default {
     }
   },
 
-  // @todo we should use mouseenter and mouseleave but they don't bubble
-  // prevent interacting with video/audio canvas elements by removing the controls attribute
-  // mouseoverHideMediaControlsEvent (event) {
-  //   if (!HelperCanvas.isPreview() && event.target.closest('.video, .audio')) {
-  //     this.hideMediaControls(event.target.closest('.element'))
-  //   }
-  // },
-  // mouseoutShowMediaControlsEvent (event) {
-  //   if (!HelperCanvas.isPreview() && event.target.closest('.video, .audio')) {
-  //     this.showMediaControls(event.target.closest('.element'))
-  //   }
-  // },
-
   keydownDeselectElementEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
@@ -89,17 +74,6 @@ export default {
       event.preventDefault()
     }
   },
-
-  // ignore interacting with audio/video by hiding the controls
-  // hideMediaControls (element) {
-  //   element.removeAttributeNS(null, 'controls')
-  // },
-
-  // showMediaControls (element) {
-  //   if (element.hasAttributeNS(null, 'data-ss-controls')) {
-  //     element.setAttributeNS(null, 'controls', '')
-  //   }
-  // },
 
   selectElementByRef (ref) {
     const element = HelperElement.getElement(ref)

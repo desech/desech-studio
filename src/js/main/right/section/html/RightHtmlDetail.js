@@ -133,7 +133,6 @@ export default {
 
   injectFormMedia (form, data) {
     RightHtmlDetailTag.injectMediaFiles(form.elements, data.element)
-    RightHtmlDetailTag.injectMediaControlsButton(form.elements.controls, data.element)
     RightHtmlDetailTrack.injectTracks(form, data.element)
   },
 

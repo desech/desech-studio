@@ -158,7 +158,7 @@ export default {
   getIgnoredAttributes () {
     return [
       'data-ss-tag', 'class', 'style', 'hidden', 'data-ss-hidden', 'data-element-properties',
-      'disabled', 'data-ss-disabled', 'controls', 'data-ss-controls', 'viewBox', 'srcset'
+      'controls', 'data-ss-controls', 'viewBox', 'srcset'
     ]
   },
 

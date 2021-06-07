@@ -130,7 +130,7 @@ export default {
 
   fixFileUrl (value) {
     return value.replace(/url\("(.*?)"\)/g, (match, file) => {
-      return `url("../${HelperFile.getRelPath(file)}")`
+      return `url("../../${HelperFile.getRelPath(file)}")`
     })
   },
 

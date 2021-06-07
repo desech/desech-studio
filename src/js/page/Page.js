@@ -7,6 +7,7 @@ import HelperProject from '../helper/HelperProject.js'
 import Project from '../start/Project.js'
 import Auth from '../start/Auth.js'
 import TopZoom from '../main/top/TopZoom.js'
+import TopCommon from '../main/top/TopCommon.js'
 
 export default {
   loadStart () {
@@ -34,6 +35,7 @@ export default {
     await Project.injectDesignSystemCss()
     HelperLocalStore.removeAllTemporary()
     this.loadFilePanel(file)
+    TopCommon.positionDragHandle()
     TopZoom.setSavedZoomLevel()
   },
 

@@ -178,6 +178,10 @@ main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.movin
   box-shadow: none;
 }*/
 
+main#page-main.preview #canvas .text {
+  user-select: text;
+}
+
 /* preview mode */
 main#page-main.preview .sidebar-left,
 main#page-main.preview .sidebar-right,

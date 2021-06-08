@@ -35,8 +35,8 @@ export default {
     await Project.injectDesignSystemCss()
     HelperLocalStore.removeAllTemporary()
     this.loadFilePanel(file)
-    TopCommon.positionDragHandle()
     TopZoom.setSavedZoomLevel()
+    TopCommon.positionDragHandle()
   },
 
   loadFilePanel (file) {

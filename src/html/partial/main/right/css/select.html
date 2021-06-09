@@ -18,6 +18,14 @@
     <option value="flex-shrink" data-template="number">flex-shrink</option>
     <option value="flex-wrap" data-template="flex-wrap">flex-wrap</option>
   </optgroup>
+  <optgroup label="{{#i18n}} Columns {{/i18n}}">
+    <option value="column-count" data-template="number-auto">column-count</option>
+    <option value="column-width" data-template="length-auto">column-width</option>
+    <option value="column-rule-style" data-template="border-style">column-rule-style</option>
+    <option value="column-rule-width" data-template="border-width">column-rule-width</option>
+    <option value="column-rule-color" data-template="color">column-rule-color</option>
+    <option value="column-span">column-span</option>
+  </optgroup>
   <optgroup label="{{#i18n}} Position {{/i18n}}">
     <option value="display">display</option>
     <option value="position">position</option>
@@ -49,9 +57,16 @@
     <option value="stroke" data-template="color">stroke</option>
     <option value="stroke-width" data-template="length-percent">stroke-width</option>
   </optgroup>
+  <optgroup label="{{#i18n}} Lists {{/i18n}}">
+    <option value="list-style-position">list-style-position</option>
+    <option value="list-style-type" data-template="custom">list-style-type</option>
+    <option value="content" data-template="custom">content</option>
+    <option value="counter-increment" data-template="custom">counter-increment</option>
+    <option value="counter-reset" data-template="custom">counter-reset</option>
+  </optgroup>
   <optgroup label="{{#i18n}} Outline {{/i18n}}">
-    <option value="outline-width" data-template="border-width">outline-width</option>
     <option value="outline-style" data-template="border-style">outline-style</option>
+    <option value="outline-width" data-template="border-width">outline-width</option>
     <option value="outline-color" data-template="color">outline-color</option>
     <option value="outline-offset" data-template="length">outline-offset</option>
   </optgroup>
@@ -86,23 +101,6 @@
     <option value="text-orientation">text-orientation</option>
     <option value="writing-mode">writing-mode</option>
     <option value="text-combine-upright" data-template="custom">text-combine-upright</option>
-  </optgroup>
-  <optgroup label="{{#i18n}} Columns {{/i18n}}">
-    <option value="column-count" data-template="number-auto">column-count</option>
-    <option value="column-width" data-template="length-auto">column-width</option>
-    <option value="column-gap" data-template="length-percent-normal">column-gap</option>
-    <option value="column-rule-width" data-template="border-width">column-rule-width</option>
-    <option value="column-rule-style" data-template="border-style">column-rule-style</option>
-    <option value="column-rule-color" data-template="color">column-rule-color</option>
-    <option value="column-fill">column-fill</option>
-    <option value="column-span">column-span</option>
-  </optgroup>
-  <optgroup label="{{#i18n}} Lists {{/i18n}}">
-    <option value="list-style-position">list-style-position</option>
-    <option value="list-style-type" data-template="custom">list-style-type</option>
-    <option value="content" data-template="custom">content</option>
-    <option value="counter-increment" data-template="custom">counter-increment</option>
-    <option value="counter-reset" data-template="custom">counter-reset</option>
   </optgroup>
   <optgroup label="{{#i18n}} Effects {{/i18n}}">
     <option value="opacity" data-template="number">opacity</option>

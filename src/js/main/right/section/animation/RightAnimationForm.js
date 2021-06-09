@@ -84,18 +84,19 @@ export default {
   setAnimation (section) {
     const current = RightAnimationCommon.getActiveElement(section)
     const fields = section.getElementsByClassName('slide-container')[0].elements
-    const value = this.getDisplayedValue(fields)
+    const index = HelperDOM.getElementIndex(current)
+    const value = this.getDisplayedValue(fields, index)
     if (value === 'none') {
       RightCommon.changeStyle({ animation: '0s ease 0s 1 normal none running none' })
       RightAnimationCommon.setElementData(current, value)
     } else {
-      const animation = this.setAnimationAtIndex(value, HelperDOM.getElementIndex(current))
+      const animation = this.setAnimationAtIndex(value, index)
       RightCommon.changeStyle({ animation })
       RightAnimationCommon.setElementData(current, this.parseCSS(value)[0])
     }
   },
 
-  getDisplayedValue (fields) {
+  getDisplayedValue (fields, index) {
     if (fields.type.value === 'none') return 'none'
     return [
       InputUnitField.getValue(fields.duration) ||
@@ -107,8 +108,15 @@ export default {
       fields.direction.value || RightAnimationCommon.getDefaultFieldValue('direction'),
       fields.fill.value || RightAnimationCommon.getDefaultFieldValue('fill'),
       fields.state.value || RightAnimationCommon.getDefaultFieldValue('state'),
-      fields.type.value || RightAnimationCommon.getDefaultFieldValue('type')
+      fields.type.value || this.getTypeValue(index)
     ].join(' ')
+  },
+
+  getTypeValue (index) {
+    // we need to return the custom value if it exists, or the default value
+    const data = this.getValueAtIndex(index)
+    return HelperStyle.getParsedCSSParam(data, 7) ||
+      RightAnimationCommon.getDefaultFieldValue('type')
   },
 
   setAnimationAtIndex (value, index) {

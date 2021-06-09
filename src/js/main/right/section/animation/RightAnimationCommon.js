@@ -9,13 +9,16 @@ export default {
   },
 
   setElementData (elem, data) {
+    const name = this.getAnimationName(data)
+    if (!name) return
     const node = elem.getElementsByClassName('animation-name')[0]
-    node.textContent = this.getAnimationName(data)
+    node.textContent = name
   },
 
   getAnimationName (data) {
     const value = this.getAnimationType(data)
     const option = this.getAnimationNameOption(value)
+    if (!option) return
     // remove the white space from the select value padding
     return option.textContent.replace(/\s\s/gi, '')
   },

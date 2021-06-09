@@ -17,8 +17,7 @@ template, [hidden] {
 div, main, article, section, nav, aside, header, h1, h2, h3, h4, h5, h6, footer,address, p,
 pre, blockquote, figure, figcaption, hr, ul, ol, li, dl, dt, dd, form, label, output, slot,
 button, svg, img, video, audio, iframe, object, input, select, textarea, progress, meter,
-details,
-summary,
+details, summary,
 table, thead, tbody, tfoot, tr, td, th, caption, colgroup, col,
 b, i, a, span, strong, em, time, ins, del, s, mark, small, sub, sup, q, abbr, cite, dfn, samp,
 code, var, kbd, bdo, ruby, rt, rb {
@@ -175,6 +174,10 @@ img {
 
 svg {
   fill: currentcolor;
+}
+
+video, iframe, object {
+  width: 100%;
 }
 
 hr {

@@ -45,7 +45,6 @@ export default {
   async save () {
     if (!TopCommand.getList()) return
     const buttons = TopCommand.getButtons()
-    if (!buttons.save.classList.contains('active')) return
     this.setSaveLoading(buttons.save, buttons.command)
     await this.saveCurrentFile(buttons.save)
   },

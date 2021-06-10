@@ -31,8 +31,7 @@ export default {
   saveStyle (css, htmlFile, folder) {
     this.saveStyleToFile(css.color, css.color, folder, 'css/general/root.css')
     this.saveStyleToFile(css.componentCss, css.color, folder, 'css/general/component-css.css')
-    this.saveComponentHtmlStyle(css, htmlFile, folder)
-    this.saveElementStyle(css, htmlFile, folder)
+    this.savePageOrComponentStyle(css, htmlFile, folder)
   },
 
   saveStyleToFile (data, colors, folder, file) {
@@ -90,17 +89,13 @@ export default {
     return ParseCssMerge.mergeProperties(properties, colors)
   },
 
-  saveComponentHtmlStyle (css, htmlFile, folder) {
-    // don't save it when we are not in a component file
-    if (!HelperProject.isFileComponent(htmlFile)) return
-    this.saveStyleToFile(css.componentHtml, css.color, folder, 'css/general/component-html.css')
-  },
-
-  saveElementStyle (css, htmlFile, folder) {
-    // don't save it when we are in a component file
-    if (HelperProject.isFileComponent(htmlFile)) return
-    const pageCssFile = HelperFile.getPageCssFile(htmlFile, folder)
-    this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
+  savePageOrComponentStyle (css, htmlFile, folder) {
+    if (HelperProject.isFileComponent(htmlFile)) {
+      this.saveStyleToFile(css.componentHtml, css.color, folder, 'css/general/component-html.css')
+    } else {
+      const pageCssFile = HelperFile.getPageCssFile(htmlFile, folder)
+      this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
+    }
   },
 
   async exportCode (data) {

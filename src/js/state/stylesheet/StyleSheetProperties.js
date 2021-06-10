@@ -84,7 +84,6 @@ export default {
 
       // fill
       'background', // not used but the main property is
-      'background-color', // not used because we use gradients and images
       'background-image',
       'background-origin',
       'background-position',

@@ -19,8 +19,6 @@ export default {
         return this.splitBorderColor(value)
       case 'border':
         return this.splitBorder(value)
-      case 'background-color':
-        return this.splitBackgroundColor(value)
       case 'background-image':
         return this.splitBackgroundImage(style, name, value)
       default:
@@ -72,17 +70,6 @@ export default {
       ...this.splitBorderStyle(chunks[1]),
       ...this.splitBorderColor(chunks[2])
     ]
-  },
-
-  splitBackgroundColor (value) {
-    const rules = [{
-      name: 'background-image',
-      value: HelperColor.getBackgroundSolidColor(value)
-    }]
-    for (const name of ParseFileCommon.getBackgroundProperties()) {
-      rules.push({ name, value: HelperStyle.getDefaultProperty(name) })
-    }
-    return rules
   },
 
   splitBackgroundImage (style, name, value) {

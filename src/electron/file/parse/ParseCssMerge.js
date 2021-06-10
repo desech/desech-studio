@@ -14,7 +14,6 @@ export default {
     this.mergeBorder(props)
     this.cleanBorderImage(props)
     this.cleanBackgroundImage(props)
-    this.cleanSolidBackground(props)
     this.replaceSwatchColors(props, colors)
     return props
   },
@@ -109,18 +108,6 @@ export default {
         delete props[name]
       }
     }
-  },
-
-  cleanSolidBackground (props) {
-    // on :hover background-color and background-image are conflicting
-    // const names = ParseFileCommon.getBackgroundProperties()
-    // const value = this.getSolidColorBackground(props, names)
-    // if (!value) return
-    // props['background-color'] = {
-    //   responsive: props['background-image'].responsive,
-    //   value
-    // }
-    // this.deleteProperties(props, [...names, 'background-image'])
   },
 
   getSolidColorBackground (props, names) {

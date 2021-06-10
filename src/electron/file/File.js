@@ -120,24 +120,37 @@ export default {
     const ui = this.sanitizePath(this.resolve(app.getAppPath(), 'ui'))
     // `withFileTypes` doesn't work with asar
     const files = this.readFolder(ui, { withFileTypes: false })
-    await this.syncFolder(files, ui, destFolder)
+    // we always want to update the animation.css and reset.css files
+    const checkSameFiles = [
+      this.resolve(ui, 'css/general/animation.css'),
+      this.resolve(ui, 'css/general/reset.css')
+    ]
+    await this.syncFolder(files, ui, destFolder, { checkSameFiles })
   },
 
-  async syncFolder (files, srcFolder, destFolder, checkIdentical = false) {
+  // options = { checkSame: true/false, checkSameFiles: ['/var/file.txt'] }
+  async syncFolder (files, srcFolder, destFolder, options = {}) {
     for (const file of files) {
-      await this.syncFile(file, srcFolder, destFolder, checkIdentical)
+      await this.syncFile(file, srcFolder, destFolder, options)
     }
   },
 
-  async syncFile (file, srcFolder, destFolder, checkIdentical = false) {
+  async syncFile (file, srcFolder, destFolder, options) {
     const destFile = file.path.replace(srcFolder, destFolder)
     if (file.type === 'folder' && !fs.existsSync(destFile)) {
       fs.mkdirSync(destFile)
     } else if (file.type === 'file' && (!fs.existsSync(destFile) ||
-      (checkIdentical && !await this.areFilesIdentical(file.path, destFile)))) {
+      ((options.checkSame ||
+        (options.checkSameFiles && options.checkSameFiles.includes(file.path))) &&
+        !await this.areFilesIdentical(file.path, destFile)))) {
+      // overwrite the file if the file doesn't exist
+      // or if checkSame is true, and the file is not identical
+      // or if the file is found in the checkSameFiles array, and the file is not identical
       fs.copyFileSync(file.path, destFile)
     }
-    if (file.children) await this.syncFolder(file.children, srcFolder, destFolder)
+    if (file.children) {
+      await this.syncFolder(file.children, srcFolder, destFolder, options)
+    }
   },
 
   async areFilesIdentical (file1, file2) {

@@ -240,13 +240,14 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 - change version in `package.json` and `app/package.json`
 
 ```sh
+sudo apt update && sudo apt upgrade
 cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86
-reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.0.3-amd64.deb
+reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.1.0-amd64.deb
 reprepro -b /home/vioi/share/download.desech.com/apt list apt
-cp ./dist/desech-studio-1.0.3-x86_64.rpm ~/share/download.desech.com/dnf
-cp ./dist/desech-studio-1.0.3-x64.pacman ~/share/download.desech.com/pacman
+cp ./dist/desech-studio-1.1.0-x86_64.rpm ~/share/download.desech.com/dnf
+cp ./dist/desech-studio-1.1.0-x64.pacman ~/share/download.desech.com/pacman
 ```
 
 Fedora
@@ -254,21 +255,25 @@ Fedora
 - disconnect VPN
 
 ```sh
+sudo dnf update && sudo dnf upgrade
 sudo createrepo -v ~/share/download.desech.com/dnf
 ```
 
 Manjaro
 
+- open add/remove software to update
+
 ```sh
 sudo -s
-repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.0.3-x64.pacman
-  - go to `/home/manjaro/share/download.desech.com/pacman/`
+repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.1.0-x64.pacman
+  - File Explorer > go to `~/share/download.desech.com/pacman/`
   - when the lock file dissapears cancel the process
 repoctl status -a
 ```
 
+- leave only the last 2 versions in `~/share/dnf` and `pacman` 
 - copy everything from `~/share` to sftp
-- leave only the last 2 versions in `dnf` and `pacman` for both our folder and the sftp
+- leave only the last 2 versions in `dnf` and `pacman` on sftp
 
 Ubuntu
 
@@ -289,10 +294,7 @@ sudo dnf update && sudo dnf upgrade
 
 Manjaro
 
-```sh
-sudo pacman -Syu
-```
-
+- open add/remove software to update
 - open Desech Studio without logging in and see if it updated
 - power off the vm
 

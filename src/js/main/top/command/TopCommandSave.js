@@ -35,16 +35,17 @@ export default {
   setAutoSaveInterval () {
     return new Promise(resolve => {
       const interval = setInterval(async () => {
-        await this.save()
+        await this.save(true)
         // we need the interval for unit testing to clear it
         resolve(interval)
       }, this._AUTOSAVE_TIME)
     })
   },
 
-  async save () {
+  async save (check = false) {
     if (!TopCommand.getList()) return
     const buttons = TopCommand.getButtons()
+    if (check && !buttons.save.classList.contains('active')) return
     this.setSaveLoading(buttons.save, buttons.command)
     await this.saveCurrentFile(buttons.save)
   },

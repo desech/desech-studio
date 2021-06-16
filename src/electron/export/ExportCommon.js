@@ -88,7 +88,7 @@ export default {
   },
 
   checkAllowedHtmlFolder (name) {
-    const ignore = ['asset', 'css', 'font', 'js', '_desech', '_export']
+    const ignore = ['asset', 'css', 'font', 'js', '_desech', '_export', '.git']
     for (const val of ignore) {
       if (name === val) return false
     }
@@ -111,7 +111,7 @@ export default {
   isRootMiscFolder (file, htmlFiles) {
     if (file.type !== 'folder') return false
     return ['asset', 'font'].includes(file.name) ||
-      (!['css', 'js', '_desech', '_export'].includes(file.name) &&
+      (!['css', 'js', '_desech', '_export', '.git'].includes(file.name) &&
       !this.isHtmlRootFolder(file.path, htmlFiles))
   },
 

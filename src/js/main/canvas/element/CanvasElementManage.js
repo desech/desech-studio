@@ -241,7 +241,7 @@ export default {
 
   async getPastedData () {
     const string = await navigator.clipboard.readText()
-    return string ? JSON.parse(string) : {}
+    return string ? ExtendJS.parseJsonNoError(string) : {}
   },
 
   pasteAllCommand (ref, data, execute = true) {

@@ -160,6 +160,6 @@ ${data.body}
   },
 
   getIgnoredFileFolders () {
-    return ['_desech', '_export', '.keep', '.DS_Store']
+    return ['_desech', '_export', '.git', '.gitignore', '.keep', '.DS_Store']
   }
 }

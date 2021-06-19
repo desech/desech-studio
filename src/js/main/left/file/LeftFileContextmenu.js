@@ -179,8 +179,8 @@ export default {
   },
 
   async deleteItem (item) {
-    const file = HelperFile.convertPathForWin(item.dataset.ref)
-    await window.electron.shellTrashItem(file)
+    const file = item.dataset.ref
+    await HelperFile.deleteFile(file)
     if (HelperFile.getFileExtension(file) === 'html') {
       await this.deleteHtmlCssFile(file)
     }
@@ -191,7 +191,7 @@ export default {
     if (HelperFile.isComponentFile(htmlFile)) return
     const folder = HelperProject.getFolder()
     const cssFile = HelperFile.getPageCssFile(htmlFile, folder)
-    await window.electron.shellTrashItem(folder + '/css/page/' + cssFile)
+    await HelperFile.deleteFile(folder + '/css/page/' + cssFile)
   },
 
   closeActiveItem () {

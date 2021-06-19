@@ -161,5 +161,10 @@ ${data.body}
 
   getIgnoredFileFolders () {
     return ['_desech', '_export', '.git', '.gitignore', '.keep', '.DS_Store']
+  },
+
+  async deleteFile (file) {
+    const truePath = this.convertPathForWin(file)
+    await window.electron.shellTrashItem(truePath)
   }
 }

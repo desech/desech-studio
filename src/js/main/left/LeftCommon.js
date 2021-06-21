@@ -16,7 +16,9 @@ export default {
 
   fixListWidth (container) {
     const list = container.getElementsByClassName('panel-list-container')[0]
-    if (list) list.style.width = `${list.scrollWidth}px`
+    if (list && list.scrollWidth) {
+      list.style.width = `${list.scrollWidth}px`
+    }
   },
 
   injectIndentTree (li, level) {

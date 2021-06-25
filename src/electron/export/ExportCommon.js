@@ -3,7 +3,7 @@ import File from '../file/File.js'
 
 export default {
   getCompiledCss (folder) {
-    const generalFiles = this.getGeneralCssFiles(folder,
+    const generalFiles = this.getFilePaths(this.getGeneralCssFiles(), folder,
       ['css/general/animation.css', 'css/general/design-system.css'])
     const general = this.getCssContent(generalFiles)
     const designSystem = this.getDesignSystemCss(folder)
@@ -12,17 +12,17 @@ export default {
     return general + '\n' + animation + '\n' + designSystem + '\n' + page
   },
 
-  getGeneralCssFiles (folder, ignore = []) {
+  getFilePaths (files, folder, ignore = []) {
     const paths = []
-    for (const link of this.getGeneralCssLinks()) {
-      if (ignore && ignore.includes(link)) continue
-      const filePath = File.resolve(folder, link)
+    for (const file of files) {
+      if (ignore && ignore.includes(file)) continue
+      const filePath = File.resolve(folder, file)
       if (fs.existsSync(filePath)) paths.push(filePath)
     }
     return paths
   },
 
-  getGeneralCssLinks () {
+  getGeneralCssFiles () {
     // order matters
     return [
       'css/general/reset.css',
@@ -32,6 +32,13 @@ export default {
       'css/general/component-css.css',
       'css/general/component-html.css',
       'css/general/design-system.css'
+    ]
+  },
+
+  getGeneralJsFiles () {
+    return [
+      'js/script.js',
+      'js/design-system.js'
     ]
   },
 

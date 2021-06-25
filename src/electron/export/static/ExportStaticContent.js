@@ -78,7 +78,7 @@ export default {
   },
 
   removeProjectCssFiles (document) {
-    const links = ExportCommon.getGeneralCssLinks()
+    const links = ExportCommon.getGeneralCssFiles()
     document.querySelectorAll('link[rel="stylesheet"]').forEach(el => {
       const href = el.getAttributeNS(null, 'href')
       if (links.includes(href) || href.startsWith('css/page/')) {

@@ -8,7 +8,7 @@ export default {
     const exportDir = File.createFolder(data.folder, '_export')
     await File.syncFolder(data.rootMiscFiles, data.folder, exportDir)
     await this.syncCss(data.folder, data.compiledCss)
-    this.syncJs(data.folder)
+    await this.syncJs(data.folder)
     this.syncPages(data.folder, data.htmlFiles)
   },
 
@@ -21,16 +21,27 @@ export default {
   async syncCustomCss (folder) {
     const files = File.readFolder(File.resolve(folder, 'css/general'))
     const destFolder = File.resolve(folder, '_export')
-    const ignoreFiles = ExportCommon.getGeneralCssFiles(folder)
+    const ignoreFiles = ExportCommon.getFilePaths(ExportCommon.getGeneralCssFiles(), folder)
     await File.syncFolder(files, folder, destFolder, { checkSame: true, ignoreFiles })
   },
 
-  syncJs (folder) {
+  async syncJs (folder) {
     const scriptFile = File.resolve(folder, '_export/js/script.js')
-    if (fs.existsSync(scriptFile)) return
+    if (!fs.existsSync(scriptFile)) this.createScriptJs(scriptFile, folder)
+    await this.syncCustomJs(folder)
+  },
+
+  createScriptJs (scriptFile, folder) {
     const dsFile = File.resolve(folder, 'js/design-system.js')
     const js = fs.existsSync(dsFile) ? fs.readFileSync(dsFile).toString() : ''
     File.createFile(scriptFile, js)
+  },
+
+  async syncCustomJs (folder) {
+    const files = File.readFolder(File.resolve(folder, 'js'))
+    const destFolder = File.resolve(folder, '_export')
+    const ignoreFiles = ExportCommon.getFilePaths(ExportCommon.getGeneralJsFiles(), folder)
+    await File.syncFolder(files, folder, destFolder, { checkSame: true, ignoreFiles })
   },
 
   syncPages (folder, htmlFiles) {

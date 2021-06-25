@@ -3,6 +3,7 @@ import { JSDOM } from 'jsdom'
 import FileParse from '../../file/FileParse.js'
 import HelperCrypto from '../../../js/helper/HelperCrypto.js'
 import File from '../../file/File.js'
+import ExportCommon from '../ExportCommon.js'
 
 export default {
   getPageHtml (folder, file) {
@@ -77,18 +78,10 @@ export default {
   },
 
   removeProjectCssFiles (document) {
-    const files = [
-      'css/general/reset.css',
-      'css/general/animation.css',
-      'css/general/font.css',
-      'css/general/root.css',
-      'css/general/component-css.css',
-      'css/general/component-html.css',
-      'css/general/design-system.css'
-    ]
+    const links = ExportCommon.getGeneralCssLinks()
     document.querySelectorAll('link[rel="stylesheet"]').forEach(el => {
       const href = el.getAttributeNS(null, 'href')
-      if (files.includes(href) || href.startsWith('css/page/')) {
+      if (links.includes(href) || href.startsWith('css/page/')) {
         el.remove()
       }
     })

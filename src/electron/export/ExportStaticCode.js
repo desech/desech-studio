@@ -1,19 +1,28 @@
 import fs from 'fs'
 import File from '../file/File.js'
 import ExportStaticContent from './static/ExportStaticContent.js'
+import ExportCommon from './ExportCommon.js'
 
 export default {
   async saveToFile (data) {
     const exportDir = File.createFolder(data.folder, '_export')
     await File.syncFolder(data.rootMiscFiles, data.folder, exportDir)
-    this.syncCss(data.folder, data.compiledCss)
+    await this.syncCss(data.folder, data.compiledCss)
     this.syncJs(data.folder)
     this.syncPages(data.folder, data.htmlFiles)
   },
 
-  syncCss (folder, css) {
+  async syncCss (folder, css) {
     const cssFile = File.resolve(folder, '_export/css/compiled/style.css')
     File.createFile(cssFile, css)
+    await this.syncCustomCss(folder)
+  },
+
+  async syncCustomCss (folder) {
+    const files = File.readFolder(File.resolve(folder, 'css/general'))
+    const destFolder = File.resolve(folder, '_export')
+    const ignoreFiles = ExportCommon.getGeneralCssFiles(folder)
+    await File.syncFolder(files, folder, destFolder, { checkSame: true, ignoreFiles })
   },
 
   syncJs (folder) {

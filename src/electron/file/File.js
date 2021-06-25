@@ -128,9 +128,11 @@ export default {
     await this.syncFolder(files, ui, destFolder, { checkSameFiles })
   },
 
-  // options = { checkSame: true/false, checkSameFiles: ['/var/file.txt'] }
+  // options = { checkSame: true/false, checkSameFiles: ['/var/file.txt'],
+  //            ignoreFiles: ['/var/file.txt'] }
   async syncFolder (files, srcFolder, destFolder, options = {}) {
     for (const file of files) {
+      if (options.ignoreFiles && options.ignoreFiles.includes(file.path)) continue
       await this.syncFile(file, srcFolder, destFolder, options)
     }
   },
@@ -146,6 +148,7 @@ export default {
       // overwrite the file if the file doesn't exist
       // or if checkSame is true, and the file is not identical
       // or if the file is found in the checkSameFiles array, and the file is not identical
+      this.createMissingDir(this.dirname(destFile))
       fs.copyFileSync(file.path, destFile)
     }
     if (file.children) {

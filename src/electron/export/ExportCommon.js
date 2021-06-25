@@ -3,22 +3,36 @@ import File from '../file/File.js'
 
 export default {
   getCompiledCss (folder) {
-    const general = this.getCssContent(this.getGeneralCssFiles(folder))
+    const generalFiles = this.getGeneralCssFiles(folder,
+      ['css/general/animation.css', 'css/general/design-system.css'])
+    const general = this.getCssContent(generalFiles)
     const designSystem = this.getDesignSystemCss(folder)
     const page = this.getCssContent(this.getPageCssFiles(folder))
     const animation = this.getAnimationCss(folder, general + page)
     return general + '\n' + animation + '\n' + designSystem + '\n' + page
   },
 
-  getGeneralCssFiles (folder) {
+  getGeneralCssFiles (folder, ignore = []) {
     const paths = []
-    // order matters
-    const files = ['reset', 'font', 'root', 'component-css', 'component-html']
-    for (const file of files) {
-      const filePath = File.resolve(folder, 'css/general', file + '.css')
+    for (const link of this.getGeneralCssLinks()) {
+      if (ignore && ignore.includes(link)) continue
+      const filePath = File.resolve(folder, link)
       if (fs.existsSync(filePath)) paths.push(filePath)
     }
     return paths
+  },
+
+  getGeneralCssLinks () {
+    // order matters
+    return [
+      'css/general/reset.css',
+      'css/general/animation.css',
+      'css/general/font.css',
+      'css/general/root.css',
+      'css/general/component-css.css',
+      'css/general/component-html.css',
+      'css/general/design-system.css'
+    ]
   },
 
   getPageCssFiles (folder) {

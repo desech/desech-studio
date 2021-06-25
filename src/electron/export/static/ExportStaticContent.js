@@ -71,9 +71,27 @@ export default {
   },
 
   replaceCssLinks (document) {
-    document.querySelectorAll('link[rel="stylesheet"]').forEach(el => el.remove())
+    this.removeProjectCssFiles(document)
     const cssLink = '<link rel="stylesheet" href="css/compiled/style.css">'
     document.head.insertAdjacentHTML('beforeend', cssLink)
+  },
+
+  removeProjectCssFiles (document) {
+    const files = [
+      'css/general/reset.css',
+      'css/general/animation.css',
+      'css/general/font.css',
+      'css/general/root.css',
+      'css/general/component-css.css',
+      'css/general/component-html.css',
+      'css/general/design-system.css'
+    ]
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(el => {
+      const href = el.getAttributeNS(null, 'href')
+      if (files.includes(href) || href.startsWith('css/page/')) {
+        el.remove()
+      }
+    })
   },
 
   replaceJsScripts (document) {

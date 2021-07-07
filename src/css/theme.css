@@ -32,10 +32,11 @@ body {
   --field-bg: transparent;
   --field-bg-hover: rgb(0, 140, 255);
   --resize-color: rgb(0, 140, 255);
-  --resize-margin-bg: rgb(249, 204, 157);
+  --resize-color-bg: rgba(0, 140, 255, 0.5);
+  --resize-margin-bg: rgba(249, 204, 157, 0.5);
   --resize-margin-btn: rgb(249, 162, 71);
   --resize-margin-txt: rgb(255, 130, 0);
-  --resize-padding-bg: rgb(196, 208, 139);
+  --resize-padding-bg: rgba(196, 208, 139, 0.5);
   --resize-padding-btn: rgb(137, 160, 24);
   --resize-padding-txt: rgb(132, 158, 4);
   --switch-btn-hover: rgb(0, 140, 255);

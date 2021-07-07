@@ -103,7 +103,7 @@
 }
 
 #element-overlay .resize-size {
-  border: 0 solid var(--resize-color);
+  border: 0 solid var(--resize-color-bg);
 }
 
 #element-overlay .resize-nw {

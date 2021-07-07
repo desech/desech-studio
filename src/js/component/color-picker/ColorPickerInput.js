@@ -6,7 +6,8 @@ import ColorPickerCommon from './ColorPickerCommon.js'
 export default {
   getEvents () {
     return {
-      change: ['changeHexInputEvent', 'changeRgbInputEvent', 'changeHslInputEvent', 'changeHsvInputEvent', 'changeAlphaInputEvent', 'changeColorTypeEvent']
+      change: ['changeHexInputEvent', 'changeRgbInputEvent', 'changeHslInputEvent',
+        'changeHsvInputEvent', 'changeAlphaInputEvent', 'changeColorTypeEvent']
     }
   },
 

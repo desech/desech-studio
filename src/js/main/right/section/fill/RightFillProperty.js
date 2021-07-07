@@ -45,6 +45,7 @@ export default {
 
   getBackgroundValue (form) {
     const picker = form.getElementsByClassName('color-picker')[0]
+    // @todo change default white color to black on gradients when first dragging alpha/hue
     const value = picker
       ? ColorPicker.getColorPickerValue(picker)
       : this.getEmptyBackgroundValue(form)

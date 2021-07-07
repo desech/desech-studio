@@ -12,6 +12,9 @@ import CanvasOverlayResize from '../overlay/CanvasOverlayResize.js'
 
 export default {
   _start: false,
+  _startX: null,
+  _startY: null,
+  _moving: false,
   _create: false,
 
   getEvents () {
@@ -43,13 +46,18 @@ export default {
   mousedownPrepareCreateElementEvent (event) {
     if (event.target.closest('#canvas') && HelperCanvas.getTool() === 'block' &&
       event.detail === 1) {
-      this.prepareCreateElement()
+      this.prepareCreateElement(event.clientX, event.clientY)
     }
   },
 
   mousemoveCreateResizeBlockEvent (event) {
     if (this._start && !this._create && event.buttons) {
-      this.createResizeBlock(event.clientX, event.clientY)
+      if (!this._moving) {
+        this._moving = this.hasMoved(event.clientX, event.clientY)
+      }
+      if (this._moving) {
+        this.createResizeBlock(event.clientX, event.clientY)
+      }
       // the resize event will be handled by CanvasOverlayResize after init
     }
   },
@@ -63,9 +71,20 @@ export default {
     }
   },
 
-  prepareCreateElement () {
+  prepareCreateElement (clientX, clientY) {
     this._start = true
+    this._startX = clientX
+    this._startY = clientY
+    this._moving = false
     this._create = false
+  },
+
+  hasMoved (clientX, clientY) {
+    // only start moving when there's an X pixels movement difference
+    const delta = 10
+    const diffX = Math.abs(this._startX - clientX)
+    const diffY = Math.abs(this._startY - clientY)
+    return (diffX > delta || diffY > delta)
   },
 
   createResizeBlock (clientX, clientY) {
@@ -84,6 +103,9 @@ export default {
 
   reset () {
     this._start = false
+    this._startX = null
+    this._startY = null
+    this._moving = false
     this._create = false
   },
 
@@ -126,7 +148,8 @@ export default {
       element.classList.add('placement', 'top')
     } else if (mouseY >= pos.topWithScroll + (pos.height - threshold)) {
       element.classList.add('placement', 'bottom')
-    } else { // inside
+    } else {
+      // inside
       this.addContainerMarkerInside(element, mouseY)
     }
   },
@@ -170,7 +193,8 @@ export default {
     if (!placement) return canvas
     if (placement.classList.contains('inside')) {
       return placement
-    } else { // top, bottom
+    } else {
+      // top, bottom
       return placement.parentNode
     }
   },
@@ -213,7 +237,8 @@ export default {
       HelperDOM.insertBefore(element, placement)
     } else if (placement.classList.contains('bottom')) {
       HelperDOM.insertAfter(element, placement)
-    } else { // inside
+    } else {
+      // inside
       placement.appendChild(element)
     }
   },

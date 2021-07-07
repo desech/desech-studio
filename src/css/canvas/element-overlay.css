@@ -265,6 +265,7 @@
   border-radius: 2px;
   cursor: pointer;
   pointer-events: all;
+  overflow: hidden;
 }
 
 #element-overlay .grid-mode .track-cell:hover {

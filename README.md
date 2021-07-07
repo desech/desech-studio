@@ -238,49 +238,51 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ## Build Studio Linux
 
 - change version in `package.json` and `app/package.json`
+- open software and update
 
 ```sh
 sudo apt update && sudo apt upgrade
 cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86
-reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.1.0-amd64.deb
+reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.1.1-amd64.deb
 reprepro -b /home/vioi/share/download.desech.com/apt list apt
-cp ./dist/desech-studio-1.1.0-x86_64.rpm ~/share/download.desech.com/dnf
-cp ./dist/desech-studio-1.1.0-x64.pacman ~/share/download.desech.com/pacman
+cp ./dist/desech-studio-1.1.1-x86_64.rpm ~/share/download.desech.com/dnf
+cp ./dist/desech-studio-1.1.1-x64.pacman ~/share/download.desech.com/pacman
+sudo chmod 777 -R ~/share/download.desech.com
 ```
 
 Fedora
 
 - disconnect VPN
+- open software and update
 
 ```sh
-sudo dnf update && sudo dnf upgrade
 sudo createrepo -v ~/share/download.desech.com/dnf
 ```
 
 Manjaro
 
-- open add/remove software to update
+- open software and update
 
 ```sh
 sudo -s
-repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.1.0-x64.pacman
+repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.1.1-x64.pacman
   - File Explorer > go to `~/share/download.desech.com/pacman/`
   - when the lock file dissapears cancel the process
 repoctl status -a
 ```
 
-- leave only the last 2 versions in `~/share/dnf` and `pacman` 
-- copy everything from `~/share` to sftp
-- leave only the last 2 versions in `dnf` and `pacman` on sftp
-
 Ubuntu
 
 ```sh
-sudo apt update && sudo apt upgrade
+sudo chmod 777 -R ~/share/download.desech.com
 ```
 
+- leave only the last 2 versions in `~/share/dnf` and `pacman` 
+- copy everything from `~/share` to sftp
+- leave only the last 2 versions in `apt/pool/stable/d/desech-studio` `dnf` and `pacman` on sftp
+- open software and update
 - open Desech Studio and see if it updated
 
 Fedora
@@ -300,6 +302,7 @@ Manjaro
 
 ## Build Studio Windows
 
+- check window updates
 - fetch the latest updates from git
 
 ```sh

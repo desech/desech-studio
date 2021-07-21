@@ -58,10 +58,48 @@ export default {
   },
 
   getGradientLinearAngle (x1, x2, y1, y2) {
-    const radians = Math.atan((y2 - y1) / (x2 - x1) * -1)
     // @todo fix gradient angle
+    const radians = Math.atan((y2 - y1) / (x2 - x1) * -1)
     return parseInt(((180 * radians) / Math.PI).toFixed(1))
   },
+
+  // getGradientLinearAngle2 (m00, m01, m02, m10, m11, m12) {
+  //   const s = { m00, m01, m02, m10, m11, m12 }
+  //   const e = (function (e) {
+  //     const t = e.m00 * e.m11 - e.m01 * e.m10
+  //     if (t === 0) {
+  //       return {
+  //         m00: 1,
+  //         m01: 0,
+  //         m02: 0,
+  //         m10: 0,
+  //         m11: 1,
+  //         m12: 0
+  //       }
+  //     }
+  //     const o = 1 / t
+  //     return {
+  //       m00: e.m11 * o,
+  //       m01: -e.m01 * o,
+  //       m02: (e.m01 * e.m12 - e.m11 * e.m02) * o,
+  //       m10: -e.m10 * o,
+  //       m11: e.m00 * o,
+  //       m12: (e.m10 * e.m02 - e.m00 * e.m12) * o
+  //     }
+  //   })(s)
+  //   const r = e.m00 * e.m11 - e.m01 * e.m10 > 0 ? 1 : -1
+  //   const i = (function (e, t) {
+  //     return {
+  //       x: e.m00 * t.x + e.m01 * t.y,
+  //       y: e.m10 * t.x + e.m11 * t.y
+  //     }
+  //   })(e, {
+  //     x: 0,
+  //     y: 1
+  //   })
+  //   const t = ((Math.atan2(i.y * r, i.x * r) / Math.PI) * 180).toFixed(2)
+  //   return t
+  // },
 
   setBlockMinHeight (type, height, css) {
     if (type === 'block' && height < 24) css['min-height'] = 'auto'

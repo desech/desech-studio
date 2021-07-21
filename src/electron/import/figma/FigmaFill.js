@@ -96,7 +96,6 @@ export default {
   },
 
   getFillBgGradientradial (fill) {
-    // @todo implement angle properties
     const stops = this.getGradientStops(fill.gradientStops)
     return `radial-gradient(${stops})`
   },

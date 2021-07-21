@@ -19,7 +19,7 @@ export default {
   keydownDeleteElementEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
-      event.key.toLowerCase() === 'delete') {
+      (event.key.toLowerCase() === 'delete' || event.key.toLowerCase() === 'backspace')) {
       CanvasElementManage.deleteElement()
     }
   },

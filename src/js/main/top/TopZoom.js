@@ -35,7 +35,8 @@ export default {
   },
 
   wheelZoomInOutEvent (event) {
-    if (HelperEvent.isCtrlCmd(event) && !event.altKey && !event.shiftKey) {
+    if (HelperEvent.areMainShortcutsAllowed(event) && HelperEvent.isCtrlCmd(event) &&
+      !event.altKey && !event.shiftKey) {
       if (event.deltaY < 0) {
         this.zoomIn(event.clientX, event.clientY)
       } else {

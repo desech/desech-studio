@@ -37,6 +37,9 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
  *
  * Bugs:
  * - wrong angle and color positions on linear and radial gradients
+ *
+ * Features:
+ * - we do import figma auto-layout which sets the gap, padding, justify-content and align-content
  */
 export default {
   _tmpFileCss: {},

@@ -57,6 +57,33 @@ export default {
     for (const form of canvas.getElementsByTagName('form')) {
       form.reset()
     }
+    this.resetFieldsOutsideForm()
+  },
+
+  resetFieldsOutsideForm () {
+    const canvas = HelperCanvas.getCanvas()
+    this.resetValueOutsideForm(canvas.getElementsByTagName('input'))
+    this.resetValueOutsideForm(canvas.getElementsByTagName('textarea'))
+    this.resetCheckedOutsideForm(canvas.querySelectorAll('input[type="checkbox"]'))
+    this.resetCheckedOutsideForm(canvas.querySelectorAll('input[type="radio"]'))
+    // @todo select is pretty hard to reset because of multiple values and no default selected
+  },
+
+  resetValueOutsideForm (fields) {
+    for (const field of fields) {
+      if ((field.value || field.getAttribute('value')) &&
+        field.value !== field.getAttribute('value')) {
+        field.value = field.getAttribute('value')
+      }
+    }
+  },
+
+  resetCheckedOutsideForm (fields) {
+    for (const field of fields) {
+      if (field.checked !== field.hasAttribute('checked')) {
+        field.checked = field.hasAttribute('checked')
+      }
+    }
   },
 
   resetResize () {

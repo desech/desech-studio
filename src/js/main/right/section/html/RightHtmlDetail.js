@@ -51,6 +51,9 @@ export default {
     RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
       [field.name]: field.value
     })
+    if (field.name === 'value') {
+      StateSelectedElement.getElement().value = field.value
+    }
   },
 
   injectDetails (template) {

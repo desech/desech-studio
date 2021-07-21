@@ -1,4 +1,5 @@
 import fs from 'fs'
+import fse from 'fs-extra'
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
@@ -12,7 +13,7 @@ export default {
     await File.syncUiFolder(folder)
     Font.rebuildFonts(folder)
     const settings = this.getProjectSettings(folder)
-    if (newSettings) this.applyNewSettings(folder, settings, newSettings)
+    if (newSettings) await this.applyNewSettings(folder, settings, newSettings)
     EventMain.ipcMainInvoke('mainOpenProject', folder, settings)
   },
 
@@ -36,7 +37,10 @@ export default {
     return settings
   },
 
-  applyNewSettings (folder, settings, newSettings) {
+  async applyNewSettings (folder, settings, newSettings) {
+    if (settings.exportCode !== newSettings.exportCode) {
+      await this.clearExistingExport(folder)
+    }
     if (settings.responsiveType !== newSettings.responsiveType) {
       settings.responsive = this.getResponsiveData(newSettings.responsiveType)
     }
@@ -44,6 +48,14 @@ export default {
     settings.designSystem = newSettings.designSystem
     settings.exportCode = newSettings.exportCode
     this.saveProjectSettings(folder, settings)
+  },
+
+  async clearExistingExport (folder) {
+    fse.emptyDirSync(File.resolve(folder, '_export'))
+    // it's not efficient to sync twice, but we need the old settings
+    // so we have to sync the project.json file
+    // besides, changing exports, will very rarely happen, so we don't need to optimize it
+    await File.syncUiFolder(folder)
   },
 
   getResponsiveData (responsiveType) {

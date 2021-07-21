@@ -28,7 +28,8 @@ export default {
       const option = this.getPluginOption(plugin)
       if (plugin.category === 'designSystem') {
         designSystem.appendChild(option.cloneNode(true))
-      } else { // exportCode
+      } else {
+        // exportCode
         exportCode.appendChild(option.cloneNode(true))
       }
     }

@@ -38,7 +38,7 @@ export default {
 
   rendererOpenProjectEvent () {
     ipcMain.handle('rendererOpenProject', async (event, settings, folder) => {
-      return await EventMain.handleEvent(this, 'openProject', settings, folder)
+      return await EventMain.handleEvent(this, 'openProject', folder, settings)
     })
   },
 
@@ -88,9 +88,9 @@ export default {
     EventMain.ipcMainInvoke('mainNewProject', plugins)
   },
 
-  async openProject (newSettings = null, folder = null) {
+  async openProject (folder = null, newSettings = null) {
     if (!this.isAuthenticated()) return
-    // the folder is when we are importing and we already have it
+    // we have the folder when we are importing or changing settings
     if (!folder) {
       const folders = this.getChooseFolder()
       if (!folders) return

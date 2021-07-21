@@ -1748,7 +1748,7 @@
   "You can only have one children element.": "You can only have one children element.",
   "You can use component properties to replace text or attribute values.": "You can use component properties to replace text or attribute values.",
   "You might need to disable your firewall for the import to work.": "You might need to disable your firewall for the import to work.",
-  "You need to choose a Figma, Sketch or Adobe XD project file and a folder where you wish to store the html/css files.": "You need to choose a Figma, Sketch or Adobe XD project file and a folder where you wish to store the html/css files.",
+  "You need to choose a Figma, Adobe XD or Sketch project file and a folder where you wish to store the html/css files.": "You need to choose a Figma, Adobe XD or Sketch project file and a folder where you wish to store the html/css files.",
   "You need to choose a folder where to store the html/css files.": "You need to choose a folder where to store the html/css files.",
   "Zip Url": "Zip Url",
   "Zoom in": "Zoom in",

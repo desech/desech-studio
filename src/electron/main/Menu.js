@@ -78,12 +78,6 @@ export default {
       label: Language.localize('Import'),
       submenu: [
         {
-          label: Language.localize('Import Sketch'),
-          click: async () => {
-            await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'sketch')
-          }
-        },
-        {
           label: Language.localize('Import Figma'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'figma')
@@ -93,6 +87,12 @@ export default {
           label: Language.localize('Import Adobe XD'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'adobexd')
+          }
+        },
+        {
+          label: Language.localize('Import Sketch'),
+          click: async () => {
+            await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'sketch')
           }
         }
       ]

@@ -35,8 +35,8 @@ export default {
     const css = {}
     const horizAlign = this.getTextAlign(style)
     if (horizAlign !== 'left') css['text-align'] = horizAlign
-    const vertAlign = this.getAlignSelf(style)
-    if (vertAlign !== 'start') css['align-self'] = vertAlign
+    // const vertAlign = this.getAlignSelf(style)
+    // if (vertAlign !== 'start') css['align-self'] = vertAlign
     return css
   },
 
@@ -47,11 +47,12 @@ export default {
     return aligns[value]
   },
 
-  getAlignSelf (style) {
-    const value = style.textStyleVerticalAlignmentKey
-    const aligns = { 0: 'start', 1: 'center', 2: 'end' }
-    return aligns[value]
-  },
+  // we don't import the height, so vertical aligning has no value
+  // getAlignSelf (style) {
+  //   const value = style.textStyleVerticalAlignmentKey
+  //   const aligns = { 0: 'start', 1: 'center', 2: 'end' }
+  //   return aligns[value]
+  // },
 
   getFontFamily (style) {
     const name = this.getFontName(style)

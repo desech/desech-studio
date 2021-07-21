@@ -52,19 +52,20 @@ export default {
     const css = {}
     const horizAlign = style.textAlignHorizontal ? style.textAlignHorizontal.toLowerCase() : null
     if (horizAlign !== 'left') css['text-align'] = horizAlign
-    const vertAlign = this.getAlignSelf(style)
-    if (vertAlign) css['align-self'] = vertAlign
+    // const vertAlign = this.getAlignSelf(style)
+    // if (vertAlign) css['align-self'] = vertAlign
     return css
   },
 
-  getAlignSelf (style) {
-    switch (style.textAlignVertical) {
-      case 'CENTER':
-        return 'center'
-      case 'BOTTOM':
-        return 'end'
-    }
-  },
+  // we don't import the height, so vertical aligning has no value
+  // getAlignSelf (style) {
+  //   switch (style.textAlignVertical) {
+  //     case 'CENTER':
+  //       return 'center'
+  //     case 'BOTTOM':
+  //       return 'end'
+  //   }
+  // },
 
   getFontWeight (style) {
     // sometimes the value is not correct and should check fontPostScriptName, ie: Inter-SemiBold

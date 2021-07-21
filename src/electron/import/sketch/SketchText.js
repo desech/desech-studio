@@ -34,7 +34,7 @@ export default {
   getAlignment (style) {
     const css = {}
     const horizAlign = this.getTextAlign(style)
-    if (horizAlign !== 'left') css['text-align'] = css['justify-self'] = horizAlign
+    if (horizAlign !== 'left') css['text-align'] = horizAlign
     const vertAlign = this.getAlignSelf(style)
     if (vertAlign !== 'start') css['align-self'] = vertAlign
     return css

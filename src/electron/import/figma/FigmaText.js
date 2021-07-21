@@ -51,7 +51,7 @@ export default {
   getAlignment (style) {
     const css = {}
     const horizAlign = style.textAlignHorizontal ? style.textAlignHorizontal.toLowerCase() : null
-    if (horizAlign !== 'left') css['text-align'] = css['justify-self'] = horizAlign
+    if (horizAlign !== 'left') css['text-align'] = horizAlign
     const vertAlign = this.getAlignSelf(style)
     if (vertAlign) css['align-self'] = vertAlign
     return css

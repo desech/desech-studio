@@ -35,9 +35,6 @@ export default {
   adjustBodyCss (css, ref) {
     delete css.element[ref].width
     // use the first font in body and remove it everywhere else
-    // because in html is not normal for every single node to have a font-family,
-    // instead you set it up on body or other parent containers
-    // let's not use fonts at all and let people manually add them
     // if (css.font[0]) css.element[ref]['font-family'] = css.font[0]
 
     // we prefer to let the body height adjust itself
@@ -268,7 +265,7 @@ export default {
   //   if (marginTop && !css.element[elem.ref]['align-self']) {
   //     css.element[elem.ref]['margin-top'] = marginTop + 'px'
   //   }
-  //   if (marginLeft && !css.element[elem.ref]['justify-self']) {
+  //   if (marginLeft) {
   //     css.element[elem.ref]['margin-left'] = marginLeft + 'px'
   //   }
   // }

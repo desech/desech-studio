@@ -17,6 +17,27 @@ import Electron from '../lib/Electron.js'
 import FileParse from '../file/FileParse.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 
+/**
+ * Elements:
+ * - pages will be converted to folders
+ * - top level visible groups or frames/artboards will be converted to files
+ * - only svg and image elements with export options, are imported
+ * - elements that don't fit inside containers are ignored and need to be adjusted and re-imported
+ *
+ * Style:
+ * - we can't have width and height for each element, because responsive will be hard
+ *    - icons are an exception
+ * - on grids:
+ *    - we don't set the columns width and leave it auto, because responsive will be hard
+ *    - we don't add margins to grid children, because you usually want to use alignment on parent
+ *    - we leave the 10px default gap, because all grids would have gap set to 0
+ * - we can't have font-size 16px for each element, we assume this is the default size
+ * - we can't have font-family for each element, we set this on main containers instead
+ * - components
+ *
+ * Bugs:
+ * - wrong angle and color positions on linear and radial gradients
+ */
 export default {
   _tmpFileCss: {},
 
@@ -118,36 +139,33 @@ export default {
     const tag = node.tag || this.getHtmlTag(node.type)
     const href = node.href ? ` href="${node.href}"` : ''
     const children = (node.children && node.children.length)
-      ? this.getHtmlNodes(node.children, css, folder)
+      ? this.getHtmlNodes(node, node.children, css, folder)
       : node.content
     if (node.type === 'block' && node.content) this.saveSvgBgImage(node, css, folder)
     return `<${tag} class="${cls}"${href}>${children}</${tag}>`
   },
 
-  getHtmlNodes (nodes, css, folder) {
+  getHtmlNodes (parent, nodes, css, folder) {
     let body = ''
     for (const node of nodes) {
+      node.parentRef = parent.ref
       body += this.getHtmlNode(node, css, folder)
     }
     return body
   },
 
+  // filter out some properties
   addNodeCss (node, css) {
     if (!css.element[node.ref]) return
     this._tmpFileCss[node.ref] = css.element[node.ref]
-    // we prefer to manually set these values in desech
     if (node.type !== 'icon') delete this._tmpFileCss[node.ref].width
+    delete this._tmpFileCss[node.ref].height
     if (this._tmpFileCss[node.ref]['font-size'] === '16px') {
       delete this._tmpFileCss[node.ref]['font-size']
     }
-    if (node.name !== 'body') {
-      delete this._tmpFileCss[node.ref]['font-family']
-    }
-    const ignored = ['height', 'align-self', 'justify-self', 'text-align']
-    for (const prop of ignored) {
-      delete this._tmpFileCss[node.ref][prop]
-    }
+    if (node.name !== 'body') delete this._tmpFileCss[node.ref]['font-family']
     if (node.type === 'text') this.addInlineCss(node, css)
+    this.setTextAlignmentCss(node, css)
   },
 
   addInlineCss (node, css) {
@@ -164,6 +182,29 @@ export default {
       classes.push(match[1])
     }
     return classes
+  },
+
+  setTextAlignmentCss (node, css) {
+    // if we all our children have the same text-alignment then set it on the parent
+    if (node.children && node.children.length) {
+      this.setTextAlignmentToParent(node, css)
+    }
+    // if our parent has a text-alignment then our children don't need it anymore
+    if (this._tmpFileCss[node.parentRef] && this._tmpFileCss[node.parentRef]['text-align']) {
+      delete this._tmpFileCss[node.ref]['text-align']
+    }
+  },
+
+  setTextAlignmentToParent (node, css) {
+    let value = null
+    for (const child of node.children) {
+      if (!css.element[child.ref] || !css.element[child.ref]['text-align'] ||
+        (value && value !== css.element[child.ref]['text-align'])) {
+        return
+      }
+      value = css.element[child.ref]['text-align']
+    }
+    this._tmpFileCss[node.ref]['text-align'] = value
   },
 
   shouldConvertDiv (node, css) {

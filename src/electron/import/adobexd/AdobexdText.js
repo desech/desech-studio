@@ -36,7 +36,7 @@ export default {
     const css = {}
     if (style.paragraphAlign) {
       // can be "center" or "right"; the "left" option doesn't exist
-      css['text-align'] = css['justify-self'] = style.paragraphAlign
+      css['text-align'] = style.paragraphAlign
     }
     return css
   },

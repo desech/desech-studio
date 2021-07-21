@@ -11,12 +11,6 @@ import EventMain from '../../event/EventMain.js'
 import Language from '../../lib/Language.js'
 import FigmaIcon from './FigmaIcon.js'
 
-/**
- * Missing functionality:
- * - wrong angle and color positions on linear and radial gradients
- * - fonts
- * - components
- */
 export default {
   _html: {},
   _css: {},

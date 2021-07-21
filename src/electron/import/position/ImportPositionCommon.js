@@ -103,8 +103,9 @@ export default {
   },
 
   debugLineNode (elem) {
-    if (this._DEBUG) console.info('   ', elem.name, elem.ref, 'Position x1', elem.x, 'y1',
-      elem.y, 'x2', this.getEnd(elem, 'x'), 'y2', this.getEnd(elem, 'y'))
+    if (!this._DEBUG) return
+    console.info('   ', elem.name, elem.ref, 'Position x1', elem.x, 'y1', elem.y, 'x2',
+      this.getEnd(elem, 'x'), 'y2', this.getEnd(elem, 'y'))
   },
 
   debugElemOutside (elem, container) {
@@ -116,7 +117,8 @@ export default {
 
   debugLineNodeCheck (node, elem, status) {
     if (!this._DEBUG) return
-    const boundaries = (status === 'outside') ? this.isOutsideBoundaries(node, elem)
+    const boundaries = (status === 'outside')
+      ? this.isOutsideBoundaries(node, elem)
       : this.isInsideChildBoundaries(node, elem)
     const intersect = this.getIntersectionParent(node, elem)
     console.info('     ', node.name, node.ref, 'Position x1', node.x, 'y1', node.y, 'x2',
@@ -140,8 +142,9 @@ export default {
   },
 
   debugAddContainerCss (container, type, value) {
-    if (this._DEBUG) console.info('  Adding css to container', container.name, container.ref,
-      'Grid Type', type, 'Template', value)
+    if (!this._DEBUG) return
+    console.info('  Adding css to container', container.name, container.ref, 'Grid Type', type,
+      'Template', value)
   },
 
   debugLineContainer (container) {

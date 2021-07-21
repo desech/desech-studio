@@ -17,7 +17,7 @@ template, [hidden] {
 div, main, article, section, nav, aside, header, h1, h2, h3, h4, h5, h6, footer,address, p,
 pre, blockquote, figure, figcaption, hr, ul, ol, li, dl, dt, dd, form, label, output, slot,
 button, svg, img, video, audio, iframe, object, input, select, textarea, progress, meter,
-details, summary,
+details, summary, fieldset, legend,
 table, thead, tbody, tfoot, tr, td, th, caption, colgroup, col,
 b, i, a, span, strong, em, time, ins, del, s, mark, small, sub, sup, q, abbr, cite, dfn, samp,
 code, var, kbd, bdo, ruby, rt, rb {
@@ -242,4 +242,8 @@ caption, caption.block {
 map, map.block, map.text,
 area, area.block, area.text {
   display: inline;
+}
+
+fieldset, fieldset.block {
+  display: block;
 }

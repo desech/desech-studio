@@ -1,13 +1,13 @@
 {
   "type": "module",
   "name": "desech-studio",
-  "description": "Desech Studio, a visual html/css editor for web programmers and designers",
+  "description": "Desech Studio, a nocode visual html/css editor for web programmers and designers",
   "homepage": "https://www.desech.com",
   "author": {
     "name": "Desech Studio SRL",
     "email": "contact@desech.com"
   },
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "license.txt",
   "repository": {
     "type": "git",

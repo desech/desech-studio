@@ -89,7 +89,10 @@ export default {
   resetResize () {
     const canvas = HelperCanvas.getCanvas()
     for (const element of canvas.querySelectorAll('[style]')) {
-      element.removeAttributeNS(null, 'style')
+      // don't remove the style from svg elements
+      if (!element.closest('svg')) {
+        element.removeAttributeNS(null, 'style')
+      }
     }
   },
 

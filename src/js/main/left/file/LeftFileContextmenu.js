@@ -14,7 +14,7 @@ export default {
     return {
       click: ['clickHideMenuEvent', 'clickLoadHtmlEvent', 'clickAddComponentHtmlEvent',
         'clickOpenFileEvent', 'clickShowRenameItemEvent', 'clickDeleteItemEvent',
-        'clickNewFolderEvent', 'clickNewFileEvent'],
+        'clickNewFolderEvent', 'clickNewFileEvent', 'clickCopySvgEvent'],
       keydown: ['keydownFinishRenameItemEvent', 'keydownCloseEvent'],
       contextmenu: ['contextmenuShowMenuEvent']
     }
@@ -63,6 +63,12 @@ export default {
   clickShowRenameItemEvent (event) {
     if (event.target.classList.contains('panel-option-rename')) {
       this.showRenameItem(this.getActiveMenuElement())
+    }
+  },
+
+  async clickCopySvgEvent (event) {
+    if (event.target.classList.contains('panel-option-copy-svg')) {
+      await this.copySvgCode(this.getActiveMenuElement())
     }
   },
 
@@ -123,6 +129,8 @@ export default {
     if (HelperFile.isComponentFile(item.dataset.ref) &&
       HelperProject.getFile() !== item.dataset.ref) {
       return 'component'
+    } else if (item.dataset.extension === 'svg') {
+      return 'svg'
     } else if (item.dataset.extension === 'html') {
       return 'html'
     } else {
@@ -214,5 +222,10 @@ export default {
   getParentFolder (data) {
     const folder = (data.type === 'folder') ? data.ref : HelperFile.getDirname(data.ref)
     return (folder === HelperProject.getFolder()) ? null : folder
+  },
+
+  async copySvgCode (item) {
+    const code = await window.electron.invoke('rendererCopySvgCode', item.dataset.ref)
+    await navigator.clipboard.writeText(code)
   }
 }

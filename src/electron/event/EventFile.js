@@ -21,6 +21,7 @@ export default {
     this.rendererParseComponentFileEvent()
     this.rendererSaveCurrentFileEvent()
     this.rendererAddFontEvent()
+    this.rendererCopySvgCodeEvent()
   },
 
   rendererGetFolderEvent () {
@@ -83,6 +84,12 @@ export default {
     })
   },
 
+  rendererCopySvgCodeEvent () {
+    ipcMain.handle('rendererCopySvgCode', async (event, file) => {
+      return await EventMain.handleEvent(this, 'copySvgCode', file)
+    })
+  },
+
   async getFolder () {
     const folder = await Cookie.getCookie('currentFolder')
     return File.readFolder(folder, {
@@ -114,5 +121,9 @@ export default {
     const baseHref = HelperFile.getBaseHref(htmlFile, folder)
     fs.writeFileSync(htmlFile, html.replace(/(<base href=")(.*)(">)/, `$1${baseHref}$3`)
       .replace(/(<link rel="stylesheet" href="css\/page\/)(.*\.css)(">)/, `$1${newCssFile}$3`))
+  },
+
+  copySvgCode (file) {
+    return fs.readFileSync(file).toString()
   }
 }

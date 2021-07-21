@@ -10,6 +10,7 @@ import ExtendJS from '../../../js/helper/ExtendJS.js'
 import EventMain from '../../event/EventMain.js'
 import Language from '../../lib/Language.js'
 import FigmaIcon from './FigmaIcon.js'
+import FigmaLayout from './FigmaLayout.js'
 
 export default {
   _html: {},
@@ -175,10 +176,10 @@ export default {
   },
 
   async getCssProperties (data, element) {
-    // we ignore the figma layout grid, because ImportPosition will create grids
     const extra = this.getExtraData({ data })
     return {
       ...FigmaCommon.getCssBasic(data.type, element),
+      ...FigmaLayout.getAutoLayout(element),
       ...FigmaCommon.getCssMixBlendMode(element.blendMode),
       ...FigmaCommon.getCssRoundedCorners(element),
       ...await FigmaFill.getCssFill(element, extra),

@@ -5,6 +5,7 @@ import CanvasOverlayGridTrack from './grid/CanvasOverlayGridTrack.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import CanvasOverlayCommon from './CanvasOverlayCommon.js'
+import InputUnitField from '../../../component/InputUnitField.js'
 
 export default {
   getEvents () {
@@ -60,8 +61,9 @@ export default {
   keydownUpdateCellEvent (event) {
     if (event.key && (event.key === 'Escape' || event.key === 'Enter') &&
       event.target.classList.contains('track-cell-size')) {
+      InputUnitField.setValueField(event.target, event.target.value)
       CanvasOverlayGridTrack.applyCellChanges(event.target)
-      // stop de-selecting the element on Escape
+      // stop de-selecting the element on Escape, but it also stops the InputUnitField event
       event.preventDefault()
     }
   },

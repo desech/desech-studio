@@ -4,13 +4,19 @@ import HelperEvent from '../helper/HelperEvent.js'
 export default {
   getEvents () {
     return {
-      change: ['changeSelectUnitEvent'],
+      change: ['changeInputValueEvent', 'changeSelectUnitEvent'],
       keydown: ['keydownOperateNumberEvent']
     }
   },
 
   handleEvent (event) {
     HelperEvent.handleEvents(this, event)
+  },
+
+  changeInputValueEvent (event) {
+    if (event.target.classList.contains('input-unit-value')) {
+      this.changeInputValue(event.target)
+    }
   },
 
   changeSelectUnitEvent (event) {
@@ -23,6 +29,10 @@ export default {
     if (event.key && event.target.classList.contains('input-unit-value')) {
       this.operateNumber(event.key, event.target)
     }
+  },
+
+  changeInputValue (input) {
+    this.setValueField(input, input.value)
   },
 
   selectUnit (select) {

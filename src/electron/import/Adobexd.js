@@ -221,7 +221,6 @@ export default {
   },
 
   async getCssProperties (data, element) {
-    // we ignore the meta.ux.repeatGrid, because ImportPosition will create grids
     return {
       ...AdobexdCommon.getCssBasic(data.type, element),
       ...AdobexdCommon.getCssRoundedCorners(element.shape),

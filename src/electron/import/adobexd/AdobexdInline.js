@@ -26,23 +26,21 @@ export default {
 
   processInlineElement (block, text, css) {
     // skip inline elements that cover the whole text
-    if (block.from === 0 && block.to === text.length) {
-      return
-    }
-    const elemId = HelperElement.generateElementRef()
-    const data = this.getInlineData(block, text, elemId)
-    if (data && block.style) {
-      css.element[elemId] = AdobexdText.getCssText('inline', block.style, css)
-    }
-    return data
-  },
-
-  getInlineData (block, text, elemId) {
-    const html = text.substring(block.from, block.to)
+    if (block.from === 0 && block.to === text.length) return
     return {
       start: block.from,
       end: block.to,
-      html: `<em class="${elemId}">${html}</em>`
+      html: this.processHtmlCss(block, text, css)
     }
+  },
+
+  processHtmlCss (block, text, css) {
+    let html = text.substring(block.from, block.to)
+    if (block.style) {
+      const elemId = HelperElement.generateElementRef()
+      css.element[elemId] = AdobexdText.getCssText('inline', block.style, css)
+      html = `<em class="${elemId}">${html}</em>`
+    }
+    return html
   }
 }

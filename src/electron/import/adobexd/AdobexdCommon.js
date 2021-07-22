@@ -48,7 +48,11 @@ export default {
     if (element.text.frame.type === 'area') {
       return parseInt(element.text.frame.width)
     } else {
-      // positioned - @todo better approximation
+      // @todo wait for adobexd to provide exact values
+      // usually a character width is a bit bigger than half the font size,
+      // and the W char is, for some fonts, the same as the font size
+      // but we don't want to approximate a bigger width because it will clip,
+      // so we want a smaller width in order to fit
       return Math.round(element.style.font.size / 2 * element.text.rawText.length)
     }
   },
@@ -57,8 +61,9 @@ export default {
     if (element.text.frame.type === 'area') {
       return parseInt(element.text.frame.height)
     } else {
-      // positioned - @todo some fonts have a line height of 1.33, some of 0.5
-      // use a value of 1 for our case
+      // @todo wait for adobexd to provide exact values
+      // the average line height is 1.2, but we have fonts with 0.5 and some with 2.3,
+      // but we will use a value of 1 to have the height a bit smaller to not clip
       return Math.round(element.style.font.size * 1)
     }
   },

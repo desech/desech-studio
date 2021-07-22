@@ -157,7 +157,6 @@ export default {
     if (!body) return ''
     return this.formatHtmlString(window.html_beautify(body, {
       indent_size: 2,
-      inline: [],
       preserve_newlines: false
     }))
   },

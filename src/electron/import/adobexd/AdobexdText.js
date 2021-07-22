@@ -7,22 +7,24 @@ export default {
     if (type !== 'text' && type !== 'inline') return
     return {
       ...this.getAutoWidth(style),
-      ...this.getAlignment(style),
-      ...ParseCommon.getFontFamily(style.fontFamily, css),
-      ...ParseCommon.getPropValue('font-weight', '700', style.fontStyle.includes('Bold')),
-      ...ParseCommon.getPropValue('font-style', 'italic', style.fontStyle.includes('Italic')),
-      ...ParseCommon.getPropValue('font-size', Math.round(style.fontSize) + 'px', style.fontSize),
-      ...ParseCommon.getPropValue('text-transform', this.getTransform(style.textTransform),
-        style.textTransform),
+      ...ParseCommon.getFontFamily(style.font?.family, css),
+      ...ParseCommon.getPropValue('font-weight', '700', style.font?.style?.includes('Bold')),
+      ...ParseCommon.getPropValue('font-style', 'italic', style.font?.style?.includes('Italic')),
+      ...ParseCommon.getPropValue('font-size', Math.round(style.font?.size) + 'px',
+        style.font?.size),
+      ...ParseCommon.getPropValue('text-align', style.textAttributes?.paragraphAlign,
+        style.textAttributes?.paragraphAlign),
+      // ...ParseCommon.getPropValue('text-transform', this.getTransform(style), style),
       ...ParseCommon.getPropValue('text-decoration-line', this.getDecoration(style),
-        this.getDecoration(style)),
-      ...ParseCommon.getPropValue('letter-spacing', ExtendJS.roundToTwo(style.charSpacing) + 'px',
-        style.charSpacing),
-      ...ParseCommon.getPropValue('vertical-align', this.getAlign(style.textScript),
-        style.textScript),
-      ...ParseCommon.getPropValue('line-height', Math.round(style.lineHeight) + 'px',
-        style.lineHeight),
-      ...ParseCommon.getPropValue('color', AdobexdCommon.getColor(style.color), style.color)
+        style.textAttributes?.decoration?.length),
+      ...ParseCommon.getPropValue('letter-spacing', this.getLetterSpacing(style),
+        this.getLetterSpacing(style)),
+      ...ParseCommon.getPropValue('vertical-align', this.getVerticalAlign(style),
+        style.textAttributes?.verticalAlign),
+      ...ParseCommon.getPropValue('line-height',
+        Math.round(style.textAttributes?.lineHeight) + 'px', style.textAttributes?.lineHeight),
+      ...ParseCommon.getPropValue('color', AdobexdCommon.getColor(style.fill?.color),
+        style.fill?.color)
     }
   },
 
@@ -32,38 +34,31 @@ export default {
     }
   },
 
-  getAlignment (style) {
-    const css = {}
-    if (style.paragraphAlign) {
-      // can be "center" or "right"; the "left" option doesn't exist
-      css['text-align'] = style.paragraphAlign
-    }
-    return css
-  },
-
-  getTransform (transform) {
-    switch (transform) {
-      case 'uppercase':
-      case 'lowercase':
-        return transform
-      case 'titlecase':
-        return 'capitalize'
-    }
-  },
+  // @todo wait for adobe to add text transform to `style`
+  // getTransform (transform) {
+  //   switch (transform) {
+  //     case 'uppercase':
+  //     case 'lowercase':
+  //       return transform
+  //     case 'titlecase':
+  //       return 'capitalize'
+  //   }
+  // },
 
   getDecoration (style) {
-    let line = ''
-    if (style.underline) line += 'underline'
-    if (style.strikethrough) line += ' line-through'
-    return line.trim()
+    const values = style.textAttributes?.decoration
+    return values ? values.join(' ') : null
   },
 
-  getAlign (type) {
-    switch (type) {
-      case 'superscript':
-        return 'super'
-      case 'subscript':
-        return 'sub'
-    }
+  getLetterSpacing (style) {
+    const value = style.textAttributes?.letterSpacing
+    const number = ExtendJS.roundToTwo(value / 1000)
+    return number ? number + 'em' : null
+  },
+
+  getVerticalAlign (style) {
+    const value = style.textAttributes?.verticalAlign
+    if (!value) return null
+    return (parseInt(value) < 0) ? 'sub' : 'sup'
   }
 }

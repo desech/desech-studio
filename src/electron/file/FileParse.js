@@ -60,7 +60,6 @@ export default {
   beautifyHtml (body) {
     return beautify.html(body, {
       indent_size: 2,
-      inline: [],
       preserve_newlines: false
     })
   }

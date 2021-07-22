@@ -54,7 +54,7 @@ export default {
     if (style.hyperlink) {
       return `<a class="${elemId}" href="${style.hyperlink.url}">${html}</a>`
     } else {
-      return `<span class="${elemId}">${html}</span>`
+      return `<em class="${elemId}">${html}</em>`
     }
   },
 

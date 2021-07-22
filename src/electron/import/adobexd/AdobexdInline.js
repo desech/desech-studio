@@ -10,15 +10,13 @@ export default {
     return { content: content.replace(/\n/g, '\n<br>') }
   },
 
+  // don't use meta.ux.rangedStyles because it's buggy as hell
   processInlineText (element, css) {
     const data = []
-    if (element.meta.ux.rangedStyles[0].length === 0) return data
-    const tmp = { index: 0, last: null }
     for (const paragraph of element.text.paragraphs) {
       for (const line of paragraph.lines) {
-        for (const string of line) {
-          const inline = this.processInlineTextElem(string, element.meta.ux.rangedStyles,
-            element.text.rawText, tmp, css)
+        for (const block of line) {
+          const inline = this.processInlineElement(block, element.text.rawText, css)
           if (inline) data.push(inline)
         }
       }
@@ -26,43 +24,25 @@ export default {
     return data
   },
 
-  processInlineTextElem (string, styles, text, tmp, css) {
-    // @todo \n are ignored, so when present, the `string.to` value is reduced by 1
-    // which breaks the entire code
-    // ignore the incremental `from` and use our stored value
-    const start = (tmp.last !== null) ? tmp.last : string.from
-    if (string.to - start === styles[tmp.index].length || string.to === text.length) {
-      const inline = this.processInlineElement(string, start, styles[tmp.index], text, css)
-      tmp.last = null
-      tmp.index++
-      return inline
-    } else if (tmp.last === null) {
-      tmp.last = string.from
-    }
-  },
-
-  processInlineElement (string, start, style, text, css) {
+  processInlineElement (block, text, css) {
     // skip inline elements that cover the whole text
-    if (start === 0 && string.to === text.length) {
+    if (block.from === 0 && block.to === text.length) {
       return
     }
     const elemId = HelperElement.generateElementRef()
-    const data = this.getInlineData(string, start, style, text, elemId)
-    if (data) {
-      css.element[elemId] = AdobexdText.getCssText('inline', {
-        ...style,
-        color: (string.style && string.style.fill) ? string.style.fill.color : null
-      }, css)
+    const data = this.getInlineData(block, text, elemId)
+    if (data && block.style) {
+      css.element[elemId] = AdobexdText.getCssText('inline', block.style, css)
     }
     return data
   },
 
-  getInlineData (string, start, style, text, elemId) {
-    const html = text.substring(start, string.to)
+  getInlineData (block, text, elemId) {
+    const html = text.substring(block.from, block.to)
     return {
-      start,
-      end: string.to,
-      html: `<span class="${elemId}">${html}</span>`
+      start: block.from,
+      end: block.to,
+      html: `<em class="${elemId}">${html}</em>`
     }
   }
 }

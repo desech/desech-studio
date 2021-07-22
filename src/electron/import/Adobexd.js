@@ -248,12 +248,8 @@ export default {
 
   prepareTextStyle (type, element) {
     if (type !== 'text' && type !== 'inline') return
-    const attr = element.style.textAttributes
     return {
-      ...element.meta.ux.rangedStyles[0],
-      lineHeight: attr ? attr.lineHeight : null,
-      paragraphAlign: attr ? attr.paragraphAlign : null,
-      color: element.style.fill.color,
+      ...element.style,
       sizeType: element.text ? element.text.frame.type : null
     }
   }

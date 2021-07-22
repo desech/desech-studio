@@ -37,11 +37,12 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
  *
  * Bugs:
  * - wrong angle and color positions on linear and radial gradients
- * - adobexd:
- *    - text width and height is approximated
- *    - fix new lines in rich text
- *    - implement svg icon for polygon
- *    - autolayout like figma, meta.ux.repeatGrid
+ * - adobexd text:
+ *   - text width and height is approximated, wait for adobexd to provide exact values
+ *   - text-transform is not present in the style property, only in the rangeStyles
+ *     which are buggy, wait for adobexd to add it in the style too
+ *   - implement svg icon for polygon
+ *   - autolayout like figma, meta.ux.repeatGrid
  *
  * Features:
  * - we do import figma auto-layout which sets the gap, padding, justify-content and align-content

@@ -38,7 +38,7 @@ export default {
     return {
       start: text.location,
       end,
-      html: `<span class="${elemId}">${html}</span>`
+      html: `<em class="${elemId}">${html}</em>`
     }
   }
 }

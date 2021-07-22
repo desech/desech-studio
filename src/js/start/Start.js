@@ -98,6 +98,7 @@ export default {
   importFilePrompt (type) {
     const query = `.start-import-file[data-type="${CSS.escape(type)}"] .start-import-title`
     const header = document.querySelector(query).textContent
+    DialogComponent.closeAllDialogs()
     const dialog = DialogComponent.showDialog({
       header,
       body: DialogComponent.getContentHtml('import', 'body')

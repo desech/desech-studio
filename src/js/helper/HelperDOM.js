@@ -171,7 +171,7 @@ export default {
 
   createElement (tag, document) {
     if (tag === 'svg') {
-      return document.createElementNS('http://www.w3.org/2000/svg', tag)
+      return document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     } else {
       return document.createElementNS('http://www.w3.org/1999/xhtml', tag)
     }

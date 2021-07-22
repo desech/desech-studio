@@ -2,15 +2,15 @@ import ParseCommon from '../ParseCommon.js'
 import AdobexdCommon from './AdobexdCommon.js'
 
 export default {
-  getCssStroke (type, element) {
+  getCssStroke (type, element, svgPaths) {
     if (AdobexdCommon.isStrokeAvailable(type, element.style)) {
-      return this.getStrokeData(type, element)
+      return this.getStrokeData(type, element, svgPaths)
     }
   },
 
-  getStrokeData (type, element) {
+  getStrokeData (type, element, svgPaths) {
     const stroke = element.style.stroke
-    const height = AdobexdCommon.getHeight(type, element, false)
+    const height = AdobexdCommon.getHeight(type, element, svgPaths, false)
     return {
       ...ParseCommon.getStrokeSize(stroke.width, height),
       ...ParseCommon.getStrokeStyle(stroke.dash ? 'dotted' : 'solid'),

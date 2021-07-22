@@ -41,8 +41,21 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
  *   - text width and height is approximated, wait for adobexd to provide exact values
  *   - text-transform is not present in the style property, only in the rangeStyles
  *     which are buggy, wait for adobexd to add it in the style too
- *   - implement svg icon for polygon
- *   - autolayout like figma, meta.ux.repeatGrid
+ *
+ * TODO:
+ *   - adobexd
+ *      - svg masked shapes
+ *      - background image for all type of svgs
+ *      - autolayout, meta.ux.repeatGrid
+ *   - sketch
+ *      - remove empty em's - check AdobexdInline
+ *      - svg masked shapes
+ *      - background image for all type of svgs
+ *      - autolayout, meta.ux.repeatGrid
+ *   - figma
+ *      - remove empty em's - check AdobexdInline
+ *      - svg masked shapes
+ *      - background image for all type of svgs
  *
  * Features:
  * - we do import figma auto-layout which sets the gap, padding, justify-content and align-content
@@ -246,6 +259,7 @@ export default {
   saveSvgBgImage (node, css, folder) {
     const file = `${ParseCommon.getName(node.name)}-${node.width}-${node.height}.svg`
     const filePath = File.resolve(folder, 'asset/image', file)
+    // @todo transfer the svg css to the first path and clear the css
     if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, node.content)
     this.addSvgBgImageCss(node.ref, file, css)
   },

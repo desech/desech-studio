@@ -12,5 +12,9 @@ export default {
 
   ipcMainInvoke (name, ...args) {
     Electron.getCurrentWeb().send(name, ...args)
+  },
+
+  async executeJs (code) {
+    return await Electron.getCurrentWeb().executeJavaScript(code)
   }
 }

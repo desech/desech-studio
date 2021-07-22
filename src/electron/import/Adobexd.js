@@ -15,6 +15,7 @@ export default {
   _html: {},
   _css: {},
   _debug: [],
+  _svgPaths: {},
   _symbols: {},
   _projectFolder: '',
   _importFolder: '',
@@ -102,17 +103,16 @@ export default {
     for (const file of Object.values(this._html)) {
       const filePath = `artwork/${file.path}/graphics/graphicContent.agc`
       const data = File.getFileData(filePath, this._importFolder)
-      const css = await this.getCssProperties({ ...file, type: 'block' }, {
+      this._css.element[file.ref] = await this.getCssProperties({ ...file, type: 'block' }, {
         ...data.children[0],
-        // pass along the width/height
         'uxdesign#bounds': {
           width: file.width,
           height: file.height
         }
       })
-      this._css.element[file.ref] = css
-      await this.parseElements(data.children[0].artboard.children, this._html[file.name].nodes,
-        this._html[file.name])
+      const children = data.children[0].artboard.children
+      this._svgPaths = await AdobexdIcon.prepareSvgPaths(children)
+      await this.parseElements(children, this._html[file.name].nodes, this._html[file.name])
     }
   },
 
@@ -173,7 +173,8 @@ export default {
         // rect, line, ellipse, polygon, path, compound
         if (['rect', 'line', 'ellipse'].includes(element.shape.type)) {
           return 'block'
-        } else if (element.shape.type === 'polygon' && element.meta.ux.markedForExport) {
+        } else if (['polygon', 'path', 'compound'].includes(element.shape.type) &&
+          element.meta.ux.markedForExport) {
           // icons need to have export settings
           return 'icon'
         }
@@ -200,13 +201,13 @@ export default {
 
   getElementData (type, element, pos) {
     this._debug.push(element) // for debugging
-    const width = AdobexdCommon.getWidth(type, element)
-    const height = AdobexdCommon.getHeight(type, element)
+    const width = AdobexdCommon.getWidth(type, element, this._svgPaths)
+    const height = AdobexdCommon.getHeight(type, element, this._svgPaths)
     return {
       id: element.id, // for debugging
       name: element.name,
-      x: AdobexdCommon.getX(type, element, pos.x),
-      y: AdobexdCommon.getY(type, element, pos.y),
+      x: AdobexdCommon.getX(type, element, pos.x, this._svgPaths),
+      y: AdobexdCommon.getY(type, element, pos.y, this._svgPaths),
       width,
       height,
       type,
@@ -215,14 +216,14 @@ export default {
       component: [],
       content: '',
       ...AdobexdInline.processTextContent(element, type, this._css),
-      ...AdobexdIcon.getSvgContent(element, type, width, height),
+      ...AdobexdIcon.getSvgContent(element, type, width, height, this._svgPaths),
       children: []
     }
   },
 
   async getCssProperties (data, element) {
     return {
-      ...AdobexdCommon.getCssBasic(data.type, element),
+      ...AdobexdCommon.getCssBasic(data.type, element, this._svgPaths),
       ...AdobexdCommon.getCssRoundedCorners(element.shape),
       ...AdobexdText.getCssText(data.type, this.prepareTextStyle(data.type, element), this._css),
       ...await this.getStyleProperties(data, element)
@@ -241,7 +242,8 @@ export default {
     return {
       ...AdobexdCommon.getCssMixBlendMode(element.style.blendMode),
       ...await AdobexdFill.getCssFill(extra),
-      ...AdobexdStroke.getCssStroke(data.type, element),
+      ...AdobexdStroke.getCssStroke(data.type, element, this._svgPath),
+      ...AdobexdIcon.getCssFillStroke(data.type, element),
       ...AdobexdEffect.getCssEffect(data.type, element.style.filters)
     }
   },

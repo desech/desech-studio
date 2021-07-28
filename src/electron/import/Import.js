@@ -298,7 +298,8 @@ export default {
     // imported svgs sometimes have elements without content
     if (!node.content) return ''
     const html = node.content.replace('<svg ', `<svg class="${cls}" `)
-    return html.replace(' fill="none"', '').replace(' xmlns="http://www.w3.org/2000/svg"', '')
+    // we only want the first replace inside <svg> not replaceAll in all nodes
+    return html.replace(/ width=".*?"/, '').replace(/ height=".*?"/, '')
   },
 
   getHtmlTag (type) {

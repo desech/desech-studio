@@ -8,7 +8,7 @@ import File from '../../file/File.js'
 export default {
   async getCssFill (element, extra) {
     const fills = element.fills
-    if (this.ignoreFill(extra.data.type, fills)) return
+    if (this.ignoreFill(element.type, extra.data.type, fills)) return
     this.addExportFill(element, fills)
     const data = []
     for (let i = fills.length - 1; i >= 0; i--) {
@@ -19,10 +19,10 @@ export default {
     return ParseCommon.mergeValues(data, ', ')
   },
 
-  ignoreFill (type, fills) {
+  ignoreFill (elementType, htmlType, fills) {
     // we also process the fill in FigmaIcon and FigmaText
-    if (type === 'icon') return true
-    if (type === 'text' && fills.length === 1 &&
+    if (elementType === 'LINE' || htmlType === 'icon') return true
+    if (htmlType === 'text' && fills.length === 1 &&
       this.getFillStrokeType(fills[0].type) === 'Solid') {
       return true
     }
@@ -91,13 +91,13 @@ export default {
     const handle = fill.gradientHandlePositions
     const angle = ParseCommon.getGradientLinearAngle(handle[0].x, handle[1].x, handle[0].y,
       handle[1].y)
-    const stops = this.getGradientStops(fill.gradientStops)
+    const stops = this.getGradientStops(fill.opacity, fill.gradientStops)
     return `linear-gradient(${angle}deg, ${stops})`
   },
 
   getFillBgGradientradial (fill) {
     // @todo add radial gradient properties
-    const stops = this.getGradientStops(fill.gradientStops)
+    const stops = this.getGradientStops(fill.opacity, fill.gradientStops)
     return `radial-gradient(${stops})`
   },
 
@@ -120,10 +120,11 @@ export default {
     })
   },
 
-  getGradientStops (stops) {
+  getGradientStops (opacity, stops) {
     let css = ''
     for (const stop of stops) {
-      const color = FigmaCommon.getColor(stop.color.r, stop.color.g, stop.color.b, stop.color.a)
+      const alpha = (typeof opacity !== 'undefined') ? opacity * stop.color.a : stop.color.a
+      const color = FigmaCommon.getColor(stop.color.r, stop.color.g, stop.color.b, alpha)
       const position = Math.round(stop.position * 100)
       css += css ? ', ' : ''
       css += `${color} ${position > 100 ? 100 : position}%`

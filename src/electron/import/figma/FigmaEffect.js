@@ -4,10 +4,17 @@ import ParseCommon from '../ParseCommon.js'
 export default {
   getCssEffect (elemType, element) {
     const effects = { 'box-shadow': [], filter: [] }
+    this.addOpacity(element.opacity, effects)
     for (const effect of element.effects) {
       this.processEffect(elemType, effect, effects)
     }
     return this.mergeEffects(effects)
+  },
+
+  addOpacity (opacity, effects) {
+    if (typeof opacity === 'undefined') return
+    const value = Math.round(opacity * 100)
+    effects.filter.push({ filter: `opacity(${value}%)` })
   },
 
   processEffect (elemType, effect, effects) {
@@ -21,7 +28,7 @@ export default {
 
   getEffectData (elemType, effect) {
     const effectType = this.getEffectType(effect)
-    if (elemType === 'text') {
+    if (elemType === 'text' || elemType === 'icon') {
       return { type: 'filter', method: effectType }
     } else {
       return {

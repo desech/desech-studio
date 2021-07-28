@@ -66,3 +66,11 @@
   padding: 20px 0 0 0;
   font-size: 13px;
 }
+
+iframe#temp {
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  top: -1000px;
+  left: -1000px;
+}

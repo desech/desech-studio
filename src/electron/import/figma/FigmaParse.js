@@ -116,10 +116,9 @@ export default {
   },
 
   getElementType (element) {
-    // ignore SLICE
     switch (element.type) {
-      case 'RECTANGLE': case 'LINE': case 'FRAME': case 'GROUP': case 'COMPONENT':
-      case 'INSTANCE': case 'ELLIPSE':
+      case 'FRAME': case 'RECTANGLE': case 'LINE': case 'ELLIPSE': case 'GROUP':
+      case 'COMPONENT': case 'INSTANCE':
         return this.convertElementType(element, 'block')
       case 'TEXT':
         return 'text'
@@ -127,6 +126,8 @@ export default {
         // icons need to have export settings
         if (!element.exportSettings || !element.exportSettings.length) return null
         return this.convertElementType(element, 'icon')
+      case 'SLICE':
+        // ignored
     }
   },
 
@@ -145,7 +146,7 @@ export default {
       width: FigmaCommon.getWidth(type, element),
       height: FigmaCommon.getHeight(type, element),
       type,
-      tag: null,
+      tag: (element.type === 'LINE') ? 'hr' : 'div',
       ref: HelperElement.generateElementRef(),
       zIndex: ++this._zIndex,
       component: [],
@@ -184,7 +185,7 @@ export default {
       ...FigmaCommon.getCssRoundedCorners(element),
       ...await FigmaFill.getCssFill(element, extra),
       ...await FigmaStroke.getCssStroke(element, extra),
-      ...FigmaIcon.getCssFillStroke(data.type, element),
+      ...FigmaIcon.processCssFillStroke(data, element),
       ...FigmaEffect.getCssEffect(data.type, element),
       ...FigmaText.getCssText(data.type, element, this._css)
     }
@@ -193,8 +194,8 @@ export default {
   // moveAllProperties (data, element, properties) {
   //   const componentProps = this.getAllComponentProperties()
   //   for (const type of ['fill', 'stroke', 'effect', 'text']) {
-  //     // icons with both fill and stroke will use the fill component, while the strike component
-  //     // will still have the border color, but it's harmless
+  //     // icons with both fill and stroke will use the fill component, while the strike
+  //     // component will still have the border color, but it's harmless
   //     this.moveProperties(data, element.styles[type], type, properties, componentProps[type])
   //   }
   // },

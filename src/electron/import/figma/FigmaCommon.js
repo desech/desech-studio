@@ -76,6 +76,10 @@ export default {
     const height = this.getHeight(type, element)
     css.height = height + 'px'
     ParseCommon.setBlockMinHeight(type, height, css)
+
+    // @todo angle value is not calculated correctly - find the correct formula
+    // const m = element.relativeTransform
+    // console.log(element.name, Math.atan2(-m[1][0], m[0][0]))
     return css
   },
 

@@ -229,6 +229,59 @@ git clone git@github.com:desech/studio-angular.git desech-studio-angular
 git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```
 
+## Import
+
+### Elements
+- pages will be converted to folders
+- top level visible groups or frames/artboards will be converted to files
+- only svg and image elements with export options, are imported
+- elements that don't fit inside containers are ignored and need to be adjusted and re-imported
+- clear `_desech/cache` to re-fetch images
+
+### Style
+- we can't have width and height for each element, because responsive will be hard
+   - icons are an exception
+- on grids:
+   - we don't set the columns width and leave it auto, because responsive will be hard
+   - we don't add margins to grid children, because you usually want to use alignment on parent
+   - we leave the 10px default gap, because all grids would have gap set to 0
+- we can't have font-size 16px for each element, we assume this is the default size
+- we can't have font-family for each element, we set this on main containers instead
+- components
+
+### Bugs
+- wrong angle and color positions on linear and radial gradients
+- figma:
+  - rotation is not supported because not enough info is provided
+  - vectors with gradients and bg images will not be shown correctly when inside html
+  - multiple backgrounds with images will be exported with the solid colors and gradients,
+    although we also add the solid colors and gradient background on top of the processed image
+    - a solution to this is to keep your images and background images in separate layers
+- adobexd:
+  - text width and height is approximated, wait for adobexd to provide exact values
+  - text-transform is not present in the style property, only in the rangeStyles
+    which are buggy, wait for adobexd to add it in the style too
+
+### TODO:
+- lines are <hr>; no bg color on <hr>
+- filter shadow on svg; opacity effect and bg opacity
+- adobexd
+   - svg masked shapes
+   - background image for all type of svgs
+   - autolayout, meta.ux.repeatGrid
+- sketch
+   - remove empty em's - check AdobexdInline
+   - svg masked shapes
+   - background image for all type of svgs
+   - autolayout, meta.ux.repeatGrid
+- figma
+   - remove empty em's - check AdobexdInline
+   - svg masked shapes
+   - background image for all type of svgs
+
+### Features:
+- we do import figma auto-layout which sets the gap, padding, justify-content and align-content
+
 
 
 -------------------------------------------------------------------------------

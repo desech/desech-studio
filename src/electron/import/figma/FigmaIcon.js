@@ -17,15 +17,33 @@ export default {
     return { content: data.content }
   },
 
-  getCssFillStroke (type, element) {
-    if (type !== 'icon') return
+  processCssFillStroke (data, element) {
+    if (data.type !== 'icon') return
     const css = {}
-    if (element.strokes.length && element.strokes[0].type === 'SOLID') {
-      css.stroke = FigmaCommon.getObjectColor(element.strokes[0])
-    }
-    if (element.fills.length && element.fills[0].type === 'SOLID') {
-      css.fill = FigmaCommon.getObjectColor(element.fills[0])
-    }
+    this.processStrokeSize(data, element, css)
+    this.processStrokeColor(data, element, css)
+    this.processFill(data, element, css)
     return css
+  },
+
+  processStrokeSize (data, element, css) {
+    if (element.strokeWeight > 1) {
+      css['stroke-width'] = element.strokeWeight + 'px'
+      data.content = data.content.replace(/ stroke-width=".*?"/gi, '')
+    }
+  },
+
+  processStrokeColor (data, element, css) {
+    if (element.strokes[0]?.type === 'SOLID') {
+      css.stroke = FigmaCommon.getObjectColor(element.strokes[0])
+      data.content = data.content.replace(/ stroke=".*?"/gi, '')
+    }
+  },
+
+  processFill (data, element, css) {
+    if (element.fills[0]?.type === 'SOLID') {
+      css.fill = FigmaCommon.getObjectColor(element.fills[0])
+      data.content = data.content.replace(/ fill=".*?"/gi, '')
+    }
   }
 }

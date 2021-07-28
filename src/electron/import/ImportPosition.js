@@ -6,11 +6,28 @@ export default {
   _BIG: 99999999,
 
   buildStructure (nodes, bodyRef, css) {
+    this.cleanNodes(nodes, css)
     const body = this.getBody(bodyRef)
     this.adjustBodyCss(css, bodyRef)
     this.positionNodes(nodes, css, body, body)
     ImportPositionCommon.debugEnd(nodes, css, body)
     return body
+  },
+
+  // remove the blocks that only have width and height
+  cleanNodes (nodes, css) {
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      if (nodes[i].type === 'block' && !this.hasExtraCss(css.element[nodes[i].ref])) {
+        nodes.splice(i, 1)
+      }
+    }
+  },
+
+  hasExtraCss (props) {
+    for (const prop of Object.keys(props)) {
+      if (!['width', 'height', 'min-height'].includes(prop)) return true
+    }
+    return false
   },
 
   getBody (ref) {
@@ -249,10 +266,9 @@ export default {
   },
 
   removeElementFromNodes (elem, nodes) {
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = nodes.length - 1; i >= 0; i--) {
       if (nodes[i].ref === elem.ref) {
-        nodes.splice(i, 1)
-        return
+        return nodes.splice(i, 1)
       }
     }
   }

@@ -103,12 +103,20 @@ export default {
     if (!data.nodes) return ''
     const body = ImportPosition.buildStructure(data.nodes, data.ref, css)
     if (data.nodes.length) {
-      const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored</span>',
-        { count: data.nodes.length })
+      const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored - {{elements}}</span>',
+        { count: data.nodes.length, elements: this.getIgnoredElements(data.nodes) })
       EventMain.ipcMainInvoke('mainImportProgress', msg)
     }
     this._tmpFileCss = {}
     return this.getHtmlNode(body, css, folder)
+  },
+
+  getIgnoredElements (nodes) {
+    const names = []
+    for (const node of nodes) {
+      names.push('"' + node.name + '"')
+    }
+    return names.join(', ')
   },
 
   getHtmlNode (node, css, folder) {

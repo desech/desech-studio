@@ -2,11 +2,12 @@ import FigmaCommon from './FigmaCommon.js'
 import ParseCommon from '../ParseCommon.js'
 
 export default {
-  getCssEffect (elemType, element) {
+  getCssEffect (desechType, element) {
+    if (desechType === 'block' && element.exportSettings?.length) return
     const effects = { 'box-shadow': [], filter: [] }
     this.addOpacity(element.opacity, effects)
     for (const effect of element.effects) {
-      this.processEffect(elemType, effect, effects)
+      this.processEffect(desechType, effect, effects)
     }
     return this.mergeEffects(effects)
   },
@@ -17,18 +18,18 @@ export default {
     effects.filter.push({ filter: `opacity(${value}%)` })
   },
 
-  processEffect (elemType, effect, effects) {
+  processEffect (desechType, effect, effects) {
     if (effect.visible === false) return
-    const data = this.getEffectData(elemType, effect)
+    const data = this.getEffectData(desechType, effect)
     const record = (data.type === 'filter')
       ? this.getFilter(effect, data)
       : this.getBoxShadow(effect)
     if (record) effects[data.type].push(record)
   },
 
-  getEffectData (elemType, effect) {
+  getEffectData (desechType, effect) {
     const effectType = this.getEffectType(effect)
-    if (elemType === 'text' || elemType === 'icon') {
+    if (desechType === 'text' || desechType === 'icon') {
       return { type: 'filter', method: effectType }
     } else {
       return {

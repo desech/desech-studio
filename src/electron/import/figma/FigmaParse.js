@@ -101,8 +101,10 @@ export default {
   async parseElements (elements, nodes, file) {
     for (const element of elements) {
       await this.parseElement(element, nodes, file)
-      if (element.visible === false) continue
-      if (element.children) await this.parseElements(element.children, nodes, file)
+      // don't fetch anything inside elements with export settings
+      if (element.visible !== false && element.children && !element.exportSettings?.length) {
+        await this.parseElements(element.children, nodes, file)
+      }
     }
   },
 
@@ -119,22 +121,17 @@ export default {
     switch (element.type) {
       case 'FRAME': case 'RECTANGLE': case 'LINE': case 'ELLIPSE': case 'GROUP':
       case 'COMPONENT': case 'INSTANCE':
-        return this.convertElementType(element, 'block')
+        return (element.exportSettings && element.exportSettings[0]?.format === 'SVG')
+          ? 'icon'
+          : 'block'
       case 'TEXT':
         return 'text'
       case 'VECTOR': case 'REGULAR_POLYGON': case 'STAR': case 'BOOLEAN_OPERATION':
         // icons need to have export settings
-        if (!element.exportSettings || !element.exportSettings.length) return null
-        return this.convertElementType(element, 'icon')
+        return element.exportSettings?.length ? 'icon' : null
       case 'SLICE':
         // ignored
     }
-  },
-
-  convertElementType (element, type) {
-    // convert blocks with svg exports to icons, and vectors with png exports to blocks
-    if (!element.exportSettings || !element.exportSettings.length) return type
-    return (element.exportSettings[0].format === 'SVG') ? 'icon' : 'block'
   },
 
   async getElementData (type, element, file) {
@@ -146,7 +143,7 @@ export default {
       width: FigmaCommon.getWidth(type, element),
       height: FigmaCommon.getHeight(type, element),
       type,
-      tag: (element.type === 'LINE') ? 'hr' : 'div',
+      ...this.getTag(element),
       ref: HelperElement.generateElementRef(),
       zIndex: ++this._zIndex,
       component: [],
@@ -156,6 +153,10 @@ export default {
       ...await FigmaIcon.getSvgContent(element, type, this.getExtraData()),
       children: []
     }
+  },
+
+  getTag (element) {
+    return (element.type === 'LINE') ? { tag: 'hr' } : null
   },
 
   getExtraData (params = {}) {

@@ -40,7 +40,7 @@
 "- Weight -",
 "-- Parent folder --",
 "-- Type --",
-"<span class=""error"">{{count}} element(s) have been ignored</span>",
+"<span class=""error"">{{count}} element(s) have been ignored - {{elements}}</span>",
 "<span class=""error"">Image is empty</span>",
 "1st Linear transformation",
 "2nd Linear transformation",

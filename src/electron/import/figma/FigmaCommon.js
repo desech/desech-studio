@@ -38,35 +38,50 @@ export default {
     return ParseCommon.getColor(rgb, alpha)
   },
 
-  getWidth (elementType, element) {
+  getWidth (desechType, element) {
     // don't add the stroke size to the width when processing lines
-    const extra = (element.type !== 'LINE') ? this.getExtraVolume(elementType, element) : 0
+    const extra = (element.type !== 'LINE') ? this.getExtraVolume(desechType, element) : 0
     return Math.round(element.absoluteBoundingBox.width + extra)
   },
 
-  getHeight (elementType, element, addExtra = true) {
-    const extra = addExtra ? this.getExtraVolume(elementType, element) : 0
+  getHeight (desechType, element, addExtra = true) {
+    const extra = addExtra ? this.getExtraVolume(desechType, element) : 0
     return Math.round(element.absoluteBoundingBox.height + extra)
   },
 
-  getExtraVolume (elementType, element) {
-    const stroke = this.getStroke(elementType, element)
-    return ParseCommon.getExtraVolume(elementType, stroke)
+  getExtraVolume (desechType, element) {
+    const stroke = this.getStroke(desechType, element)
+    return ParseCommon.getExtraVolume(desechType, stroke)
   },
 
-  getStroke (elementType, element) {
-    if (!this.isStrokeAvailable(elementType, element.strokes)) return {}
+  getStroke (desechType, element) {
+    if (!this.isStrokeAvailable(desechType, element)) return {}
     return {
       type: element.strokeAlign.toLowerCase(),
       size: element.strokeWeight
     }
   },
 
-  isStrokeAvailable (elementType, strokes) {
-    if (elementType === 'icon' || elementType === 'text') return false
-    if (!strokes || !strokes.length) return false
-    if (strokes.length === 1 && strokes[0].visible === false) return false
+  isStrokeAvailable (desechType, element) {
+    const strokes = element.strokes
+    if (desechType === 'text' || !strokes?.length ||
+      (strokes.length === 1 && strokes[0].visible === false)) {
+      return false
+    }
     return true
+  },
+
+  isAllowedFillStrokeType (type, element) {
+    // image fills/strokes need to have export settings
+    if (type === 'Image' && !element.exportSettings?.length) return
+    return ['Solid', 'Gradientlinear', 'Gradientradial', 'Image'].includes(type)
+  },
+
+  hasImageFill (fills) {
+    for (const fill of fills) {
+      if (fill.visible !== false && fill.type === 'IMAGE') return true
+    }
+    return false
   },
 
   getCssBasic (type, element) {

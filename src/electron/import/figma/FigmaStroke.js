@@ -4,11 +4,15 @@ import ParseCommon from '../ParseCommon.js'
 
 export default {
   async getCssStroke (element, extra) {
-    if (!FigmaCommon.isStrokeAvailable(extra.data.type, element.strokes)) return
+    // skip this for exported image fills
+    if (extra.data.type === 'icon' || !FigmaCommon.isStrokeAvailable(extra.data.type, element) ||
+      (element.exportSettings?.length && FigmaCommon.hasImageFill(element.fills))) {
+      return
+    }
     for (const stroke of element.strokes) {
       if (stroke.visible === false) continue
       const type = FigmaFill.getFillStrokeType(stroke.type)
-      if (!FigmaFill.isAllowedFillStrokeType(type, element)) continue
+      if (!FigmaCommon.isAllowedFillStrokeType(type, element)) continue
       // we only allow one stroke
       return await this.getCssStrokeRecord(type, stroke, element, extra)
     }

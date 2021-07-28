@@ -7,46 +7,40 @@ import File from '../../file/File.js'
 
 export default {
   async getCssFill (element, extra) {
-    const fills = element.fills
-    if (this.ignoreFill(element.type, extra.data.type, fills)) return
-    this.addExportFill(element, fills)
+    if (this.ignoreFill(element, extra.data.type, element.fills)) return
+    this.clearFillsWhenExportImage(element)
     const data = []
-    for (let i = fills.length - 1; i >= 0; i--) {
+    for (let i = element.fills.length - 1; i >= 0; i--) {
       // fills in reverse order
-      const record = await this.getCssFillRecord(fills[i], element, extra)
+      const record = await this.getCssFillRecord(element.fills[i], element, extra)
       if (record) data.push(record)
     }
     return ParseCommon.mergeValues(data, ', ')
   },
 
-  ignoreFill (elementType, htmlType, fills) {
+  ignoreFill (element, htmlType, fills) {
     // we also process the fill in FigmaIcon and FigmaText
-    if (elementType === 'LINE' || htmlType === 'icon') return true
-    if (htmlType === 'text' && fills.length === 1 &&
-      this.getFillStrokeType(fills[0].type) === 'Solid') {
-      return true
-    }
-    return false
+    return (element.type === 'LINE' || htmlType === 'icon' ||
+      (htmlType === 'text' && fills.length === 1 &&
+      this.getFillStrokeType(fills[0].type) === 'Solid'))
   },
 
-  // elements can have export settings but no fill, so we need to manually create a fill
-  addExportFill (element, fills) {
-    if (element.exportSettings && element.exportSettings.length &&
-      !this.hasImageFillStroke(element.fills) && !this.hasImageFillStroke(element.strokes)) {
-      fills.push({ type: 'IMAGE' })
+  // if we have export settings then we need to clear the other non image fills
+  // if we don't have an image fill then we need to create it
+  clearFillsWhenExportImage (element) {
+    if (!element.exportSettings?.length) return
+    if (!FigmaCommon.hasImageFill(element.fills)) {
+      element.fills = [{ type: 'IMAGE' }]
+    } else {
+      for (let i = element.fills.length - 1; i >= 0; i--) {
+        if (element.fills[i].type !== 'IMAGE') element.fills.splice(i, 1)
+      }
     }
-  },
-
-  hasImageFillStroke (items) {
-    for (const item of items) {
-      if (item.visible !== false && item.type === 'IMAGE') return true
-    }
-    return false
   },
 
   async getCssFillRecord (fill, element, extra) {
     const type = this.getFillStrokeType(fill.type)
-    if (fill.visible === false || !this.isAllowedFillStrokeType(type, element)) return
+    if (fill.visible === false || !FigmaCommon.isAllowedFillStrokeType(type, element)) return
     return {
       'background-image': await this[`getFillBg${type}`](fill, element, extra),
       'background-blend-mode': FigmaCommon.getBlendMode(fill.blendMode),
@@ -74,12 +68,6 @@ export default {
     // SOLID, GRADIENT_LINEAR, GRADIENT_RADIAL, GRADIENT_ANGULAR, GRADIENT_DIAMOND, IMAGE
     return ExtendJS.capitalize(type.toLowerCase().replace('_', ''))
       .replace(/angular|diamond/, 'radial')
-  },
-
-  isAllowedFillStrokeType (type, element) {
-    // image fills/strokes need to have export settings
-    if (type === 'Image' && (!element.exportSettings || !element.exportSettings.length)) return
-    return ['Solid', 'Gradientlinear', 'Gradientradial', 'Image'].includes(type)
   },
 
   getFillBgSolid (fill) {

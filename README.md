@@ -261,6 +261,8 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
   - text width and height is approximated, wait for adobexd to provide exact values
   - text-transform is not present in the style property, only in the rangeStyles
     which are buggy, wait for adobexd to add it in the style too
+  - masked vectors are not supported because we don't know how to calculate the transform
+  - autolayout is not supported because it applies to groups and groups have no x,y,w,h
 
 ### TODO:
 - lines are <hr>; no bg color on <hr>

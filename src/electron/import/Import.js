@@ -17,48 +17,6 @@ import Electron from '../lib/Electron.js'
 import FileParse from '../file/FileParse.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 
-/**
- * Elements:
- * - pages will be converted to folders
- * - top level visible groups or frames/artboards will be converted to files
- * - only svg and image elements with export options, are imported
- * - elements that don't fit inside containers are ignored and need to be adjusted and re-imported
- *
- * Style:
- * - we can't have width and height for each element, because responsive will be hard
- *    - icons are an exception
- * - on grids:
- *    - we don't set the columns width and leave it auto, because responsive will be hard
- *    - we don't add margins to grid children, because you usually want to use alignment on parent
- *    - we leave the 10px default gap, because all grids would have gap set to 0
- * - we can't have font-size 16px for each element, we assume this is the default size
- * - we can't have font-family for each element, we set this on main containers instead
- * - components
- *
- * Bugs:
- * - wrong angle and color positions on linear and radial gradients
- * - adobexd text:
- *   - text width and height is approximated, wait for adobexd to provide exact values
- *   - text-transform is not present in the style property, only in the rangeStyles
- *     which are buggy, wait for adobexd to add it in the style too
- *   - masked vectors are not supported because we don't know how to calculate the transform
- *   - autolayout is not supported because it applies to groups and groups have no x,y,w,h
- *
- * TODO:
- *   - sketch
- *      - remove empty em's - check AdobexdInline
- *      - svg masked shapes
- *      - background image for all type of svgs
- *      - autolayout, meta.ux.repeatGrid
- *   - figma
- *      - remove empty em's - check AdobexdInline
- *      - svg masked shapes - test
- *      - background image for all type of svgs
- *
- * Features:
- * - figma auto-layout with gap, padding, justify-content and align-content
- * - adobexd auto-layout with gap and padding
- */
 export default {
   _tmpFileCss: {},
   _type: null,

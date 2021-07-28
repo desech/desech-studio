@@ -41,12 +41,10 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
  *   - text width and height is approximated, wait for adobexd to provide exact values
  *   - text-transform is not present in the style property, only in the rangeStyles
  *     which are buggy, wait for adobexd to add it in the style too
+ *   - masked vectors are not supported because we don't know how to calculate the transform
+ *   - autolayout is not supported because it applies to groups and groups have no x,y,w,h
  *
  * TODO:
- *   - adobexd
- *      - svg masked shapes
- *      - background image for all type of svgs
- *      - autolayout, meta.ux.repeatGrid
  *   - sketch
  *      - remove empty em's - check AdobexdInline
  *      - svg masked shapes
@@ -54,21 +52,24 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
  *      - autolayout, meta.ux.repeatGrid
  *   - figma
  *      - remove empty em's - check AdobexdInline
- *      - svg masked shapes
+ *      - svg masked shapes - test
  *      - background image for all type of svgs
  *
  * Features:
- * - we do import figma auto-layout which sets the gap, padding, justify-content and align-content
+ * - figma auto-layout with gap, padding, justify-content and align-content
+ * - adobexd auto-layout with gap and padding
  */
 export default {
   _tmpFileCss: {},
+  _type: null,
 
   async importFile (params) {
+    this._type = params.type
     const folders = this.getChooseFolder()
     if (!folders) return
     const folder = File.sanitizePath(folders[0])
     const data = await this.getImportData({ ...params, folder })
-    this.backupImportFile(folder, params.type, data)
+    this.backupImportFile(folder, data)
     if (ExtendJS.isEmpty(data.html)) {
       throw new Error(Language.localize('There are no valid top level visible elements to be imported'))
     }
@@ -100,8 +101,8 @@ export default {
     }
   },
 
-  backupImportFile (folder, type, data) {
-    const file = File.resolve(folder, '_desech', type + '-import.json')
+  backupImportFile (folder, data) {
+    const file = File.resolve(folder, '_desech', this._type + '-import.json')
     fs.writeFileSync(file, JSON.stringify(data, null, 2))
   },
 
@@ -259,9 +260,23 @@ export default {
   saveSvgBgImage (node, css, folder) {
     const file = `${ParseCommon.getName(node.name)}-${node.width}-${node.height}.svg`
     const filePath = File.resolve(folder, 'asset/image', file)
-    // @todo transfer the svg css to the first path and clear the css
-    if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, node.content)
+    if (this._type !== 'figma') this.transferSvgCssToContent(node, css)
+    fs.writeFileSync(filePath, node.content)
     this.addSvgBgImageCss(node.ref, file, css)
+  },
+
+  transferSvgCssToContent (node, css) {
+    // figma svgs contain everything you need, unlike sketch and adobexd which are built manually
+    if (!css.element[node.ref]) return
+    const attrs = []
+    for (const prop of ['fill', 'stroke', 'stroke-width']) {
+      if (css.element[node.ref][prop]) {
+        attrs.push(`${prop}="${css.element[node.ref][prop]}"`)
+        delete css.element[node.ref][prop]
+      }
+    }
+    if (!attrs.length) return
+    node.content = node.content.replace(/<(polygon|path)/gi, `<$1 ${attrs.join(' ')}`)
   },
 
   addSvgBgImageCss (ref, file, css) {

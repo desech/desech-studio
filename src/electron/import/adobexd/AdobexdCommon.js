@@ -2,14 +2,14 @@ import ParseCommon from '../ParseCommon.js'
 
 export default {
   getX (elementType, element, x, svgPaths) {
-    if (elementType === 'icon' && ['path', 'compound'].includes(element.shape.type)) {
+    if (elementType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
       x = svgPaths[element.id]?.box?.x
     }
     return Math.round(x + (element.transform ? element.transform.tx : 0))
   },
 
   getY (elementType, element, y, svgPaths) {
-    if (elementType === 'icon' && ['path', 'compound'].includes(element.shape.type)) {
+    if (elementType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
       y = svgPaths[element.id]?.box?.y
     }
     y += (element.transform ? element.transform.ty : 0)
@@ -29,9 +29,10 @@ export default {
     } else if (element.shape) {
       if (element.shape.type === 'line') extra = 0
       return Math.round(this.getShapeWidth(element, extra, svgPaths))
-    } else if (element['uxdesign#bounds'].width) {
+    } else if (element['uxdesign#bounds']?.width) {
       return element['uxdesign#bounds'].width
     }
+    return 1
   },
 
   getHeight (elementType, element, svgPaths, addExtra = true) {
@@ -43,9 +44,10 @@ export default {
     } else if (element.shape) {
       if (element.shape.type === 'line') extra = 0
       return Math.round(this.getShapeHeight(element, extra, svgPaths))
-    } else if (element['uxdesign#bounds'].height) {
+    } else if (element['uxdesign#bounds']?.height) {
       return element['uxdesign#bounds'].height
     }
+    return 1
   },
 
   getTextWidth (element) {

@@ -148,23 +148,13 @@ export default {
   },
 
   async parseElement (element, nodes, pos) {
-    if (!this.acceptElement(element) || ParseCommon.isHidden(element.visible)) {
-      return
-    }
+    if (ParseCommon.isHidden(element.visible)) return
     const type = this.getElementType(element)
     if (!type) return
     this.processSymbolInstance(element)
     const data = this.getElementData(type, element, pos)
     this._css.element[data.ref] = await this.getCssProperties(data, element)
     nodes.push(data)
-  },
-
-  acceptElement (element) {
-    // ignore groups except the ones with symbols
-    if (element.type === 'group' && !element.meta.ux.symbolId) {
-      return false
-    }
-    return true
   },
 
   getElementType (element) {
@@ -181,7 +171,7 @@ export default {
         return null
       case 'group':
         // symbols are also of this type
-        return 'block'
+        return element.meta.ux.markedForExport ? 'icon' : 'block'
       case 'text':
         return 'text'
       // ignore the rest

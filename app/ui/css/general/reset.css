@@ -195,7 +195,7 @@ summary, summary.block {
 
 hr.block {
   display: block;
-  min-height: auto;
+  height: 0;
 }
 
 table, table.block {

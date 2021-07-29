@@ -1,11 +1,14 @@
 import HelperElement from '../../../js/helper/HelperElement.js'
 import FigmaText from './FigmaText.js'
 import ParseCommon from '../ParseCommon.js'
+import ExtendJS from '../../../js/helper/ExtendJS.js'
 
 export default {
-  processTextContent (element, type, css) {
-    if (type !== 'text') return
-    const inline = this.processInlineText(element, css)
+  async processTextContent (element, extra, css) {
+    if (extra.data.type !== 'text') return
+    const extra2 = ExtendJS.cloneData(extra)
+    extra2.data.type = 'inline'
+    const inline = await this.processInlineText(element, extra2, css)
     const content = ParseCommon.injectInlineElements(element.characters, inline)
     return {
       content: content.replace(/\n/g, '\n<br>'),
@@ -13,7 +16,7 @@ export default {
     }
   },
 
-  processInlineText (element, css) {
+  async processInlineText (element, extra2, css) {
     const data = []
     let lastId, startPos
     for (let i = 0; i < element.characterStyleOverrides.length; i++) {
@@ -25,7 +28,7 @@ export default {
         startPos = i
       } else if (lastId !== id || i === element.characterStyleOverrides.length - 1) {
         const lastPos = (i === element.characterStyleOverrides.length - 1) ? i + 1 : i
-        const inline = this.processInlineElement(element, lastId, startPos, lastPos,
+        const inline = await this.processInlineElement(element, extra2, lastId, startPos, lastPos,
           element.styleOverrideTable[lastId], css)
         data.push(inline)
         lastId = id
@@ -35,17 +38,17 @@ export default {
     return data
   },
 
-  processInlineElement (element, charId, start, end, style, css) {
+  async processInlineElement (element, extra2, charId, start, end, style, css) {
     const elemId = HelperElement.generateElementRef()
     const data = {
       start,
       end,
       html: this.getInlineHtml(start, end, element, elemId, style)
     }
-    css.element[elemId] = FigmaText.getCssText('inline', {
+    css.element[elemId] = await FigmaText.getCssText({
       style,
       fills: style.fills || []
-    }, css)
+    }, extra2, css)
     return data
   },
 

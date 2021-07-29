@@ -20,6 +20,7 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
 export default {
   _tmpFileCss: {},
   _type: null,
+  _svgImageNames: [],
 
   async importFile (params) {
     this._type = params.type
@@ -208,7 +209,7 @@ export default {
       .replace('")', '')
     node.srcset = `${image} 1x, ${this.getScaledSrcset(image, 2)}, ` +
       `${this.getScaledSrcset(image, 3)}`
-    this.deleteDivConvertCss(node.ref, css)
+    this.wipeCssOnBackgroundImage(node.ref, css)
   },
 
   getScaledSrcset (image, scale) {
@@ -216,32 +217,34 @@ export default {
     return image.replace(ext, `@${scale}x${ext} ${scale}x`)
   },
 
-  deleteDivConvertCss (ref, css) {
-    const deleteProps = [...ParseCommon.getBackgroundProperties(), 'height']
-    for (const name of deleteProps) {
-      delete css.element[ref][name]
+  wipeCssOnBackgroundImage (ref, css) {
+    for (const name of Object.keys(css.element[ref])) {
+      if (!['width', 'height'].includes(name)) {
+        delete css.element[ref][name]
+      }
     }
   },
 
   saveSvgBgImage (node, css, folder) {
-    const file = `${ParseCommon.getName(node.name)}-${node.width}-${node.height}.svg`
+    const file = ParseCommon.getSvgName(node, this._svgImageNames) + '.svg'
     const filePath = File.resolve(folder, 'asset/image', file)
-    if (this._type !== 'figma') this.transferSvgCssToContent(node, css)
+    this.addSvgCssToContent(node, css)
     fs.writeFileSync(filePath, node.content)
+    this.wipeCssOnBackgroundImage(node.ref, css)
     this.addSvgBgImageCss(node.ref, file, css)
   },
 
-  transferSvgCssToContent (node, css) {
-    // figma svgs contain everything you need, unlike sketch and adobexd which are built manually
+  addSvgCssToContent (node, css) {
+    // when dealing with svg bg images, copy back the css to the svg attributes
     if (!css.element[node.ref]) return
     const attrs = []
     for (const prop of ['fill', 'stroke', 'stroke-width']) {
       if (css.element[node.ref][prop]) {
         attrs.push(`${prop}="${css.element[node.ref][prop]}"`)
-        delete css.element[node.ref][prop]
       }
     }
     if (!attrs.length) return
+    // we want replace not relaceAll because we only want the first node to be affected
     node.content = node.content.replace(/<(polygon|path)/gi, `<$1 ${attrs.join(' ')}`)
   },
 

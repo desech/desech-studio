@@ -262,7 +262,7 @@ export default {
 
   getTextBackgroundCss () {
     return {
-      color: 'rgba(0, 0, 0, 0)',
+      color: 'transparent',
       'background-clip': 'text',
       '-webkit-background-clip': 'text'
     }
@@ -293,6 +293,14 @@ export default {
       name += '-' + this.sanitizeName(id)
     }
     imageList[name] = true
+    return name
+  },
+
+  getSvgName (node, images) {
+    let name = this.sanitizeName(node.name)
+    if (images[name]) name += '-' + node.width + '-' + node.height
+    if (images[name]) name += '-' + this.sanitizeName(node.id)
+    images[name] = true
     return name
   },
 

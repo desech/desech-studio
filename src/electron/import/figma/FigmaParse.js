@@ -135,7 +135,7 @@ export default {
   },
 
   async getElementData (type, element, file) {
-    return {
+    const data = {
       id: element.id, // for debugging
       name: element.name.substring(0, 32),
       x: Math.round(element.absoluteBoundingBox.x - file.x),
@@ -149,9 +149,13 @@ export default {
       component: [],
       content: '',
       href: null,
-      ...FigmaInline.processTextContent(element, type, this._css),
-      ...await FigmaIcon.getSvgContent(element, type, this.getExtraData()),
       children: []
+    }
+    const extra = this.getExtraData({ data })
+    return {
+      ...data,
+      ...await FigmaInline.processTextContent(element, extra, this._css),
+      ...await FigmaIcon.getSvgContent(element, extra)
     }
   },
 
@@ -182,13 +186,12 @@ export default {
     return {
       ...FigmaCommon.getCssBasic(data.type, element),
       ...FigmaLayout.getAutoLayout(element),
-      ...FigmaCommon.getCssMixBlendMode(element.blendMode),
       ...FigmaCommon.getCssRoundedCorners(element),
       ...await FigmaFill.getCssFill(element, extra),
       ...await FigmaStroke.getCssStroke(element, extra),
       ...FigmaIcon.processCssFillStroke(data, element),
       ...FigmaEffect.getCssEffect(data.type, element),
-      ...FigmaText.getCssText(data.type, element, this._css)
+      ...await FigmaText.getCssText(element, extra, this._css)
     }
   }
 

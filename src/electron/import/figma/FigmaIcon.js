@@ -3,9 +3,9 @@ import FigmaCommon from './FigmaCommon.js'
 import File from '../../file/File.js'
 
 export default {
-  async getSvgContent (element, type, extra) {
+  async getSvgContent (element, extra) {
     // we ignore icons without export settings in FigmaParse.getElementType()
-    if (type !== 'icon') return
+    if (extra.data.type !== 'icon') return
     const data = await FigmaCommon.processImageFile({
       ...extra,
       elementId: element.id,

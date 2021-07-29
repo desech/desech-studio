@@ -98,13 +98,6 @@ export default {
     return css
   },
 
-  getCssMixBlendMode (mode) {
-    if (!mode) return
-    const value = this.getBlendMode(mode)
-    if (value === 'normal') return
-    return { 'mix-blend-mode': value }
-  },
-
   getBlendMode (mode) {
     if (!mode) return 'normal'
     return mode.toLowerCase().replace('_', '-').replace('linear', 'color')

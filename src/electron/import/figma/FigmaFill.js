@@ -8,7 +8,7 @@ import File from '../../file/File.js'
 export default {
   async getCssFill (element, extra) {
     if (this.ignoreFill(element, extra.data.type, element.fills)) return
-    this.clearFillsWhenExportImage(element)
+    this.clearFillsWhenExportImage(element, extra.data.type)
     const data = []
     for (let i = element.fills.length - 1; i >= 0; i--) {
       // fills in reverse order
@@ -18,17 +18,18 @@ export default {
     return ParseCommon.mergeValues(data, ', ')
   },
 
-  ignoreFill (element, htmlType, fills) {
+  ignoreFill (element, desechType, fills) {
     // we also process the fill in FigmaIcon and FigmaText
-    return (element.type === 'LINE' || htmlType === 'icon' ||
-      (htmlType === 'text' && fills.length === 1 &&
+    return (element.type === 'LINE' || desechType === 'icon' ||
+      (desechType === 'text' && fills.length === 1 &&
       this.getFillStrokeType(fills[0].type) === 'Solid'))
   },
 
   // if we have export settings then we need to clear the other non image fills
   // if we don't have an image fill then we need to create it
-  clearFillsWhenExportImage (element) {
-    if (!element.exportSettings?.length) return
+  // ignore this for text elements
+  clearFillsWhenExportImage (element, desechType) {
+    if (!element.exportSettings?.length || desechType === 'text') return
     if (!FigmaCommon.hasImageFill(element.fills)) {
       element.fills = [{ type: 'IMAGE' }]
     } else {
@@ -40,7 +41,11 @@ export default {
 
   async getCssFillRecord (fill, element, extra) {
     const type = this.getFillStrokeType(fill.type)
-    if (fill.visible === false || !FigmaCommon.isAllowedFillStrokeType(type, element)) return
+    // we don't want text background images because we can't export them without text
+    if (fill.visible === false || (extra.data.type === 'text' && type === 'Image') ||
+      !FigmaCommon.isAllowedFillStrokeType(type, element)) {
+      return
+    }
     return {
       'background-image': await this[`getFillBg${type}`](fill, element, extra),
       'background-blend-mode': FigmaCommon.getBlendMode(fill.blendMode),

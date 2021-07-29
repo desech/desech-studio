@@ -1,13 +1,13 @@
 import ExtendJS from '../../../js/helper/ExtendJS.js'
 import FigmaCommon from './FigmaCommon.js'
 import ParseCommon from '../ParseCommon.js'
+import FigmaFill from './FigmaFill.js'
 
 export default {
-  getCssText (type, element, css) {
-    if (type !== 'text' && type !== 'inline') return
+  async getCssText (element, extra, css) {
+    if (extra.data.type !== 'text' && extra.data.type !== 'inline') return
     const style = element.style
     return {
-      ...this.getAutoWidth(style),
       ...this.getAlignment(style),
       ...ParseCommon.getFontFamily(style.fontFamily, css),
       ...ParseCommon.getPropValue('font-weight', this.getFontWeight(style),
@@ -22,9 +22,9 @@ export default {
         style.textDecoration),
       ...ParseCommon.getPropValue('letter-spacing',
         ExtendJS.roundToTwo(style.letterSpacing) + 'px', style.letterSpacing),
-      ...ParseCommon.getPropValue('text-indent', Math.round(style.paragraphIndent) + 'px',
-        style.paragraphIndent),
-      ...this.getColor(element)
+      // ...ParseCommon.getPropValue('text-indent', Math.round(style.paragraphIndent) + 'px',
+      //   style.paragraphIndent),
+      ...await this.getColor(element, extra)
     }
   },
 
@@ -42,30 +42,23 @@ export default {
     ]
   },
 
-  getAutoWidth (style) {
-    if (style.textAutoResize !== 'WIDTH_AND_HEIGHT') {
-      return { width: 'auto' }
-    }
-  },
-
   getAlignment (style) {
     const css = {}
     const horizAlign = style.textAlignHorizontal ? style.textAlignHorizontal.toLowerCase() : null
-    if (horizAlign !== 'left') css['text-align'] = horizAlign
-    // const vertAlign = this.getAlignSelf(style)
-    // if (vertAlign) css['align-self'] = vertAlign
+    if (horizAlign && horizAlign !== 'left') css['text-align'] = horizAlign
+    const vertAlign = this.getAlignSelf(style)
+    if (vertAlign) css['align-self'] = vertAlign
     return css
   },
 
-  // we don't import the height, so vertical aligning has no value
-  // getAlignSelf (style) {
-  //   switch (style.textAlignVertical) {
-  //     case 'CENTER':
-  //       return 'center'
-  //     case 'BOTTOM':
-  //       return 'end'
-  //   }
-  // },
+  getAlignSelf (style) {
+    switch (style.textAlignVertical) {
+      case 'CENTER':
+        return 'center'
+      case 'BOTTOM':
+        return 'end'
+    }
+  },
 
   getFontWeight (style) {
     // sometimes the value is not correct and should check fontPostScriptName, ie: Inter-SemiBold
@@ -97,11 +90,15 @@ export default {
     }
   },
 
-  getColor (element) {
+  async getColor (element, extra) {
     if (element.fills.length === 1 && element.fills[0].type === 'SOLID') {
       return this.getRgbColor(element.fills[0])
     } else if (element.fills.length) {
-      return ParseCommon.getTextBackgroundCss()
+      let css = ParseCommon.getTextBackgroundCss()
+      if (extra.data.type === 'inline') {
+        css = { ...css, ...await FigmaFill.getCssFill(element, extra) }
+      }
+      return css
     }
   },
 

@@ -9,7 +9,7 @@ export default {
     for (const effect of element.effects) {
       this.processEffect(desechType, effect, effects)
     }
-    return this.mergeEffects(effects)
+    return this.returnEffects(element, effects)
   },
 
   addOpacity (opacity, effects) {
@@ -86,11 +86,19 @@ export default {
     }
   },
 
-  mergeEffects (effects) {
+  returnEffects (element, effects) {
     return {
       ...ParseCommon.mergeValues(effects.filter, ' '),
-      ...ParseCommon.mergeValues(effects['box-shadow'], ', ')
+      ...ParseCommon.mergeValues(effects['box-shadow'], ', '),
+      ...this.addCssMixBlendMode(element.blendmode)
     }
+  },
+
+  addCssMixBlendMode (mode) {
+    if (!mode) return
+    const value = FigmaCommon.getBlendMode(mode)
+    if (value === 'normal') return
+    return { 'mix-blend-mode': value }
   },
 
   getProperties () {

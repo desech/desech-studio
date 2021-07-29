@@ -43,6 +43,7 @@
   "-- Type --": "-- Type --",
   "<span class=\"error\">{{count}} element(s) have been ignored - {{elements}}</span>": "<span class=\"error\">{{count}} element(s) have been ignored - {{elements}}</span>",
   "<span class=\"error\">Image is empty</span>": "<span class=\"error\">Image is empty</span>",
+  "<span class=\"error\">Local font <b>{{font}}</b> is ignored</span>": "<span class=\"error\">Local font <b>{{font}}</b> is ignored</span>",
   "1st Linear transformation": "1st Linear transformation",
   "2nd Linear transformation": "2nd Linear transformation",
   "3rd Linear transformation": "3rd Linear transformation",

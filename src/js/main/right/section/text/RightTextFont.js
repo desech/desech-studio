@@ -74,7 +74,8 @@ export default {
     const list = HelperProject.getFontList()
     if (!list.length) return
     for (const font of list) {
-      group.parentNode.querySelector(`option[value="${font}"]`).remove()
+      const node = group.parentNode.querySelector(`option[value="${font}"]`)
+      if (node) node.remove()
       group.appendChild(this.getGroupOption(font))
     }
     HelperDOM.show(group)

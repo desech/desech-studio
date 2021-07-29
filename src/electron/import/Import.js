@@ -317,8 +317,9 @@ export default {
       if (this.isGoogleFont(val.name, webFonts)) {
         await this.installGoogleFont(val, folder, folderFonts)
       } else {
-        // @todo
-        throw new Error('Do something with non google fonts')
+        const msg = Language.localize('<span class="error">Local font <b>{{font}}</b> is ignored</span>',
+          { font: val.name })
+        EventMain.ipcMainInvoke('mainImportProgress', msg)
       }
     }
   },

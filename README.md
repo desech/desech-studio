@@ -245,6 +245,7 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 
 - linear and radial gradients have a wrong angle and slightly off color positions
 - can't use paragraph indent and paragraph spacing because our text element is only one `<p>`
+- in sketch and adobexd, local fonts that are not google fonts, are ignored
 - figma:
   - rotation is not supported because I can't figure out the math behind it
   - some vectors will not be shown correctly when inside html, either clipped or images missing
@@ -262,7 +263,6 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ### TODO
 
 - adobexd
-  - font family
   - lines are `<hr>`; no bg color on `<hr>`
   - filter shadow on svg; opacity effect and bg opacity
   - set blend mode to effects
@@ -270,7 +270,6 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
   - svg masked shapes
   - background image for all type of svgs
 - sketch
-  - font family
   - lines are `<hr>`; no bg color on `<hr>`
   - filter shadow on svg; opacity effect and bg opacity
   - set blend mode to effects

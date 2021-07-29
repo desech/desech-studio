@@ -5,19 +5,19 @@ import HelperColor from '../../../js/helper/HelperColor.js'
 import File from '../../file/File.js'
 
 export default {
-  async getCssFill (extra) {
+  async getCssFill (element, extra) {
     // you can only have one fill
-    const fill = extra.element.style.fill
-    if (!fill) return
-    const fillType = this.getFillType(fill)
-    if (!this.isFillAllowed(fillType, extra)) return
-    return await this.getFillData(fillType, fill, extra)
+    if (!element.style.fill) return
+    const fillType = this.getFillType(element.style.fill)
+    if (this.ignoreFill(fillType, element, extra)) return
+    return await this.getFillData(fillType, element.style.fill, extra)
   },
 
   getFillType (fill) {
     if (fill.gradient && fill.gradient.meta.ux.gradientResources.type === 'linear') {
       return 'Gradientlinear'
-    } else if (fill.gradient && fill.gradient.meta.ux.gradientResources.type === 'radial') {
+    } else if (fill.gradient) {
+      // type can be radial or angular, but we process both types as radial
       return 'Gradientradial'
     } else if (fill.type === 'solid') {
       return 'Solid'
@@ -26,13 +26,9 @@ export default {
     }
   },
 
-  isFillAllowed (fillType, extra) {
-    if (!fillType || extra.data.type === 'icon' || (extra.data.type === 'text' &&
-      fillType === 'Solid')) {
-      return false
-    }
-    if (fillType === 'Image' && !extra.element.meta.ux.markedForExport) return false
-    return true
+  ignoreFill (fillType, element, extra) {
+    return (!fillType || extra.data.type === 'icon' || (extra.data.type === 'text' &&
+      fillType === 'Solid') || (fillType === 'Image' && !element.meta.ux.markedForExport))
   },
 
   async getFillData (type, fill, extra) {
@@ -78,6 +74,7 @@ export default {
   getGradientStops (stops) {
     let css = ''
     for (const stop of stops) {
+      // the alpha value also takes into account the element opacity automatically
       const color = AdobexdCommon.getColor(stop.color)
       const position = Math.round(stop.offset * 100)
       css += css ? ', ' : ''

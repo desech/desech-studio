@@ -116,6 +116,7 @@ export default {
   getGradientStops (opacity, stops) {
     let css = ''
     for (const stop of stops) {
+      // this is the fill opacity, not the element opacity which is processed as an effect
       const alpha = (typeof opacity !== 'undefined') ? opacity * stop.color.a : stop.color.a
       const color = FigmaCommon.getColor(stop.color.r, stop.color.g, stop.color.b, alpha)
       const position = Math.round(stop.position * 100)

@@ -51,6 +51,7 @@ export default {
 
   adjustBodyCss (css, ref) {
     delete css.element[ref].width
+    delete css.element[ref].height
     this.adjustBodyFont(css, ref)
   },
 
@@ -260,7 +261,7 @@ export default {
     ImportPositionCommon.debugMoveToContainer(container, containerParent, elem)
     this.replaceContainerWithElement(elem, container, containerParent)
     this.removeElementFromNodes(elem, nodes)
-    this.addElementMargin(css, elem, container)
+    // this.addElementMargin(css, elem, container)
   },
 
   replaceContainerWithElement (elem, container, containerParent) {

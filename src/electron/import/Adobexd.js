@@ -231,7 +231,7 @@ export default {
     }
     return {
       ...AdobexdCommon.getCssMixBlendMode(element.style.blendMode),
-      ...await AdobexdFill.getCssFill(extra),
+      ...await AdobexdFill.getCssFill(element, extra),
       ...AdobexdStroke.getCssStroke(data.type, element, this._svgPath),
       ...AdobexdIcon.getCssFillStroke(data.type, element),
       ...AdobexdEffect.getCssEffect(data.type, element.style.filters)

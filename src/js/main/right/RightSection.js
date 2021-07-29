@@ -2,6 +2,7 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import RightHtml from './section/RightHtml.js'
 import RightSelector from './section/RightSelector.js'
 import RightSize from './section/RightSize.js'
+import RightPosition from './section/RightPosition.js'
 import RightGrid from './section/RightGrid.js'
 import RightText from './section/RightText.js'
 import RightBorder from './section/RightBorder.js'
@@ -60,6 +61,7 @@ export default {
   getSubSectionClasses () {
     return {
       size: RightSize,
+      position: RightPosition,
       grid: RightGrid,
       text: RightText,
       border: RightBorder,
@@ -106,7 +108,7 @@ export default {
 
   // the order is set in RightSection.getSubSectionClasses()
   getSubPanelsByType (elementType) {
-    const top = ['html', 'selector', 'size']
+    const top = ['html', 'selector', 'size', 'position']
     const bottom = ['effect', 'animation', 'css']
     switch (elementType) {
       case 'block':

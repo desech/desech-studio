@@ -275,11 +275,6 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
   - background image for all type of svgs
   - autolayout, meta.ux.repeatGrid
 
-### Features:
-- we do import figma auto-layout which sets the gap, padding, justify-content and align-content
-
-
-
 -------------------------------------------------------------------------------
 
 

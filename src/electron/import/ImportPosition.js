@@ -175,6 +175,7 @@ export default {
       // only use the grid template for columns, not for rows
       css.element[container.ref][`grid-template-${gridType}s`] = gridValue
     }
+    // @todo better gap; take into account auto-layout gap
     css.element[container.ref][`${gridType}-gap`] = '0px'
     ImportPositionCommon.debugAddContainerCss(container, gridType, gridValue)
   },
@@ -285,6 +286,7 @@ export default {
 
   addElementMargin (css, elem, container) {
     // use the relative container to fetch the x and y
+    // @todo take into account auto-layout padding or don't use it at all
     if (!css.element[elem.ref]) throw new Error(`No css for element ${elem.ref}`)
     const marginTop = Math.round(elem.y - container.y)
     const marginLeft = Math.round(elem.x - container.x)

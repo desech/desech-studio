@@ -37,6 +37,7 @@ export default {
     this.loadFilePanel(file)
     TopZoom.setSavedZoomLevel()
     TopCommon.positionDragHandle()
+    if (!file) TopCommandSave.setFirstSaveTimeout()
   },
 
   loadFilePanel (file) {

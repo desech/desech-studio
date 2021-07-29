@@ -112,7 +112,7 @@ export default {
     if (fills && fills.length && fills[0].isEnabled && this.getFillType(fills[0]) === 'Solid') {
       return { fill: this.getColor(fills[0].color) }
     } else if (addNoFill) {
-      return { fill: 'rgba(0, 0, 0, 0)' }
+      return { fill: 'transparent' }
     }
   },
 

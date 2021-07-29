@@ -51,11 +51,23 @@ export default {
 
   adjustBodyCss (css, ref) {
     delete css.element[ref].width
-    // use the first font in body and remove it everywhere else
-    // if (css.font[0]) css.element[ref]['font-family'] = css.font[0]
+    this.adjustBodyFont(css, ref)
+  },
 
-    // we prefer to let the body height adjust itself
-    // css.element[ref].height = '100%'
+  adjustBodyFont (css, ref) {
+    // use the first font in body and remove it everywhere else
+    if (!css.font[0]) return
+    this.removeBodyFontFromCss(css.element, css.font[0].name)
+    this.removeBodyFontFromCss(css.component, css.font[0].name)
+    css.element[ref]['font-family'] = css.font[0].name
+  },
+
+  removeBodyFontFromCss (cssList, bodyFont) {
+    for (const val of Object.values(cssList)) {
+      if (val['font-family'] && val['font-family'] === bodyFont) {
+        delete val['font-family']
+      }
+    }
   },
 
   positionNodes (nodes, css, container, containerParent) {

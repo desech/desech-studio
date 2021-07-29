@@ -5,9 +5,9 @@ import Cookie from './Cookie.js'
 import File from '../file/File.js'
 
 export default {
-  async addFont (url, file) {
+  async addFont (url, file, folder = null) {
     if (!url && !file) return false
-    const folder = await Cookie.getCookie('currentFolder')
+    folder = folder || await Cookie.getCookie('currentFolder')
     const zip = await this.copyFontFolder(folder, url, file)
     const css = this.getFontCss(folder, zip)
     this.addFontCss(folder, css)

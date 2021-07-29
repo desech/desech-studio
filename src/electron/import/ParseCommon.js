@@ -156,13 +156,27 @@ export default {
     ]
   },
 
-  getFontFamily (font, css) {
-    // we accept all type of fonts, not just google fonts
-    // we will remove the non google fonts later
-    if (!font) return
-    // add the font to our css list
-    if (!css.font.includes(font)) css.font.push(font)
-    return { 'font-family': font }
+  getFontFamily (name, css) {
+    if (!name) return
+    const found = this.getFontFromList(name, css.font)
+    if (found) {
+      found.count++
+    } else {
+      css.font.push({
+        name,
+        count: 1,
+        url: `https://download.desech.com/font/${name.replaceAll(' ', '+')}.zip`
+      })
+    }
+    // normally we should quote names with spaces, but Desech Studio will do that for us on Save,
+    // which will trigger immediately after opening the project
+    return { 'font-family': name }
+  },
+
+  getFontFromList (name, list) {
+    for (const font of list) {
+      if (font.name === name) return font
+    }
   },
 
   getPropValue (property, value, check) {

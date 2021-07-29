@@ -92,7 +92,7 @@ export default {
 
   async getColor (element, extra) {
     if (element.fills.length === 1 && element.fills[0].type === 'SOLID') {
-      return this.getRgbColor(element.fills[0])
+      return { color: FigmaCommon.getObjectColor(element.fills[0]) }
     } else if (element.fills.length) {
       let css = ParseCommon.getTextBackgroundCss()
       if (extra.data.type === 'inline') {
@@ -100,11 +100,5 @@ export default {
       }
       return css
     }
-  },
-
-  getRgbColor (rgb) {
-    const color = FigmaCommon.getObjectColor(rgb)
-    // ignore default black
-    return (color === 'rgb(0, 0, 0)') ? null : { color }
   }
 }

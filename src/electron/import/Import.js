@@ -1,4 +1,5 @@
 import fs from 'fs'
+import fetch from 'node-fetch'
 import { dialog } from 'electron'
 import Language from '../lib/Language.js'
 import Figma from './Figma.js'
@@ -16,6 +17,7 @@ import HelperStyle from '../../js/helper/HelperStyle.js'
 import Electron from '../lib/Electron.js'
 import FileParse from '../file/FileParse.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
+import Font from '../lib/Font.js'
 
 export default {
   _tmpFileCss: {},
@@ -34,7 +36,7 @@ export default {
     }
     this.setProjectSettings(folder, data)
     const hasDesignSystem = await ProjectCommon.getDesignSystem()
-    this.saveGeneralCssFiles(data.css, folder)
+    await this.saveGeneralCssFiles(data.css, folder)
     this.saveHtmlFiles(data.html, data.css, folder, folder, hasDesignSystem)
     EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'), folder)
   },
@@ -150,12 +152,20 @@ export default {
     this._tmpFileCss[node.ref] = css.element[node.ref]
     if (node.type !== 'icon') delete this._tmpFileCss[node.ref].width
     delete this._tmpFileCss[node.ref].height
+    this.filterTextCss(node, css)
+    this.setTextAlignmentCss(node, css)
+  },
+
+  filterTextCss (node, css) {
+    // skip default font size 16px
     if (this._tmpFileCss[node.ref]['font-size'] === '16px') {
       delete this._tmpFileCss[node.ref]['font-size']
     }
-    if (node.name !== 'body') delete this._tmpFileCss[node.ref]['font-family']
+    // skip default black text color
+    if (this._tmpFileCss[node.ref].color === 'rgb(0, 0, 0)') {
+      delete this._tmpFileCss[node.ref].color
+    }
     if (node.type === 'text') this.addInlineCss(node, css)
-    this.setTextAlignmentCss(node, css)
   },
 
   addInlineCss (node, css) {
@@ -291,14 +301,52 @@ export default {
     return cls.trim()
   },
 
-  saveGeneralCssFiles (css, folder) {
+  async saveGeneralCssFiles (css, folder) {
     EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Saving css files'))
     File.createFolder(folder, 'css')
     File.createFolder(folder, 'font')
+    await this.installFonts(css, folder)
     // we no longer import components, so no need to save them
     // FileSave.saveStyleToFile(this.prepareCss(css.component), css.color, folder,
     //   'css/general/component-css.css')
-    // we also don't import fonts, so not much to do here
+  },
+
+  async installFonts (css, folder) {
+    css.font.sort((a, b) => (a.count < b.count) ? 1 : -1)
+    const webFonts = await this.fetchFonts()
+    const folderFonts = Font.getFontsList(folder)
+    for (const val of css.font) {
+      if (this.isGoogleFont(val.name, webFonts)) {
+        await this.installGoogleFont(val, folder, folderFonts)
+      } else {
+        // @todo
+        throw new Error('Do something with non google fonts')
+      }
+    }
+  },
+
+  async fetchFonts () {
+    const response = await fetch('https://download.desech.com/font/list.json')
+    if (!response.ok) throw new Error("Can't access download.desech.com")
+    return await response.json()
+  },
+
+  isGoogleFont (font, list) {
+    for (const val of list) {
+      if (val.family === font) return true
+    }
+    return false
+  },
+
+  async installGoogleFont (font, folder, folderFonts) {
+    if (folderFonts.includes(font.name)) {
+      const msg = Language.localize('Font <b>{{font}}</b> already exists', { font: font.name })
+      EventMain.ipcMainInvoke('mainImportProgress', msg)
+    } else {
+      const msg = Language.localize('Installing font <b>{{font}}</b>', { font: font.name })
+      EventMain.ipcMainInvoke('mainImportProgress', msg)
+      await Font.addFont(font.url, null, folder)
+    }
   },
 
   prepareCss (css) {

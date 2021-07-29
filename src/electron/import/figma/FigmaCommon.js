@@ -94,7 +94,7 @@ export default {
 
     // @todo angle value is not calculated correctly - find the correct formula
     // const m = element.relativeTransform
-    // console.log(element.name, Math.atan2(-m[1][0], m[0][0]))
+    // const angle = Math.atan2(-m[1][0], m[0][0])
     return css
   },
 

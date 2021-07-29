@@ -90,7 +90,7 @@ export default {
     return {
       ...ParseCommon.mergeValues(effects.filter, ' '),
       ...ParseCommon.mergeValues(effects['box-shadow'], ', '),
-      ...this.addCssMixBlendMode(element.blendmode)
+      ...this.addCssMixBlendMode(element.blendMode)
     }
   },
 

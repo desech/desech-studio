@@ -175,7 +175,7 @@ export default {
       // only use the grid template for columns, not for rows
       css.element[container.ref][`grid-template-${gridType}s`] = gridValue
     }
-    // css.element[container.ref][`${gridType}-gap`] = '0px'
+    css.element[container.ref][`${gridType}-gap`] = '0px'
     ImportPositionCommon.debugAddContainerCss(container, gridType, gridValue)
   },
 
@@ -183,12 +183,11 @@ export default {
     let css = ''
     for (let i = 0; i < traversal.lines.length - 1; i++) {
       // skip the last line
-      // const line = traversal.lines[i]
-      // const size = traversal.lines[i - 1] ? line - traversal.lines[i - 1]
-      //   : line - container[traversal.type]
-      // we prefer to let the sizes adjust themselves
-      // css += size + 'px '
-      css += 'auto '
+      const line = traversal.lines[i]
+      const size = traversal.lines[i - 1]
+        ? line - traversal.lines[i - 1]
+        : line - container[traversal.type]
+      css += size + 'px '
     }
     // last element is auto
     return css.trim() + ' auto'
@@ -260,8 +259,7 @@ export default {
     ImportPositionCommon.debugMoveToContainer(container, containerParent, elem)
     this.replaceContainerWithElement(elem, container, containerParent)
     this.removeElementFromNodes(elem, nodes)
-    // we prefer to manually add margins in desech
-    // this.addElementMargin(css, elem, container)
+    this.addElementMargin(css, elem, container)
   },
 
   replaceContainerWithElement (elem, container, containerParent) {
@@ -283,18 +281,18 @@ export default {
         return nodes.splice(i, 1)
       }
     }
-  }
+  },
 
-  // addElementMargin (css, elem, container) {
-  //   // use the relative container to fetch the x and y
-  //   if (!css.element[elem.ref]) throw new Error(`No css for element ${elem.ref}`)
-  //   const marginTop = Math.round(elem.y - container.y)
-  //   const marginLeft = Math.round(elem.x - container.x)
-  //   if (marginTop && !css.element[elem.ref]['align-self']) {
-  //     css.element[elem.ref]['margin-top'] = marginTop + 'px'
-  //   }
-  //   if (marginLeft) {
-  //     css.element[elem.ref]['margin-left'] = marginLeft + 'px'
-  //   }
-  // }
+  addElementMargin (css, elem, container) {
+    // use the relative container to fetch the x and y
+    if (!css.element[elem.ref]) throw new Error(`No css for element ${elem.ref}`)
+    const marginTop = Math.round(elem.y - container.y)
+    const marginLeft = Math.round(elem.x - container.x)
+    if (marginTop && !css.element[elem.ref]['align-self']) {
+      css.element[elem.ref]['margin-top'] = marginTop + 'px'
+    }
+    if (marginLeft) {
+      css.element[elem.ref]['margin-left'] = marginLeft + 'px'
+    }
+  }
 }

@@ -150,8 +150,6 @@ export default {
   addNodeCss (node, css) {
     if (!css.element[node.ref]) return
     this._tmpFileCss[node.ref] = css.element[node.ref]
-    if (node.type !== 'icon') delete this._tmpFileCss[node.ref].width
-    delete this._tmpFileCss[node.ref].height
     this.filterTextCss(node, css)
     this.setTextAlignmentCss(node, css)
   },

@@ -28,7 +28,8 @@ export default {
   setJustifyContent (css, mode, element) {
     if ((mode === 'column' && !element.primaryAxisAlignItems) ||
       (mode === 'row' && !element.counterAxisAlignItems)) {
-      css['justify-content'] = 'start'
+      // this is redundant
+      // css['justify-content'] = 'start'
     }
     if ((mode === 'column' && element.primaryAxisAlignItems === 'CENTER') ||
       (mode === 'row' && element.counterAxisAlignItems === 'CENTER')) {
@@ -47,7 +48,8 @@ export default {
   setAlignContent (css, mode, element) {
     if ((mode === 'column' && !element.counterAxisAlignItems) ||
       (mode === 'row' && !element.primaryAxisAlignItems)) {
-      css['align-content'] = 'start'
+      // this is redundant
+      // css['align-content'] = 'start'
     }
     if ((mode === 'column' && element.counterAxisAlignItems === 'CENTER') ||
       (mode === 'row' && element.primaryAxisAlignItems === 'CENTER')) {

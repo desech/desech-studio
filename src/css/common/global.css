@@ -53,6 +53,7 @@ textarea {
 .desech-studio svg {
   display: inline-block;
   vertical-align: middle;
+  fill: currentColor;
 }
 
 .desech-studio .sort-button {

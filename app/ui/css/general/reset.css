@@ -169,7 +169,8 @@ img {
 }
 
 svg {
-  fill: currentcolor;
+  /* we can't have it because it will overwrite svgs without fill */
+  /* fill: currentcolor; */
   width: 24px;
 }
 

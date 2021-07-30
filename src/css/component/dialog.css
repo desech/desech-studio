@@ -199,9 +199,11 @@ dialog.dialog .dialog-figma-import .figma-import-file {
   margin-top: 20px;
 }
 
-dialog.dialog .dialog-figma-import .figma-import-file svg {
-  display: inline-block;
-  margin-right: 8px;
+dialog.dialog .dialog-figma-import .figma-import-file > div {
+  display: grid;
+  align-items: center;
+  grid-auto-flow: column;
+  gap: 8px;
 }
 
 dialog.dialog .dialog-figma-import .figma-warning {

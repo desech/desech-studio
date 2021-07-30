@@ -167,7 +167,7 @@ export default {
           // icons need to have export settings
           return 'icon'
         }
-        return null
+        break
       case 'group':
         // symbols are also of this type
         return element.meta.ux.markedForExport ? 'icon' : 'block'
@@ -199,6 +199,7 @@ export default {
       width,
       height,
       type,
+      ...this.getTag(element),
       ref: HelperElement.generateElementRef(),
       zIndex: ++this._zIndex,
       component: [],
@@ -207,6 +208,10 @@ export default {
       ...AdobexdIcon.getSvgContent(element, type, width, height, this._svgPaths),
       children: []
     }
+  },
+
+  getTag (element) {
+    return (element.shape?.type === 'line') ? { tag: 'hr' } : null
   },
 
   async getCssProperties (data, element) {

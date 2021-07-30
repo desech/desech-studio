@@ -27,8 +27,9 @@ export default {
   },
 
   ignoreFill (fillType, element, extra) {
-    return (!fillType || extra.data.type === 'icon' || (extra.data.type === 'text' &&
-      fillType === 'Solid') || (fillType === 'Image' && !element.meta.ux.markedForExport))
+    return (element.shape?.type === 'line' || !fillType || extra.data.type === 'icon' ||
+      (extra.data.type === 'text' && fillType === 'Solid') ||
+      (fillType === 'Image' && !element.meta.ux.markedForExport))
   },
 
   async getFillData (type, fill, extra) {
@@ -36,12 +37,14 @@ export default {
       'background-image': await this[`getFillBg${type}`](fill, extra),
       'background-blend-mode': HelperStyle.getDefaultProperty('background-blend-mode'),
       'background-size': (type === 'Image')
-        ? 'contain'
+        ? 'cover'
         : HelperStyle.getDefaultProperty('background-size'),
       'background-repeat': (type === 'Image')
         ? 'no-repeat'
         : HelperStyle.getDefaultProperty('background-repeat'),
-      'background-position': HelperStyle.getDefaultProperty('background-position'),
+      'background-position': (type === 'Image')
+        ? 'center center'
+        : HelperStyle.getDefaultProperty('background-position'),
       'background-attachment': HelperStyle.getDefaultProperty('background-attachment'),
       'background-origin': HelperStyle.getDefaultProperty('background-origin')
     }

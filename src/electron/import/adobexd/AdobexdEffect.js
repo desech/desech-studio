@@ -2,12 +2,9 @@ import AdobexdCommon from './AdobexdCommon.js'
 
 export default {
   getCssEffect (desechType, element) {
-    if (!element.style.filters) return
     const effects = { 'box-shadow': [], filter: [] }
     this.addOpacity(element.style.opacity, effects)
-    for (const filter of element.style.filters) {
-      this.processEffect(desechType, filter, effects)
-    }
+    this.addFilters(desechType, element.style.filters, effects)
     return this.returnEffects(element, effects)
   },
 
@@ -15,6 +12,13 @@ export default {
     if (typeof opacity === 'undefined') return
     const value = Math.round(opacity * 100)
     effects.filter.push(`opacity(${value}%)`)
+  },
+
+  addFilters (desechType, filters, effects) {
+    if (!filters) return
+    for (const filter of filters) {
+      this.processEffect(desechType, filter, effects)
+    }
   },
 
   processEffect (desechType, filter, effects) {
@@ -60,12 +64,17 @@ export default {
     return {
       ...this.getEffectProperty(effects, 'filter', ' '),
       ...this.getEffectProperty(effects, 'box-shadow', ', '),
+      ...this.addRotation(Math.round(element.meta.ux.rotation)),
       ...this.addCssMixBlendMode(element.style.blendMode)
     }
   },
 
   getEffectProperty (effects, type, glue) {
     return effects[type].length ? { [type]: effects[type].join(glue) } : null
+  },
+
+  addRotation (angle) {
+    return angle ? { transform: `rotateX(0deg) rotateY(0deg) rotateZ(${angle}deg)` } : null
   },
 
   addCssMixBlendMode (value) {

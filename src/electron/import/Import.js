@@ -227,9 +227,10 @@ export default {
 
   wipeCssOnBackgroundImage (ref, css) {
     // figma also exports the effects, borders, etc on images, so we don't need the extra css
-    if (this._type !== 'figma') return
+    // but for sketch and xd we need to to remove the background css properties
     for (const name of Object.keys(css.element[ref])) {
-      if (!['width', 'height'].includes(name)) {
+      if ((this._type === 'figma' && !['width', 'height'].includes(name)) ||
+        (this._type !== 'figma' && name.startsWith('background-'))) {
         delete css.element[ref][name]
       }
     }

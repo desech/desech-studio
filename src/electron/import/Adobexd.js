@@ -160,8 +160,7 @@ export default {
   getElementType (element) {
     switch (element.type) {
       case 'shape':
-        // rect, line, ellipse, polygon, path, compound
-        if (['rect', 'line', 'ellipse'].includes(element.shape.type)) {
+        if (['rect', 'ellipse', 'line'].includes(element.shape.type)) {
           return 'block'
         } else if (['polygon', 'path', 'compound'].includes(element.shape.type) &&
           element.meta.ux.markedForExport) {
@@ -174,7 +173,6 @@ export default {
         return element.meta.ux.markedForExport ? 'icon' : 'block'
       case 'text':
         return 'text'
-      // ignore the rest
     }
   },
 
@@ -230,11 +228,10 @@ export default {
       processImages: this._processImages
     }
     return {
-      ...AdobexdCommon.getCssMixBlendMode(element.style.blendMode),
       ...await AdobexdFill.getCssFill(element, extra),
       ...AdobexdStroke.getCssStroke(data.type, element, this._svgPath),
       ...AdobexdIcon.getCssFillStroke(data.type, element),
-      ...AdobexdEffect.getCssEffect(data.type, element.style.filters)
+      ...AdobexdEffect.getCssEffect(data.type, element)
     }
   },
 

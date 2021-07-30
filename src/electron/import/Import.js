@@ -226,6 +226,8 @@ export default {
   },
 
   wipeCssOnBackgroundImage (ref, css) {
+    // figma also exports the effects, borders, etc on images, so we don't need the extra css
+    if (this._type !== 'figma') return
     for (const name of Object.keys(css.element[ref])) {
       if (!['width', 'height'].includes(name)) {
         delete css.element[ref][name]

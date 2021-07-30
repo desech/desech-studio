@@ -143,12 +143,6 @@ export default {
     return css
   },
 
-  getCssMixBlendMode (value) {
-    // normal, darken, multiply, color-burn, lighten, screen, color-dodge, overlay, soft-light,
-    // hard-light, difference, exclusion, hue, saturation, color, luminosity
-    return value ? { 'mix-blend-mode': value } : null
-  },
-
   getCssRoundedCorners (shape) {
     if (shape && shape.type === 'ellipse') {
       return ParseCommon.getCircleRoundedBorders()

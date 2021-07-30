@@ -6,8 +6,8 @@ export default {
     if (desechType === 'block' && element.exportSettings?.length) return
     const effects = { 'box-shadow': [], filter: [] }
     this.addOpacity(element.opacity, effects)
-    for (const effect of element.effects) {
-      this.processEffect(desechType, effect, effects)
+    for (const filter of element.effects) {
+      this.processEffect(desechType, filter, effects)
     }
     return this.returnEffects(element, effects)
   },

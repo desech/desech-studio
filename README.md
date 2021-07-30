@@ -264,8 +264,7 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 
 - adobexd
   - lines are `<hr>`; no bg color on `<hr>`
-  - filter shadow on svg; opacity effect
-  - set blend mode to effects
+  - filter shadow on svg;
   - bring align-self back to adobexd
   - svg masked shapes
   - background image for all type of svgs

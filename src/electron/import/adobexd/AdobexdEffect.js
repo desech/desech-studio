@@ -1,30 +1,42 @@
 import AdobexdCommon from './AdobexdCommon.js'
 
 export default {
-  getCssEffect (type, effects) {
-    if (!effects) return
-    const props = {}
-    for (const effect of effects) {
-      this.addEffect(type, effect, props)
+  getCssEffect (desechType, element) {
+    if (!element.style.filters) return
+    const effects = { 'box-shadow': [], filter: [] }
+    this.addOpacity(element.style.opacity, effects)
+    for (const filter of element.style.filters) {
+      this.processEffect(desechType, filter, effects)
     }
-    return props
+    return this.returnEffects(element, effects)
   },
 
-  addEffect (type, effect, props) {
-    if (effect.visible === false) return
-    if (effect.type === 'dropShadow') {
-      this.addShadow(type, effect.params.dropShadows[0], props)
-    } else if (effect.type === 'uxdesign#blur') {
-      this.addBlur(effect.params, props)
+  addOpacity (opacity, effects) {
+    if (typeof opacity === 'undefined') return
+    const value = Math.round(opacity * 100)
+    effects.filter.push(`opacity(${value}%)`)
+  },
+
+  processEffect (desechType, filter, effects) {
+    if (filter.visible === false) return
+    if (filter.type === 'dropShadow') {
+      this.addShadow(desechType, filter.params.dropShadows[0], false, effects)
+    } else if (filter.type === 'uxdesign#innerShadow') {
+      this.addShadow(desechType, filter.params.innerShadows[0], true, effects)
+    } else if (filter.type === 'uxdesign#blur') {
+      this.addBlur(filter.params, effects)
     }
   },
 
-  addShadow (type, shadow, props) {
+  addShadow (type, shadow, isInner, effects) {
     const data = this.getShadowData(shadow)
+    const inner = isInner ? ' inset' : ''
     if (type === 'text') {
-      props.filter = `drop-shadow(${data.color} ${data.x}px ${data.y}px ${data.radius}px)`
+      const value = `drop-shadow(${data.color} ${data.x}px ${data.y}px ${data.radius}px${inner})`
+      effects.filter.push(value)
     } else {
-      props['box-shadow'] = `${data.color} ${data.x}px ${data.y}px ${data.radius}px`
+      const value = `${data.color} ${data.x}px ${data.y}px ${data.radius}px 0px${inner}`
+      effects['box-shadow'].push(value)
     }
   },
 
@@ -37,11 +49,28 @@ export default {
     }
   },
 
-  addBlur (blur, props) {
-    // ignore background blur, allow object blur
+  addBlur (blur, effects) {
+    // allow only object blur, ignore background blur
     if (blur.backgroundEffect) return
-    props.filter = props.filter || ''
-    props.filter += ` blur(${Math.round(blur.blurAmount)}px)`
-    props.filter = props.filter.trim()
+    const value = `blur(${Math.round(blur.blurAmount)}px)`
+    effects.filter.push(value)
+  },
+
+  returnEffects (element, effects) {
+    return {
+      ...this.getEffectProperty(effects, 'filter', ' '),
+      ...this.getEffectProperty(effects, 'box-shadow', ', '),
+      ...this.addCssMixBlendMode(element.style.blendMode)
+    }
+  },
+
+  getEffectProperty (effects, type, glue) {
+    return effects[type].length ? { [type]: effects[type].join(glue) } : null
+  },
+
+  addCssMixBlendMode (value) {
+    // normal, darken, multiply, color-burn, lighten, screen, color-dodge, overlay, soft-light,
+    // hard-light, difference, exclusion, hue, saturation, color, luminosity
+    return value ? { 'mix-blend-mode': value } : null
   }
 }

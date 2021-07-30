@@ -53,17 +53,23 @@ export default {
   },
 
   async getSvgFromPolygon (element, extra) {
-    const p = element.shape.points
     const gr = this.prepareDataForGradient(element)
     const bg = await this.prepareDataForImage(element, extra)
     return `<svg viewBox="0 0 ${extra.data.width} ${extra.data.height}" ` +
       'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n' +
       ImportSvg.getGradientNode(gr) + ImportSvg.getPatternNode(bg) +
-      `<polygon points="${parseInt(p[0].x)},${parseInt(p[0].y)} ` +
-        `${parseInt(p[1].x)},${parseInt(p[1].y)} ` +
-        `${parseInt(p[2].x)},${parseInt(p[2].y)}"` +
+      `<polygon points="${this.getPolygonPoints(element.shape.points)}"` +
         `${ImportSvg.getFillUrl(gr || bg)}/>\n` +
     '</svg>'
+  },
+
+  getPolygonPoints (points) {
+    // shape['uxdesign#cornerRadius'] and shape ['uxdesign#starRatio'] are ignored
+    const array = []
+    for (const point of points) {
+      array.push(Math.round(point.x) + ',' + Math.round(point.y))
+    }
+    return array.join(' ')
   },
 
   prepareDataForGradient (element) {
@@ -147,6 +153,8 @@ export default {
     }
     if (style.fill?.type === 'solid') {
       css.fill = AdobexdCommon.getColor(style.fill.color)
+    } else if (style.fill?.type === 'none') {
+      css.fill = 'transparent'
     }
   }
 }

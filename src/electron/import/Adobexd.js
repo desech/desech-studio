@@ -117,7 +117,7 @@ export default {
   },
 
   async parseElements (elements, nodes, artboard, parent = null, pos = null) {
-    pos = this.getElementPos(artboard, parent, pos)
+    pos = this.getElementPos(pos, artboard, parent)
     for (const element of elements) {
       await this.parseElement(element, nodes, pos)
       if (ParseCommon.isHidden(element.visible)) continue
@@ -131,18 +131,17 @@ export default {
     }
   },
 
-  getElementPos (artboard, parent, pos) {
+  getElementPos (pos, artboard, parent) {
+    // parents are groups basically; we need to clone the `pos` object
     const data = {}
-    if (parent && parent.transform) {
-      data.x = Math.round(parent.meta.ux.localTransform
-        ? parent.transform.tx - artboard.x
-        : parent.transform.tx + pos.x)
-      data.y = Math.round(parent.meta.ux.localTransform
-        ? parent.transform.ty - artboard.y
-        : parent.transform.ty + pos.y)
+    if (!parent) {
+      // when we have no parents we start adding the artboard position
+      data.tx = Math.round(-artboard.x)
+      data.ty = Math.round(-artboard.y)
     } else {
-      data.x = Math.round(-artboard.x)
-      data.y = Math.round(-artboard.y)
+      // add the transform from the group parent
+      data.tx = pos.tx + (Math.round(parent.transform?.tx) || 0)
+      data.ty = pos.ty + (Math.round(parent.transform?.ty) || 0)
     }
     return data
   },
@@ -204,8 +203,8 @@ export default {
     return {
       id: element.id, // for debugging
       name: element.name,
-      x: AdobexdCommon.getX(type, element, pos.x, this._svgPaths),
-      y: AdobexdCommon.getY(type, element, pos.y, this._svgPaths),
+      x: AdobexdCommon.getX(pos.tx, type, element, this._svgPaths),
+      y: AdobexdCommon.getY(pos.ty, type, element, this._svgPaths),
       width,
       height,
       type,
@@ -250,7 +249,7 @@ export default {
       projectFolder: this._projectFolder,
       importFolder: this._importFolder,
       processImages: this._processImages,
-      svgPath: this._svgPaths
+      svgPaths: this._svgPaths
     }
   },
 

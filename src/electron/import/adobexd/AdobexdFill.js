@@ -24,6 +24,7 @@ export default {
     } else if (fill.type === 'pattern') {
       return 'Image'
     }
+    // do nothing for type "none"
   },
 
   ignoreFill (fillType, element, extra) {

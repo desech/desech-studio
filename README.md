@@ -249,10 +249,12 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 - figma:
   - rotation is not supported because I can't figure out the math behind it
   - we skip background images for text because the exported image will contain the text too
+  - arrows are reported at 0 height, so they will have a smaller height than what's in figma
 - adobexd:
   - text width and height is approximated, wait for adobexd to provide exact values
   - text-transform is not present in the style property, only in the rangeStyles which is buggy
     - wait for adobexd to add it in the style too
+  - polygons with rounded corners and star ratios are not supported
   - masked vectors are not supported because we don't know how to calculate the transform
   - autolayout is not supported because it applies to groups and they have no x,y,w,h
 

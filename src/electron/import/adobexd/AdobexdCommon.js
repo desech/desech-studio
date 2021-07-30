@@ -1,28 +1,34 @@
 import ParseCommon from '../ParseCommon.js'
 
 export default {
-  getX (elementType, element, x, svgPaths) {
-    if (elementType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
+  getX (parentX, desechType, element, svgPaths) {
+    let x = 0
+    if (desechType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
       x = svgPaths[element.id]?.box?.x
     }
-    return Math.round(x + (element.transform ? element.transform.tx : 0))
+    if (element?.transform?.tx) x += Math.round(element.transform.tx)
+    return Math.round(x + parentX)
   },
 
-  getY (elementType, element, y, svgPaths) {
-    if (elementType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
+  getY (parentY, desechType, element, svgPaths) {
+    let y = 0
+    if (desechType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
       y = svgPaths[element.id]?.box?.y
     }
-    y += (element.transform ? element.transform.ty : 0)
-    if (elementType === 'text' && element.text.frame.type !== 'area') {
-      y -= this.getHeight(elementType, element, svgPaths)
+    if (element?.transform?.ty) y += Math.round(element.transform.ty)
+    if (desechType === 'text' && element.text.frame.type !== 'area') {
+      y -= this.getHeight(desechType, element, svgPaths)
     }
-    return Math.round(y)
+    if (element?.shape?.type === 'line') {
+      y -= Math.round(element.style.stroke.width / 2)
+    }
+    return Math.round(y + parentY)
   },
 
-  getWidth (elementType, element, svgPaths) {
+  getWidth (desechType, element, svgPaths) {
     // don't add the stroke size to the width when processing lines
-    let extra = this.getExtraVolume(elementType, element)
-    if (elementType === 'text') {
+    let extra = this.getExtraVolume(desechType, element)
+    if (desechType === 'text') {
       return this.getTextWidth(element)
     } else if (element.meta && element.meta.ux.symbolId) {
       return Math.round(element.meta.ux.width + extra)
@@ -35,9 +41,9 @@ export default {
     return 1
   },
 
-  getHeight (elementType, element, svgPaths, addExtra = true) {
-    let extra = this.getExtraVolume(elementType, element)
-    if (elementType === 'text') {
+  getHeight (desechType, element, svgPaths, addExtra = true) {
+    let extra = this.getExtraVolume(desechType, element)
+    if (desechType === 'text') {
       return this.getTextHeight(element)
     } else if (element.meta && element.meta.ux.symbolId) {
       return Math.round(element.meta.ux.height + extra)
@@ -106,13 +112,13 @@ export default {
     }
   },
 
-  getExtraVolume (elementType, element) {
-    const stroke = this.getStroke(elementType, element)
-    return ParseCommon.getExtraVolume(elementType, stroke)
+  getExtraVolume (desechType, element) {
+    const stroke = this.getStroke(desechType, element)
+    return ParseCommon.getExtraVolume(desechType, stroke)
   },
 
-  getStroke (elementType, element) {
-    if (!this.isStrokeAvailable(elementType, element.style)) {
+  getStroke (desechType, element) {
+    if (!this.isStrokeAvailable(desechType, element.style)) {
       return {}
     }
     return {
@@ -123,8 +129,8 @@ export default {
     }
   },
 
-  isStrokeAvailable (elementType, style) {
-    if (elementType === 'icon' || elementType === 'text') {
+  isStrokeAvailable (desechType, style) {
+    if (desechType === 'icon' || desechType === 'text') {
       return false
     }
     if (!style || !style.stroke || style.stroke.type === 'none') {

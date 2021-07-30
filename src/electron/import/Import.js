@@ -150,6 +150,7 @@ export default {
   addNodeCss (node, css) {
     if (!css.element[node.ref]) return
     this._tmpFileCss[node.ref] = css.element[node.ref]
+    if (node.tag === 'hr') delete this._tmpFileCss[node.ref].height
     this.filterTextCss(node, css)
     this.setTextAlignmentCss(node, css)
   },
@@ -227,10 +228,11 @@ export default {
 
   wipeCssOnBackgroundImage (ref, css) {
     // figma also exports the effects, borders, etc on images, so we don't need the extra css
-    // but for sketch and xd we need to to remove the background css properties
+    // but for sketch and xd we need to remove the background css properties and the svg strokes
     for (const name of Object.keys(css.element[ref])) {
       if ((this._type === 'figma' && !['width', 'height'].includes(name)) ||
-        (this._type !== 'figma' && name.startsWith('background-'))) {
+        (this._type !== 'figma' && (name.startsWith('background-') ||
+          name.startsWith('stroke')))) {
         delete css.element[ref][name]
       }
     }

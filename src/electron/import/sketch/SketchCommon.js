@@ -122,6 +122,7 @@ export default {
       return {
         stroke: this.getColor(strokes[0].color),
         'stroke-width': strokes[0].thickness + 'px'
+        // @todo stroke-dasharray
       }
     }
   }

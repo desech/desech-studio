@@ -152,7 +152,7 @@ export default {
     const type = this.getElementType(element)
     if (!type) return
     this.processSymbolInstance(element)
-    const data = this.getElementData(type, element, pos)
+    const data = await this.getElementData(type, element, pos)
     this._css.element[data.ref] = await this.getCssProperties(data, element)
     nodes.push(data)
   },
@@ -187,10 +187,20 @@ export default {
     element.group.children = ExtendJS.cloneData(this._symbols[id].group.children)
   },
 
-  getElementData (type, element, pos) {
+  async getElementData (type, element, pos) {
     this._debug.push(element) // for debugging
     const width = AdobexdCommon.getWidth(type, element, this._svgPaths)
     const height = AdobexdCommon.getHeight(type, element, this._svgPaths)
+    let data = this.getData(type, element, pos, width, height)
+    const extra = this.getExtraData(data, element)
+    data = {
+      ...data,
+      ...await AdobexdIcon.getSvgContent(element, extra)
+    }
+    return data
+  },
+
+  getData (type, element, pos, width, height) {
     return {
       id: element.id, // for debugging
       name: element.name,
@@ -205,7 +215,6 @@ export default {
       component: [],
       content: '',
       ...AdobexdInline.processTextContent(element, type, this._css),
-      ...AdobexdIcon.getSvgContent(element, type, width, height, this._svgPaths),
       children: []
     }
   },
@@ -225,18 +234,23 @@ export default {
 
   async getStyleProperties (data, element) {
     if (!element.style) return
-    const extra = {
-      data,
-      element,
-      projectFolder: this._projectFolder,
-      importFolder: this._importFolder,
-      processImages: this._processImages
-    }
+    const extra = this.getExtraData(data, element)
     return {
       ...await AdobexdFill.getCssFill(element, extra),
       ...AdobexdStroke.getCssStroke(data.type, element, this._svgPath),
       ...AdobexdIcon.getCssFillStroke(data.type, element),
       ...AdobexdEffect.getCssEffect(data.type, element)
+    }
+  },
+
+  getExtraData (data, element) {
+    return {
+      data,
+      element,
+      projectFolder: this._projectFolder,
+      importFolder: this._importFolder,
+      processImages: this._processImages,
+      svgPath: this._svgPaths
     }
   },
 

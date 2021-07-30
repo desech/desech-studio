@@ -37,7 +37,8 @@ export default {
   async processLocalImages (imagePath, extra) {
     if (!imagePath.includes('.')) imagePath += '.png'
     const ext = extra.element.exportOptions.exportFormats[0].fileFormat
-    return await ParseCommon.processLocalImages(imagePath, ext, extra)
+    const data = await ParseCommon.processLocalImages(imagePath, ext, extra)
+    return data.url
   },
 
   async addFillRecords (array, extra) {

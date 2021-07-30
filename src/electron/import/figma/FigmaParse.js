@@ -135,7 +135,17 @@ export default {
   },
 
   async getElementData (type, element, file) {
-    const data = {
+    const data = this.getData(type, element, file)
+    const extra = this.getExtraData({ data })
+    return {
+      ...data,
+      ...await FigmaInline.processTextContent(element, extra, this._css),
+      ...await FigmaIcon.getSvgContent(element, extra)
+    }
+  },
+
+  getData (type, element, file) {
+    return {
       id: element.id, // for debugging
       name: element.name.substring(0, 32),
       x: Math.round(element.absoluteBoundingBox.x - file.x),
@@ -150,12 +160,6 @@ export default {
       content: '',
       href: null,
       children: []
-    }
-    const extra = this.getExtraData({ data })
-    return {
-      ...data,
-      ...await FigmaInline.processTextContent(element, extra, this._css),
-      ...await FigmaIcon.getSvgContent(element, extra)
     }
   },
 
@@ -189,7 +193,7 @@ export default {
       ...FigmaCommon.getCssRoundedCorners(element),
       ...await FigmaFill.getCssFill(element, extra),
       ...await FigmaStroke.getCssStroke(element, extra),
-      ...FigmaIcon.processCssFillStroke(data, element),
+      // ...FigmaIcon.processCssFillStroke(data, element),
       ...FigmaEffect.getCssEffect(data.type, element),
       ...await FigmaText.getCssText(element, extra, this._css)
     }

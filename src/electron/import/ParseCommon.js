@@ -293,7 +293,10 @@ export default {
     const src = File.resolve(extra.importFolder, imagePath)
     const dest1x = await this.copyResizeImages(src, extra.projectFolder, fileName, ext,
       extra.data)
-    return this.getImageUrl(dest1x, extra.projectFolder)
+    return {
+      path: src,
+      url: this.getImageUrl(dest1x, extra.projectFolder)
+    }
   },
 
   getImageId (imagePath) {

@@ -246,10 +246,11 @@ export default {
   },
 
   addSvgCssToContent (node, css) {
+    // figma no longer has css properties for svgs
     // when dealing with svg bg images, copy back the css to the svg attributes
     if (!css.element[node.ref]) return
     const attrs = []
-    for (const prop of ['fill', 'stroke', 'stroke-width']) {
+    for (const prop of ['fill', 'stroke', 'stroke-width', 'stroke-dasharray']) {
       if (css.element[node.ref][prop]) {
         attrs.push(`${prop}="${css.element[node.ref][prop]}"`)
       }
@@ -277,9 +278,9 @@ export default {
   getIconNode (node, cls) {
     // imported svgs sometimes have elements without content
     if (!node.content) return ''
-    const html = node.content.replace('<svg ', `<svg class="${cls}" `)
-    // we only want the first replace inside <svg> not replaceAll in all nodes
-    return html.replace(/ width=".*?"/, '').replace(/ height=".*?"/, '')
+    return node.content.replace('<svg ', `<svg class="${cls}" `)
+      .replace(/(<svg.*?) width=".*?"/, '$1')
+      .replace(/(<svg.*?) height=".*?"/, '$1')
   },
 
   getHtmlTag (type) {

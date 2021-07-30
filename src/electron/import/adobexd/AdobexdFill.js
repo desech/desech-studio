@@ -71,7 +71,8 @@ export default {
   async getFillBgImage (fill, extra) {
     const imagePath = 'resources/' + fill.pattern.meta.ux.uid
     const ext = File.extname(fill.pattern.href).substring(1)
-    return await ParseCommon.processLocalImages(imagePath, ext, extra)
+    const data = await ParseCommon.processLocalImages(imagePath, ext, extra)
+    return data.url
   },
 
   getGradientStops (stops) {

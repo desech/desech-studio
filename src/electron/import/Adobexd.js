@@ -119,8 +119,8 @@ export default {
   async parseElements (elements, nodes, artboard, parent = null, pos = null) {
     pos = this.getElementPos(pos, artboard, parent)
     for (const element of elements) {
-      await this.parseElement(element, nodes, pos)
-      if (ParseCommon.isHidden(element.visible)) continue
+      const parsed = await this.parseElement(element, nodes, pos)
+      if (!parsed || ParseCommon.isHidden(element.visible)) continue
       if (element.group && element.group.children) {
         // this also processes symbols
         await this.parseElements(element.group.children, nodes, artboard, element, pos)
@@ -149,11 +149,12 @@ export default {
   async parseElement (element, nodes, pos) {
     if (ParseCommon.isHidden(element.visible)) return
     const type = this.getElementType(element)
-    if (!type) return
+    if (!type) return false
     this.processSymbolInstance(element)
     const data = await this.getElementData(type, element, pos)
     this._css.element[data.ref] = await this.getCssProperties(data, element)
     nodes.push(data)
+    return true
   },
 
   getElementType (element) {
@@ -167,9 +168,13 @@ export default {
           return 'icon'
         }
         break
+
       case 'group':
+        // ignore clip masks
+        if (element?.meta?.ux?.clipPathResources) return
         // symbols are also of this type
         return element.meta.ux.markedForExport ? 'icon' : 'block'
+
       case 'text':
         return 'text'
     }

@@ -17,26 +17,47 @@ export default {
     return await EventMain.executeJs(code)
   },
 
-  parseSvgPaths (elements, data) {
+  parseSvgPaths (elements, data, paths = null) {
+    // we need to go through all elements and fetch our exported svgs (path/compound/group)
     for (const element of elements) {
       if (ParseCommon.isHidden(element.visible)) continue
-      if (element.type === 'shape' && ['path', 'compound'].includes(element.shape.type) &&
-        element.meta.ux.markedForExport) {
-        data[element.id] = { path: element.shape.path }
+      if (['path', 'compound'].includes(element.shape?.type)) {
+        this.parseSvgElement(element, data, paths)
       } else if (element.group?.children) {
-        this.parseSvgPaths(element.group.children, data)
-      } else if (element.shape?.children) {
-        this.parseSvgPaths(element.shape.children, data)
+        this.parseSvgParent(element, element.group.children, data, paths)
       }
+    }
+  },
+
+  parseSvgElement (element, data, paths) {
+    if (paths) {
+      paths.push(element.shape.path)
+    } else if (element.meta?.ux?.markedForExport) {
+      data[element.id] = { paths: [element.shape.path] }
+    }
+  },
+
+  parseSvgParent (element, children, data, paths) {
+    if (paths) {
+      this.parseSvgPaths(children, data, paths)
+    } else if (element.meta?.ux?.markedForExport) {
+      data[element.id] = { paths: [] }
+      this.parseSvgPaths(children, data, data[element.id].paths)
+    } else {
+      this.parseSvgPaths(children, data)
     }
   },
 
   async getSvgContent (element, extra) {
     if (extra.data.type !== 'icon') return
-    const content = element.shape.path
-      ? await this.getSvgFromPath(element, extra)
-      : await this.getSvgFromPolygon(element, extra)
-    return { content }
+    switch (element.shape?.type) {
+      case 'polygon':
+        return { content: await this.getSvgFromPolygon(element, extra) }
+      case 'path': case 'compound':
+        return { content: await this.getSvgFromPath(element, extra) }
+      default: // group
+        return { content: await this.getSvgFromGroup(element, extra) }
+    }
   },
 
   async getSvgFromPath (element, extra) {

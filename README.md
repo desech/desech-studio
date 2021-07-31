@@ -262,7 +262,6 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
 
 - adobexd
   - bring align-self back to adobexd
-  - svg masked shapes
 - sketch
   - rotate
   - lines are `<hr>`; no bg color on `<hr>`

@@ -1,55 +1,55 @@
 import ParseCommon from '../ParseCommon.js'
 
 export default {
-  getX (parentX, desechType, element, svgPaths) {
+  getX (parentX, desechType, element, svgData) {
     let x = 0
-    if (desechType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
-      x = svgPaths[element.id]?.box?.x
+    if (desechType === 'icon' && svgData[element.id]) {
+      x = svgData[element.id]?.box?.x
     }
-    if (element?.transform?.tx) x += Math.round(element.transform.tx)
+    if (element.transform?.tx) x += Math.round(element.transform.tx)
     return Math.round(x + parentX)
   },
 
-  getY (parentY, desechType, element, svgPaths) {
+  getY (parentY, desechType, element, svgData) {
     let y = 0
-    if (desechType === 'icon' && ['path', 'compound'].includes(element.shape?.type)) {
-      y = svgPaths[element.id]?.box?.y
+    if (desechType === 'icon' && svgData[element.id]) {
+      y = svgData[element.id]?.box?.y
     }
-    if (element?.transform?.ty) y += Math.round(element.transform.ty)
+    if (element.transform?.ty) y += Math.round(element.transform.ty)
     if (desechType === 'text' && element.text.frame.type !== 'area') {
-      y -= this.getHeight(desechType, element, svgPaths)
+      y -= this.getHeight(desechType, element, svgData)
     }
-    if (element?.shape?.type === 'line') {
+    if (element.shape?.type === 'line') {
       y -= Math.round(element.style.stroke.width / 2)
     }
     return Math.round(y + parentY)
   },
 
-  getWidth (desechType, element, svgPaths) {
+  getWidth (desechType, element, svgData) {
     // don't add the stroke size to the width when processing lines
     let extra = this.getExtraVolume(desechType, element)
     if (desechType === 'text') {
       return this.getTextWidth(element)
+    } else if (desechType === 'icon' || element.shape) {
+      if (element.shape?.type === 'line') extra = 0
+      return Math.round(this.getShapeWidth(element, extra, svgData))
     } else if (element.meta && element.meta.ux.symbolId) {
       return Math.round(element.meta.ux.width + extra)
-    } else if (element.shape) {
-      if (element.shape.type === 'line') extra = 0
-      return Math.round(this.getShapeWidth(element, extra, svgPaths))
     } else if (element['uxdesign#bounds']?.width) {
       return element['uxdesign#bounds'].width
     }
     return 1
   },
 
-  getHeight (desechType, element, svgPaths, addExtra = true) {
+  getHeight (desechType, element, svgData, addExtra = true) {
     let extra = this.getExtraVolume(desechType, element)
     if (desechType === 'text') {
       return this.getTextHeight(element)
+    } else if (desechType === 'icon' || element.shape) {
+      if (element.shape?.type === 'line') extra = 0
+      return Math.round(this.getShapeHeight(element, extra, svgData))
     } else if (element.meta && element.meta.ux.symbolId) {
       return Math.round(element.meta.ux.height + extra)
-    } else if (element.shape) {
-      if (element.shape.type === 'line') extra = 0
-      return Math.round(this.getShapeHeight(element, extra, svgPaths))
     } else if (element['uxdesign#bounds']?.height) {
       return element['uxdesign#bounds'].height
     }
@@ -80,8 +80,8 @@ export default {
     }
   },
 
-  getShapeWidth (element, extra, svgPaths) {
-    switch (element.shape.type) {
+  getShapeWidth (element, extra, svgData) {
+    switch (element.shape?.type) {
       case 'rect':
         return element.shape.width + extra
       case 'line':
@@ -91,13 +91,13 @@ export default {
       case 'polygon':
         return element.shape['uxdesign#width'] + extra
       default:
-        // path, compound
-        return svgPaths[element.id]?.box?.width
+        // path, compound, group
+        return svgData[element.id]?.box?.width
     }
   },
 
-  getShapeHeight (element, extra, svgPaths) {
-    switch (element.shape.type) {
+  getShapeHeight (element, extra, svgData) {
+    switch (element.shape?.type) {
       case 'rect':
         return element.shape.height + extra
       case 'line':
@@ -107,8 +107,8 @@ export default {
       case 'polygon':
         return element.shape['uxdesign#height'] + extra
       default:
-        // path, compound
-        return svgPaths[element.id]?.box?.height
+        // path, compound, group
+        return svgData[element.id]?.box?.height
     }
   },
 
@@ -139,11 +139,11 @@ export default {
     return true
   },
 
-  getCssBasic (type, element, svgPaths) {
+  getCssBasic (type, element, svgData) {
     const css = {}
     if (type === 'text' || type === 'inline') return css
-    css.width = this.getWidth(type, element, svgPaths) + 'px'
-    const height = this.getHeight(type, element, svgPaths)
+    css.width = this.getWidth(type, element, svgData) + 'px'
+    const height = this.getHeight(type, element, svgData)
     css.height = height + 'px'
     ParseCommon.setBlockMinHeight(type, height, css)
     return css

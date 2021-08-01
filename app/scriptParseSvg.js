@@ -10,12 +10,7 @@
     // create and append the svg with our designed svg path
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2000/svg')
-
-    for (const path of val.paths) {
-      const pathNode = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-      pathNode.setAttributeNS(null, 'd', path)
-      svg.appendChild(pathNode)
-    }
+    svg.innerHTML = val.nodes.join('')
 
     // return the svg box coordinates
     container.appendChild(svg)

@@ -6,16 +6,16 @@ import AdobexdStroke from './adobexd/AdobexdStroke.js'
 import AdobexdEffect from './adobexd/AdobexdEffect.js'
 import AdobexdText from './adobexd/AdobexdText.js'
 import AdobexdInline from './adobexd/AdobexdInline.js'
+import AdobexdIcon from './adobexd/AdobexdIcon.js'
 import Zip from '../file/Zip.js'
 import File from '../file/File.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
-import AdobexdIcon from './adobexd/AdobexdIcon.js'
 
 export default {
   _html: {},
   _css: {},
   _debug: [],
-  _svgPaths: {},
+  _svgData: {},
   _symbols: {},
   _projectFolder: '',
   _importFolder: '',
@@ -111,7 +111,7 @@ export default {
         }
       })
       const children = data.children[0].artboard.children
-      this._svgPaths = await AdobexdIcon.prepareSvgPaths(children)
+      this._svgData = await AdobexdIcon.prepareSvgData(children)
       await this.parseElements(children, this._html[file.name].nodes, this._html[file.name])
     }
   },
@@ -119,14 +119,11 @@ export default {
   async parseElements (elements, nodes, artboard, parent = null, pos = null) {
     pos = this.getElementPos(pos, artboard, parent)
     for (const element of elements) {
-      const parsed = await this.parseElement(element, nodes, pos)
-      if (!parsed || ParseCommon.isHidden(element.visible)) continue
-      if (element.group && element.group.children) {
-        // this also processes symbols
+      const data = await this.parseElement(element, nodes, pos)
+      if (!data || ParseCommon.isHidden(element.visible)) continue
+      if (data.type !== 'icon' && element.group && element.group.children) {
+        // skip children for icons; this also processes symbols
         await this.parseElements(element.group.children, nodes, artboard, element, pos)
-      }
-      if (element.shape && element.shape.children) {
-        await this.parseElements(element.shape.children, nodes, artboard, element, pos)
       }
     }
   },
@@ -149,12 +146,12 @@ export default {
   async parseElement (element, nodes, pos) {
     if (ParseCommon.isHidden(element.visible)) return
     const type = this.getElementType(element)
-    if (!type) return false
+    if (!type) return
     this.processSymbolInstance(element)
     const data = await this.getElementData(type, element, pos)
     this._css.element[data.ref] = await this.getCssProperties(data, element)
     nodes.push(data)
-    return true
+    return data
   },
 
   getElementType (element) {
@@ -193,8 +190,8 @@ export default {
 
   async getElementData (type, element, pos) {
     this._debug.push(element) // for debugging
-    const width = AdobexdCommon.getWidth(type, element, this._svgPaths)
-    const height = AdobexdCommon.getHeight(type, element, this._svgPaths)
+    const width = AdobexdCommon.getWidth(type, element, this._svgData)
+    const height = AdobexdCommon.getHeight(type, element, this._svgData)
     let data = this.getData(type, element, pos, width, height)
     const extra = this.getExtraData(data, element)
     data = {
@@ -208,8 +205,8 @@ export default {
     return {
       id: element.id, // for debugging
       name: element.name,
-      x: AdobexdCommon.getX(pos.tx, type, element, this._svgPaths),
-      y: AdobexdCommon.getY(pos.ty, type, element, this._svgPaths),
+      x: AdobexdCommon.getX(pos.tx, type, element, this._svgData),
+      y: AdobexdCommon.getY(pos.ty, type, element, this._svgData),
       width,
       height,
       type,
@@ -229,7 +226,7 @@ export default {
 
   async getCssProperties (data, element) {
     return {
-      ...AdobexdCommon.getCssBasic(data.type, element, this._svgPaths),
+      ...AdobexdCommon.getCssBasic(data.type, element, this._svgData),
       ...AdobexdCommon.getCssRoundedCorners(element.shape),
       ...AdobexdText.getCssText(data.type, this.prepareTextStyle(data.type, element), this._css),
       ...await this.getStyleProperties(data, element)
@@ -254,7 +251,7 @@ export default {
       projectFolder: this._projectFolder,
       importFolder: this._importFolder,
       processImages: this._processImages,
-      svgPaths: this._svgPaths
+      svgPaths: this._svgData
     }
   },
 

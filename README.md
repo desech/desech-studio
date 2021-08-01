@@ -256,6 +256,9 @@ git clone git@github.com:desech/studio-vue.git desech-studio-vue
     - wait for adobexd to add it in the style too
   - polygons with rounded corners and star ratios are not supported
   - masked vectors are not supported because we don't know how to calculate the transform
+  - complex svg shapes only allow path and compound children at the top level
+    - before exporting a group of shapes, make sure they are converted to paths
+      and they are nested at the top level not inside inner groups
   - autolayout is not supported because it applies to groups and they have no x,y,w,h
 
 ### TODO

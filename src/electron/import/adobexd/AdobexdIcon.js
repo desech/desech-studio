@@ -1,87 +1,63 @@
 import fs from 'fs'
-import { app } from 'electron'
 import AdobexdCommon from './AdobexdCommon.js'
 import ParseCommon from '../ParseCommon.js'
-import EventMain from '../../event/EventMain.js'
 import File from '../../file/File.js'
 import ImportSvg from '../ImportSvg.js'
 
 export default {
-  async prepareSvgPaths (elements) {
-    const data = {}
-    this.parseSvgPaths(elements, data)
-    // we execute a js script on the browser because we can't use ipc `send` to return a value
-    const file = File.resolve(app.getAppPath(), 'scriptParseSvg.js')
-    const code = fs.readFileSync(file).toString()
-      .replace('{{DATA}}', JSON.stringify(data))
-    return await EventMain.executeJs(code)
-  },
-
-  parseSvgPaths (elements, data, paths = null) {
-    // we need to go through all elements and fetch our exported svgs (path/compound/group)
-    for (const element of elements) {
-      if (ParseCommon.isHidden(element.visible)) continue
-      if (['path', 'compound'].includes(element.shape?.type)) {
-        this.parseSvgElement(element, data, paths)
-      } else if (element.group?.children) {
-        this.parseSvgParent(element, element.group.children, data, paths)
-      }
-    }
-  },
-
-  parseSvgElement (element, data, paths) {
-    if (paths) {
-      paths.push(element.shape.path)
-    } else if (element.meta?.ux?.markedForExport) {
-      data[element.id] = { paths: [element.shape.path] }
-    }
-  },
-
-  parseSvgParent (element, children, data, paths) {
-    if (paths) {
-      this.parseSvgPaths(children, data, paths)
-    } else if (element.meta?.ux?.markedForExport) {
-      data[element.id] = { paths: [] }
-      this.parseSvgPaths(children, data, data[element.id].paths)
-    } else {
-      this.parseSvgPaths(children, data)
-    }
-  },
-
   async getSvgContent (element, extra) {
     if (extra.data.type !== 'icon') return
-    switch (element.shape?.type) {
-      case 'polygon':
-        return { content: await this.getSvgFromPolygon(element, extra) }
-      case 'path': case 'compound':
-        return { content: await this.getSvgFromPath(element, extra) }
-      default: // group
-        return { content: await this.getSvgFromGroup(element, extra) }
+    const content = `<svg viewBox="${this.getSvgNodeViewBox(element, extra)}" ` +
+      'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n' +
+      await this.getSvgNodes(element, extra) +
+    '</svg>'
+    return { content }
+  },
+
+  getSvgNodeViewBox (element, extra) {
+    if (element.shape?.type === 'polygon') {
+      return `0 0 ${extra.data.width} ${extra.data.height}`
+    } else { // path, compound, group
+      // val.box has the x/y/width/height values in order, so we presume it's safe to just merge
+      return Object.values(extra.svgData[element.id].box).join(' ')
     }
   },
 
-  async getSvgFromPath (element, extra) {
-    // val.box has the x/y/width/height values in order, so we presume it's safe to just merge
-    const val = extra.svgPaths[element.id]
-    const viewBox = Object.values(val.box).join(' ')
-    const gr = this.prepareDataForGradient(element)
-    const bg = await this.prepareDataForImage(element, extra)
-    return `<svg viewBox="${viewBox}" xmlns="http://www.w3.org/2000/svg" ` +
-      'xmlns:xlink="http://www.w3.org/1999/xlink">\n' +
-      ImportSvg.getGradientNode(gr) + ImportSvg.getPatternNode(bg) +
-      `<path d="${val.path}"${ImportSvg.getFillUrl(gr || bg)}/>\n` +
-    '</svg>'
+  async getSvgNodes (element, extra) {
+    const nodes = []
+    if (element.group?.children?.length) {
+      for (const child of element.group.children) {
+        // only allow certain svg element; @todo implement the other elements too
+        if (!['path', 'compound'].includes(child.shape?.type)) continue
+        nodes.push(await this.getSvgNode(child, extra, true))
+      }
+    } else {
+      nodes.push(await this.getSvgNode(element, extra))
+    }
+    return nodes.join('\n')
   },
 
-  async getSvgFromPolygon (element, extra) {
+  async getSvgNode (element, extra, isChild = false) {
     const gr = this.prepareDataForGradient(element)
     const bg = await this.prepareDataForImage(element, extra)
-    return `<svg viewBox="0 0 ${extra.data.width} ${extra.data.height}" ` +
-      'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">\n' +
-      ImportSvg.getGradientNode(gr) + ImportSvg.getPatternNode(bg) +
-      `<polygon points="${this.getPolygonPoints(element.shape.points)}"` +
-        `${ImportSvg.getFillUrl(gr || bg)}/>\n` +
-    '</svg>'
+    const tag = this.getSvgNodeTag(element)
+    const transform = isChild ? this.getSvgNodeTransform(element) : ''
+    return ImportSvg.getGradientNode(gr) + ImportSvg.getPatternNode(bg) +
+      `<${tag}${transform}${ImportSvg.getFillUrl(gr || bg)}/>`
+  },
+
+  getSvgNodeTag (element) {
+    if (element.shape?.type === 'polygon') {
+      const points = this.getPolygonPoints(element.shape.points)
+      return `polygon points="${points}"`
+    } else { // path, compound
+      return `path d="${element.shape.path}"`
+    }
+  },
+
+  getSvgNodeTransform (element) {
+    const t = element.transform
+    return t ? ` transform="translate(${Math.round(t.tx)} ${Math.round(t.ty)})"` : ''
   },
 
   getPolygonPoints (points) {

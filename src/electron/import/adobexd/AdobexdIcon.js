@@ -59,7 +59,7 @@ export default {
     // we execute a js script on the browser because we can't use ipc `send` to return a value
     if (ExtendJS.isEmpty(data)) return null
     const file = File.resolve(app.getAppPath(), 'scriptParseSvg.js')
-    const code = fs.readFileSync(file).toString().replace('{{DATA}}', JSON.stringify(data))
+    const code = fs.readFileSync(file).toString().replace("'{{DATA}}'", JSON.stringify(data))
     return await EventMain.executeJs(code)
   },
 

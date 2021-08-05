@@ -5,7 +5,7 @@
   const container = document.getElementById('temp').contentWindow.document.body
 
   // go through each svg element
-  const data = {{DATA}}
+  const data = '{{DATA}}' // this will be replaced
   for (const val of Object.values(data)) {
     // create and append the svg with our designed svg path
     if (!val.needsViewBox) continue

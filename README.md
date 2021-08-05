@@ -297,9 +297,9 @@ sudo chmod 777 -R ~/share/download.desech.com
 Fedora
 
 ```sh
-sudo dnf update && sudo dnf upgrade && sudo dnf autoremove
-sudo rm -rf ~/share/download.desech.com/dnf/repodata
+sudo dnf update --refresh && sudo dnf upgrade --refresh && sudo dnf autoremove
 sudo createrepo -v ~/share/download.desech.com/dnf
+@todo fix this in the future
 ```
 
 Manjaro
@@ -309,8 +309,8 @@ Manjaro
 ```sh
 sudo -s
 repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.1.3-x64.pacman
-  - File Explorer > go to `~/share/download.desech.com/pacman/`
-  - when the lock file disapears cancel the process
+  - File Explorer > go to `~/share/download.desech.com/pacman`
+  - when the lock file disappears cancel the process
 repoctl status -a
 ```
 
@@ -329,7 +329,7 @@ sudo chmod 777 -R ~/share/download.desech.com
 Fedora
 
 ```sh
-sudo dnf update && sudo dnf upgrade
+sudo dnf update --refresh && sudo dnf upgrade --refresh && sudo dnf autoremove
 ```
 
 - open Desech Studio without logging in and see if it updated

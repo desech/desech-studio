@@ -27,8 +27,8 @@ export default {
   },
 
   mainNewProjectEvent () {
-    window.electron.on('mainNewProject', (event, plugins) => {
-      ElectronCommon.handleEvent(Project, 'newProject', plugins)
+    window.electron.on('mainNewProject', (event, importData) => {
+      ElectronCommon.handleEvent(Project, 'newProject', importData)
     })
   },
 
@@ -45,8 +45,8 @@ export default {
   },
 
   mainOpenProjectSettingsEvent () {
-    window.electron.on('mainOpenProjectSettings', (event, settings, plugins) => {
-      ElectronCommon.handleEvent(Project, 'openProjectSettings', settings, plugins)
+    window.electron.on('mainOpenProjectSettings', (event, settings) => {
+      ElectronCommon.handleEvent(Project, 'openProjectSettings', settings)
     })
   },
 

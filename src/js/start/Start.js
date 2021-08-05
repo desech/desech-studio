@@ -3,14 +3,15 @@ import HelperRegex from '../helper/HelperRegex.js'
 import DialogComponent from '../component/DialogComponent.js'
 import HelperDOM from '../helper/HelperDOM.js'
 import Project from './Project.js'
+import Import from './Import.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickPremiumButton', 'clickNewTutorialProjectEvent', 'clickNewProjectEvent',
+      click: ['clickPremiumButton', 'clickNewSampleProjectEvent', 'clickNewProjectEvent',
         'clickNewProjectSubmitEvent', 'clickSaveProjectSettingsEvent', 'clickOpenProjectEvent',
-        'clickImportFilePromptEvent', 'clickImportFileEvent', 'clickImportFigmaEvent',
-        'clickFinishImportEvent', 'clickContinueFigmaAuthEvent']
+        'clickImportFilePromptEvent', 'clickImportFigmaEvent', 'clickFinishImportEvent',
+        'clickContinueFigmaAuthEvent']
     }
   },
 
@@ -24,15 +25,15 @@ export default {
     }
   },
 
-  async clickNewTutorialProjectEvent (event) {
-    if (event.target.closest('.start-new-tutorial-project')) {
-      await window.electron.invoke('rendererNewTutorialProject')
+  async clickNewSampleProjectEvent (event) {
+    if (event.target.closest('.start-new-sample-project')) {
+      await window.electron.invoke('rendererNewSampleProject')
     }
   },
 
   async clickNewProjectEvent (event) {
     if (event.target.closest('.start-new-project')) {
-      await window.electron.invoke('rendererNewProject')
+      Project.newProject()
     }
   },
 
@@ -50,25 +51,19 @@ export default {
 
   async clickOpenProjectEvent (event) {
     if (event.target.closest('.start-open-folder')) {
-      await this.triggerOpenProject()
+      await window.electron.invoke('rendererInitProject')
     }
   },
 
-  clickImportFilePromptEvent (event) {
+  async clickImportFilePromptEvent (event) {
     if (event.target.closest('.start-import-file')) {
-      this.importFilePrompt(event.target.closest('.start-import-file').dataset.type)
-    }
-  },
-
-  async clickImportFileEvent (event) {
-    if (event.target.closest('.dialog-import-file')) {
-      await this.importFile(event.target.closest('.dialog-import-file'))
+      await this.importFilePrompt(event.target.closest('.start-import-file').dataset.type)
     }
   },
 
   async clickImportFigmaEvent (event) {
     if (event.target.closest('.figma-import-file')) {
-      await this.importFigma(event.target.closest('.dialog-figma-import'))
+      await this.importFigma(event.target.closest('.dialog-import-figma'))
     }
   },
 
@@ -91,55 +86,34 @@ export default {
     window.close()
   },
 
-  async triggerOpenProject (folder = null) {
-    await window.electron.invoke('rendererOpenProject', null, folder)
+  async importFilePrompt (type) {
+    DialogComponent.closeAllDialogs()
+    if (type === 'figma') {
+      this.showImportDialog(type)
+      this.showFigmaContinue(type)
+    }
+    await window.electron.invoke('rendererImportFile', type)
   },
 
-  importFilePrompt (type) {
-    const query = `.start-import-file[data-type="${CSS.escape(type)}"] .start-import-title`
-    const header = document.querySelector(query).textContent
-    DialogComponent.closeAllDialogs()
-    const dialog = DialogComponent.showDialog({
-      header,
+  showImportDialog (type) {
+    DialogComponent.showDialog({
+      header: Import.getImportTitle(type),
       body: DialogComponent.getContentHtml('import', 'body')
     })
-    this.setImportButtonType(dialog, type)
   },
 
-  setImportButtonType (dialog, type) {
-    const button = dialog.getElementsByClassName('dialog-import-file')[0]
-    button.dataset.type = type
-  },
-
-  async importFile (button) {
-    this.switchImportToLoading(button.closest('.dialog-import'), button.dataset.type)
-    await window.electron.invoke('rendererImportFile', button.dataset.type)
-  },
-
-  switchImportToLoading (container, type) {
-    HelperDOM.hide(container.children)
-    // show the loading section
-    HelperDOM.show(container.children[1])
-    if (type === 'figma') this.showFigmaLoader(container.children[1])
-  },
-
-  showFigmaLoader (container) {
-    const button = container.getElementsByClassName('dialog-figma-continue')[0]
+  showFigmaContinue (type) {
+    const button = document.getElementsByClassName('dialog-figma-continue')[0]
     HelperDOM.show(button)
   },
 
   switchImportToFigma (token) {
     const container = document.querySelector('dialog.dialog .dialog-import')
-    const figmaContainer = container.children[2]
+    const figmaContainer = container.getElementsByClassName('dialog-import-figma')[0]
     figmaContainer.dataset.token = token
-    // hide the prompt
     HelperDOM.hide(container.children)
     HelperDOM.show(figmaContainer)
     container.getElementsByClassName('figma-input')[0].focus()
-  },
-
-  async finishImport (button) {
-    await this.triggerOpenProject(button.dataset.folder)
   },
 
   async importFigma (container) {
@@ -148,8 +122,7 @@ export default {
     const file = this.getFigmaInputFile(input.value)
     const valid = this.validateFigmaFile(input, file)
     if (!valid) return
-    this.switchImportToLoading(input.closest('.dialog-import'))
-    await window.electron.invoke('rendererImportFigmaFile', file, token)
+    Project.newProject({ type: 'figma', file, token })
   },
 
   getFigmaInputFile (value) {
@@ -175,5 +148,9 @@ export default {
       button.removeAttributeNS(null, 'disabled')
     }, 2000)
     await window.electron.invoke('rendererFetchFigma')
+  },
+
+  async finishImport (button) {
+    await window.electron.invoke('rendererInitProject', { folder: button.dataset.folder })
   }
 }

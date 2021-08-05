@@ -31,9 +31,9 @@ export default {
       label: Language.localize('File'),
       submenu: [
         // {
-        //   label: Language.localize('New Tutorial Project'),
+        //   label: Language.localize('New Sample Project'),
         //   click: async () => {
-        //     await EventMain.handleEvent(EventMenu, 'newTutorialProject')
+        //     await EventMain.handleEvent(EventMenu, 'newSampleProject')
         //   }
         // },
         {
@@ -80,19 +80,19 @@ export default {
         {
           label: Language.localize('Import Figma'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'figma')
+            await EventMain.handleEvent(EventMenu, 'importShowFilePrompt', 'figma')
           }
         },
         {
           label: Language.localize('Import Adobe XD'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'adobexd')
+            await EventMain.handleEvent(EventMenu, 'importShowFilePrompt', 'adobexd')
           }
         },
         {
           label: Language.localize('Import Sketch'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'importFilePrompt', 'sketch')
+            await EventMain.handleEvent(EventMenu, 'importShowFilePrompt', 'sketch')
           }
         }
       ]

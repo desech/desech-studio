@@ -1,8 +1,8 @@
 import { ipcMain } from 'electron'
 import EventMain from './EventMain.js'
-import Import from '../import/Import.js'
 import Auth from '../main/Auth.js'
-import Figma from '../import/Figma.js'
+import FigmaApi from '../import/figma/FigmaApi.js'
+import Project from '../project/Project.js'
 
 export default {
   addEvents () {
@@ -10,7 +10,6 @@ export default {
     this.rendererFetchAuthDesechEvent()
     this.rendererLogoutDesechEvent()
     this.rendererPurchasePremiumEvent()
-    this.rendererImportFigmaFileEvent()
     this.rendererFetchFigmaEvent()
   },
 
@@ -38,17 +37,9 @@ export default {
     })
   },
 
-  rendererImportFigmaFileEvent () {
-    ipcMain.handle('rendererImportFigmaFile', async (event, file, token) => {
-      return await EventMain.handleEvent(Import, 'importFile', {
-        type: 'figma', file, token
-      })
-    })
-  },
-
   rendererFetchFigmaEvent () {
     ipcMain.handle('rendererFetchFigma', async (event) => {
-      return await EventMain.handleEvent(Figma, 'fetchToken')
+      return await EventMain.handleEvent(FigmaApi, 'fetchToken')
     })
   }
 }

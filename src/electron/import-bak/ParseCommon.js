@@ -207,11 +207,6 @@ export default {
     }
   },
 
-  async prepareProjectFolder (folder) {
-    await File.syncUiFolder(folder)
-    File.createFolder(folder, '_desech/cache')
-  },
-
   unifyFiles (data) {
     if (ExtendJS.isEmpty(data._html)) return
     this.unifyFolderToFile(data)

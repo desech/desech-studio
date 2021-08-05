@@ -30,6 +30,7 @@ export default {
         if (event.type === type && !event.defaultPrevented) {
           // preventDefault() will stop the rest of the events of the same type,
           // from all the handlers
+          if (!obj[eventName]) throw new Error(`Unknown event ${eventName}`)
           await obj[eventName](event)
         }
       }

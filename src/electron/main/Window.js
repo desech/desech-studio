@@ -45,23 +45,28 @@ export default {
 
   async loadWindow () {
     try {
-      const settings = await this.prepareWindow()
-      await this._window.loadFile(`html/${settings.locale}.html`)
+      const data = await this.getData()
+      this.prepareWindow(data)
+      await this._window.loadFile(`html/${data.settings.locale}.html`)
       await Log.setInstanceId()
-      EventMain.ipcMainInvoke('mainSettings', settings)
+      EventMain.ipcMainInvoke('mainSettings', data)
     } catch (error) {
       await Log.error(error)
     }
   },
 
-  async prepareWindow () {
+  async getData () {
+    const settings = Settings.initSettings()
+    const plugins = await Plugin.getAllPlugins()
+    return { settings, plugins }
+  },
+
+  prepareWindow (data) {
     // we don't want the plugins update to stop the electron loading
     Plugin.initPlugins()
-    const settings = Settings.initSettings()
-    global.locale = settings.locale
+    global.locale = data.settings.locale
     Menu.setMenu()
     this.addEvents()
-    return settings
   },
 
   addEvents () {
@@ -88,9 +93,9 @@ export default {
   },
 
   setThemeOnReload () {
-    this._window.webContents.on('did-finish-load', () => {
-      const settings = Settings.initSettings()
-      EventMain.ipcMainInvoke('mainSettings', settings)
+    this._window.webContents.on('did-finish-load', async () => {
+      const data = await this.getData()
+      EventMain.ipcMainInvoke('mainSettings', data)
     })
   },
 

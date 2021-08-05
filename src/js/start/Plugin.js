@@ -25,9 +25,14 @@ export default {
     }
   },
 
-  openPlugins (plugins) {
+  getAllPlugins () {
+    return JSON.parse(document.body.dataset.plugins)
+  },
+
+  openPlugins () {
     const dialog = this.showPluginOverlay()
     const container = dialog.getElementsByClassName('plugin-list')[0]
+    const plugins = this.getAllPlugins()
     this.injectPlugins(container, plugins)
   },
 

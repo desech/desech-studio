@@ -147,20 +147,6 @@ dialog.dialog .dialog-import {
   width: 450px;
 }
 
-dialog.dialog .dialog-import-prompt ul {
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-dialog.dialog .dialog-import-prompt ul li {
-  padding-bottom: 10px;
-}
-
-dialog.dialog .dialog-import-prompt .dialog-import-file {
-  margin-top: 10px;
-  width: auto;
-}
-
 dialog.dialog .dialog-import-loader .dialog-figma-continue {
   display: block;
   margin: 50px auto 10px auto;
@@ -184,29 +170,29 @@ dialog.dialog .dialog-import-loader .dialog-import-finished {
   margin: 15px 0 5px 0;
 }
 
-dialog.dialog .dialog-figma-import .figma-title {
+dialog.dialog .dialog-import-figma .figma-title {
   padding-bottom: 15px;
   font-size: 16px;
 }
 
-dialog.dialog .dialog-figma-import .figma-input {
+dialog.dialog .dialog-import-figma .figma-input {
   height: 40px;
   font-size: 15px;
 }
 
-dialog.dialog .dialog-figma-import .figma-import-file {
+dialog.dialog .dialog-import-figma .figma-import-file {
   width: auto;
   margin-top: 20px;
 }
 
-dialog.dialog .dialog-figma-import .figma-import-file > div {
+dialog.dialog .dialog-import-figma .figma-import-file > div {
   display: grid;
   align-items: center;
   grid-auto-flow: column;
   gap: 8px;
 }
 
-dialog.dialog .dialog-figma-import .figma-warning {
+dialog.dialog .dialog-import-figma .figma-warning {
   margin-top: 20px;
 }
 

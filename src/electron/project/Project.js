@@ -1,20 +1,48 @@
 import fs from 'fs'
 import fse from 'fs-extra'
+import { dialog } from 'electron'
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
 import Plugin from '../lib/Plugin.js'
 import HelperProject from '../../js/helper/HelperProject.js'
 import Font from '../lib/Font.js'
+import Electron from '../lib/Electron.js'
+import Language from '../lib/Language.js'
+import Import from '../import/Import.js'
 
 export default {
-  async openProject (folder, newSettings = null) {
+  // this can:
+  //  - open a project
+  //  - save the project settings
+  //  - create a new project with settings
+  //  - import a file with settings
+  async initProject (data) {
+    const folder = data?.folder || this.getProjectFolder(data)
+    if (!folder) return
     await Cookie.setCookie('currentFolder', folder)
     await File.syncUiFolder(folder)
     Font.rebuildFonts(folder)
     const settings = this.getProjectSettings(folder)
-    if (newSettings) await this.applyNewSettings(folder, settings, newSettings)
+    if (data?.settings) await this.applyNewSettings(folder, settings, data.settings)
+    if (data?.import) await Import.importFile(data.import)
     EventMain.ipcMainInvoke('mainOpenProject', folder, settings)
+  },
+
+  getProjectFolder (data) {
+    const title = this.getDialogTitle(data)
+    const folders = dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
+      title,
+      buttonLabel: title,
+      properties: ['openDirectory', 'createDirectory']
+    })
+    if (folders) return File.sanitizePath(folders[0])
+  },
+
+  getDialogTitle (data) {
+    return data
+      ? Language.localize('Save files to this empty folder')
+      : Language.localize('Choose a folder project')
   },
 
   getProjectSettings (folder) {

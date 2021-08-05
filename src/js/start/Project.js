@@ -3,12 +3,17 @@ import HelperPlugin from '../helper/HelperPlugin.js'
 import HelperForm from '../helper/HelperForm.js'
 import HelperDesignSystem from '../helper/HelperDesignSystem.js'
 import HelperProject from '../helper/HelperProject.js'
+import Plugin from './Plugin.js'
+import Import from './Import.js'
+import HelperDOM from '../helper/HelperDOM.js'
 
 export default {
-  newProject (plugins) {
+  newProject (importData) {
+    DialogComponent.closeAllDialogs()
     const dialog = this.openProjectSettingsDialog('project-create')
-    this.addInstalledPlugins(dialog, plugins)
+    this.groupNotInstalledPlugins(dialog)
     this.setNewDefaults(dialog)
+    this.updateImportDialog(dialog, importData)
   },
 
   openProjectSettingsDialog (template) {
@@ -18,20 +23,16 @@ export default {
     })
   },
 
-  addInstalledPlugins (dialog, plugins) {
+  groupNotInstalledPlugins (dialog) {
+    const plugins = Plugin.getAllPlugins()
     const fields = dialog.getElementsByClassName('dialog-project')[0].elements
-    this.setPluginsOptions(plugins, fields.designSystem, fields.exportCode)
+    this.setPluginsOptions(plugins, fields)
   },
 
-  setPluginsOptions (plugins, designSystem, exportCode) {
+  setPluginsOptions (plugins, fields) {
     for (const plugin of plugins) {
       const option = this.getPluginOption(plugin)
-      if (plugin.category === 'designSystem') {
-        designSystem.appendChild(option.cloneNode(true))
-      } else {
-        // exportCode
-        exportCode.appendChild(option.cloneNode(true))
-      }
+      this.injectPluginOption(fields[plugin.category], plugin, option.cloneNode(true))
     }
   },
 
@@ -42,14 +43,41 @@ export default {
     return option
   },
 
+  injectPluginOption (select, plugin, option) {
+    const group = select.getElementsByTagName('optgroup')[0]
+    if (plugin.installed) {
+      HelperDOM.insertBefore(option, group)
+    } else {
+      group.appendChild(option)
+      HelperDOM.show(group)
+    }
+  },
+
   setNewDefaults (dialog) {
     const fields = dialog.getElementsByClassName('dialog-project')[0].elements
     fields.exportCode.value = 'static'
   },
 
+  updateImportDialog (dialog, importData) {
+    if (!importData) return
+    const title = Import.getImportTitle(importData.type)
+    dialog.getElementsByClassName('dialog-title')[0].textContent = title
+    dialog.getElementsByClassName('start-new-project-submit')[0].textContent = title
+    const fields = dialog.getElementsByClassName('dialog-project')[0].elements
+    fields.import.value = JSON.stringify(importData)
+  },
+
   async newProjectSubmit (form) {
-    const settings = HelperForm.getFormValues(form)
-    await window.electron.invoke('rendererOpenProject', settings)
+    const values = HelperForm.getFormValues(form)
+    const data = {
+      settings: {
+        responsiveType: values.responsiveType,
+        designSystem: values.designSystem,
+        exportCode: values.exportCode
+      },
+      import: values.import ? JSON.parse(values.import) : null
+    }
+    await window.electron.invoke('rendererInitProject', data)
   },
 
   async injectDesignSystemCss () {
@@ -57,9 +85,10 @@ export default {
     if (css) HelperDesignSystem.injectDesignSystemCss(css)
   },
 
-  openProjectSettings (settings, plugins) {
+  openProjectSettings (settings) {
     const dialog = this.openProjectSettingsDialog('project-update')
-    this.addInstalledPlugins(dialog, plugins)
+    const plugins = Plugin.getAllPlugins()
+    this.groupNotInstalledPlugins(dialog, plugins)
     this.addSettingsFields(dialog, settings)
   },
 
@@ -71,8 +100,8 @@ export default {
   },
 
   async saveProjectSettings (form) {
-    const settings = HelperForm.getFormValues(form)
     const folder = HelperProject.getFolder()
-    await window.electron.invoke('rendererOpenProject', settings, folder)
+    const settings = HelperForm.getFormValues(form)
+    await window.electron.invoke('rendererInitProject', { folder, settings })
   }
 }

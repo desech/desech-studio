@@ -4,19 +4,17 @@ import Language from '../lib/Language.js'
 import Cookie from '../lib/Cookie.js'
 import Settings from '../lib/Settings.js'
 import File from '../file/File.js'
-import Figma from '../import/Figma.js'
-import Generic from '../import/Generic.js'
 import Plugin from '../lib/Plugin.js'
 import Project from '../project/Project.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import Electron from '../lib/Electron.js'
 import Zip from '../file/Zip.js'
+import Import from '../import/Import.js'
 
 export default {
   addEvents () {
-    this.rendererNewTutorialProjectEvent()
-    this.rendererNewProjectEvent()
-    this.rendererOpenProjectEvent()
+    this.rendererNewSampleProjectEvent()
+    this.rendererInitProjectEvent()
     this.rendererSaveProjectSettingsEvent()
     this.rendererImportFileEvent()
     this.rendererInstallPluginEvent()
@@ -24,21 +22,15 @@ export default {
     this.rendererGetDesignSystemCssEvent()
   },
 
-  rendererNewTutorialProjectEvent () {
-    ipcMain.handle('rendererNewTutorialProject', async (event) => {
-      return await EventMain.handleEvent(this, 'newTutorialProject')
+  rendererNewSampleProjectEvent () {
+    ipcMain.handle('rendererNewSampleProject', async (event) => {
+      return await EventMain.handleEvent(this, 'newSampleProject')
     })
   },
 
-  rendererNewProjectEvent () {
-    ipcMain.handle('rendererNewProject', async (event) => {
-      return await EventMain.handleEvent(this, 'newProject')
-    })
-  },
-
-  rendererOpenProjectEvent () {
-    ipcMain.handle('rendererOpenProject', async (event, settings, folder) => {
-      return await EventMain.handleEvent(this, 'openProject', folder, settings)
+  rendererInitProjectEvent () {
+    ipcMain.handle('rendererInitProject', async (event, data) => {
+      return await EventMain.handleEvent(this, 'initProject', data)
     })
   },
 
@@ -50,7 +42,7 @@ export default {
 
   rendererImportFileEvent () {
     ipcMain.handle('rendererImportFile', async (event, type) => {
-      return await EventMain.handleEvent(this, 'importFile', type)
+      return await EventMain.handleEvent(this, 'importChooseFile', type)
     })
   },
 
@@ -77,56 +69,35 @@ export default {
       Cookie.getCookie('accountType')
   },
 
-  newTutorialProject () {
+  newSampleProject () {
     // if (!this.isAuthenticated()) return
-    // @todo do the tutorial code
+    // @todo do the sample code
   },
 
   newProject () {
     if (!this.isAuthenticated()) return
-    const plugins = Plugin.getInstalledPlugins()
-    EventMain.ipcMainInvoke('mainNewProject', plugins)
+    EventMain.ipcMainInvoke('mainNewProject')
   },
 
-  async openProject (folder = null, newSettings = null) {
+  async initProject (data) {
     if (!this.isAuthenticated()) return
-    // we have the folder when we are importing or changing settings
-    if (!folder) {
-      const folders = this.getChooseFolder()
-      if (!folders) return
-      folder = File.sanitizePath(folders[0])
-    }
-    await Project.openProject(folder, newSettings)
+    await Project.initProject(data)
   },
 
-  getChooseFolder () {
-    return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
-      title: Language.localize('Open a folder / project'),
-      buttonLabel: Language.localize('Open folder'),
-      properties: ['openDirectory', 'createDirectory']
-    })
-  },
-
-  async importFilePrompt (type) {
+  async importShowFilePrompt (type) {
     if (!this.isAuthenticated()) return
     await this.closeProject()
     EventMain.ipcMainInvoke('mainImportFilePrompt', type)
   },
 
-  async importFile (type) {
-    if (!this.isAuthenticated()) return
-    if (type === 'sketch' || type === 'adobexd') {
-      return await Generic.importFile(type)
-    } else if (type === 'figma') {
-      return await Figma.showImportFile()
-    }
+  async importChooseFile (type) {
+    if (this.isAuthenticated()) await Import.importChooseFile(type)
   },
 
   async openProjectSettings () {
     const settings = await ProjectCommon.getProjectSettings()
     if (!settings) return
-    const plugins = Plugin.getInstalledPlugins()
-    EventMain.ipcMainInvoke('mainOpenProjectSettings', settings, plugins)
+    EventMain.ipcMainInvoke('mainOpenProjectSettings', settings)
   },
 
   async closeProject () {
@@ -164,9 +135,8 @@ export default {
     Electron.reload()
   },
 
-  async openPlugins () {
-    const plugins = await Plugin.getAllPlugins()
-    EventMain.ipcMainInvoke('mainOpenPlugins', plugins)
+  openPlugins () {
+    EventMain.ipcMainInvoke('mainOpenPlugins')
   },
 
   openLink (url) {

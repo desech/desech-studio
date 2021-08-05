@@ -8,8 +8,8 @@ export default {
   },
 
   mainOpenPluginsEvent () {
-    window.electron.on('mainOpenPlugins', (event, plugins) => {
-      ElectronCommon.handleEvent(Plugin, 'openPlugins', plugins)
+    window.electron.on('mainOpenPlugins', (event) => {
+      ElectronCommon.handleEvent(Plugin, 'openPlugins')
     })
   },
 
@@ -20,6 +20,7 @@ export default {
   },
 
   setSettings (data) {
-    document.body.dataset.theme = data.theme || 'light'
+    document.body.dataset.theme = data.settings.theme || 'light'
+    document.body.dataset.plugins = JSON.stringify(data.plugins)
   }
 }

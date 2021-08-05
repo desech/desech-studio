@@ -77,7 +77,7 @@ export default {
   },
 
   importProgress (html, folder) {
-    HelperDOM.hide(document.getElementsByClassName('dialog-figma-continue'))
+    HelperDOM.hide(document.getElementsByClassName('dialog-figma-continue')[0])
     const list = document.querySelector('.dialog-import .loader-progress')
     if (!list) return
     this.injectProgressText(list, html)

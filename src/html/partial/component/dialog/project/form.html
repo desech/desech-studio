@@ -6,18 +6,21 @@
   </select>
 </div>
 <div class="grid" style="padding-bottom: 20px; gap: 20px;">
-  <div style="align-self: center;">{{#i18n}} Design System Plugin {{/i18n}}</div>
+  <div style="align-self: center;">{{#i18n}} Design System {{/i18n}}</div>
   <select name="designSystem">
     <option value="">{{#i18n}} None {{/i18n}}</option>
+    <optgroup label="{{#i18n}} Not Installed {{/i18n}}" disabled hidden></optgroup>
   </select>
 </div>
 <div class="grid" style="padding-bottom: 20px; gap: 20px;">
-  <div style="align-self: center;">{{#i18n}} Export Code Plugin {{/i18n}}</div>
+  <div style="align-self: center;">{{#i18n}} Export Code {{/i18n}}</div>
   <select name="exportCode">
     <option value="">{{#i18n}} None {{/i18n}}</option>
     <option value="static">{{#i18n}} HTML/CSS {{/i18n}}</option>
+    <optgroup label="{{#i18n}} Not Installed {{/i18n}}" disabled hidden></optgroup>
   </select>
 </div>
 <div style="padding-bottom: 15px; font-size: 13px;">
-  <p>{{#i18n}} Check Settings &raquo; Plugins for more options {{/i18n}}</p>
+  <p>{{#i18n}} Check Settings &raquo; Plugins to manage your plugins {{/i18n}}</p>
 </div>
+<input type="hidden" name="import">

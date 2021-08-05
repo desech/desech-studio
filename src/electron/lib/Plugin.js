@@ -17,6 +17,7 @@ import Config from './Config.js'
 import Electron from './Electron.js'
 import Language from './Language.js'
 import Log from './Log.js'
+import EventMain from '../event/EventMain.js'
 
 export default {
   _DIR: null,
@@ -24,12 +25,16 @@ export default {
   async initPlugins () {
     // this is async, but will not be called as such, because we want it to be run in parallel
     try {
-      this._DIR = File.resolve(app.getPath('userData'), 'plugin')
+      this.setDir()
       File.createFolder(this._DIR)
       await this.updatePlugins()
     } catch (error) {
       await Log.error(error)
     }
+  },
+
+  setDir () {
+    this._DIR = File.resolve(app.getPath('userData'), 'plugin')
   },
 
   async updatePlugins () {
@@ -103,6 +108,30 @@ export default {
     fse.copySync(folder, dest)
   },
 
+  async getAllPlugins () {
+    this.setDir()
+    const list = await this.getPluginsList()
+    const installed = this.getInstalledPlugins()
+    for (const plugin of list) {
+      for (let i = 0; i < installed.length; i++) {
+        if (plugin.url === installed[i].url) {
+          plugin.installed = true
+          installed.splice(i, 1)
+          break
+        }
+      }
+    }
+    return [...list, ...installed]
+  },
+
+  async getPluginsList () {
+    const url = Config.getConfig('api') + '/plugins'
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
+    const json = await response.json()
+    return json.plugins
+  },
+
   getInstalledPlugins () {
     const list = []
     const files = fs.readdirSync(this._DIR, { withFileTypes: true })
@@ -127,29 +156,6 @@ export default {
     }
   },
 
-  async getAllPlugins () {
-    const list = await this.getPluginsList()
-    const installed = this.getInstalledPlugins()
-    for (const plugin of list) {
-      for (let i = 0; i < installed.length; i++) {
-        if (plugin.url === installed[i].url) {
-          plugin.installed = true
-          installed.splice(i, 1)
-          break
-        }
-      }
-    }
-    return [...list, ...installed]
-  },
-
-  async getPluginsList () {
-    const url = Config.getConfig('api') + '/plugins'
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
-    const json = await response.json()
-    return json.plugins
-  },
-
   removePlugin (url) {
     const pluginName = HelperPlugin.getPluginName(url)
     let pluginPath = File.resolve(this._DIR, pluginName)
@@ -164,6 +170,10 @@ export default {
     const project = await ProjectCommon.getProjectSettings()
     if (!project[category]) return
     const file = File.resolve(this._DIR, project[category], 'index.js')
+    if (!fs.existsSync(file)) {
+      throw new Error(Language.localize('Plugin {{plugin}} is not installed',
+        { plugin: project[category] }))
+    }
     const module = require(file)
     if (!(method in module)) {
       throw new Error(Language.localize('Unknown "{{method}}" method for active plugin ' +

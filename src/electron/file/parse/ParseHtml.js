@@ -203,8 +203,9 @@ export default {
   },
 
   buildImageElement (node) {
+    // only the folder needs to be encoded because the images are saved as encoded in the html
     const srcset = node.getAttributeNS(null, 'srcset')
-      .replace(/(,)?( )?(.+?)( .x)/g, `$1$2${this._folder}/$3$4`)
+      .replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(this._folder)}/$3$4`)
     node.setAttributeNS(null, 'srcset', srcset)
     this.addBasic(node, 'image')
   },

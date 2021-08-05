@@ -29,6 +29,10 @@ export default {
     return this.sanitizePath(path.relative(path.resolve(from), path.resolve(to)))
   },
 
+  isDir (file) {
+    return fs.lstatSync(file).isDirectory()
+  },
+
   sanitizePath (absPath) {
     // fix windows separator
     return absPath.replaceAll(path.sep, '/')
@@ -58,7 +62,7 @@ export default {
   readFolderEntry (file, folder, options) {
     const fileName = options.withFileTypes ? file.name : file
     const absPath = this.resolve(folder, fileName)
-    const isDir = options.withFileTypes ? file.isDirectory() : fs.lstatSync(absPath).isDirectory()
+    const isDir = options.withFileTypes ? file.isDirectory() : this.isDir(absPath)
     return {
       name: fileName,
       path: this.sanitizePath(absPath),
@@ -79,6 +83,7 @@ export default {
   },
 
   moveToFolder (from, to) {
+    to = this.isDir(to) ? to : this.dirname(to)
     const newPath = this.resolve(to, this.basename(from))
     fs.renameSync(from, newPath)
     return newPath

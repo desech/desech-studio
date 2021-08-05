@@ -247,7 +247,7 @@ export default {
     const type = HelperElement.getType(element)
     switch (type) {
       case 'image':
-        if (!element.srcset) element.srcset = HelperFile.getDefaultImage() + ' 1x'
+        if (!element.srcset) element.srcset = encodeURI(HelperFile.getDefaultImage()) + ' 1x'
         break
       case 'video':
         if (!element.src) element.src = HelperFile.getDefaultVideo()

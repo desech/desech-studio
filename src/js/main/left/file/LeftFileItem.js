@@ -159,6 +159,7 @@ export default {
   },
 
   selectSourceFile (item) {
+    if (!item) return
     const buttonId = item.parentNode.dataset.selectFile
     const srcButton = document.getElementById(buttonId)
     if (!srcButton || item.dataset.container) {

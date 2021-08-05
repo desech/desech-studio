@@ -64,7 +64,8 @@ export default {
     const src = node.getAttributeNS(null, 'srcset')
     const values = []
     for (const set of src.split(', ')) {
-      values.push(this.getRelPath(set))
+      const [file, scaling] = set.split(' ')
+      values.push(this.getRelPath(file) + ' ' + scaling)
     }
     node.srcset = values.join(', ')
   },
@@ -75,8 +76,9 @@ export default {
   },
 
   getRelPath (attr) {
-    const folder = HelperProject.getFolder()
-    return attr.replace(folder + '/', '')
+    // remove the folder and the encoded folder
+    const folder = HelperProject.getFolder() + '/'
+    return attr.replaceAll(encodeURI(folder), '').replaceAll(folder, '')
   },
 
   setBasic (node, css, designSystemClasses) {

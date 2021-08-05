@@ -133,8 +133,9 @@ export default {
   },
 
   setFileName (field, file) {
-    field.value = file
-    field.textContent = HelperProject.getFileName(file)
+    if (!field) return
+    field.value = decodeURI(file)
+    field.textContent = decodeURI(HelperProject.getFileName(decodeURI(file)))
   },
 
   setHidden (value) {

@@ -287,10 +287,10 @@ sudo apt update && sudo apt upgrade && sudo apt autoremove
 cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86
-reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.1.2-amd64.deb
+reprepro -b ~/share/download.desech.com/apt includedeb apt ./dist/desech-studio-1.1.3-amd64.deb
 reprepro -b /home/vioi/share/download.desech.com/apt list apt
-cp ./dist/desech-studio-1.1.2-x86_64.rpm ~/share/download.desech.com/dnf
-cp ./dist/desech-studio-1.1.2-x64.pacman ~/share/download.desech.com/pacman
+cp ./dist/desech-studio-1.1.3-x86_64.rpm ~/share/download.desech.com/dnf
+cp ./dist/desech-studio-1.1.3-x64.pacman ~/share/download.desech.com/pacman
 sudo chmod 777 -R ~/share/download.desech.com
 ```
 
@@ -308,7 +308,7 @@ Manjaro
 
 ```sh
 sudo -s
-repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.1.2-x64.pacman
+repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.1.3-x64.pacman
   - File Explorer > go to `~/share/download.desech.com/pacman/`
   - when the lock file disapears cancel the process
 repoctl status -a

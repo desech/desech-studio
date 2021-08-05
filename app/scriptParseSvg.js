@@ -5,9 +5,10 @@
   const container = document.getElementById('temp').contentWindow.document.body
 
   // go through each svg element
-  const data = JSON.parse('{{DATA}}')
+  const data = {{DATA}}
   for (const val of Object.values(data)) {
     // create and append the svg with our designed svg path
+    if (!val.needsViewBox) continue
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2000/svg')
     svg.innerHTML = val.nodes.join('')

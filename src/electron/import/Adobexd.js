@@ -251,7 +251,7 @@ export default {
       projectFolder: this._projectFolder,
       importFolder: this._importFolder,
       processImages: this._processImages,
-      svgPaths: this._svgData
+      svgData: this._svgData
     }
   },
 

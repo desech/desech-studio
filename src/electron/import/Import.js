@@ -8,6 +8,7 @@ import Figma from './figma/Figma.js'
 import Sketch from './sketch/Sketch.js'
 import Adobexd from './adobexd/Adobexd.js'
 import EventMain from '../event/EventMain.js'
+import ImportFiles from './ImportFiles.js'
 
 export default {
   async importChooseFile (type) {
@@ -28,10 +29,12 @@ export default {
     })
   },
 
-  // params = folder, type, file, token
+  // params = type, folder, file, token, settings
   async importFile (params) {
     const data = await this.getImportData(params)
-    this.backupImportFile(params, data)
+    this.backupImportFile(data, params)
+    ImportFiles.unifyFiles(data)
+    ImportFiles.saveHtmlFiles(data, params, params.folder)
     EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'),
       params.type, params.folder)
   },
@@ -49,7 +52,7 @@ export default {
     }
   },
 
-  backupImportFile (params, data) {
+  backupImportFile (data, params) {
     const file = File.resolve(params.folder, '_desech', params.type + '-import.json')
     fs.writeFileSync(file, JSON.stringify(data, null, 2))
   }

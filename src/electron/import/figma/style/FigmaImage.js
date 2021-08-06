@@ -17,7 +17,7 @@ export default {
 
   async getImageFile (file, scale, node, settings) {
     return await this.processImageFile({
-      ...settings, // type, folder, file, token, allImages
+      ...settings, // type, folder, file, token, settings, allImages
       elementId: node.id,
       image: {
         file,

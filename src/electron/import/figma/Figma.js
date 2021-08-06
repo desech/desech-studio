@@ -3,12 +3,13 @@ import Language from '../../lib/Language.js'
 import ImportCommon from '../ImportCommon.js'
 import FigmaCommon from './FigmaCommon.js'
 import FigmaElement from './FigmaElement.js'
+import ExtendJS from '../../../js/helper/ExtendJS.js'
 
 export default {
   _data: {},
   _settings: {},
 
-  // params = type, folder, file, token
+  // params = type, folder, file, token, settings
   async getImportData (params) {
     this.setSettings(params)
     const data = await FigmaApi.apiCall(`files/${params.file}?geometry=paths`, params.token)
@@ -33,8 +34,9 @@ export default {
 
   async parsePage (page) {
     const name = ImportCommon.getName(page.name, this._data)
-    this._data[name] = { type: 'folder', name, files: {} }
-    await this.parseFiles(page.children, this._data[name].files)
+    const folder = { type: 'folder', name, files: {} }
+    await this.parseFiles(page.children, folder.files)
+    if (!ExtendJS.isEmpty(folder.files)) this._data[name] = folder
   },
 
   async parseFiles (nodes, files) {
@@ -62,13 +64,12 @@ export default {
 
   async parseElements (nodes, elements, file) {
     for (const node of nodes) {
-      await this.parseElement(node, elements, file)
-      if (node.children) await this.parseElements(node.children, elements, file)
+      const data = await FigmaElement.getData(node, file, this._settings)
+      if (!data) continue
+      elements.push(data)
+      // don't fetch anything inside elements with export settings
+      if (!node.children || node.exportSettings?.length) continue
+      await this.parseElements(node.children, elements, file)
     }
-  },
-
-  async parseElement (node, elements, file) {
-    const data = await FigmaElement.getData(node, file, this._settings)
-    if (data) elements.push(data)
   }
 }

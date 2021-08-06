@@ -26,7 +26,7 @@ export default {
     const settings = this.getProjectSettings(folder)
     if (data?.settings) await this.applyNewSettings(folder, settings, data.settings)
     if (data?.import) {
-      await Import.importFile({ ...data.import, folder })
+      await Import.importFile({ ...data.import, folder, settings })
     } else {
       EventMain.ipcMainInvoke('mainOpenProject', folder, settings)
     }

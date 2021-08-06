@@ -8,7 +8,7 @@ export default {
     if (data.desechType !== 'icon') return
     const file = ImportCommon.getName(node.id)
     const image = await FigmaImage.processImageFile({
-      ...settings, // type, folder, file, token, allImages
+      ...settings, // type, folder, file, token, settings, allImages
       elementId: node.id,
       image: {
         file,

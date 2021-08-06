@@ -3,7 +3,7 @@ import ExtendJS from '../../../js/helper/ExtendJS.js'
 export default {
   getRotation (node) {
     // @todo angle value is not calculated correctly - find the correct formula
-    // const m = node.relativeTransform // use size.x, size.y for width/height
+    // const m = node.relativeTransform
     // const angle = Math.atan2(-m[1][0], m[0][0])
   },
 
@@ -41,6 +41,13 @@ export default {
 
   getOpacity (opacity) {
     if (opacity) return ExtendJS.roundToTwo(opacity)
+  },
+
+  isFillStrokeAllowed (value, designType) {
+    if (value.visible === false) return false
+    // we can't have image renders with text because it will contain the text too
+    if (value.type === 'IMAGE' && designType === 'text') return false
+    return true
   },
 
   getFillStrokeType (type) {

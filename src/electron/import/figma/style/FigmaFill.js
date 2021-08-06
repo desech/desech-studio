@@ -1,34 +1,39 @@
 import FigmaStyle from '../FigmaStyle.js'
 import ExtendJS from '../../../../js/helper/ExtendJS.js'
+import FigmaImage from './FigmaImage.js'
 
 export default {
-  getFills (node) {
+  async getFills (data, node, settings = null) {
+    if (data.desechType === 'icon') return
     const records = []
-    for (const fill of node.fills) {
-      if (fill.visible) records.push(this.getFill(fill))
+    for (let i = node.fills.length - 1; i >= 0; i--) {
+      // fills in reverse order
+      if (!FigmaStyle.isFillStrokeAllowed(node.fills[i], data.designType)) continue
+      const record = await this.getFill(node.fills[i], node, settings)
+      records.push(record)
     }
     if (records.length) return records
   },
 
-  getFill (fill) {
+  async getFill (fill, node, settings) {
     const record = {
       type: FigmaStyle.getFillStrokeType(fill.type),
       blendMode: FigmaStyle.getBlendMode(fill.blendMode)
     }
-    this.processFillType(fill, record)
+    await this.processFillType(fill, node, record, settings)
     return record
   },
 
-  processFillType (fill, record) {
+  async processFillType (fill, node, record, settings) {
     switch (record.type) {
-      case 'solid-image':
+      case 'solid-color':
         return this.getFillSolid(fill, record)
       case 'linear-gradient':
         return this.getFillLinearGradient(fill, record)
       case 'radial-gradient':
         return this.getFillRadialGradient(fill, record)
       case 'image':
-        return this.getFillImage(fill, record)
+        return await this.getFillImage(node, record, settings)
     }
   },
 
@@ -47,12 +52,14 @@ export default {
   },
 
   getFillRadialGradient (fill, record) {
+    // @todo add radial gradient properties
     record.stops = this.getGradientStops(fill.gradientStops, fill.opacity)
   },
 
-  getFillImage (fill, record) {
-    record.scale = this.getImageScale(fill.scaleMode)
-    record.image = fill.imageRef
+  async getFillImage (node, record, settings) {
+    // we are rendering the entire image element including effects, borders, text, etc
+    // so if we have more than one image fill this would trigger twice
+    record.image = await FigmaImage.fetchImage(node, settings)
   },
 
   getGradientStops (stops, opacity) {
@@ -64,15 +71,5 @@ export default {
       })
     }
     return values
-  },
-
-  getImageScale (mode) {
-    switch (mode) {
-      case 'FILL': case 'FIT': case 'STRETCH': case 'TILE'
-      // scaleMode
-      // imageTransform - crop
-      // scalingFactor - tile
-      // rotation
-    }
   }
 }

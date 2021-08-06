@@ -1,11 +1,24 @@
+import ExtendJS from '../../../../js/helper/ExtendJS.js'
+
 export default {
   getAutoLayout (node) {
-    // we don't need the gap and padding because this will be calculated later by us
     if (!node.layoutMode) return
-    const direction = (node.layoutMode === 'HORIZONTAL') ? 'column' : 'row'
-    const justifyContent = this.getJustifyContent(node, direction)
-    const alignContent = this.getAlignContent(node, direction)
-    if (justifyContent || alignContent) return { justifyContent, alignContent }
+    const record = {}
+    record.direction = (node.layoutMode === 'HORIZONTAL') ? 'column' : 'row'
+    if (node.itemSpacing) record.gap = parseInt(node.itemSpacing)
+    record.padding = this.getPadding(node)
+    record.justifyContent = this.getJustifyContent(node, record.direction)
+    record.alignContent = this.getAlignContent(node, record.direction)
+    return !ExtendJS.isEmpty(record) ? record : undefined
+  },
+
+  getPadding (node) {
+    const padding = {}
+    for (const dir of ['top', 'bottom', 'left', 'right']) {
+      const value = node['padding' + ExtendJS.capitalize(dir)]
+      if (value) padding[dir] = Math.round(value)
+    }
+    return padding
   },
 
   getJustifyContent (node, direction) {

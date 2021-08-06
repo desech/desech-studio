@@ -6,12 +6,23 @@ import FigmaElement from './FigmaElement.js'
 
 export default {
   _data: {},
+  _settings: {},
 
+  // params = type, folder, file, token
   async getImportData (params) {
+    this.setSettings(params)
     const data = await FigmaApi.apiCall(`files/${params.file}?geometry=paths`, params.token)
     FigmaCommon.sendProgress(Language.localize('Parsing started'))
     await this.parsePages(data.document.children)
     return this._data
+  },
+
+  setSettings (params) {
+    this._settings = {
+      ...params,
+      // ImportCommon.getImageName() uses this
+      allImages: {}
+    }
   },
 
   async parsePages (pages) {
@@ -57,7 +68,7 @@ export default {
   },
 
   async parseElement (node, elements, file) {
-    const data = await FigmaElement.getData(node, file)
+    const data = await FigmaElement.getData(node, file, this._settings)
     if (data) elements.push(data)
   }
 }

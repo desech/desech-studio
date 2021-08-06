@@ -4,13 +4,21 @@ import ImportCommon from '../ImportCommon.js'
 import FigmaLayout from './style/FigmaLayout.js'
 import FigmaStyle from './FigmaStyle.js'
 import FigmaFill from './style/FigmaFill.js'
+import FigmaStroke from './style/FigmaStroke.js'
+import FigmaEffect from './style/FigmaEffect.js'
+import FigmaText from './style/FigmaText.js'
+import FigmaInline from './FigmaInline.js'
+import FigmaIcon from './FigmaIcon.js'
 
 export default {
-  async getData (node, file) {
+  async getData (node, file, settings) {
     const desechType = this.getDesechType(node)
-    if (!desechType) return
+    // we don't allow hidden elements and masks
+    if (!desechType || node.visible === false || node.isMask) return
     const data = this.getBasicData(desechType, node, file)
-    this.addStyle(data, node)
+    await this.addStyle(data, node, settings)
+    await FigmaInline.addInlineText(data, node, settings)
+    await FigmaIcon.addSvgContent(data, node, settings)
     return data
   },
 
@@ -31,8 +39,6 @@ export default {
   },
 
   getBasicData (desechType, node, file) {
-    const debug = ExtendJS.cloneData(node)
-    delete debug.children
     return {
       desechType,
       designType: ImportCommon.sanitizeName(node.type),
@@ -44,19 +50,28 @@ export default {
       height: FigmaCommon.getHeight(desechType, node),
       content: '',
       style: {},
-      debug
+      styleChildren: {},
+      debug: this.cloneNode(node)
     }
   },
 
-  addStyle (data, node) {
+  cloneNode (node) {
+    const clone = ExtendJS.cloneData(node)
+    delete clone.children
+    return clone
+  },
+
+  async addStyle (data, node, settings) {
     data.style = {
       rotation: FigmaStyle.getRotation(node),
       corners: FigmaStyle.getRoundedCorners(node),
       autoLayout: FigmaLayout.getAutoLayout(node),
-      hidden: (node.visible === false),
       blendMode: FigmaStyle.getBlendMode(node.blendMode),
       opacity: FigmaStyle.getOpacity(node.opacity),
-      fills: FigmaFill.getFills(node)
+      fills: await FigmaFill.getFills(data, node, settings),
+      stroke: await FigmaStroke.getStroke(data, node, settings),
+      effects: FigmaEffect.getEffects(node),
+      text: FigmaText.getText(node.style, data)
     }
   }
 }

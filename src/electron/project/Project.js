@@ -16,7 +16,7 @@ export default {
   //  - open a project
   //  - save the project settings
   //  - create a new project with settings
-  //  - import a file with settings
+  //  - import a file with settings; this doesn't actually open the project
   async initProject (data) {
     const folder = data?.folder || this.getProjectFolder(data)
     if (!folder) return
@@ -25,8 +25,11 @@ export default {
     Font.rebuildFonts(folder)
     const settings = this.getProjectSettings(folder)
     if (data?.settings) await this.applyNewSettings(folder, settings, data.settings)
-    if (data?.import) await Import.importFile(data.import)
-    EventMain.ipcMainInvoke('mainOpenProject', folder, settings)
+    if (data?.import) {
+      await Import.importFile({ ...data.import, folder })
+    } else {
+      EventMain.ipcMainInvoke('mainOpenProject', folder, settings)
+    }
   },
 
   getProjectFolder (data) {

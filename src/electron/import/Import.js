@@ -28,11 +28,12 @@ export default {
     })
   },
 
-  // params = type, file, token (figma only)
+  // params = folder, type, file, token
   async importFile (params) {
     const data = await this.getImportData(params)
-    console.log(data)
-    this.backupImportFile(params.folder, data)
+    this.backupImportFile(params, data)
+    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'),
+      params.type, params.folder)
   },
 
   async getImportData (params) {
@@ -48,8 +49,8 @@ export default {
     }
   },
 
-  backupImportFile (folder, data) {
-    const file = File.resolve(folder, '_desech', this._type + '-import.json')
+  backupImportFile (params, data) {
+    const file = File.resolve(params.folder, '_desech', params.type + '-import.json')
     fs.writeFileSync(file, JSON.stringify(data, null, 2))
   }
 }

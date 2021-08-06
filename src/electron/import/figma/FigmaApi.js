@@ -1,9 +1,11 @@
 import { shell } from 'electron'
+import fetch from 'node-fetch'
 import Config from '../../lib/Config.js'
 import Settings from '../../lib/Settings.js'
 import EventMain from '../../event/EventMain.js'
 import Auth from '../../main/Auth.js'
 import Language from '../../lib/Language.js'
+import FigmaCommon from './FigmaCommon.js'
 
 export default {
   async showImportFile () {
@@ -35,8 +37,7 @@ export default {
   },
 
   async apiCall (method, token) {
-    const msg = Language.localize('Fetching <b>{{method}}</b>', { method })
-    EventMain.ipcMainInvoke('mainImportProgress', msg)
+    FigmaCommon.sendProgress(Language.localize('Fetching <b>{{method}}</b>', { method }))
     const res = await this.getResponse(method, token)
     const json = await res.json()
     if (json.error) this.error(json.message, res, method)

@@ -1,27 +1,63 @@
 import FigmaApi from './FigmaApi.js'
-import EventMain from '../../event/EventMain.js'
 import Language from '../../lib/Language.js'
+import ImportCommon from '../ImportCommon.js'
+import FigmaCommon from './FigmaCommon.js'
+import FigmaElement from './FigmaElement.js'
 
 export default {
+  _data: {},
+
   async getImportData (params) {
     const data = await FigmaApi.apiCall(`files/${params.file}?geometry=paths`, params.token)
-    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Parsing started'))
+    FigmaCommon.sendProgress(Language.localize('Parsing started'))
     await this.parsePages(data.document.children)
+    return this._data
   },
 
   async parsePages (pages) {
     for (const page of pages) {
-      // ignore empty pages
-      if (!page.children.length) continue
-      await this.parsePage(page)
+      if (page.children?.length) await this.parsePage(page)
     }
   },
 
   async parsePage (page) {
-    const name = ParseCommon.getName(page.name, this._html)
-    this._html[name] = { type: 'folder', name, files: {} }
-    await this.parseRoot(page.children, this._html[name].files)
-    // ignore empty folders
-    if (ExtendJS.isEmpty(this._html[name].files)) delete this._html[name]
+    const name = ImportCommon.getName(page.name, this._data)
+    this._data[name] = { type: 'folder', name, files: {} }
+    await this.parseFiles(page.children, this._data[name].files)
+  },
+
+  async parseFiles (nodes, files) {
+    for (const node of nodes) {
+      // we ignore non containers
+      if (!node.children?.length) continue
+      const name = ImportCommon.getName(node.name, files)
+      const file = this.getFileData(node, name)
+      files[name] = file
+      await this.parseElements(node.children, file.elements, file)
+    }
+  },
+
+  getFileData (node, name) {
+    return {
+      type: 'file',
+      name,
+      x: Math.round(node.absoluteBoundingBox.x),
+      y: Math.round(node.absoluteBoundingBox.y),
+      width: FigmaCommon.getWidth('block', node),
+      height: FigmaCommon.getHeight('block', node),
+      elements: []
+    }
+  },
+
+  async parseElements (nodes, elements, file) {
+    for (const node of nodes) {
+      await this.parseElement(node, elements, file)
+      if (node.children) await this.parseElements(node.children, elements, file)
+    }
+  },
+
+  async parseElement (node, elements, file) {
+    const data = await FigmaElement.getData(node, file)
+    if (data) elements.push(data)
   }
 }

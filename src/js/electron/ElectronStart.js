@@ -33,8 +33,8 @@ export default {
   },
 
   mainImportProgressEvent () {
-    window.electron.on('mainImportProgress', (event, msg, folder) => {
-      ElectronCommon.handleEvent(this, 'importProgress', msg, folder)
+    window.electron.on('mainImportProgress', (event, html, type, folder) => {
+      ElectronCommon.handleEvent(this, 'importProgress', html, type, folder)
     })
   },
 
@@ -76,12 +76,19 @@ export default {
     }
   },
 
-  importProgress (html, folder) {
-    HelperDOM.hide(document.getElementsByClassName('dialog-figma-continue')[0])
-    const list = document.querySelector('.dialog-import .loader-progress')
-    if (!list) return
+  importProgress (html, type, folder) {
+    const dialog = this.initDialogImport(type)
+    if (!dialog) return
+    const list = dialog.getElementsByClassName('loader-progress')[0]
     this.injectProgressText(list, html)
-    if (folder) this.markImportFinished(list.closest('.dialog-import-loader'), folder)
+    if (folder) this.markImportFinished(dialog, folder)
+  },
+
+  initDialogImport (type) {
+    const dialog = document.getElementsByClassName('dialog-import')[0]
+    if (dialog) return dialog
+    DialogComponent.closeAllDialogs()
+    return Start.showImportDialog(type)
   },
 
   injectProgressText (list, html) {
@@ -91,9 +98,9 @@ export default {
     li.scrollIntoView()
   },
 
-  markImportFinished (container, folder) {
-    HelperDOM.hide(container.getElementsByClassName('svg-loader')[0])
-    const button = container.getElementsByClassName('dialog-import-finished')[0]
+  markImportFinished (dialog, folder) {
+    HelperDOM.hide(dialog.getElementsByClassName('progress-loader')[0])
+    const button = dialog.getElementsByClassName('dialog-import-finished')[0]
     button.dataset.folder = folder
     HelperDOM.show(button)
   }

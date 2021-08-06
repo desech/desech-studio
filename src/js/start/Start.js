@@ -96,7 +96,7 @@ export default {
   },
 
   showImportDialog (type) {
-    DialogComponent.showDialog({
+    return DialogComponent.showDialog({
       header: Import.getImportTitle(type),
       body: DialogComponent.getContentHtml('import', 'body')
     })

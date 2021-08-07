@@ -9,6 +9,7 @@ import Sketch from './sketch/Sketch.js'
 import Adobexd from './adobexd/Adobexd.js'
 import EventMain from '../event/EventMain.js'
 import ImportFiles from './ImportFiles.js'
+import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
   async importChooseFile (type) {
@@ -33,8 +34,15 @@ export default {
   async importFile (params) {
     const data = await this.getImportData(params)
     this.backupImportFile(data, params)
-    ImportFiles.unifyFiles(data)
-    ImportFiles.saveHtmlFiles(data, params, params.folder)
+    if (ExtendJS.isEmpty(data)) {
+      const msg = Language.localize('<span class="error">There are no valid top level visible elements to be imported</span>')
+      EventMain.ipcMainInvoke('mainImportProgress', msg, params.type, params.folder)
+      return
+    }
+    console.log(data)
+    ImportFiles.cleanFiles(data)
+    console.log(data)
+    // ImportFiles.saveHtmlFiles(data, params, params.folder)
     EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'),
       params.type, params.folder)
   },

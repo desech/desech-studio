@@ -3,7 +3,6 @@ import Language from '../../lib/Language.js'
 import ImportCommon from '../ImportCommon.js'
 import FigmaCommon from './FigmaCommon.js'
 import FigmaElement from './FigmaElement.js'
-import ExtendJS from '../../../js/helper/ExtendJS.js'
 
 export default {
   _data: {},
@@ -11,14 +10,15 @@ export default {
 
   // params = type, folder, file, token, settings
   async getImportData (params) {
-    this.setSettings(params)
+    this.init(params)
     const data = await FigmaApi.apiCall(`files/${params.file}?geometry=paths`, params.token)
     FigmaCommon.sendProgress(Language.localize('Parsing started'))
     await this.parsePages(data.document.children)
     return this._data
   },
 
-  setSettings (params) {
+  init (params) {
+    this._data = {}
     this._settings = {
       ...params,
       // ImportCommon.getImageName() uses this
@@ -34,19 +34,17 @@ export default {
 
   async parsePage (page) {
     const name = ImportCommon.getName(page.name, this._data)
-    const folder = { type: 'folder', name, files: {} }
-    await this.parseFiles(page.children, folder.files)
-    if (!ExtendJS.isEmpty(folder.files)) this._data[name] = folder
+    this._data[name] = { type: 'folder', name, files: {} }
+    await this.parseFiles(page.children, this._data[name].files)
   },
 
   async parseFiles (nodes, files) {
     for (const node of nodes) {
-      // we ignore non containers
-      if (!node.children?.length) continue
+      // we ignore non containers and hidden artboards
+      if (!node.children?.length || node.visible === false) continue
       const name = ImportCommon.getName(node.name, files)
-      const file = this.getFileData(node, name)
-      files[name] = file
-      await this.parseElements(node.children, file.elements, file)
+      files[name] = this.getFileData(node, name)
+      await this.parseElements(node.children, files[name].elements, files[name])
     }
   },
 
@@ -67,7 +65,7 @@ export default {
       const data = await FigmaElement.getData(node, file, this._settings)
       if (!data) continue
       elements.push(data)
-      // don't fetch anything inside elements with export settings
+      // don't fetch the children of elements with export settings
       if (!node.children || node.exportSettings?.length) continue
       await this.parseElements(node.children, elements, file)
     }

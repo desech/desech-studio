@@ -5,46 +5,57 @@ import HelperFile from '../../js/helper/HelperFile.js'
 import FileSave from '../file/FileSave.js'
 
 export default {
-  unifyFiles (data) {
-    if (ExtendJS.isEmpty(data)) return
+  cleanFiles (data) {
+    this.removeEmptyEntries(data)
     this.unifyFolderToFile(data)
-    this.unifyFileToIndex(data)
     this.renameFirstFileToIndex(data)
   },
 
+  // some imports have folders, some have just files
+  removeEmptyEntries (data) {
+    if (Object.values(data)[0].type === 'folder') {
+      this.removeEmptyFolders(data)
+    } else {
+      this.removeEmptyFiles(data)
+    }
+  },
+
+  removeEmptyFolders (data) {
+    for (const folder of Object.keys(data)) {
+      this.removeEmptyFiles(data[folder].files)
+      if (ExtendJS.isEmpty(data[folder].files)) delete data[folder]
+    }
+  },
+
+  removeEmptyFiles (files) {
+    for (const file of Object.keys(files)) {
+      if (!files[file].elements.length) delete files[file]
+    }
+  },
+
+  // the single folder becomes redundant, so use the files directly
   unifyFolderToFile (data) {
-    const keys = Object.keys(data)
-    if (data[keys[0]].type === 'file' || keys.length > 1) return
-    // the single folder becomes redundant, so use the files directly
-    data = data[keys[0]].files
+    const first = Object.values(data)[0]
+    if (first.type === 'file' || Object.keys(data).length > 1) return
+    for (const file of Object.keys(first.files)) {
+      data[file] = first.files[file]
+    }
+    delete data[first.name]
   },
 
-  unifyFileToIndex (data) {
-    const keys = Object.keys(data)
-    if (keys.length > 1 || keys[0] === 'index') return
-    this.convertToIndexFile(data, keys[0])
-  },
-
-  convertToIndexFile (data, name) {
-    data.index = { ...data[name], name: 'index' }
-    delete data[name]
-  },
-
+  // take the first file and rename it to index
   renameFirstFileToIndex (data) {
-    if (this.haveRootIndexFile(data)) return
     const keys = Object.keys(data)
     if (data[keys[0]].type === 'file') {
-      this.convertToIndexFile(data, keys[0])
+      this.convertFileToIndex(data, keys[0])
     } else { // folder
       this.convertFolderFileToIndex(data)
     }
   },
 
-  haveRootIndexFile (html) {
-    for (const file of Object.values(html)) {
-      if (file.type === 'file' && file.name === 'index') return true
-    }
-    return false
+  convertFileToIndex (data, name) {
+    data.index = { ...data[name], name: 'index' }
+    delete data[name]
   },
 
   convertFolderFileToIndex (data) {

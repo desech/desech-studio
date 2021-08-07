@@ -9,6 +9,7 @@ import FigmaEffect from './style/FigmaEffect.js'
 import FigmaText from './style/FigmaText.js'
 import FigmaInline from './FigmaInline.js'
 import FigmaIcon from './FigmaIcon.js'
+import HelperElement from '../../../js/helper/HelperElement.js'
 
 export default {
   async getData (node, file, settings) {
@@ -43,6 +44,7 @@ export default {
       desechType,
       designType: ImportCommon.sanitizeName(node.type),
       id: node.id,
+      ref: HelperElement.generateElementRef(),
       name: node.name.substring(0, 32),
       x: Math.round(node.absoluteBoundingBox.x - file.x),
       y: Math.round(node.absoluteBoundingBox.y - file.y),
@@ -50,7 +52,7 @@ export default {
       height: FigmaCommon.getHeight(desechType, node),
       content: '',
       style: {},
-      styleChildren: {},
+      inlineChildren: [],
       debug: this.cloneNode(node)
     }
   },
@@ -65,13 +67,13 @@ export default {
     data.style = {
       rotation: FigmaStyle.getRotation(node),
       corners: FigmaStyle.getRoundedCorners(node),
-      autoLayout: FigmaLayout.getAutoLayout(node),
-      blendMode: FigmaStyle.getBlendMode(node.blendMode),
-      opacity: FigmaStyle.getOpacity(node.opacity),
+      layout: FigmaLayout.getAutoLayout(node),
+      text: FigmaText.getText(node.style, data),
       fills: await FigmaFill.getFills(data, node, settings),
       stroke: await FigmaStroke.getStroke(data, node, settings),
-      effects: FigmaEffect.getEffects(node),
-      text: FigmaText.getText(node.style, data)
+      blendMode: FigmaStyle.getBlendMode(node.blendMode),
+      opacity: FigmaStyle.getOpacity(node.opacity),
+      effects: FigmaEffect.getEffects(node)
     }
   }
 }

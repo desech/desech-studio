@@ -301,7 +301,7 @@ export default {
   //   const name = this.getComponentName(element)
   //   data.component.push(name)
   //   if (!this._css.component[name]) this._css.component[name] = { ...properties }
-  //   for (const key of Object.keys(properties)) {
+  //   for (const key in properties) {
   //     if (key !== 'width' && key !== 'height') delete properties[key]
   //   }
   // },

@@ -1,46 +1,15 @@
 import fs from 'fs'
-import ExtendJS from '../../js/helper/ExtendJS.js'
 import File from '../file/File.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import FileSave from '../file/FileSave.js'
+import ExtendJS from '../../js/helper/ExtendJS.js'
+import ImportHtml from './ImportHtml.js'
+import ImportCss from './ImportCss.js'
 
 export default {
   cleanFiles (data) {
-    this.removeEmptyEntries(data)
-    this.unifyFolderToFile(data)
     this.renameFirstFileToIndex(data)
-  },
-
-  // some imports have folders, some have just files
-  removeEmptyEntries (data) {
-    if (Object.values(data)[0].type === 'folder') {
-      this.removeEmptyFolders(data)
-    } else {
-      this.removeEmptyFiles(data)
-    }
-  },
-
-  removeEmptyFolders (data) {
-    for (const folder of Object.keys(data)) {
-      this.removeEmptyFiles(data[folder].files)
-      if (ExtendJS.isEmpty(data[folder].files)) delete data[folder]
-    }
-  },
-
-  removeEmptyFiles (files) {
-    for (const file of Object.keys(files)) {
-      if (!files[file].elements.length) delete files[file]
-    }
-  },
-
-  // the single folder becomes redundant, so use the files directly
-  unifyFolderToFile (data) {
-    const first = Object.values(data)[0]
-    if (first.type === 'file' || Object.keys(data).length > 1) return
-    for (const file of Object.keys(first.files)) {
-      data[file] = first.files[file]
-    }
-    delete data[first.name]
+    this.removeEmptyFiles(data)
   },
 
   // take the first file and rename it to index
@@ -65,6 +34,21 @@ export default {
     delete data[folder].files[file]
   },
 
+  removeEmptyFiles (data) {
+    for (const entry of Object.values(data)) {
+      if (entry.type === 'folder') {
+        if (!ExtendJS.isEmpty(data[entry.name].files)) {
+          this.removeEmptyFiles(data[entry.name].files)
+        }
+        if (ExtendJS.isEmpty(data[entry.name].files)) {
+          delete data[entry.name]
+        }
+      } else if (!data[entry.name].elements.length) {
+        delete data[entry.name]
+      }
+    }
+  },
+
   saveHtmlFiles (data, params, currentFolder) {
     for (const entry of Object.values(data)) {
       const entryPath = File.resolve(currentFolder, entry.name)
@@ -78,10 +62,11 @@ export default {
   },
 
   saveHtmlFileAndCss (elements, params, htmlFile) {
-    const html = this.getHtml(elements, params, htmlFile)
-    fs.writeFileSync(htmlFile, html)
+    // data.body will contain the body element with all its children
+    const data = ImportHtml.processHtml(elements, params, htmlFile)
+    fs.writeFileSync(htmlFile, data.html)
     const pageCssFile = HelperFile.getPageCssFile(htmlFile, params.folder)
-    const pageCss = this.prepareCss(this._tmpFileCss)
-    FileSave.saveStyleToFile(pageCss, css.color, params.folder, `css/page/${pageCssFile}`)
+    const pageCss = ImportCss.processCss(data.body)
+    FileSave.saveStyleToFile(pageCss, null, params.folder, `css/page/${pageCssFile}`)
   }
 }

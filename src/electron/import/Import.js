@@ -8,8 +8,9 @@ import Figma from './figma/Figma.js'
 import Sketch from './sketch/Sketch.js'
 import Adobexd from './adobexd/Adobexd.js'
 import EventMain from '../event/EventMain.js'
-import ImportFiles from './ImportFiles.js'
+import ImportFile from './ImportFile.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
+import ImportFont from './ImportFont.js'
 
 export default {
   async importChooseFile (type) {
@@ -30,8 +31,9 @@ export default {
     })
   },
 
-  // params = type, folder, file, token, settings
+  // params = type, folder, file, token, settings, svgImageNames
   async importFile (params) {
+    params.svgImageNames = []
     const data = await this.getImportData(params)
     this.backupImportFile(data, params)
     if (ExtendJS.isEmpty(data)) {
@@ -39,10 +41,9 @@ export default {
       EventMain.ipcMainInvoke('mainImportProgress', msg, params.type, params.folder)
       return
     }
-    console.log(data)
-    ImportFiles.cleanFiles(data)
-    console.log(data)
-    // ImportFiles.saveHtmlFiles(data, params, params.folder)
+    ImportFile.cleanFiles(data)
+    await ImportFont.installFonts(data, params)
+    ImportFile.saveHtmlFiles(data, params, params.folder)
     EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'),
       params.type, params.folder)
   },

@@ -262,7 +262,7 @@ export default {
     const data = array[0]
     for (let i = 1; i < array.length; i++) {
       // we skip the 1st record
-      for (const key of Object.keys(data)) {
+      for (const key in data) {
         data[key] += glue + array[i][key]
       }
     }

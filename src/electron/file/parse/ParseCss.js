@@ -159,7 +159,7 @@ export default {
   },
 
   removeClassesNotFoundInHtmlFiles (css, classes) {
-    for (const selector of Object.keys(css)) {
+    for (const selector in css) {
       if (selector === ':root') continue
       const cls = HelperStyle.getClassFromSelector(selector).replace('_ss_', '')
       if (!classes.includes(cls)) delete css[selector]

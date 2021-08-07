@@ -24,7 +24,7 @@ export default {
   },
 
   hasExtraCss (props) {
-    for (const prop of Object.keys(props)) {
+    for (const prop in props) {
       if (!['width', 'height', 'min-height'].includes(prop)) return true
     }
     return false

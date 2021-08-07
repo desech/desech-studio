@@ -1,75 +1,59 @@
+import fs from 'fs'
 import Language from '../lib/Language.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
 import FileParse from '../file/FileParse.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import ImportPosition from './ImportPosition.js'
+import ImportCommon from './ImportCommon.js'
 
 export default {
-  getHtml (elements, params, file) {
+  processHtml (elements, params, file) {
     const msg = Language.localize('Saving html file <b>{{file}}</b>',
       { file: File.basename(file) })
-    EventMain.ipcMainInvoke('mainImportProgress', msg)
-    const html = this.getImportHtml(elements, params)
+    EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
+    this.prepareElements(elements)
+    const body = ImportPosition.buildStructure(elements)
+    const html = this.getFullHtml(body, params, file)
+    return { body, html }
+  },
+
+  prepareElements (elements) {
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].zIndex = i + 1
+      elements[i].children = []
+    }
+  },
+
+  getFullHtml (body, params, file) {
+    const html = this.getHtmlNode(body, params)
     const beauty = FileParse.beautifyHtml(html)
     return HelperFile.getFullHtml(file, beauty, {}, params.folder, params.settings.designSystem)
   },
 
-  getImportHtml (elements, params) {
-    const body = ImportPosition.buildStructure(elements)
-    if (elements.length) {
-      const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored - {{elements}}</span>',
-        { count: elements.length, elements: this.getIgnoredElements(elements) })
-      EventMain.ipcMainInvoke('mainImportProgress', msg)
-    }
-    return this.getHtmlNode(body, params)
+  getHtmlNode (element, params) {
+    this.convertDivToImg(element, params)
+    this.convertBackgroundSvg(element, params)
+    const cls = this.getClasses(element)
+    if (element.desechType === 'icon') return this.getIconNode(element, cls)
+    const tag = this.getHtmlTag(element)
+    const srcset = element.srcset ? ` srcset="${element.srcset}"` : ''
+    const href = element.href ? ` href="${element.href}"` : ''
+    const children = element.children?.length
+      ? this.getHtmlChildren(element, element.children, params)
+      : element.content
+    return `<${tag} class="${cls}"${srcset}${href}>${children}</${tag}>`
   },
 
-  getIgnoredElements (elements) {
-    const names = []
-    for (const element of elements) {
-      names.push('"' + element.name + '"')
-    }
-    return names.join(', ')
-  },
-
-  getHtmlNode (node, params) {
-    if (this.shouldConvertDiv(node)) this.convertDivToImg(node, folder)
-    this.addNodeCss(node)
-    const cls = this.getClasses(node)
-    if (node.type === 'image') return this.getImageNode(node, cls)
-    if (node.type === 'icon') return this.getIconNode(node, cls)
-    const tag = node.tag || this.getHtmlTag(node.type)
-    const href = node.href ? ` href="${node.href}"` : ''
-    const children = (node.children && node.children.length)
-      ? this.getHtmlChildren(node, node.children, folder)
-      : node.content
-    if (node.type === 'block' && node.content) this.saveSvgBgImage(node, folder)
-    return `<${tag} class="${cls}"${href}>${children}</${tag}>`
-  },
-
-  getHtmlChildren (parent, nodes, folder) {
-    let body = ''
-    for (const node of nodes) {
-      node.parentRef = parent.ref
-      body += this.getHtmlNode(node, folder)
-    }
-    return body
-  },
-
-  shouldConvertDiv (node) {
-    return (node.type === 'block' && !node.elements.length && css.element[node.ref] &&
-      css.element[node.ref]['background-image'] &&
-      /^url\([^,]*?\)$/.test(css.element[node.ref]['background-image']))
-  },
-
-  convertDivToImg (node, folder) {
-    node.type = 'image'
-    const image = css.element[node.ref]['background-image'].replace('url("../', '')
-      .replace('")', '')
-    node.srcset = `${image} 1x, ${this.getScaledSrcset(image, 2)}, ` +
+  // if a block with an image fill has no children, then it can be an image element
+  convertDivToImg (element, params) {
+    if (element.desechType !== 'block' || element.children.length) return
+    const fill = ImportCommon.getImageFill(element)
+    if (!fill) return
+    element.desechType = 'image'
+    const image = fill.image.replace(params.folder + '/', '')
+    element.srcset = `${image} 1x, ${this.getScaledSrcset(image, 2)}, ` +
       `${this.getScaledSrcset(image, 3)}`
-    this.wipeCssOnBackgroundImage(node.ref)
   },
 
   getScaledSrcset (image, scale) {
@@ -77,15 +61,52 @@ export default {
     return image.replace(ext, `@${scale}x${ext} ${scale}x`)
   },
 
-  wipeCssOnBackgroundImage (ref) {
-    // figma also exports the effects, borders, etc on images, so we don't need the extra css
-    // but for sketch and xd we need to remove the background css properties and the svg strokes
-    for (const name of Object.keys(css.element[ref])) {
-      if ((this._type === 'figma' && !['width', 'height'].includes(name)) ||
-        (this._type !== 'figma' && (name.startsWith('background-') ||
-          name.startsWith('stroke')))) {
-        delete css.element[ref][name]
-      }
+  // if an svg icon becomes a block parent, place the svg icon as a background image
+  convertBackgroundSvg (element, params) {
+    if (element.desechType !== 'block' || !element.content) return
+    const image = ImportCommon.getSvgName(element, params.svgImageNames) + '.svg'
+    const filePath = File.resolve(params.folder, 'asset/image', image)
+    fs.writeFileSync(filePath, element.content)
+    element.style.fills = [{ type: 'image', image }]
+  },
+
+  getClasses (element) {
+    let cls = element.ref
+    if (element.desechType === 'block' || element.desechType === 'text') {
+      cls += ' ' + element.desechType
     }
+    return cls.trim()
+  },
+
+  getIconNode (element, cls) {
+    // imported svgs sometimes have elements without content
+    if (!element.content) return ''
+    return element.content.replace('<svg ', `<svg class="${cls}" `)
+      .replace(/(<svg.*?) width=".*?"/, '$1')
+      .replace(/(<svg.*?) height=".*?"/, '$1')
+  },
+
+  getHtmlTag (element) {
+    if (element.designType === 'line') return 'hr'
+    if (element.href) return 'a'
+    switch (element.desechType) {
+      case 'block':
+        return 'div'
+      case 'text':
+        return 'p'
+      case 'icon':
+        return 'svg'
+      case 'image':
+        return 'img'
+    }
+  },
+
+  getHtmlChildren (parent, elements, params) {
+    let body = ''
+    for (const element of elements) {
+      element.parentRef = parent.ref
+      body += this.getHtmlNode(element, params)
+    }
+    return body
   }
 }

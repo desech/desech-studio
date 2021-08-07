@@ -34,7 +34,7 @@ export default {
   },
 
   replaceVars (string, vars) {
-    for (const key of Object.keys(vars)) {
+    for (const key in vars) {
       string = string.replaceAll(`{{${key}}}`, vars[key])
     }
     return string

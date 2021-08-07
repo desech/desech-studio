@@ -34,25 +34,32 @@ export default {
   },
 
   async processInlineElement (data, node, charId, start, end, style) {
-    const elemId = HelperElement.generateElementRef()
+    const ref = HelperElement.generateElementRef()
     const info = {
       start,
       end,
-      html: this.getInlineHtml(start, end, node, elemId, style)
+      html: this.getInlineHtml(start, end, node, ref, style)
     }
-    data.styleChildren[elemId] = {
-      text: FigmaText.getText(style, { designType: 'text' }),
-      fills: await FigmaFill.getFills({ designType: 'text' }, { fills: style.fills || [] })
-    }
+    await this.addInlineStyle(data, ref, style)
     return info
   },
 
-  getInlineHtml (start, end, node, elemId, style) {
+  async addInlineStyle (data, ref, style) {
+    data.inlineChildren.push({
+      ref,
+      style: {
+        text: FigmaText.getText(style, { designType: 'text' }),
+        fills: await FigmaFill.getFills({ designType: 'text' }, { fills: style.fills || [] })
+      }
+    })
+  },
+
+  getInlineHtml (start, end, node, ref, style) {
     const html = node.characters.substring(start, end)
     if (style.hyperlink) {
-      return `<a class="${elemId}" href="${style.hyperlink.url}">${html}</a>`
+      return `<a class="${ref}" href="${style.hyperlink.url}">${html}</a>`
     } else {
-      return `<em class="${elemId}">${html}</em>`
+      return `<em class="${ref}">${html}</em>`
     }
   }
 }

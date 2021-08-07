@@ -229,7 +229,7 @@ export default {
   wipeCssOnBackgroundImage (ref, css) {
     // figma also exports the effects, borders, etc on images, so we don't need the extra css
     // but for sketch and xd we need to remove the background css properties and the svg strokes
-    for (const name of Object.keys(css.element[ref])) {
+    for (const name in css.element[ref]) {
       if ((this._type === 'figma' && !['width', 'height'].includes(name)) ||
         (this._type !== 'figma' && (name.startsWith('background-') ||
           name.startsWith('stroke')))) {

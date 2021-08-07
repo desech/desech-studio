@@ -70,7 +70,7 @@ export default {
     if (!inside) return false
     const areaNode = node.width * node.height
     const areaContainer = container.width * container.height
-    return (container.type === 'block' && areaContainer >= areaNode &&
+    return (container.desechType === 'block' && areaContainer >= areaNode &&
       container.zIndex < node.zIndex)
   },
 
@@ -141,9 +141,9 @@ export default {
     }
   },
 
-  debugAddContainerCss (container, type, value) {
+  debugAddContainerStyle (container, type, value) {
     if (!this._DEBUG) return
-    console.info('  Adding css to container', container.name, container.ref, 'Grid Type', type,
+    console.info('  Adding style to container', container.name, container.ref, 'Grid Type', type,
       'Template', value)
   },
 
@@ -162,13 +162,13 @@ export default {
   },
 
   debugConvert (elem) {
-    if (this._DEBUG) console.info(`  Convert ${elem.type} to block`, elem.name, elem.ref)
+    if (this._DEBUG) console.info(`  Convert ${elem.desechType} to block`, elem.name, elem.ref)
   },
 
-  debugEnd (nodes, css, body) {
+  debugEnd (nodes, body) {
     if (!this._DEBUG) return
     console.info('------------------------------------------------------------')
-    console.info(JSON.stringify(nodes, null, 2), JSON.stringify(body, null, 2), css)
+    console.info(JSON.stringify(nodes, null, 2), JSON.stringify(body, null, 2))
   },
 
   debugMsg (text, spaces) {

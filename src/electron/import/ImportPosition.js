@@ -3,15 +3,11 @@ import ImportPositionCommon from './ImportPositionCommon.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
-  _BIG: 99999999,
-
   buildStructure (nodes) {
     this.cleanUnstyledBlocks(nodes)
-    const bodyRef = HelperElement.generateElementRef()
-    const body = this.getBody(bodyRef)
-    this.adjustBodyCss(css, bodyRef)
-    this.positionNodes(nodes, css, body, body)
-    ImportPositionCommon.debugEnd(nodes, css, body)
+    const body = this.getBody()
+    this.positionNodes(nodes, body, body)
+    ImportPositionCommon.debugEnd(nodes, body)
     return body
   },
 
@@ -23,56 +19,30 @@ export default {
     }
   },
 
-  getBody (ref) {
+  getBody () {
     return {
       desechType: 'block',
-      designType: 'body',
       name: 'body',
       x: 0,
       y: 0,
-      width: this._BIG,
-      height: this._BIG,
-      ref,
-      zIndex: 0,
-      component: [],
-      content: '',
-      href: null,
+      width: 99999999,
+      height: 99999999,
+      ref: HelperElement.generateElementRef(),
+      style: {},
       isContainer: true,
       children: []
     }
   },
 
-  adjustBodyCss (css, ref) {
-    delete css.element[ref].width
-    delete css.element[ref].height
-    this.adjustBodyFont(css, ref)
-  },
-
-  adjustBodyFont (css, ref) {
-    // use the first font in body and remove it everywhere else
-    if (!css.font[0]) return
-    this.removeBodyFontFromCss(css.element, css.font[0].name)
-    this.removeBodyFontFromCss(css.component, css.font[0].name)
-    css.element[ref]['font-family'] = css.font[0].name
-  },
-
-  removeBodyFontFromCss (cssList, bodyFont) {
-    for (const val of Object.values(cssList)) {
-      if (val['font-family'] && val['font-family'] === bodyFont) {
-        delete val['font-family']
-      }
-    }
-  },
-
-  positionNodes (nodes, css, container, containerParent) {
+  positionNodes (nodes, container, containerParent) {
     ImportPositionCommon.debugContainer(container)
     const traversal = this.getTraversal(nodes, container)
     ImportPositionCommon.debugTraversal(traversal)
     if (traversal.lines.length) this.convertToBlock(container)
     if (traversal.lines.length > 1) {
-      this.positionContainerNode(nodes, css, container, traversal)
+      this.positionContainerNode(nodes, container, traversal)
     } else if (traversal.lines.length === 1) {
-      this.positionSingleNode(nodes, css, container, containerParent, traversal.elem)
+      this.positionSingleNode(nodes, container, containerParent, traversal.elem)
     }
   },
 
@@ -151,51 +121,52 @@ export default {
   },
 
   convertToBlock (element) {
-    if (element.type === 'block') return
+    if (element.desechType === 'block') return
     ImportPositionCommon.debugConvert(element)
-    element.type = 'block'
+    element.desechType = 'block'
   },
 
-  positionContainerNode (nodes, css, container, traversal) {
-    this.addContainerCss(css, container, traversal)
-    this.processLines(nodes, css, container, traversal)
+  positionContainerNode (nodes, container, traversal) {
+    this.addContainerStyle(container, traversal)
+    this.processLines(nodes, container, traversal)
   },
 
-  addContainerCss (css, container, traversal) {
-    const gridType = (traversal.type === 'x') ? 'column' : 'row'
-    const gridValue = this.getGridLines(container, traversal, gridType)
-    css.element[container.ref] = css.element[container.ref] || {}
-    if (gridType === 'column') {
+  addContainerStyle (container, traversal) {
+    if (!container.style.layout) container.style.layout = {}
+    const direction = (traversal.type === 'x') ? 'column' : 'row'
+    container.style.layout.direction = direction
+    const gridValue = this.getGridLines(container, traversal, direction)
+    if (direction === 'column') {
       // only use the grid template for columns, not for rows
-      css.element[container.ref][`grid-template-${gridType}s`] = gridValue
+      container.style.layout.gridTemplateColumns = gridValue
     }
     // @todo better gap; take into account auto-layout gap
-    css.element[container.ref][`${gridType}-gap`] = '0px'
-    ImportPositionCommon.debugAddContainerCss(container, gridType, gridValue)
+    container.style.layout.gap = 0
+    ImportPositionCommon.debugAddContainerStyle(container, direction, gridValue)
   },
 
   getGridLines (container, traversal, type) {
-    let css = ''
+    let value = ''
     for (let i = 0; i < traversal.lines.length - 1; i++) {
       // skip the last line
       const line = traversal.lines[i]
       const size = traversal.lines[i - 1]
         ? line - traversal.lines[i - 1]
         : line - container[traversal.type]
-      css += size + 'px '
+      value += size + 'px '
     }
     // last element is auto
-    return css.trim() + ' auto'
+    return value.trim() + ' auto'
   },
 
-  processLines (nodes, css, container, traversal) {
+  processLines (nodes, container, traversal) {
     for (let i = 0; i < traversal.lines.length; i++) {
       // we want the last cell too
       const block = this.getLineContainer(container, traversal, i)
       ImportPositionCommon.debugLineContainer(block)
       // add the container block
       container.children.push(block)
-      this.positionNodes(nodes, css, block, container)
+      this.positionNodes(nodes, block, container)
     }
   },
 
@@ -209,10 +180,7 @@ export default {
       type: 'block',
       ref: HelperElement.generateElementRef(),
       zIndex: 0,
-      tag: null,
-      component: [],
-      content: '',
-      href: null,
+      style: {},
       isContainer: true,
       children: []
     }
@@ -236,25 +204,25 @@ export default {
     }
   },
 
-  positionSingleNode (nodes, css, container, containerParent, elem) {
-    this.moveSingleElement(nodes, css, container, containerParent, elem)
+  positionSingleNode (nodes, container, containerParent, elem) {
+    this.moveSingleElement(nodes, container, containerParent, elem)
     // we only have 3 types: block, text and icon
     // if we find children inside icons convert them to block
     // later in Import.js we will set the icon svg as bg image
-    if (elem.type === 'text') {
+    if (elem.desechType === 'text') {
       ImportPositionCommon.debugMsg('Ignore children for text element', 2)
     } else {
-      ImportPositionCommon.debugMsg(`Finding children for ${elem.type} element`, 2)
-      this.positionNodes(nodes, css, elem, containerParent)
+      ImportPositionCommon.debugMsg(`Finding children for ${elem.desechType} element`, 2)
+      this.positionNodes(nodes, elem, containerParent)
     }
   },
 
-  moveSingleElement (nodes, css, container, containerParent, elem) {
+  moveSingleElement (nodes, container, containerParent, elem) {
     // no extra container is needed, we just move this element inside the container parent
     ImportPositionCommon.debugMoveToContainer(container, containerParent, elem)
     this.replaceContainerWithElement(elem, container, containerParent)
     this.removeElementFromNodes(elem, nodes)
-    // this.addElementMargin(css, elem, container)
+    this.addElementMargin(elem, container)
   },
 
   replaceContainerWithElement (elem, container, containerParent) {
@@ -278,17 +246,18 @@ export default {
     }
   },
 
-  addElementMargin (css, elem, container) {
+  addElementMargin (elem, container) {
     // use the relative container to fetch the x and y
-    // @todo take into account auto-layout padding or don't use it at all
-    if (!css.element[elem.ref]) throw new Error(`No css for element ${elem.ref}`)
-    const marginTop = Math.round(elem.y - container.y)
-    const marginLeft = Math.round(elem.x - container.x)
-    if (marginTop && !css.element[elem.ref]['align-self']) {
-      css.element[elem.ref]['margin-top'] = marginTop + 'px'
-    }
-    if (marginLeft) {
-      css.element[elem.ref]['margin-left'] = marginLeft + 'px'
+    // @todo take into account auto-layout padding
+    // @todo do negative margins for elements that don't fit inside
+    const top = Math.round(elem.y - container.y)
+    const left = Math.round(elem.x - container.x)
+    const margin = {}
+    if (top && !elem.style.text?.alignSelf) margin.top = top
+    if (left) margin.left = left
+    if (!ExtendJS.isEmpty(margin)) {
+      if (!elem.style.layout) elem.style.layout = {}
+      elem.style.layout.margin = margin
     }
   }
 }

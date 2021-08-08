@@ -114,6 +114,8 @@ export default {
     HelperDOM.hide(container.children)
     HelperDOM.show(figmaContainer)
     container.getElementsByClassName('figma-input')[0].focus()
+    const title = document.getElementsByClassName('dialog-title')[0].textContent
+    figmaContainer.getElementsByClassName('figma-import-file')[0].textContent = title
   },
 
   async importFigma (container) {

@@ -3,9 +3,9 @@ import ImportPositionCommon from './ImportPositionCommon.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
-  buildStructure (nodes) {
+  buildStructure (nodes, fonts) {
     this.cleanUnstyledBlocks(nodes)
-    const body = this.getBody()
+    const body = this.getBody(fonts)
     this.positionNodes(nodes, body, body)
     ImportPositionCommon.debugEnd(nodes, body)
     return body
@@ -19,7 +19,7 @@ export default {
     }
   },
 
-  getBody () {
+  getBody (fonts) {
     return {
       desechType: 'block',
       name: 'body',
@@ -28,7 +28,12 @@ export default {
       width: 99999999,
       height: 99999999,
       ref: HelperElement.generateElementRef(),
-      style: {},
+      style: {
+        text: {
+          // add the first font to the body
+          fontFamily: fonts[0] ? fonts[0].name : undefined
+        }
+      },
       isContainer: true,
       children: []
     }
@@ -140,8 +145,8 @@ export default {
       // only use the grid template for columns, not for rows
       container.style.layout.gridTemplateColumns = gridValue
     }
-    // @todo better gap; take into account auto-layout gap
-    container.style.layout.gap = 0
+    // @todo take into account auto-layout gap and justify/align-content
+    /*if (!container.style.layout.gap) */container.style.layout.gap = 0
     ImportPositionCommon.debugAddContainerStyle(container, direction, gridValue)
   },
 

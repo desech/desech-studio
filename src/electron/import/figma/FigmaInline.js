@@ -25,7 +25,7 @@ export default {
         const lastPos = (i === node.characterStyleOverrides.length - 1) ? i + 1 : i
         const inline = await this.processInlineElement(data, node, lastId, startPos, lastPos,
           node.styleOverrideTable[lastId])
-        info.push(inline)
+        if (inline) info.push(inline)
         lastId = id
         startPos = i
       }
@@ -33,31 +33,32 @@ export default {
     return info
   },
 
-  async processInlineElement (data, node, charId, start, end, style) {
+  async processInlineElement (data, node, charId, start, end, override) {
     const ref = HelperElement.generateElementRef()
-    const info = {
-      start,
-      end,
-      html: this.getInlineHtml(start, end, node, ref, style)
+    const hasStyle = await this.addInlineStyle(data, ref, override)
+    if (!hasStyle) return
+    const html = this.getInlineHtml(start, end, node, ref, override)
+    return { start, end, html }
+  },
+
+  async addInlineStyle (data, ref, override) {
+    const style = {
+      text: FigmaText.getText(override, { designType: 'text' }),
+      fills: await FigmaFill.getFills({ designType: 'text' }, { fills: override.fills || [] })
     }
-    await this.addInlineStyle(data, ref, style)
-    return info
-  },
-
-  async addInlineStyle (data, ref, style) {
+    if (!style.text && !style.fills) return false
     data.inlineChildren.push({
+      desechType: 'text',
       ref,
-      style: {
-        text: FigmaText.getText(style, { designType: 'text' }),
-        fills: await FigmaFill.getFills({ designType: 'text' }, { fills: style.fills || [] })
-      }
+      style
     })
+    return true
   },
 
-  getInlineHtml (start, end, node, ref, style) {
+  getInlineHtml (start, end, node, ref, override) {
     const html = node.characters.substring(start, end)
-    if (style.hyperlink) {
-      return `<a class="${ref}" href="${style.hyperlink.url}">${html}</a>`
+    if (override.hyperlink) {
+      return `<a class="${ref}" href="${override.hyperlink.url}">${html}</a>`
     } else {
       return `<em class="${ref}">${html}</em>`
     }

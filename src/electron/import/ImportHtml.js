@@ -13,7 +13,7 @@ export default {
       { file: File.basename(file) })
     EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
     this.prepareElements(elements)
-    const body = ImportPosition.buildStructure(elements)
+    const body = ImportPosition.buildStructure(elements, params.fonts)
     const html = this.getFullHtml(body, params, file)
     return { body, html }
   },

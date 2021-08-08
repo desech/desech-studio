@@ -36,7 +36,7 @@ export default {
 
   rendererSaveProjectSettingsEvent () {
     ipcMain.handle('rendererSaveProjectSettings', async (event, folder, settings) => {
-      return await EventMain.handleEvent(Project, 'saveProjectSettings', folder, settings)
+      return await EventMain.handleEvent(ProjectCommon, 'saveProjectSettings', folder, settings)
     })
   },
 

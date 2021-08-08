@@ -1,4 +1,5 @@
 import ExtendJS from '../../../js/helper/ExtendJS.js'
+import ImportCommon from '../ImportCommon.js'
 
 export default {
   getRotation (node) {
@@ -40,7 +41,9 @@ export default {
   },
 
   getOpacity (opacity) {
-    if (opacity) return ExtendJS.roundToTwo(opacity)
+    if (typeof opacity !== 'undefined') {
+      return ExtendJS.roundToTwo(opacity)
+    }
   },
 
   isFillStrokeAllowed (value, designType) {
@@ -65,17 +68,12 @@ export default {
   },
 
   getColor (obj) {
-    return {
-      rgb: [
-        Math.round(obj.color.r * 255),
-        Math.round(obj.color.g * 255),
-        Math.round(obj.color.b * 255)
-      ],
-      alpha: ExtendJS.roundToTwo(this.getColorAlpha(obj))
-    }
-  },
-
-  getColorAlpha (obj) {
-    return (typeof obj.alpha === 'undefined') ? obj.color.a : obj.alpha * obj.color.a
+    const rgb = [
+      Math.round(obj.color.r * 255),
+      Math.round(obj.color.g * 255),
+      Math.round(obj.color.b * 255)
+    ]
+    const alpha = (typeof obj.opacity === 'undefined') ? obj.color.a : obj.opacity * obj.color.a
+    return ImportCommon.getColor(rgb, alpha)
   }
 }

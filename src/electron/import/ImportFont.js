@@ -17,6 +17,7 @@ export default {
         EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
       }
     }
+    return elementFonts
   },
 
   getElementFonts (data) {

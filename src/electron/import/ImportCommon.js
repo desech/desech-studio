@@ -1,4 +1,6 @@
 import HelperCrypto from '../../js/helper/HelperCrypto.js'
+import ExtendJS from '../../js/helper/ExtendJS.js'
+import HelperColor from '../../js/helper/HelperColor.js'
 
 export default {
   getName (string, obj = null) {
@@ -58,5 +60,10 @@ export default {
       content = newContent
     }
     return content.replace(/\n/g, '\n<br>')
+  },
+
+  getColor (rgb, alpha) {
+    alpha = ExtendJS.roundToTwo(alpha)
+    return HelperColor.rgbToCss(rgb, alpha)
   }
 }

@@ -70,6 +70,12 @@ dialog.dialog .dialog-about p span {
   color: var(--dialog-txt-highlight);
 }
 
+dialog.dialog .dialog-project {
+  width: 350px;
+}
+
+/* shortcuts dialog  */
+
 dialog.dialog .dialog-shortcuts {
   height: 475px;
   padding: 0 10px 10px 10px;
@@ -109,6 +115,8 @@ dialog.dialog .dialog-shortcuts .description p:last-child {
   padding: 0;
 }
 
+/* plugin dialog */
+
 dialog.dialog .dialog-plugin {
   width: 400px;
 }
@@ -144,7 +152,7 @@ dialog.dialog .dialog-plugin .plugin-meta {
 /* import dialogs */
 
 dialog.dialog .dialog-import {
-  width: 450px;
+  width: 350px;
 }
 
 dialog.dialog .dialog-import-loader .dialog-figma-continue {

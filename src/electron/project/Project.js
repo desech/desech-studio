@@ -10,6 +10,7 @@ import Font from '../lib/Font.js'
 import Electron from '../lib/Electron.js'
 import Language from '../lib/Language.js'
 import Import from '../import/Import.js'
+import ProjectCommon from './ProjectCommon.js'
 
 export default {
   // this can:
@@ -64,7 +65,7 @@ export default {
       exportCode: 'static',
       responsive: this.getResponsiveData('desktop')
     }
-    this.saveProjectSettings(folder, settings)
+    ProjectCommon.saveProjectSettings(folder, settings)
     return settings
   },
 
@@ -78,7 +79,7 @@ export default {
     settings.responsiveType = newSettings.responsiveType
     settings.designSystem = newSettings.designSystem
     settings.exportCode = newSettings.exportCode
-    this.saveProjectSettings(folder, settings)
+    ProjectCommon.saveProjectSettings(folder, settings)
   },
 
   async clearExistingExport (folder) {
@@ -93,18 +94,6 @@ export default {
     return (responsiveType === 'desktop')
       ? HelperProject.getDesktopFirstResponsive()
       : HelperProject.getMobileFirstResponsive()
-  },
-
-  saveProjectSettings (folder, settings) {
-    const file = File.resolve(folder, '_desech/project.json')
-    fs.writeFileSync(file, JSON.stringify(settings, null, 2))
-  },
-
-  saveDefaultWidthHeight (folder, width, height) {
-    const settings = this.getProjectSettings(folder)
-    settings.responsive.default.width = width
-    settings.responsive.default.height = height
-    this.saveProjectSettings(folder, settings)
   },
 
   async getDesignSystemCss () {

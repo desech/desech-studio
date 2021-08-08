@@ -49,24 +49,28 @@ export default {
     }
   },
 
-  saveHtmlFiles (data, params, currentFolder) {
+  saveAllHtmlCssFiles (data, params) {
+    this.processFolders(data, params, params.folder)
+  },
+
+  processFolders (data, params, currentFolder) {
     for (const entry of Object.values(data)) {
       const entryPath = File.resolve(currentFolder, entry.name)
       if (entry.type === 'folder') {
         File.createFolder(entryPath)
-        this.saveHtmlFiles(entry.files, params, entryPath)
+        this.processFolders(entry.files, params, entryPath)
       } else { // file
-        this.saveHtmlFileAndCss(entry.elements, params, entryPath + '.html')
+        this.saveHtmlCssFile(entry, params, entryPath + '.html')
       }
     }
   },
 
-  saveHtmlFileAndCss (elements, params, htmlFile) {
+  saveHtmlCssFile (entry, params, htmlFile) {
     // data.body will contain the body element with all its children
-    const data = ImportHtml.processHtml(elements, params, htmlFile)
+    const data = ImportHtml.processHtml(entry.elements, params, htmlFile)
     fs.writeFileSync(htmlFile, data.html)
     const pageCssFile = HelperFile.getPageCssFile(htmlFile, params.folder)
-    const pageCss = ImportCss.processCss(data.body)
+    const pageCss = ImportCss.processCss(data.body, params)
     FileSave.saveStyleToFile(pageCss, null, params.folder, `css/page/${pageCssFile}`)
   }
 }

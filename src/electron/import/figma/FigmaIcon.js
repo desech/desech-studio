@@ -18,6 +18,7 @@ export default {
       }
     })
     data.content = this.fixIdRefs(image.content)
+    // this.fixWidthHeight(data)
   },
 
   fixIdRefs (svg) {
@@ -27,4 +28,14 @@ export default {
       .replace(/id="(.*?)"/g, `id="$1-${rand}"`)
       .replace(/"#image(.*?)"/g, `"#image$1-${rand}"`)
   }
+
+  // @todo arrows have the wrong x,y,w,h; we can extract the width and height from the svg code,
+  // but the x and y is still wrong
+  // we will use a height of 1 to fix this in ImportCommon.returnSize
+  // fixWidthHeight (data) {
+  //   const width = /<svg.*? width="(.*?)"/gi.exec(data.content)
+  //   if (width && width[1]) data.width = width[1]
+  //   const height = /<svg.*? height="(.*?)"/gi.exec(data.content)
+  //   if (height && height[1]) data.height = height[1]
+  // }
 }

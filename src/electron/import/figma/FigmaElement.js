@@ -64,16 +64,26 @@ export default {
   },
 
   async addStyle (data, node, settings) {
-    data.style = {
+    const fills = await FigmaFill.getFills(data, node, settings)
+    const stroke = await FigmaStroke.getStroke(data, node, settings)
+    const isRender = this.isRender(data.desechType, fills, stroke)
+    data.style = ImportCommon.removeUndefined({
       rotation: FigmaStyle.getRotation(node),
-      corners: FigmaStyle.getRoundedCorners(node),
+      corners: isRender ? undefined : FigmaStyle.getRoundedCorners(node),
       layout: FigmaLayout.getAutoLayout(node),
       text: FigmaText.getText(node.style, data),
-      fills: await FigmaFill.getFills(data, node, settings),
-      stroke: await FigmaStroke.getStroke(data, node, settings),
-      blendMode: FigmaStyle.getBlendMode(node.blendMode),
-      opacity: FigmaStyle.getOpacity(node.opacity),
-      effects: FigmaEffect.getEffects(node)
-    }
+      fills: (isRender && isRender !== 'fill') ? undefined : fills,
+      stroke: (isRender && isRender !== 'stroke') ? undefined : stroke,
+      blendMode: isRender ? undefined : FigmaStyle.getBlendMode(node.blendMode),
+      opacity: isRender ? undefined : FigmaStyle.getOpacity(node.opacity),
+      effects: isRender ? undefined : FigmaEffect.getEffects(node)
+    })
+  },
+
+  // we render the images, so the fills, strokes and effects are already in the image
+  isRender (desechType, fills, stroke) {
+    if (desechType === 'icon') return 'all'
+    if (fills && fills[0].type === 'image') return 'fill'
+    if (stroke && stroke.type === 'image') return 'stroke'
   }
 }

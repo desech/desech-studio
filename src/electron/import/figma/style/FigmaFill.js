@@ -10,6 +10,8 @@ export default {
       // fills in reverse order
       if (!FigmaStyle.isFillStrokeAllowed(node.fills[i], data.designType)) continue
       const record = await this.getFill(node.fills[i], node, settings)
+      // if we find an image, then we don't care about the other fills since figma renders it
+      if (record.type === 'image') return [record]
       records.push(record)
     }
     if (records.length) return records
@@ -42,6 +44,7 @@ export default {
   },
 
   getFillLinearGradient (fill, record) {
+    // @todo gradient angle is not calculated correctly
     record.angle = {
       x1: fill.gradientHandlePositions[0].x,
       x2: fill.gradientHandlePositions[1].x,

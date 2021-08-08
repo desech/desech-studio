@@ -3,11 +3,12 @@ import ImportPositionCommon from './ImportPositionCommon.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
-  buildStructure (nodes, fonts) {
+  buildStructure (nodes, params, file) {
     this.cleanUnstyledBlocks(nodes)
-    const body = this.getBody(fonts)
+    const body = this.getBody(params.fonts)
     this.positionNodes(nodes, body, body)
     ImportPositionCommon.debugEnd(nodes, body)
+    ImportPositionCommon.backupBodyToFile(body, params, file)
     return body
   },
 
@@ -177,12 +178,12 @@ export default {
 
   getLineContainer (container, traversal, i) {
     return {
+      desechType: 'block',
       name: 'container',
       x: (i && traversal.type === 'x') ? traversal.lines[i - 1] : container.x,
       y: (i && traversal.type === 'y') ? traversal.lines[i - 1] : container.y,
       width: this.getLineContainerWidth(container, traversal, i),
       height: this.getLineContainerHeight(container, traversal, i),
-      type: 'block',
       ref: HelperElement.generateElementRef(),
       zIndex: 0,
       style: {},

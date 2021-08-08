@@ -51,6 +51,11 @@ export default {
     }
   },
 
+  returnSize (value, desechType) {
+    // we make sure each icon has at least 2px in width/height
+    return (desechType === 'icon' && !value) ? 2 : value
+  },
+
   injectInlineElements (content, inline) {
     let inc = 0
     for (const elem of inline) {
@@ -65,5 +70,12 @@ export default {
   getColor (rgb, alpha) {
     alpha = ExtendJS.roundToTwo(alpha)
     return HelperColor.rgbToCss(rgb, alpha)
+  },
+
+  removeUndefined (obj) {
+    for (const name in obj) {
+      if (!obj[name]) delete obj[name]
+    }
+    return obj
   }
 }

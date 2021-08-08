@@ -3,7 +3,7 @@ import ImportCommon from '../ImportCommon.js'
 
 export default {
   getRotation (node) {
-    // @todo angle value is not calculated correctly - find the correct formula
+    // @todo correct the rotation angle; also the "y" coordinate of the element is wrong
     // const m = node.relativeTransform
     // const angle = Math.atan2(-m[1][0], m[0][0])
   },

@@ -13,7 +13,9 @@ export default {
 
   async getFirstStroke (stroke, node, settings) {
     const record = {
+      // @todo with `line` it says the size is 5 when it's 20; figma should fix it
       size: Math.round(node.strokeWeight),
+      // @todo dotted style doesn't work on frames; figma should fix it
       style: node.strokeDashes ? 'dotted' : 'solid',
       type: FigmaStyle.getFillStrokeType(stroke.type)
     }

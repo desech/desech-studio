@@ -1,6 +1,10 @@
+import fs from 'fs'
+import File from '../file/File.js'
+
 export default {
   // enable it to see debugging messages
   _DEBUG: false,
+  _BACKUP: true,
 
   getEnd (elem, type) {
     return (type === 'x') ? elem.x + elem.width : elem.y + elem.height
@@ -178,5 +182,11 @@ export default {
     } else {
       console.info(text)
     }
+  },
+
+  backupBodyToFile (body, params, htmlFile) {
+    if (!this._BACKUP) return
+    const file = File.resolve(params.folder, '_desech', params.type + '-import.json')
+    fs.appendFileSync(file, '\n\n' + htmlFile + '\n' + JSON.stringify(body, null, 2))
   }
 }

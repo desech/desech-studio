@@ -13,7 +13,7 @@ export default {
       { file: File.basename(file) })
     EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
     this.prepareElements(elements)
-    const body = ImportPosition.buildStructure(elements, params.fonts)
+    const body = ImportPosition.buildStructure(elements, params, file)
     const html = this.getFullHtml(body, params, file)
     return { body, html }
   },
@@ -39,9 +39,7 @@ export default {
     const tag = this.getHtmlTag(element)
     const srcset = element.srcset ? ` srcset="${element.srcset}"` : ''
     const href = element.href ? ` href="${element.href}"` : ''
-    const children = element.children?.length
-      ? this.getHtmlChildren(element, element.children, params)
-      : element.content
+    const children = this.getHtmlChildren(element, params)
     return `<${tag} class="${cls}"${srcset}${href}>${children}</${tag}>`
   },
 
@@ -64,9 +62,9 @@ export default {
   // if an svg icon becomes a block parent, place the svg icon as a background image
   convertBackgroundSvg (element, params) {
     if (element.desechType !== 'block' || !element.content) return
-    const image = ImportCommon.getSvgName(element, params.svgImageNames) + '.svg'
-    const filePath = File.resolve(params.folder, 'asset/image', image)
-    fs.writeFileSync(filePath, element.content)
+    const name = ImportCommon.getSvgName(element, params.svgImageNames) + '.svg'
+    const image = File.resolve(params.folder, 'asset/image', name)
+    fs.writeFileSync(image, element.content)
     element.style.fills = [{ type: 'image', image }]
   },
 
@@ -101,7 +99,17 @@ export default {
     }
   },
 
-  getHtmlChildren (parent, elements, params) {
+  getHtmlChildren (element, params) {
+    if (element.children?.length) {
+      return this.processNodeChildren(element, element.children, params)
+    } else if (element.content) {
+      return element.content
+    } else {
+      return ''
+    }
+  },
+
+  processNodeChildren (parent, elements, params) {
     let body = ''
     for (const element of elements) {
       element.parentRef = parent.ref

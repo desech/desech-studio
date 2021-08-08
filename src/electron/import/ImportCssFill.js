@@ -74,7 +74,6 @@ export default {
       const stops = this.getGradientStops(fill.stops)
       return `linear-gradient(${angle}deg, ${stops})`
     } else if (fill.type === 'radial-gradient') {
-      // @todo add radial gradient properties
       const stops = this.getGradientStops(fill.stops)
       return `radial-gradient(${stops})`
     } else if (fill.type === 'image') {
@@ -83,7 +82,6 @@ export default {
   },
 
   getGradientLinearAngle (x1, x2, y1, y2) {
-    // @todo fix gradient angle
     const radians = Math.atan((y2 - y1) / (x2 - x1) * -1)
     return parseInt(((180 * radians) / Math.PI).toFixed(1))
   },

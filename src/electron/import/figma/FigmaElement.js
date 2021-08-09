@@ -24,9 +24,10 @@ export default {
   },
 
   getDesechType (node) {
+    // https://www.figma.com/developers/api#node-types
     switch (node.type) {
       case 'FRAME': case 'RECTANGLE': case 'LINE': case 'ELLIPSE': case 'GROUP':
-      case 'COMPONENT': case 'INSTANCE':
+      case 'COMPONENT': case 'COMPONENT_SET': case 'INSTANCE':
         return (node.exportSettings && node.exportSettings[0]?.format === 'SVG')
           ? 'icon'
           : 'block'

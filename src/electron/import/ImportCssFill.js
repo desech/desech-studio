@@ -4,7 +4,8 @@ import HelperColor from '../../js/helper/HelperColor.js'
 
 export default {
   addCssFills (element, rules, params) {
-    if (!element.style.fills) return
+    // lines don't have fills
+    if (!element.style.fills || element.designType === 'line') return
     if (element.desechType === 'text') {
       this.addCssFillsText(element.style.fills, rules, params)
     } else if (element.desechType === 'block') {
@@ -14,7 +15,7 @@ export default {
 
   addCssFillsText (fills, rules, params) {
     if (fills.length === 1 && fills[0].type === 'solid-color') {
-      // black is the default color
+      // skip the default text color black
       if (fills[0].color !== 'rgb(0, 0, 0)') rules.color = fills[0].color
     } else {
       rules.color = 'transparent'

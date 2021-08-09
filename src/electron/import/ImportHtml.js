@@ -14,6 +14,12 @@ export default {
     EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
     this.prepareElements(elements)
     const body = ImportPosition.buildStructure(elements, params, file)
+    if (elements.length) {
+      // @todo remove this when we improve our ImportPosition script
+      const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored - {{elements}}</span>',
+        { count: elements.length, elements: this.getIgnoredElements(elements) })
+      EventMain.ipcMainInvoke('mainImportProgress', msg)
+    }
     const html = this.getFullHtml(body, params, file)
     return { body, html }
   },
@@ -23,6 +29,14 @@ export default {
       elements[i].zIndex = i + 1
       elements[i].children = []
     }
+  },
+
+  getIgnoredElements (nodes) {
+    const names = []
+    for (const node of nodes) {
+      names.push('"' + node.name + '"')
+    }
+    return names.join(', ')
   },
 
   getFullHtml (body, params, file) {
@@ -45,7 +59,10 @@ export default {
 
   // if a block with an image fill has no children, then it can be an image element
   convertDivToImg (element, params) {
-    if (element.desechType !== 'block' || element.children.length) return
+    if (element.desechType !== 'block' || element.designType === 'line' ||
+      element.children.length) {
+      return
+    }
     const fill = ImportCommon.getImageFill(element)
     if (!fill) return
     element.desechType = 'image'

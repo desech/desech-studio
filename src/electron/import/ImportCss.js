@@ -49,8 +49,8 @@ export default {
 
   addCssWidthHeight (element, isBody, rules) {
     if (isBody) return
-    rules.width = Math.round(element.width) + 'px'
-    if (element.designType !== 'line') {
+    if (element.width !== 99999999) rules.width = Math.round(element.width) + 'px'
+    if (element.height !== 99999999 && element.designType !== 'line') {
       rules.height = Math.round(element.height) + 'px'
     }
     if (element.desechType === 'block' && element.height < 24) {

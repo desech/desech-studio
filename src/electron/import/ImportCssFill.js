@@ -6,7 +6,7 @@ export default {
   addCssFills (element, rules, params) {
     if (!element.style.fills) return
     if (element.desechType === 'text') {
-      this.addCssFillsText(element.style.fills, rules)
+      this.addCssFillsText(element.style.fills, rules, params)
     } else if (element.desechType === 'block') {
       this.addCssFillsBackground(element.style.fills, rules, params)
     }

@@ -7,14 +7,35 @@ export default {
     if (data.desechType === 'icon') return
     const records = []
     for (let i = node.fills.length - 1; i >= 0; i--) {
-      // fills in reverse order
-      if (!FigmaStyle.isFillStrokeAllowed(node.fills[i], data.designType)) continue
-      const record = await this.getFill(node.fills[i], node, settings)
-      // if we find an image, then we don't care about the other fills since figma renders it
-      if (record.type === 'image') return [record]
-      records.push(record)
+      const imageFill = await this.processFill(records, i, data, node, settings)
+      if (imageFill) return [imageFill]
     }
+    await this.fixExportBitmapOnNoImageFill(records, data, node, settings)
     if (records.length) return records
+  },
+
+  async processFill (records, i, data, node, settings) {
+    // fills in reverse order
+    if (!FigmaStyle.isFillStrokeAllowed(node.fills[i], data.designType)) return
+    const record = await this.getFill(node.fills[i], node, settings)
+    // if we find an image, then we don't care about the other fills since figma renders it
+    if (record.type === 'image') return record
+    records.push(record)
+  },
+
+  // when we have export settings as bitmap (png, jpg) make sure we have that image fill only
+  async fixExportBitmapOnNoImageFill (records, data, node, settings) {
+    // we can't have image renders with text because it will contain the text too
+    if (data.desechType === 'text') return
+    if (node.exportSettings && ['JPG', 'PNG'].includes(node.exportSettings[0]?.format) &&
+      (!records.length || records[0].type !== 'image')) {
+      // make sure to remove all the other entries before adding the image
+      records.splice(0, records.length)
+      records.push({
+        type: 'image',
+        image: await FigmaImage.fetchImage(node, settings)
+      })
+    }
   },
 
   async getFill (fill, node, settings) {

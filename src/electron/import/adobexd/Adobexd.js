@@ -1,6 +1,7 @@
 import Zip from '../../file/Zip.js'
 import File from '../../file/File.js'
 import ImportCommon from '../ImportCommon.js'
+import AdobexdElement from './AdobexdElement.js'
 
 export default {
   _data: {},
@@ -9,7 +10,6 @@ export default {
   // params = type, folder, file, token, settings
   async getImportData (params) {
     this.init(params)
-    this._settings.importFolder = Zip.unzipFileTmp(params.file)
     this.parseFiles()
     await this.parseNodes()
     return this._data
@@ -19,8 +19,8 @@ export default {
     this._data = {}
     this._settings = {
       ...params,
-      importFolder: null,
-      // ImportCommon.getImageName() uses this
+      importFolder: Zip.unzipFileTmp(params.file),
+      // ImportImage.getImageName() uses this
       allImages: {}
     }
   },
@@ -49,19 +49,24 @@ export default {
   },
 
   async parseNodes () {
-    for (const file of Object.values(this.data)) {
+    for (const file of Object.values(this._data)) {
       const filePath = `artwork/${file.path}/graphics/graphicContent.agc`
       const data = File.getFileData(filePath, this._settings.importFolder)
-      this._css.element[file.ref] = await this.getCssProperties({ ...file, type: 'block' }, {
-        ...data.children[0],
-        'uxdesign#bounds': {
-          width: file.width,
-          height: file.height
-        }
-      })
       const children = data.children[0].artboard.children
-      this._svgData = await AdobexdIcon.prepareSvgData(children)
-      await this.parseElements(children, this.data[file.name].nodes, this.data[file.name])
+      await this.parseElements(children, this._data[file.name].elements, this._data[file.name])
+    }
+  },
+
+  async parseElements (nodes, elements, artboard, parent = null, currentPos = null) {
+    const newPos = AdobexdElement.getPos(artboard, parent, currentPos)
+    for (const node of nodes) {
+      const data = await AdobexdElement.getData(node, newPos, this._settings)
+      if (!data) continue
+      elements.push(data)
+      if (data.desechType !== 'icon' && node.group?.children) {
+        // skip children for icons; this also processes symbols
+        await this.parseElements(node.group.children, elements, artboard, node, newPos)
+      }
     }
   }
 }

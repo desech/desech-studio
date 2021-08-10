@@ -9,7 +9,7 @@ export default {
     if (style.fontWeight) record.fontWeight = style.fontWeight
     if (style.italic) record.fontStyle = 'italic'
     this.addLineHeight(style, record)
-    if (style.letterSpacing) record.letterSpacing = Math.round(style.letterSpacing)
+    if (style.letterSpacing) record.letterSpacing = Math.round(style.letterSpacing) + 'px'
     this.addTextAlign(style, record)
     this.addAlignSelf(style, record)
     this.addTextTransform(style, record)

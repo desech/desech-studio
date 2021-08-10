@@ -38,11 +38,11 @@ export default {
   getCssRules (element, css, isBody) {
     const rules = {}
     this.addCssWidthHeight(element, isBody, rules)
-    this.addCssRoundedCorners(element, rules)
     this.addCssLayout(element.style.layout, rules)
     this.addCssText(element, css, isBody, rules)
     ImportCssFill.addCssFills(element, rules, this._params)
     this.addCssStroke(element, rules)
+    this.addCssRoundedCorners(element, rules)
     ImportCssEffect.addCssEffects(element, rules)
     return rules
   },
@@ -121,8 +121,9 @@ export default {
   addCssTextExtra (text, rules) {
     if (!text) return
     if (text.lineHeight) rules['line-height'] = Math.round(text.lineHeight) + 'px'
-    if (text.letterSpacing) rules['letter-spacing'] = Math.round(text.letterSpacing) + 'px'
+    if (text.letterSpacing) rules['letter-spacing'] = text.letterSpacing
     if (text.alignSelf) rules['align-self'] = text.alignSelf
+    if (text.verticalAlign) rules['vertical-align'] = text.verticalAlign
     if (text.textTransform) rules['text-transform'] = text.textTransform
     if (text.textDecoration) rules['text-decoration-line'] = text.textDecoration
   },

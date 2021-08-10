@@ -46,27 +46,6 @@ export default {
     }
   },
 
-  isFillStrokeAllowed (value, designType) {
-    if (value.visible === false) return false
-    // we can't have image renders with text because it will contain the text too
-    if (value.type === 'IMAGE' && designType === 'text') return false
-    return true
-  },
-
-  getFillStrokeType (type) {
-    switch (type) {
-      case 'SOLID':
-        return 'solid-color'
-      case 'IMAGE':
-        return 'image'
-      case 'GRADIENT_LINEAR':
-        return 'linear-gradient'
-      default:
-        // GRADIENT_RADIAL, GRADIENT_ANGULAR, GRADIENT_DIAMOND
-        return 'radial-gradient'
-    }
-  },
-
   getColor (obj) {
     const rgb = [
       Math.round(obj.color.r * 255),

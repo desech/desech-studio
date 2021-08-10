@@ -1,10 +1,17 @@
 export default {
   addCssEffects (element, rules) {
     const list = { filter: [], 'box-shadow': [] }
+    this.addTransformRotation(element.style.rotation, rules)
     if (element.style.blendMode) rules['mix-blend-mode'] = element.style.blendMode
     this.addEffectOpacity(element.style.opacity, list.filter)
     this.addGeneralEffects(element.desechType, element.style.effects, list)
     this.addListEffects(list, rules)
+  },
+
+  addTransformRotation (rotation, rules) {
+    if (rotation) {
+      rules.transform = `rotateX(0deg) rotateY(0deg) rotateZ(${rotation}deg)`
+    }
   },
 
   addEffectOpacity (opacity, filter) {
@@ -30,7 +37,7 @@ export default {
       list.filter.push(value)
     } else {
       const inner = e.inset ? ' inset' : ''
-      const value = `${e.color} ${e.x}px ${e.y}px ${e.radius}px ${e.spread}px${inner}`
+      const value = `${e.color} ${e.x}px ${e.y}px ${e.radius}px ${(e.spread || 0)}px${inner}`
       list['box-shadow'].push(value)
     }
   },

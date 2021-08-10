@@ -70,8 +70,8 @@ export default {
     if (fill.type === 'solid-color') {
       return HelperColor.getBackgroundSolidColor(fill.color)
     } else if (fill.type === 'linear-gradient') {
-      const angle = this.getGradientLinearAngle(fill.angle.x1, fill.angle.x2, fill.angle.y1,
-        fill.angle.y2)
+      const angle = this.getGradientLinearAngle(fill.coords.x1, fill.coords.x2, fill.coords.y1,
+        fill.coords.y2)
       const stops = this.getGradientStops(fill.stops)
       return `linear-gradient(${angle}deg, ${stops})`
     } else if (fill.type === 'radial-gradient') {

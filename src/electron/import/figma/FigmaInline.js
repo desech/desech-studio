@@ -1,10 +1,10 @@
 import HelperElement from '../../../js/helper/HelperElement.js'
 import FigmaText from './style/FigmaText.js'
-import FigmaFill from './style/FigmaFill.js'
+import FigmaFillStroke from './style/FigmaFillStroke.js'
 import ImportCommon from '../ImportCommon.js'
 
 export default {
-  async addInlineText (data, node, settings) {
+  async addInlineText (data, node) {
     if (data.designType !== 'text') return
     const inline = await this.processInlineText(data, node)
     data.content = ImportCommon.injectInlineElements(node.characters, inline)
@@ -42,17 +42,20 @@ export default {
   },
 
   async addInlineStyle (data, ref, override) {
-    const style = {
-      text: FigmaText.getText(override, { designType: 'text' }),
-      fills: await FigmaFill.getFills({ designType: 'text' }, { fills: override.fills || [] })
-    }
+    const style = await this.getElementStyle(override)
     if (!style.text && !style.fills) return false
-    data.inlineChildren.push({
-      desechType: 'text',
-      ref,
-      style
-    })
+    data.inlineChildren.push({ desechType: 'text', ref, style })
     return true
+  },
+
+  async getElementStyle (override) {
+    return {
+      text: FigmaText.getText(override, { designType: 'text' }),
+      // we don't have the settings parameter because images are ignored for text elements
+      fills: await FigmaFillStroke.getFills({ designType: 'text' }, {
+        fills: override.fills || []
+      })
+    }
   },
 
   getInlineHtml (start, end, node, ref, override) {

@@ -4,11 +4,11 @@ import FigmaApi from '../FigmaApi.js'
 import Language from '../../../lib/Language.js'
 import FigmaCommon from '../FigmaCommon.js'
 import File from '../../../file/File.js'
-import ImportCommon from '../../ImportCommon.js'
+import ImportImage from '../../ImportImage.js'
 
 export default {
   async fetchImage (node, settings) {
-    const fileName = ImportCommon.getImageName(node.name, node.id, settings.allImages)
+    const fileName = ImportImage.getImageName(node.name, node.id, settings.allImages)
     const data = await this.getImageFile(fileName, 1, node, settings)
     await this.getImageFile(fileName + '@2x', 2, node, settings)
     await this.getImageFile(fileName + '@3x', 3, node, settings)

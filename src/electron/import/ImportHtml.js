@@ -6,6 +6,7 @@ import FileParse from '../file/FileParse.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import ImportPosition from './ImportPosition.js'
 import ImportCommon from './ImportCommon.js'
+import ImportImage from './ImportImage.js'
 
 export default {
   processHtml (elements, params, file) {
@@ -79,7 +80,7 @@ export default {
   // if an svg icon becomes a block parent, place the svg icon as a background image
   convertBackgroundSvg (element, params) {
     if (element.desechType !== 'block' || !element.content) return
-    const name = ImportCommon.getSvgName(element, params.svgImageNames) + '.svg'
+    const name = ImportImage.getSvgName(element, params.svgImageNames) + '.svg'
     const image = File.resolve(params.folder, 'asset/image', name)
     fs.writeFileSync(image, element.content)
     element.style.fills = [{ type: 'image', image }]

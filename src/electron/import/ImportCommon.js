@@ -13,23 +13,6 @@ export default {
     return name.toLowerCase().replace(/([^a-z0-9])/g, '-').replace(/-+/g, '-')
   },
 
-  getImageName (string, id, images) {
-    let name = this.sanitizeName(string)
-    if (images[name] || ['background', 'image', 'arrow-down'].includes(name)) {
-      name += '-' + this.sanitizeName(id)
-    }
-    images[name] = true
-    return name
-  },
-
-  getSvgName (node, images) {
-    let name = this.sanitizeName(node.name)
-    if (images[name]) name += '-' + node.width + '-' + node.height
-    if (images[name]) name += '-' + this.sanitizeName(node.id)
-    images[name] = true
-    return name
-  },
-
   getImageFill (element) {
     if (!element.style.fills) return
     for (const fill of element.style.fills) {

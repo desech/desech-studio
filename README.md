@@ -229,53 +229,7 @@ git clone git@github.com:desech/studio-angular.git desech-studio-angular
 git clone git@github.com:desech/studio-vue.git desech-studio-vue
 ```
 
-## Import
-
-### How the import works
-
-- pages will be converted to folders
-- top level visible groups or frames/artboards will be converted to files
-- only svg and image elements with export options are imported
-- delete the `_desech/cache`folder to re-fetch the svg images
-- delete the `asset/image` folder to re-fetch the bitmap images
-- font size is by default 16px, so it's skipped as a specific style
-- text color is by default black, so it's skipped as a specific style
-
-### Known bugs and issues
-
-- linear and radial gradients have a wrong angle and slightly off color positions
-- can't use paragraph indent and paragraph spacing because our text element is only one `<p>`
-- in sketch and adobexd, local fonts that are not google fonts, are ignored
-- figma:
-  - rotation is not supported because I can't figure out the math behind it
-  - we skip background images for text because the exported image will contain the text too
-  - arrows are reported at 0 height, so they will have a smaller height than what's in figma
-- adobexd:
-  - text width and height is approximated, wait for adobexd to provide exact values
-  - text-transform is not present in the style property, only in the rangeStyles which is buggy
-    - wait for adobexd to add it in the style too
-  - polygons with rounded corners and star ratios are not supported
-  - masked vectors are not supported because we don't know how to calculate the transform
-  - complex svg shapes only allow path and compound children at the top level
-    - before exporting a group of shapes, make sure they are converted to paths
-      and they are nested at the top level not inside inner groups
-  - autolayout is not supported because it applies to groups and they have no x,y,w,h
-
-### TODO
-
-- adobexd
-  - bring align-self back to adobexd
-- sketch
-  - rotate
-  - lines are `<hr>`; no bg color on `<hr>`
-  - filter shadow on svg; opacity effect and bg opacity
-  - set blend mode to effects
-  - remove empty em's - check AdobexdInline
-  - svg masked shapes
-  - background image for all type of svgs
-  - autolayout
-
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------
 
 ## Build Studio Linux
 

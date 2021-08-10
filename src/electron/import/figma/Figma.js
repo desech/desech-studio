@@ -19,7 +19,7 @@ export default {
     this._data = {}
     this._settings = {
       ...params,
-      // ImportCommon.getImageName() uses this
+      // ImportImage.getImageName() uses this
       allImages: {}
     }
   },

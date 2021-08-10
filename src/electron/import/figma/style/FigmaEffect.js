@@ -26,13 +26,19 @@ export default {
   },
 
   processEffectType (filter, record) {
-    record.radius = Math.round(filter.radius)
-    if (record.type === 'shadow') {
-      record.inset = (filter.type === 'INNER_SHADOW')
-      record.color = FigmaStyle.getColor(filter)
-      record.x = Math.round(filter.offset.x)
-      record.y = Math.round(filter.offset.y)
-      record.spread = Math.round(filter.spread) || 0
+    if (record.type === 'blur') {
+      record.amount = Math.round(filter.radius)
+    } else { // shadow
+      this.addShadow(filter, record)
     }
+  },
+
+  addShadow (filter, record) {
+    record.inset = (filter.type === 'INNER_SHADOW')
+    record.color = FigmaStyle.getColor(filter)
+    record.x = Math.round(filter.offset.x)
+    record.y = Math.round(filter.offset.y)
+    record.radius = Math.round(filter.radius)
+    record.spread = Math.round(filter.spread) || 0
   }
 }

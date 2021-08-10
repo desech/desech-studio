@@ -27,7 +27,7 @@ export default {
     // https://www.figma.com/developers/api#node-types
     switch (node.type) {
       case 'FRAME': case 'RECTANGLE': case 'LINE': case 'ELLIPSE': case 'GROUP':
-      case 'COMPONENT': case 'COMPONENT_SET': case 'INSTANCE':
+      case 'COMPONENT': case 'INSTANCE':
         return (node.exportSettings && node.exportSettings[0]?.format === 'SVG')
           ? 'icon'
           : 'block'
@@ -35,7 +35,7 @@ export default {
         return 'text'
       case 'VECTOR': case 'REGULAR_POLYGON': case 'STAR': case 'BOOLEAN_OPERATION':
         return 'icon'
-      case 'SLICE':
+      case 'SLICE': case 'COMPONENT_SET':
         // ignored
     }
   },

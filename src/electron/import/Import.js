@@ -36,6 +36,8 @@ export default {
   // we also add later: svgImageNames, fonts
   async importFile (params) {
     params.svgImageNames = []
+    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Parsing started'),
+      params.type)
     const data = await this.getImportData(params)
     this.backupImportFile(data, params)
     if (ExtendJS.isEmpty(data)) {
@@ -43,12 +45,16 @@ export default {
       EventMain.ipcMainInvoke('mainImportProgress', msg, params.type, params.folder)
       return
     }
+    await this.processImportData(data, params)
+    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'),
+      params.type, params.folder)
+  },
+
+  async processImportData (data, params) {
     ImportFile.cleanFiles(data)
     this.saveViewportDimensions(data, params)
     params.fonts = await ImportFont.installFonts(data, params)
     ImportFile.saveAllHtmlCssFiles(data, params)
-    EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Import finished'),
-      params.type, params.folder)
   },
 
   async getImportData (params) {

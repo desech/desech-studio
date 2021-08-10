@@ -1,5 +1,4 @@
 import FigmaApi from './FigmaApi.js'
-import Language from '../../lib/Language.js'
 import ImportCommon from '../ImportCommon.js'
 import FigmaCommon from './FigmaCommon.js'
 import FigmaElement from './FigmaElement.js'
@@ -12,7 +11,6 @@ export default {
   async getImportData (params) {
     this.init(params)
     const data = await FigmaApi.apiCall(`files/${params.file}?geometry=paths`, params.token)
-    FigmaCommon.sendProgress(Language.localize('Parsing started'))
     await this.parsePages(data.document.children)
     return this._data
   },

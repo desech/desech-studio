@@ -1,3 +1,4 @@
+import ImportFont from '../../ImportFont.js'
 import ExtendJS from '../../../../js/helper/ExtendJS.js'
 
 export default {
@@ -6,8 +7,7 @@ export default {
     const record = {}
     if (style.font?.family) record.fontFamily = style.font.family
     if (style.font?.size) record.fontSize = Math.round(style.font.size)
-    if (style.font?.style?.includes('Bold')) record.fontWeight = '700'
-    if (style.font?.style?.includes('Italic')) record.fontStyle = 'italic'
+    this.addBoldItalic(style.font?.postscriptName?.toLowerCase(), record)
     this.addLineHeight(style, record)
     this.addLetterSpacing(style, record)
     this.addTextTransform(style, record)
@@ -15,6 +15,13 @@ export default {
     this.addVerticalAlign(style, record)
     this.addTextDecoration(style, record)
     if (!ExtendJS.isEmpty(record)) return record
+  },
+
+  addBoldItalic (font, record) {
+    if (!font) return
+    const weight = ImportFont.getWeight(font)
+    if (weight) record.fontWeight = weight
+    if (font.includes('italic')) record.fontStyle = 'italic'
   },
 
   addLineHeight (style, record) {
@@ -47,7 +54,7 @@ export default {
   // right now it only works with inline text
   addVerticalAlign (style, record) {
     const value = style.textAttributes?.verticalAlign
-    if (value) record.verticalAlign = (parseInt(value) < 0) ? 'sub' : 'sup'
+    if (value) record.verticalAlign = (parseInt(value) < 0) ? 'sub' : 'super'
   },
 
   // @todo wait for adobe to add decoration to `style` too

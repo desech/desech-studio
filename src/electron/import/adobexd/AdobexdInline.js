@@ -7,7 +7,9 @@ export default {
   async addInlineText (data, node) {
     if (data.designType !== 'text') return
     const inline = await this.processInlineText(data, node)
-    data.content = ImportCommon.injectInlineElements(node.text.rawText, inline)
+    // because of the imprecise width/height of our text, we can't have new lines
+    const text = node.text.rawText.replaceAll('\n', ' ')
+    data.content = ImportCommon.injectInlineElements(text, inline)
   },
 
   // don't use meta.ux.rangedStyles because it's buggy as hell

@@ -17,7 +17,8 @@ export default {
     if (data.designType === 'polygon') {
       const points = this.getPolygonPoints(node.shape.points)
       return `polygon points="${points}"`
-    } else { // path, compound
+    } else {
+      // path, compound; can't be anything else because only these shapes can be icons
       return `path d="${node.shape.path}"`
     }
   },

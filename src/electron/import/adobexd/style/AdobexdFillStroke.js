@@ -56,6 +56,7 @@ export default {
 
   getFillRadialGradient (fill, record) {
     // these coordinates are used by svg; @todo make use of them in css too
+    // angular gradients have the meta coordinates
     record.coords = {
       cx: fill.gradient.cx || fill.gradient.meta.ux.x,
       cy: fill.gradient.cx || fill.gradient.meta.ux.y,

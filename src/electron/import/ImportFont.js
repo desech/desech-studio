@@ -85,5 +85,27 @@ export default {
       EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
       await Font.addFont(font.url, null, params.folder)
     }
+  },
+
+  getWeight (font) {
+    if (!font) return
+    for (const [name, value] of Object.entries(this.getWeights())) {
+      if (font.includes(name)) return value
+    }
+  },
+
+  getWeights () {
+    // we want to sort them by most specific words first
+    return {
+      thin: 100,
+      semilight: 200,
+      light: 300,
+      regular: 400,
+      medium: 500,
+      semibold: 600,
+      extrabold: 800,
+      bold: 700,
+      black: 900
+    }
   }
 }

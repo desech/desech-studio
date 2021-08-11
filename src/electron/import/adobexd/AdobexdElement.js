@@ -46,7 +46,7 @@ export default {
         }
         break
       case 'group':
-        // symbols are also of this type
+        // components are also of this type
         return 'block'
       case 'text':
         return 'text'

@@ -1,14 +1,17 @@
 import ImportCommon from '../ImportCommon.js'
 
 export default {
+  _lineHeight: 1.2,
+  _charSpace: 2,
+
   getX (parentX, node) {
     return Math.round((node.transform?.tx || 0) + parentX)
   },
 
   getY (parentY, desechType, node) {
     let y = node.transform?.ty || 0
-    if (desechType === 'text' && node.text.frame.type !== 'area') {
-      y -= this.getHeight(desechType, node)
+    if (desechType === 'text' && node.text.frame.type === 'positioned') {
+      y -= Math.round(node.style.font.size * this._lineHeight)
     }
     if (node.shape?.type === 'line') {
       y -= Math.round(node.style.stroke.width / 2)
@@ -45,8 +48,9 @@ export default {
     }
   },
 
+  // "positioned" needs y/width/height, "autoHeight" needs height
   getTextWidth (node) {
-    if (node.text.frame.type === 'area') {
+    if (node.text.frame.width) {
       return parseInt(node.text.frame.width)
     } else {
       // @todo wait for adobexd to provide exact values
@@ -54,19 +58,39 @@ export default {
       // and the W char is, for some fonts, the same as the font size
       // but we don't want to approximate a bigger width because it will clip,
       // so we want a smaller width in order to fit
-      return Math.round(node.style.font.size / 2 * node.text.rawText.length)
+      // we also need to take into account new lines to break the text
+      return Math.round(node.style.font.size / this._charSpace * this.getLineCharCount(node))
     }
   },
 
   getTextHeight (node) {
-    if (node.text.frame.type === 'area') {
+    if (node.text.frame.height) {
       return parseInt(node.text.frame.height)
+    } else if (node.text.frame.type === 'autoHeight') {
+      // for auto height we need to calculate the lines using `paragraphs.lines` not `\n`
+      return Math.round(node.style.font.size * this._lineHeight * this.getDataLinesCount(node))
     } else {
       // @todo wait for adobexd to provide exact values
-      // the average line height is 1.2, but we have fonts with 0.5 and some with 2.3,
-      // but we will use a value of 1 to have the height a bit smaller to not clip
-      return Math.round(node.style.font.size * 1)
+      // the average line height is 1.2, but we have fonts with 0.5 and some with 2.3
+      return Math.round(node.style.font.size * this._lineHeight * this.getNewLinesCount(node))
     }
+  },
+
+  getLineCharCount (node) {
+    const lines = this.getNewLinesCount(node)
+    return Math.round(node.text.rawText.length / lines)
+  },
+
+  getNewLinesCount (node) {
+    return Array.from(node.text.rawText.matchAll('\n')).length + 1
+  },
+
+  getDataLinesCount (node) {
+    let count = 0
+    for (const paragraph of node.text.paragraphs) {
+      count += paragraph.lines.length
+    }
+    return count
   },
 
   getShapeWidth (node, extra) {

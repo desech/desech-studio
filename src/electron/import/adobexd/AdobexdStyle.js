@@ -13,6 +13,7 @@ export default {
 
   getAutoLayout (node) {
     // @todo autolayout is not supported because it applies to groups and they have no x,y,w,h
+    // for the same reason we ignore repeat grids and scroll groups
   },
 
   getOpacity (node) {

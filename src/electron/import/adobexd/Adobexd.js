@@ -2,6 +2,7 @@ import Zip from '../../file/Zip.js'
 import File from '../../file/File.js'
 import ImportCommon from '../ImportCommon.js'
 import AdobexdElement from './AdobexdElement.js'
+import ExtendJS from '../../../js/helper/ExtendJS.js'
 
 export default {
   _data: {},
@@ -11,6 +12,7 @@ export default {
   async getImportData (params) {
     this.init(params)
     this.parseFiles()
+    this.parseComponents()
     await this.parseNodes()
     return this._data
   },
@@ -20,6 +22,7 @@ export default {
     this._settings = {
       ...params,
       importFolder: Zip.unzipFileTmp(params.file),
+      components: {},
       // ImportImage.getImageName() uses this
       allImages: {}
     }
@@ -48,6 +51,14 @@ export default {
     }
   },
 
+  parseComponents () {
+    const data = File.getFileData('resources/graphics/graphicContent.agc',
+      this._settings.importFolder)
+    for (const element of data.resources.meta.ux.symbols) {
+      this._settings.components[element.meta.ux.symbolId] = element
+    }
+  },
+
   async parseNodes () {
     for (const file of Object.values(this._data)) {
       const filePath = `artwork/${file.path}/graphics/graphicContent.agc`
@@ -63,9 +74,30 @@ export default {
       const data = await AdobexdElement.getData(node, newPos, this._settings)
       if (!data) continue
       elements.push(data)
-      if (data.desechType !== 'icon' && node.group?.children) {
-        // skip children for icons; this also processes symbols
-        await this.parseElements(node.group.children, elements, artboard, node, newPos)
+      await this.parseChildren(data, elements, artboard, node, newPos)
+    }
+  },
+
+  async parseChildren (data, elements, artboard, node, newPos) {
+    if (data.desechType === 'icon') return
+    const children = this.getComponentChildren(node) || node.group?.children
+    if (!children) return
+    await this.parseElements(children, elements, artboard, node, newPos)
+  },
+
+  getComponentChildren (node) {
+    const component = this._settings.components[node.meta.ux.symbolId]
+    if (!node.meta.ux.symbolId || !component) return
+    const children = (!node.meta.ux.stateId || node.meta.ux.symbolId === node.meta.ux.stateId)
+      ? component.group.children
+      : this.getDifferentStateChildren(node, component)
+    return ExtendJS.cloneData(children)
+  },
+
+  getDifferentStateChildren (node, component) {
+    for (const state of component.meta.ux.states) {
+      if (state.id === node.meta.ux.stateId) {
+        return state.group.children
       }
     }
   }

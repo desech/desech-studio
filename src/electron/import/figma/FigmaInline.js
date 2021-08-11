@@ -44,7 +44,7 @@ export default {
   async addInlineStyle (data, ref, override) {
     const style = await this.getElementStyle(override)
     if (!style.text && !style.fills) return false
-    data.inlineChildren.push({ desechType: 'text', ref, style })
+    data.inlineChildren.push({ desechType: 'text', inline: true, ref, style })
     return true
   },
 

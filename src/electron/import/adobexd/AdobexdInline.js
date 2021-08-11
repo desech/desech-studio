@@ -40,7 +40,7 @@ export default {
       const style = await this.getElementStyle(block)
       if (style.text || style.fills) {
         const ref = HelperElement.generateElementRef()
-        data.inlineChildren.push({ desechType: 'text', ref, style })
+        data.inlineChildren.push({ desechType: 'text', inline: true, ref, style })
         html = `<em class="${ref}">${html}</em>`
       }
     }

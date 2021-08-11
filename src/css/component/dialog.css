@@ -161,7 +161,7 @@ dialog.dialog .dialog-import-loader .dialog-figma-continue {
 }
 
 dialog.dialog .dialog-import-loader ul.loader-progress {
-  max-height: 88px;
+  max-height: 200px;
   overflow: auto;
   font-size: 13px;
 }

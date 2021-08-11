@@ -43,11 +43,15 @@ export default {
     }
   },
 
+  // @todo wait for adobe to add verticalAlign to `style` too
+  // right now it only works with inline text
   addVerticalAlign (style, record) {
     const value = style.textAttributes?.verticalAlign
     if (value) record.verticalAlign = (parseInt(value) < 0) ? 'sub' : 'sup'
   },
 
+  // @todo wait for adobe to add decoration to `style` too
+  // right now it only works with inline text
   addTextDecoration (style, record) {
     const values = style.textAttributes?.decoration
     if (values?.length) record.textDecoration = values.join(' ')

@@ -10,7 +10,7 @@ export default {
     if (!node.style?.fill) return
     const record = { type: this.getType(node.style.fill) }
     await this.processFillType(node.style.fill, record, data, settings)
-    return [record]
+    if (record.type) return [record]
   },
 
   getType (entry) {
@@ -67,7 +67,7 @@ export default {
   async getFillImage (fill, record, data, settings) {
     const image = {
       file: 'resources/' + fill.pattern.meta.ux.uid,
-      ext: File.extname(fill.pattern.href).substring(1),
+      ext: File.extname(fill.pattern.href, true),
       width: fill.pattern.width
     }
     record.image = await ImportImage.processLocalImages(image, data, settings)
@@ -92,10 +92,10 @@ export default {
     if (!AdobexdCommon.isStrokeAvailable(data.desechType, node.style)) return
     const record = {
       size: Math.round(node.style.stroke.width),
-      style: node.style.stroke.dash ? 'dotted' : 'solid',
-      type: this.getType(node.style.stroke.type)
+      dash: node.style.stroke.dash,
+      type: this.getType(node.style.stroke)
     }
-    await this.processFillType(node.style.stroke, node, record, settings)
+    await this.processFillType(node.style.stroke, record, data, settings)
     return record
   }
 }

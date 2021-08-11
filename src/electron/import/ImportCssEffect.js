@@ -24,7 +24,7 @@ export default {
     if (!effects) return
     for (const effect of effects) {
       if (effect.type === 'blur') {
-        list.filter.push(`blur(${Math.round(effect.radius)}px)`)
+        list.filter.push(`blur(${Math.round(effect.amount)}px)`)
       } else { // shadow
         this.addShadowEffect(desechType, effect, list)
       }

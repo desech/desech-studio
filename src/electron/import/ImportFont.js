@@ -25,18 +25,21 @@ export default {
     for (const entry of Object.values(data)) {
       if (entry.type === 'folder') {
         for (const file of Object.values(entry.files)) {
-          this.processFileElementFonts(file.elements, fonts)
+          this.processElementFonts(file.elements, fonts)
         }
       } else { // file
-        this.processFileElementFonts(entry.elements, fonts)
+        this.processElementFonts(entry.elements, fonts)
       }
     }
     return fonts.sort((a, b) => (a.count < b.count) ? 1 : -1)
   },
 
-  processFileElementFonts (elements, fonts) {
+  processElementFonts (elements, fonts) {
     for (const element of elements) {
       this.processElementFont(element.style.text?.fontFamily, fonts)
+      if (element.inlineChildren?.length) {
+        this.processElementFonts(element.inlineChildren, fonts)
+      }
     }
   },
 

@@ -3,7 +3,7 @@ import File from '../File.js'
 
 export default class CustomResourceLoader extends ResourceLoader {
   async fetch (url, options) {
-    if (File.extname(url) === '.css') {
+    if (File.extname(url, true) === 'css') {
       return await this.formatCssFile(url, options)
     }
     return await super.fetch(url, options)

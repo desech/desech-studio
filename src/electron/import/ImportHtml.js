@@ -25,19 +25,27 @@ export default {
     return { body, html }
   },
 
-  prepareElements (elements) {
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].zIndex = i + 1
-      elements[i].children = []
-    }
-  },
-
   getIgnoredElements (nodes) {
     const names = []
     for (const node of nodes) {
       names.push('"' + node.name + '"')
     }
     return names.join(', ')
+  },
+
+  prepareElements (elements) {
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].zIndex = i + 1
+      elements[i].children = []
+      this.removeSvgStyle(elements[i])
+    }
+  },
+
+  // since we used the fills and strokes as svg code, we need to remove them from css
+  removeSvgStyle (element) {
+    if (element.desechType !== 'icon') return
+    delete element.style.fills
+    delete element.style.stroke
   },
 
   getFullHtml (body, params, file) {
@@ -97,6 +105,7 @@ export default {
   getIconNode (element, cls) {
     // imported svgs sometimes have elements without content
     if (!element.content) return ''
+    // because we have new lines between svg tags, this won't remove the width of other nodes
     return element.content.replace('<svg ', `<svg class="${cls}" `)
       .replace(/(<svg.*?) width=".*?"/, '$1')
       .replace(/(<svg.*?) height=".*?"/, '$1')

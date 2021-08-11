@@ -3,7 +3,8 @@ import ExtendJS from '../../../js/helper/ExtendJS.js'
 
 export default {
   getRotation (node) {
-    if (node.meta?.ux?.rotation) return node.meta.ux.rotation
+    // @todo fix the x coordinate because it's wrongly reported
+    // if (node.meta?.ux?.rotation) return node.meta.ux.rotation
   },
 
   getRoundedCorners (shape) {

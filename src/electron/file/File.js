@@ -4,8 +4,9 @@ import path from 'path'
 import { app } from 'electron'
 
 export default {
-  extname (file) {
-    return path.extname(file)
+  extname (file, noDot = false) {
+    const ext = path.extname(file)
+    return noDot ? ext.substring(1) : ext
   },
 
   resolve () {

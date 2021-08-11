@@ -40,7 +40,6 @@ export default {
       params.type)
     const data = await this.getImportData(params)
     this.backupImportFile(data, params)
-    return
     if (ExtendJS.isEmpty(data)) {
       const msg = Language.localize('<span class="error">There are no valid top level visible elements to be imported</span>')
       EventMain.ipcMainInvoke('mainImportProgress', msg, params.type, params.folder)

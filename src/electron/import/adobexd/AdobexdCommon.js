@@ -118,7 +118,6 @@ export default {
   },
 
   isStrokeAvailable (desechType, style) {
-    return (desechType !== 'icon' && desechType !== 'text' && style?.stroke &&
-      style.stroke?.type !== 'none')
+    return (desechType !== 'text' && style?.stroke && style.stroke?.type !== 'none')
   }
 }

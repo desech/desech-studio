@@ -98,18 +98,19 @@ export default {
   },
 
   addCssText (element, css, isBody, rules) {
-    this.addCssTextBasic(element.style.text, isBody, rules)
+    this.addCssTextBasic(element.style.text, element.inline, isBody, rules)
     this.addCssTextExtra(element.style.text, rules)
     this.addCssTextAlign(element, css, rules)
   },
 
-  addCssTextBasic (text, isBody, rules) {
+  addCssTextBasic (text, isInline, isBody, rules) {
     if (!text) return
     if (text.fontFamily && (isBody || text.fontFamily !== this._bodyFont)) {
       // we don't want the body font on anything other than the body
       rules['font-family'] = text.fontFamily
     }
-    if (text.fontSize && text.fontSize !== 16) {
+    if (text.fontSize && (text.fontSize !== 16 || isInline)) {
+      // we ignore font size 16px because it's the default, but not for inline elements
       rules['font-size'] = Math.round(text.fontSize) + 'px'
     }
     if (text.fontWeight && text.fontWeight !== 400) {
@@ -156,7 +157,7 @@ export default {
     const stroke = element.style.stroke
     if (!stroke) return
     this.addStrokeSize(element.designType, Math.round(stroke.size), rules)
-    this.addStrokeStyle(stroke.style, rules)
+    this.addStrokeStyle(stroke.dash, rules)
     this.addStrokeFill(stroke, rules)
   },
 
@@ -174,10 +175,10 @@ export default {
     }
   },
 
-  addStrokeStyle (style, rules) {
+  addStrokeStyle (dash, rules) {
     // although border-image doesn't support it, it is required to properly show the border
     for (const dir of ['top', 'right', 'bottom', 'left']) {
-      rules[`border-${dir}-style`] = style
+      rules[`border-${dir}-style`] = dash ? 'dotted' : 'solid'
     }
   },
 

@@ -4,7 +4,7 @@ import HelperColor from '../../js/helper/HelperColor.js'
 
 export default {
   addCssFills (element, rules, params) {
-    // lines don't have fills
+    // lines don't have fills; we also ignore icons
     if (!element.style.fills || element.designType === 'line') return
     if (element.desechType === 'text') {
       this.addCssFillsText(element.style.fills, rules, params)
@@ -56,12 +56,14 @@ export default {
     rules['background-blend-mode'] += fill.blendMode ||
       HelperStyle.getDefaultProperty('background-size')
     rules['background-size'] += (fill.type === 'image')
-      ? 'contain'
+      ? 'cover'
       : HelperStyle.getDefaultProperty('background-size')
     rules['background-repeat'] += (fill.type === 'image')
       ? 'no-repeat'
       : HelperStyle.getDefaultProperty('background-repeat')
-    rules['background-position'] += HelperStyle.getDefaultProperty('background-position')
+    rules['background-position'] += (fill.type === 'image')
+      ? 'center center'
+      : HelperStyle.getDefaultProperty('background-position')
     rules['background-attachment'] += HelperStyle.getDefaultProperty('background-attachment')
     rules['background-origin'] += HelperStyle.getDefaultProperty('background-origin')
   },

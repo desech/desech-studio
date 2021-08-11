@@ -100,12 +100,16 @@ export default {
 
   async moveToFolder (from, to) {
     const newPath = File.moveToFolder(from, to)
-    if (File.extname(from) === '.html') await this.updateCssFile(from, newPath)
+    if (File.extname(from, true) === 'html') {
+      await this.updateCssFile(from, newPath)
+    }
   },
 
   async renamePath (file, name) {
     const newPath = File.renamePath(file, name)
-    if (File.extname(file) === '.html') await this.updateCssFile(file, newPath)
+    if (File.extname(file, true) === 'html') {
+      await this.updateCssFile(file, newPath)
+    }
   },
 
   async updateCssFile (oldPath, newPath) {

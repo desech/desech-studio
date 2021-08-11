@@ -131,8 +131,8 @@ export default {
     const record = {
       // @todo with `line` it says the size is 5 when it's 20; figma should fix it
       size: Math.round(node.strokeWeight),
-      // @todo dotted style doesn't work on frames; figma should fix it
-      style: node.strokeDashes ? 'dotted' : 'solid',
+      // @todo dotted border doesn't work on frames; figma should fix it
+      dash: node.strokeDashes,
       type: this.getType(stroke.type)
     }
     await this.processFillType(stroke, node, record, settings)

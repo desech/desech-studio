@@ -7,26 +7,30 @@ export default {
     for (const filter of node.style.filters) {
       if (filter.visible === false) continue
       const record = this.getEffect(filter)
-      records.push(record)
+      if (record) records.push(record)
     }
     if (records.length) return records
   },
 
   getEffect (filter) {
-    const record = { type: this.getEffectType(filter.type) }
+    const record = { type: this.getEffectType(filter) }
     this.processEffectType(filter, record)
-    return record
+    if (record.type) return record
   },
 
-  getEffectType (type) {
-    return (type === 'uxdesign#blur') ? 'blur' : 'shadow'
+  getEffectType (filter) {
+    // allow only object blur, ignore background blur
+    if (filter.type === 'uxdesign#blur' && !filter.params.backgroundEffect) {
+      return 'blur'
+    } else if (filter.type === 'dropShadow' || filter.type === 'uxdesign#innerShadow') {
+      return 'shadow'
+    }
   },
 
   processEffectType (filter, record) {
     if (record.type === 'blur') {
-      // allow only object blur, ignore background blur
       record.amount = Math.round(filter.params.blurAmount)
-    } else { // shadow
+    } else if (record.type === 'shadow') {
       this.addShadow(filter.params, record)
     }
   },
@@ -37,6 +41,7 @@ export default {
     record.color = AdobexdStyle.getColor(shadow.color)
     record.x = Math.round(shadow.dx)
     record.y = Math.round(shadow.dy)
+    // this is reported as half the value so 3 is 1.5, which rounded becomes 2
     record.radius = Math.round(shadow.r)
   }
 }

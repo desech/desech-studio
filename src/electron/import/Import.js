@@ -35,6 +35,7 @@ export default {
   // params = type, folder, file, token, settings
   // we also add later: svgImageNames, fonts
   async importFile (params) {
+    // @todo closing the import dialog should stop the import process
     params.svgImageNames = []
     EventMain.ipcMainInvoke('mainImportProgress', Language.localize('Parsing started'),
       params.type)

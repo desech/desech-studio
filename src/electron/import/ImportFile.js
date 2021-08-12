@@ -8,8 +8,23 @@ import ImportCss from './ImportCss.js'
 
 export default {
   cleanFiles (data) {
-    this.renameFirstFileToIndex(data)
     this.removeEmptyFiles(data)
+    this.renameFirstFileToIndex(data)
+  },
+
+  removeEmptyFiles (data) {
+    for (const entry of Object.values(data)) {
+      if (entry.type === 'folder') {
+        if (!ExtendJS.isEmpty(data[entry.name].files)) {
+          this.removeEmptyFiles(data[entry.name].files)
+        }
+        if (ExtendJS.isEmpty(data[entry.name].files)) {
+          delete data[entry.name]
+        }
+      } else if (!data[entry.name].elements.length) {
+        delete data[entry.name]
+      }
+    }
   },
 
   // take the first file and rename it to index
@@ -32,21 +47,6 @@ export default {
     const file = Object.keys(data[folder].files)[0]
     data.index = { ...data[folder].files[file], name: 'index' }
     delete data[folder].files[file]
-  },
-
-  removeEmptyFiles (data) {
-    for (const entry of Object.values(data)) {
-      if (entry.type === 'folder') {
-        if (!ExtendJS.isEmpty(data[entry.name].files)) {
-          this.removeEmptyFiles(data[entry.name].files)
-        }
-        if (ExtendJS.isEmpty(data[entry.name].files)) {
-          delete data[entry.name]
-        }
-      } else if (!data[entry.name].elements.length) {
-        delete data[entry.name]
-      }
-    }
   },
 
   saveAllHtmlCssFiles (data, params) {

@@ -56,14 +56,8 @@ export default {
       content: '',
       style: {},
       inlineChildren: [],
-      debug: this.cloneNode(node)
+      debug: ExtendJS.cloneData(node)
     }
-  },
-
-  cloneNode (node) {
-    const clone = ExtendJS.cloneData(node)
-    delete clone.children
-    return clone
   },
 
   async addStyle (data, node, settings) {

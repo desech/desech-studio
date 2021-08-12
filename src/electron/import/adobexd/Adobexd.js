@@ -2,7 +2,7 @@ import Zip from '../../file/Zip.js'
 import File from '../../file/File.js'
 import ImportCommon from '../ImportCommon.js'
 import AdobexdElement from './AdobexdElement.js'
-import ExtendJS from '../../../js/helper/ExtendJS.js'
+import AdobexdComponent from './AdobexdComponent.js'
 
 export default {
   _data: {},
@@ -80,25 +80,9 @@ export default {
 
   async parseChildren (data, elements, artboard, node, newPos) {
     if (data.desechType === 'icon') return
-    const children = this.getComponentChildren(node) || node.group?.children
+    const componentChildren = AdobexdComponent.getChildren(node, this._settings.components)
+    const children = componentChildren || node.group?.children
     if (!children) return
     await this.parseElements(children, elements, artboard, node, newPos)
-  },
-
-  getComponentChildren (node) {
-    const component = this._settings.components[node.meta.ux.symbolId]
-    if (!node.meta.ux.symbolId || !component) return
-    const children = (!node.meta.ux.stateId || node.meta.ux.symbolId === node.meta.ux.stateId)
-      ? component.group.children
-      : this.getDifferentStateChildren(node, component)
-    return ExtendJS.cloneData(children)
-  },
-
-  getDifferentStateChildren (node, component) {
-    for (const state of component.meta.ux.states) {
-      if (state.id === node.meta.ux.stateId) {
-        return state.group.children
-      }
-    }
   }
 }

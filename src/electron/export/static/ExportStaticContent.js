@@ -129,7 +129,9 @@ export default {
       if (node.classList.contains('text')) node.classList.remove('text')
       const ref = this.getRefFromClasses(node)
       if (!css.includes('.' + ref)) node.classList.remove(ref)
-      if (!node.className) node.removeAttributeNS(null, 'class')
+      if (!node.getAttributeNS(null, 'class')) {
+        node.removeAttributeNS(null, 'class')
+      }
     }
   },
 

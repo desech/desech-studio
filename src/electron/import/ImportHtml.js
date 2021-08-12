@@ -9,16 +9,16 @@ import ImportCommon from './ImportCommon.js'
 import ImportImage from './ImportImage.js'
 
 export default {
-  processHtml (elements, params, file) {
+  processHtml (artboard, params, file) {
     const msg = Language.localize('Saving html file <b>{{file}}</b>',
       { file: File.basename(file) })
     EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
-    this.prepareElements(elements)
-    const body = ImportPosition.buildStructure(elements, params, file)
-    if (elements.length) {
+    this.prepareElements(artboard.elements)
+    const body = ImportPosition.buildStructure(artboard, params, file)
+    if (artboard.elements.length) {
       // @todo remove this when we improve our ImportPosition script
       const msg = Language.localize('<span class="error">{{count}} element(s) have been ignored - {{elements}}</span>',
-        { count: elements.length, elements: this.getIgnoredElements(elements) })
+        { count: artboard.elements.length, elements: this.getIgnoredElements(artboard.elements) })
       EventMain.ipcMainInvoke('mainImportProgress', msg)
     }
     const html = this.getFullHtml(body, params, file)

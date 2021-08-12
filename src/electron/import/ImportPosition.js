@@ -3,11 +3,11 @@ import ImportPositionCommon from './ImportPositionCommon.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
-  buildStructure (nodes, params, file) {
-    this.cleanUnstyledBlocks(nodes)
-    const body = this.getBody(params.fonts)
-    this.positionNodes(nodes, body, body)
-    ImportPositionCommon.debugEnd(nodes, body)
+  buildStructure (artboard, params, file) {
+    this.cleanUnstyledBlocks(artboard.elements)
+    const body = this.getBody(artboard.style, params.fonts)
+    this.positionNodes(artboard.elements, body, body)
+    ImportPositionCommon.debugEnd(artboard.elements, body)
     ImportPositionCommon.backupBodyToFile(body, params, file)
     return body
   },
@@ -20,7 +20,7 @@ export default {
     }
   },
 
-  getBody (fonts) {
+  getBody (style, fonts) {
     return {
       desechType: 'block',
       name: 'body',
@@ -29,14 +29,20 @@ export default {
       width: 99999999,
       height: 99999999,
       ref: HelperElement.generateElementRef(),
-      style: {
-        text: {
-          // add the first font to the body
-          fontFamily: fonts[0] ? fonts[0].name : undefined
-        }
-      },
+      style: this.getBodyStyle(style, fonts),
       isContainer: true,
       children: []
+    }
+  },
+
+  getBodyStyle (style, fonts) {
+    // add the existing style from the artboard
+    return {
+      ...style,
+      text: {
+        // add the first font to the body
+        fontFamily: fonts[0] ? fonts[0].name : undefined
+      }
     }
   },
 

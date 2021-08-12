@@ -37,16 +37,17 @@ export default {
     }
   },
 
-  getFile (element, name) {
-    const bounds = element['uxdesign#bounds']
+  getFile (artboard, name) {
+    const bounds = artboard['uxdesign#bounds']
     return {
       type: 'file',
-      path: element.path,
+      path: artboard.path,
       name,
       x: Math.round(bounds.x),
       y: Math.round(bounds.y),
       width: Math.round(bounds.width),
       height: Math.round(bounds.height),
+      style: {},
       elements: []
     }
   },
@@ -63,8 +64,10 @@ export default {
     for (const file of Object.values(this._data)) {
       const filePath = `artwork/${file.path}/graphics/graphicContent.agc`
       const data = File.getFileData(filePath, this._settings.importFolder)
-      const children = data.children[0].artboard.children
-      await this.parseElements(children, this._data[file.name].elements, this._data[file.name])
+      const fileData = this._data[file.name]
+      await AdobexdElement.addStyle(fileData, data.children[0], this._settings)
+      const elements = data.children[0].artboard.children
+      await this.parseElements(elements, fileData.elements, fileData)
     }
   },
 

@@ -65,9 +65,9 @@ export default {
     }
   },
 
-  saveHtmlCssFile (entry, params, htmlFile) {
+  saveHtmlCssFile (artboard, params, htmlFile) {
     // data.body will contain the body element with all its children
-    const data = ImportHtml.processHtml(entry.elements, params, htmlFile)
+    const data = ImportHtml.processHtml(artboard, params, htmlFile)
     fs.writeFileSync(htmlFile, data.html)
     const pageCssFile = HelperFile.getPageCssFile(htmlFile, params.folder)
     const pageCss = ImportCss.processCss(data.body, params)

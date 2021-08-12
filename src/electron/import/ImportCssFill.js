@@ -3,13 +3,19 @@ import HelperStyle from '../../js/helper/HelperStyle.js'
 import HelperColor from '../../js/helper/HelperColor.js'
 
 export default {
-  addCssFills (element, rules, params) {
+  addCssFills (element, isBody, rules, params) {
     // lines don't have fills; we also ignore icons
-    if (!element.style.fills || element.designType === 'line') return
+    const fills = element.style.fills
+    if (!fills || element.designType === 'line') return
+    // ignore the white background on the artboard body
+    if (isBody && fills.length === 1 && fills[0].type === 'solid-color' &&
+      fills[0].color === 'rgb(255, 255, 255)') {
+      return
+    }
     if (element.desechType === 'text') {
-      this.addCssFillsText(element.style.fills, rules, params)
+      this.addCssFillsText(fills, rules, params)
     } else if (element.desechType === 'block') {
-      this.addCssFillsBackground(element.style.fills, rules, params)
+      this.addCssFillsBackground(fills, rules, params)
     }
   },
 

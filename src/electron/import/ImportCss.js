@@ -40,7 +40,7 @@ export default {
     this.addCssWidthHeight(element, isBody, rules)
     this.addCssLayout(element.style.layout, rules)
     this.addCssText(element, css, isBody, rules)
-    ImportCssFill.addCssFills(element, rules, this._params)
+    ImportCssFill.addCssFills(element, isBody, rules, this._params)
     this.addCssStroke(element, rules)
     this.addCssRoundedCorners(element, rules)
     ImportCssEffect.addCssEffects(element, rules)
@@ -48,7 +48,10 @@ export default {
   },
 
   addCssWidthHeight (element, isBody, rules) {
-    if (isBody) return
+    if (isBody) {
+      rules.height = '100%'
+      return
+    }
     if (element.width !== 99999999) rules.width = Math.round(element.width) + 'px'
     if (element.height !== 99999999 && element.designType !== 'line' &&
       element.desechType !== 'text') {

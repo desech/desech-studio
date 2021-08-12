@@ -50,9 +50,12 @@ export default {
   addCssWidthHeight (element, isBody, rules) {
     if (isBody) {
       rules.height = '100%'
+      rules['align-content'] = 'start'
       return
     }
-    if (element.width !== 99999999) rules.width = Math.round(element.width) + 'px'
+    if (element.width !== 99999999) {
+      rules.width = Math.round(element.width) + 'px'
+    }
     if (element.height !== 99999999 && element.designType !== 'line' &&
       element.desechType !== 'text') {
       rules.height = Math.round(element.height) + 'px'

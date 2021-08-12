@@ -77,6 +77,7 @@ export default {
   },
 
   importProgress (html, type, folder) {
+    if (!document.getElementById('page-start')) return
     const dialog = this.initDialogImport(type)
     if (!dialog) return
     const list = dialog.getElementsByClassName('loader-progress')[0]

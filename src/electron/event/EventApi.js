@@ -2,7 +2,6 @@ import { ipcMain } from 'electron'
 import EventMain from './EventMain.js'
 import Auth from '../main/Auth.js'
 import FigmaApi from '../import/figma/FigmaApi.js'
-import Project from '../project/Project.js'
 
 export default {
   addEvents () {

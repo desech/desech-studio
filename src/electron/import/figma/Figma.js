@@ -42,6 +42,7 @@ export default {
       if (!node.children?.length || node.visible === false) continue
       const name = ImportCommon.getName(node.name, files)
       files[name] = this.getFileData(node, name)
+      FigmaElement.addStyle(files[name], node, this._settings)
       await this.parseElements(node.children, files[name].elements, files[name])
     }
   },
@@ -54,6 +55,7 @@ export default {
       y: Math.round(node.absoluteBoundingBox.y),
       width: FigmaCommon.getWidth('block', node),
       height: FigmaCommon.getHeight('block', node),
+      style: {},
       elements: []
     }
   },

@@ -113,7 +113,7 @@ export default {
     const folders = this.getExportFolder()
     if (!folders) return
     const zipFolder = File.sanitizePath(folders[0])
-    await Zip.exportFolder(zipFolder, currentFolder)
+    await Zip.exportProjectFolder(zipFolder, currentFolder)
   },
 
   getExportFolder () {

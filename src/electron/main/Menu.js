@@ -45,7 +45,7 @@ export default {
         {
           label: Language.localize('Open Project'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'openProject')
+            await EventMain.handleEvent(EventMenu, 'initProject')
           }
         },
         { type: 'separator' },

@@ -6,7 +6,9 @@ import File from '../../file/File.js'
 import ExportCommon from '../ExportCommon.js'
 
 export default {
-  getPageHtml (folder, file) {
+  getPageHtml (folder, file, css) {
+    // we replace <template>'s because they are parsed differently than regular html elements,
+    // and we don't want that
     const rand = HelperCrypto.generateSmallHash()
     const initialHtml = this.replaceTemplate(fs.readFileSync(file).toString(), rand)
     const dom = new JSDOM(initialHtml)
@@ -14,6 +16,7 @@ export default {
     this.buildComponents(folder, document, document)
     this.replaceCssLinks(document)
     this.replaceJsScripts(document)
+    this.cleanClasses(document, css)
     const html = this.replaceTemplateBack(this.regexHtmlRender(dom.serialize()), rand)
     return FileParse.beautifyHtml(html)
   },
@@ -118,5 +121,21 @@ export default {
       attrs.push(`${name}="${value}"`)
     }
     return attrs.join(' ')
+  },
+
+  cleanClasses (document, css) {
+    // getElementsByClassName doesn't work correctly with jsdom
+    for (const node of document.querySelectorAll('[class*="e0"]')) {
+      if (node.classList.contains('text')) node.classList.remove('text')
+      const ref = this.getRefFromClasses(node)
+      if (!css.includes('.' + ref)) node.classList.remove(ref)
+      if (!node.className) node.removeAttributeNS(null, 'class')
+    }
+  },
+
+  getRefFromClasses (node) {
+    for (const cls of node.classList) {
+      if (cls.startsWith('e0')) return cls
+    }
   }
 }

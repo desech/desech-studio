@@ -9,7 +9,7 @@ export default {
     await File.syncFolder(data.rootMiscFiles, data.folder, exportDir)
     await this.syncCss(data.folder, data.compiledCss)
     await this.syncJs(data.folder)
-    this.syncPages(data.folder, data.htmlFiles)
+    this.syncPages(data.folder, data.htmlFiles, data.compiledCss)
   },
 
   async syncCss (folder, css) {
@@ -44,14 +44,14 @@ export default {
     await File.syncFolder(files, folder, destFolder, { checkSame: true, ignoreFiles })
   },
 
-  syncPages (folder, htmlFiles) {
+  syncPages (folder, htmlFiles, css) {
     for (const file of htmlFiles) {
-      if (!file.isComponent) this.syncPage(folder, file.path)
+      if (!file.isComponent) this.syncPage(folder, file.path, css)
     }
   },
 
-  syncPage (folder, filePath) {
-    const html = ExportStaticContent.getPageHtml(folder, filePath)
+  syncPage (folder, filePath, css) {
+    const html = ExportStaticContent.getPageHtml(folder, filePath, css)
     const exportFile = folder + '/_export' + filePath.replace(folder, '')
     File.createFile(exportFile, html)
   }

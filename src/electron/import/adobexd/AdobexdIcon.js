@@ -5,7 +5,7 @@ import File from '../../file/File.js'
 import EventMain from '../../event/EventMain.js'
 
 export default {
-  async addSvgContent (data, node, settings) {
+  async addSvgContent (data, node) {
     if (data.desechType !== 'icon') return
     const nodeContent = this.getSvgNodeContent(data, node)
     const svgContent = ImportIcon.buildSvgContent(data, nodeContent)

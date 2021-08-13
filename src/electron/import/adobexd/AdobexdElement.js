@@ -32,7 +32,7 @@ export default {
     const data = this.getBasicData(desechType, node, pos)
     await this.addStyle(data, node, settings)
     await AdobexdInline.addInlineText(data, node)
-    await AdobexdIcon.addSvgContent(data, node, settings)
+    await AdobexdIcon.addSvgContent(data, node)
     return data
   },
 

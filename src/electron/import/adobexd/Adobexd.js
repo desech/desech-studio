@@ -62,6 +62,7 @@ export default {
 
   async parseNodes () {
     for (const file of Object.values(this._data)) {
+      // the artboard style is in this json file
       const filePath = `artwork/${file.path}/graphics/graphicContent.agc`
       const data = File.getFileData(filePath, this._settings.importFolder)
       const fileData = this._data[file.name]

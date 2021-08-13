@@ -3,6 +3,7 @@ import File from '../../file/File.js'
 import ImportCommon from '../ImportCommon.js'
 import SketchCommon from './SketchCommon.js'
 import SketchElement from './SketchElement.js'
+import SketchComponent from './SketchComponent.js'
 
 export default {
   _data: {},
@@ -10,6 +11,7 @@ export default {
   // params = type, folder, file, settings
   async getImportData (params) {
     this.init(params)
+    this.parseComponents()
     await this.parseDocument()
     return this._data
   },
@@ -22,6 +24,18 @@ export default {
       components: {},
       // ImportImage.getImageName() uses this
       allImages: {}
+    }
+  },
+
+  parseComponents () {
+    const document = File.getFileData('document.json', this._settings.importFolder)
+    for (const page of document.pages) {
+      const root = File.getFileData(page._ref + '.json', this._settings.importFolder)
+      for (const node of root.layers) {
+        if (node._class === 'symbolMaster') {
+          this._settings.components[node.symbolID] = node
+        }
+      }
     }
   },
 
@@ -48,6 +62,7 @@ export default {
       }
       const name = ImportCommon.getName(node.name, files)
       files[name] = this.getFileData(node, name)
+      await SketchElement.addStyle(files[name], node, this._settings)
       await this.parseElements(node.layers, files[name].elements)
     }
   },
@@ -69,10 +84,15 @@ export default {
       const data = await SketchElement.getData(node, parent, newPos, this._settings)
       if (!data) continue
       elements.push(data)
-      if (node.layers && data.designType !== 'shapegroup') {
-        // shapeGroup children are processed in the svg icon
-        await this.parseElements(node.layers, elements, node, newPos)
-      }
+      await this.parseChildren(data, node, elements, newPos)
     }
+  },
+
+  async parseChildren (data, node, elements, newPos) {
+    if (data.desechType === 'icon') return
+    const componentChildren = SketchComponent.getChildren(node, this._settings.components)
+    const children = componentChildren || node.layers
+    if (!children) return
+    await this.parseElements(children, elements, node, newPos)
   }
 }

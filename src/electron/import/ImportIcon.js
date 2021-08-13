@@ -14,7 +14,8 @@ export default {
     const nodeId = 'node-' + HelperCrypto.generateSmallHash()
     const fillAttr = this.processFills(data.style.fills, nodes, nodeId)
     const strokeAttr = this.processStroke(data.style.stroke, nodes, nodeId)
-    nodes.push(`<${nodeContent} id="${nodeId}" ${fillAttr} ${strokeAttr}/>`)
+    // move it in front so it's the first svg child
+    nodes.unshift(`<${nodeContent} id="${nodeId}" ${fillAttr} ${strokeAttr}/>`)
     // effects will be added by css
     return nodes.join('\n')
   },

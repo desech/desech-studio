@@ -42,7 +42,7 @@ export default {
       if (!node.children?.length || node.visible === false) continue
       const name = ImportCommon.getName(node.name, files)
       files[name] = this.getFileData(node, name)
-      FigmaElement.addStyle(files[name], node, this._settings)
+      await FigmaElement.addStyle(files[name], node, this._settings)
       await this.parseElements(node.children, files[name].elements, files[name])
     }
   },

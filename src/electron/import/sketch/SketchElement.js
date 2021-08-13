@@ -4,6 +4,8 @@ import SketchStyle from './SketchStyle.js'
 import SketchText from './style/SketchText.js'
 import SketchFillStroke from './style/SketchFillStroke.js'
 import SketchEffect from './style/SketchEffect.js'
+import SketchInline from './SketchInline.js'
+import SketchIcon from './SketchIcon.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
 import ExtendJS from '../../../js/helper/ExtendJS.js'
 
@@ -22,18 +24,20 @@ export default {
     if (!desechType || !node.isVisible) return
     const data = this.getBasicData(desechType, node, parentPos)
     await this.addStyle(data, node, settings)
+    SketchInline.addInlineText(data, node)
+    SketchIcon.addSvgContent(data, node)
     return data
   },
 
   getDesechType (node) {
     // ignore slice, MSImmutableHotspotLayer
     switch (node._class) {
-      case 'group': case 'rectangle': case 'bitmap': case 'oval':
+      case 'group': case 'shapeGroup': case 'rectangle': case 'bitmap': case 'oval':
       case 'symbolMaster': case 'symbolInstance':
         return 'block'
       case 'text':
         return 'text'
-      case 'triangle': case 'shapePath': case 'star': case 'polygon': case 'shapeGroup':
+      case 'triangle': case 'shapePath': case 'star': case 'polygon':
         return 'icon'
     }
   },

@@ -1,4 +1,5 @@
 import ImportFont from '../../ImportFont.js'
+import SketchStyle from '../SketchStyle.js'
 import ExtendJS from '../../../../js/helper/ExtendJS.js'
 
 export default {
@@ -16,6 +17,7 @@ export default {
     this.addStyle('alignSelf', this.getAlignSelf(style), record)
     this.addStyle('verticalAlign', this.getVerticalAlign(style), record)
     this.addStyle('textDecoration', this.getTextDecoration(style), record)
+    this.addColor(style, record)
     if (!ExtendJS.isEmpty(record)) return record
   },
 
@@ -94,5 +96,11 @@ export default {
     if (style?.underlineStyle) value.push('underline')
     if (style?.strikethroughStyle) value.push('line-through')
     return value.join(' ')
+  },
+
+  addColor (style, record) {
+    if (style.MSAttributedStringColorAttribute) {
+      record.color = SketchStyle.getColor(style.MSAttributedStringColorAttribute)
+    }
   }
 }

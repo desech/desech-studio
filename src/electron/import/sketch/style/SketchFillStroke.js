@@ -6,12 +6,20 @@ import ExtendJS from '../../../../js/helper/ExtendJS.js'
 
 export default {
   async getFills (data, node, settings = null) {
-    const fills = node.style?.fills
-    if (!fills) return
     const records = []
+    this.addArtboardBackgroundColor(records, node.backgroundColor)
     await this.addBitmapFill(records, data, node, settings)
-    await this.processFills(fills, data, records, settings)
+    await this.processFills(node.style?.fills, data, records, settings)
     if (records.length) return records
+  },
+
+  addArtboardBackgroundColor (records, color) {
+    if (!color) return
+    const record = {
+      type: 'solid-color',
+      color: SketchStyle.getColor(color)
+    }
+    records.push(record)
   },
 
   async addBitmapFill (records, data, node, settings) {
@@ -22,6 +30,7 @@ export default {
   },
 
   async processFills (fills, data, records, settings) {
+    if (!fills) return
     for (let i = fills.length - 1; i >= 0; i--) {
       if (!fills[i].isEnabled) continue
       const record = await this.getFill(fills[i], data, settings)
@@ -121,7 +130,7 @@ export default {
   },
 
   async getStroke (data, node, settings) {
-    if (!SketchCommon.isStrokeAvailable(data.desechType, node.style.borders)) {
+    if (!SketchCommon.isStrokeAvailable(data.desechType, node.style?.borders)) {
       return
     }
     for (const stroke of node.style.borders) {
@@ -134,7 +143,7 @@ export default {
   async getFirstStroke (stroke, data, node, settings) {
     const record = {
       size: Math.round(stroke.thickness),
-      dash: node.style.borderOptions?.dashPattern?.length ? 'dotted' : 'solid',
+      dash: node.style.borderOptions?.dashPattern,
       // we can't have border images
       type: this.getType(stroke)
     }

@@ -115,8 +115,8 @@ export default {
       // we don't want the body font on anything other than the body
       rules['font-family'] = text.fontFamily
     }
-    if (text.fontSize && (text.fontSize !== 16 || isInline)) {
-      // we ignore font size 16px because it's the default, but not for inline elements
+    if (text.fontSize && text.fontSize !== 16) {
+      // we ignore font size 16px because it's the default
       rules['font-size'] = Math.round(text.fontSize) + 'px'
     }
     if (text.fontWeight && text.fontWeight !== 400) {
@@ -133,6 +133,7 @@ export default {
     if (text.verticalAlign) rules['vertical-align'] = text.verticalAlign
     if (text.textTransform) rules['text-transform'] = text.textTransform
     if (text.textDecoration) rules['text-decoration-line'] = text.textDecoration
+    if (text.color && text.color !== 'rgb(0, 0, 0)') rules.color = text.color
   },
 
   addCssTextAlign (element, css, rules) {

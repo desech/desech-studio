@@ -36,14 +36,12 @@ export default {
   },
 
   getBodyStyle (style, fonts) {
-    // add the existing style from the artboard
-    return {
-      ...style,
-      text: {
-        // add the first font to the body
-        fontFamily: fonts[0] ? fonts[0].name : undefined
-      }
+    if (fonts[0]) {
+      // add the first font to the body
+      style.text = {}
+      style.text.fontFamily = fonts[0].name
     }
+    return style
   },
 
   positionNodes (nodes, container, containerParent) {

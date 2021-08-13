@@ -133,9 +133,7 @@ export default {
   getStroke (desechType, node) {
     if (this.isStrokeAvailable(desechType, node.style)) {
       return {
-        type: (node.shape && node.shape.type === 'line')
-          ? 'outside'
-          : (node.style.stroke.align || 'center'),
+        type: this.getStrokeType(node),
         size: node.style.stroke.width
       }
     }
@@ -143,5 +141,9 @@ export default {
 
   isStrokeAvailable (desechType, style) {
     return (desechType !== 'text' && style?.stroke && style.stroke?.type !== 'none')
+  },
+
+  getStrokeType (node) {
+    return (node.shape?.type === 'line') ? 'outside' : (node.style.stroke.align || 'center')
   }
 }

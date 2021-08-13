@@ -29,7 +29,7 @@ export default {
     const desechType = this.getDesechType(node)
     // we don't allow hidden elements and masks
     if (!desechType || node.visible === false || node.meta?.ux?.clipPathResources) return
-    const data = await this.getBasicData(desechType, node, pos)
+    const data = this.getBasicData(desechType, node, pos)
     await this.addStyle(data, node, settings)
     await AdobexdInline.addInlineText(data, node)
     await AdobexdIcon.addSvgContent(data, node, settings)
@@ -53,7 +53,7 @@ export default {
     }
   },
 
-  async getBasicData (desechType, node, pos) {
+  getBasicData (desechType, node, pos) {
     return {
       desechType,
       designType: ImportCommon.sanitizeName(node.shape?.type || node.type),

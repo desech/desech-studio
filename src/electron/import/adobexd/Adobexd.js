@@ -8,7 +8,7 @@ export default {
   _data: {},
   _settings: {},
 
-  // params = type, folder, file, token, settings
+  // params = type, folder, file, settings
   async getImportData (params) {
     this.init(params)
     this.parseFiles()
@@ -33,11 +33,11 @@ export default {
     for (const artboard of manifest.children[0].children) {
       if (artboard.name === 'pasteboard') continue
       const name = ImportCommon.getName(artboard.name, this._data)
-      this._data[name] = this.getFile(artboard, name)
+      this._data[name] = this.getFileData(artboard, name)
     }
   },
 
-  getFile (artboard, name) {
+  getFileData (artboard, name) {
     const bounds = artboard['uxdesign#bounds']
     return {
       type: 'file',

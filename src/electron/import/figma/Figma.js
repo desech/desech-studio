@@ -47,14 +47,14 @@ export default {
     }
   },
 
-  getFileData (node, name) {
+  getFileData (artboard, name) {
     return {
       type: 'file',
       name,
-      x: Math.round(node.absoluteBoundingBox.x),
-      y: Math.round(node.absoluteBoundingBox.y),
-      width: FigmaCommon.getWidth('block', node),
-      height: FigmaCommon.getHeight('block', node),
+      x: Math.round(artboard.absoluteBoundingBox.x),
+      y: Math.round(artboard.absoluteBoundingBox.y),
+      width: FigmaCommon.getWidth('block', artboard),
+      height: FigmaCommon.getHeight('block', artboard),
       style: {},
       elements: []
     }

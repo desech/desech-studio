@@ -34,7 +34,9 @@ export default {
   },
 
   isStrokeAvailable (desechType, node) {
-    if (['text', 'icon'].includes(desechType) || !node.strokes?.length) return false
+    if (['text', 'icon'].includes(desechType) || !node.strokes?.length) {
+      return false
+    }
     // the fill already downloaded and rendered the full image with strokes
     // if we have an image fill
     for (const fill of node.fills) {

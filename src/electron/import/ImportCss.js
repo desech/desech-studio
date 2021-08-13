@@ -9,7 +9,7 @@ export default {
   processCss (body, params) {
     this._params = params
     const css = {}
-    this._bodyFont = body.style.text.fontFamily
+    this._bodyFont = body.style.text?.fontFamily
     this.processElementCss(body, css, true)
     return this.prepareCss(css)
   },

@@ -5,7 +5,7 @@ import ImportCommon from '../ImportCommon.js'
 
 export default {
   async addInlineText (data, node) {
-    if (data.designType !== 'text') return
+    if (data.desechType !== 'text') return
     const inline = await this.processInlineText(data, node)
     data.content = ImportCommon.injectInlineElements(node.characters, inline)
     if (node.style?.hyperlink?.url) data.href = node.style.hyperlink.url
@@ -50,9 +50,9 @@ export default {
 
   async getElementStyle (override) {
     return {
-      text: FigmaText.getText(override, { designType: 'text' }),
+      text: FigmaText.getText(override, { desechType: 'text' }),
       // we don't have the settings parameter because images are ignored for text elements
-      fills: await FigmaFillStroke.getFills({ designType: 'text' }, {
+      fills: await FigmaFillStroke.getFills({ desechType: 'text' }, {
         fills: override.fills || []
       })
     }

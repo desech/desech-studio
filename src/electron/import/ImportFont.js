@@ -98,7 +98,7 @@ export default {
     // we want to sort them by most specific words first
     return {
       thin: 100,
-      semilight: 200,
+      extralight: 200,
       light: 300,
       regular: 400,
       medium: 500,

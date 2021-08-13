@@ -3,11 +3,11 @@ import ExtendJS from '../../../../js/helper/ExtendJS.js'
 
 export default {
   getText (style, data) {
-    if (data.designType !== 'text') return
+    if (data.desechType !== 'text') return
     const record = {}
     if (style.font?.family) record.fontFamily = style.font.family
     if (style.font?.size) record.fontSize = Math.round(style.font.size)
-    this.addBoldItalic(style.font?.postscriptName?.toLowerCase(), record)
+    this.addBoldItalic(style.font?.postscriptName, record)
     this.addLineHeight(style, record)
     this.addLetterSpacing(style, record)
     this.addTextTransform(style, record)
@@ -19,6 +19,7 @@ export default {
 
   addBoldItalic (font, record) {
     if (!font) return
+    font = font.toLowerCase().replace('semilight', 'extralight')
     const weight = ImportFont.getWeight(font)
     if (weight) record.fontWeight = weight
     if (font.includes('italic')) record.fontStyle = 'italic'

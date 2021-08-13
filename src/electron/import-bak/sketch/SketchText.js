@@ -48,11 +48,11 @@ export default {
   },
 
   // we don't import the height, so vertical aligning has no value
-  // getAlignSelf (style) {
-  //   const value = style.textStyleVerticalAlignmentKey
-  //   const aligns = { 0: 'start', 1: 'center', 2: 'end' }
-  //   return aligns[value]
-  // },
+  getAlignSelf (style) {
+    const value = style.textStyleVerticalAlignmentKey
+    const aligns = { 0: 'start', 1: 'center', 2: 'end' }
+    return aligns[value]
+  },
 
   getFontFamily (style) {
     const name = this.getFontName(style)

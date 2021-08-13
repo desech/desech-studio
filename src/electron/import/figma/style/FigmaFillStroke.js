@@ -17,17 +17,17 @@ export default {
 
   async processFill (records, i, data, node, settings) {
     // fills in reverse order
-    if (!this.isAllowed(node.fills[i], data.designType)) return
+    if (!this.isAllowed(node.fills[i], data.desechType)) return
     const record = await this.getFill(node.fills[i], node, settings)
     // if we find an image, then we don't care about the other fills since figma renders it
     if (record.type === 'image') return record
     records.push(record)
   },
 
-  isAllowed (value, designType) {
+  isAllowed (value, desechType) {
     if (value.visible === false) return false
     // we can't have image renders with text because it will contain the text too
-    if (value.type === 'IMAGE' && designType === 'text') return false
+    if (value.type === 'IMAGE' && desechType === 'text') return false
     return true
   },
 
@@ -122,7 +122,7 @@ export default {
   async getStroke (data, node, settings) {
     if (!FigmaCommon.isStrokeAvailable(data.desechType, node)) return
     for (const stroke of node.strokes) {
-      if (!this.isAllowed(stroke, data.designType)) continue
+      if (!this.isAllowed(stroke, data.desechType)) continue
       return await this.getFirstStroke(stroke, node, settings)
     }
   },

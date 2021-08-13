@@ -5,7 +5,7 @@ import HelperElement from '../../../js/helper/HelperElement.js'
 
 export default {
   async addInlineText (data, node) {
-    if (data.designType !== 'text') return
+    if (data.desechType !== 'text') return
     const inline = await this.processInlineText(data, node)
     // because of the imprecise width/height of our text, we can't have new lines
     const text = node.text.rawText.replaceAll('\n', ' ')
@@ -51,9 +51,9 @@ export default {
 
   async getElementStyle (block) {
     return {
-      text: AdobexdText.getText(block.style, { designType: 'text' }),
+      text: AdobexdText.getText(block.style, { desechType: 'text' }),
       // we don't have the settings parameter because images are ignored for text elements
-      fills: await AdobexdFillStroke.getFills({ designType: 'text' }, block)
+      fills: await AdobexdFillStroke.getFills({ desechType: 'text' }, block)
     }
   }
 }

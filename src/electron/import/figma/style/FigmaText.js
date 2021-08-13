@@ -2,7 +2,7 @@ import ExtendJS from '../../../../js/helper/ExtendJS.js'
 
 export default {
   getText (style, data) {
-    if (data.designType !== 'text') return
+    if (data.desechType !== 'text') return
     const record = {}
     if (style.fontFamily) record.fontFamily = style.fontFamily
     if (style.fontSize) record.fontSize = Math.round(style.fontSize)

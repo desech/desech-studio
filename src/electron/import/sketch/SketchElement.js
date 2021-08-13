@@ -1,6 +1,8 @@
 import ImportCommon from '../ImportCommon.js'
 import SketchCommon from './SketchCommon.js'
 import SketchStyle from './SketchStyle.js'
+import SketchText from './style/SketchText.js'
+import SketchFillStroke from './style/SketchFillStroke.js'
 import SketchEffect from './style/SketchEffect.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
 import ExtendJS from '../../../js/helper/ExtendJS.js'
@@ -61,13 +63,13 @@ export default {
   async addStyle (data, node, settings) {
     data.style = ImportCommon.removeUndefined({
       layout: SketchStyle.getAutoLayout(node),
-      // text: SketchText.getText(node.style, data),
-      // fills: await SketchFillStroke.getFills(data, node, settings),
-      // stroke: await SketchFillStroke.getStroke(data, node, settings),
+      text: SketchText.getText(node.style?.textStyle?.encodedAttributes, data),
+      fills: await SketchFillStroke.getFills(data, node, settings),
+      stroke: await SketchFillStroke.getStroke(data, node, settings),
       corners: SketchStyle.getRoundedCorners(node),
-      effects: SketchEffect.getEffects(node),
-      opacity: SketchStyle.getOpacity(node),
-      blendMode: SketchStyle.getBlendMode(node),
+      effects: SketchEffect.getEffects(node.style),
+      opacity: SketchStyle.getOpacity(node.style),
+      blendMode: SketchStyle.getBlendMode(node.style),
       rotation: SketchStyle.getRotation(node)
     })
   }

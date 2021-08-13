@@ -23,11 +23,18 @@ export default {
   addGeneralEffects (desechType, effects, list) {
     if (!effects) return
     for (const effect of effects) {
-      if (effect.type === 'blur') {
-        list.filter.push(`blur(${Math.round(effect.amount)}px)`)
-      } else { // shadow
+      this.addEffect(desechType, effect, list)
+    }
+  },
+
+  addEffect (desechType, effect, list) {
+    switch (effect.type) {
+      case 'shadow':
         this.addShadowEffect(desechType, effect, list)
-      }
+        break
+      case 'blur': case 'brightness': case 'saturate': case 'contrast': case 'hue-rotate':
+        list.filter.push(`${effect.type}(${effect.amount})`)
+        break
     }
   },
 

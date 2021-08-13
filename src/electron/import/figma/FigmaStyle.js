@@ -52,7 +52,11 @@ export default {
       Math.round(obj.color.g * 255),
       Math.round(obj.color.b * 255)
     ]
-    const alpha = (typeof obj.opacity === 'undefined') ? obj.color.a : obj.opacity * obj.color.a
-    return ImportCommon.getColor(rgb, alpha)
+    return ImportCommon.getColor(rgb, this.getColorAlpha(obj))
+  },
+
+  getColorAlpha (obj) {
+    // `opacity` is the layer opacity, while `color.a` is the color opacity
+    return (typeof obj.opacity === 'undefined') ? obj.color.a : obj.opacity * obj.color.a
   }
 }

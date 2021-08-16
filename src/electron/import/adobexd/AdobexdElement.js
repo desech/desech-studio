@@ -79,7 +79,7 @@ export default {
       stroke: await AdobexdFillStroke.getStroke(data, node, settings),
       corners: AdobexdStyle.getRoundedCorners(node.shape),
       effects: AdobexdEffect.getEffects(node),
-      opacity: AdobexdStyle.getOpacity(node.style?.opacity),
+      opacity: AdobexdStyle.getOpacity(node),
       blendMode: AdobexdStyle.getBlendMode(node),
       rotation: AdobexdStyle.getRotation(node)
     })

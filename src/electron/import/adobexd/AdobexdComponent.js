@@ -26,9 +26,11 @@ export default {
 
   overrideComponents (nodeChildren, componentChildren) {
     for (let i = 0; i < nodeChildren.length; i++) {
+      if (!nodeChildren[i] || !componentChildren[i]) continue
       if (nodeChildren[i].type === 'syncRef') {
         nodeChildren[i] = componentChildren[i]
-      } else if (nodeChildren[i].group?.children) {
+      } else if (nodeChildren[i].group?.children?.length &&
+        componentChildren[i].group?.children?.length) {
         this.overrideComponents(nodeChildren[i].group.children,
           componentChildren[i].group.children)
       }

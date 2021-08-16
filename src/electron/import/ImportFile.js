@@ -38,6 +38,7 @@ export default {
   },
 
   convertFileToIndex (data, name) {
+    if (name === 'index') return
     data.index = { ...data[name], name: 'index' }
     delete data[name]
   },

@@ -68,7 +68,7 @@ export default {
   async getFillImage (fill, record, data, settings) {
     const image = {
       file: 'resources/' + fill.pattern.meta.ux.uid,
-      ext: File.extname(fill.pattern.href, true),
+      ext: fill.pattern.href ? File.extname(fill.pattern.href, true) : 'png',
       width: fill.pattern.width
     }
     record.image = await ImportImage.processLocalImages(image, data, settings)

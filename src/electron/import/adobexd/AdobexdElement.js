@@ -26,6 +26,7 @@ export default {
   },
 
   async getData (node, pos, settings) {
+    if (!node) return
     const desechType = this.getDesechType(node)
     // we don't allow hidden elements and masks
     if (!desechType || node.visible === false || node.meta?.ux?.clipPathResources) return

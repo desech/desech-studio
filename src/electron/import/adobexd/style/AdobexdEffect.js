@@ -29,7 +29,7 @@ export default {
 
   processEffectType (filter, record) {
     if (record.type === 'blur') {
-      record.amount = Math.round(filter.params.blurAmount)
+      record.amount = Math.round(filter.params.blurAmount) + 'px'
     } else if (record.type === 'shadow') {
       this.addShadow(filter.params, record)
     }

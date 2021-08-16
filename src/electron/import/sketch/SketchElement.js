@@ -30,14 +30,15 @@ export default {
   },
 
   getDesechType (node) {
-    // ignore slice, MSImmutableHotspotLayer
+    // ignore `slice`, `MSImmutableHotspotLayer`
     switch (node._class) {
-      case 'group': case 'shapeGroup': case 'rectangle': case 'bitmap': case 'oval':
-      case 'symbolMaster': case 'symbolInstance':
+      case 'rectangle': case 'oval': case 'bitmap':
+      case 'group': case 'shapeGroup': case 'symbolInstance':
         return 'block'
       case 'text':
         return 'text'
-      case 'triangle': case 'shapePath': case 'star': case 'polygon':
+      // `line` and `arrow` are also `shapePath`
+      case 'triangle': case 'polygon': case 'star': case 'shapePath':
         return 'icon'
     }
   },
@@ -65,6 +66,8 @@ export default {
   },
 
   async addStyle (data, node, settings) {
+    // we don't want any styles for shape groups since we can't build the svg properly
+    if (data.designType === 'shapegroup') return
     data.style = ImportCommon.removeUndefined({
       layout: SketchStyle.getAutoLayout(node),
       text: SketchText.getText(node.style?.textStyle?.encodedAttributes, data),

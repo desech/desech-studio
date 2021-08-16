@@ -65,6 +65,8 @@ export default {
 
   async saveCurrentFile (button) {
     await window.electron.invoke('rendererSaveCurrentFile', this.getCurrentFileData())
+    // saving can take a long time and we might not even be inside the project
+    if (!TopCommand.getList()) return
     button.classList.replace('loading', 'inactive')
     TopCommand.updateButtonStates()
   },

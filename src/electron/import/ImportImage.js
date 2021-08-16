@@ -1,5 +1,6 @@
 import fs from 'fs'
 import jimp from 'jimp'
+import jpeg from 'jpeg-js'
 import ImportCommon from './ImportCommon.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
@@ -48,6 +49,7 @@ export default {
   async copyResizeImage (src, projectFolder, name, ext, width) {
     const dest = File.resolve(projectFolder, 'asset/image/' + name + '.' + ext)
     if (fs.existsSync(dest)) return dest
+    jimp.decoders['image/jpeg'] = (data) => jpeg.decode(data, { maxMemoryUsageInMB: 1024 * 4 })
     const image = await jimp.read(src)
     await image.resize(width, jimp.AUTO)
     await image.writeAsync(dest)

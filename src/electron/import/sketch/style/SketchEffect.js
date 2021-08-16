@@ -16,7 +16,7 @@ export default {
     if (!blur || blur.type === 0) return
     records.push({
       type: 'blur',
-      amount: Math.round(blur.radius)
+      amount: Math.round(blur.radius) + 'px'
     })
   },
 
@@ -50,6 +50,7 @@ export default {
     // 0, 1, 4 <--> 0, 1, 4
     this.addBitmapFilter('contrast', controls.contrast, 1, records)
     // -3.14, 0, 3.14 <--> -3.14, 0, 3.14
+    // the min and max value look the same in html compared to sketch
     this.addBitmapFilter('hue-rotate', controls.hue, 0, records)
   },
 

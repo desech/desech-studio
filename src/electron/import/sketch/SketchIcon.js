@@ -15,6 +15,10 @@ export default {
   },
 
   getShapePathPoints (node) {
+    // @todo gradients in lines are not visible
+    // arrows are seen as lines and gradients are also not visible
+    // rounded corners on paths don't work
+    // shape groups like unions we will create the children svg, but not the operation
     const points = []
     const origin = this.parsePoint(node, node.points[0].point)
     points.push(`M${origin.x} ${origin.y}`)

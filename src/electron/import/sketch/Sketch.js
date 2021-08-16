@@ -56,7 +56,7 @@ export default {
 
   async parseFiles (layers, files) {
     for (const node of layers) {
-      // we ignore non containers, hidden artboards and master symbols from the Components page
+      // we ignore non containers, hidden artboards and master symbols
       if (!node.layers?.length || !node.isVisible || node._class === 'symbolMaster') {
         continue
       }

@@ -42,7 +42,7 @@ export default {
     return {
       value: [results[i].value, results[i + 1].value, results[i + 2].value].join(' '),
       function: 'rotate',
-      paramsString: [x.value, y.value, z.value].join(', '),
+      paramsString: [x.value, y.value, z.value].join(', ').replaceAll('deg', ''),
       params: [x, y, z]
     }
   },

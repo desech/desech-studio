@@ -4,6 +4,10 @@ import ExtendJS from '../../../js/helper/ExtendJS.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
 
 export default {
+  // @todo if there's an underline or different color on a child, Sketch sets that on the parent
+  // and then everywhere else it sets the default black color, not underline, etc;
+  // but we ignore black colors and the default font, so then the children will be removed since
+  // no special style is added
   addInlineText (data, node) {
     if (data.desechType !== 'text') return
     const inline = this.processInlineText(data, node)

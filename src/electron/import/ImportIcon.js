@@ -39,11 +39,18 @@ export default {
   },
 
   processStroke (stroke, nodes, nodeId) {
+    // because we can't have multiple strokes in css, we only have one stroke,
+    // although svg does support multiple strokes
     if (!stroke) return 'stroke="none"'
     const val = this.getSvgFillStroke(stroke, 'stroke', nodeId)
     if (val.def) nodes.push(val.def)
-    const dashed = stroke.dash ? `stroke-dasharray="${stroke.dash.join(' ')}"` : ''
-    return `${val.attr} stroke-width="${stroke.size}" ${dashed}`
+    return `${val.attr} stroke-width="${stroke.size}" ${this.getStrokeDash(stroke)}`
+  },
+
+  getStrokeDash (stroke) {
+    return (!stroke.dash?.length || stroke.dash.join(' ') === '0')
+      ? ''
+      : `stroke-dasharray="${stroke.dash.join(' ')}"`
   },
 
   getSvgFillStroke (val, type, nodeId) {
@@ -101,10 +108,11 @@ export default {
 
   getSvgImage (val, type, nodeId) {
     const imageId = 'image-' + HelperCrypto.generateSmallHash()
+    const opacity = (val.opacity && val.opacity < 1) ? `${type}-opacity="${val.opacity}"` : ''
     return {
       def: this.getImageNode(val, imageId),
-      use: `<use ${type}="url(#${imageId})" href="#${nodeId}"/>`,
-      attr: `${type}="url(#${imageId})"`
+      use: `<use ${type}="url(#${imageId})" ${opacity} href="#${nodeId}"/>`,
+      attr: `${type}="url(#${imageId})" ${opacity}`
     }
   },
 

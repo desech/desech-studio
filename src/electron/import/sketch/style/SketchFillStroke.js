@@ -100,6 +100,7 @@ export default {
     }
     record.image = await ImportImage.processLocalImages(image, data, settings)
     // the width and height are used by the svg builder
+    record.opacity = SketchStyle.getOpacity(fill)
     record.width = data.width
     record.height = data.height
   },
@@ -115,7 +116,7 @@ export default {
   getGradientCirclePositions (from, to) {
     // @todo gradient angle is not calculated correctly
     // same values as the linear gradient, so no radius, etc, which we can't use
-    return { cx: 0, cy: 0, r: 0 }
+    return { cx: 1, cy: 1, r: 1 }
   },
 
   getGradientStops (stops, layerOpacity) {
@@ -141,9 +142,10 @@ export default {
   },
 
   async getFirstStroke (stroke, data, node, settings) {
+    const dash = node.style.borderOptions?.dashPattern
     const record = {
       size: Math.round(stroke.thickness),
-      dash: node.style.borderOptions?.dashPattern,
+      dash: dash?.length ? dash : undefined,
       // we can't have border images
       type: this.getType(stroke)
     }

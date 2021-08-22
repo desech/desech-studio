@@ -154,7 +154,7 @@
 
 .sidebar-right .grid.grid-cell {
   grid-template-columns: 1fr;
-  row-gap: 15px;
+  row-gap: 0;
   padding: 10px 0 0 0;
 }
 
@@ -162,26 +162,35 @@
   display: grid;
   grid-template-columns: auto 18px;
   align-items: center;
+  margin-bottom: 15px;
 }
 
 .sidebar-right .grid.grid-cell .grid {
   padding: 0;
 }
 
-.sidebar-right .grid-list {
-  padding-top: 10px;
-  border-top: 1px solid var(--section-border);
-}
-
 .sidebar-right .grid-list .cell {
   grid-template-columns: 1fr 18px;
   column-gap: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.sidebar-right .grid-list .cell:last-child {
+  margin-bottom: 15px;
 }
 
 .sidebar-right .grid-cell .grid-gap {
   grid-template-columns: 25px 1fr;
   padding-top: 5px;
+}
+
+#grid-section .grid-auto-flow {
+  width:  95px;
+}
+
+#grid-section:hover .grid.grid-cell .add-grid-cell,
+#grid-section:hover .grid-auto-flow {
+  color: var(--btn-txt-hover);
 }
 
 .sidebar-right .switch-radius {

@@ -8,7 +8,7 @@
   cursor: pointer;
 }
 
-.sidebar-right .slider-extra-button span:hover {
+.sidebar-section:hover .slider-extra-button span {
   color: var(--section-title-hover);
 }
 

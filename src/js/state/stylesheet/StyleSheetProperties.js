@@ -27,6 +27,7 @@ export default {
       'grid-template', // not used but the sub properties are
       'grid-template-columns',
       'grid-template-rows',
+      'grid-auto-flow',
       'gap', // not used but the sub properties are
       'column-gap',
       'row-gap',

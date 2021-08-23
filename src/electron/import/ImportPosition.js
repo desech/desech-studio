@@ -1,14 +1,19 @@
+import fs from 'fs'
 import HelperElement from '../../js/helper/HelperElement.js'
-import ImportPositionCommon from './ImportPositionCommon.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
+import ImportPositionCommon from './position/ImportPositionCommon.js'
+import ImportPositionIgnore from './position/ImportPositionIgnore.js'
+import ImportPositionDebug from './position/ImportPositionDebug.js'
+import File from '../file/File.js'
 
 export default {
   buildStructure (artboard, params, file) {
+    ImportPositionDebug.start()
     this.cleanUnstyledBlocks(artboard.elements)
     const body = this.getBody(artboard.style, params.fonts)
     this.positionNodes(artboard.elements, body, body)
-    ImportPositionCommon.debugEnd(artboard.elements, body)
-    ImportPositionCommon.backupBodyToFile(body, params, file)
+    ImportPositionIgnore.positionIgnoredNodes(artboard.elements, body)
+    this.backupBodyToFile(body, params, file)
     return body
   },
 
@@ -45,9 +50,9 @@ export default {
   },
 
   positionNodes (nodes, container, containerParent) {
-    ImportPositionCommon.debugContainer(container)
+    ImportPositionDebug.debugContainer(container)
     const traversal = this.getTraversal(nodes, container)
-    ImportPositionCommon.debugTraversal(traversal)
+    ImportPositionDebug.debugTraversal(traversal)
     if (traversal.lines.length) this.convertToBlock(container)
     if (traversal.lines.length > 1) {
       this.positionContainerNode(nodes, container, traversal)
@@ -64,7 +69,7 @@ export default {
   },
 
   getValidLines (nodes, container, type) {
-    ImportPositionCommon.debugMsg(`Line ${type}`, 2)
+    ImportPositionDebug.debugMsg(`Line ${type}`, 2)
     const data = { type, elem: null, lines: [] }
     for (const elem of nodes) {
       this.addValidLine(nodes, container, elem, type, data)
@@ -74,9 +79,9 @@ export default {
   },
 
   addValidLine (nodes, container, elem, type, data) {
-    ImportPositionCommon.debugLineNode(elem)
+    ImportPositionDebug.debugLineNode(elem)
     if (!this.isLineValid(nodes, container, elem, type, data)) return
-    ImportPositionCommon.debugLineAdd(elem, type)
+    ImportPositionDebug.debugLineAdd(elem, type)
     data.lines.push(ImportPositionCommon.getEnd(elem, type))
     // only used when running positionSingleNode()
     data.elem = elem
@@ -95,12 +100,12 @@ export default {
   isLineOutside (elem, container, type) {
     if (ImportPositionCommon.isOutside(elem, container)) {
       // elem is outside container
-      ImportPositionCommon.debugElemOutside(elem, container)
+      ImportPositionDebug.debugElemOutside(elem, container)
       return true
     } else if (ImportPositionCommon.getEnd(elem, type) >
       ImportPositionCommon.getEnd(container, type)) {
       // line is outside container
-      ImportPositionCommon.debugMsg('Line is outside', 6)
+      ImportPositionDebug.debugMsg('Line is outside', 6)
       return true
     }
     return false
@@ -111,11 +116,11 @@ export default {
       return true
     } else if (ImportPositionCommon.isOutside(node, container)) {
       // node is outside of container
-      ImportPositionCommon.debugLineNodeCheck(node, container, 'outside')
+      ImportPositionDebug.debugLineNodeCheck(node, container, 'outside')
       return true
     } else if (ImportPositionCommon.isInsideChild(node, elem)) {
       // node is a child of elem
-      ImportPositionCommon.debugLineNodeCheck(node, elem, 'inside child')
+      ImportPositionDebug.debugLineNodeCheck(node, elem, 'inside child')
       return true
     }
     return false
@@ -123,16 +128,16 @@ export default {
 
   isLineNodeClipping (node, container, elem, type, data) {
     if (ImportPositionCommon.isClipping(node, type, elem)) {
-      ImportPositionCommon.debugLineNodeCheck(node, elem, 'clipping')
+      ImportPositionDebug.debugLineNodeCheck(node, elem, 'clipping')
       return true
     }
-    ImportPositionCommon.debugLineNodeCheck(node, elem, 'good')
+    ImportPositionDebug.debugLineNodeCheck(node, elem, 'good')
     return false
   },
 
   convertToBlock (element) {
     if (element.desechType === 'block') return
-    ImportPositionCommon.debugConvert(element)
+    ImportPositionDebug.debugConvert(element)
     element.desechType = 'block'
   },
 
@@ -143,37 +148,15 @@ export default {
 
   addContainerStyle (container, traversal) {
     if (!container.style.layout) container.style.layout = {}
-    const direction = (traversal.type === 'x') ? 'column' : 'row'
-    container.style.layout.direction = direction
-    const gridValue = this.getGridLines(container, traversal, direction)
-    if (direction === 'column') {
-      // only use the grid template for columns, not for rows
-      container.style.layout.gridTemplateColumns = gridValue
-    }
-    // @todo take into account auto-layout gap and justify/align-content
-    /*if (!container.style.layout.gap) */container.style.layout.gap = 0
-    ImportPositionCommon.debugAddContainerStyle(container, direction, gridValue)
-  },
-
-  getGridLines (container, traversal, type) {
-    let value = ''
-    for (let i = 0; i < traversal.lines.length - 1; i++) {
-      // skip the last line
-      const line = traversal.lines[i]
-      const size = traversal.lines[i - 1]
-        ? line - traversal.lines[i - 1]
-        : line - container[traversal.type]
-      value += size + 'px '
-    }
-    // last element is auto
-    return value.trim() + ' auto'
+    container.style.layout.gridAutoFlow = (traversal.type === 'x') ? 'column' : 'row'
+    ImportPositionDebug.debugAddContainerStyle(container, container.style.layout)
   },
 
   processLines (nodes, container, traversal) {
     for (let i = 0; i < traversal.lines.length; i++) {
       // we want the last cell too
       const block = this.getLineContainer(container, traversal, i)
-      ImportPositionCommon.debugLineContainer(block)
+      ImportPositionDebug.debugLineContainer(block)
       // add the container block
       container.children.push(block)
       this.positionNodes(nodes, block, container)
@@ -220,16 +203,16 @@ export default {
     // if we find children inside icons convert them to block
     // later in Import.js we will set the icon svg as bg image
     if (elem.desechType === 'text') {
-      ImportPositionCommon.debugMsg('Ignore children for text element', 2)
+      ImportPositionDebug.debugMsg('Ignore children for text element', 2)
     } else {
-      ImportPositionCommon.debugMsg(`Finding children for ${elem.desechType} element`, 2)
+      ImportPositionDebug.debugMsg(`Finding children for ${elem.desechType} element`, 2)
       this.positionNodes(nodes, elem, containerParent)
     }
   },
 
   moveSingleElement (nodes, container, containerParent, elem) {
     // no extra container is needed, we just move this element inside the container parent
-    ImportPositionCommon.debugMoveToContainer(container, containerParent, elem)
+    ImportPositionDebug.debugMoveToContainer(container, containerParent, elem)
     this.replaceContainerWithElement(elem, container, containerParent)
     this.removeElementFromNodes(elem, nodes)
     this.addElementMargin(elem, container)
@@ -258,7 +241,7 @@ export default {
 
   addElementMargin (elem, container) {
     // use the relative container to fetch the x and y
-    // @todo take into account auto-layout padding
+    // @todo take into account auto-layout padding and alignment
     // @todo do negative margins for elements that don't fit inside
     const top = Math.round(elem.y - container.y)
     const left = Math.round(elem.x - container.x)
@@ -269,5 +252,11 @@ export default {
       if (!elem.style.layout) elem.style.layout = {}
       elem.style.layout.margin = margin
     }
+  },
+
+  backupBodyToFile (body, params, htmlFile) {
+    const file = File.resolve(params.folder, '_desech', params.type + '-import.json')
+    fs.appendFileSync(file, '\n\n' + htmlFile + '\n' + JSON.stringify(body, null, 2) +
+      '\n' + ImportPositionDebug.getMessages().join('\n'))
   }
 }

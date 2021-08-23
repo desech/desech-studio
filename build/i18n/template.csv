@@ -42,7 +42,6 @@
 "- Weight -",
 "-- Parent folder --",
 "-- Type --",
-"<span class=""error"">{{count}} element(s) have been ignored - {{elements}}</span>",
 "<span class=""error"">Image is empty</span>",
 "<span class=""error"">Local font <b>{{font}}</b> is ignored</span>",
 "<span class=""error"">There are no valid top level visible elements to be imported</span>",

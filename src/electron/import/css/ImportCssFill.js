@@ -1,6 +1,6 @@
-import File from '../file/File.js'
-import HelperStyle from '../../js/helper/HelperStyle.js'
-import HelperColor from '../../js/helper/HelperColor.js'
+import File from '../../file/File.js'
+import HelperStyle from '../../../js/helper/HelperStyle.js'
+import HelperColor from '../../../js/helper/HelperColor.js'
 
 export default {
   addCssFills (element, isBody, rules, params) {

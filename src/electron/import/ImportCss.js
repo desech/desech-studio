@@ -1,6 +1,6 @@
 import ExtendJS from '../../js/helper/ExtendJS.js'
-import ImportCssFill from './ImportCssFill.js'
-import ImportCssEffect from './ImportCssEffect.js'
+import ImportCssFill from './css/ImportCssFill.js'
+import ImportCssEffect from './css/ImportCssEffect.js'
 
 export default {
   _bodyFont: null,
@@ -80,17 +80,13 @@ export default {
   },
 
   addCssLayout (layout, rules) {
-    // direction, gap, padding, margin, justifyContent, alignContent
+    // margin, padding, gridAutoFlow, justifyContent, alignContent
     if (!layout) return
-    if (typeof layout.gap !== 'undefined' && layout.gap !== 10) {
-      rules[`${layout.direction}-gap`] = Math.round(layout.gap) + 'px'
-    }
-    if (layout.gridTemplateColumns) {
-      rules['grid-template-columns'] = layout.gridTemplateColumns
-    }
     this.addCssLayoutMarginPadding(layout, rules)
-    if (layout.justifyContent) rules['justify-content'] = layout.justifyContent
-    if (layout.alignContent) rules['align-content'] = layout.alignContent
+    if (layout.gridAutoFlow === 'column') rules['grid-auto-flow'] = 'column'
+    // @todo until we correctly process the margins we can't use the alignment
+    // if (layout.justifyContent) rules['justify-content'] = layout.justifyContent
+    // if (layout.alignContent) rules['align-content'] = layout.alignContent
   },
 
   addCssLayoutMarginPadding (layout, rules) {

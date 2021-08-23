@@ -188,8 +188,11 @@
   width:  95px;
 }
 
-#grid-section:hover .grid.grid-cell .add-grid-cell,
 #grid-section:hover .grid-auto-flow {
+  color: var(--btn-txt-hover);
+}
+
+.sidebar-section:hover button.add-record {
   color: var(--btn-txt-hover);
 }
 

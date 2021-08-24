@@ -29,7 +29,7 @@ export default {
 
   async loadMain (file = null) {
     // save first before loading a new file
-    if (file) await TopCommandSave.save()
+    if (file) await TopCommandSave.save(true)
     this.loadPage('main')
     HelperTrigger.triggerReload('responsive-mode-list')
     await Project.injectDesignSystemCss()

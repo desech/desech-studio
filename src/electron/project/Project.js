@@ -14,10 +14,14 @@ import ProjectCommon from './ProjectCommon.js'
 
 export default {
   // this can:
-  //  - open a project
-  //  - save the project settings
-  //  - create a new project with settings
+  //  - open a project (no data)
+  //  - save the project settings (data.folder, data.settings)
+  //  - create a new project with settings (data.settings)
+  //    - if you create it on an existing folder, it will not overwrite anything
   //  - import a file with settings; this doesn't actually open the project
+  //    - (data.settings, data.import)
+  //    - after the import is finished and you click open project this will be called again
+  //      - (data.folder)
   async initProject (data) {
     const folder = data?.folder || this.getProjectFolder(data)
     if (!folder) return

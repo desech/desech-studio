@@ -187,8 +187,6 @@ hr {
 .block {
   display: grid;
   min-height: 24px;
-  justify-content: start;
-  align-content: start;
 }
 
 summary, summary.block {

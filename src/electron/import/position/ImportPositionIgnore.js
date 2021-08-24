@@ -7,8 +7,9 @@ export default {
   positionIgnoredNodes (elements, body) {
     if (!elements.length) return
     ImportPositionDebug.debugIgnoreStart(elements)
-    for (const element of elements) {
-      this.positionIgnoredNode(element, body)
+    for (let i = elements.length - 1; i >= 0; i--) {
+      const positioned = this.positionIgnoredNode(elements[i], body)
+      if (positioned) elements.splice(i, 1)
     }
   },
 
@@ -17,11 +18,12 @@ export default {
     const found = this.findElementContainer(element, body.children)
     if (!found) {
       ImportPositionDebug.debugMsg('No container found', 4)
-      return
+      return false
     }
     ImportPositionDebug.debugIgnoreContainer(found)
     this.replaceNode(found, element)
-    this.positionSecondElement(found.children[0], element)
+    this.positionSecondElement(found.children[0], found.children[1])
+    return true
   },
 
   findElementContainer (element, children, found = null) {
@@ -38,9 +40,10 @@ export default {
     return found
   },
 
-  replaceNode (found, second) {
+  replaceNode (found, element) {
     // replace the found node with a container with 2 children (first + second)
     const first = ExtendJS.cloneData(found)
+    const second = ExtendJS.cloneData(element)
     for (const name of Object.keys(found)) {
       delete found[name]
     }
@@ -72,6 +75,7 @@ export default {
     const left = second.x - first.x
     if (top !== 0 || left !== 0) {
       if (!second.style.layout) second.style.layout = { margin: {} }
+      if (!second.style.layout.margin) second.style.layout.margin = {}
       if (top !== 0) second.style.layout.margin.top = top
       if (left !== 0) second.style.layout.margin.left = left
     }

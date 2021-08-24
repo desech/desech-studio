@@ -247,12 +247,12 @@ export default {
 
   addElementMargin (elem, container) {
     // use the relative container to fetch the x and y
-    // @todo take into account auto-layout padding and alignment
-    // @todo do negative margins for elements that don't fit inside
+    // @todo take into account padding, justifyContent, alignContent
     const top = Math.round(elem.y - container.y)
     const left = Math.round(elem.x - container.x)
     const margin = {}
-    if (top && !elem.style.text?.alignSelf) margin.top = top
+    // @todo enable this back when we allow alignSelf for text
+    if (top/* && !elem.style.text?.alignSelf*/) margin.top = top
     if (left) margin.left = left
     if (!ExtendJS.isEmpty(margin)) {
       if (!elem.style.layout) elem.style.layout = {}

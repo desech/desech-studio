@@ -50,7 +50,6 @@ export default {
   addCssWidthHeight (element, isBody, rules) {
     if (isBody) {
       rules.height = '100%'
-      rules['align-content'] = 'start'
       return
     }
     if (element.width !== 99999999) {
@@ -83,19 +82,28 @@ export default {
     // margin, padding, gridAutoFlow, justifyContent, alignContent
     if (!layout) return
     this.addCssLayoutMarginPadding(layout, rules)
-    if (layout.gridAutoFlow === 'column') rules['grid-auto-flow'] = 'column'
-    // @todo until we correctly process the margins we can't use the alignment
+    this.addCssLayoutGrid(layout, rules)
+    // @todo for now we rather want to use fixed margins
     // if (layout.justifyContent) rules['justify-content'] = layout.justifyContent
     // if (layout.alignContent) rules['align-content'] = layout.alignContent
   },
 
   addCssLayoutMarginPadding (layout, rules) {
-    // @todo work with ImportPosition on padding and justify/align-content
+    // @todo for now we rather want to use fixed margins
     for (const type of ['margin'/*, 'padding'*/]) {
       if (!layout[type]) continue
       for (const [name, value] of Object.entries(layout[type])) {
         rules[`${type}-${name}`] = Math.round(value) + 'px'
       }
+    }
+  },
+
+  addCssLayoutGrid (layout, rules) {
+    if (layout.gridAutoFlow === 'column') {
+      rules['grid-auto-flow'] = 'column'
+      rules['justify-content'] = 'start'
+    } else {
+      rules['align-content'] = 'start'
     }
   },
 
@@ -125,7 +133,8 @@ export default {
     if (!text) return
     if (text.lineHeight) rules['line-height'] = Math.round(text.lineHeight) + 'px'
     if (text.letterSpacing) rules['letter-spacing'] = text.letterSpacing
-    if (text.alignSelf) rules['align-self'] = text.alignSelf
+    // @todo this messes with the grid `align-content`=`start`
+    // if (text.alignSelf) rules['align-self'] = text.alignSelf
     if (text.verticalAlign) rules['vertical-align'] = text.verticalAlign
     if (text.textTransform) rules['text-transform'] = text.textTransform
     if (text.textDecoration) rules['text-decoration-line'] = text.textDecoration

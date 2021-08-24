@@ -15,8 +15,21 @@ export default {
     EventMain.ipcMainInvoke('mainImportProgress', msg, params.type)
     this.prepareElements(artboard.elements)
     const body = ImportPosition.buildStructure(artboard, params, file)
+    if (artboard.elements.length) {
+      const msg = Language.localize('<span class="error">{{count}} ignored element(s): {{elements}}</span>',
+        { count: artboard.elements.length, elements: this.getIgnoredElements(artboard.elements) })
+      EventMain.ipcMainInvoke('mainImportProgress', msg)
+    }
     const html = this.getFullHtml(body, params, file)
     return { body, html }
+  },
+
+  getIgnoredElements (nodes) {
+    const names = []
+    for (const node of nodes) {
+      names.push('"' + node.name + '"')
+    }
+    return names.join(', ')
   },
 
   prepareElements (elements) {

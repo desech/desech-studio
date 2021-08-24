@@ -42,6 +42,7 @@
   "- Weight -": "- Weight -",
   "-- Parent folder --": "-- Parent folder --",
   "-- Type --": "-- Type --",
+  "<span class=\"error\">{{count}} ignored element(s): {{elements}}</span>": "<span class=\"error\">{{count}} ignored element(s): {{elements}}</span>",
   "<span class=\"error\">Image is empty</span>": "<span class=\"error\">Image is empty</span>",
   "<span class=\"error\">Local font <b>{{font}}</b> is ignored</span>": "<span class=\"error\">Local font <b>{{font}}</b> is ignored</span>",
   "<span class=\"error\">There are no valid top level visible elements to be imported</span>": "<span class=\"error\">There are no valid top level visible elements to be imported</span>",

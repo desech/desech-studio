@@ -15,7 +15,10 @@ export default {
   positionIgnoredNode (element, body) {
     ImportPositionDebug.debugIgnoreNode(element)
     const found = this.findElementContainer(element, body.children)
-    if (!found) return
+    if (!found) {
+      ImportPositionDebug.debugMsg('No container found', 4)
+      return
+    }
     ImportPositionDebug.debugIgnoreContainer(found)
     this.replaceNode(found, element)
     this.positionSecondElement(found.children[0], element)

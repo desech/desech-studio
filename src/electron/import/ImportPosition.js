@@ -107,32 +107,38 @@ export default {
       // line is outside container
       ImportPositionDebug.debugMsg('Line is outside', 6)
       return true
+    } else {
+      // ImportPositionDebug.debugMsg('Line is inside', 6)
+      return false
     }
-    return false
   },
 
   isLineNodeInvalid (node, container, elem) {
     if (node.ref === elem.ref) {
-      return true
-    } else if (ImportPositionCommon.isOutside(node, container)) {
-      // node is outside of container
-      ImportPositionDebug.debugLineNodeCheck(node, container, 'outside')
+      // ImportPositionDebug.debugMsg('Line is invalid, same ref ' + node.ref, 6)
       return true
     } else if (ImportPositionCommon.isInsideChild(node, elem)) {
       // node is a child of elem
       ImportPositionDebug.debugLineNodeCheck(node, elem, 'inside child')
       return true
+    } else if (ImportPositionCommon.isOutside(node, container)) {
+      // node is outside of container
+      ImportPositionDebug.debugLineNodeCheck(node, container, 'outside')
+      return true
+    } else {
+      // ImportPositionDebug.debugMsg('Line is valid ' + node.ref, 6)
+      return false
     }
-    return false
   },
 
   isLineNodeClipping (node, container, elem, type, data) {
     if (ImportPositionCommon.isClipping(node, type, elem)) {
       ImportPositionDebug.debugLineNodeCheck(node, elem, 'clipping')
       return true
+    } else {
+      ImportPositionDebug.debugLineNodeCheck(node, elem, 'good')
+      return false
     }
-    ImportPositionDebug.debugLineNodeCheck(node, elem, 'good')
-    return false
   },
 
   convertToBlock (element) {

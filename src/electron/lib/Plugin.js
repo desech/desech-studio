@@ -25,7 +25,6 @@ export default {
     // this is async, but will not be called as such, because we want it to be run in parallel
     try {
       this.setDir()
-      File.createFolder(this._DIR)
       await this.updatePlugins()
     } catch (error) {
       await Log.error(error)
@@ -34,6 +33,7 @@ export default {
 
   setDir () {
     this._DIR = File.resolve(app.getPath('userData'), 'plugin')
+    File.createFolder(this._DIR)
   },
 
   async updatePlugins () {

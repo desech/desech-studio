@@ -138,9 +138,11 @@ function getFontData (font) {
   }
 }
 
-function buildErrorHtml () {
-  const html = fs.readFileSync('./src/html/error.html').toString()
-  fs.writeFileSync('./app/html/error.html', html)
+function buildMainHtml () {
+  const loading = fs.readFileSync('./src/html/loading.html').toString()
+  fs.writeFileSync('./app/html/loading.html', loading)
+  const error = fs.readFileSync('./src/html/error.html').toString()
+  fs.writeFileSync('./app/html/error.html', error)
 }
 
 fs.rmSync('./app/html', { recursive: true, force: true })
@@ -148,4 +150,4 @@ fs.mkdirSync('./app/html')
 
 buildHtml('en') // async
 // buildHtml('ro') // async
-buildErrorHtml()
+buildMainHtml()

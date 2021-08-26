@@ -20,6 +20,7 @@ export default {
 
   async launchWindow () {
     this.createWindow()
+    await this.showInitialWindow()
     if (!app.isPackaged) await this.setDevEnvironment()
     await this.loadWindow()
     this.windowEvents()
@@ -42,6 +43,13 @@ export default {
 
   openDevTools () {
     this._window.webContents.openDevTools()
+  },
+
+  async showInitialWindow () {
+    this._window.removeMenu() // only linux, windows
+    const file = File.resolve(app.getAppPath(), 'html/loading.html')
+    const html = fs.readFileSync(file).toString()
+    await this._window.loadURL(`data:text/html;charset=utf-8,${html}`)
   },
 
   async loadWindow () {

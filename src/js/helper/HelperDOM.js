@@ -2,9 +2,9 @@ export default {
   show (node) {
     if (this.isNodeList(node)) {
       for (const elem of node) {
-        elem.removeAttributeNS(null, 'hidden')
+        if (elem) elem.removeAttributeNS(null, 'hidden')
       }
-    } else {
+    } else if (node) {
       node.removeAttributeNS(null, 'hidden')
     }
   },
@@ -12,9 +12,9 @@ export default {
   hide (node) {
     if (this.isNodeList(node)) {
       for (const elem of node) {
-        elem.setAttributeNS(null, 'hidden', '')
+        if (elem) elem.setAttributeNS(null, 'hidden', '')
       }
-    } else {
+    } else if (node) {
       node.setAttributeNS(null, 'hidden', '')
     }
   },

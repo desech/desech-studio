@@ -293,7 +293,7 @@ Manjaro
 Fedora
 
 ```sh
-sudo dnf update --refresh && sudo dnf upgrade --refresh && sudo dnf autoremove
+sudo dnf update --refresh && sudo dnf upgrade
 ```
 
 - open Desech Studio without logging in and see if it updated

@@ -138,8 +138,14 @@ function getFontData (font) {
   }
 }
 
+function buildErrorHtml () {
+  const html = fs.readFileSync('./src/html/error.html').toString()
+  fs.writeFileSync('./app/html/error.html', html)
+}
+
 fs.rmSync('./app/html', { recursive: true, force: true })
 fs.mkdirSync('./app/html')
 
 buildHtml('en') // async
 // buildHtml('ro') // async
+buildErrorHtml()

@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { app, BrowserWindow } from 'electron'
 import Menu from './Menu.js'
 import Settings from '../lib/Settings.js'
@@ -52,7 +53,16 @@ export default {
       EventMain.ipcMainInvoke('mainSettings', data)
     } catch (error) {
       await Log.error(error)
+      await this.showFatalError(error)
     }
+  },
+
+  async showFatalError (error) {
+    // @todo make this use localization too
+    this._window.removeMenu() // only linux, windows
+    const file = File.resolve(app.getAppPath(), 'html/error.html')
+    const html = fs.readFileSync(file).toString().replace('{{ERROR}}', error)
+    await this._window.loadURL(`data:text/html;charset=utf-8,${html}`)
   },
 
   async getData () {
@@ -62,8 +72,7 @@ export default {
   },
 
   prepareWindow (data) {
-    // we don't want the plugins update to stop the electron loading
-    Plugin.initPlugins()
+    Plugin.initPlugins() // don't use await
     global.locale = data.settings.locale
     Menu.setMenu()
     this.addEvents()

@@ -17,7 +17,6 @@ import Config from './Config.js'
 import Electron from './Electron.js'
 import Language from './Language.js'
 import Log from './Log.js'
-import EventMain from '../event/EventMain.js'
 
 export default {
   _DIR: null,

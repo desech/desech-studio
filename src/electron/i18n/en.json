@@ -1654,7 +1654,7 @@
   "Time": "Time",
   "Title": "Title",
   "To Bottom": "To Bottom",
-  "To do so, add text like &nbsp; <em>&#123;&#123;componentProperty&#125;&#125;</em> &nbsp; in the component elements.": "To do so, add text like &nbsp; <em>&#123;&#123;componentProperty&#125;&#125;</em> &nbsp; in the component elements.",
+  "To do so, add text like &nbsp; <em>&#123;&#123;property&#125;&#125;</em> &nbsp; in the component elements. With react you need to use only one curly bracket like so &nbsp; <em>&#123;property&#125;</em> &nbsp;": "To do so, add text like &nbsp; <em>&#123;&#123;property&#125;&#125;</em> &nbsp; in the component elements. With react you need to use only one curly bracket like so &nbsp; <em>&#123;property&#125;</em> &nbsp;",
   "To Left": "To Left",
   "To Right": "To Right",
   "To Top": "To Top",

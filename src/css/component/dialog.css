@@ -47,9 +47,18 @@ dialog.dialog .grid {
 /* specific dialogs */
 
 dialog.dialog .dialog-premium {
-  width: 400px;
+  width: 410px;
   font-size: 15px;
   line-height: 24px;
+}
+
+dialog.dialog .dialog-premium .premium-icon-container {
+  background-color: #FFF;
+  color: #000;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px;
+  filter: grayscale(100%);
 }
 
 dialog.dialog .dialog-auth {

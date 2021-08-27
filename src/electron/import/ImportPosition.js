@@ -90,6 +90,8 @@ export default {
   isLineValid (nodes, container, elem, type, data) {
     if (this.isLineOutside(elem, container, type)) return false
     for (const node of nodes) {
+      // @todo the last element will be placed in this final container with negative margin
+      // instead of being ignored, if the element clips the container
       if (this.isLineNodeInvalid(node, container, elem)) continue
       const clipping = this.isLineNodeClipping(node, container, elem, type, data)
       if (clipping) return false

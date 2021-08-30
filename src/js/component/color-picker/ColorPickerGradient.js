@@ -169,11 +169,12 @@ export default {
   },
 
   setBackgroundImageSource (container, file) {
+    // file is already encoded
     const source = container.getElementsByClassName('image-source')[0]
-    source.style.backgroundImage = `url("${encodeURI(file)}")`
+    source.style.backgroundImage = `url("${file}")`
     const field = container.getElementsByClassName('picker-source-name')[0]
-    field.value = file
-    field.textContent = HelperProject.getFileName(file)
+    field.value = decodeURI(file)
+    field.textContent = decodeURI(HelperProject.getFileName(file))
   },
 
   injectGradient (container, gradientData) {

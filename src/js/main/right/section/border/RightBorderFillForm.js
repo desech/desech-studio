@@ -140,7 +140,7 @@ export default {
   getImageFile () {
     const source = StateStyleSheet.getPropertyValue('border-image-source')
     const regex = source ? /url\("(.*)"\)/gi.exec(source) : null
-    return regex ? regex[1] : HelperFile.getDefaultBackgroundImage()
+    return regex ? regex[1] : encodeURI(HelperFile.getDefaultBackgroundImage())
   },
 
   initFill (form) {

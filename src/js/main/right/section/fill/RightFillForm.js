@@ -121,7 +121,7 @@ export default {
 
   injectImage (container, background) {
     const file = background ? /url\("(.*)"\)/gi.exec(background)[1] : null
-    const image = file || HelperFile.getDefaultBackgroundImage()
+    const image = file || encodeURI(HelperFile.getDefaultBackgroundImage())
     ColorPickerGradient.setBackgroundImageSource(container, image)
   },
 

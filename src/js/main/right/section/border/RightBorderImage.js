@@ -96,10 +96,6 @@ export default {
   setImageSource (button, file) {
     file = encodeURI(file)
     ColorPickerGradient.setBackgroundImageSource(button.closest('.fill-image'), file)
-    this.saveImageSource(button, file)
-  },
-
-  saveImageSource (button, file) {
     const background = `url("${file}")`
     RightBorderFillProperty.updatePreviewSwatch(button.closest('#border-section'), background)
     RightCommon.changeStyle({ 'border-image-source': background })

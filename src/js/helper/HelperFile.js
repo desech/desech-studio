@@ -20,8 +20,8 @@ export default {
   },
 
   getRelPath (path, folder = null) {
-    folder = folder || HelperProject.getFolder()
-    return path.replace(folder + '/', '')
+    folder = (folder || HelperProject.getFolder()) + '/'
+    return path.replaceAll(encodeURI(folder), '').replaceAll(folder, '')
   },
 
   getAbsPath (path) {

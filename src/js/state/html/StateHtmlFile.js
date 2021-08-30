@@ -37,7 +37,7 @@ export default {
   addComponent (node, css, designSystemClasses) {
     const div = document.createElement('div')
     div.setAttributeNS(null, 'class', 'component')
-    div.setAttributeNS(null, 'src', this.getRelPath(node.getAttributeNS(null, 'src')))
+    div.setAttributeNS(null, 'src', HelperFile.getRelPath(node.getAttributeNS(null, 'src')))
     if (node.dataset.elementProperties) {
       div.setAttributeNS(null, 'data-element-properties', node.dataset.elementProperties)
     }
@@ -65,20 +65,14 @@ export default {
     const values = []
     for (const set of src.split(', ')) {
       const [file, scaling] = set.split(' ')
-      values.push(this.getRelPath(file) + ' ' + scaling)
+      values.push(HelperFile.getRelPath(file) + ' ' + scaling)
     }
     node.srcset = values.join(', ')
   },
 
   setRelativeSourceAttr (node, attr) {
     const source = node.getAttributeNS(null, attr)
-    node[attr] = this.getRelPath(source)
-  },
-
-  getRelPath (attr) {
-    // remove the folder and the encoded folder
-    const folder = HelperProject.getFolder() + '/'
-    return attr.replaceAll(encodeURI(folder), '').replaceAll(folder, '')
+    node[attr] = HelperFile.getRelPath(source)
   },
 
   setBasic (node, css, designSystemClasses) {

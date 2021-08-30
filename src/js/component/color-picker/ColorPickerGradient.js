@@ -24,7 +24,8 @@ export default {
   },
 
   dblclickDeletePinEvent (event) {
-    if (event.target.classList.contains('fill-color-interaction') && event.target.getElementsByClassName('fill-color-gradient')[0]) {
+    if (event.target.classList.contains('fill-color-interaction') &&
+      event.target.getElementsByClassName('fill-color-gradient')[0]) {
       this.deletePin(event.target.closest('.color-picker'), event.clientX)
     }
   },
@@ -70,11 +71,13 @@ export default {
   },
 
   enableRepeatingGradient (fill) {
-    fill.style.backgroundImage = fill.style.backgroundImage.replace('linear-gradient', 'repeating-linear-gradient')
+    fill.style.backgroundImage = fill.style.backgroundImage
+      .replace('linear-gradient', 'repeating-linear-gradient')
   },
 
   disableRepeatingGradient (fill) {
-    fill.style.backgroundImage = fill.style.backgroundImage.replace('repeating-linear-gradient', 'linear-gradient')
+    fill.style.backgroundImage = fill.style.backgroundImage
+      .replace('repeating-linear-gradient', 'linear-gradient')
   },
 
   setGradient (data, event) {
@@ -86,7 +89,8 @@ export default {
 
   setGradientStart (data) {
     const range = this.getMousePinRange(data)
-    const pin = this.findPinOnPosition(data.gradient, range) || this.createPin(data.gradient, range[0])
+    const pin = this.findPinOnPosition(data.gradient, range) ||
+      this.createPin(data.gradient, range[0])
     this.selectPin(pin)
   },
 
@@ -165,14 +169,16 @@ export default {
   },
 
   setBackgroundImageSource (container, file) {
-    container.getElementsByClassName('image-source')[0].style.backgroundImage = `url("${encodeURI(file)}")`
+    const source = container.getElementsByClassName('image-source')[0]
+    source.style.backgroundImage = `url("${encodeURI(file)}")`
     const field = container.getElementsByClassName('picker-source-name')[0]
     field.value = file
     field.textContent = HelperProject.getFileName(file)
   },
 
   injectGradient (container, gradientData) {
-    const colorData = ColorPickerCommon.getColorPickerData(container.getElementsByClassName('color-picker')[0])
+    const picker = container.getElementsByClassName('color-picker')[0]
+    const colorData = ColorPickerCommon.getColorPickerData(picker)
     this.injectPins(colorData.gradient, gradientData.colors)
     this.injectRepeatingGradient(colorData.repeatingGradient, gradientData.repeating)
     ColorPickerCommon.updateGradientFill(colorData)

@@ -257,7 +257,6 @@ sudo -s
 repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.2.4-x64.pacman
   - File Explorer > go to `~/share/download.desech.com/pacman`
   - when the lock file disappears cancel the process
-repoctl status -a
 ```
 
 Fedora

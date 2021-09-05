@@ -313,7 +313,7 @@ npm run build-all-prod
 npm run build-win
 ```
 
-- copy the `latest.yml` and exe file to sftp and leave only the last 2 versions
+- copy the `latest.yml`, exe and blockmap file to sftp and leave only the last 2 versions
 - open Desech Studio without logging in and see if it auto updates
 
 ## Build Studio Mac

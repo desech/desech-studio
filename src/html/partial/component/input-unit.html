@@ -1,8 +1,9 @@
 <div class="component-input-unit">
-  <input type="text" class="input-unit-value {{ class }}" name="{{ name }}" placeholder="{{#if placeholder }} {{ placeholder }} {{else}} {{#i18n}} Auto {{/i18n}} {{/if}}" {{# if disabled }} disabled {{/if}}>
-  <select class="input-unit-measure" {{# if disabled }} disabled {{/if}}>
-    <option value="-" hidden>-</option>
+  <input type="text" class="input-unit-value {{ class }}" name="{{ name }}"
+    placeholder="{{#if placeholder }} {{ placeholder }} {{else}} {{#i18n}} Auto {{/i18n}} {{/if}}"
+    {{#if disabled }} disabled {{/if}}>
 
+  <select class="input-unit-measure" name="{{ name }}-unit-measure" {{#if disabled }} disabled {{/if}}>
     {{#if length }} <optgroup label="{{#i18n}} Common {{/i18n}}"> {{/if}}
       {{#if number }} <option {{#ifeq selected ''}} selected {{/ifeq}} data-numeric="1" value="">-</option> {{/if}}
       {{#if length }} <option {{#ifeq selected 'px'}} selected {{/ifeq}} data-numeric="1" value="px">PX</option> {{/if}}
@@ -13,17 +14,20 @@
       {{#if length }} <option {{#ifeq selected 'vw'}} selected {{/ifeq}} data-numeric="1" value="vw">VW</option> {{/if}}
       {{#if length }} <option {{#ifeq selected 'vh'}} selected {{/ifeq}} data-numeric="1" value="vh">VH</option> {{/if}}
     {{#if length }} </optgroup> {{/if}}
-    {{#if length }} <optgroup label="{{#i18n}} Other {{/i18n}}"> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'ex'}} selected {{/ifeq}} data-numeric="1" value="ex">EX</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'ch'}} selected {{/ifeq}} data-numeric="1" value="ch">CH</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'vmin'}} selected {{/ifeq}} data-numeric="1" value="vmin">Vmin</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'vmax'}} selected {{/ifeq}} data-numeric="1" value="vmax">Vmax</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'mm'}} selected {{/ifeq}} data-numeric="1" value="mm">MM</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'cm'}} selected {{/ifeq}} data-numeric="1" value="cm">CM</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'in'}} selected {{/ifeq}} data-numeric="1" value="in">IN</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'pc'}} selected {{/ifeq}} data-numeric="1" value="pc">PC</option> {{/if}}
-      {{#if length }} <option {{#ifeq selected 'pt'}} selected {{/ifeq}} data-numeric="1" value="pt">PT</option> {{/if}}
-    {{#if length }} </optgroup> {{/if}}
+
+    {{#if length }}
+      <optgroup label="{{#i18n}} Other {{/i18n}}">
+        <option {{#ifeq selected 'ex'}} selected {{/ifeq}} data-numeric="1" value="ex">EX</option>
+        <option {{#ifeq selected 'ch'}} selected {{/ifeq}} data-numeric="1" value="ch">CH</option>
+        <option {{#ifeq selected 'vmin'}} selected {{/ifeq}} data-numeric="1" value="vmin">Vmin</option>
+        <option {{#ifeq selected 'vmax'}} selected {{/ifeq}} data-numeric="1" value="vmax">Vmax</option>
+        <option {{#ifeq selected 'mm'}} selected {{/ifeq}} data-numeric="1" value="mm">MM</option>
+        <option {{#ifeq selected 'cm'}} selected {{/ifeq}} data-numeric="1" value="cm">CM</option>
+        <option {{#ifeq selected 'in'}} selected {{/ifeq}} data-numeric="1" value="in">IN</option>
+        <option {{#ifeq selected 'pc'}} selected {{/ifeq}} data-numeric="1" value="pc">PC</option>
+        <option {{#ifeq selected 'pt'}} selected {{/ifeq}} data-numeric="1" value="pt">PT</option>
+      </optgroup>
+    {{/if}}
 
     {{#if angle }}
       <optgroup label="{{#i18n}} Angle {{/i18n}}">
@@ -137,13 +141,15 @@
 
     {{^if noGeneral }}
       <optgroup label="{{#i18n}} General {{/i18n}}">
-        {{#if auto }}<option value="auto">{{#i18n}} Auto {{/i18n}}</option>{{/if}}
-        {{#if normal }}<option value="normal">{{#i18n}} Normal {{/i18n}}</option>{{/if}}
-        {{#if none }}<option value="none">{{#i18n}} None {{/i18n}}</option>{{/if}}
-        {{^if noGeneralOption }}<option value="inherit">{{#i18n}} Inherit {{/i18n}}</option>{{/if}}
-        {{^if noGeneralOption }}<option value="initial">{{#i18n}} Initial {{/i18n}}</option>{{/if}}
-        {{^if noGeneralOption }}<option value="unset">{{#i18n}} Unset {{/i18n}}</option>{{/if}}
+        {{#if auto }} <option value="auto">{{#i18n}} Auto {{/i18n}}</option> {{/if}}
+        {{#if normal }} <option value="normal">{{#i18n}} Normal {{/i18n}}</option> {{/if}}
+        {{#if none }} <option value="none">{{#i18n}} None {{/i18n}}</option> {{/if}}
+        {{^if noGeneralOption }} <option value="inherit">{{#i18n}} Inherit {{/i18n}}</option> {{/if}}
+        {{^if noGeneralOption }} <option value="initial">{{#i18n}} Initial {{/i18n}}</option> {{/if}}
+        {{^if noGeneralOption }} <option value="unset">{{#i18n}} Unset {{/i18n}}</option> {{/if}}
       </optgroup>
     {{/if}}
+
+    {{^if number }} <option value="-" hidden>-</option> {{/if}}
   </select>
 </div>

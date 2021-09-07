@@ -46,9 +46,9 @@ export default {
     }
   },
 
-  injectFields (template, style) {
+  injectFields (form, style) {
     const css = StateStyleSheet.getCurrentStyleObject()
-    for (const field of template.elements) {
+    for (const field of form.elements) {
       if (field.classList.contains('change-style')) {
         this.setValue(field, css[field.name], style[field.name])
       }
@@ -58,7 +58,8 @@ export default {
   setValue (field, css, style) {
     if (field.classList.contains('input-unit-value')) {
       InputUnitField.setValue(field, css, style)
-    } else if ((field.tagName === 'SELECT' || field.tagName === 'INPUT') && !field.classList.contains('input-unit-measure')) {
+    } else if ((field.tagName === 'SELECT' || field.tagName === 'INPUT') &&
+      !field.classList.contains('input-unit-measure')) {
       field.value = css || ''
     } else if (field.tagName === 'BUTTON') {
       CheckButtonField.setValue(field, css)

@@ -1,6 +1,6 @@
 export default {
   startsNumeric (string) {
-    return /^-?[0-9.,]+/.test(string)
+    return /^-?[0-9]([0-9.,]+)?/.test(string)
   },
 
   isNumeric (string) {

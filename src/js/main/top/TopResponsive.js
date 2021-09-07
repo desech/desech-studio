@@ -143,8 +143,7 @@ export default {
   },
 
   getInput (input) {
-    let value = InputUnitField.getValue(input)
-    if (ExtendJS.isNumeric(value)) value += 'px'
+    const value = InputUnitField.getValue(input)
     return parseInt(value) > 0 ? { [input.name]: value } : null
   },
 

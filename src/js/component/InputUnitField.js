@@ -5,7 +5,7 @@ export default {
   getEvents () {
     return {
       change: ['changeInputValueEvent', 'changeSelectUnitEvent'],
-      keydown: ['keydownOperateNumberEvent']
+      keydown: ['keydownOperateNumberEvent', 'keydownSaveNumberEvent']
     }
   },
 
@@ -28,6 +28,12 @@ export default {
   keydownOperateNumberEvent (event) {
     if (event.key && event.target.classList.contains('input-unit-value')) {
       this.operateNumber(event.key, event.target)
+    }
+  },
+
+  keydownSaveNumberEvent (event) {
+    if (event.key === 'Enter' && event.target.classList.contains('input-unit-value')) {
+      this.triggerChange(event.target)
     }
   },
 
@@ -114,19 +120,23 @@ export default {
     if (value) {
       this.setValueField(field, value)
     } else if (style !== null) {
-      this.setUnitValue(field, style)
+      this.setUnitValue(field.nextElementSibling, style)
       field.value = ''
       this.injectInputPlaceholder(field, style)
     }
   },
 
-  setUnitValue (field, value) {
+  setUnitValue (select, value) {
     if (ExtendJS.startsNumeric(value)) {
       const numeric = this.getNumericValue(value)
-      if (Array.isArray(numeric)) field.nextElementSibling.value = numeric[1]
+      if (Array.isArray(numeric)) select.value = numeric[1]
     } else if (value) {
-      field.nextElementSibling.value = '-'
+      this.setDefaultUnit(select)
     }
+  },
+
+  setDefaultUnit (select) {
+    select.value = select.options[0].value
   },
 
   injectInputPlaceholder (input, style) {
@@ -137,8 +147,10 @@ export default {
   setValueField (field, value) {
     if (ExtendJS.startsNumeric(value)) {
       this.setNumericValue(field, value)
-    } else {
+    } else if (value) {
       this.setCustomValue(field, value)
+    } else {
+      this.setDefaultUnit(field.nextElementSibling)
     }
   },
 
@@ -162,7 +174,7 @@ export default {
   },
 
   splitNumericValue (value) {
-    return /(?<value>-?[0-9.,]+)(?<unit>[a-z%]+)/gi.exec(value)
+    return /(?<value>^-?[0-9]([0-9.,]+)?)(?<unit>[a-z%]+)/gi.exec(value)
   },
 
   setCustomValue (field, value) {

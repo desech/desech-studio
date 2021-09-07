@@ -55,7 +55,7 @@ export default {
     ImportFile.cleanFiles(data)
     this.saveViewportDimensions(data, params)
     params.fonts = await ImportFont.installFonts(data, params)
-    ImportFile.saveAllHtmlCssFiles(data, params)
+    await ImportFile.saveAllHtmlCssFiles(data, params)
   },
 
   async getImportData (params) {

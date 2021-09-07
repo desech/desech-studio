@@ -50,28 +50,28 @@ export default {
     delete data[folder].files[file]
   },
 
-  saveAllHtmlCssFiles (data, params) {
-    this.processFolders(data, params, params.folder)
+  async saveAllHtmlCssFiles (data, params) {
+    await this.processFolders(data, params, params.folder)
   },
 
-  processFolders (data, params, currentFolder) {
+  async processFolders (data, params, currentFolder) {
     for (const entry of Object.values(data)) {
       const entryPath = File.resolve(currentFolder, entry.name)
       if (entry.type === 'folder') {
         File.createFolder(entryPath)
-        this.processFolders(entry.files, params, entryPath)
+        await this.processFolders(entry.files, params, entryPath)
       } else { // file
-        this.saveHtmlCssFile(entry, params, entryPath + '.html')
+        await this.saveHtmlCssFile(entry, params, entryPath + '.html')
       }
     }
   },
 
-  saveHtmlCssFile (artboard, params, htmlFile) {
+  async saveHtmlCssFile (artboard, params, htmlFile) {
     // data.body will contain the body element with all its children
     const data = ImportHtml.processHtml(artboard, params, htmlFile)
     fs.writeFileSync(htmlFile, data.html)
     const pageCssFile = HelperFile.getPageCssFile(htmlFile, params.folder)
     const pageCss = ImportCss.processCss(data.body, params)
-    FileSave.saveStyleToFile(pageCss, null, params.folder, `css/page/${pageCssFile}`)
+    await FileSave.saveStyleToFile(pageCss, null, params.folder, `css/page/${pageCssFile}`)
   }
 }

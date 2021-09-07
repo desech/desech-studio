@@ -29,6 +29,7 @@ export default {
   createWindow () {
     this._window = new BrowserWindow({
       webPreferences: {
+        nativeWindowOpen: true,
         preload: File.resolve(app.getAppPath(), 'preload.js')
       }
     })

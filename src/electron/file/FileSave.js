@@ -13,31 +13,32 @@ import File from './File.js'
 export default {
   async saveCurrentFile (data) {
     // check TopCommandSave.getCurrentFileData() for data
-    this.saveFileWithBackup(data.htmlFile, data.html)
-    this.saveStyle(data.css, data.htmlFile, data.folder)
+    await this.saveFileWithBackup(data.htmlFile, data.html)
+    await this.saveStyle(data.css, data.htmlFile, data.folder)
     await Plugin.triggerPlugin('designSystem', 'saveToFile', data)
     // we want the design system to trigger early to copy the css/js files
     await this.exportCode(data)
   },
 
-  saveFileWithBackup (file, contents) {
+  async saveFileWithBackup (file, contents) {
     if (fs.existsSync(file)) {
       file = HelperFile.convertPathForWin(file, os.platform())
-      shell.moveItemToTrash(file)
+      await shell.trashItem(file)
     }
     fs.writeFileSync(file, contents)
   },
 
-  saveStyle (css, htmlFile, folder) {
-    this.saveStyleToFile(css.color, css.color, folder, 'css/general/root.css')
-    this.saveStyleToFile(css.componentCss, css.color, folder, 'css/general/component-css.css')
-    this.savePageOrComponentStyle(css, htmlFile, folder)
+  async saveStyle (css, htmlFile, folder) {
+    await this.saveStyleToFile(css.color, css.color, folder, 'css/general/root.css')
+    await this.saveStyleToFile(css.componentCss, css.color, folder,
+      'css/general/component-css.css')
+    await this.savePageOrComponentStyle(css, htmlFile, folder)
   },
 
-  saveStyleToFile (data, colors, folder, file) {
+  async saveStyleToFile (data, colors, folder, file) {
     const filePath = File.resolve(folder, file)
     const css = this.getStyle(data, colors)
-    this.saveFileWithBackup(filePath, css)
+    await this.saveFileWithBackup(filePath, css)
   },
 
   getStyle (data, colors = null) {
@@ -89,12 +90,13 @@ export default {
     return ParseCssMerge.mergeProperties(properties, colors)
   },
 
-  savePageOrComponentStyle (css, htmlFile, folder) {
+  async savePageOrComponentStyle (css, htmlFile, folder) {
     if (HelperProject.isFileComponent(htmlFile)) {
-      this.saveStyleToFile(css.componentHtml, css.color, folder, 'css/general/component-html.css')
+      await this.saveStyleToFile(css.componentHtml, css.color, folder,
+        'css/general/component-html.css')
     } else {
       const pageCssFile = HelperFile.getPageCssFile(htmlFile, folder)
-      this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
+      await this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
     }
   },
 

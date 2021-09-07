@@ -67,7 +67,7 @@ export default {
     if (!data) {
       throw new Error(Language.localize('No package.json data found for {{url}}', { url }))
     }
-    this.moveTmpFolder(folder, url)
+    await this.moveTmpFolder(folder, url)
   },
 
   async unzipTemp (url) {
@@ -92,13 +92,13 @@ export default {
     }
   },
 
-  moveTmpFolder (folder, url) {
+  async moveTmpFolder (folder, url) {
     const pluginName = HelperPlugin.getPluginName(url)
     let dest = File.resolve(this._DIR, pluginName)
     if (fs.existsSync(dest)) {
-      dest = HelperFile.convertPathForWin(dest, os.platform())
       // clean it up if it exists (when upgrading)
-      shell.moveItemToTrash(dest)
+      dest = HelperFile.convertPathForWin(dest, os.platform())
+      await shell.trashItem(dest)
     }
     fse.copySync(folder, dest)
   },
@@ -149,12 +149,12 @@ export default {
     }
   },
 
-  removePlugin (url) {
+  async removePlugin (url) {
     const pluginName = HelperPlugin.getPluginName(url)
     let pluginPath = File.resolve(this._DIR, pluginName)
     if (fs.existsSync(pluginPath)) {
       pluginPath = HelperFile.convertPathForWin(pluginPath, os.platform())
-      shell.moveItemToTrash(pluginPath)
+      await shell.trashItem(pluginPath)
     }
     Electron.reload()
   },

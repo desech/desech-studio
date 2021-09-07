@@ -21,9 +21,7 @@ process.once('loaded', () => {
 
     async shellTrashItem (file) {
       if (fs.existsSync(file)) {
-        // await shell.trashItem(file)
-        // use this for now - https://github.com/electron/electron/issues/28029
-        shell.moveItemToTrash(file)
+        await shell.trashItem(file)
       }
     }
   })

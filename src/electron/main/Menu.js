@@ -3,6 +3,7 @@ import Language from '../lib/Language.js'
 import EventMain from '../event/EventMain.js'
 import EventMenu from '../event/EventMenu.js'
 import Config from '../lib/Config.js'
+import ExportFolder from '../export/ExportFolder.js'
 
 export default {
   setMenu () {
@@ -64,7 +65,13 @@ export default {
         {
           label: Language.localize('Export Project'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'exportFolder')
+            await EventMain.handleEvent(ExportFolder, 'exportFolder')
+          }
+        },
+        {
+          label: Language.localize('Export for Production'),
+          click: async () => {
+            await EventMain.handleEvent(ExportFolder, 'exportProduction')
           }
         },
         { type: 'separator' },
@@ -230,7 +237,7 @@ export default {
   },
 
   injectEditMacMenu (menu) {
-    // inject the `Edit` menu after the `Import` menu
+    // inject the `Edit` menu after the `File` menu
     menu.splice(2, 0, {
       label: Language.localize('Edit'),
       submenu: [

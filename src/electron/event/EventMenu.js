@@ -1,14 +1,11 @@
-import { ipcMain, dialog, app, shell } from 'electron'
+import { ipcMain, app, shell } from 'electron'
 import EventMain from './EventMain.js'
-import Language from '../lib/Language.js'
 import Cookie from '../lib/Cookie.js'
 import Settings from '../lib/Settings.js'
-import File from '../file/File.js'
 import Plugin from '../lib/Plugin.js'
 import Project from '../project/Project.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import Electron from '../lib/Electron.js'
-import Zip from '../file/Zip.js'
 import Import from '../import/Import.js'
 
 export default {
@@ -105,23 +102,6 @@ export default {
     if (!currentFolder) return
     await Cookie.removeCookie('currentFolder')
     EventMain.ipcMainInvoke('mainCloseProject')
-  },
-
-  async exportFolder () {
-    const currentFolder = await Cookie.getCookie('currentFolder')
-    if (!currentFolder) return
-    const folders = this.getExportFolder()
-    if (!folders) return
-    const zipFolder = File.sanitizePath(folders[0])
-    await Zip.exportProjectFolder(zipFolder, currentFolder)
-  },
-
-  getExportFolder () {
-    return dialog.showOpenDialogSync(Electron.getCurrentWindow(), {
-      title: Language.localize('Save zip file'),
-      buttonLabel: Language.localize('Save file'),
-      properties: ['openDirectory', 'createDirectory']
-    })
   },
 
   switchLanguage (locale) {

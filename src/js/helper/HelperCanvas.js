@@ -15,6 +15,11 @@ export default {
     return this.getCanvas().style.height
   },
 
+  scrollToTop () {
+    const container = this.getCanvasContainer()
+    container.scrollTop = 0
+  },
+
   // data = tool, operation, selectedElement
   getCanvasData () {
     const canvas = this.getCanvas()

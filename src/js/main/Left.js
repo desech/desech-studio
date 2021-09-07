@@ -27,6 +27,7 @@ export default {
   getEvents () {
     return {
       openpanel: ['openpanelEvent'],
+      closepanel: ['closepanelEvent'],
       reloadcontainer: ['reloadcontainerEvent'],
       click: ['clickTogglePanelEvent'],
       keydown: ['keydownTogglePanelEvent']
@@ -40,6 +41,12 @@ export default {
   openpanelEvent (event) {
     if (event.target.classList.contains('panel-list-button')) {
       this.openPanel(event.target, event.detail || {})
+    }
+  },
+
+  closepanelEvent (event) {
+    if (event.target.classList.contains('panel-list-button')) {
+      this.closePanel(event.target)
     }
   },
 
@@ -69,6 +76,11 @@ export default {
     } else if (options.callback) {
       options.callback()
     }
+  },
+
+  closePanel (button) {
+    const container = document.getElementById('sidebar-left-panel')
+    this.hidePanel(button, container)
   },
 
   reloadPanel (container, data) {

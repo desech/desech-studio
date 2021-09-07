@@ -8,6 +8,8 @@ import Project from '../start/Project.js'
 import Auth from '../start/Auth.js'
 import TopZoom from '../main/top/TopZoom.js'
 import TopCommon from '../main/top/TopCommon.js'
+import LeftFileLoad from '../main/left/file/LeftFileLoad.js'
+import HelperCanvas from '../helper/HelperCanvas.js'
 
 export default {
   loadStart () {
@@ -49,5 +51,11 @@ export default {
 
   setIntervals () {
     TopCommandSave.setAutoSaveInterval()
+  },
+
+  async loadFile (file) {
+    await LeftFileLoad.loadFile(file)
+    HelperTrigger.triggerClosePanel('panel-button-file')
+    HelperCanvas.scrollToTop()
   }
 }

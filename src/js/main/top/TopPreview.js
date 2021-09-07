@@ -1,13 +1,13 @@
 import HelperEvent from '../../helper/HelperEvent.js'
-import CanvasCommon from '../canvas/CanvasCommon.js'
-import CanvasElementSelect from '../canvas/element/CanvasElementSelect.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import TopCommon from './TopCommon.js'
+import HelperFile from '../../helper/HelperFile.js'
+import Page from '../../page/Page.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickSwitchPreviewEvent'],
+      click: ['clickSwitchPreviewEvent', 'clickOpenLinkEvent'],
       keydown: ['keydownSwitchPreviewEvent']
     }
   },
@@ -18,89 +18,33 @@ export default {
 
   clickSwitchPreviewEvent (event) {
     if (event.target.closest('.top-preview-button')) {
-      this.switchPreview()
+      TopCommon.switchPreview()
+    }
+  },
+
+  async clickOpenLinkEvent (event) {
+    if (HelperCanvas.isPreview() && event.target.closest('#canvas a')) {
+      await this.openHtmlFile(event.target.closest('a'))
     }
   },
 
   keydownSwitchPreviewEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && event.key.toLowerCase() === 'p') {
-      this.switchPreview()
+      TopCommon.switchPreview()
     }
   },
 
-  switchPreview () {
-    const button = document.getElementsByClassName('top-preview-button')[0]
-    const enabled = button.classList.contains('selected')
-    enabled ? this.disablePreview(button) : this.enablePreview(button)
-    TopCommon.positionDragHandle()
+  async openHtmlFile (anchor) {
+    let href = anchor.getAttributeNS(null, 'href')
+    if (!href || href === '/') href = 'index.html'
+    if (!this.isPathRelative(href)) return
+    const file = HelperFile.getAbsPath(href)
+    await Page.loadFile(file)
   },
 
-  enablePreview (button) {
-    CanvasCommon.enablePanelButton('select')
-    CanvasElementSelect.deselectElement()
-    button.classList.add('selected')
-    HelperCanvas.addPreview()
-    this.turnPropertiesOn()
-  },
-
-  disablePreview (button) {
-    button.classList.remove('selected')
-    HelperCanvas.removePreview()
-    this.resetForms()
-    this.resetResize()
-    this.turnPropertiesOff()
-  },
-
-  resetForms () {
-    const canvas = HelperCanvas.getCanvas()
-    for (const form of canvas.getElementsByTagName('form')) {
-      form.reset()
-    }
-    this.resetFieldsOutsideForm()
-  },
-
-  resetFieldsOutsideForm () {
-    const canvas = HelperCanvas.getCanvas()
-    this.resetValueOutsideForm(canvas.getElementsByTagName('input'))
-    this.resetValueOutsideForm(canvas.getElementsByTagName('textarea'))
-    this.resetCheckedOutsideForm(canvas.querySelectorAll('input[type="checkbox"]'))
-    this.resetCheckedOutsideForm(canvas.querySelectorAll('input[type="radio"]'))
-    // @todo select is pretty hard to reset because of multiple values and no default selected
-  },
-
-  resetValueOutsideForm (fields) {
-    for (const field of fields) {
-      if ((field.value || field.getAttribute('value')) &&
-        field.value !== field.getAttribute('value')) {
-        field.value = field.getAttribute('value')
-      }
-    }
-  },
-
-  resetCheckedOutsideForm (fields) {
-    for (const field of fields) {
-      if (field.checked !== field.hasAttribute('checked')) {
-        field.checked = field.hasAttribute('checked')
-      }
-    }
-  },
-
-  resetResize () {
-    const canvas = HelperCanvas.getCanvas()
-    for (const element of canvas.querySelectorAll('[style]')) {
-      // don't remove the style from svg elements
-      if (!element.closest('svg')) {
-        element.removeAttributeNS(null, 'style')
-      }
-    }
-  },
-
-  turnPropertiesOn () {
-    // @todo finish it
-  },
-
-  turnPropertiesOff () {
-    // @todo finish it
+  isPathRelative (path) {
+    return (!path.startsWith('http') && !path.startsWith('tel:') && !path.startsWith('mailto:') &&
+      !path.startsWith('#'))
   }
 }

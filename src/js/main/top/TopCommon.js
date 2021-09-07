@@ -5,6 +5,8 @@ import StateCommand from '../../state/StateCommand.js'
 import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperStyle from '../../helper/HelperStyle.js'
+import CanvasCommon from '../canvas/CanvasCommon.js'
+import CanvasElementSelect from '../canvas/element/CanvasElementSelect.js'
 
 export default {
   createOverlay (container, type) {
@@ -146,5 +148,70 @@ export default {
       ).join(' ')
     }
     return list
+  },
+
+  switchPreview () {
+    const button = document.getElementsByClassName('top-preview-button')[0]
+    const enabled = button.classList.contains('selected')
+    enabled ? this.disablePreview(button) : this.enablePreview(button)
+    this.positionDragHandle()
+  },
+
+  enablePreview (button) {
+    CanvasCommon.enablePanelButton('select')
+    CanvasElementSelect.deselectElement()
+    button.classList.add('selected')
+    HelperCanvas.addPreview()
+  },
+
+  disablePreview (button) {
+    button.classList.remove('selected')
+    HelperCanvas.removePreview()
+    this.resetForms()
+    this.resetResize()
+  },
+
+  resetForms () {
+    const canvas = HelperCanvas.getCanvas()
+    for (const form of canvas.getElementsByTagName('form')) {
+      form.reset()
+    }
+    this.resetFieldsOutsideForm()
+  },
+
+  resetFieldsOutsideForm () {
+    const canvas = HelperCanvas.getCanvas()
+    this.resetValueOutsideForm(canvas.getElementsByTagName('input'))
+    this.resetValueOutsideForm(canvas.getElementsByTagName('textarea'))
+    this.resetCheckedOutsideForm(canvas.querySelectorAll('input[type="checkbox"]'))
+    this.resetCheckedOutsideForm(canvas.querySelectorAll('input[type="radio"]'))
+    // @todo select is pretty hard to reset because of multiple values and no default selected
+  },
+
+  resetValueOutsideForm (fields) {
+    for (const field of fields) {
+      if ((field.value || field.getAttribute('value')) &&
+        field.value !== field.getAttribute('value')) {
+        field.value = field.getAttribute('value')
+      }
+    }
+  },
+
+  resetCheckedOutsideForm (fields) {
+    for (const field of fields) {
+      if (field.checked !== field.hasAttribute('checked')) {
+        field.checked = field.hasAttribute('checked')
+      }
+    }
+  },
+
+  resetResize () {
+    const canvas = HelperCanvas.getCanvas()
+    for (const element of canvas.querySelectorAll('[style]')) {
+      // don't remove the style from svg elements
+      if (!element.closest('svg')) {
+        element.removeAttributeNS(null, 'style')
+      }
+    }
   }
 }

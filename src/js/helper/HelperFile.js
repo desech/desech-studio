@@ -26,7 +26,7 @@ export default {
 
   getAbsPath (path) {
     const root = HelperProject.getFolder()
-    return root + path
+    return (root + '/' + path).replaceAll('//', '/')
   },
 
   getBaseHref (file, folder = null) {

@@ -11,6 +11,10 @@ export default {
     this.triggerCustomEvent('openpanel', id, detail)
   },
 
+  triggerClosePanel (id, detail = null) {
+    this.triggerCustomEvent('closepanel', id, detail)
+  },
+
   triggerCustomEvent (type, id, detail = null) {
     const data = { bubbles: true, cancelable: true }
     if (detail) data.detail = detail

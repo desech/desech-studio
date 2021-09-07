@@ -9,9 +9,7 @@ export default {
     if (!data) return
     this.loadHtml(data.html)
     this.loadCss(data.css)
-    HelperProject.setFile(file)
-    HelperProject.setFileMeta(data.html.meta)
-    HelperProject.setFontList(data.font)
+    this.setData(file, data)
     HelperTrigger.triggerClear('right-panel-style')
   },
 
@@ -21,5 +19,11 @@ export default {
 
   loadCss (css) {
     StyleSheetFile.reloadStyle(css)
+  },
+
+  setData (file, data) {
+    HelperProject.setFile(file)
+    HelperProject.setFileMeta(data.html.meta)
+    HelperProject.setFontList(data.font)
   }
 }

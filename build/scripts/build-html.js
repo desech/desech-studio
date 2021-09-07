@@ -1,16 +1,14 @@
 import fs from 'fs'
-import fetch from 'node-fetch'
 import minify from 'html-minifier'
 import Template from '../../src/lib/Template.js'
 import Language from '../../src/electron/lib/Language.js'
 import pjson from '../../package.json'
+import Fetch from '../../src/electron/lib/Fetch.js'
 
 async function buildHtml (locale) {
   global.locale = locale
   // sort the fonts by category
-  const response = await fetch('https://download.desech.com/font/list.json')
-  if (!response.ok) throw new Error("Can't access download.desech.com")
-  const fonts = await response.json()
+  const fonts = await Fetch.fetch('https://download.desech.com/font/list.json')
   // first 20 from https://fonts.google.com/?sort=popularity
   const popularCategory = [
     'Poppins',

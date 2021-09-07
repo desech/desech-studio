@@ -1,9 +1,9 @@
 import { shell } from 'electron'
-import fetch from 'node-fetch'
 import Settings from '../lib/Settings.js'
 import Config from '../lib/Config.js'
 import EventMain from '../event/EventMain.js'
 import Cookie from '../lib/Cookie.js'
+import Fetch from '../lib/Fetch.js'
 
 export default {
   async authenticateDesech (studioToken) {
@@ -15,7 +15,7 @@ export default {
 
   async fetchAuthDesech (studioToken) {
     const url = Config.getConfig('api') + '/user/studio-fetch?token=' + studioToken
-    const data = await this.fetchData(url)
+    const data = await Fetch.fetch(url)
     if (!data.user_token || !data.login_token) return
     this.saveTokens(data.user_token, data.login_token)
     await this.loginWithTokens(data.user_token, data.login_token, studioToken)
@@ -30,14 +30,6 @@ export default {
     shell.openExternal(url)
   },
 
-  async fetchData (url) {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error("Can't access api.desech.com")
-    const json = await response.json()
-    if (json.error) throw new Error(json.error)
-    return json
-  },
-
   saveTokens (userToken, loginToken) {
     Settings.changeSettings({ userToken, loginToken })
   },
@@ -45,7 +37,7 @@ export default {
   async loginWithTokens (userToken, loginToken, studioToken) {
     try {
       const url = Config.getConfig('api') + `/user/account?user=${userToken}&login=${loginToken}`
-      const user = await this.fetchData(url)
+      const user = await Fetch.fetch(url)
       if (!user.active_subscription) EventMain.ipcMainInvoke('mainPremiumPrompt')
       await Cookie.setCookie('accountType', user.account_type)
       EventMain.ipcMainInvoke('mainLoginSuccess', user)

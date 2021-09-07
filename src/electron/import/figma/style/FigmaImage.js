@@ -1,10 +1,10 @@
 import fs from 'fs'
-import fetch from 'node-fetch'
 import FigmaApi from '../FigmaApi.js'
 import Language from '../../../lib/Language.js'
 import FigmaCommon from '../FigmaCommon.js'
 import File from '../../../file/File.js'
 import ImportImage from '../../ImportImage.js'
+import Fetch from '../../../lib/Fetch.js'
 
 export default {
   async fetchImage (node, settings) {
@@ -59,9 +59,8 @@ export default {
   },
 
   async saveApiImage (url, file, ext) {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(Language.localize("Can't access the figma image"))
-    const content = (ext === 'svg') ? await response.text() : await response.buffer()
+    const type = (ext === 'svg') ? 'text' : 'buffer'
+    const content = await Fetch.fetch(url, type)
     fs.writeFileSync(file, content)
   }
 }

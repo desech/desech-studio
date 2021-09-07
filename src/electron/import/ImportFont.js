@@ -1,12 +1,12 @@
-import fetch from 'node-fetch'
 import EventMain from '../event/EventMain.js'
 import Language from '../lib/Language.js'
 import Font from '../lib/Font.js'
+import Fetch from '../lib/Fetch.js'
 
 export default {
   async installFonts (data, params) {
     const elementFonts = this.getElementFonts(data)
-    const webFonts = await this.fetchFonts()
+    const webFonts = await Fetch.fetch('https://download.desech.com/font/list.json')
     const folderFonts = Font.getFontsList(params.folder)
     for (const val of elementFonts) {
       if (this.isGoogleFont(val.name, webFonts)) {
@@ -61,12 +61,6 @@ export default {
     for (const font of list) {
       if (font.name === name) return font
     }
-  },
-
-  async fetchFonts () {
-    const response = await fetch('https://download.desech.com/font/list.json')
-    if (!response.ok) throw new Error("Can't access download.desech.com")
-    return await response.json()
   },
 
   isGoogleFont (font, list) {

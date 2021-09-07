@@ -4,7 +4,6 @@ import archiver from 'archiver'
 import fse from 'fs-extra'
 import jimp from 'jimp'
 import beautify from 'js-beautify'
-import fetch from 'node-fetch'
 import jsdom from 'jsdom'
 import fs from 'fs'
 import os from 'os'
@@ -17,6 +16,7 @@ import Config from './Config.js'
 import Electron from './Electron.js'
 import Language from './Language.js'
 import Log from './Log.js'
+import Fetch from './Fetch.js'
 
 export default {
   _DIR: null,
@@ -53,9 +53,7 @@ export default {
   async fetchPluginData (repoUrl) {
     const url = repoUrl.replace('github.com', 'raw.githubusercontent.com') +
       '/main/package.json'
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
-    return await response.json()
+    return await Fetch.fetch(url)
   },
 
   async installPlugin (url) {
@@ -83,9 +81,7 @@ export default {
   async getApiZip (url) {
     // const apiUrl = url.replace('github.com', 'api.github.com/repos') + '/zipball'
     url += '/archive/refs/heads/main.zip'
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
-    return await response.buffer()
+    return await Fetch.fetch(url, 'buffer')
   },
 
   getFolderPluginData (folder) {
@@ -125,9 +121,7 @@ export default {
 
   async getPluginsList () {
     const url = Config.getConfig('api') + '/plugins'
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(Language.localize("Can't access {{url}}", { url }))
-    const json = await response.json()
+    const json = await Fetch.fetch(url)
     return json.plugins
   },
 

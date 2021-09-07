@@ -1,8 +1,8 @@
 import fs from 'fs'
-import fetch from 'node-fetch'
 import AdmZip from 'adm-zip'
 import Cookie from './Cookie.js'
 import File from '../file/File.js'
+import Fetch from './Fetch.js'
 
 export default {
   async addFont (url, file, folder = null) {
@@ -23,13 +23,7 @@ export default {
   },
 
   async getZipFile (url, file) {
-    if (url) {
-      const response = await fetch(url)
-      if (!response.ok) throw new Error("Can't access download.desech.com")
-      return await response.buffer()
-    } else {
-      return fs.readFileSync(file)
-    }
+    return url ? await Fetch.fetch(url, 'buffer') : fs.readFileSync(file)
   },
 
   getFontCss (folder, zip) {

@@ -13,8 +13,7 @@ export default {
   getEvents () {
     return {
       click: ['clickCollapseExpandEvent', 'clickSelectSourceFileEvent',
-        'clickChooseSourceFileEvent', 'clickHighlightSourceFileEvent',
-        'clickSetActiveItemEvent'], // order matters
+        'clickChooseSourceFileEvent', 'clickHighlightSourceFileEvent'],
       dblclick: ['dblclickCollapseExpandEvent', 'dblclickExecuteFileEvent'],
       keydown: ['keydownClearSourceFileEvent'],
       dragstart: ['dragstartMoveItemEvent'],
@@ -49,19 +48,6 @@ export default {
       // ignore all click events
       event.preventDefault()
     }
-  },
-
-  clickSetActiveItemEvent (event) {
-    // use a timer and the event.detail check, to prevent the click events firing twice
-    // for double click
-    if (event.detail !== 1) return
-    this._timer = setTimeout(() => {
-      if (event.target.closest('.panel-file-item')) {
-        LeftFileCommon.setActiveItem(event.target.closest('.panel-file-item'))
-      } else {
-        LeftFileCommon.clearActiveItem()
-      }
-    }, 200)
   },
 
   clickSelectSourceFileEvent (event) {

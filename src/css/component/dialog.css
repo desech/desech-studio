@@ -202,7 +202,7 @@ dialog.dialog .dialog-import-figma .figma-import-file {
   margin-top: 20px;
 }
 
-dialog.dialog .dialog-import-figma .figma-import-file > div {
+dialog.dialog .dialog-import-figma .figma-import-file>div {
   display: grid;
   align-items: center;
   grid-auto-flow: column;

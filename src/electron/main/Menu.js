@@ -214,17 +214,23 @@ export default {
   },
 
   moveAboutMenuOption (menu) {
-    menu[0].submenu.unshift(menu[5].submenu[2])
-    delete menu[5].submenu[2]
+    // `Help` is the last menu category; `About` is the last menu item
+    const helpMenu = menu[menu.length - 1]
+    const aboutOption = helpMenu.submenu[helpMenu.submenu.length - 1]
+    menu[0].submenu.unshift(aboutOption)
+    delete helpMenu.submenu[helpMenu.submenu.length - 1]
   },
 
   moveQuitMenuOption (menu) {
-    menu[0].submenu.push(menu[1].submenu[7])
-    delete menu[1].submenu[6]
-    delete menu[1].submenu[7]
+    // `Quit` is the last menu item from the `File` menu; before that there's a separator
+    const fileMenu = menu[1]
+    menu[0].submenu.push(fileMenu.submenu[fileMenu.submenu.length - 1])
+    delete fileMenu.submenu[fileMenu.submenu.length - 2]
+    delete fileMenu.submenu[fileMenu.submenu.length - 1]
   },
 
   injectEditMacMenu (menu) {
+    // inject the `Edit` menu after the `Import` menu
     menu.splice(2, 0, {
       label: Language.localize('Edit'),
       submenu: [

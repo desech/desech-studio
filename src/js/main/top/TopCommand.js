@@ -100,6 +100,7 @@ export default {
     element.className = 'current-command'
     this.setPreviousCommands(element)
     this.setNextCommands(element)
+    // the container must have visibility hidden not display one
     element.scrollIntoView()
   },
 

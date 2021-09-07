@@ -47,7 +47,7 @@
 }
 
 .sidebar-top .history {
-  display: none;
+  visibility: hidden;
   position: relative;
   z-index: 2;
   margin-top: 9px;
@@ -59,7 +59,7 @@
 }
 
 .sidebar-top .sidebar-top-middle:hover .history {
-  display: block;
+  visibility: visible;
 }
 
 .sidebar-top ul.history-queue {

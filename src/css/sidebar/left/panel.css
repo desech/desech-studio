@@ -120,6 +120,7 @@
 }
 
 #sidebar-left-panel .panel-item-name {
+  align-self: center;
   white-space: nowrap;
 }
 

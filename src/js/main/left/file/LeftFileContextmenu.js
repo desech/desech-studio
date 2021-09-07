@@ -16,7 +16,8 @@ export default {
         'clickOpenFileEvent', 'clickShowRenameItemEvent', 'clickDeleteItemEvent',
         'clickNewFolderEvent', 'clickNewFileEvent', 'clickCopySvgEvent'],
       keydown: ['keydownFinishRenameItemEvent', 'keydownCloseEvent'],
-      contextmenu: ['contextmenuShowMenuEvent']
+      contextmenu: ['contextmenuShowMenuEvent'],
+      focusout: ['focusoutFinishRenameItemEvent']
     }
   },
 
@@ -54,15 +55,15 @@ export default {
     }
   },
 
-  async clickDeleteItemEvent (event) {
-    if (event.target.classList.contains('panel-option-delete')) {
-      await this.deleteItem(this.getActiveMenuElement())
+  clickShowRenameItemEvent (event) {
+    if (event.target.closest('.panel-option-rename:not(.disabled)')) {
+      this.showRenameItem(this.getActiveMenuElement())
     }
   },
 
-  clickShowRenameItemEvent (event) {
-    if (event.target.classList.contains('panel-option-rename')) {
-      this.showRenameItem(this.getActiveMenuElement())
+  async clickDeleteItemEvent (event) {
+    if (event.target.closest('.panel-option-delete:not(.disabled)')) {
+      await this.deleteItem(this.getActiveMenuElement())
     }
   },
 
@@ -75,6 +76,12 @@ export default {
   async keydownFinishRenameItemEvent (event) {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && (event.key === 'Escape' ||
       event.key === 'Enter')) {
+      await this.finishRenameItem()
+    }
+  },
+
+  async focusoutFinishRenameItemEvent (event) {
+    if (event.target.classList.contains('panel-file-input')) {
       await this.finishRenameItem()
     }
   },
@@ -119,9 +126,7 @@ export default {
   getMenuOptions (item) {
     const type = this.getItemType(item)
     const template = HelperDOM.getTemplate(`template-contextmenu-file-${type}`)
-    if (HelperFile.isReadonly(item.dataset.ref) || item.classList.contains('loaded')) {
-      this.hideWritable(template)
-    }
+    this.disableWritable(item, template)
     return template
   },
 
@@ -139,9 +144,11 @@ export default {
     }
   },
 
-  hideWritable (menu) {
-    const writable = menu.getElementsByClassName('writable')
-    HelperDOM.hide(writable)
+  disableWritable (item, menu) {
+    const check = HelperFile.isReadonly(item.dataset.ref) || item.classList.contains('loaded')
+    for (const node of menu.getElementsByClassName('writable')) {
+      node.classList.toggle('disabled', check)
+    }
   },
 
   async loadHtmlFile (item) {

@@ -22,7 +22,11 @@
   padding: 5px 10px;
 }
 
-.desech-studio .contextmenu ul.menu-list li:hover {
+.desech-studio .contextmenu ul.menu-list li.disabled {
+  opacity: 0.5;
+}
+
+.desech-studio .contextmenu ul.menu-list li:not(.disabled):hover {
   background-color: var(--menu-bg-hover);
   color: var(--menu-txt-hover);
 }

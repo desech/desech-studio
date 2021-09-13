@@ -1,0 +1,59 @@
+Components
+- add <body> element to pages and components; use it as actual <body>
+  - you can't move the body element or add elements next to it, only inside of it
+- no more <div> for components, just use the inner component content; fixes <ul><li> and align
+  - when parsing component-children make sure to add a ref class if missing
+    @todo to remove it later
+- add component section in the right panel above the html section
+  - this also includes the children element
+- you can click any element even inside components
+  - if you drag the element outside the component then it's moved there
+  - if you bring in an element inside a component, then it's added
+- component elements and everything inside will be violet in the sidebar, similar to figma
+- have a toggle properties button above the file manager button (save it in settings file)
+  - default is to see the property values
+  - properties only apply to the current component and they are passed to children components
+    if the property name(s) are matching otherwise not
+    - check with react/angular if that's the case
+
+- edit component in place
+- create component from element
+- detach component
+
+- material design - create all components
+- react/angular/vue - update npm packages
+- check storybook integration and update all repos
+
+Easier selectors
+- rename to style
+- add style
+  - for checkbox/radio add [type="radio"] in the selector automatically
+- add state
+- add selector
+
+Figma like snapping
+- creating elements everywhere on drop positioned pixel perfect
+- layout grid in background
+- finish import positioning
+
+----------------------------------------------
+
+Figma plugins/helpers
+- generate text lipsum
+- unicode + emoji table
+- unsplash api, material design icons api, etc
+
+Images
+- resize/crop images
+- drag&drop image from os to desech to create image
+- drag&drop image from desech file manager to viewport to create image
+
+Comments like in Figma
+- integrate with git
+
+Future
+- remove unused refs on export
+- start project from existing templates
+- oauth microsoft
+- electron, capacitor starter kits repos
+- bitcoin payments + promote in crypto options websites

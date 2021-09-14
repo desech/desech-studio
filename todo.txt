@@ -2,19 +2,35 @@ Components
 - add <body> element to pages and components; use it as actual <body>
   - you can't move the body element or add elements next to it, only inside of it
 - no more <div> for components, just use the inner component content; fixes <ul><li> and align
-  - when parsing component-children make sure to add a ref class if missing
-    @todo to remove it later
+  - when parsing component-children make sure to add a ref class if missing; @todo to remove it later
 - add component section in the right panel above the html section
   - this also includes the children element
 - you can click any element even inside components
   - if you drag the element outside the component then it's moved there
   - if you bring in an element inside a component, then it's added
-- component elements and everything inside will be violet in the sidebar, similar to figma
-- have a toggle properties button above the file manager button (save it in settings file)
-  - default is to see the property values
-  - properties only apply to the current component and they are passed to children components
-    if the property name(s) are matching otherwise not
-    - check with react/angular if that's the case
+  - if you double click to change a component child text, you will change the component default text, not the instance property value
+- change the component left sidebar icon to a diamond and show the full children tree
+- you can right click and edit component in place
+  - shows you the component properties as a list with name and default value
+  - you can't add a new property here, but you can delete them or unlink them from all elements
+  - to add a property, you need to select a component element and then click a button that will let you highlight the element text or an attribute name or value
+  - once you highlight/click it then you see a dropdown to select the property name or create a new one
+  - when you create a new property you can set the name, and depending on what you clicked it will also set its type/value
+    - if you select the first srcset attribute, then it will only use value for the first srcset, not all srcsets; this attribute is a bit special, since it's a multiple value thing
+    - if you select the "_blank" attr value from anchors, the value for it will be a default/yes/no button
+    - if you select input type dropdown, then it will be that dropdown
+    - you can only highlight things from the html section, including the custom html tag, except <option>s and <track>s
+    - if you want to change the style, then attach a different class which will set the desired style
+    - the first thing that will be attached will set the property type; if you use the same property name for a different type, then it will show an error, unless it's unlinked from all elements and in that case it will use that type
+  - highlighted properties will persist to let you know which elements are linked to them
+    - hovering over them, will show a tooltip with the property name
+    - there will be a button to unlink and clicking the highlighted attribute will remove it
+    - for the element text, there will be a place that says element text and you can highlight it
+  - multiple elements can link to the same property
+- when you select a component which has properties, you will see all them available in the sidebar and you can modify their value
+- properties are not passed down from the parent to the children, they only apply to the parent
+- react/angular/vue will use code like {{fooBar || 'Some text'}} for default properties
+  - static has no change and will dump the default/set value
 
 - edit component in place
 - create component from element

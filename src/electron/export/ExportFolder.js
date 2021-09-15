@@ -24,7 +24,11 @@ export default {
     if (!currentFolder) return
     const zipFolder = await this.getZipFolder()
     if (!zipFolder) return
-    await this.exportZipFolder(zipFolder, File.resolve(currentFolder, '_export'))
+    await this.exportZipFolder(zipFolder, File.resolve(currentFolder, '_export'), {
+      ignorePathsFunc: file => {
+        return file.startsWith('node_modules')
+      }
+    })
   },
 
   async getZipFolder () {

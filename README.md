@@ -257,6 +257,7 @@ sudo -s
 repoctl add /home/manjaro/share/download.desech.com/pacman/desech-studio-1.2.6-x64.pacman
   - File Explorer > go to `~/share/download.desech.com/pacman`
   - when the lock file disappears cancel the process
+  - remove the previous pacman file
 ```
 
 Fedora
@@ -273,7 +274,6 @@ Ubuntu
 sudo chmod 777 -R ~/share/download.desech.com
 ```
 
-- leave only the last version in `~/share/pacman` 
 - copy everything from `~/share` to sftp
 - leave only the last 2 versions in `apt/pool/stable/d/desech-studio`, `dnf` and `pacman` on sftp
 

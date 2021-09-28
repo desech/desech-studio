@@ -73,3 +73,29 @@ Future
 - oauth microsoft
 - electron, capacitor starter kits repos
 - bitcoin payments + promote in crypto options websites
+
+
+----------------------
+
+morphu notes
+
+- multi select elements in viewport and sidebar (high priority)
+- grouping/ungrouping elements (ctrl+g/ctrl+shift+g)
+- variables placed in unit measure + left panel with variables
+  - selecting a variable will show in the right panel the value to change
+- import the layer grouping if the option is on
+- prototyping like in figma
+
+- project title in window title
+- use figma pages/layers structure
+  - abstract the html pages in the elements panel
+  - default panel is elements not files
+- viewport width/height per page not per project
+
+- default + inherited values (check webflow)
+  - maybe use input/autocomplete instead of select to show the inherited value
+  
+bugs:
+- font Urbanist doesn't work in desech but works in the browser
+- cut/copy/paste selector add it to right click selectors too
+- copy/paste svg (google icon in desech) doesn't work

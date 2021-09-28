@@ -69,15 +69,15 @@ export default {
 
   async newProjectSubmit (form) {
     const values = HelperForm.getFormValues(form)
-    const data = {
+    await window.electron.invoke('rendererInitProject', {
+      action: values.import ? 'import-start' : 'create',
+      import: values.import ? JSON.parse(values.import) : null,
       settings: {
         responsiveType: values.responsiveType,
         designSystem: values.designSystem,
         exportCode: values.exportCode
-      },
-      import: values.import ? JSON.parse(values.import) : null
-    }
-    await window.electron.invoke('rendererInitProject', data)
+      }
+    })
   },
 
   async injectDesignSystemCss () {
@@ -100,8 +100,10 @@ export default {
   },
 
   async saveProjectSettings (form) {
-    const folder = HelperProject.getFolder()
-    const settings = HelperForm.getFormValues(form)
-    await window.electron.invoke('rendererInitProject', { folder, settings })
+    await window.electron.invoke('rendererInitProject', {
+      action: 'save',
+      folder: HelperProject.getFolder(),
+      settings: HelperForm.getFormValues(form)
+    })
   }
 }

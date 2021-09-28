@@ -31,7 +31,7 @@ export default {
 
   async loadMain (file = null) {
     // save first before loading a new file
-    if (file) await TopCommandSave.save(true)
+    // if (file) await TopCommandSave.save(true)
     this.loadPage('main')
     HelperTrigger.triggerReload('responsive-mode-list')
     await Project.injectDesignSystemCss()
@@ -39,7 +39,7 @@ export default {
     this.loadFilePanel(file)
     TopZoom.setSavedZoomLevel()
     TopCommon.positionDragHandle()
-    if (!file) TopCommandSave.setFirstSaveTimeout()
+    // if (!file) TopCommandSave.setFirstSaveTimeout()
   },
 
   loadFilePanel (file) {

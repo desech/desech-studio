@@ -51,7 +51,7 @@ export default {
 
   async clickOpenProjectEvent (event) {
     if (event.target.closest('.start-open-folder')) {
-      await window.electron.invoke('rendererInitProject')
+      await window.electron.invoke('rendererInitProject', { action: 'open' })
     }
   },
 
@@ -153,6 +153,9 @@ export default {
   },
 
   async finishImport (button) {
-    await window.electron.invoke('rendererInitProject', { folder: button.dataset.folder })
+    await window.electron.invoke('rendererInitProject', {
+      action: 'import-finish',
+      folder: button.dataset.folder
+    })
   }
 }

@@ -14,22 +14,24 @@ import ProjectCommon from './ProjectCommon.js'
 
 export default {
   // this can:
-  //  - open a project (no data)
-  //  - save the project settings (data.folder, data.settings)
-  //  - create a new project with settings (data.settings)
+  //  - open a project (data.action = 'open')
+  //  - save the project settings (data.action = 'save', data.settings, data.folder)
+  //  - create a new project with settings (data.action = 'create', data.settings)
   //    - if you create it on an existing folder, it will not overwrite anything
   //  - import a file with settings; this doesn't actually open the project
-  //    - (data.settings, data.import)
-  //    - after the import is finished and you click open project this will be called again
-  //      - (data.folder)
-  async initProject (data) {
+  //    - (data.action = 'import-start', data.settings, data.import)
+  //  - after the import is finished and you click open project this will be called again
+  //    - (data.action = 'import-finish', data.folder)
+  async initProject (data = null) {
     const folder = data?.folder || this.getProjectFolder(data)
     if (!folder) return
     await Cookie.setCookie('currentFolder', folder)
     await File.syncUiFolder(folder)
     Font.rebuildFonts(folder)
     const settings = this.getProjectSettings(folder)
-    if (data?.settings) await this.applyNewSettings(folder, settings, data.settings)
+    if (data?.settings) {
+      await this.applyNewSettings(folder, settings, data.settings)
+    }
     if (data?.import) {
       await Import.importFile({ ...data.import, folder, settings })
     } else {

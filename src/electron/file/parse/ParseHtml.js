@@ -18,12 +18,12 @@ export default {
     return this.parseHtml(dom.window.document, folder, nodes)
   },
 
-  parseHtml (document, folder, nodes = null) {
-    if (!nodes) nodes = document.body.children
+  parseHtml (document, folder, body = null) {
+    if (!body) body = document.body
     this.init(document, folder)
-    this.buildHtml(nodes)
+    this.buildHtml(body)
     return {
-      canvas: nodes.length ? nodes[0].parentNode.innerHTML.trim() : '',
+      canvas: body.length ? body.innerHTML.trim() : '',
       meta: this.getMeta()
     }
   },
@@ -34,17 +34,17 @@ export default {
   },
 
   getMeta () {
-    if (!this._document.head) return
-    const meta = this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
-    return {
-      language: this._document.documentElement.lang,
-      title: this._document.title,
-      meta
+    if (this._document.head) {
+      return {
+        language: this._document.documentElement.lang,
+        title: this._document.title,
+        meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
+      }
     }
   },
 
-  buildHtml (nodes, componentChildren = null) {
-    for (const node of nodes) {
+  buildHtml (body, componentChildren = null) {
+    for (const node of body.children) {
       this.buildElement(node, componentChildren)
     }
   },
@@ -52,27 +52,25 @@ export default {
   buildElement (node, componentChildren) {
     const tag = HelperDOM.getTag(node)
     const elemName = this.getTagElement(tag)
-    if (elemName) return this.addBasic(node, elemName)
-    if (tag === 'input') return this.addInputElement(node)
-    if (tag === 'img') return this.buildImageElement(node)
-    if (tag === 'video' || tag === 'audio') {
-      return this.buildMediaElement(node, tag)
-    }
-    if (node.classList.contains('text')) {
-      return this.buildTagElement(node, 'text', 'p')
-    }
-    if (node.classList.contains('block')) {
-      return this.buildTagElement(node, 'block', 'div', componentChildren)
-    }
-    if (node.classList.contains('component')) {
-      return this.addComponent(node)
-    }
-    if (node.classList.contains('component-children')) {
-      return this.addComponentChildren(node, componentChildren)
-    }
-    // inline check is done at the end
-    if (this.isInlineElement(node)) {
-      return this.buildInlineElement(node)
+    if (elemName) {
+      this.addBasic(node, elemName)
+    } else if (tag === 'input') {
+      this.addInputElement(node)
+    } else if (tag === 'img') {
+      this.buildImageElement(node)
+    } else if (tag === 'video' || tag === 'audio') {
+      this.buildMediaElement(node, tag)
+    } else if (node.classList.contains('text')) {
+      this.buildTagElement(node, 'text', 'p')
+    } else if (node.classList.contains('block')) {
+      this.buildTagElement(node, 'block', 'div', componentChildren)
+    } else if (node.classList.contains('component')) {
+      this.addComponent(node)
+    } else if (node.classList.contains('component-children')) {
+      this.addComponentChildren(node, componentChildren)
+    } else if (this.isInlineElement(node)) {
+      // inline check is done at the end
+      this.buildInlineElement(node)
     }
   },
 
@@ -104,7 +102,7 @@ export default {
 
   getHtmlFromFile (file) {
     const html = fs.readFileSync(file).toString()
-    return html.indexOf('<body>') > 1 ? html : `<body>${html}</body`
+    return html.indexOf('<body>') > 1 ? html : `<body>${html}</body>`
   },
 
   addComponentChildren (node, componentChildren) {
@@ -134,7 +132,7 @@ export default {
     return text.replace(/[&<>"']/g, m => map[m])
   },
 
-  // check RightHtmlCommon.getIgnoredAttributes()
+  // also check RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
     for (const attr of node.attributes) {
       if (attr.name === 'hidden') {
@@ -173,15 +171,19 @@ export default {
 
   addCanvasClasses (node, type) {
     node.classList.add('element')
-    if (this.isComponentElement(node)) node.classList.add('component-element')
+    if (this.isComponentElement(node)) {
+      node.classList.add('component-element')
+    }
     if (!['block', 'text', 'component', 'component-children'].includes(type)) {
       node.classList.add(type)
     }
   },
 
   isComponentElement (node) {
-    if (node.parentNode.constructor.name === 'DocumentFragment') return false
-    if (!node.parentNode.closest('.component')) return false
+    if (node.parentNode.constructor.name === 'DocumentFragment' ||
+      !node.parentNode.closest('.component')) {
+      return false
+    }
     if (node.classList.contains('component-children')) {
       return this.getTotalParents(node, 'component') !==
       this.getTotalParents(node, 'component-children')
@@ -223,12 +225,12 @@ export default {
 
   addInputElement (node) {
     if (['range', 'color', 'file'].includes(node.type)) {
-      return this.addBasic(node, node.type)
+      this.addBasic(node, node.type)
+    } else if (node.type === 'checkbox' || node.type === 'radio') {
+      this.addBasic(node, 'checkbox')
+    } else {
+      this.addBasic(node, 'input')
     }
-    if (node.type === 'checkbox' || node.type === 'radio') {
-      return this.addBasic(node, 'checkbox')
-    }
-    this.addBasic(node, 'input')
   },
 
   isInlineElement (node) {

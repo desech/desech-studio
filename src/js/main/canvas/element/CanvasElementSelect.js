@@ -32,21 +32,27 @@ export default {
 
   mouseupEndSelectElementEvent (event) {
     if (this._node && this._node.classList.contains('element')) {
-      if (HelperCanvas.getOperation() === 'selecting') this.selectElement(this._node)
+      if (HelperCanvas.getOperation() === 'selecting') {
+        this.selectElement(this._node)
+      }
       this.clearState()
     }
   },
 
   mouseupEndDeselectElementEvent (event) {
     if (this._node && !this._node.classList.contains('element')) {
-      if (HelperCanvas.getOperation() === 'selecting') this.deselectElement()
+      if (HelperCanvas.getOperation() === 'selecting') {
+        this.deselectElement()
+      }
       this.clearState()
     }
   },
 
   ignoreElementEvent (event) {
-    if (event.target.closest('.element') && !HelperCanvas.isPreview()) {
-      this.ignoreElementInteraction(event)
+    // stop all clicks and most mousedowns, except the ones where we edit the text
+    if (event.target.closest('.element') && !HelperCanvas.isPreview() &&
+      (event.type === 'click' || HelperCanvas.getOperation() !== 'editing')) {
+      event.preventDefault()
     }
   },
 
@@ -66,18 +72,6 @@ export default {
   clearState () {
     this._node = null
     HelperCanvas.deleteCanvasData('operation')
-  },
-
-  ignoreElementInteraction (event) {
-    // stop all clicks and most mousedowns, except the ones where we edit the text
-    if (event.type === 'click' || HelperCanvas.getOperation() !== 'editing') {
-      event.preventDefault()
-    }
-  },
-
-  selectElementByRef (ref) {
-    const element = HelperElement.getElement(ref)
-    this.selectElement(element)
   },
 
   selectElement (element) {

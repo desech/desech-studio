@@ -92,6 +92,7 @@ export default {
     const refMap = this.generateNewRefs(data.refs)
     const node = HelperDOM.createElement(data.tag, document)
     for (let [name, value] of Object.entries(data.attributes)) {
+      if (name.startsWith('xmlns')) continue
       if (name === 'class') value = value.replace('selected', '').trim()
       node.setAttributeNS(null, name, this.replaceMapValue(value, refMap))
     }

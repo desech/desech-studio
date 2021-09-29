@@ -102,7 +102,7 @@ export default {
       : HelperProject.getMobileFirstResponsive()
   },
 
-  async getDesignSystemCss () {
-    return await Plugin.triggerPlugin('designSystem', 'getEditorCss')
+  async getDesignSystemCssFile () {
+    return await Plugin.triggerPlugin('designSystem', 'getEditorCssFile')
   }
 }

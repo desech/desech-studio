@@ -36,7 +36,7 @@ export default {
 
   clickSelectItemEvent (event) {
     if (event.target.closest('.panel-element-item')) {
-      this.selectItem(event.target.closest('.panel-element-item'))
+      this.selectItem(event)
     }
   },
 
@@ -58,8 +58,10 @@ export default {
     }
   },
 
-  selectItem (li) {
-    CanvasElementSelect.selectElementByRef(li.dataset.ref)
+  selectItem (event) {
+    const li = event.target.closest('.panel-element-item')
+    const element = HelperElement.getElement(li.dataset.ref)
+    CanvasElementSelect.selectElement(element)
   },
 
   sortItem (data) {

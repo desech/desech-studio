@@ -80,9 +80,22 @@ export default {
     })
   },
 
-  async injectDesignSystemCss () {
-    const css = await window.electron.invoke('rendererGetDesignSystemCss')
-    if (css) HelperDesignSystem.injectDesignSystemCss(css)
+  addProjectFontCss () {
+    const file = HelperProject.getFolder() + '/css/general/font.css'
+    this.addCssFile('project-css-font', file)
+  },
+
+  async addDesignSystemCss () {
+    const file = await window.electron.invoke('rendererGetDesignSystemCssFile')
+    this.addCssFile('project-css-design-system', file)
+  },
+
+  addCssFile (id, file) {
+    const node = document.getElementById(id)
+    if (node) node.remove()
+    if (!file) return
+    const link = `<link id="${id}" rel="stylesheet" href="${file}">`
+    document.head.insertAdjacentHTML('beforeend', link)
   },
 
   openProjectSettings (settings) {

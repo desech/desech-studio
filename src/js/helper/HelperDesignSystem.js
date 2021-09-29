@@ -2,27 +2,28 @@ import HelperStyle from '../helper/HelperStyle.js'
 import HelperProject from './HelperProject.js'
 
 export default {
-  injectDesignSystemCss (css) {
-    const sheet = document.createElement('style')
-    sheet.innerHTML = css
-    document.getElementById('page-main').appendChild(sheet)
-  },
-
   hasDesignSystem () {
     return (HelperProject.getProjectSettings().designSystem !== '')
   },
 
   getDesignSystemClasses () {
     if (!this.hasDesignSystem()) return
+    const sheet = this.getDesignSystemSheet()
+    if (!sheet) return
     const classes = []
-    for (const sheet of document.styleSheets) {
-      if (!sheet.cssRules[0].selectorText.startsWith('._ss_')) continue
-      for (const rule of sheet.cssRules) {
-        if (rule.constructor.name !== 'CSSStyleRule') continue
-        HelperStyle.addSelectorClass(rule.selectorText, classes)
-      }
+    for (const rule of sheet.cssRules) {
+      if (rule.constructor.name !== 'CSSStyleRule') continue
+      HelperStyle.addSelectorClass(rule.selectorText, classes)
     }
     return classes.sort()
+  },
+
+  getDesignSystemSheet () {
+    const link = document.getElementById('project-css-design-system')
+    if (!link) return
+    for (const sheet of document.styleSheets) {
+      if (sheet.ownerNode === link) return sheet
+    }
   },
 
   getDesignSystemCssFileLink (check = null) {

@@ -16,7 +16,7 @@ export default {
     this.rendererImportFileEvent()
     this.rendererInstallPluginEvent()
     this.rendererRemovePluginEvent()
-    this.rendererGetDesignSystemCssEvent()
+    this.rendererGetDesignSystemCssFileEvent()
   },
 
   rendererNewSampleProjectEvent () {
@@ -55,9 +55,9 @@ export default {
     })
   },
 
-  rendererGetDesignSystemCssEvent () {
-    ipcMain.handle('rendererGetDesignSystemCss', async (event) => {
-      return await EventMain.handleEvent(Project, 'getDesignSystemCss')
+  rendererGetDesignSystemCssFileEvent () {
+    ipcMain.handle('rendererGetDesignSystemCssFile', async (event) => {
+      return await EventMain.handleEvent(Project, 'getDesignSystemCssFile')
     })
   },
 

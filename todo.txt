@@ -94,6 +94,3 @@ Future
 - default + inherited values (check webflow)
   - maybe use input/autocomplete instead of select to show the inherited value
 - cut/copy/paste selector add it to right click selectors too
-  
-bugs:
-- copy/paste svg (google icon in desech) doesn't work

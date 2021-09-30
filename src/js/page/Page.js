@@ -55,6 +55,8 @@ export default {
   },
 
   async loadFile (file) {
+    // save first before loading a new file
+    await TopCommandSave.save(true)
     await LeftFileLoad.loadFile(file)
     HelperTrigger.triggerClosePanel('panel-button-file')
     HelperCanvas.scrollToTop()

@@ -51,15 +51,15 @@ export default {
         },
         { type: 'separator' },
         {
-          label: Language.localize('Project Settings'),
-          click: async () => {
-            await EventMain.handleEvent(EventMenu, 'openProjectSettings')
-          }
-        },
-        {
           label: Language.localize('Close Project'),
           click: async () => {
             await EventMain.handleEvent(EventMenu, 'closeProject')
+          }
+        },
+        {
+          label: Language.localize('Project Settings'),
+          click: async () => {
+            await EventMain.handleEvent(EventMenu, 'openProjectSettings')
           }
         },
         {

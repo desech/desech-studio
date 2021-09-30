@@ -25,7 +25,8 @@ export default {
 
   mousedownStartOperationEvent (event) {
     if ((event.target.closest('#canvas .element') || event.target.id === 'canvas' ||
-      event.target.classList.contains('canvas-container')) && HelperCanvas.canInteract()) {
+      event.target.classList.contains('canvas-container')) && HelperEvent.isLeftClick(event) &&
+      HelperCanvas.canInteract()) {
       this.startOperation(event.target.closest('#canvas .element') || event.target)
     }
   },

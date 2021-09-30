@@ -57,9 +57,10 @@ export default {
     return container.querySelector('.selector-list-container .selector-element.active')
   },
 
-  getCurrentSelector (container = document) {
+  getCurrentSelector (container = document, useDefault = true) {
     const elem = this.getCurrentSelectorLi(container)
-    return elem ? elem.dataset.selector : this.getDefaultSelector()
+    if (elem) return elem.dataset.selector
+    if (useDefault) return this.getDefaultSelector()
   },
 
   getDefaultSelector () {

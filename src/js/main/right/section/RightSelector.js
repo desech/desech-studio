@@ -19,6 +19,7 @@ export default {
     this.injectDefaultSelector(template)
     const selectors = StyleSheetSelector.getDisplayElementSelectors()
     this.injectSelectors(selectors, template)
+    this.activateSelector(template)
   },
 
   injectDefaultSelector (container) {
@@ -51,7 +52,6 @@ export default {
   getSelectorElement (selector, container) {
     const element = HelperDOM.getTemplate('template-style-selector-element')
     this.prefillSelector(element, selector)
-    this.selectSelectorIfCurrent(element, selector, container)
     return element
   },
 
@@ -85,10 +85,9 @@ export default {
     }
   },
 
-  selectSelectorIfCurrent (element, selector, container) {
-    const current = StyleSheetSelector.getCurrentSelector(container)
-    if (!current || current === selector) {
-      RightSelectorCommon.activateSelector(element, container)
-    }
+  activateSelector (container) {
+    const element = container.querySelector('.class-selector-list li') ||
+      container.querySelector('.default-selector-list li')
+    RightSelectorCommon.activateSelector(element, container)
   }
 }

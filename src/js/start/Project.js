@@ -1,7 +1,6 @@
 import DialogComponent from '../component/DialogComponent.js'
 import HelperPlugin from '../helper/HelperPlugin.js'
 import HelperForm from '../helper/HelperForm.js'
-import HelperDesignSystem from '../helper/HelperDesignSystem.js'
 import HelperProject from '../helper/HelperProject.js'
 import Plugin from './Plugin.js'
 import Import from './Import.js'

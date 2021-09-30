@@ -33,7 +33,7 @@ export default {
 
   reloadPanel () {
     if (StateSelectedElement.getRef() && this.getContainer()) {
-      const selector = StyleSheetSelector.getCurrentSelector()
+      const selector = StyleSheetSelector.getCurrentSelector(document, false)
       this.clearPanel()
       this.loadPanel(selector)
     }
@@ -65,7 +65,7 @@ export default {
   },
 
   selectPreviousSelector (container, selector) {
-    if (!container) return
+    if (!container || !selector) return
     const defaultLi = container.querySelector('.selector-element.active')
     const selectorLi = this.getCurrentSelector(container, selector)
     if (!defaultLi || !selectorLi) return

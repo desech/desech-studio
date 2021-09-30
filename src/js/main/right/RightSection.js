@@ -110,11 +110,7 @@ export default {
     const bottom = ['effect', 'animation', 'css']
     switch (elementType) {
       case 'block':
-        return top + ['grid', 'text', 'border', 'fill'] + bottom
-
       case 'text':
-        return top + ['text', 'border', 'fill'] + bottom
-
       case 'input':
       case 'dropdown':
       case 'textarea':

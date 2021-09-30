@@ -33,7 +33,8 @@ export default {
   },
 
   mousedownStartMoveEvent (event) {
-    if (event.target.closest('.element') && HelperCanvas.canInteract()) {
+    if (event.target.closest('.element') && HelperEvent.isLeftClick(event) &&
+      HelperCanvas.canInteract()) {
       this.prepareMovement(event.target.closest('.element'), event.clientX, event.clientY)
     }
   },

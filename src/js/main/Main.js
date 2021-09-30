@@ -4,6 +4,7 @@ export default {
   getEvents () {
     return {
       click: ['clickOpenLinkEvent'],
+      mouseup: ['mouseupNavigateButtonsEvent'],
       focusin: ['focusinInputEvent'],
       change: ['changeFocusOutEvent'],
       submit: ['submitIgnoreEvent']
@@ -17,6 +18,12 @@ export default {
   async clickOpenLinkEvent (event) {
     if (event.target.closest('.desech-external-link')) {
       await this.openLink(event.target.closest('.desech-external-link'))
+    }
+  },
+
+  mouseupNavigateButtonsEvent (event) {
+    if (event.button > 2) {
+      event.preventDefault()
     }
   },
 

@@ -53,5 +53,9 @@ export default {
 
   isCtrlCmd (event) {
     return (event.ctrlKey || event.metaKey)
+  },
+
+  isLeftClick (event) {
+    return (event.button === 0)
   }
 }

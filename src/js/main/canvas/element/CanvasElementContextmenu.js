@@ -38,7 +38,8 @@ export default {
 
   contextmenuCanvasShowMenuEvent (event) {
     if (!HelperCanvas.isPreview() && event.target.closest('.element')) {
-      this.showContextmenu(event.target.closest('.element'), event.clientX, event.clientY)
+      const elem = StateSelectedElement.getElement() || event.target.closest('.element')
+      this.showContextmenu(elem, event.clientX, event.clientY)
     }
   },
 

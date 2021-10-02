@@ -45,8 +45,8 @@ export default {
 
   contextmenuSidebarShowMenuEvent (event) {
     if (event.target.closest('.panel-element-item')) {
-      this.showSidebarContextmenu(event.target.closest('.panel-element-item'), event.clientX,
-        event.clientY)
+      const item = event.target.closest('.panel-element-item')
+      this.showSidebarContextmenu(item, event.clientX, event.clientY)
     }
   },
 
@@ -164,7 +164,7 @@ export default {
   },
 
   getMenuOptionsTemplate (type) {
-    const special = ['inline', 'component', 'component-children']
+    const special = ['body', 'inline', 'component', 'component-children']
     const fragment = special.includes(type) ? type : 'general'
     return HelperDOM.getTemplate(`template-contextmenu-element-${fragment}`)
   },

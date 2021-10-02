@@ -109,6 +109,7 @@ export default {
     const top = ['html', 'selector', 'size', 'grid']
     const bottom = ['effect', 'animation', 'css']
     switch (elementType) {
+      case 'body':
       case 'block':
       case 'text':
       case 'input':

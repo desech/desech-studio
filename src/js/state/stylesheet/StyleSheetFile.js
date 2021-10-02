@@ -121,7 +121,7 @@ export default {
   },
 
   addToStyle (sheet, data, css) {
-    // ignore empty elements
+    // ignore empty properties
     if (!data.value) return
     if (data.value.includes('url(')) data.value = this.fixFileUrl(data.value)
     sheet.push(data)

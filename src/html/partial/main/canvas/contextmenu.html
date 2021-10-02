@@ -11,6 +11,17 @@
   </div>
 </template>
 
+<template id="template-contextmenu-element-body">
+  <div>
+    <ul class="menu-list">
+      <li class="element-menu-hide">{{#i18n}} Hide element {{/i18n}}</li>
+      <li class="element-menu-show">{{#i18n}} Show element {{/i18n}}</li>
+      <li class="element-menu-paste">{{#i18n}} Paste element {{/i18n}} (CTRL + V)</li>
+    </ul>
+    {{> mainCanvasContextmenuCopyCss }}
+  </div>
+</template>
+
 <template id="template-contextmenu-element-inline">
   <div>
     <ul class="menu-list">

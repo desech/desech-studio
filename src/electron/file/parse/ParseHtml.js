@@ -18,13 +18,12 @@ export default {
     return this.parseHtml(dom.window.document, folder, nodes)
   },
 
-  parseHtml (document, folder, body = null) {
-    if (!body) body = document.body
+  parseHtml (document, folder) {
     this.init(document, folder)
-    this.buildHtml(body)
+    this.prepareElement(document.body)
     return {
-      canvas: body.length ? body.innerHTML.trim() : '',
-      meta: this.getMeta()
+      canvas: this.getBody(document),
+      meta: this.getMeta(document)
     }
   },
 
@@ -33,44 +32,50 @@ export default {
     this._folder = folder
   },
 
-  getMeta () {
-    if (this._document.head) {
+  getBody (document) {
+    return document.body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+  },
+
+  getMeta (document) {
+    if (document.head) {
       return {
-        language: this._document.documentElement.lang,
-        title: this._document.title,
-        meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
+        language: document.documentElement.lang,
+        title: document.title,
+        meta: document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
       }
     }
   },
 
-  buildHtml (body, componentChildren = null) {
-    for (const node of body.children) {
-      this.buildElement(node, componentChildren)
+  prepareElement (node, componentChildren) {
+    const tag = HelperDOM.getTag(node)
+    const type = this.getTagElement(tag)
+    if (tag === 'body') {
+      this.setBody(node)
+    } else if (type) {
+      this.setBasic(node, type)
+    } else if (tag === 'input') {
+      this.setInputElement(node)
+    } else if (tag === 'img') {
+      this.setImageElement(node)
+    } else if (tag === 'video' || tag === 'audio') {
+      this.setMediaElement(node, tag)
+    } else if (node.classList.contains('text')) {
+      this.setTagElement(node, 'text', 'p')
+    } else if (node.classList.contains('block')) {
+      this.setTagElement(node, 'block', 'div', componentChildren)
+    } else if (node.classList.contains('component')) {
+      this.setComponent(node)
+    } else if (node.classList.contains('component-children')) {
+      this.setComponentChildren(node, componentChildren)
+    } else if (this.isInlineElement(node)) {
+      // inline check is done at the end
+      this.setInlineElement(node)
     }
   },
 
-  buildElement (node, componentChildren) {
-    const tag = HelperDOM.getTag(node)
-    const elemName = this.getTagElement(tag)
-    if (elemName) {
-      this.addBasic(node, elemName)
-    } else if (tag === 'input') {
-      this.addInputElement(node)
-    } else if (tag === 'img') {
-      this.buildImageElement(node)
-    } else if (tag === 'video' || tag === 'audio') {
-      this.buildMediaElement(node, tag)
-    } else if (node.classList.contains('text')) {
-      this.buildTagElement(node, 'text', 'p')
-    } else if (node.classList.contains('block')) {
-      this.buildTagElement(node, 'block', 'div', componentChildren)
-    } else if (node.classList.contains('component')) {
-      this.addComponent(node)
-    } else if (node.classList.contains('component-children')) {
-      this.addComponentChildren(node, componentChildren)
-    } else if (this.isInlineElement(node)) {
-      // inline check is done at the end
-      this.buildInlineElement(node)
+  prepareChildren (children, componentChildren = null) {
+    for (const node of children) {
+      this.prepareElement(node, componentChildren)
     }
   },
 
@@ -89,7 +94,15 @@ export default {
     return map[tag] || null
   },
 
-  addComponent (node) {
+  setBody (body) {
+    this.cleanAttributes(body)
+    this.cleanClasses(body)
+    body.classList.add('element')
+    body.classList.add('body')
+    if (body.children.length) this.prepareChildren(body.children)
+  },
+
+  setComponent (node) {
     const file = File.resolve(this._folder, node.getAttributeNS(null, 'src'))
     if (!fs.existsSync(file)) return node.remove()
     node.classList.add(HelperElement.generateElementRef())
@@ -97,21 +110,20 @@ export default {
     node.setAttributeNS(null, 'src', file)
     const componentChildren = node.innerHTML
     node.innerHTML = this.getHtmlFromFile(file)
-    this.buildHtml(node.children, componentChildren)
+    this.prepareChildren(node.children, componentChildren)
   },
 
   getHtmlFromFile (file) {
-    const html = fs.readFileSync(file).toString()
-    return html.indexOf('<body>') > 1 ? html : `<body>${html}</body>`
+    return fs.readFileSync(file).toString()
   },
 
-  addComponentChildren (node, componentChildren) {
-    this.addBasic(node, 'component-children')
+  setComponentChildren (node, componentChildren) {
+    this.setBasic(node, 'component-children')
     if (componentChildren) node.innerHTML = componentChildren
-    this.buildHtml(node.children)
+    this.prepareChildren(node.children)
   },
 
-  addBasic (node, type) {
+  setBasic (node, type) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
@@ -204,16 +216,16 @@ export default {
     return count
   },
 
-  buildImageElement (node) {
+  setImageElement (node) {
     // only the folder needs to be encoded because the images are saved as encoded in the html
     const srcset = node.getAttributeNS(null, 'srcset')
       .replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(this._folder)}/$3$4`)
     node.setAttributeNS(null, 'srcset', srcset)
-    this.addBasic(node, 'image')
+    this.setBasic(node, 'image')
   },
 
-  buildMediaElement (node, tag) {
-    this.addBasic(node, tag)
+  setMediaElement (node, tag) {
+    this.setBasic(node, tag)
     this.setTrackSource(node)
   },
 
@@ -223,13 +235,13 @@ export default {
     }
   },
 
-  addInputElement (node) {
+  setInputElement (node) {
     if (['range', 'color', 'file'].includes(node.type)) {
-      this.addBasic(node, node.type)
+      this.setBasic(node, node.type)
     } else if (node.type === 'checkbox' || node.type === 'radio') {
-      this.addBasic(node, 'checkbox')
+      this.setBasic(node, 'checkbox')
     } else {
-      this.addBasic(node, 'input')
+      this.setBasic(node, 'input')
     }
   },
 
@@ -244,18 +256,16 @@ export default {
       'cite|dfn|samp|data|code|var|kbd|bdo|bdi|ruby|rt|rb)'
   },
 
-  buildInlineElement (node) {
-    this.addBasic(node, 'inline')
-    if (node.children.length) {
-      this.buildHtml(node.children)
-    }
+  setInlineElement (node) {
+    this.setBasic(node, 'inline')
+    if (node.children.length) this.prepareChildren(node.children)
   },
 
-  buildTagElement (node, type, tag, componentChildren = null) {
-    this.addBasic(node, type)
+  setTagElement (node, type, tag, componentChildren = null) {
+    this.setBasic(node, type)
     node = this.changeNodeSpecialTag(node)
     const children = HelperDOM.getChildren(node)
-    if (children) this.buildHtml(children, componentChildren)
+    if (children) this.prepareChildren(children, componentChildren)
   },
 
   changeNodeSpecialTag (node) {

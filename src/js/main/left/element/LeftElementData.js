@@ -60,7 +60,7 @@ export default {
   },
 
   injectDrag (li, data) {
-    if (data.type === 'inline') return
+    if (data.type === 'body' || data.type === 'inline') return
     if (data.isContainer) li.dataset.container = true
     li.classList.add('dragdrop-element')
     li.setAttributeNS(null, 'draggable', 'true')

@@ -60,7 +60,8 @@ export default {
   },
 
   prepareMovement (element, clientX, clientY) {
-    if (HelperElement.getType(element) === 'inline') return
+    const type = HelperElement.getType(element)
+    if (type === 'body' || type === 'inline') return
     element = CanvasCommon.getClosestElementOrComponent(element)
     this._element = element
     this.setPositions(clientX, clientY)

@@ -10,6 +10,10 @@ body {
   overflow: hidden;
 }
 
+.body {
+  height: 100%;
+}
+
 .desech-studio a {
   display:  inline-block;
   color: var(--body-txt);

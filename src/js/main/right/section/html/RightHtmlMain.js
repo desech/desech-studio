@@ -107,9 +107,11 @@ export default {
 
   injectTopLine (template, data) {
     const container = template.getElementsByClassName('style-html-top-line')[0]
-    this.injectComponentChildren(container, data)
     if (!HelperDOM.isVisible(data.element)) container.classList.add('hidden')
-    if (data.type === 'inline') container.classList.add('inline')
+    if (data.type === 'body' || data.type === 'inline') {
+      container.classList.add(data.type)
+    }
+    this.injectComponentChildren(container, data)
   },
 
   injectComponentChildren (container, data) {

@@ -152,9 +152,7 @@ export default {
   <link rel="stylesheet" href="css/general/component-html.css">
   <link rel="stylesheet" href="css/page/${data.pageCssFile}">
 </head>
-<body>
 ${data.body}
-</body>
 </html>
 `
   },

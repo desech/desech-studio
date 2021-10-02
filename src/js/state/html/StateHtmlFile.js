@@ -8,47 +8,65 @@ import HelperElement from '../../helper/HelperElement.js'
 import '../../compiled/beautify-html.js'
 
 export default {
+  _css: null,
+  _designSystemClasses: null,
+
   getHtml (file, css) {
+    this.init(css)
     const canvas = HelperCanvas.getCanvas().cloneNode(true)
-    const designSystemClasses = HelperDesignSystem.getDesignSystemClasses()
     this.removeNonCanvasElements(canvas)
-    this.buildHtml(canvas.children, css, designSystemClasses)
+    this.prepareElement(canvas.children[0])
     return this.returnHtml(canvas.innerHTML, file)
+  },
+
+  init (css) {
+    this._css = css
+    this._designSystemClasses = HelperDesignSystem.getDesignSystemClasses()
   },
 
   removeNonCanvasElements (canvas) {
     canvas.querySelectorAll('[hidden]:not([data-ss-hidden])').forEach(el => el.remove())
   },
 
-  buildHtml (nodes, css, designSystemClasses) {
-    for (const node of nodes) {
-      this.buildElement(node, css, designSystemClasses)
+  prepareElement (node) {
+    if (node.classList.contains('body')) {
+      this.setBody(node)
+    } else if (node.classList.contains('component')) {
+      this.setComponent(node)
+    } else {
+      this.setRelativeSource(node)
+      this.setBasic(node)
     }
   },
 
-  buildElement (node, css, designSystemClasses) {
-    if (node.classList.contains('component')) {
-      return this.addComponent(node, css, designSystemClasses)
+  prepareChildren (children) {
+    for (const node of children) {
+      this.prepareElement(node)
     }
-    this.setRelativeSource(node)
-    this.setBasic(node, css, designSystemClasses)
   },
 
-  addComponent (node, css, designSystemClasses) {
+  setBody (node) {
+    const body = HelperDOM.changeTag(node, 'body', document)
+    this.cleanAttributes(body)
+    this.cleanClasses(body)
+    if (body.children.length) this.prepareChildren(body.children)
+  },
+
+  setComponent (node) {
     const div = document.createElement('div')
     div.setAttributeNS(null, 'class', 'component')
     div.setAttributeNS(null, 'src', HelperFile.getRelPath(node.getAttributeNS(null, 'src')))
     if (node.dataset.elementProperties) {
       div.setAttributeNS(null, 'data-element-properties', node.dataset.elementProperties)
     }
-    this.addComponentChildren(div, node, css, designSystemClasses)
+    this.setComponentChildren(div, node)
     node.replaceWith(div)
   },
 
-  addComponentChildren (div, node, css, designSystemClasses) {
+  setComponentChildren (div, node) {
     const container = HelperElement.getComponentChildren(node)
     if (!container || !container.children) return
-    this.buildHtml(container.children, css, designSystemClasses)
+    this.prepareChildren(container.children)
     div.innerHTML = container.innerHTML
   },
 
@@ -75,13 +93,13 @@ export default {
     node[attr] = HelperFile.getRelPath(source)
   },
 
-  setBasic (node, css, designSystemClasses) {
+  setBasic (node) {
     node = this.changeTag(node)
     this.cleanAttributes(node)
-    this.cleanClasses(node, css, designSystemClasses)
-    // noscript can't have children
+    this.cleanClasses(node)
+    // <noscript> can't have children
     const children = HelperDOM.getChildren(node)
-    if (children) this.buildHtml(children, css, designSystemClasses)
+    if (children) this.prepareChildren(children)
   },
 
   changeTag (node) {
@@ -101,13 +119,13 @@ export default {
     }
   },
 
-  cleanClasses (node, css, designSystemClasses) {
+  cleanClasses (node) {
     const cls = node.getAttributeNS(null, 'class')
     if (!cls) return
     const array = []
     for (let val of cls.split(' ')) {
-      if (val.includes('_ss_') && !this.componentExists(val, css) &&
-        !this.componentNotDesignSystem(val, designSystemClasses)) {
+      if (val.includes('_ss_') && !this.componentExists(val) &&
+        !this.componentNotDesignSystem(val)) {
         continue
       }
       val = this.filterClass(val.trim())
@@ -118,15 +136,15 @@ export default {
 
   filterClass (cls) {
     // we allow `block`, `text`, `component` and `component-children`
-    const ignore = ['selected', 'element', 'inline', 'icon', 'image', 'video', 'audio', 'iframe',
-      'object', 'canvas', 'input', 'datalist', 'dropdown', 'textarea', 'checkbox', 'range',
-      'color', 'file', 'progress', 'meter']
+    const ignore = ['selected', 'element', 'body', 'inline', 'icon', 'image', 'video', 'audio',
+      'iframe', 'object', 'canvas', 'input', 'datalist', 'dropdown', 'textarea', 'checkbox',
+      'range', 'color', 'file', 'progress', 'meter']
     if (ignore.includes(cls)) return
     return cls.replace('_ss_', '')
   },
 
-  componentExists (cls, css) {
-    for (const val of css.componentCss) {
+  componentExists (cls) {
+    for (const val of this._css.componentCss) {
       if (!val[0]) continue
       const selector = val[0].selector.replace('.', '._ss_')
       if (HelperStyle.extractClassSelector(selector) === cls) return true
@@ -134,22 +152,22 @@ export default {
     return false
   },
 
-  componentNotDesignSystem (cls, designSystemClasses) {
-    if (!designSystemClasses) return
-    for (const designClass of designSystemClasses) {
+  componentNotDesignSystem (cls) {
+    if (!this._designSystemClasses) return
+    for (const designClass of this._designSystemClasses) {
       if (designClass === cls.replace('_ss_', '')) return true
     }
     return false
   },
 
-  returnHtml (canvas, file) {
-    const html = this.formatHtml(canvas)
+  returnHtml (body, file) {
+    const cleanBody = this.beautifyHtml(body)
     const isComponent = HelperFile.isComponentFile(file)
     const meta = HelperProject.getFileMeta()
-    return isComponent ? html : HelperFile.getFullHtml(file, html, meta)
+    return isComponent ? cleanBody : HelperFile.getFullHtml(file, cleanBody, meta)
   },
 
-  formatHtml (body) {
+  beautifyHtml (body) {
     if (!body) return ''
     return this.formatHtmlString(window.html_beautify(body, {
       indent_size: 2,

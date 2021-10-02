@@ -77,8 +77,8 @@ export default {
   },
 
   getTypes () {
-    return ['block', 'text', 'icon', 'image', 'video', 'audio', 'iframe', 'object', 'canvas',
-      'input', 'dropdown', 'textarea', 'checkbox', 'datalist', 'range', 'color', 'file',
+    return ['body', 'block', 'text', 'icon', 'image', 'video', 'audio', 'iframe', 'object',
+      'canvas', 'input', 'dropdown', 'textarea', 'checkbox', 'datalist', 'range', 'color', 'file',
       'progress', 'meter', 'inline', 'component', 'component-children']
   },
 
@@ -137,7 +137,7 @@ export default {
   },
 
   isContainer (element) {
-    return element.classList.contains('block')
+    return element.classList.contains('body') || element.classList.contains('block')
   },
 
   hasSmallWidth (element) {
@@ -150,11 +150,13 @@ export default {
     return pos.height <= 40
   },
 
-  getTag (node) {
-    if (node.hasAttributeNS(null, 'data-ss-tag')) {
-      return node.getAttributeNS(null, 'data-ss-tag').toLowerCase()
+  getTag (element) {
+    if (this.getType(element) === 'body') {
+      return 'body'
+    } else if (element.hasAttributeNS(null, 'data-ss-tag')) {
+      return element.getAttributeNS(null, 'data-ss-tag').toLowerCase()
     } else {
-      return HelperDOM.getTag(node)
+      return HelperDOM.getTag(element)
     }
   },
 

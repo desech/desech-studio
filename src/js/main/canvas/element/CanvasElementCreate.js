@@ -128,7 +128,10 @@ export default {
   },
 
   addCanvasElementMarker (element, mouseY) {
-    if (HelperElement.getType(element) === 'component-children') {
+    const type = HelperElement.getType(element)
+    if (type === 'body') {
+      this.addContainerMarkerInside(element, mouseY)
+    } else if (type === 'component-children') {
       if (element.closest('.component')) {
         this.addContainerMarkerInside(element, mouseY)
       } else {
@@ -209,13 +212,6 @@ export default {
     return element
   },
 
-  finishCreateElement (element) {
-    CanvasElementSelect.selectElement(element)
-    // go back to the selection tool
-    CanvasCommon.enablePanelButton('select')
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-  },
-
   getElementTemplate (type) {
     const template = HelperDOM.getTemplate(`template-canvas-${type}`)
     const ref = HelperElement.generateElementRef()
@@ -226,7 +222,8 @@ export default {
   createElementForPlacement (element) {
     const canvas = HelperCanvas.getCanvas()
     const placement = canvas.getElementsByClassName('placement')[0]
-    placement ? this.insertElementInCanvas(element, placement) : canvas.appendChild(element)
+    const body = HelperCanvas.getCanvasOrBody()
+    placement ? this.insertElementInCanvas(element, placement) : body.appendChild(element)
     this.addSourceFile(element)
     // remove the marker to fix the element selection
     CanvasCommon.removePlacementMarker()
@@ -256,5 +253,12 @@ export default {
         if (!element.src) element.src = HelperFile.getDefaultAudio()
         break
     }
+  },
+
+  finishCreateElement (element) {
+    CanvasElementSelect.selectElement(element)
+    // go back to the selection tool
+    CanvasCommon.enablePanelButton('select')
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   }
 }

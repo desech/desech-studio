@@ -3,6 +3,10 @@
   column-gap: 0;
 }
 
+.sidebar-right #html-section .style-html-top-line.body {
+  display: none;
+}
+
 .sidebar-right #html-section .style-html-top-line.inline {
   grid-template-columns: 24px auto 24px;
 }

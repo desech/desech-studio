@@ -23,7 +23,9 @@ export default {
   },
 
   isElementAllowed (ref) {
-    return (ref && HelperElement.getTypeByRef(ref) !== 'inline')
+    if (!ref) return false
+    const type = HelperElement.getTypeByRef(ref)
+    return (type !== 'body' && type !== 'inline')
   },
 
   async copyElement () {

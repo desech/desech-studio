@@ -99,6 +99,8 @@ export default {
     this.cleanClasses(body)
     body.classList.add('element')
     body.classList.add('body')
+    // @todo this is temporary for older projects; remove it later
+    if (!body.classList.contains('e000body')) body.classList.add('e000body')
     if (body.children.length) this.prepareChildren(body.children)
   },
 

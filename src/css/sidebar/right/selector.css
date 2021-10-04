@@ -6,7 +6,6 @@
   min-height: 20px;
   padding: 10px;
   margin-bottom: 20px;
-  border: 1px solid var(--highlight-border);
   border-radius: 3px;
   text-align: center;
   user-select: text;
@@ -17,6 +16,10 @@
   grid-template-columns: auto auto auto;
   column-gap: 20px;
   row-gap: 10px;
+}
+
+.dialog-selector-add-container .dialog-selector-add-buttons .small {
+  padding: 6px;
 }
 
 .dialog-selector-add-container .dialog-selector-add-form {

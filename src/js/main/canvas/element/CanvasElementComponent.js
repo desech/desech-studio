@@ -39,8 +39,8 @@ export default {
   async addComponentElement (file) {
     const element = CanvasElementCreate.getElementTemplate('component')
     await this.buildComponentElement(element, file)
-    CanvasElementManage.addPastedElementPlacement()
-    CanvasElementManage.createPastedElement(element)
+    CanvasElementManage.addPastedPlacement()
+    CanvasElementManage.addPastedElement(element)
     return element
   },
 
@@ -55,7 +55,7 @@ export default {
   },
 
   insertComponentChildren () {
-    CanvasElementManage.addPastedElementPlacement('inside')
+    CanvasElementManage.addPastedPlacement('inside')
     CanvasElementCreate.createElement('component-children')
   }
 }

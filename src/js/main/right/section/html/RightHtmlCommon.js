@@ -159,8 +159,8 @@ export default {
   // check ParseHtml.cleanAttributes()
   getIgnoredAttributes () {
     return [
-      'data-ss-tag', 'class', 'style', 'hidden', 'data-ss-hidden', 'data-element-properties',
-      'viewBox', 'srcset'
+      'class', 'style', 'hidden', 'data-element-properties', 'viewBox', 'srcset',
+      'data-ss-tag', 'data-ss-hidden', 'data-ss-token'
     ]
   },
 

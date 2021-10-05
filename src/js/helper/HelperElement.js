@@ -17,7 +17,19 @@ export default {
   },
 
   getElement (ref) {
-    return document.getElementsByClassName(ref)[0]
+    const canvas = HelperCanvas.getCanvas()
+    const nodes = canvas.getElementsByClassName(ref)
+    for (const node of nodes) {
+      if (this.isCanvasElement(node)) return node
+    }
+    // sometimes we just need the element even if it's no part of the canvas
+    if (nodes.length) return nodes[0]
+  },
+
+  // is the element part of the ui (visible or not), not a hidden clone that is used for do/undo
+  isCanvasElement (node) {
+    return node && !node.closest('[hidden]:not([data-ss-hidden])') &&
+      (!node.hasAttributeNS(null, 'hidden') || node.hasAttributeNS(null, 'data-ss-hidden'))
   },
 
   getAttributes (element) {
@@ -110,12 +122,6 @@ export default {
       offsetLeft: container.offsetLeft,
       offsetTop: container.offsetTop
     }
-  },
-
-  // is the element part of the ui (visible or not), not a hidden clone that is used for do/undo
-  isCanvasElement (element) {
-    return element && (!element.hasAttributeNS(null, 'hidden') ||
-      element.hasAttributeNS(null, 'data-ss-hidden'))
   },
 
   isComponent (element) {

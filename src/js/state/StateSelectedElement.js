@@ -1,3 +1,6 @@
+import HelperElement from '../helper/HelperElement.js'
+import HelperCanvas from '../helper/HelperCanvas.js'
+
 export default {
   getRef () {
     const canvas = document.getElementById('canvas')
@@ -5,9 +8,11 @@ export default {
   },
 
   getElement () {
-    const canvas = document.getElementById('canvas')
+    const canvas = HelperCanvas.getCanvas()
     const ref = this.getRef()
-    return canvas.getElementsByClassName(ref)[0]
+    for (const node of canvas.getElementsByClassName(ref)) {
+      if (HelperElement.isCanvasElement(node)) return node
+    }
   },
 
   getStyle (element = null) {

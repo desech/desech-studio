@@ -79,17 +79,17 @@ export default {
     element = CanvasCommon.getClosestElementOrComponent(element)
     const selectedElement = StateSelectedElement.getElement()
     if (selectedElement === element) return element
-    this.deselectElement()
     this.selectElementNode(element)
-    this.scrollToItem(element)
     return element
   },
 
   selectElementNode (element) {
+    this.deselectElement()
     element.classList.add('selected')
     const ref = HelperElement.getRef(element)
     HelperCanvas.setCanvasData('selectedElement', ref)
     this.updateUiAfterElementSelect(ref)
+    this.scrollToItem(element)
   },
 
   updateUiAfterElementSelect (ref) {

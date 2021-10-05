@@ -9,6 +9,7 @@ import HelperTrigger from '../../helper/HelperTrigger.js'
 import ProjectResponsive from '../../start/project/ProjectResponsive.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import HelperProject from '../../helper/HelperProject.js'
+import HelperCanvas from '../../helper/HelperCanvas.js'
 
 export default {
   addElement (data) {
@@ -18,7 +19,7 @@ export default {
 
   removeElement (data) {
     const element = HelperElement.getElement(data.ref)
-    delete element.dataset.ssHidden
+    element.removeAttributeNS(null, 'data-ss-hidden')
     HelperDOM.hide(element)
   },
 
@@ -36,10 +37,17 @@ export default {
   },
 
   moveElement (data) {
-    const showElem = HelperElement.getElement(data.show)
-    HelperDOM.show(showElem)
-    const hideElem = HelperElement.getElement(data.hide)
-    HelperDOM.hide(hideElem)
+    const canvas = HelperCanvas.getCanvas()
+    const elements = canvas.querySelectorAll(`[data-ss-token~="${data.token}"]`)
+    for (const element of elements) {
+      if (element.hasAttributeNS(null, 'hidden') &&
+        !element.hasAttributeNS(null, 'data-ss-hidden')) {
+        HelperDOM.show(element)
+      } else {
+        HelperDOM.hide(element)
+        element.removeAttributeNS(null, 'data-ss-hidden')
+      }
+    }
   },
 
   changeStyle (data) {

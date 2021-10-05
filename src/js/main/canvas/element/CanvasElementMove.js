@@ -113,23 +113,15 @@ export default {
 
   moveElementInCanvas (element, altKey = false) {
     const newElement = this.cloneElementFromMoving(element)
-    if (!altKey) this.hideElementInCanvas(element)
-    // select it after you've hidden the old element
-    CanvasElementSelect.selectElement(newElement)
-    const newRef = HelperElement.getRef(newElement)
-    const ref = HelperElement.getRef(element)
-    CanvasElement.moveElementCommand(newRef, ref, false)
+    if (!altKey) HelperDOM.hide(element)
+    CanvasElementSelect.selectElementNode(newElement)
+    CanvasElement.moveElementCommand(newElement.dataset.ssToken, false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  hideElementInCanvas (element) {
-    HelperDOM.hide(element)
-    delete element.dataset.ssHidden
-  },
-
   cloneElementFromMoving (element) {
-    const newElement = CanvasElement.cloneElement(element)
-    CanvasElementManage.createPastedElement(newElement)
+    const newElement = CanvasElement.cloneMoveElement(element)
+    CanvasElementManage.addPastedElement(newElement)
     return newElement
   },
 

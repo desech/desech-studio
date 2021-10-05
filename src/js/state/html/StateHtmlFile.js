@@ -113,7 +113,8 @@ export default {
     // check RightHtmlCommon.js for details
     for (const attr of node.attributes) {
       if (!attr.name.startsWith('data-ss-')) continue
-      node.setAttributeNS(null, attr.name.replace('data-ss-', ''), attr.value)
+      if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
+      // data-ss-token is ignored
       // JSDOM doesn't use a live list
       node.removeAttributeNS(null, attr.name)
     }

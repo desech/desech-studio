@@ -47,10 +47,6 @@ export default {
   async buildComponentElement (element, file) {
     element.setAttributeNS(null, 'src', file)
     const html = await window.electron.invoke('rendererParseComponentFile', file)
-    this.addHtml(element, html)
-  },
-
-  addHtml (element, html) {
     element.insertAdjacentHTML('afterbegin', html.canvas)
   },
 

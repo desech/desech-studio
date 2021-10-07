@@ -11,11 +11,9 @@ export default {
 
   async parseComponentFile (file) {
     const folder = await Cookie.getCookie('currentFolder')
-    // the purpose of the wrapping div is to properly add component-element
-    const html = '<div class="component">' + fs.readFileSync(file).toString() + '</div>'
+    const html = fs.readFileSync(file).toString()
     const dom = new JSDOM(html)
-    const nodes = dom.window.document.body.children[0].children
-    return this.parseHtml(dom.window.document, folder, nodes)
+    return this.parseHtml(dom.window.document, folder)
   },
 
   parseHtml (document, folder) {

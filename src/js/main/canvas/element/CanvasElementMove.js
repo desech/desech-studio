@@ -115,7 +115,7 @@ export default {
     const newElement = this.cloneElementFromMoving(element)
     if (!altKey) HelperDOM.hide(element)
     CanvasElementSelect.selectElementNode(newElement)
-    CanvasElement.moveElementCommand(newElement.dataset.ssToken, false)
+    CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 

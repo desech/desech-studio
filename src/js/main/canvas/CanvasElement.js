@@ -33,10 +33,8 @@ export default {
   },
 
   cloneMoveElement (element) {
-    // we don't allow hidden elements to be moved, because it will be impossible to undo
     element.classList.remove('selected')
-    element.removeAttributeNS(null, 'data-ss-hidden')
-    element.removeAttributeNS(null, 'hidden')
+    this.removeHidden(element)
     const token = HelperCrypto.generateSmallHash()
     const clone = element.cloneNode(true)
     // the clone has the token, while the previous element has the previous token + the new token
@@ -45,39 +43,32 @@ export default {
     return clone
   },
 
-  appendToken (element, token = null) {
-    if (!token) token = HelperCrypto.generateSmallHash()
+  removeHidden (element) {
+    // we don't allow hidden elements to be moved, because it will be impossible to undo
+    element.removeAttributeNS(null, 'data-ss-hidden')
+    element.removeAttributeNS(null, 'hidden')
+  },
+
+  appendToken (element, token) {
     const tokens = [element.dataset.ssToken, token].join(' ').trim()
     element.setAttributeNS(null, 'data-ss-token', tokens)
   },
 
   addRemoveElementCommand (ref, doCommand, undoCommand, execute = true) {
     const command = {
-      do: {
-        command: doCommand,
-        ref
-      },
-      undo: {
-        command: undoCommand,
-        ref
-      }
+      do: { command: doCommand, ref },
+      undo: { command: undoCommand, ref }
     }
     StateCommand.stackCommand(command)
     if (execute) StateCommand.executeCommand(command.do)
   },
 
-  moveElementCommand (token, execute = true) {
-    const command = {
-      do: {
-        command: 'moveElement',
-        token
-      },
-      undo: {
-        command: 'moveElement',
-        token
-      }
+  tokenCommand (token, command, execute = true) {
+    const action = {
+      do: { command, token },
+      undo: { command, token }
     }
-    StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    StateCommand.stackCommand(action)
+    if (execute) StateCommand.executeCommand(action.do)
   }
 }

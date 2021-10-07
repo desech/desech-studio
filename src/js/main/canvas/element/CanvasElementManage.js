@@ -12,6 +12,7 @@ import StateCommand from '../../../state/StateCommand.js'
 import RightCommon from '../../right/RightCommon.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
 import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties.js'
+import HelperCrypto from '../../../helper/HelperCrypto.js'
 
 export default {
   deleteElement () {
@@ -22,17 +23,57 @@ export default {
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  isElementAllowed (ref) {
-    if (!ref) return false
-    const type = HelperElement.getTypeByRef(ref)
-    return (type !== 'body' && type !== 'inline')
-  },
-
   async copyElement () {
     const ref = StateSelectedElement.getRef()
     if (!this.isElementAllowed(ref)) return
     const element = HelperElement.getElement(ref)
     await this.copyElementData(element)
+  },
+
+  async cutElement () {
+    const ref = StateSelectedElement.getRef()
+    if (!this.isElementAllowed(ref)) return
+    const element = HelperElement.getElement(ref)
+    CanvasElement.removeHidden(element)
+    const token = HelperCrypto.generateSmallHash()
+    CanvasElement.appendToken(element, token)
+    await this.copyElementData(element, 'cut')
+    CanvasElement.tokenCommand(token, 'cutElement')
+    CanvasElementSelect.deselectElement()
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+  },
+
+  async pasteElement () {
+    const data = await this.getPastedData()
+    if (!data.element) return
+    const newElement = this.createElementFromData(data.element)
+    this.addPastedPlacement()
+    this.addPastedElement(newElement)
+    this.pasteExecute(newElement, data.element)
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+  },
+
+  async duplicateElement () {
+    await this.copyElement()
+    await this.pasteDuplicateElement()
+  },
+
+  async pasteDuplicateElement () {
+    const data = await this.getPastedData()
+    if (!data.element) return
+    const newElement = this.createElementFromData(data.element)
+    this.addPastedPlacement('bottom')
+    this.addPastedElement(newElement)
+    const ref = HelperElement.getRef(newElement)
+    CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    CanvasElementSelect.selectElement(newElement)
+  },
+
+  isElementAllowed (ref) {
+    if (!ref) return false
+    const type = HelperElement.getTypeByRef(ref)
+    return (type !== 'body' && type !== 'inline')
   },
 
   async copyElementData (element, action = 'copy') {
@@ -46,9 +87,13 @@ export default {
 
   getCopiedAttributes (element, action) {
     const attrs = HelperDOM.getAttributes(element)
-    // we don't need the token link when copying a new element
-    if (action === 'copy' && attrs['data-ss-token']) {
-      delete attrs['data-ss-token']
+    if (attrs['data-ss-token']) {
+      // on copy we don't need any tokens, while on cut, we need to generate a token
+      if (action === 'copy') {
+        delete attrs['data-ss-token']
+      } else { // cut
+        attrs['data-ss-token'] = HelperCrypto.generateSmallHash()
+      }
     }
     return attrs
   },
@@ -77,28 +122,6 @@ export default {
 
   async saveToClipboard (data) {
     await navigator.clipboard.writeText(JSON.stringify(data, null, 2))
-  },
-
-  async cutElement () {
-    const ref = StateSelectedElement.getRef()
-    if (!this.isElementAllowed(ref)) return
-    const element = HelperElement.getElement(ref)
-    CanvasElement.appendToken(element)
-    await this.copyElementData(element, 'cut')
-    CanvasElement.addRemoveElementCommand(ref, 'cutElement', 'addElement')
-    CanvasElementSelect.deselectElement()
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-  },
-
-  async pasteElement () {
-    const data = await this.getPastedData()
-    if (!data.element) return
-    const newElement = this.createElementFromData(data.element)
-    this.addPastedPlacement()
-    this.addPastedElement(newElement)
-    const ref = HelperElement.getRef(newElement)
-    CanvasElement.addRemoveElementCommand(ref, 'pasteElement', 'removeElement', false)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
   createElementFromData (data) {
@@ -162,21 +185,14 @@ export default {
     if (!HelperElement.isHidden(element)) HelperDOM.show(element)
   },
 
-  async duplicateElement () {
-    await this.copyElement()
-    await this.pasteDuplicateElement()
-  },
-
-  async pasteDuplicateElement () {
-    const data = await this.getPastedData()
-    if (!data.element) return
-    const newElement = this.createElementFromData(data.element)
-    this.addPastedPlacement('bottom')
-    this.addPastedElement(newElement)
-    const ref = HelperElement.getRef(newElement)
-    CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-    CanvasElementSelect.selectElement(newElement)
+  pasteExecute (element, data) {
+    if (data.action === 'copy') {
+      const ref = HelperElement.getRef(element)
+      CanvasElement.addRemoveElementCommand(ref, 'pasteElement', 'removeElement', false)
+    } else { // cut
+      const token = data.attributes['data-ss-token']
+      CanvasElement.tokenCommand(token, 'pasteCutElement', false)
+    }
   },
 
   async copyAll () {

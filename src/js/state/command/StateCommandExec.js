@@ -23,19 +23,6 @@ export default {
     HelperDOM.hide(element)
   },
 
-  pasteElement (data) {
-    this.addElement(data)
-  },
-
-  duplicateElement (data) {
-    // alias
-    this.pasteElement(data)
-  },
-
-  cutElement (data) {
-    this.removeElement(data)
-  },
-
   moveElement (data) {
     const canvas = HelperCanvas.getCanvas()
     const elements = canvas.querySelectorAll(`[data-ss-token~="${data.token}"]`)
@@ -50,17 +37,31 @@ export default {
     }
   },
 
+  pasteElement (data) {
+    this.addElement(data)
+  },
+
+  duplicateElement (data) {
+    this.pasteElement(data)
+  },
+
+  cutElement (data) {
+    this.moveElement(data)
+  },
+
+  pasteCutElement (data) {
+    this.moveElement(data)
+  },
+
   changeStyle (data) {
     StyleSheetCommon.addRemoveStyleRules(data, true)
   },
 
   cutStyle (data) {
-    // alias
     this.changeStyle(data)
   },
 
   pasteStyle (data) {
-    // alias
     this.changeStyle(data)
   },
 

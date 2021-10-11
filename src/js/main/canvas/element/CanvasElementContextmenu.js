@@ -21,7 +21,7 @@ export default {
         'clickDuplicateElementEvent', 'clickDeleteElementEvent', 'clickCopyAllEvent',
         'clickCopyAttributesEvent', 'clickCopyStyleEvent', 'clickPasteAllEvent',
         'clickCopySelectorEvent', 'clickCutSelectorEvent', 'clickPasteSelectorEvent',
-        'clickInsertComponentChildrenEvent', 'clickLoadComponentEvent'],
+        'clickAssignComponentHoleEvent', 'clickLoadComponentEvent'],
       contextmenu: ['contextmenuCanvasShowMenuEvent', 'contextmenuSidebarShowMenuEvent']
     }
   },
@@ -134,9 +134,9 @@ export default {
     }
   },
 
-  clickInsertComponentChildrenEvent (event) {
+  clickAssignComponentHoleEvent (event) {
     if (event.target.classList.contains('element-menu-component-children')) {
-      CanvasElementComponent.insertComponentChildren()
+      CanvasElementComponent.assignComponentHole()
     }
   },
 

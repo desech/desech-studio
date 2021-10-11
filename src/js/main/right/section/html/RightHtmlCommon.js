@@ -156,11 +156,11 @@ export default {
     return remove
   },
 
-  // check ParseHtml.cleanAttributes()
+  // check ParseHtml.cleanAttributes(), StateHtmlFile.cleanAttributes()
   getIgnoredAttributes () {
     return [
       'class', 'style', 'hidden', 'data-element-properties', 'viewBox', 'srcset',
-      'data-ss-tag', 'data-ss-hidden', 'data-ss-token'
+      'data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-component'
     ]
   },
 

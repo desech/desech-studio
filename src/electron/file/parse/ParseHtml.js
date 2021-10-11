@@ -13,8 +13,8 @@ export default {
     this.init(document, folder)
     this.prepareElement(document.body)
     return {
-      canvas: this.getBody(document) || null,
-      meta: this.getMeta(document) || null
+      canvas: this.getBody() || null,
+      meta: this.getMeta() || null
     }
   },
 
@@ -23,25 +23,27 @@ export default {
     this._folder = folder
   },
 
-  getBody (document) {
-    if (document.styleSheets.length) {
-      return document.body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
-    } else {
-      return document.body.children[0]?.trim()
+  getBody () {
+    // components don't have stylesheets, even if they contain <svg>s with <style>
+    const body = this._document.body
+    if (this._document.styleSheets.length) {
+      return body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+    } else if (this._document.body.children.length) {
+      return body.children[0].outerHTML.trim()
     }
   },
 
-  getMeta (document) {
-    if (document.styleSheets.length) {
+  getMeta () {
+    if (this._document.styleSheets.length) {
       return {
-        language: document.documentElement.lang,
-        title: document.title,
-        meta: document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
+        language: this._document.documentElement.lang,
+        title: this._document.title,
+        meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
       }
     }
   },
 
-  prepareElement (node, componentChildren) {
+  prepareElement (node, componentChildren = null) {
     const tag = HelperDOM.getTag(node)
     const type = this.getTagElement(tag)
     if (tag === 'body') {
@@ -100,14 +102,14 @@ export default {
   },
 
   setComponent (node) {
-    const file = File.resolve(this._folder, node.getAttributeNS(null, 'src'))
-    if (!fs.existsSync(file)) return node.remove()
-    node.classList.add(HelperElement.generateElementRef())
-    this.addCanvasClasses(node, 'component')
-    node.setAttributeNS(null, 'src', file)
-    const componentChildren = node.innerHTML
-    node.innerHTML = this.getHtmlFromFile(file)
-    this.prepareChildren(node.children, componentChildren)
+    const data = JSON.parse(node.dataset.component)
+    data.file = File.resolve(this._folder, data.file)
+    if (!fs.existsSync(data.file)) return node.remove()
+    const html = this.getHtmlFromFile(data.file)
+    const element = this._document.createRange().createContextualFragment(html).children[0]
+    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    this.prepareElement(element, node.innerHTML)
+    node.replaceWith(element)
   },
 
   getHtmlFromFile (file) {
@@ -141,7 +143,7 @@ export default {
     return text.replace(/[&<>"']/g, m => map[m])
   },
 
-  // also check RightHtmlCommon.getIgnoredAttributes()
+  // check StateHtmlFile.cleanAttributes(), RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
     for (const attr of node.attributes) {
       if (attr.name === 'hidden') {
@@ -180,37 +182,19 @@ export default {
 
   addCanvasClasses (node, type) {
     node.classList.add('element')
-    if (this.isComponentElement(node)) {
-      node.classList.add('component-element')
-    }
-    if (!['block', 'text', 'component', 'component-children'].includes(type)) {
+    if (type !== 'block' && type !== 'text') {
       node.classList.add(type)
     }
-  },
-
-  isComponentElement (node) {
-    if (node.parentNode.constructor.name === 'DocumentFragment' ||
-      !node.parentNode.closest('.component')) {
-      return false
-    }
-    if (node.classList.contains('component-children')) {
-      return this.getTotalParents(node, 'component') !==
-      this.getTotalParents(node, 'component-children')
-    } else {
-      return this.getTotalParents(node.parentNode, 'component') !==
-        this.getTotalParents(node.parentNode, 'component-children')
+    // we need unique refs for each component element to be able to select them
+    if (!this._document.styleSheets.length || node.closest('[data-ss-component]')) {
+      HelperDOM.prependClass(node, this.getComponentRef(node))
     }
   },
 
-  getTotalParents (node, cls) {
-    let elem = node
-    let count = 0
-    while (elem = elem.closest('.' + cls)) { // eslint-disable-line
-      count++
-      elem = elem.parentNode
-      if (!elem) return count
-    }
-    return count
+  getComponentRef (node) {
+    return node.dataset.ssComponent
+      ? JSON.parse(node.dataset.ssComponent).ref
+      : HelperElement.generateElementRef()
   },
 
   setImageElement (node) {

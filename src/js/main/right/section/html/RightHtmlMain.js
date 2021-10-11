@@ -13,7 +13,7 @@ export default {
   getEvents () {
     return {
       change: ['changeTagEvent', 'changeCustomTagEvent'],
-      click: ['clickCopyRefEvent', 'clickInsertComponentChildrenEvent', 'clickHideElementEvent',
+      click: ['clickCopyRefEvent', 'clickAssignComponentHoleEvent', 'clickHideElementEvent',
         'clickShowElementEvent', 'clickDeleteElementEvent']
     }
   },
@@ -40,9 +40,9 @@ export default {
     }
   },
 
-  clickInsertComponentChildrenEvent (event) {
+  clickAssignComponentHoleEvent (event) {
     if (event.target.closest('.style-html-component-children')) {
-      CanvasElementComponent.insertComponentChildren()
+      CanvasElementComponent.assignComponentHole()
     }
   },
 

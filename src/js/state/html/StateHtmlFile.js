@@ -29,10 +29,11 @@ export default {
   },
 
   prepareElement (node) {
+    if (!node) return
     if (node.classList.contains('body')) {
       this.setBody(node)
-    } else if (node.classList.contains('component')) {
-      this.setComponent(node)
+    } else if (node.dataset.ssComponent) {
+      this.setComponent(node, JSON.parse(node.dataset.ssComponent))
     } else {
       this.setRelativeSource(node)
       this.setBasic(node)
@@ -52,13 +53,11 @@ export default {
     if (body.children.length) this.prepareChildren(body.children)
   },
 
-  setComponent (node) {
+  setComponent (node, data) {
     const div = document.createElement('div')
-    div.setAttributeNS(null, 'class', 'component')
-    div.setAttributeNS(null, 'src', HelperFile.getRelPath(node.getAttributeNS(null, 'src')))
-    if (node.dataset.elementProperties) {
-      div.setAttributeNS(null, 'data-element-properties', node.dataset.elementProperties)
-    }
+    div.classList.add('component')
+    data.file = HelperFile.getRelPath(data.file)
+    div.setAttributeNS(null, 'data-component', JSON.stringify(data))
     this.setComponentChildren(div, node)
     node.replaceWith(div)
   },
@@ -109,12 +108,11 @@ export default {
     return HelperDOM.changeTag(node, tag, document)
   },
 
+  // check ParseHtml.cleanAttributes(), RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
-    // check RightHtmlCommon.js for details
     for (const attr of node.attributes) {
       if (!attr.name.startsWith('data-ss-')) continue
       if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
-      // data-ss-token is ignored
       // JSDOM doesn't use a live list
       node.removeAttributeNS(null, attr.name)
     }
@@ -163,9 +161,9 @@ export default {
 
   returnHtml (body, file) {
     const cleanBody = this.beautifyHtml(body)
-    const isComponent = HelperFile.isComponentFile(file)
+    if (HelperFile.isComponentFile(file)) return cleanBody
     const meta = HelperProject.getFileMeta()
-    return isComponent ? cleanBody : HelperFile.getFullHtml(file, cleanBody, meta)
+    return HelperFile.getFullHtml(file, cleanBody, meta)
   },
 
   beautifyHtml (body) {

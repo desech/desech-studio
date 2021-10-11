@@ -4,6 +4,7 @@ import StyleSheetFile from '../../../state/stylesheet/StyleSheetFile.js'
 import StateHtmlFile from '../../../state/html/StateHtmlFile.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperProject from '../../../helper/HelperProject.js'
+import HelperElement from '../../../helper/HelperElement.js'
 
 export default {
   _AUTOSAVE_TIME: 60 * 1000, // in ms
@@ -53,8 +54,17 @@ export default {
     if (!TopCommand.getList()) return
     const buttons = TopCommand.getButtons()
     if (check && !buttons.save.classList.contains('active')) return
+    this.validateTopElements()
     this.setSaveLoading(buttons.save, buttons.command)
     await this.saveCurrentFile(buttons.save)
+  },
+
+  validateTopElements () {
+    const count = HelperElement.countTopElements()
+    if (count > 1) {
+      throw new Error('Only one top level element is allowed. ' +
+        `Please delete the other ${count - 1}.`)
+    }
   },
 
   setSaveLoading (button, command) {

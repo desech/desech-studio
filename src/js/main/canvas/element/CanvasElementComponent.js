@@ -1,4 +1,3 @@
-import CanvasElementCreate from './CanvasElementCreate.js'
 import CanvasElementManage from './CanvasElementManage.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import CanvasElement from '../CanvasElement.js'
@@ -6,6 +5,8 @@ import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import Page from '../../../page/Page.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
+import StateCommand from '../../../state/StateCommand.js'
 
 export default {
   getEvents () {
@@ -26,32 +27,36 @@ export default {
   },
 
   async loadComponent (element) {
-    await Page.loadMain(element.getAttributeNS(null, 'src'))
+    const data = JSON.parse(element.dataset.ssComponent)
+    await Page.loadMain(data.file)
   },
 
   async createElement (file) {
-    const element = await this.addComponentElement(file)
+    const element = await this.buildComponentElement(file)
+    if (!element) return
+    CanvasElementManage.addPastedPlacement()
+    CanvasElementManage.addPastedElement(element)
     const ref = HelperElement.getRef(element)
     CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  async addComponentElement (file) {
-    const element = CanvasElementCreate.getElementTemplate('component')
-    await this.buildComponentElement(element, file)
-    CanvasElementManage.addPastedPlacement()
-    CanvasElementManage.addPastedElement(element)
+  async buildComponentElement (file) {
+    const html = await window.electron.invoke('rendererParseComponentFile', file)
+    const element = document.createRange().createContextualFragment(html.canvas).children[0]
+    if (!element) return
+    const ref = HelperElement.getRef(element)
+    element.setAttributeNS(null, 'data-ss-component', JSON.stringify({ ref, file }))
     return element
   },
 
-  async buildComponentElement (element, file) {
-    element.setAttributeNS(null, 'src', file)
-    const html = await window.electron.invoke('rendererParseComponentFile', file)
-    element.insertAdjacentHTML('afterbegin', html.canvas)
-  },
-
-  insertComponentChildren () {
-    CanvasElementManage.addPastedPlacement('inside')
-    CanvasElementCreate.createElement('component-children')
+  assignComponentHole (execute = true) {
+    const ref = StateSelectedElement.getRef()
+    const command = {
+      do: { command: doCommand, ref },
+      undo: { command: undoCommand, ref }
+    }
+    StateCommand.stackCommand(command)
+    if (execute) StateCommand.executeCommand(command.do)
   }
 }

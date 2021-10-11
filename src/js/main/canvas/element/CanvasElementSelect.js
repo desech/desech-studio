@@ -76,7 +76,6 @@ export default {
   },
 
   selectElement (element) {
-    element = CanvasCommon.getClosestElementOrComponent(element)
     const selectedElement = StateSelectedElement.getElement()
     if (selectedElement === element) return element
     this.selectElementNode(element)

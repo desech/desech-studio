@@ -60,6 +60,11 @@ export default {
     }
   },
 
+  prependClass (node, cls) {
+    const classes = cls + ' ' + node.getAttributeNS(null, 'class')
+    node.setAttributeNS(null, 'class', classes)
+  },
+
   getVisibleChildren (parent) {
     const children = []
     for (const child of parent.children) {

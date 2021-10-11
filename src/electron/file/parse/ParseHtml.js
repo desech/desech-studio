@@ -9,19 +9,12 @@ export default {
   _document: null,
   _folder: null,
 
-  async parseComponentFile (file) {
-    const folder = await Cookie.getCookie('currentFolder')
-    const html = fs.readFileSync(file).toString()
-    const dom = new JSDOM(html)
-    return this.parseHtml(dom.window.document, folder)
-  },
-
   parseHtml (document, folder) {
     this.init(document, folder)
     this.prepareElement(document.body)
     return {
-      canvas: this.getBody(document),
-      meta: this.getMeta(document)
+      canvas: this.getBody(document) || null,
+      meta: this.getMeta(document) || null
     }
   },
 
@@ -31,11 +24,15 @@ export default {
   },
 
   getBody (document) {
-    return document.body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+    if (document.styleSheets.length) {
+      return document.body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+    } else {
+      return document.body.children[0]?.trim()
+    }
   },
 
   getMeta (document) {
-    if (document.head) {
+    if (document.styleSheets.length) {
       return {
         language: document.documentElement.lang,
         title: document.title,
@@ -274,5 +271,12 @@ export default {
     node = HelperDOM.changeTag(node, 'div', this._document)
     node.setAttributeNS(null, 'data-ss-tag', tag)
     return node
+  },
+
+  async parseComponentFile (file) {
+    const folder = await Cookie.getCookie('currentFolder')
+    const html = fs.readFileSync(file).toString()
+    const dom = new JSDOM(html)
+    return this.parseHtml(dom.window.document, folder)
   }
 }

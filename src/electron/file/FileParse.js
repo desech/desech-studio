@@ -9,31 +9,24 @@ import Font from '../lib/Font.js'
 import File from './File.js'
 
 export default {
-  async parseHtmlCssFile (file, parseElementCss = true) {
+  async parseHtmlCssFile (file, options = {}) {
     const folder = await Cookie.getCookie('currentFolder')
     const html = ParseHtml.getHtmlFromFile(file)
     const dom = new JSDOM(html, {
       resources: new CustomResourceLoader(),
       url: new URL('file:' + File.resolve(file))
     })
-    const data = await this.parseFileType(dom.window.document, file, folder, parseElementCss)
-    data.font = Font.getFontsList(folder)
+    const data = await this.parseOnDomReady(dom.window.document, folder, options)
+    data.font = options.ignoreFonts ? null : Font.getFontsList(folder)
     return data
   },
 
-  async parseFileType (document, file, folder, parseElementCss) {
-    if (file.startsWith(folder + '/component')) {
-      return await this.parseDom(document, folder, parseElementCss)
-    } else {
-      return await this.parseOnDomReady(document, folder, parseElementCss)
-    }
-  },
-
-  parseOnDomReady (document, folder, parseElementCss) {
+  parseOnDomReady (document, folder, options) {
     return new Promise((resolve, reject) => {
       document.addEventListener('DOMContentLoaded', async () => {
         try {
-          return resolve(await this.parseDom(document, folder, parseElementCss))
+          const data = await this.parseDom(document, folder, options)
+          return resolve(data)
         } catch (error) {
           reject(error)
         }
@@ -41,19 +34,25 @@ export default {
     })
   },
 
-  async parseDom (document, folder, parseElementCss) {
-    const html = ParseHtml.parseHtml(document, folder)
-    const css = await this.parseCss(document, folder, parseElementCss)
+  async parseDom (document, folder, options) {
+    const html = options.ignoreHtml ? null : ParseHtml.parseHtml(document, folder, options)
+    const css = await this.parseCss(document, folder, options)
     return { html, css }
   },
 
-  async parseCss (document, folder, parseElementCss) {
+  async parseCss (document, folder, options) {
     if (document.styleSheets.length) {
-      return ParseCss.parseCss(document, folder, parseElementCss)
+      return ParseCss.parseCss(document, folder, options)
+    } else {
+      return await this.parseIndexCss(folder)
     }
-    // parse index.html for css, but ignore its element css file
+  },
+
+  async parseIndexCss (folder) {
+    // for components, parse index.html for css, but ignore its element css file
     const index = File.resolve(folder, 'index.html')
-    const data = await this.parseHtmlCssFile(index, false)
+    const options = { ignoreFonts: true, ignoreHtml: true, ignoreElementCss: true }
+    const data = await this.parseHtmlCssFile(index, options)
     return data.css
   },
 

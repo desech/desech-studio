@@ -8,18 +8,18 @@ import ParseCssSplit from './ParseCssSplit.js'
 export default {
   _colors: [],
 
-  parseCss (document, folder, parseElementCss = true) {
+  parseCss (document, folder, options = {}) {
     this._colors = []
     const css = {}
-    this.addStyle(document, css, folder, parseElementCss)
+    this.addStyle(document, css, folder, options)
     // this.cleanProjectCss(css, folder)
     return Object.values(css)
   },
 
-  addStyle (document, css, folder, parseElementCss) {
+  addStyle (document, css, folder, options) {
     const files = this.getCssFiles(document, folder)
     for (let i = 0; i < document.styleSheets.length; i++) {
-      if (!this.isCssFileAllowed(files[i], parseElementCss)) continue
+      if (!this.isCssFileAllowed(files[i], options)) continue
       this.buildRules(document.styleSheets[i], css, folder)
     }
   },
@@ -33,14 +33,14 @@ export default {
     return files
   },
 
-  isCssFileAllowed (file, parseElementCss) {
+  isCssFileAllowed (file, options) {
     const files = [
       'css/general/reset.css',
       'css/general/animation.css',
       'css/general/font.css',
       'css/general/design-system.css'
     ]
-    return (parseElementCss || !file.startsWith('css/page/')) && !files.includes(file)
+    return (!options.ignoreElementCss || !file.startsWith('css/page/')) && !files.includes(file)
   },
 
   buildRules (sheet, css, folder) {

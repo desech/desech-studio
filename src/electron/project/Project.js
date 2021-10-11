@@ -50,9 +50,9 @@ export default {
   },
 
   getDialogTitle (data) {
-    return data
-      ? Language.localize('Save files to this empty folder')
-      : Language.localize('Choose a folder project')
+    return (data.action === 'open')
+      ? Language.localize('Choose a folder project')
+      : Language.localize('Save files to this empty folder')
   },
 
   getProjectSettings (folder) {

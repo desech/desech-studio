@@ -11,7 +11,7 @@
   grid-template-columns: 24px auto 24px;
 }
 
-.sidebar-right #html-section .style-html-top-line.component-children {
+.sidebar-right #html-section .style-html-top-line.component-hole {
   grid-template-columns: 24px auto 24px 24px 24px;
 }
 
@@ -21,7 +21,7 @@
 
 .sidebar-right #html-section .style-html-top-line.hidden .style-html-hide,
 .sidebar-right #html-section .style-html-top-line:not(.hidden) .style-html-show,
-.sidebar-right #html-section .style-html-top-line:not(.component-children) .style-html-component-children,
+.sidebar-right #html-section .style-html-top-line:not(.component-hole) .style-html-component-hole,
 .sidebar-right #html-section .style-html-top-line.inline .style-html-delete {
   display: none;
 }

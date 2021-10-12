@@ -3,6 +3,7 @@ import HelperElement from '../../../helper/HelperElement.js'
 import LeftCommon from '../LeftCommon.js'
 import CanvasElementSelect from '../../canvas/element/CanvasElementSelect.js'
 import CanvasElementMove from '../../canvas/element/CanvasElementMove.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -72,8 +73,8 @@ export default {
 
   placeItem (ref, direction) {
     const element = HelperElement.getElement(ref)
-    const componentChildren = HelperElement.getComponentChildren(element)
-    if (direction === 'inside' && HelperElement.isComponent(element) && componentChildren) {
+    const componentChildren = HelperComponent.getComponentChildren(element)
+    if (direction === 'inside' && HelperComponent.isComponent(element) && componentChildren) {
       componentChildren.classList.add('placement', 'inside')
     } else {
       element.classList.add('placement', direction)

@@ -16,16 +16,16 @@ export default {
       resources: new CustomResourceLoader(),
       url: new URL('file:' + File.resolve(file))
     })
-    const data = await this.parseOnDomReady(dom.window.document, folder, options)
+    const data = await this.parseOnDomReady(dom.window.document, file, folder, options)
     data.font = options.ignoreFonts ? null : Font.getFontsList(folder)
     return data
   },
 
-  parseOnDomReady (document, folder, options) {
+  parseOnDomReady (document, file, folder, options) {
     return new Promise((resolve, reject) => {
       document.addEventListener('DOMContentLoaded', async () => {
         try {
-          const data = await this.parseDom(document, folder, options)
+          const data = await this.parseDom(document, file, folder, options)
           return resolve(data)
         } catch (error) {
           reject(error)
@@ -34,8 +34,9 @@ export default {
     })
   },
 
-  async parseDom (document, folder, options) {
-    const html = options.ignoreHtml ? null : ParseHtml.parseHtml(document, folder, options)
+  async parseDom (document, file, folder, options) {
+    const htmlOptions = { isComponent: file.startsWith(folder + '/component') }
+    const html = options.ignoreHtml ? null : ParseHtml.parseHtml(document, folder, htmlOptions)
     const css = await this.parseCss(document, folder, options)
     return { html, css }
   },
@@ -49,7 +50,7 @@ export default {
   },
 
   async parseIndexCss (folder) {
-    // for components, parse index.html for css, but ignore its element css file
+    // for components, parse index.html for the css, but ignore its element css file and html
     const index = File.resolve(folder, 'index.html')
     const options = { ignoreFonts: true, ignoreHtml: true, ignoreElementCss: true }
     const data = await this.parseHtmlCssFile(index, options)

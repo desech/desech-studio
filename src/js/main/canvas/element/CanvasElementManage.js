@@ -13,6 +13,7 @@ import RightCommon from '../../right/RightCommon.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
 import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties.js'
 import HelperCrypto from '../../../helper/HelperCrypto.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   deleteElement () {
@@ -169,8 +170,8 @@ export default {
   },
 
   addGeneralPastedPlacement (element) {
-    const componentChildren = HelperElement.getComponentChildren(element)
-    if (HelperElement.isComponent(element) && componentChildren) {
+    const componentChildren = HelperComponent.getComponentChildren(element)
+    if (HelperComponent.isComponent(element) && componentChildren) {
       componentChildren.classList.add('placement', 'inside')
     } else if (HelperElement.isContainer(element)) {
       element.classList.add('placement', 'inside')

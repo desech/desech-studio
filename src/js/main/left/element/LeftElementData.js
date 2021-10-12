@@ -70,8 +70,6 @@ export default {
     const title = li.getElementsByClassName('panel-item-name')[0]
     if (data.type === 'component') {
       title.textContent = HelperProject.getFileName(data.element.getAttributeNS(null, 'src'))
-    } else if (data.type === 'component-children') {
-      title.textContent = title.dataset.componentChildren
     } else {
       const classes = HelperElement.getClasses(data.element, true)
       title.textContent = `<${data.tag}> ` + classes.join(' ')
@@ -80,7 +78,8 @@ export default {
 
   injectIcon (li, data) {
     const icon = li.getElementsByClassName('panel-item-icon')[0]
-    const svg = HelperDOM.getTemplate(`template-element-icon-${data.type}`)
+    const type = data.isHole ? 'component-hole' : data.type
+    const svg = HelperDOM.getTemplate(`template-element-icon-${type}`)
     if (svg) icon.appendChild(svg)
   },
 

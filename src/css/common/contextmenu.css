@@ -31,7 +31,7 @@
   color: var(--menu-txt-hover);
 }
 
-.desech-studio .contextmenu ul.menu-list:not(.component-children) .element-menu-component-children,
+.desech-studio .contextmenu ul.menu-list:not(.component-hole) .element-menu-component-hole,
 .desech-studio .contextmenu ul.menu-list.hidden .element-menu-hide,
 .desech-studio .contextmenu ul.menu-list:not(.hidden) .element-menu-show {
   display: none;

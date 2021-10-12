@@ -1,7 +1,7 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import RightCommon from '../RightCommon.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
-import HelperElement from '../../../helper/HelperElement.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   getSection () {
@@ -14,6 +14,6 @@ export default {
   injectComponentName (container) {
     const node = container.getElementsByClassName('sidebar-component-name')[0]
     const selected = StateSelectedElement.getElement()
-    node.textContent = HelperElement.getComponentName(selected)
+    node.textContent = HelperComponent.getComponentName(selected)
   }
 }

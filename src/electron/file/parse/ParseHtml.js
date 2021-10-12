@@ -8,48 +8,61 @@ import File from '../File.js'
 export default {
   _document: null,
   _folder: null,
+  _options: null,
 
-  parseHtml (document, folder) {
-    this.init(document, folder)
+  parseHtml (document, folder, options) {
+    this.init(document, folder, options)
+    const componentData = this.prepareComponentData()
     this.prepareElement(document.body)
     return {
       canvas: this.getBody() || null,
-      meta: this.getMeta() || null
+      meta: this.getMeta() || null,
+      component: componentData || null
     }
   },
 
-  init (document, folder) {
+  init (document, folder, options) {
     this._document = document
     this._folder = folder
+    this._options = options
+  },
+
+  prepareComponentData () {
+    if (!this._options.isComponent) return
+    const root = this._document.body.children[0]
+    if (!root) return
+    const data = root.dataset.ssComponent
+    root.removeAttributeNS(null, 'data-ss-component')
+    return data ? JSON.parse(data) : null
   },
 
   getBody () {
-    // components don't have stylesheets, even if they contain <svg>s with <style>
     const body = this._document.body
-    if (this._document.styleSheets.length) {
+    if (this._options.isComponent || this._options.newComponent) {
+      return body.children.length ? body.children[0].outerHTML.trim() : null
+    } else { // page
       return body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
-    } else if (this._document.body.children.length) {
-      return body.children[0].outerHTML.trim()
     }
   },
 
   getMeta () {
-    if (this._document.styleSheets.length) {
-      return {
-        language: this._document.documentElement.lang,
-        title: this._document.title,
-        meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
-      }
+    if (this._options.isComponent || this._options.newComponent) return
+    return {
+      language: this._document.documentElement.lang,
+      title: this._document.title,
+      meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
     }
   },
 
   prepareElement (node, componentChildren = null) {
     const tag = HelperDOM.getTag(node)
-    const type = this.getTagElement(tag)
+    const mappedTag = this.getMappedTag(tag)
     if (tag === 'body') {
       this.setBody(node)
-    } else if (type) {
-      this.setBasic(node, type)
+    } else if (node.classList.contains('component')) {
+      this.setComponent(node)
+    } else if (mappedTag) {
+      this.setBasic(node, mappedTag)
     } else if (tag === 'input') {
       this.setInputElement(node)
     } else if (tag === 'img') {
@@ -60,10 +73,6 @@ export default {
       this.setTagElement(node, 'text', 'p')
     } else if (node.classList.contains('block')) {
       this.setTagElement(node, 'block', 'div', componentChildren)
-    } else if (node.classList.contains('component')) {
-      this.setComponent(node)
-    } else if (node.classList.contains('component-children')) {
-      this.setComponentChildren(node, componentChildren)
     } else if (this.isInlineElement(node)) {
       // inline check is done at the end
       this.setInlineElement(node)
@@ -76,7 +85,7 @@ export default {
     }
   },
 
-  getTagElement (tag) {
+  getMappedTag (tag) {
     const map = {
       svg: 'icon',
       iframe: 'iframe',
@@ -102,12 +111,12 @@ export default {
   },
 
   setComponent (node) {
-    const data = JSON.parse(node.dataset.component)
+    const data = JSON.parse(node.dataset.ssComponent)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
     const html = this.getHtmlFromFile(data.file)
     const element = this._document.createRange().createContextualFragment(html).children[0]
-    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    this.mergeComponentData(element, data)
     this.prepareElement(element, node.innerHTML)
     node.replaceWith(element)
   },
@@ -116,10 +125,9 @@ export default {
     return fs.readFileSync(file).toString()
   },
 
-  setComponentChildren (node, componentChildren) {
-    this.setBasic(node, 'component-children')
-    if (componentChildren) node.innerHTML = componentChildren
-    this.prepareChildren(node.children)
+  mergeComponentData (element, data) {
+    data.main = element.dataset.ssComponent
+    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
 
   setBasic (node, type) {
@@ -176,8 +184,7 @@ export default {
   },
 
   isStandardClass (cls) {
-    return (cls === 'block' || cls === 'text' || cls === 'component-children' ||
-      cls.startsWith('e0'))
+    return (cls === 'block' || cls === 'text' || cls.startsWith('e0'))
   },
 
   addCanvasClasses (node, type) {
@@ -186,7 +193,8 @@ export default {
       node.classList.add(type)
     }
     // we need unique refs for each component element to be able to select them
-    if (!this._document.styleSheets.length || node.closest('[data-ss-component]')) {
+    // this happens when we parse existing components inside the page, or we add new components
+    if (node.closest('[data-ss-component]') || this._options.newComponent) {
       HelperDOM.prependClass(node, this.getComponentRef(node))
     }
   },
@@ -245,8 +253,17 @@ export default {
   setTagElement (node, type, tag, componentChildren = null) {
     this.setBasic(node, type)
     node = this.changeNodeSpecialTag(node)
+    this.setElementChildren(node, componentChildren)
+  },
+
+  setElementChildren (node, componentChildren) {
     const children = HelperDOM.getChildren(node)
-    if (children) this.prepareChildren(children, componentChildren)
+    if (children) {
+      this.prepareChildren(children, componentChildren)
+    } else if (componentChildren && node.dataset.ssComponentHole) {
+      node.innerHTML = componentChildren
+      this.prepareChildren(node.children)
+    }
   },
 
   changeNodeSpecialTag (node) {
@@ -257,10 +274,11 @@ export default {
     return node
   },
 
+  // this is called when we add a component to the canvas
   async parseComponentFile (file) {
     const folder = await Cookie.getCookie('currentFolder')
     const html = fs.readFileSync(file).toString()
     const dom = new JSDOM(html)
-    return this.parseHtml(dom.window.document, folder)
+    return this.parseHtml(dom.window.document, folder, { newComponent: true })
   }
 }

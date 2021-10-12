@@ -7,6 +7,8 @@ import Page from '../../../page/Page.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import StateCommand from '../../../state/StateCommand.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
+import HelperDOM from '../../../helper/HelperDOM.js'
 
 export default {
   getEvents () {
@@ -46,15 +48,37 @@ export default {
     const element = document.createRange().createContextualFragment(html.canvas).children[0]
     if (!element) return
     const ref = HelperElement.getRef(element)
-    element.setAttributeNS(null, 'data-ss-component', JSON.stringify({ ref, file }))
+    const data = { ref, file, main: element.dataset.ssComponent }
+    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
     return element
   },
 
-  assignComponentHole (execute = true) {
+  assignComponentHole (container) {
     const ref = StateSelectedElement.getRef()
+    const hole = HelperComponent.getCurrentComponentHole()
+    this.swapButtons(container, ref !== hole)
+    this.execAssignComponentHole(ref, hole)
+  },
+
+  swapButtons (container, same) {
+    const buttons = container.getElementsByClassName('style-html-component-hole')
+    HelperDOM.toggle(buttons[0], !same)
+    HelperDOM.toggle(buttons[1], same)
+  },
+
+  execAssignComponentHole (ref, hole, execute = true) {
+    if (ref === hole) ref = null
     const command = {
-      do: { command: doCommand, ref },
-      undo: { command: undoCommand, ref }
+      do: {
+        command: 'assignComponentHole',
+        current: ref,
+        previous: hole
+      },
+      undo: {
+        command: 'assignComponentHole',
+        current: hole,
+        previous: ref
+      }
     }
     StateCommand.stackCommand(command)
     if (execute) StateCommand.executeCommand(command.do)

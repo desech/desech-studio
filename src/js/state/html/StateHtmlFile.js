@@ -4,7 +4,7 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperDesignSystem from '../../helper/HelperDesignSystem.js'
 import HelperProject from '../../helper/HelperProject.js'
-import HelperElement from '../../helper/HelperElement.js'
+import HelperComponent from '../../helper/HelperComponent.js'
 import '../../compiled/beautify-html.js'
 
 export default {
@@ -16,6 +16,7 @@ export default {
     const canvas = HelperCanvas.getCanvas().cloneNode(true)
     this.removeNonCanvasElements(canvas)
     this.prepareElement(canvas.children[0])
+    this.addComponentDataToRoot(file, canvas.children[0])
     return this.returnHtml(canvas.innerHTML, file)
   },
 
@@ -28,12 +29,19 @@ export default {
     canvas.querySelectorAll('[hidden]:not([data-ss-hidden])').forEach(el => el.remove())
   },
 
+  addComponentDataToRoot (file, root) {
+    if (!HelperFile.isComponentFile(file)) return
+    const data = HelperComponent.getCurrentComponentData()
+    if (!data) return
+    root.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+  },
+
   prepareElement (node) {
     if (!node) return
     if (node.classList.contains('body')) {
       this.setBody(node)
     } else if (node.dataset.ssComponent) {
-      this.setComponent(node, JSON.parse(node.dataset.ssComponent))
+      this.setComponentInstance(node, JSON.parse(node.dataset.ssComponent))
     } else {
       this.setRelativeSource(node)
       this.setBasic(node)
@@ -53,17 +61,18 @@ export default {
     if (body.children.length) this.prepareChildren(body.children)
   },
 
-  setComponent (node, data) {
+  setComponentInstance (node, data) {
     const div = document.createElement('div')
     div.classList.add('component')
     data.file = HelperFile.getRelPath(data.file)
-    div.setAttributeNS(null, 'data-component', JSON.stringify(data))
+    if (data.main) delete data.main
+    div.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
     this.setComponentChildren(div, node)
     node.replaceWith(div)
   },
 
   setComponentChildren (div, node) {
-    const container = HelperElement.getComponentChildren(node)
+    const container = HelperComponent.getComponentChildren(node)
     if (!container || !container.children) return
     this.prepareChildren(container.children)
     div.innerHTML = container.innerHTML
@@ -111,10 +120,11 @@ export default {
   // check ParseHtml.cleanAttributes(), RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
     for (const attr of node.attributes) {
-      if (!attr.name.startsWith('data-ss-')) continue
-      if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
-      // JSDOM doesn't use a live list
-      node.removeAttributeNS(null, attr.name)
+      if (attr.name.startsWith('data-ss-') && attr.name !== 'data-ss-component-hole') {
+        if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
+        // JSDOM doesn't use a live list
+        node.removeAttributeNS(null, attr.name)
+      }
     }
   },
 
@@ -134,7 +144,7 @@ export default {
   },
 
   filterClass (cls) {
-    // we allow `block`, `text`, `component` and `component-children`
+    // we allow `block` and `text`
     const ignore = ['selected', 'element', 'body', 'inline', 'icon', 'image', 'video', 'audio',
       'iframe', 'object', 'canvas', 'input', 'datalist', 'dropdown', 'textarea', 'checkbox',
       'range', 'color', 'file', 'progress', 'meter']

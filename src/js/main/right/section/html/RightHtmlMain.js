@@ -4,10 +4,9 @@ import RightHtmlCommon from './RightHtmlCommon.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
 import CanvasElementManage from '../../../canvas/element/CanvasElementManage.js'
-import HelperFile from '../../../../helper/HelperFile.js'
-import HelperProject from '../../../../helper/HelperProject.js'
 import CanvasElementComponent from '../../../canvas/element/CanvasElementComponent.js'
 import HelperElement from '../../../../helper/HelperElement.js'
+import HelperComponent from '../../../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -41,8 +40,8 @@ export default {
   },
 
   clickAssignComponentHoleEvent (event) {
-    if (event.target.closest('.style-html-component-children')) {
-      CanvasElementComponent.assignComponentHole()
+    if (event.target.closest('.style-html-component-hole')) {
+      CanvasElementComponent.assignComponentHole(event.target.closest('form'))
     }
   },
 
@@ -111,13 +110,14 @@ export default {
     if (data.type === 'body' || data.type === 'inline') {
       container.classList.add(data.type)
     }
-    this.injectComponentChildren(container, data)
+    this.injectComponentHole(container, data)
   },
 
-  injectComponentChildren (container, data) {
-    if (data.type === 'block' && HelperFile.isComponentFile(HelperProject.getFile())) {
-      container.classList.add('component-children')
-    }
+  injectComponentHole (container, data) {
+    if (!HelperComponent.canAssignComponentHole(data.element)) return
+    container.classList.add('component-hole')
+    const same = HelperElement.getRef(data.element) === HelperComponent.getCurrentComponentHole()
+    CanvasElementComponent.swapButtons(container, same)
   },
 
   setTagFromSelect (select) {

@@ -133,10 +133,6 @@
   display: none;
 }
 
-#canvas .component-children {
-  min-height: 24px;
-}
-
 /* to fix the displaying bug; we can't have a high specificity */
 .audio {
   height: 54px;
@@ -171,12 +167,6 @@ main#page-main:not(.preview) div.canvas-container div#canvas .element:not(.movin
   box-shadow: inset 0 0 8px 2px var(--move-color) !important;
   outline-color: var(--move-color) !important;
 }
-
-/* don't show anything for component element children */
-/*main#page-main:not(.preview) div.canvas-container div#canvas .element.component .element:not(.component-children) {
-  outline-color: transparent;
-  box-shadow: none;
-}*/
 
 main#page-main.preview #canvas .text {
   user-select: text;

@@ -67,7 +67,7 @@ export default {
   },
 
   buildComponentChildren (folder, document, div, properties, componentHtml) {
-    const container = div.getElementsByClassName('component-children')[0]
+    const container = div.querySelector('[data-ss-component-hole]')
     if (!container) return
     container.innerHTML = this.parseComponentHtml(componentHtml, properties)
     container.removeAttributeNS(null, 'class')

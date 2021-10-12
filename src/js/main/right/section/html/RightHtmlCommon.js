@@ -160,7 +160,8 @@ export default {
   getIgnoredAttributes () {
     return [
       'class', 'style', 'hidden', 'data-element-properties', 'viewBox', 'srcset',
-      'data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-component'
+      'data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-component',
+      'data-ss-component-hole'
     ]
   },
 

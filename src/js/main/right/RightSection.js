@@ -10,7 +10,6 @@ import RightEffect from './section/RightEffect.js'
 import RightAnimation from './section/RightAnimation.js'
 import RightCSS from './section/RightCSS.js'
 import RightComponent from './section/RightComponent.js'
-import RightComponentChildren from './section/RightComponentChildren.js'
 import HelperEvent from '../../helper/HelperEvent.js'
 import HelperElement from '../../helper/HelperElement.js'
 import StateSelectedElement from '../../state/StateSelectedElement.js'
@@ -46,8 +45,6 @@ export default {
     switch (type) {
       case 'component':
         return { component: RightComponent }
-      case 'component-children':
-        return { componentChildren: RightComponentChildren }
       default:
         return {
           html: RightHtml,

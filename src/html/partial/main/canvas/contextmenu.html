@@ -1,7 +1,8 @@
 <template id="template-contextmenu-element-general">
   <div>
     <ul class="menu-list">
-      <li class="element-menu-component-children">{{#i18n}} Assign as component hole {{/i18n}}</li>
+      <li class="element-menu-component-hole">{{#i18n}} Assign as component hole {{/i18n}}</li>
+      <li class="element-menu-component-hole" hidden>{{#i18n}} Unassign as component hole {{/i18n}}</li>
       <li class="element-menu-hide">{{#i18n}} Hide element {{/i18n}}</li>
       <li class="element-menu-show">{{#i18n}} Show element {{/i18n}}</li>
       <li class="element-menu-delete">{{#i18n}} Delete element {{/i18n}} (DEL)</li>
@@ -42,10 +43,11 @@
   </div>
 </template>
 
-<template id="template-contextmenu-element-component-children">
+<template id="template-contextmenu-element-component-hole">
   <div>
     <ul class="menu-list">
-      <li class="element-menu-delete">{{#i18n}} Delete element {{/i18n}} (DEL)</li>
+      <li class="element-menu-component-hole">{{#i18n}} Remove component hole {{/i18n}}</li>
     </ul>
+    {{> mainCanvasContextmenuCopyCss }}
   </div>
 </template>

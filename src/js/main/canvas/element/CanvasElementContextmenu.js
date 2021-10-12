@@ -6,12 +6,11 @@ import HelperElement from '../../../helper/HelperElement.js'
 import CanvasElementManage from './CanvasElementManage.js'
 import Contextmenu from '../../../component/Contextmenu.js'
 import CanvasElementSelect from './CanvasElementSelect.js'
-import HelperFile from '../../../helper/HelperFile.js'
-import HelperProject from '../../../helper/HelperProject.js'
 import CanvasElementComponent from './CanvasElementComponent.js'
 import Page from '../../../page/Page.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -135,8 +134,8 @@ export default {
   },
 
   clickAssignComponentHoleEvent (event) {
-    if (event.target.classList.contains('element-menu-component-children')) {
-      CanvasElementComponent.assignComponentHole()
+    if (event.target.classList.contains('element-menu-component-hole')) {
+      CanvasElementComponent.assignComponentHole(document.getElementById('html-section'))
     }
   },
 
@@ -155,24 +154,36 @@ export default {
   },
 
   getMenuOptions (element) {
-    const type = HelperElement.getType(element)
-    const template = this.getMenuOptionsTemplate(type)
+    const menuType = this.getMenuOptionsType(element)
+    const template = HelperDOM.getTemplate(`template-contextmenu-element-${menuType}`)
     const menu = template.getElementsByClassName('menu-list')[0]
-    this.toggleComponentChildren(menu, type)
+    this.toggleComponentHole(element, menu)
     if (!HelperDOM.isVisible(element)) menu.classList.add('hidden')
     return template
   },
 
-  getMenuOptionsTemplate (type) {
-    const special = ['body', 'inline', 'component', 'component-children']
-    const fragment = special.includes(type) ? type : 'general'
-    return HelperDOM.getTemplate(`template-contextmenu-element-${fragment}`)
+  getMenuOptionsType (element) {
+    const type = HelperElement.getType(element)
+    if (HelperComponent.isComponent(element)) {
+      return 'component'
+    } else if (type === 'body' || type === 'inline') {
+      return type
+    } else {
+      return 'general'
+    }
   },
 
-  toggleComponentChildren (menu, type) {
-    if (type === 'block' && HelperFile.isComponentFile(HelperProject.getFile())) {
-      menu.classList.add('component-children')
-    }
+  toggleComponentHole (element, menu) {
+    if (!HelperComponent.canAssignComponentHole(element)) return
+    menu.classList.add('component-hole')
+    this.swapComponentHoleLinks(element, menu)
+  },
+
+  swapComponentHoleLinks (element, menu) {
+    const same = HelperElement.getRef(element) === HelperComponent.getCurrentComponentHole()
+    const links = menu.getElementsByClassName('element-menu-component-hole')
+    HelperDOM.toggle(links[0], !same)
+    HelperDOM.toggle(links[1], same)
   },
 
   showSidebarContextmenu (li, x, y) {

@@ -39,7 +39,7 @@ export default {
 
   setFileMeta (meta) {
     const page = document.getElementById('page')
-    page.dataset.fileMeta = JSON.stringify(meta)
+    page.dataset.fileMeta = meta ? JSON.stringify(meta) : ''
   },
 
   setFontList (list) {

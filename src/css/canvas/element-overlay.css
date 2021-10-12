@@ -77,8 +77,7 @@
 #element-overlay .element-overlay-container .overlay-margin-padding-toggle,
 #element-overlay .element-overlay-container .overlay-size-width-toggle,
 #element-overlay .element-overlay-container .overlay-size-height-toggle,
-#element-overlay .element-overlay-container .overlay-size-corner-toggle,
-#element-overlay .element-overlay-container[data-type="component-children"] div.resize-button {
+#element-overlay .element-overlay-container .overlay-size-corner-toggle {
   display: none;
 }
 

@@ -2,6 +2,7 @@ import HelperCanvas from '../../../helper/HelperCanvas.js'
 import StyleSheetFile from '../../../state/stylesheet/StyleSheetFile.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   async loadFile (file) {
@@ -25,5 +26,6 @@ export default {
     HelperProject.setFile(file)
     HelperProject.setFileMeta(data.html.meta)
     HelperProject.setFontList(data.font)
+    HelperComponent.setCurrentComponentData(data.html.component)
   }
 }

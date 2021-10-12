@@ -178,5 +178,13 @@ export default {
 
   changeMeta (data) {
     HelperProject.setFileMeta(data.meta)
+  },
+
+  assignComponentHole (data) {
+    const canvas = document.getElementById('canvas')
+    const previous = canvas.getElementsByClassName(data.previous)[0]
+    const current = canvas.getElementsByClassName(data.current)[0]
+    if (previous) previous.removeAttributeNS(null, 'data-ss-component-hole')
+    if (current) current.setAttributeNS(null, 'data-ss-component-hole', '')
   }
 }

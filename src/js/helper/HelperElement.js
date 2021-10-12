@@ -1,7 +1,6 @@
 import HelperStyle from './HelperStyle.js'
 import HelperCrypto from './HelperCrypto.js'
 import HelperCanvas from './HelperCanvas.js'
-import HelperFile from './HelperFile.js'
 import HelperDOM from './HelperDOM.js'
 
 export default {
@@ -9,11 +8,17 @@ export default {
     return 'e0' + HelperCrypto.generateSmallHash()
   },
 
-  getRef (element) {
+  getRef (element, lastRef = false) {
+    const refs = []
     for (const name of element.classList) {
       // ui classes used are: element, block, selected, _ss_foo...
-      if (name.startsWith('e0')) return name
+      if (name.startsWith('e0')) refs.push(name)
     }
+    return lastRef ? refs[refs.length - 1] : refs[0]
+  },
+
+  getComponentRef (element) {
+    return this.getRef(element, true)
   },
 
   getElement (ref) {
@@ -99,7 +104,7 @@ export default {
   getTypes () {
     return ['body', 'block', 'text', 'icon', 'image', 'video', 'audio', 'iframe', 'object',
       'canvas', 'input', 'dropdown', 'textarea', 'checkbox', 'datalist', 'range', 'color', 'file',
-      'progress', 'meter', 'inline', 'component', 'component-children']
+      'progress', 'meter', 'inline']
   },
 
   getPosition (element) {
@@ -130,20 +135,6 @@ export default {
       offsetLeft: container.offsetLeft,
       offsetTop: container.offsetTop
     }
-  },
-
-  isComponent (element) {
-    return (this.getType(element) === 'component')
-  },
-
-  getComponentChildren (element) {
-    return element.querySelector('.component-children:not(.component-element)')
-  },
-
-  getComponentName (element) {
-    const file = element.getAttributeNS(null, 'src')
-    const name = HelperFile.getBasename(file)
-    return name.replace('.html', '')
   },
 
   isHidden (element) {

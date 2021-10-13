@@ -4,6 +4,7 @@ import Cookie from '../../lib/Cookie.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import File from '../File.js'
+import HelperComponent from '../../../js/helper/HelperComponent.js'
 
 export default {
   _document: null,
@@ -111,7 +112,7 @@ export default {
   },
 
   setComponent (node) {
-    const data = JSON.parse(node.dataset.ssComponent)
+    const data = HelperComponent.getComponentInstanceData(node)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
     const html = this.getHtmlFromFile(data.file)
@@ -195,14 +196,8 @@ export default {
     // we need unique refs for each component element to be able to select them
     // this happens when we parse existing components inside the page, or we add new components
     if (node.closest('[data-ss-component]') || this._options.newComponent) {
-      HelperDOM.prependClass(node, this.getComponentRef(node))
+      HelperDOM.prependClass(node, HelperElement.generateElementRef())
     }
-  },
-
-  getComponentRef (node) {
-    return node.dataset.ssComponent
-      ? JSON.parse(node.dataset.ssComponent).ref
-      : HelperElement.generateElementRef()
   },
 
   setImageElement (node) {
@@ -260,7 +255,7 @@ export default {
     const children = HelperDOM.getChildren(node)
     if (children) {
       this.prepareChildren(children, componentChildren)
-    } else if (componentChildren && node.dataset.ssComponentHole) {
+    } else if (componentChildren && HelperComponent.isComponentHole(node)) {
       node.innerHTML = componentChildren
       this.prepareChildren(node.children)
     }

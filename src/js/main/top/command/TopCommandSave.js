@@ -86,6 +86,7 @@ export default {
     const htmlFile = HelperProject.getFile()
     const css = StyleSheetFile.getStyle()
     const html = StateHtmlFile.getHtml(htmlFile, css)
+    console.log(htmlFile, html) // @todo fix why index.html is empty sometimes
     return { folder, htmlFile, html, css }
   }
 }

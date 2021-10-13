@@ -22,15 +22,16 @@ export default {
   },
 
   async dblclickLoadComponentEvent (event) {
-    if (HelperCanvas.getOperation() !== 'editing' &&
-      event.target.closest('.element.component')) {
-      await this.loadComponent(event.target.closest('.element.component'))
+    const element = event.target.closest('.element')
+    if (HelperCanvas.getOperation() !== 'editing' && element &&
+      HelperComponent.isComponent(element)) {
+      await this.loadComponent(element)
     }
   },
 
   async loadComponent (element) {
-    const data = JSON.parse(element.dataset.ssComponent)
-    await Page.loadMain(data.file)
+    const file = HelperComponent.getComponentInstanceFile(element)
+    await Page.loadMain(file)
   },
 
   async createElement (file) {
@@ -55,7 +56,7 @@ export default {
 
   assignComponentHole (container) {
     const ref = StateSelectedElement.getRef()
-    const hole = HelperComponent.getCurrentComponentHole()
+    const hole = HelperComponent.getComponentMainHole()
     this.swapButtons(container, ref !== hole)
     this.execAssignComponentHole(ref, hole)
   },

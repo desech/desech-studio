@@ -8,6 +8,7 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import CanvasCommon from '../CanvasCommon.js'
+import HelperCrypto from '../../../helper/HelperCrypto.js'
 
 export default {
   // check if we started movement; we use `pointer-events: none`
@@ -108,21 +109,31 @@ export default {
     HelperCanvas.deleteCanvasData('operation')
     HelperDOM.clearStyle(this._element)
     this._element.classList.remove('moving')
-    this.moveElementInCanvas(this._element, altKey)
+    if (altKey) {
+      CanvasElementManage.duplicateElement(this._element)
+    } else {
+      this.moveElementInCanvas(this._element)
+    }
   },
 
-  moveElementInCanvas (element, altKey = false) {
-    const newElement = this.cloneElementFromMoving(element)
-    if (!altKey) HelperDOM.hide(element)
+  moveElementInCanvas (element) {
+    const newElement = this.cloneMoveElement(element)
+    CanvasElementManage.addPastedElement(newElement)
+    HelperDOM.hide(element)
     CanvasElementSelect.selectElementNode(newElement)
     CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  cloneElementFromMoving (element) {
-    const newElement = CanvasElement.cloneMoveElement(element)
-    CanvasElementManage.addPastedElement(newElement)
-    return newElement
+  cloneMoveElement (element) {
+    element.classList.remove('selected')
+    CanvasElement.removeHidden(element)
+    const token = HelperCrypto.generateSmallHash()
+    const clone = element.cloneNode(true)
+    // the clone has the token, while the previous element has the previous token + the new token
+    clone.setAttributeNS(null, 'data-ss-token', token)
+    CanvasElement.appendToken(element, token)
+    return clone
   },
 
   clearState () {

@@ -7,29 +7,47 @@ export default {
     return Boolean(element.dataset.ssComponent)
   },
 
+  isComponentHole (element) {
+    return element.hasAttributeNS(null, 'data-ss-component-hole')
+  },
+
   getComponentChildren (element) {
     return element.querySelector('.component-children:not(.component-element)')
   },
 
-  getComponentName (element) {
-    const file = element.getAttributeNS(null, 'src')
-    const name = HelperFile.getBasename(file)
+  getComponentInstanceData (element) {
+    const data = element.dataset.ssComponent
+    return data ? JSON.parse(data) : null
+  },
+
+  getComponentInstanceFile (element) {
+    const data = this.getComponentInstanceData(element)
+    return data ? data.file : null
+  },
+
+  getComponentInstanceName (element = null, file = null) {
+    if (!file) file = this.getComponentInstanceFile(element)
+    const name = HelperFile.getRelPath(file, HelperFile.getAbsPath('component'))
     return name.replace('.html', '')
   },
 
-  getCurrentComponentData () {
+  getComponentMainData () {
     const string = document.getElementById('page').dataset.component
     return string ? JSON.parse(string) : null
   },
 
-  setCurrentComponentData (data) {
+  setComponentMainData (data) {
     document.getElementById('page').dataset.component = data ? JSON.stringify(data) : ''
   },
 
-  getCurrentComponentHole () {
+  getComponentMainHole () {
     const query = ':not([data-ss-component]) [data-ss-component-hole]'
-    const element = document.getElementById('canvas').querySelector(query)
-    if (element) return HelperElement.getRef(element)
+    const elements = document.getElementById('canvas').querySelectorAll(query)
+    for (const element of elements) {
+      if (HelperElement.isCanvasElement(element)) {
+        return HelperElement.getRef(element)
+      }
+    }
   },
 
   canAssignComponentHole (element) {

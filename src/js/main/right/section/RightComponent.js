@@ -14,6 +14,6 @@ export default {
   injectComponentName (container) {
     const node = container.getElementsByClassName('sidebar-component-name')[0]
     const selected = StateSelectedElement.getElement()
-    node.textContent = HelperComponent.getComponentName(selected)
+    node.textContent = HelperComponent.getComponentInstanceName(selected)
   }
 }

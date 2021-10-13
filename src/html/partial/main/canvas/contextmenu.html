@@ -36,18 +36,9 @@
 <template id="template-contextmenu-element-component">
   <div>
     <ul class="menu-list">
-      <li class="element-menu-component-load">{{#i18n}} Load component file (Double click) {{/i18n}}</li>
-      <li class="element-menu-delete">{{#i18n}} Delete element {{/i18n}} (DEL)</li>
+      <li class="element-menu-component-load">{{#i18n}} Open component (Double click) {{/i18n}}</li>
+      <li class="element-menu-delete">{{#i18n}} Delete component {{/i18n}} (DEL)</li>
     </ul>
-    {{> mainCanvasContextmenuCopy }}
-  </div>
-</template>
-
-<template id="template-contextmenu-element-component-hole">
-  <div>
-    <ul class="menu-list">
-      <li class="element-menu-component-hole">{{#i18n}} Remove component hole {{/i18n}}</li>
-    </ul>
-    {{> mainCanvasContextmenuCopyCss }}
+    {{> mainCanvasContextmenuCopyComponent }}
   </div>
 </template>

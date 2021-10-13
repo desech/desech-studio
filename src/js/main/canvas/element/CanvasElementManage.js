@@ -54,14 +54,14 @@ export default {
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  async duplicateElement () {
-    await this.copyElement()
-    await this.pasteDuplicateElement()
-  },
-
-  async pasteDuplicateElement () {
+  async duplicateElement (element = null) {
+    element ? await this.copyElementData(element) : await this.copyElement()
     const data = await this.getPastedData()
     if (!data.element) return
+    await this.pasteDuplicateElement(data)
+  },
+
+  async pasteDuplicateElement (data) {
     const newElement = this.createElementFromData(data.element)
     this.addPastedPlacement('bottom')
     this.addPastedElement(newElement)
@@ -88,15 +88,31 @@ export default {
 
   getCopiedAttributes (element, action) {
     const attrs = HelperDOM.getAttributes(element)
-    if (attrs['data-ss-token']) {
-      // on copy we don't need any tokens, while on cut, we need to generate a token
-      if (action === 'copy') {
-        delete attrs['data-ss-token']
-      } else { // cut
-        attrs['data-ss-token'] = HelperCrypto.generateSmallHash()
-      }
-    }
+    this.processTokenAttribute(attrs, action)
+    this.processComponentAttribute(attrs, action)
     return attrs
+  },
+
+  processTokenAttribute (attrs, action) {
+    // on copy we don't need any tokens, while on cut we need to generate a new token
+    if (!attrs['data-ss-token']) return
+    if (action === 'copy') {
+      delete attrs['data-ss-token']
+    } else { // cut
+      attrs['data-ss-token'] = HelperCrypto.generateSmallHash()
+    }
+  },
+
+  processComponentAttribute (attrs, action) {
+    // on copy we don't need the hole, and also regenerate the component ref
+    if (action === 'copy' && 'data-ss-component-hole' in attrs) {
+      delete attrs['data-ss-component-hole']
+    }
+    if (action === 'copy' && 'data-ss-component' in attrs) {
+      const data = JSON.parse(attrs['data-ss-component'])
+      data.ref = HelperElement.generateElementRef()
+      attrs['data-ss-component'] = JSON.stringify(data)
+    }
   },
 
   getAllRefs (html) {
@@ -123,6 +139,10 @@ export default {
 
   async saveToClipboard (data) {
     await navigator.clipboard.writeText(JSON.stringify(data, null, 2))
+  },
+
+  async clearClipboard () {
+    await navigator.clipboard.writeText('')
   },
 
   createElementFromData (data) {
@@ -193,6 +213,7 @@ export default {
     } else { // cut
       const token = data.attributes['data-ss-token']
       CanvasElement.tokenCommand(token, 'pasteCutElement', false)
+      this.clearClipboard()
     }
   },
 
@@ -231,7 +252,9 @@ export default {
     const ref = HelperElement.getRef(element)
     const attributes = {}
     for (const attr of element.attributes) {
-      attributes[attr.name] = this.getAttributeValue(attr, ref)
+      if (attr.name !== 'data-ss-token' && attr.name !== 'data-ss-component-hole') {
+        attributes[attr.name] = this.getAttributeValue(attr, ref)
+      }
     }
     return attributes
   },

@@ -1,7 +1,4 @@
 import StateCommand from '../../state/StateCommand.js'
-import HelperElement from '../../helper/HelperElement.js'
-import StateStyleSheet from '../../state/StateStyleSheet.js'
-import HelperCrypto from '../../helper/HelperCrypto.js'
 
 export default {
   getMouseX (x) {
@@ -12,35 +9,6 @@ export default {
   getMouseY (y) {
     const scroll = document.getElementsByClassName('canvas-container')[0].scrollTop
     return y + scroll
-  },
-
-  cloneElement (element) {
-    const clone = element.cloneNode(true)
-    clone.classList.remove('selected')
-    this.changeRefsOnClones([clone, ...clone.getElementsByClassName('element')])
-    return clone
-  },
-
-  changeRefsOnElements (elements) {
-    for (const element of elements) {
-      // @todo duplicate the component properties refs too
-      if (element.classList.contains('component-element')) continue
-      const newRef = HelperElement.generateElementRef()
-      StateStyleSheet.transferStyle(element, newRef)
-      const oldRef = HelperElement.getRef(element)
-      element.classList.replace(oldRef, newRef)
-    }
-  },
-
-  cloneMoveElement (element) {
-    element.classList.remove('selected')
-    this.removeHidden(element)
-    const token = HelperCrypto.generateSmallHash()
-    const clone = element.cloneNode(true)
-    // the clone has the token, while the previous element has the previous token + the new token
-    clone.setAttributeNS(null, 'data-ss-token', token)
-    this.appendToken(element, token)
-    return clone
   },
 
   removeHidden (element) {

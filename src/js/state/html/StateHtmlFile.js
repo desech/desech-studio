@@ -14,6 +14,7 @@ export default {
   getHtml (file, css) {
     this.init(css)
     const canvas = HelperCanvas.getCanvas().cloneNode(true)
+    console.log('getHtml', canvas.outerHTML) // @todo fix why index.html is empty sometimes
     this.removeNonCanvasElements(canvas)
     this.prepareElement(canvas.children[0])
     this.addComponentDataToRoot(file, canvas.children[0])
@@ -31,7 +32,7 @@ export default {
 
   addComponentDataToRoot (file, root) {
     if (!HelperFile.isComponentFile(file)) return
-    const data = HelperComponent.getCurrentComponentData()
+    const data = HelperComponent.getComponentMainData()
     if (!data) return
     root.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
@@ -41,7 +42,7 @@ export default {
     if (node.classList.contains('body')) {
       this.setBody(node)
     } else if (node.dataset.ssComponent) {
-      this.setComponentInstance(node, JSON.parse(node.dataset.ssComponent))
+      this.setComponentInstance(node)
     } else {
       this.setRelativeSource(node)
       this.setBasic(node)
@@ -61,14 +62,19 @@ export default {
     if (body.children.length) this.prepareChildren(body.children)
   },
 
-  setComponentInstance (node, data) {
+  setComponentInstance (node) {
     const div = document.createElement('div')
     div.classList.add('component')
+    this.setComponentInstanceData(div, node)
+    this.setComponentChildren(div, node)
+    node.replaceWith(div)
+  },
+
+  setComponentInstanceData (div, node) {
+    const data = HelperComponent.getComponentInstanceData(node)
     data.file = HelperFile.getRelPath(data.file)
     if (data.main) delete data.main
     div.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
-    this.setComponentChildren(div, node)
-    node.replaceWith(div)
   },
 
   setComponentChildren (div, node) {

@@ -26,6 +26,6 @@ export default {
     HelperProject.setFile(file)
     HelperProject.setFileMeta(data.html.meta)
     HelperProject.setFontList(data.font)
-    HelperComponent.setCurrentComponentData(data.html.component)
+    HelperComponent.setComponentMainData(data.html.component)
   }
 }

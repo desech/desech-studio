@@ -41,16 +41,16 @@ export default {
   },
 
   injectData (li, data, parent) {
-    li.dataset.search = [data.ref, data.type].join('-')
     li.dataset.ref = data.ref
     li.dataset.parent = parent.ref || ''
   },
 
   injectSearch (li, data) {
+    li.dataset.search = [data.ref, data.styleRef, data.type].join('-')
     if (data.classes.length) li.dataset.search += '-' + data.classes.join('-')
-    if (data.type === 'component') {
-      const src = data.element.getAttributeNS(null, 'src')
-      li.dataset.search += '-' + HelperProject.getFileName(src)
+    if (data.isComponentHole) li.dataset.search += '-hole'
+    if (data.component) {
+      li.dataset.search += '-' + [data.component.ref, data.component.name].join('-')
     }
   },
 
@@ -68,8 +68,8 @@ export default {
 
   injectTitle (li, data) {
     const title = li.getElementsByClassName('panel-item-name')[0]
-    if (data.type === 'component') {
-      title.textContent = HelperProject.getFileName(data.element.getAttributeNS(null, 'src'))
+    if (data.component) {
+      title.textContent = data.component.name
     } else {
       const classes = HelperElement.getClasses(data.element, true)
       title.textContent = `<${data.tag}> ` + classes.join(' ')
@@ -78,9 +78,18 @@ export default {
 
   injectIcon (li, data) {
     const icon = li.getElementsByClassName('panel-item-icon')[0]
-    const type = data.isHole ? 'component-hole' : data.type
-    const svg = HelperDOM.getTemplate(`template-element-icon-${type}`)
+    const svg = HelperDOM.getTemplate(`template-element-icon-${this.getIconType(data)}`)
     if (svg) icon.appendChild(svg)
+  },
+
+  getIconType (data) {
+    if (data.isComponentHole) {
+      return 'component-hole'
+    } else if (data.component) {
+      return 'component'
+    } else {
+      return data.type
+    }
   },
 
   injectHidden (li, data) {

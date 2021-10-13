@@ -212,19 +212,5 @@ export default {
       properties[rule.name] = rule.value
     }
     return properties
-  },
-
-  transferStyle (oldElem, newRef) {
-    const oldRef = HelperElement.getRef(oldElem)
-    const selectors = StyleSheetSelector.getElementSelectors(oldElem, 'ref')
-    for (const selector of selectors) {
-      this.transferStyleSelector(selector, oldRef, newRef)
-    }
-  },
-
-  transferStyleSelector (selector, oldRef, newRef) {
-    const style = this.getSelectorStyle(selector, false)
-    const newSelector = selector.replace(oldRef, newRef)
-    this.addSelector(newSelector, style.length ? style : [{}])
   }
 }

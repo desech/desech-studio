@@ -180,7 +180,7 @@ export default {
   },
 
   swapComponentHoleLinks (element, menu) {
-    const same = HelperElement.getRef(element) === HelperComponent.getCurrentComponentHole()
+    const same = HelperElement.getRef(element) === HelperComponent.getComponentMainHole()
     const links = menu.getElementsByClassName('element-menu-component-hole')
     HelperDOM.toggle(links[0], !same)
     HelperDOM.toggle(links[1], same)
@@ -200,6 +200,7 @@ export default {
 
   loadComponent () {
     const element = StateSelectedElement.getElement()
-    Page.loadMain(element.getAttributeNS(null, 'src'))
+    const file = HelperComponent.getComponentInstanceFile(element)
+    Page.loadMain(file)
   }
 }

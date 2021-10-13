@@ -8,17 +8,23 @@ export default {
     return 'e0' + HelperCrypto.generateSmallHash()
   },
 
-  getRef (element, lastRef = false) {
+  getAllRefs (element) {
     const refs = []
     for (const name of element.classList) {
       // ui classes used are: element, block, selected, _ss_foo...
       if (name.startsWith('e0')) refs.push(name)
     }
-    return lastRef ? refs[refs.length - 1] : refs[0]
+    return refs
   },
 
-  getComponentRef (element) {
-    return this.getRef(element, true)
+  getRef (element) {
+    const refs = this.getAllRefs(element)
+    return refs[0] || null
+  },
+
+  getStyleRef (element) {
+    const refs = this.getAllRefs(element)
+    return (refs.length > 1) ? refs[refs.length - 1] : null
   },
 
   getElement (ref) {

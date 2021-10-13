@@ -116,7 +116,7 @@ export default {
   injectComponentHole (container, data) {
     if (!HelperComponent.canAssignComponentHole(data.element)) return
     container.classList.add('component-hole')
-    const same = HelperElement.getRef(data.element) === HelperComponent.getCurrentComponentHole()
+    const same = HelperElement.getRef(data.element) === HelperComponent.getComponentMainHole()
     CanvasElementComponent.swapButtons(container, same)
   },
 

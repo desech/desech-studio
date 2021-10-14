@@ -14,7 +14,8 @@ export default {
   parseHtml (document, folder, options) {
     this.init(document, folder, options)
     const componentData = this.prepareComponentData()
-    this.prepareElement(document.body)
+    const componentLevel = this._options.newComponent ? 1 : 0
+    this.prepareElement(document.body, componentLevel)
     return {
       canvas: this.getBody() || null,
       meta: this.getMeta() || null,
@@ -55,34 +56,34 @@ export default {
     }
   },
 
-  prepareElement (node, componentChildren = null) {
+  prepareElement (node, componentLevel = 0, componentChildren = null) {
     const tag = HelperDOM.getTag(node)
     const mappedTag = this.getMappedTag(tag)
     if (tag === 'body') {
       this.setBody(node)
     } else if (node.classList.contains('component')) {
-      this.setComponent(node)
+      this.setComponent(node, componentLevel)
     } else if (mappedTag) {
-      this.setBasic(node, mappedTag)
+      this.setBasic(node, mappedTag, componentLevel)
     } else if (tag === 'input') {
-      this.setInputElement(node)
+      this.setInputElement(node, componentLevel)
     } else if (tag === 'img') {
-      this.setImageElement(node)
+      this.setImageElement(node, componentLevel)
     } else if (tag === 'video' || tag === 'audio') {
-      this.setMediaElement(node, tag)
+      this.setMediaElement(node, tag, componentLevel)
     } else if (node.classList.contains('text')) {
-      this.setTagElement(node, 'text', 'p')
+      this.setTagElement(node, 'text', 'p', componentLevel)
     } else if (node.classList.contains('block')) {
-      this.setTagElement(node, 'block', 'div', componentChildren)
+      this.setTagElement(node, 'block', 'div', componentLevel, componentChildren)
     } else if (this.isInlineElement(node)) {
       // inline check is done at the end
-      this.setInlineElement(node)
+      this.setInlineElement(node, componentLevel)
     }
   },
 
-  prepareChildren (children, componentChildren = null) {
+  prepareChildren (children, componentLevel, componentChildren = null) {
     for (const node of children) {
-      this.prepareElement(node, componentChildren)
+      this.prepareElement(node, componentLevel, componentChildren)
     }
   },
 
@@ -111,14 +112,15 @@ export default {
     if (body.children.length) this.prepareChildren(body.children)
   },
 
-  setComponent (node) {
+  setComponent (node, componentLevel) {
     const data = HelperComponent.getComponentInstanceData(node)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
     const html = this.getHtmlFromFile(data.file)
     const element = this._document.createRange().createContextualFragment(html).children[0]
     this.mergeComponentData(element, data)
-    this.prepareElement(element, node.innerHTML)
+    componentLevel = this.adjustComponentLevel('component', componentLevel)
+    this.prepareElement(element, componentLevel, node.innerHTML)
     node.replaceWith(element)
   },
 
@@ -131,14 +133,38 @@ export default {
     element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
 
-  setBasic (node, type) {
+  /**
+   * level 0 means that we are not inside a component
+   * level 1 means that we just entered a component and we need the root element to not be a
+   *    component-element
+   * level 2 means that we are going through the component children
+   * level 3 means that we are inside a component that is inside another component, which means
+   *    that everything will be a component-element, including the component holes
+   *
+   * for components, we need to increase the level when we just entered one at level 0,
+   *    or at level 2 where we are inside another component
+   * for component holes, we reset the level back to 0 when we are inside a component
+   * for regular elements, when we just entered the component we need to increase the level
+   */
+  adjustComponentLevel (type, level) {
+    switch (type) {
+      case 'component':
+        return (level === 0 || level === 2) ? level + 1 : level
+      case 'component-hole':
+        return (level === 2) ? 0 : level
+      case 'element':
+        return (level === 1) ? level + 1 : level
+    }
+  },
+
+  setBasic (node, type, componentLevel) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
-    this.addCanvasClasses(node, type)
+    this.addCanvasClasses(node, type, componentLevel)
   },
 
   errorEscapeHtml (text) {
@@ -188,28 +214,30 @@ export default {
     return (cls === 'block' || cls === 'text' || cls.startsWith('e0'))
   },
 
-  addCanvasClasses (node, type) {
+  addCanvasClasses (node, type, componentLevel) {
     node.classList.add('element')
-    if (type !== 'block' && type !== 'text') {
-      node.classList.add(type)
-    }
+    if (type !== 'block' && type !== 'text') node.classList.add(type)
     // we need unique refs for each component element to be able to select them
-    // this happens when we parse existing components inside the page, or we add new components
+    // this happens when we parse existing components, or we add new components
     if (node.closest('[data-ss-component]') || this._options.newComponent) {
       HelperDOM.prependClass(node, HelperElement.generateElementRef())
     }
+    // level 0 and 1 are regular elements, while level 2 and 3 are component elements
+    if ((componentLevel === 2 && !HelperComponent.isComponentHole(node)) || componentLevel > 2) {
+      node.classList.add('component-element')
+    }
   },
 
-  setImageElement (node) {
+  setImageElement (node, componentLevel) {
     // only the folder needs to be encoded because the images are saved as encoded in the html
     const srcset = node.getAttributeNS(null, 'srcset')
       .replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(this._folder)}/$3$4`)
     node.setAttributeNS(null, 'srcset', srcset)
-    this.setBasic(node, 'image')
+    this.setBasic(node, 'image', componentLevel)
   },
 
-  setMediaElement (node, tag) {
-    this.setBasic(node, tag)
+  setMediaElement (node, tag, componentLevel) {
+    this.setBasic(node, tag, componentLevel)
     this.setTrackSource(node)
   },
 
@@ -219,13 +247,13 @@ export default {
     }
   },
 
-  setInputElement (node) {
+  setInputElement (node, componentLevel) {
     if (['range', 'color', 'file'].includes(node.type)) {
-      this.setBasic(node, node.type)
+      this.setBasic(node, node.type, componentLevel)
     } else if (node.type === 'checkbox' || node.type === 'radio') {
-      this.setBasic(node, 'checkbox')
+      this.setBasic(node, 'checkbox', componentLevel)
     } else {
-      this.setBasic(node, 'input')
+      this.setBasic(node, 'input', componentLevel)
     }
   },
 
@@ -240,24 +268,26 @@ export default {
       'cite|dfn|samp|data|code|var|kbd|bdo|bdi|ruby|rt|rb)'
   },
 
-  setInlineElement (node) {
-    this.setBasic(node, 'inline')
-    if (node.children.length) this.prepareChildren(node.children)
+  setInlineElement (node, componentLevel) {
+    this.setBasic(node, 'inline', componentLevel)
+    if (node.children.length) this.prepareChildren(node.children, componentLevel)
   },
 
-  setTagElement (node, type, tag, componentChildren = null) {
-    this.setBasic(node, type)
+  setTagElement (node, type, tag, componentLevel, componentChildren = null) {
+    this.setBasic(node, type, componentLevel)
     node = this.changeNodeSpecialTag(node)
-    this.setElementChildren(node, componentChildren)
+    this.setElementChildren(node, componentLevel, componentChildren)
   },
 
-  setElementChildren (node, componentChildren) {
+  setElementChildren (node, componentLevel, componentChildren) {
     const children = HelperDOM.getChildren(node)
     if (children) {
-      this.prepareChildren(children, componentChildren)
+      componentLevel = this.adjustComponentLevel('element', componentLevel)
+      this.prepareChildren(children, componentLevel, componentChildren)
     } else if (componentChildren && HelperComponent.isComponentHole(node)) {
       node.innerHTML = componentChildren
-      this.prepareChildren(node.children)
+      componentLevel = this.adjustComponentLevel('component-hole', componentLevel)
+      this.prepareChildren(node.children, componentLevel)
     }
   },
 

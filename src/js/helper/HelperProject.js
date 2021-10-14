@@ -56,6 +56,8 @@ export default {
     return path.substring(path.lastIndexOf('/') + 1)
   },
 
+  // check HelperFile.isComponentFile()
+  // doesn't use document, so it's useful for electron
   isFileComponent (file = null) {
     file = file || this.getFile()
     return file.includes('/component/')

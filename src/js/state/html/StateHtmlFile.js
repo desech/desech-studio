@@ -14,7 +14,6 @@ export default {
   getHtml (file, css) {
     this.init(css)
     const canvas = HelperCanvas.getCanvas().cloneNode(true)
-    console.log('getHtml', canvas.outerHTML) // @todo fix why index.html is empty sometimes
     this.removeNonCanvasElements(canvas)
     this.prepareElement(canvas.children[0])
     this.addComponentDataToRoot(file, canvas.children[0])

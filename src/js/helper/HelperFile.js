@@ -106,6 +106,7 @@ export default {
     return (file.startsWith(root + '/' + folder))
   },
 
+  // check HelperProject.isFileComponent()
   isComponentFile (file) {
     return this.getFileExtension(file) === 'html' && this.isFolderFile(file, 'component')
   },

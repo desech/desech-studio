@@ -4,11 +4,11 @@ import { shell } from 'electron'
 import Plugin from '../lib/Plugin.js'
 import ParseCssMerge from './parse/ParseCssMerge.js'
 import HelperFile from '../../js/helper/HelperFile.js'
-import HelperProject from '../../js/helper/HelperProject.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import ExportStaticCode from '../export/ExportStaticCode.js'
 import ExportCommon from '../export/ExportCommon.js'
 import File from './File.js'
+import HelperProject from '../../js/helper/HelperProject.js'
 
 export default {
   async saveCurrentFile (data) {

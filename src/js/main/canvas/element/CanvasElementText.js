@@ -11,6 +11,7 @@ import HelperCrypto from '../../../helper/HelperCrypto.js'
 import CanvasCommon from '../CanvasCommon.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import CanvasElementSelect from './CanvasElementSelect.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   _startWidth: null,
@@ -38,7 +39,7 @@ export default {
     if (HelperCanvas.getOperation() !== 'editing' && !HelperCanvas.isPreview() &&
       event.target.closest('.element.text')) {
       const element = CanvasCommon.getClosestElementOrComponent(event.target.closest('.element'))
-      if (!element.classList.contains('component')) {
+      if (!HelperComponent.isComponent(element)) {
         this.startEditText(event.target.closest('.element.text'))
         // so we don't deselect the text
         event.preventDefault()

@@ -43,14 +43,6 @@ export default {
       (!node.hasAttributeNS(null, 'hidden') || node.hasAttributeNS(null, 'data-ss-hidden'))
   },
 
-  countTopElements () {
-    let count = 0
-    for (const node of HelperCanvas.getCanvas().children) {
-      if (this.isCanvasElement(node)) count++
-    }
-    return count
-  },
-
   getAttributes (element) {
     return element.attributes
   },

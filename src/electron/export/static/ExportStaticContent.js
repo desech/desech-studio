@@ -33,7 +33,7 @@ export default {
 
   buildComponents (folder, document, container) {
     // don't mess with this, only with `querySelectorAll` and `replaceWith` it seems to work
-    for (const comp of container.querySelectorAll('div.component')) {
+    for (const comp of container.querySelectorAll('div[data-ss-component]')) {
       const properties = this.getProperties(comp)
       const componentFile = File.resolve(folder, comp.getAttributeNS(null, 'src'))
       const html = fs.readFileSync(componentFile).toString()

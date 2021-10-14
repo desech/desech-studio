@@ -100,8 +100,7 @@ export default {
   },
 
   validateComponent (form, data) {
-    const special = ['block', 'text', 'component', 'component-child']
-    if (!data.component || !special.includes(data.component)) {
+    if (!data.component || !['block', 'text'].includes(data.component)) {
       return true
     }
     form.elements.component.setCustomValidity(form.dataset.error)

@@ -12,7 +12,9 @@ export default {
   },
 
   getComponentChildren (element) {
-    return element.querySelector('.component-children:not(.component-element)')
+    // the other component holes will also be component-element, so it's safe to fetch the one
+    // that is not also a component-element, because it's the only one
+    return element.querySelector('[data-ss-component-hole]:not(.component-element)')
   },
 
   getComponentInstanceData (element) {
@@ -52,7 +54,7 @@ export default {
 
   canAssignComponentHole (element) {
     const type = HelperElement.getType(element)
-    return (type === 'block' && HelperFile.isComponentFile(HelperProject.getFile()) &&
-      !element.children.length && !element.closest('[data-ss-component]'))
+    return (type === 'block' && HelperProject.isFileComponent() && !element.children.length &&
+      !element.closest('[data-ss-component]'))
   }
 }

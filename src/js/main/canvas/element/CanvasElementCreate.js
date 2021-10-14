@@ -10,6 +10,7 @@ import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperFile from '../../../helper/HelperFile.js'
 import CanvasOverlayResize from '../overlay/CanvasOverlayResize.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import HelperProject from '../../../helper/HelperProject.js'
 
 export default {
   _start: false,
@@ -20,9 +21,9 @@ export default {
 
   getEvents () {
     return {
-      mousedown: ['mousedownPrepareCreateElementEvent'],
+      mousedown: ['mousedownPrepareCreateBlockEvent'],
       mousemove: ['mousemoveAddMarkerEvent', 'mousemoveCreateResizeBlockEvent'],
-      click: ['clickEndCreateElementEvent'],
+      click: ['clickCreateElementEvent'],
       mouseout: ['mouseoutRemoveMarkerEvent']
     }
   },
@@ -44,10 +45,10 @@ export default {
     }
   },
 
-  mousedownPrepareCreateElementEvent (event) {
+  mousedownPrepareCreateBlockEvent (event) {
     if (event.target.closest('#canvas') && HelperCanvas.getTool() === 'block' &&
       event.detail === 1) {
-      this.prepareCreateElement(event.clientX, event.clientY)
+      this.prepareCreateBlock(event.clientX, event.clientY)
     }
   },
 
@@ -63,16 +64,18 @@ export default {
     }
   },
 
-  clickEndCreateElementEvent (event) {
+  // this can create a normal/resizing block or a regular element
+  clickCreateElementEvent (event) {
     this.reset()
-    if (!this._create && event.target.closest('#canvas') && HelperCanvas.isCreateTool()) {
+    if (!this._create && event.target.closest('#canvas') && HelperProject.getFile() &&
+      HelperCanvas.isCreateTool()) {
       this.createElement(HelperCanvas.getTool())
       // stop reaching the selection logic, because it will deselect the element
       event.preventDefault()
     }
   },
 
-  prepareCreateElement (clientX, clientY) {
+  prepareCreateBlock (clientX, clientY) {
     this._start = true
     this._startX = clientX
     this._startY = clientY
@@ -132,14 +135,14 @@ export default {
     const type = HelperElement.getType(element)
     if (type === 'body') {
       this.addContainerMarkerInside(element, mouseY)
-    } else if (HelperComponent.isComponent(element)) {
-      this.addElementMarker(element, mouseY)
     } else if (HelperComponent.isComponentHole(element)) {
-      if (element.closest('.component')) {
+      if (element.closest('[data-ss-component')) {
         this.addContainerMarkerInside(element, mouseY)
       } else {
         this.addElementMarker(element, mouseY)
       }
+    } else if (HelperComponent.isComponent(element)) {
+      this.addElementMarker(element, mouseY)
     } else if (HelperElement.isContainer(element)) {
       this.addContainerMarker(element, mouseY)
     } else {
@@ -154,8 +157,7 @@ export default {
       element.classList.add('placement', 'top')
     } else if (mouseY >= pos.topWithScroll + (pos.height - threshold)) {
       element.classList.add('placement', 'bottom')
-    } else {
-      // inside
+    } else { // inside
       this.addContainerMarkerInside(element, mouseY)
     }
   },
@@ -168,7 +170,9 @@ export default {
 
   addContainerMarkerInside (element, mouseY) {
     let placed = false
-    if (element.children.length) placed = this.addChildrenContainerMarker(element, mouseY)
+    if (element.children.length) {
+      placed = this.addChildrenContainerMarker(element, mouseY)
+    }
     if (!placed) element.classList.add('placement', 'inside')
   },
 

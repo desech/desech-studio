@@ -4,6 +4,7 @@ import HelperStyle from '../../helper/HelperStyle.js'
 import HelperElement from '../../helper/HelperElement.js'
 import HelperProject from '../../helper/HelperProject.js'
 import CanvasCommon from '../../main/canvas/CanvasCommon.js'
+import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   reloadStyle (css) {
@@ -93,7 +94,7 @@ export default {
     let element = HelperElement.getElement(ref)
     if (!element) return
     element = CanvasCommon.getClosestElementOrComponent(element)
-    return (element.classList.contains('component')) ? 'componentHtml' : 'element'
+    return HelperComponent.isComponent(element) ? 'componentHtml' : 'element'
   },
 
   addStyleItem (sheet, index, rule, css) {

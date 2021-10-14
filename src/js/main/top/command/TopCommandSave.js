@@ -5,6 +5,7 @@ import StateHtmlFile from '../../../state/html/StateHtmlFile.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperElement from '../../../helper/HelperElement.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   _AUTOSAVE_TIME: 60 * 1000, // in ms
@@ -51,7 +52,7 @@ export default {
   },
 
   async save (check = false) {
-    if (!TopCommand.getList()) return
+    if (!HelperProject.getFile()) return
     const buttons = TopCommand.getButtons()
     if (check && !buttons.save.classList.contains('active')) return
     this.validateTopElements()
@@ -60,11 +61,22 @@ export default {
   },
 
   validateTopElements () {
-    const count = HelperElement.countTopElements()
-    if (count > 1) {
+    const nodes = this.getTopElements()
+    if (nodes.length > 1) {
       throw new Error('Only one top level element is allowed. ' +
-        `Please delete the other ${count - 1}.`)
+        `Please delete the other ${nodes.length - 1}`)
     }
+    if (HelperProject.isFileComponent() && HelperComponent.isComponent(nodes[0])) {
+      throw new Error('Components are not allowed as the root element')
+    }
+  },
+
+  getTopElements () {
+    const nodes = []
+    for (const node of HelperCanvas.getCanvas().children) {
+      if (HelperElement.isCanvasElement(node)) nodes.push(node)
+    }
+    return nodes
   },
 
   setSaveLoading (button, command) {
@@ -76,7 +88,7 @@ export default {
   async saveCurrentFile (button) {
     await window.electron.invoke('rendererSaveCurrentFile', this.getCurrentFileData())
     // saving can take a long time and we might not even be inside the project
-    if (!TopCommand.getList()) return
+    if (!HelperProject.getFile()) return
     button.classList.replace('loading', 'inactive')
     TopCommand.updateButtonStates()
   },
@@ -86,7 +98,6 @@ export default {
     const htmlFile = HelperProject.getFile()
     const css = StyleSheetFile.getStyle()
     const html = StateHtmlFile.getHtml(htmlFile, css)
-    console.log(htmlFile, html) // @todo fix why index.html is empty sometimes
     return { folder, htmlFile, html, css }
   }
 }

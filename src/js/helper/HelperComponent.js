@@ -4,7 +4,7 @@ import HelperProject from './HelperProject.js'
 
 export default {
   isComponent (element) {
-    return Boolean(element.dataset.ssComponent)
+    return element.hasAttributeNS(null, 'data-ss-component')
   },
 
   isComponentHole (element) {

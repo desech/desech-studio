@@ -67,14 +67,14 @@ export default {
     return !intersect.length
   },
 
-  getClosestElementOrComponentOrChildren (node) {
+  getClosestElementOrComponentOrHole (node) {
     return node.closest('.element:not(.component-element), ' +
-      '.component:not(.component-element), ' +
-      '.component-children:not(.component-element)')
+      '[data-ss-component]:not(.component-element), ' +
+      '[data-ss-component-hole]:not(.component-element)')
   },
 
   getClosestElementOrComponent (node) {
     return node.closest('.element:not(.component-element), ' +
-      '.component:not(.component-element)')
+      '[data-ss-component]:not(.component-element)')
   }
 }

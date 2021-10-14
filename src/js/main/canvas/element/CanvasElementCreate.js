@@ -9,6 +9,7 @@ import CanvasCommon from '../CanvasCommon.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperFile from '../../../helper/HelperFile.js'
 import CanvasOverlayResize from '../overlay/CanvasOverlayResize.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   _start: false,
@@ -119,7 +120,7 @@ export default {
 
   getMarkerElement (node, mouseX, mouseY) {
     if (node.id === 'canvas') return
-    const element = CanvasCommon.getClosestElementOrComponentOrChildren(node)
+    const element = CanvasCommon.getClosestElementOrComponentOrHole(node)
     if (this.isValidMarkerElement(element)) return element
   },
 
@@ -131,7 +132,9 @@ export default {
     const type = HelperElement.getType(element)
     if (type === 'body') {
       this.addContainerMarkerInside(element, mouseY)
-    } else if (type === 'component-children') {
+    } else if (HelperComponent.isComponent(element)) {
+      this.addElementMarker(element, mouseY)
+    } else if (HelperComponent.isComponentHole(element)) {
       if (element.closest('.component')) {
         this.addContainerMarkerInside(element, mouseY)
       } else {

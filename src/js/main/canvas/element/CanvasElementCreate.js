@@ -123,7 +123,7 @@ export default {
 
   getMarkerElement (node, mouseX, mouseY) {
     if (node.id === 'canvas') return
-    const element = CanvasCommon.getClosestElementOrComponentOrHole(node)
+    const element = HelperComponent.getClosestElementOrComponentOrHole(node)
     if (this.isValidMarkerElement(element)) return element
   },
 

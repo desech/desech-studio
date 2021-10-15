@@ -8,7 +8,6 @@ import CanvasTextOverlay from '../CanvasTextOverlay.js'
 import StateCommand from '../../../state/StateCommand.js'
 import HelperLocalStore from '../../../helper/HelperLocalStore.js'
 import HelperCrypto from '../../../helper/HelperCrypto.js'
-import CanvasCommon from '../CanvasCommon.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import CanvasElementSelect from './CanvasElementSelect.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
@@ -38,7 +37,8 @@ export default {
   dblclickStartEditEvent (event) {
     if (HelperCanvas.getOperation() !== 'editing' && !HelperCanvas.isPreview() &&
       event.target.closest('.element.text')) {
-      const element = CanvasCommon.getClosestElementOrComponent(event.target.closest('.element'))
+      let element = event.target.closest('.element')
+      element = HelperComponent.getClosestElementOrComponent(element)
       if (!HelperComponent.isComponent(element)) {
         this.startEditText(event.target.closest('.element.text'))
         // so we don't deselect the text

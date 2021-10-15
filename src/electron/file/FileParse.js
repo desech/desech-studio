@@ -35,8 +35,8 @@ export default {
   },
 
   async parseDom (document, file, folder, options) {
-    const htmlOptions = { isComponent: file.startsWith(folder + '/component') }
-    const html = options.ignoreHtml ? null : ParseHtml.parseHtml(document, folder, htmlOptions)
+    const opts = { isComponent: file.startsWith(folder + '/component') }
+    const html = options.ignoreHtml ? null : ParseHtml.parseHtml(document, file, folder, opts)
     const css = await this.parseCss(document, folder, options)
     return { html, css }
   },

@@ -65,16 +65,5 @@ export default {
     const intersect = ExtendJS.arrayIntersect(properties, ignore)
     // it's ok when the intersection is empty
     return !intersect.length
-  },
-
-  getClosestElementOrComponentOrHole (node) {
-    return node.closest('.element:not(.component-element), ' +
-      '[data-ss-component]:not(.component-element), ' +
-      '[data-ss-component-hole]:not(.component-element)')
-  },
-
-  getClosestElementOrComponent (node) {
-    return node.closest('.element:not(.component-element), ' +
-      '[data-ss-component]:not(.component-element)')
   }
 }

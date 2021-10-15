@@ -3,7 +3,6 @@ import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperElement from '../../helper/HelperElement.js'
 import HelperProject from '../../helper/HelperProject.js'
-import CanvasCommon from '../../main/canvas/CanvasCommon.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
@@ -93,7 +92,7 @@ export default {
     const ref = HelperStyle.extractRefFromSelector(selector)
     let element = HelperElement.getElement(ref)
     if (!element) return
-    element = CanvasCommon.getClosestElementOrComponent(element)
+    element = HelperComponent.getClosestElementOrComponent(element)
     return HelperComponent.isComponent(element) ? 'componentHtml' : 'element'
   },
 

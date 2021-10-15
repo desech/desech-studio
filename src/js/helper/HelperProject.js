@@ -63,6 +63,10 @@ export default {
     return file.includes('/component/')
   },
 
+  isFilePage (file = null) {
+    return !this.isFileComponent(file)
+  },
+
   getDesktopFirstResponsive () {
     return {
       default: {

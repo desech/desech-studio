@@ -7,8 +7,8 @@ import CanvasElementManage from './CanvasElementManage.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
-import CanvasCommon from '../CanvasCommon.js'
 import HelperCrypto from '../../../helper/HelperCrypto.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   // check if we started movement; we use `pointer-events: none`
@@ -63,7 +63,7 @@ export default {
   prepareMovement (element, clientX, clientY) {
     const type = HelperElement.getType(element)
     if (type === 'body' || type === 'inline') return
-    element = CanvasCommon.getClosestElementOrComponent(element)
+    element = HelperComponent.getClosestElementOrComponent(element)
     this._element = element
     this.setPositions(clientX, clientY)
     this._moving = false

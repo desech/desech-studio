@@ -5,14 +5,15 @@ import HelperElement from '../../../js/helper/HelperElement.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import File from '../File.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
+import HelperProject from '../../../js/helper/HelperProject.js'
 
 export default {
   _document: null,
   _folder: null,
   _options: null,
 
-  parseHtml (document, folder, options) {
-    this.init(document, folder, options)
+  parseHtml (document, file, folder, options) {
+    this.init(document, file, folder, options)
     const componentData = this.prepareComponentData()
     const componentLevel = this._options.newComponent ? 1 : 0
     this.prepareElement(document.body, componentLevel)
@@ -23,8 +24,9 @@ export default {
     }
   },
 
-  init (document, folder, options) {
+  init (document, file, folder, options) {
     this._document = document
+    this._file = file
     this._folder = folder
     this._options = options
   },
@@ -217,14 +219,17 @@ export default {
   addCanvasClasses (node, type, componentLevel) {
     node.classList.add('element')
     if (type !== 'block' && type !== 'text') node.classList.add(type)
-    // we need unique refs for each component element to be able to select them
-    // this happens when we parse existing components, or we add new components
-    if (node.closest('[data-ss-component]') || this._options.newComponent) {
-      HelperDOM.prependClass(node, HelperElement.generateElementRef())
-    }
     // level 0 and 1 are regular elements, while level 2 and 3 are component elements
     if ((componentLevel === 2 && !HelperComponent.isComponentHole(node)) || componentLevel > 2) {
       node.classList.add('component-element')
+    }
+    // we need unique refs for each component element to be able to select them
+    // we also need it for the component root element and the hole when we are in a page
+    // this happens when we parse existing components, or we add new components
+    if (node.classList.contains('component-element') || HelperComponent.isComponent(node) ||
+      (HelperProject.isFilePage(this._file) && HelperComponent.isComponentHole(node)) ||
+      this._options.newComponent) {
+      HelperDOM.prependClass(node, HelperElement.generateElementRef())
     }
   },
 
@@ -304,6 +309,6 @@ export default {
     const folder = await Cookie.getCookie('currentFolder')
     const html = fs.readFileSync(file).toString()
     const dom = new JSDOM(html)
-    return this.parseHtml(dom.window.document, folder, { newComponent: true })
+    return this.parseHtml(dom.window.document, file, folder, { newComponent: true })
   }
 }

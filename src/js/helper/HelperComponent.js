@@ -12,8 +12,12 @@ export default {
   },
 
   getComponentChildren (element) {
+    // the component itself can be the component hole
+    if (this.isComponentHole(element) && !element.classList.contains('component-element')) {
+      return element
+    }
     // the other component holes will also be component-element, so it's safe to fetch the one
-    // that is not also a component-element, because it's the only one
+    // that is not a component-element, because it's the only one
     return element.querySelector('[data-ss-component-hole]:not(.component-element)')
   },
 
@@ -43,7 +47,7 @@ export default {
   },
 
   getComponentMainHole () {
-    const query = ':not([data-ss-component]) [data-ss-component-hole]'
+    const query = ':not([data-ss-component]) :not([data-ss-component])[data-ss-component-hole]'
     const elements = document.getElementById('canvas').querySelectorAll(query)
     for (const element of elements) {
       if (HelperElement.isCanvasElement(element)) {
@@ -56,5 +60,16 @@ export default {
     const type = HelperElement.getType(element)
     return (type === 'block' && HelperProject.isFileComponent() && !element.children.length &&
       !element.closest('[data-ss-component]'))
+  },
+
+  getClosestElementOrComponentOrHole (node) {
+    return node.closest('.element:not(.component-element), ' +
+      '[data-ss-component]:not(.component-element), ' +
+      '[data-ss-component-hole]:not(.component-element)')
+  },
+
+  getClosestElementOrComponent (node) {
+    return node.closest('.element:not(.component-element), ' +
+      '[data-ss-component]:not(.component-element)')
   }
 }

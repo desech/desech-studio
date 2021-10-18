@@ -90,10 +90,9 @@ export default {
     if (selector.includes('._ss_')) return 'componentCss'
     if (HelperProject.isFileComponent()) return 'componentHtml'
     const ref = HelperStyle.extractRefFromSelector(selector)
-    let element = HelperElement.getElement(ref)
+    const element = HelperElement.getElement(ref)
     if (!element) return
-    element = HelperComponent.getClosestElementOrComponent(element)
-    return HelperComponent.isComponent(element) ? 'componentHtml' : 'element'
+    return HelperComponent.belongsToAComponent(element) ? 'componentHtml' : 'element'
   },
 
   addStyleItem (sheet, index, rule, css) {

@@ -67,8 +67,9 @@ export default {
   },
 
   addOverClass (element, y) {
-    if (element.parentNode.dataset.containerOnly && element.dataset.container) {
-      // container only
+    if ((element.parentNode.dataset.containerOnly && element.dataset.container) ||
+      element.dataset.containerOnly) {
+      // containerOnly set on the main list, or on each element
       this.attachOverClass(element, 'inside')
     } else if (element.dataset.container) {
       // container and top/bottom

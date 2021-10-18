@@ -40,7 +40,7 @@ export default {
     if (!node) return
     if (node.classList.contains('body')) {
       this.setBody(node)
-    } else if (node.dataset.ssComponent) {
+    } else if (HelperComponent.isComponent(node)) {
       this.setComponentInstance(node)
     } else {
       this.setRelativeSource(node)
@@ -61,26 +61,26 @@ export default {
     if (body.children.length) this.prepareChildren(body.children)
   },
 
-  setComponentInstance (node) {
+  setComponentInstance (root) {
     const div = document.createElement('div')
     div.classList.add('component')
-    this.setComponentInstanceData(div, node)
-    this.setComponentChildren(div, node)
-    node.replaceWith(div)
+    this.setComponentInstanceData(div, root)
+    this.setComponentChildren(div, root)
+    root.replaceWith(div)
   },
 
-  setComponentInstanceData (div, node) {
-    const data = HelperComponent.getComponentInstanceData(node)
+  setComponentInstanceData (div, root) {
+    const data = HelperComponent.getComponentInstanceData(root)
     data.file = HelperFile.getRelPath(data.file)
     if (data.main) delete data.main
     div.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
 
-  setComponentChildren (div, node) {
-    const container = HelperComponent.getComponentChildren(node)
-    if (!container || !container.children) return
-    this.prepareChildren(container.children)
-    div.innerHTML = container.innerHTML
+  setComponentChildren (div, root) {
+    const hole = HelperComponent.getComponentInstanceHole(root)
+    if (!hole || !hole.children) return
+    this.prepareChildren(hole.children)
+    div.innerHTML = hole.innerHTML
   },
 
   setRelativeSource (node) {

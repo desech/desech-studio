@@ -24,9 +24,9 @@ export default {
     return path.replaceAll(encodeURI(folder), '').replaceAll(folder, '')
   },
 
-  getAbsPath (path) {
-    const root = HelperProject.getFolder()
-    return (root + '/' + path).replaceAll('//', '/')
+  getAbsPath (path, folder = null) {
+    folder = (folder || HelperProject.getFolder()) + '/'
+    return (folder + path).replaceAll('//', '/')
   },
 
   getBaseHref (file, folder = null) {

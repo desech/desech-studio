@@ -11,14 +11,13 @@ export default {
     return element.hasAttributeNS(null, 'data-ss-component-hole')
   },
 
-  getComponentChildren (element) {
-    // the component itself can be the component hole
-    if (this.isComponentHole(element) && !element.classList.contains('component-element')) {
-      return element
-    }
-    // the other component holes will also be component-element, so it's safe to fetch the one
-    // that is not a component-element, because it's the only one
-    return element.querySelector('[data-ss-component-hole]:not(.component-element)')
+  isComponentElement (element) {
+    return element.classList.contains('component-element')
+  },
+
+  belongsToAComponent (element) {
+    return this.isComponent(element) || this.isComponentHole(element) ||
+      this.isComponentElement(element)
   },
 
   getComponentInstanceData (element) {
@@ -31,9 +30,9 @@ export default {
     return data ? data.file : null
   },
 
-  getComponentInstanceName (element = null, file = null) {
+  getComponentInstanceName (element = null, file = null, folder = null) {
     if (!file) file = this.getComponentInstanceFile(element)
-    const name = HelperFile.getRelPath(file, HelperFile.getAbsPath('component'))
+    const name = HelperFile.getRelPath(file, HelperFile.getAbsPath('component', folder))
     return name.replace('.html', '')
   },
 
@@ -46,30 +45,40 @@ export default {
     document.getElementById('page').dataset.component = data ? JSON.stringify(data) : ''
   },
 
-  getComponentMainHole () {
-    const query = ':not([data-ss-component]) :not([data-ss-component])[data-ss-component-hole]'
-    const elements = document.getElementById('canvas').querySelectorAll(query)
-    for (const element of elements) {
-      if (HelperElement.isCanvasElement(element)) {
-        return HelperElement.getRef(element)
-      }
-    }
-  },
-
   canAssignComponentHole (element) {
     const type = HelperElement.getType(element)
     return (type === 'block' && HelperProject.isFileComponent() && !element.children.length &&
       !element.closest('[data-ss-component]'))
   },
 
-  getClosestElementOrComponentOrHole (node) {
-    return node.closest('.element:not(.component-element), ' +
-      '[data-ss-component]:not(.component-element), ' +
-      '[data-ss-component-hole]:not(.component-element)')
+  getComponentMainHole () {
+    const query = '[data-ss-component-hole]:not(.component-element)'
+    const elements = document.getElementById('canvas').querySelectorAll(query)
+    for (const element of elements) {
+      if (!element.closest('[data-ss-component]') && HelperElement.isCanvasElement(element)) {
+        return HelperElement.getRef(element)
+      }
+    }
   },
 
-  getClosestElementOrComponent (node) {
-    return node.closest('.element:not(.component-element), ' +
-      '[data-ss-component]:not(.component-element)')
+  getComponentInstanceHole (root) {
+    // the component root element can also be the component hole
+    if (this.isComponentHole(root) && !this.isComponentElement(root)) {
+      return root
+    }
+    // even if there are more holes, the first hole will be our component hole,
+    // so it's safe to fetch the first hole we find which is not a component-element
+    return root.querySelector('[data-ss-component-hole]:not(.component-element)')
+  },
+
+  getMovableElement (node) {
+    node = node.closest('.element:not(.component-element)')
+    // if this is not the main component hole, then jump directly to the component,
+    // because holes are not movable
+    if (node && this.isComponentHole(node) && (HelperProject.isFilePage() ||
+      HelperElement.getRef(node) !== this.getComponentMainHole())) {
+      node = node.closest('[data-ss-component]')
+    }
+    return node
   }
 }

@@ -190,9 +190,9 @@ export default {
   },
 
   addGeneralPastedPlacement (element) {
-    const componentChildren = HelperComponent.getComponentChildren(element)
-    if (HelperComponent.isComponent(element) && componentChildren) {
-      componentChildren.classList.add('placement', 'inside')
+    const hole = HelperComponent.getComponentInstanceHole(element)
+    if (HelperComponent.isComponent(element) && hole) {
+      hole.classList.add('placement', 'inside')
     } else if (HelperElement.isContainer(element)) {
       element.classList.add('placement', 'inside')
     } else {

@@ -37,13 +37,9 @@ export default {
   dblclickStartEditEvent (event) {
     if (HelperCanvas.getOperation() !== 'editing' && !HelperCanvas.isPreview() &&
       event.target.closest('.element.text')) {
-      let element = event.target.closest('.element')
-      element = HelperComponent.getClosestElementOrComponent(element)
-      if (!HelperComponent.isComponent(element)) {
-        this.startEditText(event.target.closest('.element.text'))
-        // so we don't deselect the text
-        event.preventDefault()
-      }
+      this.startEditText(event.target.closest('.element.text'))
+      // so we don't deselect the text
+      event.preventDefault()
     }
   },
 

@@ -123,7 +123,7 @@ export default {
 
   getMarkerElement (node, mouseX, mouseY) {
     if (node.id === 'canvas') return
-    const element = HelperComponent.getClosestElementOrComponentOrHole(node)
+    const element = node.closest('.element:not(.component-element)')
     if (this.isValidMarkerElement(element)) return element
   },
 
@@ -136,7 +136,7 @@ export default {
     if (type === 'body') {
       this.addContainerMarkerInside(element, mouseY)
     } else if (HelperComponent.isComponentHole(element)) {
-      if (element.closest('[data-ss-component')) {
+      if (element.closest('[data-ss-component]')) {
         this.addContainerMarkerInside(element, mouseY)
       } else {
         this.addElementMarker(element, mouseY)

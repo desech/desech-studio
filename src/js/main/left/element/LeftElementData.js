@@ -3,7 +3,6 @@ import HelperElement from '../../../helper/HelperElement.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import LeftCommon from '../LeftCommon.js'
-import HelperProject from '../../../helper/HelperProject.js'
 import LeftElementCommon from './LeftElementCommon.js'
 
 export default {
@@ -33,7 +32,7 @@ export default {
     this.injectData(li, data, parent)
     this.injectSearch(li, data)
     this.injectSelection(li, data)
-    this.injectDrag(li, data)
+    data.component ? this.injectComponentDrag(li, data) : this.injectDrag(li, data)
     this.injectTitle(li, data)
     this.injectIcon(li, data)
     this.injectHidden(li, data)
@@ -48,9 +47,9 @@ export default {
   injectSearch (li, data) {
     li.dataset.search = [data.ref, data.styleRef, data.type].join('-')
     if (data.classes.length) li.dataset.search += '-' + data.classes.join('-')
-    if (data.isComponentHole) li.dataset.search += '-hole'
-    if (data.component) {
-      li.dataset.search += '-' + [data.component.ref, data.component.name].join('-')
+    if (data.component?.isComponentHole) li.dataset.search += '-hole'
+    if (data.component?.data) {
+      li.dataset.search += '-' + [data.component.data.ref, data.component.name].join('-')
     }
   },
 
@@ -59,8 +58,17 @@ export default {
     if (selected === data.ref) li.classList.add('active')
   },
 
+  injectComponentDrag (li, data) {
+    if (data.component.containerOnly) li.dataset.containerOnly = true
+    if (data.component.container) li.dataset.container = true
+    if (data.component.draggable) li.setAttributeNS(null, 'draggable', 'true')
+    if (data.component.draggable || data.component.containerOnly) {
+      li.classList.add('dragdrop-element')
+    }
+  },
+
   injectDrag (li, data) {
-    if (data.type === 'body' || data.type === 'inline') return
+    if (['body', 'inline'].includes(data.type)) return
     if (data.isContainer) li.dataset.container = true
     li.classList.add('dragdrop-element')
     li.setAttributeNS(null, 'draggable', 'true')
@@ -68,7 +76,7 @@ export default {
 
   injectTitle (li, data) {
     const title = li.getElementsByClassName('panel-item-name')[0]
-    if (data.component) {
+    if (data.component?.name) {
       title.textContent = data.component.name
     } else {
       const classes = HelperElement.getClasses(data.element, true)
@@ -83,10 +91,12 @@ export default {
   },
 
   getIconType (data) {
-    if (data.isComponentHole) {
-      return 'component-hole'
-    } else if (data.component) {
+    if (data.component?.isComponent && data.component?.isComponentHole) {
+      return 'component-and-hole'
+    } else if (data.component?.isComponent) {
       return 'component'
+    } else if (data.component?.isComponentHole) {
+      return 'component-hole'
     } else {
       return data.type
     }

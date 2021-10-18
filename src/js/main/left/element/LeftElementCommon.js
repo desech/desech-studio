@@ -1,6 +1,5 @@
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
-import ExtendJS from '../../../helper/ExtendJS.js'
 
 export default {
   getElements (container) {
@@ -25,15 +24,37 @@ export default {
       isContainer: HelperElement.isContainer(element),
       hidden: HelperElement.isHidden(element),
       children: element.children.length ? this.getElements(element) : [],
-      isComponentHole: HelperComponent.isComponentHole(element),
       component: this.getComponentData(element)
     }
   },
 
   getComponentData (element) {
-    const data = HelperComponent.getComponentInstanceData(element)
-    if (!data) return null
-    data.name = HelperComponent.getComponentInstanceName(null, data.file)
-    return data
+    if (!HelperComponent.belongsToAComponent(element)) return null
+    const comp = {
+      draggable: (element === HelperComponent.getMovableElement(element))
+    }
+    if (HelperComponent.isComponent(element)) {
+      this.addComponentNode(element, comp)
+    } else if (HelperComponent.isComponentHole(element)) {
+      this.addComponentHole(element, comp)
+    } else {
+      comp.isElement = true
+    }
+    return comp
+  },
+
+  addComponentNode (element, comp) {
+    comp.data = HelperComponent.getComponentInstanceData(element)
+    comp.name = HelperComponent.getComponentInstanceName(null, comp.data.file)
+    comp.isComponent = true
+    if (HelperComponent.isComponentHole(element)) {
+      comp.isComponentHole = true
+      if (comp.draggable) comp.container = true
+    }
+  },
+
+  addComponentHole (element, comp) {
+    comp.isComponentHole = true
+    comp.containerOnly = element.closest('[data-ss-component]')
   }
 }

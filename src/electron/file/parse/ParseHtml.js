@@ -11,15 +11,19 @@ export default {
   _document: null,
   _folder: null,
   _options: null,
+  // change this when you want to debug
+  _debug: false,
 
   parseHtml (document, file, folder, options) {
+    this.debugMsg('\n\nParsing started')
     this.init(document, file, folder, options)
-    const componentData = this.prepareComponentData()
-    const componentLevel = this._options.newComponent ? 1 : 0
-    this.prepareElement(document.body, componentLevel)
+    const body = this.getBody(document.body)
+    const componentData = this.extractComponentData(body)
+    const componentLevel = options.newComponent ? 1 : 0
+    if (body) this.prepareElement(body, componentLevel)
     return {
-      canvas: this.getBody() || null,
-      meta: this.getMeta() || null,
+      canvas: this.returnBody(body) || null,
+      meta: this.returnMeta() || null,
       component: componentData || null
     }
   },
@@ -31,30 +35,31 @@ export default {
     this._options = options
   },
 
-  prepareComponentData () {
-    if (!this._options.isComponent) return
-    const root = this._document.body.children[0]
-    if (!root) return
-    const data = root.dataset.ssComponent
-    root.removeAttributeNS(null, 'data-ss-component')
+  getBody (body) {
+    // components also have <body> but we don't want it
+    return (this._options.isComponent || this._options.newComponent) ? body.children[0] : body
+  },
+
+  extractComponentData (body) {
+    if (!this._options.isComponent || !body) return
+    const data = body.dataset.ssComponent
+    body.removeAttributeNS(null, 'data-ss-component')
     return data ? JSON.parse(data) : null
   },
 
-  getBody () {
-    const body = this._document.body
-    if (this._options.isComponent || this._options.newComponent) {
-      return body.children.length ? body.children[0].outerHTML.trim() : null
-    } else { // page
+  returnBody (body) {
+    if (body) {
       return body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
     }
   },
 
-  getMeta () {
-    if (this._options.isComponent || this._options.newComponent) return
-    return {
-      language: this._document.documentElement.lang,
-      title: this._document.title,
-      meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
+  returnMeta () {
+    if (!this._options.isComponent && !this._options.newComponent) {
+      return {
+        language: this._document.documentElement.lang,
+        title: this._document.title,
+        meta: this._document.head.innerHTML.replace(/<title([\s\S]*)/gi, '').trim()
+      }
     }
   },
 
@@ -121,18 +126,10 @@ export default {
     const html = this.getHtmlFromFile(data.file)
     const element = this._document.createRange().createContextualFragment(html).children[0]
     this.mergeComponentData(element, data)
+    this.debugComponent(node, componentLevel)
     componentLevel = this.adjustComponentLevel('component', componentLevel)
     this.prepareElement(element, componentLevel, node.innerHTML)
     node.replaceWith(element)
-  },
-
-  getHtmlFromFile (file) {
-    return fs.readFileSync(file).toString()
-  },
-
-  mergeComponentData (element, data) {
-    data.main = element.dataset.ssComponent
-    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
 
   /**
@@ -146,7 +143,8 @@ export default {
    * for components, we need to increase the level when we just entered one at level 0,
    *    or at level 2 where we are inside another component
    * for component holes, we reset the level back to 0 when we are inside a component
-   * for regular elements, when we just entered the component we need to increase the level
+   * for regular elements, when we just entered the component we need to increase the level,
+   *    so the root element is level 1 while the children are level 2
    */
   adjustComponentLevel (type, level) {
     switch (type) {
@@ -159,14 +157,55 @@ export default {
     }
   },
 
-  setBasic (node, type, componentLevel) {
-    if (!node.getAttributeNS(null, 'class')) {
-      throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
+  addComponentClasses (node, componentLevel) {
+    // level 0 and 1 are regular elements, while level 2 and 3 are component elements
+    if ((componentLevel === 2 && !HelperComponent.isComponentHole(node)) || componentLevel > 2) {
+      node.classList.add('component-element')
     }
-    this.setAbsoluteSource(node)
-    this.cleanAttributes(node)
-    this.cleanClasses(node)
-    this.addCanvasClasses(node, type, componentLevel)
+    // we need unique refs for each component element to be able to select them
+    // we also need it for the component root element and the hole when we are in a page
+    // this happens when we parse existing components, or we add new components
+    if (HelperComponent.isComponentElement(node) || HelperComponent.isComponent(node) ||
+      (HelperProject.isFilePage(this._file) && HelperComponent.isComponentHole(node)) ||
+      this._options.newComponent) {
+      HelperDOM.prependClass(node, HelperElement.generateElementRef())
+    }
+    this.debugNode(node, componentLevel)
+  },
+
+  debugNode (node, componentLevel) {
+    if (!this._debug) return
+    const tab = (' ').repeat(componentLevel)
+    const ref = HelperElement.getRef(node)
+    if (HelperComponent.isComponent(node) && HelperComponent.isComponentHole(node)) {
+      console.info(tab, 'component root and hole', ref, componentLevel)
+    } else if (HelperComponent.isComponent(node)) {
+      console.info(tab, 'component root', ref, componentLevel)
+    } else if (HelperComponent.isComponentHole(node)) {
+      console.info(tab, 'component hole', ref, componentLevel)
+    } else { // element
+      console.info(tab, HelperElement.getType(node), ref, componentLevel)
+    }
+  },
+
+  debugComponent (node, componentLevel) {
+    if (!this._debug) return
+    const tab = (' ').repeat(componentLevel)
+    const file = HelperComponent.getComponentInstanceFile(node).replace('.html', '')
+    console.info(tab, file, componentLevel)
+  },
+
+  debugMsg (msg) {
+    if (this._debug) console.info(msg)
+  },
+
+  getHtmlFromFile (file) {
+    return fs.readFileSync(file).toString()
+  },
+
+  mergeComponentData (element, data) {
+    data.main = element.dataset.ssComponent
+    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
 
   errorEscapeHtml (text) {
@@ -216,20 +255,21 @@ export default {
     return (cls === 'block' || cls === 'text' || cls.startsWith('e0'))
   },
 
-  addCanvasClasses (node, type, componentLevel) {
-    node.classList.add('element')
-    if (type !== 'block' && type !== 'text') node.classList.add(type)
-    // level 0 and 1 are regular elements, while level 2 and 3 are component elements
-    if ((componentLevel === 2 && !HelperComponent.isComponentHole(node)) || componentLevel > 2) {
-      node.classList.add('component-element')
+  setBasic (node, type, componentLevel) {
+    if (!node.getAttributeNS(null, 'class')) {
+      throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
-    // we need unique refs for each component element to be able to select them
-    // we also need it for the component root element and the hole when we are in a page
-    // this happens when we parse existing components, or we add new components
-    if (node.classList.contains('component-element') || HelperComponent.isComponent(node) ||
-      (HelperProject.isFilePage(this._file) && HelperComponent.isComponentHole(node)) ||
-      this._options.newComponent) {
-      HelperDOM.prependClass(node, HelperElement.generateElementRef())
+    this.setAbsoluteSource(node)
+    this.cleanAttributes(node)
+    this.cleanClasses(node)
+    this.addCanvasClasses(node, type)
+    this.addComponentClasses(node, componentLevel)
+  },
+
+  addCanvasClasses (node, type) {
+    node.classList.add('element')
+    if (type !== 'block' && type !== 'text') {
+      node.classList.add(type)
     }
   },
 

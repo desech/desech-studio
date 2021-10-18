@@ -63,7 +63,7 @@ export default {
   prepareMovement (element, clientX, clientY) {
     const type = HelperElement.getType(element)
     if (type === 'body' || type === 'inline') return
-    element = HelperComponent.getClosestElementOrComponent(element)
+    element = HelperComponent.getMovableElement(element)
     this._element = element
     this.setPositions(clientX, clientY)
     this._moving = false

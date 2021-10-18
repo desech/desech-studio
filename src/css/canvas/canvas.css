@@ -145,7 +145,7 @@
 /* we see the outlines when we are creating, moving or hovering over an element */
 /* we see the inline element outlines when we are hovering over the main parent */
 /* also see the outlines when */
-main#page-main:not(.preview) #canvas:not([data-tool='select']):not([data-tool='hand']) .element:not(.inline),
+main#page-main:not(.preview) #canvas:not([data-tool='select'], [data-tool='hand']) .element:not(.inline),
 main#page-main:not(.preview) #canvas[data-operation="moving"] .element:not(.inline),
 main#page-main:not(.preview) #canvas:not([data-operation="editing"]) .element:hover,
 main#page-main:not(.preview) #canvas:not([data-operation="editing"]) .element.text:hover .element.inline,

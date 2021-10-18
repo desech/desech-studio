@@ -20,8 +20,8 @@
   height: 100%;
 }
 
-#sidebar-left-panel .panel-file-item.loaded:not(.active):not(:hover) .panel-item-icon svg,
-#sidebar-left-panel .panel-file-item.loaded:not(.active):not(:hover) .panel-item-name {
+#sidebar-left-panel .panel-file-item.loaded:not(.active, :hover) .panel-item-icon svg,
+#sidebar-left-panel .panel-file-item.loaded:not(.active, :hover) .panel-item-name {
   color: var(--list-txt-special);
 }
 

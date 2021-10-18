@@ -81,14 +81,14 @@
   display: none;
 }
 
-#element-overlay .element-overlay-container.container:not(.small-width):not(.small-height) .overlay-button-switch-container,
+#element-overlay .element-overlay-container.container:not(.small-width, .small-height) .overlay-button-switch-container,
 #element-overlay .element-overlay-container:not(.small-width) .overlay-size-height-toggle,
 #element-overlay .element-overlay-container:not(.small-height) .overlay-size-width-toggle,
 #element-overlay .element-overlay-container .overlay-size-corner-toggle {
   display: block;
 }
 
-#element-overlay .element-overlay-container:not(.small-width):not(.small-height):not(.editing) .overlay-margin-padding-toggle {
+#element-overlay .element-overlay-container:not(.small-width, .small-height, .editing) .overlay-margin-padding-toggle {
   display: grid;
 }
 

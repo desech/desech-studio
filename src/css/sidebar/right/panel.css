@@ -71,7 +71,7 @@
   display: none;
 }
 
-.sidebar-right .sidebar-section:not(.active):not(:hover) .sidebar-title {
+.sidebar-right .sidebar-section:not(.active, :hover) .sidebar-title {
   opacity: 0.5;
 }
 

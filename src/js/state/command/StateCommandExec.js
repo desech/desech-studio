@@ -65,9 +65,12 @@ export default {
     this.changeStyle(data)
   },
 
+  // when pasting cross projects, the image/media file urls and component files will fail
+  // @todo find a way to copy these files too if they don't exist,
+  // and also integrate the missing components
   pasteElementData (data) {
     const element = HelperElement.getElement(data.ref)
-    StateCommandCommon.pasteAttributes(element, data.ref, data.data.attributes)
+    StateCommandCommon.pasteAttributes(element, data.data.attributes)
     StateCommandCommon.pasteStyle(element, data.ref, data.data.style)
   },
 

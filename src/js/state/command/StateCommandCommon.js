@@ -24,20 +24,29 @@ export default {
     }
   },
 
-  pasteAttributes (element, ref, data) {
+  pasteAttributes (element, data) {
     if (!data) return
     const type = HelperElement.getType(element)
     // needs to be the same element type
     if (!data.type || type !== data.type) return
-    this.pasteAttributesList(element, ref, data.attributes)
+    this.pasteAttributesList(element, data.attributes, data.filter)
     this.pasteContent(element, data.content)
   },
 
-  pasteAttributesList (element, ref, attributes) {
-    HelperDOM.removeAttributes(element)
+  pasteAttributesList (element, attributes, filter) {
+    if (!filter) HelperDOM.removeAttributes(element)
     for (const [name, value] of Object.entries(attributes)) {
-      const val = (name === 'class') ? ref + ' ' + value : value
-      element.setAttributeNS(null, name, val)
+      if (filter && name === 'class') {
+        if (value) this.appendAttributeClass(element.classList, value.split(' '))
+      } else {
+        element.setAttributeNS(null, name, value)
+      }
+    }
+  },
+
+  appendAttributeClass (list, newClasses) {
+    for (const cls of newClasses) {
+      list.add(cls)
     }
   },
 

@@ -14,6 +14,7 @@ import HelperEvent from '../../helper/HelperEvent.js'
 import HelperElement from '../../helper/HelperElement.js'
 import StateSelectedElement from '../../state/StateSelectedElement.js'
 import RightCommon from './RightCommon.js'
+import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -41,15 +42,17 @@ export default {
 
   getSectionClasses () {
     const element = StateSelectedElement.getElement()
-    const type = HelperElement.getType(element)
-    switch (type) {
-      case 'component':
-        return { component: RightComponent }
-      default:
-        return {
-          html: RightHtml,
-          selector: RightSelector
-        }
+    if (HelperComponent.isComponent(element)) {
+      return {
+        component: RightComponent,
+        html: RightHtml,
+        selector: RightSelector
+      }
+    } else {
+      return {
+        html: RightHtml,
+        selector: RightSelector
+      }
     }
   },
 
@@ -94,11 +97,11 @@ export default {
     return container
   },
 
-  isSectionAllowed (name) {
+  isSectionAllowed (section) {
+    if (section === 'component') return true
     const elementType = HelperElement.getType(StateSelectedElement.getElement())
-    if (elementType.startsWith('component')) return true
     const panels = this.getSubPanelsByType(elementType)
-    return !panels || panels.includes(name)
+    return !panels || panels.includes(section)
   },
 
   // the order is set in RightSection.getSubSectionClasses()

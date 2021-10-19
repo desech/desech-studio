@@ -1,5 +1,4 @@
 import HelperStyle from '../helper/HelperStyle.js'
-import HelperElement from '../helper/HelperElement.js'
 import HelperLocalStore from '../helper/HelperLocalStore.js'
 import HelperCanvas from '../helper/HelperCanvas.js'
 import StyleSheetCommon from './stylesheet/StyleSheetCommon.js'
@@ -174,7 +173,7 @@ export default {
     // the selector can have the responsive class in front
     if (/\.e0([a-z0-9]*)$/g.test(selector)) {
       // init the default element sheet
-      this.initElementStyle(StateSelectedElement.getRef(), false)
+      this.initElementStyle(StateSelectedElement.getStyleRef(), false)
     } else {
       // create the selector sheet
       this.addSelector(selector, [{}])

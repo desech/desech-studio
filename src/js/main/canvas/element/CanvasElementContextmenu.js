@@ -156,9 +156,8 @@ export default {
   getMenuOptions (element) {
     const menuType = this.getMenuOptionsType(element)
     const template = HelperDOM.getTemplate(`template-contextmenu-element-${menuType}`)
-    const menu = template.getElementsByClassName('menu-list')[0]
-    this.toggleComponentHole(element, menu)
-    if (!HelperDOM.isVisible(element)) menu.classList.add('hidden')
+    this.toggleComponent(element, template)
+    if (!HelperDOM.isVisible(element)) template.classList.add('hidden')
     return template
   },
 
@@ -173,15 +172,20 @@ export default {
     }
   },
 
-  toggleComponentHole (element, menu) {
-    if (!HelperComponent.canAssignComponentHole(element)) return
-    menu.classList.add('component-hole')
-    this.swapComponentHoleLinks(element, menu)
+  toggleComponent (element, container) {
+    if (HelperComponent.isComponentElement(element)) {
+      // this will hide the options to delete, cut, paste, duplicate
+      container.classList.add('component-element')
+    }
+    if (HelperComponent.canAssignComponentHole(element)) {
+      container.classList.add('component-hole')
+      this.swapComponentHoleLinks(element, container)
+    }
   },
 
-  swapComponentHoleLinks (element, menu) {
+  swapComponentHoleLinks (element, container) {
     const same = HelperElement.getRef(element) === HelperComponent.getComponentMainHole()
-    const links = menu.getElementsByClassName('element-menu-component-hole')
+    const links = container.getElementsByClassName('element-menu-component-hole')
     HelperDOM.toggle(links[0], !same)
     HelperDOM.toggle(links[1], same)
   },

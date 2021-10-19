@@ -38,7 +38,7 @@ export default {
   },
 
   isDefaultSelector (selector) {
-    const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getRef())
+    const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getStyleRef())
     // empty title means default selector
     return !title
   },
@@ -57,7 +57,7 @@ export default {
 
   prefillSelector (element, selector) {
     element.dataset.selector = selector
-    const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getRef())
+    const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getStyleRef())
     const isDefault = (title === '')
     this.prefillSelectorDrag(element, !isDefault)
     this.prefillSelectorTitle(element, title)

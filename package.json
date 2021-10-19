@@ -86,9 +86,7 @@
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm",
-        "pacman"
+        "deb"
       ],
       "executableArgs": [
         "--no-sandbox"

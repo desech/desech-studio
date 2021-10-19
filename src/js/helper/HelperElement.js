@@ -19,12 +19,14 @@ export default {
 
   getRef (element) {
     const refs = this.getAllRefs(element)
-    return refs[0] || null
+    // when we have 2 refs, the first ref is used for positioning only
+    return refs[0]
   },
 
   getStyleRef (element) {
+    // when we have 2 refs, the style is the last ref
     const refs = this.getAllRefs(element)
-    return (refs.length > 1) ? refs[refs.length - 1] : null
+    return refs[refs.length - 1]
   },
 
   getElement (ref) {
@@ -51,7 +53,7 @@ export default {
     const classes = []
     if (!element.classList) return classes
     for (const name of element.classList) {
-      if (!HelperStyle.isSelectorClass(name)) continue
+      if (!HelperStyle.isComponentClass(name)) continue
       const label = viewable ? HelperStyle.getViewableClass(name) : name
       classes.push(label)
     }

@@ -81,7 +81,7 @@ export default {
     return selector.includes('._ss_')
   },
 
-  isSelectorClass (cls) {
+  isComponentClass (cls) {
     return cls.startsWith('_ss_')
   },
 

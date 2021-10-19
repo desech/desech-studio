@@ -47,8 +47,15 @@ export default {
 
   canAssignComponentHole (element) {
     const type = HelperElement.getType(element)
-    return (type === 'block' && HelperProject.isFileComponent() && !element.children.length &&
-      !element.closest('[data-ss-component]'))
+    return (type === 'block' && HelperProject.isFileComponent() &&
+      this.hasCanvasChildren(element) && !element.closest('[data-ss-component]'))
+  },
+
+  hasCanvasChildren (element) {
+    for (const node of element.children) {
+      if (HelperElement.isCanvasElement(node)) return false
+    }
+    return true
   },
 
   getComponentMainHole () {

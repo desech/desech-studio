@@ -11,6 +11,7 @@ export default {
     return {
       element,
       ref: HelperElement.getRef(element),
+      styleRef: HelperElement.getStyleRef(element),
       type: HelperElement.getType(element),
       tag: HelperElement.getTag(element)
     }
@@ -156,7 +157,8 @@ export default {
     return remove
   },
 
-  // check ParseHtml.cleanAttributes(), StateHtmlFile.cleanAttributes()
+  // check ParseHtml.cleanAttributes(), StateHtmlFile.cleanAttributes(),
+  // CanvasElementManage.getIgnoredAttributes()
   getIgnoredAttributes () {
     return [
       'class', 'style', 'hidden', 'data-element-properties', 'viewBox', 'srcset',

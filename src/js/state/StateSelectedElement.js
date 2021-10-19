@@ -8,11 +8,15 @@ export default {
   },
 
   getElement () {
-    const canvas = HelperCanvas.getCanvas()
     const ref = this.getRef()
-    for (const node of canvas.getElementsByClassName(ref)) {
+    for (const node of HelperCanvas.getCanvas().getElementsByClassName(ref)) {
       if (HelperElement.isCanvasElement(node)) return node
     }
+  },
+
+  getStyleRef () {
+    const element = this.getElement()
+    return HelperElement.getStyleRef(element)
   },
 
   getStyle (element = null) {

@@ -14,11 +14,15 @@ import ExtendJS from '../../../helper/ExtendJS.js'
 import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties.js'
 import HelperCrypto from '../../../helper/HelperCrypto.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import HelperStyle from '../../../helper/HelperStyle.js'
 
 export default {
   deleteElement () {
     const ref = StateSelectedElement.getRef()
-    if (!this.isElementAllowed(ref)) return
+    const element = StateSelectedElement.getElement()
+    if (!this.isElementAllowed(ref) || HelperComponent.isComponentElement(element)) {
+      return
+    }
     CanvasElement.addRemoveElementCommand(ref, 'removeElement', 'addElement')
     CanvasElementSelect.deselectElement()
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
@@ -33,8 +37,10 @@ export default {
 
   async cutElement () {
     const ref = StateSelectedElement.getRef()
-    if (!this.isElementAllowed(ref)) return
-    const element = HelperElement.getElement(ref)
+    const element = StateSelectedElement.getElement()
+    if (!this.isElementAllowed(ref) || HelperComponent.isComponentElement(element)) {
+      return
+    }
     CanvasElement.removeHidden(element)
     const token = HelperCrypto.generateSmallHash()
     CanvasElement.appendToken(element, token)
@@ -48,7 +54,7 @@ export default {
     const data = await this.getPastedData()
     if (!data.element) return
     const newElement = this.createElementFromData(data.element)
-    this.addPastedPlacement()
+    if (!this.addPastedPlacement()) return
     this.addPastedElement(newElement)
     this.pasteExecute(newElement, data.element)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
@@ -63,7 +69,7 @@ export default {
 
   async pasteDuplicateElement (data) {
     const newElement = this.createElementFromData(data.element)
-    this.addPastedPlacement('bottom')
+    if (!this.addPastedPlacement('bottom')) return
     this.addPastedElement(newElement)
     const ref = HelperElement.getRef(newElement)
     CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
@@ -81,35 +87,24 @@ export default {
     const tag = HelperDOM.getTag(element)
     const attributes = this.getCopiedAttributes(element, action)
     const html = element.innerHTML
+    // all these refs will be replaced on paste by generateNewRefs()
     const refs = this.getAllRefs(element.outerHTML)
     const style = this.getAllRefsStyle(refs)
     await this.saveToClipboard({ element: { action, tag, attributes, html, refs, style } })
   },
 
   getCopiedAttributes (element, action) {
-    const attrs = HelperDOM.getAttributes(element)
-    this.processTokenAttribute(attrs, action)
-    this.processComponentAttribute(attrs, action)
+    const filter = (action === 'copy') ? { attr: true, cls: false } : { attr: false, cls: false }
+    const attrs = this.getAttributesList(element, filter)
+    if (action === 'cut') attrs['data-ss-token'] = HelperCrypto.generateSmallHash()
+    this.processComponentAttribute(element, attrs, action)
     return attrs
   },
 
-  processTokenAttribute (attrs, action) {
-    // on copy we don't need any tokens, while on cut we need to generate a new token
-    if (!attrs['data-ss-token']) return
-    if (action === 'copy') {
-      delete attrs['data-ss-token']
-    } else { // cut
-      attrs['data-ss-token'] = HelperCrypto.generateSmallHash()
-    }
-  },
-
-  processComponentAttribute (attrs, action) {
-    // on copy we don't need the hole, and also regenerate the component ref
-    if (action === 'copy' && 'data-ss-component-hole' in attrs) {
-      delete attrs['data-ss-component-hole']
-    }
-    if (action === 'copy' && 'data-ss-component' in attrs) {
-      const data = JSON.parse(attrs['data-ss-component'])
+  processComponentAttribute (element, attrs, action) {
+    // on copy regenerate the component ref
+    if (action === 'copy' && HelperComponent.isComponent(element)) {
+      const data = HelperComponent.getComponentInstanceData(element)
       data.ref = HelperElement.generateElementRef()
       attrs['data-ss-component'] = JSON.stringify(data)
     }
@@ -119,7 +114,6 @@ export default {
     const refs = []
     const matches = html.matchAll(/class="(.*?)"/g)
     for (const match of matches) {
-      if (match[1].includes('component-element')) continue
       const ref = match[1].match(/e0[a-z0-9]+/g)
       if (!ref) continue
       refs.push(ref[0])
@@ -179,14 +173,16 @@ export default {
 
   addPastedPlacement (placement = null) {
     const element = StateSelectedElement.getElement()
-    if (!HelperElement.isCanvasElement(element) || HelperElement.getType(element) === 'inline') {
-      return
+    if (!HelperElement.isCanvasElement(element) || HelperElement.getType(element) === 'inline' ||
+      HelperComponent.isComponentElement(element)) {
+      return false
     }
     if (placement) {
       element.classList.add('placement', placement)
     } else {
       this.addGeneralPastedPlacement(element)
     }
+    return true
   },
 
   addGeneralPastedPlacement (element) {
@@ -240,31 +236,46 @@ export default {
     await this.saveToClipboard({ style })
   },
 
-  getAttributes (element, type) {
+  getAttributes (element, type, filter = { attr: true, cls: true }) {
     return {
       type,
-      attributes: this.getAttributesList(element),
+      filter,
+      attributes: this.getAttributesList(element, filter),
       content: this.getContent(element, type)
     }
   },
 
-  getAttributesList (element) {
-    const ref = HelperElement.getRef(element)
+  getAttributesList (element, filter) {
     const attributes = {}
     for (const attr of element.attributes) {
-      if (attr.name !== 'data-ss-token' && attr.name !== 'data-ss-component-hole') {
-        attributes[attr.name] = this.getAttributeValue(attr, ref)
+      if (!filter.attr || !this.getIgnoredAttributes().includes(attr.name)) {
+        attributes[attr.name] = this.getAttributeValue(attr, filter.cls)
       }
     }
     return attributes
   },
 
-  getAttributeValue (attr, ref) {
-    if (attr.name === 'class') {
-      return attr.value.replace(' selected', '').replace(ref, '').trim()
+  getIgnoredAttributes () {
+    return ['style', 'data-ss-token', 'data-ss-component', 'data-ss-component-hole']
+  },
+
+  getAttributeValue (attr, filterCls) {
+    if (attr.name !== 'class') return attr.value
+    if (filterCls) {
+      return this.removeNonComponentClasses(attr.value)
     } else {
-      return attr.value
+      return attr.value.replace(' selected', '').replace(' component-element', '').trim()
     }
+  },
+
+  removeNonComponentClasses (string) {
+    const classes = string.trim().split(' ')
+    for (let i = classes.length - 1; i >= 0; i--) {
+      if (!classes[i] || !HelperStyle.isComponentClass(classes[i])) {
+        classes.splice(i, 1)
+      }
+    }
+    return classes.join(' ')
   },
 
   getContent (element, type) {
@@ -320,7 +331,9 @@ export default {
     const element = HelperElement.getElement(ref)
     const type = HelperElement.getType(element)
     const data = {}
-    if (pastedData.attributes) data.attributes = this.getAttributes(element, type)
+    if (pastedData.attributes) {
+      data.attributes = this.getAttributes(element, type, { attr: false, cls: false })
+    }
     if (pastedData.style) data.style = this.getStyle(element)
     return data
   },
@@ -329,7 +342,6 @@ export default {
     const selector = StyleSheetSelector.getCurrentSelector()
     if (!selector) return null
     const properties = StateStyleSheet.getSelectorStyleProperties(selector)
-    if (ExtendJS.isEmpty(properties)) return null
     await this.saveToClipboard({ selector: { selector, properties } })
     return properties
   },

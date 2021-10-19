@@ -14,7 +14,7 @@ export default {
   // filter = all, ref, classes
   getElementSelectors (element, filter = 'all') {
     const selectors = []
-    const ref = HelperElement.getRef(element)
+    const ref = HelperElement.getStyleRef(element)
     const classes = HelperElement.getClasses(element)
     for (const sheet of document.adoptedStyleSheets) {
       const rules = this.getElementSelector(sheet, ref, classes, filter)
@@ -64,7 +64,7 @@ export default {
   },
 
   getDefaultSelector () {
-    const ref = StateSelectedElement.getRef()
+    const ref = StateSelectedElement.getStyleRef()
     return HelperStyle.buildRefSelector(ref)
   },
 

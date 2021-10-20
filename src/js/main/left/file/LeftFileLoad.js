@@ -9,6 +9,8 @@ export default {
   async loadFile (file) {
     const data = await window.electron.invoke('rendererParseHtmlCssFile', file)
     // @todo try to figure out why on program startup the index page sometimes fails
+    // this might still be bypassed by bugs and end up with a blank index.html on first save
+    // investigate further
     if (!data || (!HelperFile.isComponentFile(file) && !data.html?.canvas)) {
       HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
       throw new Error('Failed to load the html page. Please try opening the index.html again')

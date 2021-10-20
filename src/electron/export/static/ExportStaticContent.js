@@ -33,45 +33,34 @@ export default {
 
   buildComponents (folder, document, container) {
     // don't mess with this, only with `querySelectorAll` and `replaceWith` it seems to work
-    for (const comp of container.querySelectorAll('div[data-ss-component]')) {
-      const properties = this.getProperties(comp)
-      const componentFile = File.resolve(folder, comp.getAttributeNS(null, 'src'))
-      const html = fs.readFileSync(componentFile).toString()
-      const div = document.createElementNS('https://www.w3.org/XML/1998/namespace', 'div')
-      this.setElementProperties(comp, div)
-      div.innerHTML = this.parseComponentHtml(html, properties)
+    for (const comp of container.querySelectorAll('div.component[data-ss-component]')) {
+      const data = JSON.parse(comp.dataset.ssComponent)
+      const file = File.resolve(folder, data.file)
+      const html = this.parseComponentHtml(fs.readFileSync(file).toString())
+      // with static, we don't use the component programming properties, because they are never
+      // shown, unlike with react/angular/vue
+      const element = document.createRange().createContextualFragment(html).children[0]
       const componentHtml = comp.innerHTML
-      comp.replaceWith(div)
-      this.buildComponents(folder, document, div)
-      this.buildComponentChildren(folder, document, div, properties, componentHtml)
+      comp.replaceWith(element)
+      this.buildComponents(folder, document, element)
+      this.buildComponentChildren(folder, document, element, componentHtml)
     }
   },
 
-  getProperties (node) {
-    const string = node.getAttributeNS(null, 'data-ss-properties')
-    return string ? JSON.parse(string) : {}
-  },
-
-  setElementProperties (old, newNode) {
-    if (old.hasAttributeNS(null, 'data-ss-properties')) {
-      const props = old.getAttributeNS(null, 'data-ss-properties')
-      newNode.setAttributeNS(null, 'data-ss-properties', props)
-    }
-  },
-
-  parseComponentHtml (html, properties) {
-    // jsdom fails with innerHTML when having non self closing tags
-    html = html.replace(/<(img|input|track)(.*?)>/g, '<$1$2 />')
-    // we don't want to see the unmapped properties
-    return html.replace(/{{(.*?)}}/g, (match, name) => properties[name] || '')
-  },
-
-  buildComponentChildren (folder, document, div, properties, componentHtml) {
-    const container = div.querySelector('[data-ss-component-hole]')
+  buildComponentChildren (folder, document, element, componentHtml) {
+    // some components can also be component holes at the same time
+    const container = element.hasAttributeNS(null, 'data-ss-component-hole')
+      ? element
+      : element.querySelector('[data-ss-component-hole]')
     if (!container) return
-    container.innerHTML = this.parseComponentHtml(componentHtml, properties)
-    container.removeAttributeNS(null, 'class')
+    container.removeAttributeNS(null, 'data-ss-component-hole')
+    container.innerHTML = this.parseComponentHtml(componentHtml)
     this.buildComponents(folder, document, container)
+  },
+
+  parseComponentHtml (html) {
+    // jsdom fails with innerHTML when having non self closing tags
+    return html.replace(/<(img|input|track)(.*?)>/g, '<$1$2 />')
   },
 
   replaceCssLinks (document) {
@@ -127,6 +116,7 @@ export default {
     // getElementsByClassName doesn't work correctly with jsdom
     for (const node of document.querySelectorAll('[class*="e0"]')) {
       if (node.classList.contains('text')) node.classList.remove('text')
+      // remove the ref classes that don't have any css styles
       const ref = this.getRefFromClasses(node)
       if (!css.includes('.' + ref)) node.classList.remove(ref)
       if (!node.getAttributeNS(null, 'class')) {

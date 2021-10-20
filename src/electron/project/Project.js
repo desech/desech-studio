@@ -1,6 +1,7 @@
 import fs from 'fs'
 import fse from 'fs-extra'
 import { dialog } from 'electron'
+import packageJson from '../../../package.json'
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
@@ -11,6 +12,7 @@ import Electron from '../lib/Electron.js'
 import Language from '../lib/Language.js'
 import Import from '../import/Import.js'
 import ProjectCommon from './ProjectCommon.js'
+import ProjectMigrate from './ProjectMigrate.js'
 
 export default {
   // this can:
@@ -29,6 +31,7 @@ export default {
     await File.syncUiFolder(folder)
     Font.rebuildFonts(folder)
     const settings = this.getProjectSettings(folder)
+    ProjectMigrate.migrateVersion(folder, settings)
     if (data?.settings) {
       await this.applyNewSettings(folder, settings, data.settings)
     }
@@ -66,6 +69,7 @@ export default {
 
   initSettingsFile (folder) {
     const settings = {
+      version: packageJson.version,
       responsiveType: 'desktop',
       designSystem: '',
       exportCode: 'static',

@@ -2,7 +2,7 @@ import fs from 'fs'
 import minify from 'html-minifier'
 import Template from '../../src/lib/Template.js'
 import Language from '../../src/electron/lib/Language.js'
-import pjson from '../../package.json'
+import packageJson from '../../package.json'
 import Fetch from '../../src/electron/lib/Fetch.js'
 
 async function buildHtml (locale) {
@@ -100,8 +100,8 @@ async function buildHtml (locale) {
 
   // about details
   const about = {
-    version: pjson.version,
-    electron: pjson.devDependencies.electron.substring(1)
+    version: packageJson.version,
+    electron: packageJson.devDependencies.electron.substring(1)
   }
 
   // generate the html contents

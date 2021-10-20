@@ -92,5 +92,19 @@ export default {
   escapeRegExp (string) {
     // $& means the whole matched string
     return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')
+  },
+
+  // we presume all versions are of this format "1.4" or "1.10.2.3", without letters
+  // returns: 1 (bigger), 0 (same), -1 (smaller)
+  versionCompare (v1, v2) {
+    const v1Parts = v1.split('.')
+    const v2Parts = v2.split('.')
+    const length = Math.max(v1Parts.length, v2Parts.length)
+    for (let i = 0; i < length; i++) {
+      const value = (parseInt(v1Parts[i]) || 0) - (parseInt(v2Parts[i]) || 0)
+      if (value < 0) return -1
+      if (value > 0) return 1
+    }
+    return 0
   }
 }

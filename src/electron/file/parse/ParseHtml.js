@@ -120,7 +120,7 @@ export default {
   },
 
   setComponent (node, componentLevel) {
-    const data = HelperComponent.getComponentInstanceData(node)
+    const data = HelperComponent.getInstanceData(node)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
     const html = this.getHtmlFromFile(data.file)
@@ -191,7 +191,7 @@ export default {
   debugComponent (node, componentLevel) {
     if (!this._debug) return
     const tab = (' ').repeat(componentLevel)
-    const file = HelperComponent.getComponentInstanceFile(node).replace('.html', '')
+    const file = HelperComponent.getInstanceFile(node).replace('.html', '')
     console.info(tab, file, componentLevel)
   },
 
@@ -219,11 +219,11 @@ export default {
     return text.replace(/[&<>"']/g, m => map[m])
   },
 
-  // check StateHtmlFile.cleanAttributes(), RightHtmlCommon.getIgnoredAttributes()
+  // check RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
     for (const attr of node.attributes) {
       if (attr.name === 'hidden') {
-        node.setAttributeNS(null, `data-ss-${attr.name}`, attr.value)
+        node.setAttributeNS(null, 'data-ss-hidden', attr.value)
       }
     }
   },

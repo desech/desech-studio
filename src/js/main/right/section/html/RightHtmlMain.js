@@ -110,13 +110,16 @@ export default {
     if (data.type === 'body' || data.type === 'inline') {
       container.classList.add(data.type)
     }
+    if (!HelperComponent.isMovableElement(data.element)) {
+      container.classList.add('immovable')
+    }
     this.injectComponentHole(container, data)
   },
 
   injectComponentHole (container, data) {
     if (!HelperComponent.canAssignComponentHole(data.element)) return
     container.classList.add('component-hole')
-    const same = HelperElement.getRef(data.element) === HelperComponent.getComponentMainHole()
+    const same = HelperElement.getRef(data.element) === HelperComponent.getMainHole()
     CanvasElementComponent.swapButtons(container, same)
   },
 

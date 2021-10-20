@@ -97,6 +97,7 @@ export default {
   },
 
   deselectElement () {
+    // this expects an actual canvas element, not a hidden one by operations like delete/cut/move
     const element = StateSelectedElement.getElement()
     if (!element) return
     element.classList.remove('selected')

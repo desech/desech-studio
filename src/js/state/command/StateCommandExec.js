@@ -10,6 +10,7 @@ import ProjectResponsive from '../../start/project/ProjectResponsive.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
+import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   addElement (data) {
@@ -158,10 +159,21 @@ export default {
   changeProperties (data) {
     const element = HelperElement.getElement(data.ref)
     if (ExtendJS.isEmpty(data.properties)) {
-      delete element.dataset.elementProperties
+      delete element.dataset.ssProperties
     } else {
-      element.dataset.elementProperties = JSON.stringify(data.properties)
+      element.dataset.ssProperties = JSON.stringify(data.properties)
     }
+  },
+
+  changeComponentProperties (data) {
+    const element = HelperElement.getElement(data.ref)
+    const componentData = HelperComponent.getInstanceData(element)
+    if (ExtendJS.isEmpty(data.properties)) {
+      delete componentData.properties
+    } else {
+      componentData.properties = data.properties
+    }
+    HelperComponent.setInstanceData(element, componentData)
   },
 
   addResponsive (data) {

@@ -31,7 +31,7 @@ export default {
 
   addComponentDataToRoot (file, root) {
     if (!HelperFile.isComponentFile(file)) return
-    const data = HelperComponent.getComponentMainData()
+    const data = HelperComponent.getMainData()
     if (!data) return
     root.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
@@ -70,14 +70,14 @@ export default {
   },
 
   setComponentInstanceData (div, root) {
-    const data = HelperComponent.getComponentInstanceData(root)
+    const data = HelperComponent.getInstanceData(root)
     data.file = HelperFile.getRelPath(data.file)
     if (data.main) delete data.main
     div.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
   },
 
   setComponentChildren (div, root) {
-    const hole = HelperComponent.getComponentInstanceHole(root)
+    const hole = HelperComponent.getInstanceHole(root)
     if (!hole || !hole.children) return
     this.prepareChildren(hole.children)
     div.innerHTML = hole.innerHTML
@@ -118,19 +118,21 @@ export default {
   changeTag (node) {
     if (!node.hasAttributeNS(null, 'data-ss-tag')) return node
     const tag = node.getAttributeNS(null, 'data-ss-tag')
-    node.removeAttributeNS(null, 'data-ss-tag')
     return HelperDOM.changeTag(node, tag, document)
   },
 
-  // check ParseHtml.cleanAttributes(), RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
     for (const attr of node.attributes) {
-      if (attr.name.startsWith('data-ss-') && attr.name !== 'data-ss-component-hole') {
-        if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
-        // JSDOM doesn't use a live list
+      if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
+      if (this.getRemovedAttributes().includes(attr.name)) {
         node.removeAttributeNS(null, attr.name)
       }
     }
+  },
+
+  // check RightHtmlCommon.getIgnoredAttributes()
+  getRemovedAttributes () {
+    return ['data-ss-tag', 'data-ss-hidden', 'data-ss-component', 'data-ss-token']
   },
 
   cleanClasses (node) {

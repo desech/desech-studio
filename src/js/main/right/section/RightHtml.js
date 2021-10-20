@@ -3,6 +3,8 @@ import RightHtmlMain from './html/RightHtmlMain.js'
 import RightHtmlDetail from './html/RightHtmlDetail.js'
 import RightHtmlAttribute from './html/RightHtmlAttribute.js'
 import RightCommon from '../RightCommon.js'
+import HelperElement from '../../../helper/HelperElement.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
 
 export default {
   getSection () {
@@ -26,6 +28,7 @@ export default {
     const details = template.getElementsByClassName('slider-extra-container')[0]
     const container = HelperDOM.getTemplate('template-style-html-property')
     details.appendChild(container)
-    RightCommon.injectPropertyFields(container)
+    const properties = HelperElement.getProperties(StateSelectedElement.getElement())
+    RightCommon.injectPropertyFields(container, properties)
   }
 }

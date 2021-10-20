@@ -173,7 +173,7 @@ export default {
   },
 
   toggleComponent (element, container) {
-    if (HelperComponent.isComponentElement(element)) {
+    if (!HelperComponent.isMovableElement(element)) {
       // this will hide the options to delete, cut, paste, duplicate
       container.classList.add('component-element')
     }
@@ -184,7 +184,7 @@ export default {
   },
 
   swapComponentHoleLinks (element, container) {
-    const same = HelperElement.getRef(element) === HelperComponent.getComponentMainHole()
+    const same = HelperElement.getRef(element) === HelperComponent.getMainHole()
     const links = container.getElementsByClassName('element-menu-component-hole')
     HelperDOM.toggle(links[0], !same)
     HelperDOM.toggle(links[1], same)
@@ -204,7 +204,7 @@ export default {
 
   loadComponent () {
     const element = StateSelectedElement.getElement()
-    const file = HelperComponent.getComponentInstanceFile(element)
+    const file = HelperComponent.getInstanceFile(element)
     Page.loadMain(file)
   }
 }

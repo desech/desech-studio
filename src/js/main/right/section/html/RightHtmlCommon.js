@@ -157,13 +157,13 @@ export default {
     return remove
   },
 
-  // check ParseHtml.cleanAttributes(), StateHtmlFile.cleanAttributes(),
-  // CanvasElementManage.getIgnoredAttributes()
+  // check StateHtmlFile.getRemovedAttributes(), ParseHtml.cleanAttributes()
+  // CanvasElementManage.getCopyIgnoredAttributes()
   getIgnoredAttributes () {
     return [
-      'class', 'style', 'hidden', 'data-element-properties', 'viewBox', 'srcset',
-      'data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-component',
-      'data-ss-component-hole'
+      'class', 'style', 'hidden', 'viewBox', 'srcset',
+      'data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-properties',
+      'data-ss-component', 'data-ss-component-hole'
     ]
   },
 

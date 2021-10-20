@@ -49,6 +49,11 @@ export default {
     return element.attributes
   },
 
+  getProperties (element) {
+    const props = element.dataset.ssProperties
+    return props ? JSON.parse(props) : null
+  },
+
   getClasses (element, viewable = false) {
     const classes = []
     if (!element.classList) return classes

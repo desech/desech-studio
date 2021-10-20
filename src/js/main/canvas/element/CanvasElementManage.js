@@ -20,12 +20,11 @@ export default {
   deleteElement () {
     const ref = StateSelectedElement.getRef()
     const element = StateSelectedElement.getElement()
-    if (!this.isElementAllowed(ref) || HelperComponent.isComponentElement(element)) {
+    if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
       return
     }
+    CanvasElementSelect.deselectElement() // this first, before operation
     CanvasElement.addRemoveElementCommand(ref, 'removeElement', 'addElement')
-    CanvasElementSelect.deselectElement()
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
   async copyElement () {
@@ -38,16 +37,15 @@ export default {
   async cutElement () {
     const ref = StateSelectedElement.getRef()
     const element = StateSelectedElement.getElement()
-    if (!this.isElementAllowed(ref) || HelperComponent.isComponentElement(element)) {
+    if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
       return
     }
     CanvasElement.removeHidden(element)
     const token = HelperCrypto.generateSmallHash()
     CanvasElement.appendToken(element, token)
     await this.copyElementData(element, 'cut')
+    CanvasElementSelect.deselectElement() // this first, before operation
     CanvasElement.tokenCommand(token, 'cutElement')
-    CanvasElementSelect.deselectElement()
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
   async pasteElement () {
@@ -104,7 +102,7 @@ export default {
   processComponentAttribute (element, attrs, action) {
     // on copy regenerate the component ref
     if (action === 'copy' && HelperComponent.isComponent(element)) {
-      const data = HelperComponent.getComponentInstanceData(element)
+      const data = HelperComponent.getInstanceData(element)
       data.ref = HelperElement.generateElementRef()
       attrs['data-ss-component'] = JSON.stringify(data)
     }
@@ -174,7 +172,7 @@ export default {
   addPastedPlacement (placement = null) {
     const element = StateSelectedElement.getElement()
     if (!HelperElement.isCanvasElement(element) || HelperElement.getType(element) === 'inline' ||
-      HelperComponent.isComponentElement(element)) {
+      !HelperComponent.isMovableElement(element)) {
       return false
     }
     if (placement) {
@@ -186,7 +184,7 @@ export default {
   },
 
   addGeneralPastedPlacement (element) {
-    const hole = HelperComponent.getComponentInstanceHole(element)
+    const hole = HelperComponent.getInstanceHole(element)
     if (HelperComponent.isComponent(element) && hole) {
       hole.classList.add('placement', 'inside')
     } else if (HelperElement.isContainer(element)) {
@@ -248,14 +246,15 @@ export default {
   getAttributesList (element, filter) {
     const attributes = {}
     for (const attr of element.attributes) {
-      if (!filter.attr || !this.getIgnoredAttributes().includes(attr.name)) {
+      if (!filter.attr || !this.getCopyIgnoredAttributes().includes(attr.name)) {
         attributes[attr.name] = this.getAttributeValue(attr, filter.cls)
       }
     }
     return attributes
   },
 
-  getIgnoredAttributes () {
+  // check RightHtmlCommon.getIgnoredAttributes()
+  getCopyIgnoredAttributes () {
     return ['style', 'data-ss-token', 'data-ss-component', 'data-ss-component-hole']
   },
 

@@ -73,7 +73,7 @@ export default {
 
   placeItem (ref, direction) {
     const element = HelperElement.getElement(ref)
-    const hole = HelperComponent.getComponentInstanceHole(element)
+    const hole = HelperComponent.getInstanceHole(element)
     if (direction === 'inside' && HelperComponent.isComponent(element) && hole) {
       hole.classList.add('placement', 'inside')
     } else {

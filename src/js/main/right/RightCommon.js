@@ -101,8 +101,7 @@ export default {
     return `right-section-${type}-collapse`
   },
 
-  injectPropertyFields (form) {
-    const properties = StateSelectedElement.getElementProperties()
+  injectPropertyFields (form, properties) {
     if (!properties) return
     const list = form.getElementsByClassName('style-component-list')[0]
     for (const [name, value] of Object.entries(properties)) {

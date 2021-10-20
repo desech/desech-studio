@@ -30,7 +30,7 @@ export default {
   },
 
   async loadComponent (element) {
-    const file = HelperComponent.getComponentInstanceFile(element)
+    const file = HelperComponent.getInstanceFile(element)
     await Page.loadMain(file)
   },
 
@@ -56,7 +56,7 @@ export default {
 
   assignComponentHole (container) {
     const ref = StateSelectedElement.getRef()
-    const hole = HelperComponent.getComponentMainHole()
+    const hole = HelperComponent.getMainHole()
     this.swapButtons(container, ref !== hole)
     this.execAssignComponentHole(ref, hole)
   },

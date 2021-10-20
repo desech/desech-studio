@@ -48,14 +48,14 @@ export default {
   },
 
   getProperties (node) {
-    const string = node.getAttributeNS(null, 'data-element-properties')
+    const string = node.getAttributeNS(null, 'data-ss-properties')
     return string ? JSON.parse(string) : {}
   },
 
   setElementProperties (old, newNode) {
-    if (old.hasAttributeNS(null, 'data-element-properties')) {
-      const props = old.getAttributeNS(null, 'data-element-properties')
-      newNode.setAttributeNS(null, 'data-element-properties', props)
+    if (old.hasAttributeNS(null, 'data-ss-properties')) {
+      const props = old.getAttributeNS(null, 'data-ss-properties')
+      newNode.setAttributeNS(null, 'data-ss-properties', props)
     }
   },
 
@@ -103,7 +103,7 @@ export default {
 
   addElementProperties (html) {
     // we can't add attributes with setAttributeNS because we allow invalid html/xml attributes
-    return html.replace(/(class="([^><]*?)"([^><]*?))?data-element-properties="(.*?)"/g,
+    return html.replace(/(class="([^><]*?)"([^><]*?))?data-ss-properties="(.*?)"/g,
       (match, extraBlock, cls, extra, json) => {
         const props = JSON.parse(json.replaceAll('&quot;', '"'))
         const attrs = this.getPropertyAttributes(props, cls || '')

@@ -4,7 +4,7 @@ import HelperComponent from '../../../helper/HelperComponent.js'
 export default {
   getElements (container) {
     const results = []
-    const componentData = HelperComponent.getComponentMainData()
+    const componentData = HelperComponent.getMainData()
     for (const element of container.children) {
       if (element.classList.contains('element') && HelperElement.isCanvasElement(element)) {
         results.push(this.getElementData(element, componentData))
@@ -44,8 +44,8 @@ export default {
   },
 
   addComponentNode (element, comp) {
-    comp.data = HelperComponent.getComponentInstanceData(element)
-    comp.name = HelperComponent.getComponentInstanceName(null, comp.data.file)
+    comp.data = HelperComponent.getInstanceData(element)
+    comp.name = HelperComponent.getInstanceName(null, comp.data.file)
     comp.isComponent = true
     if (HelperComponent.isComponentHole(element)) {
       comp.isComponentHole = true

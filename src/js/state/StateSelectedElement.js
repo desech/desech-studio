@@ -27,11 +27,5 @@ export default {
   getComputed (property, style = null) {
     style = style || this.getStyle()
     return style.getPropertyValue(property) || ''
-  },
-
-  getElementProperties (element = null) {
-    element = element || this.getElement()
-    const props = element.dataset.elementProperties
-    return props ? JSON.parse(props) : null
   }
 }

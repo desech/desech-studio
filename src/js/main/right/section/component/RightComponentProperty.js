@@ -3,6 +3,8 @@ import HelperForm from '../../../../helper/HelperForm.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import RightCommon from '../../RightCommon.js'
+import HelperElement from '../../../../helper/HelperElement.js'
+import HelperComponent from '../../../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -83,7 +85,7 @@ export default {
     const ref = StateSelectedElement.getRef()
     if (!ref) return
     const properties = this.getFormProperties(form)
-    const command = this.getCommandData(properties, ref)
+    const command = this.getCommandData(properties, ref, form.dataset.type)
     StateCommand.stackCommand(command)
     if (execute) StateCommand.executeCommand(command.do)
   },
@@ -98,18 +100,15 @@ export default {
     return obj
   },
 
-  getCommandData (properties, ref) {
+  getCommandData (properties, ref, type) {
+    const element = HelperElement.getElement(ref)
+    const command = (type === 'component') ? 'changeComponentProperties' : 'changeProperties'
+    const currentProperties = (type === 'component')
+      ? HelperComponent.getInstanceProperties(element)
+      : HelperElement.getProperties(element)
     return {
-      do: {
-        command: 'changeProperties',
-        ref,
-        properties
-      },
-      undo: {
-        command: 'changeProperties',
-        ref,
-        properties: StateSelectedElement.getElementProperties()
-      }
+      do: { command, ref, properties },
+      undo: { command, ref, properties: currentProperties }
     }
   }
 }

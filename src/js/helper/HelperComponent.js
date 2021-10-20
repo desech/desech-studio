@@ -20,28 +20,37 @@ export default {
       this.isComponentElement(element)
   },
 
-  getComponentInstanceData (element) {
+  getInstanceData (element) {
     const data = element.dataset.ssComponent
     return data ? JSON.parse(data) : null
   },
 
-  getComponentInstanceFile (element) {
-    const data = this.getComponentInstanceData(element)
+  getInstanceFile (element) {
+    const data = this.getInstanceData(element)
     return data ? data.file : null
   },
 
-  getComponentInstanceName (element = null, file = null, folder = null) {
-    if (!file) file = this.getComponentInstanceFile(element)
+  getInstanceName (element = null, file = null, folder = null) {
+    if (!file) file = this.getInstanceFile(element)
     const name = HelperFile.getRelPath(file, HelperFile.getAbsPath('component', folder))
     return name.replace('.html', '')
   },
 
-  getComponentMainData () {
+  getInstanceProperties (element) {
+    const data = this.getInstanceData(element)
+    return data ? data.properties : null
+  },
+
+  setInstanceData (element, data) {
+    element.dataset.ssComponent = data ? JSON.stringify(data) : ''
+  },
+
+  getMainData () {
     const string = document.getElementById('page').dataset.component
     return string ? JSON.parse(string) : null
   },
 
-  setComponentMainData (data) {
+  setMainData (data) {
     document.getElementById('page').dataset.component = data ? JSON.stringify(data) : ''
   },
 
@@ -58,7 +67,7 @@ export default {
     return true
   },
 
-  getComponentMainHole () {
+  getMainHole () {
     const query = '[data-ss-component-hole]:not(.component-element)'
     const elements = document.getElementById('canvas').querySelectorAll(query)
     for (const element of elements) {
@@ -68,7 +77,7 @@ export default {
     }
   },
 
-  getComponentInstanceHole (root) {
+  getInstanceHole (root) {
     // the component root element can also be the component hole
     if (this.isComponentHole(root) && !this.isComponentElement(root)) {
       return root
@@ -83,9 +92,17 @@ export default {
     // if this is not the main component hole, then jump directly to the component,
     // because holes are not movable
     if (node && this.isComponentHole(node) && (HelperProject.isFilePage() ||
-      HelperElement.getRef(node) !== this.getComponentMainHole())) {
+      HelperElement.getRef(node) !== this.getMainHole())) {
       node = node.closest('[data-ss-component]')
     }
     return node
+  },
+
+  isMovableElement (node) {
+    // not movable are component elements and holes that are not also components
+    // or non main holes
+    return !this.isComponentElement(node) &&
+      (!this.isComponentHole(node) || this.isComponent(node) ||
+      (HelperProject.isFileComponent() && HelperElement.getRef(node) === this.getMainHole()))
   }
 }

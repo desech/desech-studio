@@ -31,7 +31,7 @@ export default {
     await File.syncUiFolder(folder)
     Font.rebuildFonts(folder)
     const settings = this.getProjectSettings(folder)
-    ProjectMigrate.migrateVersion(folder, settings)
+    await ProjectMigrate.migrateVersion(folder, settings)
     if (data?.settings) {
       await this.applyNewSettings(folder, settings, data.settings)
     }

@@ -1,5 +1,6 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperProject from '../../../helper/HelperProject.js'
+import HelperFile from '../../../helper/HelperFile.js'
 
 export default {
   loadSection () {
@@ -10,7 +11,7 @@ export default {
 
   getSection () {
     const template = HelperDOM.getTemplate('template-style-page')
-    if (HelperProject.isFileComponent()) {
+    if (HelperFile.isComponentFile()) {
       this.hideFields(template)
     } else {
       this.injectFields(template)

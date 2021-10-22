@@ -16,8 +16,7 @@ export default {
         'clickOpenFileEvent', 'clickShowRenameItemEvent', 'clickDeleteItemEvent',
         'clickNewFolderEvent', 'clickNewFileEvent', 'clickCopySvgEvent'],
       keydown: ['keydownFinishRenameItemEvent', 'keydownCloseEvent'],
-      contextmenu: ['contextmenuShowMenuEvent'],
-      focusout: ['focusoutFinishRenameItemEvent']
+      contextmenu: ['contextmenuShowMenuEvent']
     }
   },
 
@@ -76,12 +75,6 @@ export default {
   async keydownFinishRenameItemEvent (event) {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && (event.key === 'Escape' ||
       event.key === 'Enter')) {
-      await this.finishRenameItem()
-    }
-  },
-
-  async focusoutFinishRenameItemEvent (event) {
-    if (event.target.classList.contains('panel-file-input')) {
       await this.finishRenameItem()
     }
   },
@@ -194,19 +187,8 @@ export default {
   },
 
   async deleteItem (item) {
-    const file = item.dataset.ref
-    await HelperFile.deleteFile(file)
-    if (HelperFile.getFileExtension(file) === 'html') {
-      await this.deleteHtmlCssFile(file)
-    }
+    await window.electron.invoke('rendererDeletePath', item.dataset.ref)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
-  },
-
-  async deleteHtmlCssFile (htmlFile) {
-    if (HelperFile.isComponentFile(htmlFile)) return
-    const folder = HelperProject.getFolder()
-    const cssFile = HelperFile.getPageCssFile(htmlFile, folder)
-    await HelperFile.deleteFile(folder + '/css/page/' + cssFile)
   },
 
   closeActiveItem () {

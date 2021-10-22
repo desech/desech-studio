@@ -2,7 +2,6 @@ import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperElement from '../../helper/HelperElement.js'
-import HelperProject from '../../helper/HelperProject.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
@@ -88,7 +87,7 @@ export default {
   getSelectorType (selector) {
     if (selector === ':root') return 'root'
     if (selector.includes('._ss_')) return 'componentCss'
-    if (HelperProject.isFileComponent()) return 'componentHtml'
+    if (HelperFile.isComponentFile()) return 'componentHtml'
     const ref = HelperStyle.extractRefFromSelector(selector)
     const element = HelperElement.getElement(ref)
     if (!element) return

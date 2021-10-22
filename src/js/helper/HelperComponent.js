@@ -1,6 +1,5 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
-import HelperProject from './HelperProject.js'
 
 export default {
   isComponent (element) {
@@ -56,7 +55,7 @@ export default {
 
   canAssignComponentHole (element) {
     const type = HelperElement.getType(element)
-    return (type === 'block' && HelperProject.isFileComponent() &&
+    return (type === 'block' && HelperFile.isComponentFile() &&
       this.hasCanvasChildren(element) && !element.closest('[data-ss-component]'))
   },
 
@@ -91,7 +90,7 @@ export default {
     node = node.closest('.element:not(.component-element)')
     // if this is not the main component hole, then jump directly to the component,
     // because holes are not movable
-    if (node && this.isComponentHole(node) && (HelperProject.isFilePage() ||
+    if (node && this.isComponentHole(node) && (HelperFile.isPageFile() ||
       HelperElement.getRef(node) !== this.getMainHole())) {
       node = node.closest('[data-ss-component]')
     }
@@ -103,6 +102,6 @@ export default {
     // or non main holes
     return !this.isComponentElement(node) &&
       (!this.isComponentHole(node) || this.isComponent(node) ||
-      (HelperProject.isFileComponent() && HelperElement.getRef(node) === this.getMainHole()))
+      (HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()))
   }
 }

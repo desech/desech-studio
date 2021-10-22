@@ -1,6 +1,4 @@
 import fs from 'fs'
-import os from 'os'
-import { shell } from 'electron'
 import Plugin from '../lib/Plugin.js'
 import ParseCssMerge from './parse/ParseCssMerge.js'
 import HelperFile from '../../js/helper/HelperFile.js'
@@ -8,7 +6,6 @@ import ProjectCommon from '../project/ProjectCommon.js'
 import ExportStaticCode from '../export/ExportStaticCode.js'
 import ExportCommon from '../export/ExportCommon.js'
 import File from './File.js'
-import HelperProject from '../../js/helper/HelperProject.js'
 
 export default {
   async saveCurrentFile (data) {
@@ -21,10 +18,7 @@ export default {
   },
 
   async saveFileWithBackup (file, contents) {
-    if (fs.existsSync(file)) {
-      file = HelperFile.convertPathForWin(file, os.platform())
-      await shell.trashItem(file)
-    }
+    await File.sendToTrash(file)
     fs.writeFileSync(file, contents)
   },
 
@@ -91,7 +85,7 @@ export default {
   },
 
   async savePageOrComponentStyle (css, htmlFile, folder) {
-    if (HelperProject.isFileComponent(htmlFile)) {
+    if (HelperFile.isComponentFile(htmlFile, folder)) {
       await this.saveStyleToFile(css.componentHtml, css.color, folder,
         'css/general/component-html.css')
     } else {

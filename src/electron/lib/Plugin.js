@@ -95,12 +95,8 @@ export default {
 
   async moveTmpFolder (folder, url) {
     const pluginName = HelperPlugin.getPluginName(url)
-    let dest = File.resolve(this._DIR, pluginName)
-    if (fs.existsSync(dest)) {
-      // clean it up if it exists (when upgrading)
-      dest = HelperFile.convertPathForWin(dest, os.platform())
-      await shell.trashItem(dest)
-    }
+    const dest = File.resolve(this._DIR, pluginName)
+    await File.sendToTrash(dest)
     fse.copySync(folder, dest)
   },
 
@@ -152,11 +148,8 @@ export default {
 
   async removePlugin (url) {
     const pluginName = HelperPlugin.getPluginName(url)
-    let pluginPath = File.resolve(this._DIR, pluginName)
-    if (fs.existsSync(pluginPath)) {
-      pluginPath = HelperFile.convertPathForWin(pluginPath, os.platform())
-      await shell.trashItem(pluginPath)
-    }
+    const pluginPath = File.resolve(this._DIR, pluginName)
+    await File.sendToTrash(pluginPath)
     Electron.reload()
   },
 

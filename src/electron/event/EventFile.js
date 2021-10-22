@@ -8,6 +8,7 @@ import FileSave from '../file/FileSave.js'
 import ParseHtml from '../file/parse/ParseHtml.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import Font from '../lib/Font.js'
+import FileManage from '../file/FileManage.js'
 
 export default {
   addEvents () {
@@ -17,6 +18,7 @@ export default {
     this.rendererCopyFileEvent()
     this.rendererCreateFileEvent()
     this.rendererRenamePathEvent()
+    this.rendererDeletePathEvent()
     this.rendererParseHtmlCssFileEvent()
     this.rendererParseComponentFileEvent()
     this.rendererSaveCurrentFileEvent()
@@ -60,6 +62,12 @@ export default {
     })
   },
 
+  rendererDeletePathEvent () {
+    ipcMain.handle('rendererDeletePath', async (event, file) => {
+      return await EventMain.handleEvent(this, 'deletePath', file)
+    })
+  },
+
   rendererParseHtmlCssFileEvent () {
     ipcMain.handle('rendererParseHtmlCssFile', async (event, file) => {
       return await EventMain.handleEvent(FileParse, 'parseHtmlCssFile', file)
@@ -99,32 +107,21 @@ export default {
   },
 
   async moveToFolder (from, to) {
+    await FileManage.validateMove(from, to)
     const newPath = File.moveToFolder(from, to)
-    if (File.extname(from, true) === 'html') {
-      await this.updateCssFile(from, newPath)
-    }
+    await FileManage.manageMove(from, newPath)
   },
 
   async renamePath (file, name) {
+    // this returns undefined if the file already exists
     const newPath = File.renamePath(file, name)
-    if (File.extname(file, true) === 'html') {
-      await this.updateCssFile(file, newPath)
-    }
+    await FileManage.validateRename(file, newPath)
+    await FileManage.manageMove(file, newPath)
   },
 
-  async updateCssFile (oldPath, newPath) {
-    const folder = await Cookie.getCookie('currentFolder')
-    const oldCssFile = HelperFile.getPageCssFile(oldPath, folder)
-    const newCssFile = HelperFile.getPageCssFile(newPath, folder)
-    File.renamePath(File.resolve(folder, 'css/page', oldCssFile), newCssFile)
-    this.updateMovedHtml(newPath, oldCssFile, newCssFile, folder)
-  },
-
-  updateMovedHtml (htmlFile, oldCssFile, newCssFile, folder) {
-    const html = fs.readFileSync(htmlFile).toString()
-    const baseHref = HelperFile.getBaseHref(htmlFile, folder)
-    fs.writeFileSync(htmlFile, html.replace(/(<base href=")(.*)(">)/, `$1${baseHref}$3`)
-      .replace(/(<link rel="stylesheet" href="css\/page\/)(.*\.css)(">)/, `$1${newCssFile}$3`))
+  async deletePath (file) {
+    await File.sendToTrash(file)
+    FileManage.manageDelete(file)
   },
 
   copySvgCode (file) {

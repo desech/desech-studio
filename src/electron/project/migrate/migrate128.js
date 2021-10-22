@@ -1,26 +1,18 @@
-import fs from 'fs'
-import ExportCommon from '../../export/ExportCommon.js'
 import Log from '../../lib/Log.js'
 import HelperElement from '../../../js/helper/HelperElement.js'
+import ProjectCommon from '../ProjectCommon.js'
 
 export default {
   // components need to be overhauled completely
   async migrate (folder) {
     await Log.info('Migrating to version 1.2.8')
-    const htmlFiles = ExportCommon.getHtmlFiles(folder)
-    for (const page of htmlFiles) {
-      await this.migrateHtml(page.path)
-    }
+    await ProjectCommon.updateHtmlFiles(folder, async (file, html) => {
+      await Log.info(`Migrating file ${file}`)
+      html = html.replace(/data-element-properties="{(.*?)}"/g, 'data-ss-properties="{$1}"')
+        .replace(/class="component-children/g, 'data-ss-component-hole="" class="block')
+      return this.replaceComponent(html)
+    })
     await Log.info('Migration 1.2.8 finished')
-  },
-
-  async migrateHtml (file) {
-    await Log.info(`Migrating file ${file}`)
-    let html = fs.readFileSync(file).toString()
-    html = html.replace(/data-element-properties="{(.*?)}"/g, 'data-ss-properties="{$1}"')
-      .replace(/class="component-children/g, 'data-ss-component-hole="" class="block')
-    html = this.replaceComponent(html)
-    fs.writeFileSync(file, html)
   },
 
   replaceComponent (html) {

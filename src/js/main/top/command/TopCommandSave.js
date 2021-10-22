@@ -6,6 +6,7 @@ import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import HelperFile from '../../../helper/HelperFile.js'
 
 export default {
   _AUTOSAVE_TIME: 60 * 1000, // in ms
@@ -66,7 +67,7 @@ export default {
       throw new Error('Only one top level element is allowed. ' +
         `Please delete the other ${nodes.length - 1}`)
     }
-    if (HelperProject.isFileComponent() && HelperComponent.isComponent(nodes[0])) {
+    if (HelperFile.isComponentFile() && HelperComponent.isComponent(nodes[0])) {
       throw new Error('Components are not allowed as the root element')
     }
   },

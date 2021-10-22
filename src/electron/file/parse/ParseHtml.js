@@ -5,7 +5,7 @@ import HelperElement from '../../../js/helper/HelperElement.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import File from '../File.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
-import HelperProject from '../../../js/helper/HelperProject.js'
+import HelperFile from '../../../js/helper/HelperFile.js'
 
 export default {
   _document: null,
@@ -166,8 +166,8 @@ export default {
     // we also need it for the component root element and the hole when we are in a page
     // this happens when we parse existing components, or we add new components
     if (HelperComponent.isComponentElement(node) || HelperComponent.isComponent(node) ||
-      (HelperProject.isFilePage(this._file) && HelperComponent.isComponentHole(node)) ||
-      this._options.newComponent) {
+      (HelperFile.isPageFile(this._file, this._folder) &&
+      HelperComponent.isComponentHole(node)) || this._options.newComponent) {
       HelperDOM.prependClass(node, HelperElement.generateElementRef())
     }
     this.debugNode(node, componentLevel)

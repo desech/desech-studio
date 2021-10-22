@@ -1,12 +1,14 @@
 import fs from 'fs'
+import os from 'os'
 import crypto from 'crypto'
 import path from 'path'
-import { app } from 'electron'
+import { app, shell } from 'electron'
+import HelperFile from '../../js/helper/HelperFile.js'
 
 export default {
-  extname (file, noDot = false) {
+  extname (file, returnWithoutDot = false) {
     const ext = path.extname(file)
-    return noDot ? ext.substring(1) : ext
+    return returnWithoutDot ? ext.substring(1) : ext
   },
 
   resolve () {
@@ -118,8 +120,16 @@ export default {
   renamePath (file, name) {
     if (!fs.existsSync(file)) return
     const newPath = this.resolve(this.dirname(file), name)
+    if (fs.existsSync(newPath)) return
     fs.renameSync(file, newPath)
     return newPath
+  },
+
+  async sendToTrash (file) {
+    if (fs.existsSync(file)) {
+      file = HelperFile.convertPathForWin(file, os.platform())
+      await shell.trashItem(file)
+    }
   },
 
   async syncUiFolder (destFolder) {

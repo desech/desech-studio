@@ -101,14 +101,19 @@ export default {
       this.isFolderFile(folder, 'component/design-system')
   },
 
-  isFolderFile (file, folder) {
-    const root = HelperProject.getFolder()
+  isFolderFile (file, folder, root = null) {
+    if (!root) root = HelperProject.getFolder()
     return (file.startsWith(root + '/' + folder))
   },
 
-  // check HelperProject.isFileComponent()
-  isComponentFile (file) {
-    return this.getFileExtension(file) === 'html' && this.isFolderFile(file, 'component')
+  isComponentFile (file = null, root = null) {
+    if (!file) file = HelperProject.getFile()
+    return this.getFileExtension(file) === 'html' && this.isFolderFile(file, 'component', root)
+  },
+
+  isPageFile (file = null, root = null) {
+    if (!file) file = HelperProject.getFile()
+    return this.getFileExtension(file) === 'html' && !this.isFolderFile(file, 'component', root)
   },
 
   getFullHtml (htmlFile, body = '', meta = {}, rootFolder = null, hasDesignSystem = null) {
@@ -160,10 +165,5 @@ ${data.body}
 
   getIgnoredFileFolders () {
     return ['_desech', '_export', '.git', '.gitignore', '.keep', '.DS_Store']
-  },
-
-  async deleteFile (file) {
-    const truePath = this.convertPathForWin(file)
-    await window.electron.shellTrashItem(truePath)
   }
 }

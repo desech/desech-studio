@@ -6,6 +6,8 @@ import HelperError from '../../../helper/HelperError.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import LeftFileCommon from './LeftFileCommon.js'
 import LeftFileContextmenu from './LeftFileContextmenu.js'
+import TopCommandSave from '../../top/command/TopCommandSave.js'
+import LeftFileLoad from './LeftFileLoad.js'
 
 export default {
   _timer: null,
@@ -191,7 +193,9 @@ export default {
   },
 
   async moveToFolder (from, to) {
+    await TopCommandSave.save(true)
     await window.electron.invoke('rendererMoveToFolder', from, to)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    await LeftFileLoad.reloadCurrentFile()
   }
 }

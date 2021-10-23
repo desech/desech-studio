@@ -132,7 +132,7 @@ export default {
 
   getPageCssFile (htmlFile, rootFolder = null) {
     rootFolder = rootFolder || HelperProject.getFolder()
-    return htmlFile.replace(rootFolder + '/', '').replace('/', '-').replace('.html', '.css')
+    return htmlFile.replace(rootFolder + '/', '').replaceAll('/', '-').replace('.html', '.css')
   },
 
   getFullHtmlString (data) {

@@ -106,17 +106,21 @@ export default {
     })
   },
 
-  async moveToFolder (from, to) {
-    await FileManage.validateMove(from, to)
-    const newPath = File.moveToFolder(from, to)
-    await FileManage.manageMove(from, newPath)
+  // @todo implement undo for files too
+  async moveToFolder (oldPath, to) {
+    to = File.isDir(to) ? to : File.dirname(to)
+    const newPath = File.resolve(to, File.basename(oldPath))
+    await FileManage.validateMove(oldPath, newPath)
+    await FileManage.manageMove(oldPath, newPath)
+    fs.renameSync(oldPath, newPath)
   },
 
   async renamePath (file, name) {
-    // this returns undefined if the file already exists
-    const newPath = File.renamePath(file, name)
+    if (File.basename(file) === name || !fs.existsSync(file)) return
+    const newPath = File.resolve(File.dirname(file), name)
     await FileManage.validateRename(file, newPath)
     await FileManage.manageMove(file, newPath)
+    fs.renameSync(file, newPath)
   },
 
   async deletePath (file) {

@@ -8,6 +8,8 @@ import HelperProject from '../../../helper/HelperProject.js'
 import Contextmenu from '../../../component/Contextmenu.js'
 import LeftFileCommon from './LeftFileCommon.js'
 import LeftFileList from './LeftFileList.js'
+import TopCommandSave from '../../top/command/TopCommandSave.js'
+import LeftFileLoad from './LeftFileLoad.js'
 
 export default {
   getEvents () {
@@ -182,8 +184,10 @@ export default {
     if (!input) return
     const item = input.closest('.panel-file-item')
     const newPath = HelperFile.sanitizeFile(input.value) || 'new'
+    await TopCommandSave.save(true)
     await window.electron.invoke('rendererRenamePath', item.dataset.ref, newPath)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    await LeftFileLoad.reloadCurrentFile()
   },
 
   async deleteItem (item) {

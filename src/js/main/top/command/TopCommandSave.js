@@ -52,10 +52,10 @@ export default {
     setTimeout(async () => { await this.save() }, this._FIRST_SAVE_TIME)
   },
 
-  async save (check = false) {
+  async save (checkAlreadySaved = false) {
     if (!HelperProject.getFile()) return
     const buttons = TopCommand.getButtons()
-    if (check && !buttons.save.classList.contains('active')) return
+    if (checkAlreadySaved && !buttons.save.classList.contains('active')) return
     this.validateTopElements()
     this.setSaveLoading(buttons.save, buttons.command)
     await this.saveCurrentFile(buttons.save)

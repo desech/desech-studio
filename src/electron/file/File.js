@@ -75,6 +75,15 @@ export default {
     }
   },
 
+  readFileEntry (filePath) {
+    return {
+      name: this.basename(filePath),
+      path: this.sanitizePath(filePath),
+      type: 'file',
+      extension: this.extname(filePath).substring(1)
+    }
+  },
+
   sortReadFolder (results) {
     return results.sort((a, b) => {
       const aScore = ((a.type === 'folder') ? 0 : 10) +
@@ -83,13 +92,6 @@ export default {
         (b.name.toLowerCase() > a.name.toLowerCase() ? 1 : 0)
       return aScore < bScore ? -1 : (aScore > bScore ? 1 : 0)
     })
-  },
-
-  moveToFolder (from, to) {
-    to = this.isDir(to) ? to : this.dirname(to)
-    const newPath = this.resolve(to, this.basename(from))
-    fs.renameSync(from, newPath)
-    return newPath
   },
 
   createFolder (root, folder = null) {

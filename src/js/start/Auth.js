@@ -80,9 +80,9 @@ export default {
     const container = document.getElementsByClassName('start-user')[0]
     if (container && document.body.dataset.email) {
       container.children[0].textContent = document.body.dataset.email
-      HelperDOM.show(container)
+      container.style.visibility = 'visible'
     } else {
-      HelperDOM.hide(container)
+      container.style.visibility = 'hidden'
     }
   }
 }

@@ -10,10 +10,11 @@ export default {
   async loadFile (file) {
     const data = await window.electron.invoke('rendererParseHtmlCssFile', file)
     // @todo try to figure out why on program startup the index page sometimes fails
+    console.log('loadFile', data)
     if (!data || (HelperFile.isPageFile(file) && !data.html?.canvas)) {
       HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
       throw new Error('Failed to load the html page. Please try opening the index.html again')
-    }console.log('loadFile', data)
+    }
     this.loadHtml(data.html)
     this.loadCss(data.css)
     this.setData(file, data)

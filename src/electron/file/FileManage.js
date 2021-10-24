@@ -31,21 +31,21 @@ export default {
     const root = await Cookie.getCookie('currentFolder')
     const isPathComponent = HelperFile.isFolderFile(oldPath, 'component', root)
     if (File.isDir(oldPath)) {
-      await this.manageFolderMove(File.readFolder(oldPath), newPath, root, isPathComponent)
+      const files = File.readFolder(oldPath)
+      await this.manageFolderMove(files, oldPath, newPath, root, isPathComponent)
     } else {
       await this.manageFileMove(File.readFileEntry(oldPath), newPath, root, isPathComponent)
     }
   },
 
-  async manageFolderMove (files, newFolderPath, root, isPathComponent) {console.log('manageFolderMove')
+  async manageFolderMove (files, oldFolderPath, newFolderPath, root, isPathComponent) {
     for (const file of files) {
-      const newPath = File.resolve(newFolderPath, File.relative(newFolderPath, file.path))
+      const newPath = file.path.replace(oldFolderPath, newFolderPath)
       await this.manageFileMove(file, newPath, root, isPathComponent)
     }
   },
 
   async manageFileMove (file, newPath, root, isPathComponent) {
-    console.log('manageFileMove', file, newPath, root, isPathComponent)
     if (file.type === 'file' && file.extension === 'html' && !isPathComponent) {
       await this.managePageMove(file.path, newPath, root)
     } else if (file.type === 'file' && file.extension === 'html' && isPathComponent) {
@@ -53,11 +53,11 @@ export default {
     } else if (file.type === 'file') {
       await this.manageMediaMove(file.path, newPath, root)
     } else {
-      await this.manageFolderMove(file.children, newPath, root, isPathComponent)
+      await this.manageFolderMove(file.children, file.path, newPath, root, isPathComponent)
     }
   },
 
-  async managePageMove (oldPath, newPath, root) {console.log('page')
+  async managePageMove (oldPath, newPath, root) {
     this.updatePageCssFile(oldPath, newPath, root)
     await this.updateLinkHtml(oldPath, newPath, root)
   },
@@ -76,12 +76,11 @@ export default {
       .replace(/(<link rel="stylesheet" href="css\/page\/)(.*\.css)(">)/, `$1${newCssFile}$3`))
   },
 
-  async manageComponentMove (oldPath, newPath, root) {console.log('component')
+  async manageComponentMove (oldPath, newPath, root) {
     const component = File.resolve(root, 'component')
     const oldLink = File.relative(component, oldPath)
     const newLink = File.relative(component, newPath)
     const template = '&quot;,&quot;file&quot;:&quot;component/XXX&quot;'
-    console.log(oldLink, newLink)
     await ProjectCommon.updateHtmlFiles(root, async (file, html) => {
       return html.replaceAll(template.replace('XXX', oldLink), template.replace('XXX', newLink))
     })
@@ -111,26 +110,34 @@ export default {
   async manageDelete (file) {
     const root = await Cookie.getCookie('currentFolder')
     const isPathComponent = HelperFile.isFolderFile(file, 'component', root)
-    await this.managePathDelete(File.readFolder(file), root, isPathComponent)
-  },
-
-  async managePathDelete (files, root, isPathComponent) {
-    for (const file of files) {
-      if (file.type === 'file' && file.extension === 'html' && !isPathComponent) {
-        await this.managePageDelete(file, root)
-      } else if (file.type === 'file' && file.extension === 'html' && isPathComponent) {
-        // we don't want to remove all component references because when we will implement undo
-        // then how will we know where to add those references back?
-      } else if (file.type === 'file') {
-        // do nothing
-      } else {
-        await this.managePathDelete(file.children, root, isPathComponent)
-      }
+    if (File.isDir(file)) {
+      await this.manageFolderDelete(File.readFolder(file), root, isPathComponent)
+    } else {
+      await this.manageFileDelete(File.readFileEntry(file), root, isPathComponent)
     }
   },
 
-  async managePageDelete (file, root) {
-    const cssFile = HelperFile.getPageCssFile(file, root)
+  async manageFolderDelete (files, root, isPathComponent) {
+    for (const file of files) {
+      await this.manageFileDelete(file, root, isPathComponent)
+    }
+  },
+
+  async manageFileDelete (file, root, isPathComponent) {
+    if (file.type === 'file' && file.extension === 'html' && !isPathComponent) {
+      await this.managePageDelete(file.path, root)
+    } else if (file.type === 'file' && file.extension === 'html' && isPathComponent) {
+      // we don't want to remove all component references because when we will implement undo
+      // then how will we know where to add those references back?
+    } else if (file.type === 'file') {
+      // do nothing
+    } else {
+      await this.manageFolderDelete(file.children, root, isPathComponent)
+    }
+  },
+
+  async managePageDelete (filePath, root) {
+    const cssFile = HelperFile.getPageCssFile(filePath, root)
     await File.sendToTrash(root + '/css/page/' + cssFile)
   }
 }

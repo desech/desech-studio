@@ -124,8 +124,8 @@ export default {
   },
 
   async deletePath (file) {
+    await FileManage.manageDelete(file)
     await File.sendToTrash(file)
-    FileManage.manageDelete(file)
   },
 
   copySvgCode (file) {

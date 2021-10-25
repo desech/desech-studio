@@ -81,25 +81,26 @@ export default {
     }
   },
 
-  setSvgCommand (element, svg, execute = true) {
-    const command = this.initSetSvgCommand(element, svg)
+  setSvgCommand (currentNode, newNode, execute = true) {
+    const command = this.initSetSvgCommand(currentNode, newNode)
     StateCommand.stackCommand(command)
     if (execute) StateCommand.executeCommand(command.do)
   },
 
-  initSetSvgCommand (element, svg) {
+  initSetSvgCommand (currentNode, newNode) {
+    const ref = HelperElement.getRef(currentNode)
     return {
       do: {
         command: 'changeSvg',
-        ref: HelperElement.getRef(element),
-        svg: svg.innerHTML,
-        viewBox: svg.getAttributeNS(null, 'viewBox')
+        ref,
+        inner: newNode.innerHTML,
+        viewBox: newNode.getAttributeNS(null, 'viewBox')
       },
       undo: {
         command: 'changeSvg',
-        ref: HelperElement.getRef(element),
-        svg: element.innerHTML,
-        viewBox: element.getAttributeNS(null, 'viewBox')
+        ref,
+        inner: currentNode.innerHTML,
+        viewBox: currentNode.getAttributeNS(null, 'viewBox')
       }
     }
   },
@@ -161,7 +162,7 @@ export default {
   // CanvasElementManage.getCopyIgnoredAttributes()
   getIgnoredAttributes () {
     return [
-      'class', 'style', 'hidden', 'viewBox', 'srcset',
+      'class', 'style', 'hidden', 'srcset', 'viewBox', 'xmlns', 'xmlns:xlink',
       'data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-properties',
       'data-ss-component', 'data-ss-component-hole'
     ]

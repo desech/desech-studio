@@ -84,9 +84,12 @@
   padding: 7px 15px;
 }
 
-.sidebar-right #html-section .style-html-svg p {
-  padding-bottom: 7px;
-  font-size: 12px;
+.sidebar-right #html-section .style-html-svg .style-html-svg-viewbox-container {
+  display: grid;
+  grid-auto-flow: column;
+  padding-bottom: 10px;
+  align-items: center;
+  gap: 10px;
 }
 
 .sidebar-right #html-section .style-html-svg textarea {

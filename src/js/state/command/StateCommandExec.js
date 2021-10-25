@@ -153,7 +153,7 @@ export default {
   changeSvg (data) {
     const element = HelperElement.getElement(data.ref)
     element.setAttributeNS(null, 'viewBox', data.viewBox)
-    element.innerHTML = data.svg
+    element.innerHTML = data.inner
   },
 
   changeProperties (data) {

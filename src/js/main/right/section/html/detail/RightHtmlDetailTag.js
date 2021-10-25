@@ -69,7 +69,7 @@ export default {
 
   async changeSvgCodeEvent (event) {
     if (event.target.classList.contains('style-html-svg-code')) {
-      await this.updateSvgCode(event.target)
+      await this.updateSvgCode(event.target.closest('form').elements)
     }
   },
 
@@ -157,24 +157,35 @@ export default {
   },
 
   injectSvg (element, textarea) {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    svg.setAttributeNS(null, 'viewBox', element.getAttributeNS(null, 'viewBox'))
-    svg.innerHTML = element.innerHTML
-    textarea.value = svg.outerHTML.replace(/\s\s+/g, '')
+    textarea.value = element.innerHTML.replace(/\s\s+/g, '')
   },
 
-  async updateSvgCode (textarea) {
-    await this.processSvgUrl(textarea)
-    const svg = new DOMParser().parseFromString(textarea.value, 'image/svg+xml').children[0]
-    if (svg.tagName !== 'svg') return
+  async updateSvgCode (fields) {
+    const node = await this.getSvgNode(fields.code.value.trim(), fields.viewBox.value)
+    if (!node) return
+    fields.code.value = node.innerHTML
+    fields.viewBox.value = node.getAttributeNS(null, 'viewBox')
     const element = StateSelectedElement.getElement()
-    RightHtmlCommon.setSvgCommand(element, svg)
+    RightHtmlCommon.setSvgCommand(element, node)
   },
 
-  async processSvgUrl (textarea) {
-    if (!textarea.value.startsWith('http')) return
-    const response = await fetch(textarea.value)
-    textarea.value = await response.text()
+  async getSvgNode (string, viewbox) {
+    const svgString = await this.getSvgFromString(string, viewbox)
+    const node = new DOMParser().parseFromString(svgString, 'image/svg+xml').children[0]
+    if (node?.tagName !== 'svg' || node.getElementsByTagName('parsererror').length) {
+      throw new Error('Invalid SVG')
+    }
+  },
+
+  async getSvgFromString (string, viewbox) {
+    if (string.startsWith('http')) {
+      const response = await fetch(string)
+      return await response.text()
+    } else if (string.startsWith('<svg') || string.startsWith('<?xml')) {
+      return string
+    } else {
+      return `<svg viewBox="${viewbox}">${string}</svg>`
+    }
   },
 
   injectImageSrcset (fields, srcset) {

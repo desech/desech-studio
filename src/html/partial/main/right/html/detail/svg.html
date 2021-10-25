@@ -1,8 +1,11 @@
 <template id="template-style-html-attr-svg">
   <form class="style-html-details">
     <div class="style-html-svg">
-      <p>{{#i18n}} Paste SVG code our url ... {{/i18n}}</p>
-      <textarea spellcheck="false" class="style-html-svg-code scrollbar" name="code" placeholder="{{#i18n}} Paste SVG code our url {{/i18n}}"></textarea>
+      <div class="style-html-svg-viewbox-container">
+        <div style="font-size:12px">{{#i18n}} ViewBox {{/i18n}}</div>
+        <input type="text" class="style-html-field" name="viewBox" placeholder="{{#i18n}} ViewBox {{/i18n}}">
+      </div>
+      <textarea spellcheck="false" class="style-html-svg-code scrollbar" name="code" placeholder="{{#i18n}} Paste SVG code or paste an url {{/i18n}}"></textarea>
     </div>
   </form>
 </template>

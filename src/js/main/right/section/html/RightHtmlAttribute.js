@@ -126,15 +126,15 @@ export default {
   },
 
   saveAttributeCommand (name, value) {
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
+    const ref = StateSelectedElement.getRef()
+    RightHtmlCommon.changeAttributeCommand(ref, {
       // when the value is empty then we set a boolean value
       [name]: value || true
     })
   },
 
   deleteAttributeCommand (name) {
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
-      [name]: null
-    })
+    const ref = StateSelectedElement.getRef()
+    RightHtmlCommon.changeAttributeCommand(ref, { [name]: null })
   }
 }

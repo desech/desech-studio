@@ -41,9 +41,11 @@ export default {
     }
   },
 
-  mouseupEndEvent (event) {
+  async mouseupEndEvent (event) {
     if (this._button) {
-      if (HelperCanvas.getOperation() === 'resizing') this.finalizeElementResize()
+      if (HelperCanvas.getOperation() === 'resizing') {
+        await this.finalizeElementResize()
+      }
       this.clearState()
     }
   },
@@ -186,10 +188,10 @@ export default {
     return list
   },
 
-  finalizeElementResize () {
+  async finalizeElementResize () {
     this.hideCounters()
     // we do want to reload the side panel and ignore zeros
-    StateTempStyle.applyStyleValue(true, true)
+    await StateTempStyle.applyStyleValue(true, true)
   },
 
   hideCounters () {

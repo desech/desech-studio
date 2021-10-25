@@ -85,9 +85,9 @@ export default {
     }
   },
 
-  clickDeleteElementEvent (event) {
+  async clickDeleteElementEvent (event) {
     if (event.target.classList.contains('element-menu-delete')) {
-      CanvasElementManage.deleteElement()
+      await CanvasElementManage.deleteElement()
     }
   },
 
@@ -133,9 +133,9 @@ export default {
     }
   },
 
-  clickAssignComponentHoleEvent (event) {
+  async clickAssignComponentHoleEvent (event) {
     if (event.target.classList.contains('element-menu-component-hole')) {
-      CanvasElementComponent.assignComponentHole(document.getElementById('html-section'))
+      await CanvasElementComponent.assignComponentHole(document.getElementById('html-section'))
     }
   },
 

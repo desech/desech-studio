@@ -21,10 +21,10 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeAnimationFieldsEvent (event) {
+  async changeAnimationFieldsEvent (event) {
     if (event.target.closest('.animation-form-container .animation-field') ||
       event.target.closest('.animation-form-container .timing-field')) {
-      this.changeAnimationFields(event.target, event.target.closest('#animation-section'))
+      await this.changeAnimationFields(event.target, event.target.closest('#animation-section'))
     }
   },
 
@@ -81,17 +81,17 @@ export default {
     fields.type.value = RightAnimationCommon.getAnimationType(data, elemType)
   },
 
-  setAnimation (section) {
+  async setAnimation (section) {
     const current = RightAnimationCommon.getActiveElement(section)
     const fields = section.getElementsByClassName('slide-container')[0].elements
     const index = HelperDOM.getElementIndex(current)
     const value = this.getDisplayedValue(fields, index)
     if (value === 'none') {
-      RightCommon.changeStyle({ animation: '0s ease 0s 1 normal none running none' })
+      await RightCommon.changeStyle({ animation: '0s ease 0s 1 normal none running none' })
       RightAnimationCommon.setElementData(current, value)
     } else {
       const animation = this.setAnimationAtIndex(value, index)
-      RightCommon.changeStyle({ animation })
+      await RightCommon.changeStyle({ animation })
       RightAnimationCommon.setElementData(current, this.parseCSS(value)[0])
     }
   },
@@ -134,8 +134,8 @@ export default {
     return results
   },
 
-  changeAnimationFields (field, section) {
-    this.setAnimation(section)
+  async changeAnimationFields (field, section) {
+    await this.setAnimation(section)
     if (field.name === 'type' && field.value === 'none') {
       this.setAnimationNone(section)
     }
@@ -149,8 +149,8 @@ export default {
     HelperDOM.deleteChildren(container)
   },
 
-  deleteAnimation (index) {
-    RightCommon.changeStyle({
+  async deleteAnimation (index) {
+    await RightCommon.changeStyle({
       animation: this.removeAnimationAtIndex(index)
     })
   },
@@ -161,8 +161,8 @@ export default {
     return values.join(', ')
   },
 
-  sortAnimations (from, to) {
-    RightCommon.changeStyle({
+  async sortAnimations (from, to) {
+    await RightCommon.changeStyle({
       animation: this.replaceAnimationAtIndex(from, to)
     })
   },

@@ -20,20 +20,21 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickAttrButtonEvent (event) {
+  async clickAttrButtonEvent (event) {
     if (event.target.closest('.style-html-button')) {
-      this.setButtonAttribute(event.target.closest('.style-html-button'))
+      await this.setButtonAttribute(event.target.closest('.style-html-button'))
     }
   },
 
-  changeAttrFieldEvent (event) {
+  async changeAttrFieldEvent (event) {
     if (event.target.classList.contains('style-html-field')) {
-      this.setFieldAttribute(event.target)
+      await this.setFieldAttribute(event.target)
     }
   },
 
-  setButtonAttribute (button) {
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
+  async setButtonAttribute (button) {
+    const ref = StateSelectedElement.getRef()
+    await RightHtmlCommon.changeAttributeCommand(ref, {
       [button.name]: this.getButtonValue(button)
     })
   },
@@ -47,10 +48,9 @@ export default {
     }
   },
 
-  setFieldAttribute (field) {
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
-      [field.name]: field.value
-    })
+  async setFieldAttribute (field) {
+    const ref = StateSelectedElement.getRef()
+    await RightHtmlCommon.changeAttributeCommand(ref, { [field.name]: field.value })
     if (field.name === 'value') {
       StateSelectedElement.getElement().value = field.value
     }

@@ -42,9 +42,9 @@ export default {
     }
   },
 
-  clickSaveSelectorEvent (event) {
+  async clickSaveSelectorEvent (event) {
     if (event.target.classList.contains('dialog-selector-save-button')) {
-      this.saveSelector(event.target.closest('.dialog'))
+      await this.saveSelector(event.target.closest('.dialog'))
     }
   },
 
@@ -145,28 +145,28 @@ export default {
     }
   },
 
-  saveSelector (dialog) {
+  async saveSelector (dialog) {
     const preview = dialog.getElementsByClassName('dialog-selector-add-preview')[0]
     const selector = preview.dataset.selector
     try {
       document.querySelector(selector)
-      this.saveSelectorSuccess(selector)
+      await this.saveSelectorSuccess(selector)
       this.reloadSuccess()
     } catch (error) {
       HelperError.error(error, new Error(preview.dataset.error))
     }
   },
 
-  saveSelectorSuccess (selector) {
+  async saveSelectorSuccess (selector) {
     if (StyleSheetSelector.selectorExists(selector)) {
-      RightSelectorCommon.linkClass(selector)
+      await RightSelectorCommon.linkClass(selector)
     } else {
-      this.callCreateCommand(selector)
+      await this.callCreateCommand(selector)
       RightSelectorCommon.reloadSection(selector)
     }
   },
 
-  callCreateCommand (selector) {
+  async callCreateCommand (selector) {
     const command = {
       do: {
         command: 'addSelector',
@@ -179,7 +179,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
   reloadSuccess () {

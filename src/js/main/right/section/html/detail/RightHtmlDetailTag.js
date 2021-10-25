@@ -37,15 +37,15 @@ export default {
     }
   },
 
-  clickSelectDeleteOptionEvent (event) {
+  async clickSelectDeleteOptionEvent (event) {
     if (event.target.closest('.style-html-option-delete')) {
-      this.deleteSelectOption(event.target.closest('li'))
+      await this.deleteSelectOption(event.target.closest('li'))
     }
   },
 
-  clickSelectOptionButtonEvent (event) {
+  async clickSelectOptionButtonEvent (event) {
     if (event.target.closest('.style-html-option-button')) {
-      this.updateSelect(event.target.closest('ul'))
+      await this.updateSelect(event.target.closest('ul'))
     }
   },
 
@@ -55,15 +55,15 @@ export default {
     }
   },
 
-  dragdropafterSelectSortOptionEvent (event) {
+  async dragdropafterSelectSortOptionEvent (event) {
     if (event.target.classList.contains('style-html-option-list')) {
-      this.updateSelect(event.target)
+      await this.updateSelect(event.target)
     }
   },
 
-  changeSelectOptionInputEvent (event) {
+  async changeSelectOptionInputEvent (event) {
     if (event.target.classList.contains('style-html-option-input')) {
-      this.updateSelect(event.target.closest('ul'))
+      await this.updateSelect(event.target.closest('ul'))
     }
   },
 
@@ -79,45 +79,45 @@ export default {
     }
   },
 
-  clickTrackDeleteEvent (event) {
+  async clickTrackDeleteEvent (event) {
     if (event.target.closest('.style-html-track-delete')) {
-      this.deleteTrack(event.target.closest('.style-html-track-element'))
+      await this.deleteTrack(event.target.closest('.style-html-track-element'))
     }
   },
 
-  clickTrackButtonEvent (event) {
+  async clickTrackButtonEvent (event) {
     if (event.target.closest('.style-html-track-button')) {
-      this.updateTrackField(event.target.closest('.style-html-track-list'))
+      await this.updateTrackField(event.target.closest('.style-html-track-list'))
     }
   },
 
-  changeTrackInputEvent (event) {
+  async changeTrackInputEvent (event) {
     if (event.target.classList.contains('style-html-track-input')) {
-      this.updateTrackField(event.target.closest('.style-html-track-list'))
+      await this.updateTrackField(event.target.closest('.style-html-track-list'))
     }
   },
 
-  changeInputTextTypeEvent (event) {
+  async changeInputTextTypeEvent (event) {
     if (event.target.classList.contains('style-html-input-type')) {
-      this.changeInputTextType(event.target)
+      await this.changeInputTextType(event.target)
     }
   },
 
-  setsourceImageEvent (event) {
+  async setsourceImageEvent (event) {
     if (event.target.id.startsWith('source-image-detail-')) {
-      this.setImageSrcset(event.target, event.detail)
+      await this.setImageSrcset(event.target, event.detail)
     }
   },
 
-  setsourceVideoEvent (event) {
+  async setsourceVideoEvent (event) {
     if (event.target.id === 'source-media-detail') {
-      this.setAttrSource(event.target, event.detail, 'src')
+      await this.setAttrSource(event.target, event.detail, 'src')
     }
   },
 
-  setsourcePosterEvent (event) {
+  async setsourcePosterEvent (event) {
     if (event.target.id === 'source-poster-detail') {
-      this.setAttrSource(event.target, event.detail, 'poster')
+      await this.setAttrSource(event.target, event.detail, 'poster')
     }
   },
 
@@ -127,9 +127,9 @@ export default {
     }
   },
 
-  setsourceObjectEvent (event) {
+  async setsourceObjectEvent (event) {
     if (event.target.id === 'source-object-detail') {
-      this.setAttrSource(event.target, event.detail, 'data')
+      await this.setAttrSource(event.target, event.detail, 'data')
     }
   },
 
@@ -146,14 +146,14 @@ export default {
     input.focus()
   },
 
-  deleteSelectOption (li) {
+  async deleteSelectOption (li) {
     const list = li.parentNode
     li.remove()
-    this.updateSelect(list)
+    await this.updateSelect(list)
   },
 
-  updateSelect (list) {
-    RightHtmlDetailOption.setOptions(list)
+  async updateSelect (list) {
+    await RightHtmlDetailOption.setOptions(list)
   },
 
   injectSvg (element, textarea) {
@@ -166,7 +166,7 @@ export default {
     fields.code.value = node.innerHTML
     fields.viewBox.value = node.getAttributeNS(null, 'viewBox')
     const element = StateSelectedElement.getElement()
-    RightHtmlCommon.setSvgCommand(element, node)
+    await RightHtmlCommon.setSvgCommand(element, node)
   },
 
   async getSvgNode (string, viewbox) {
@@ -213,23 +213,23 @@ export default {
     RightHtmlCommon.addTrackToList(list)
   },
 
-  deleteTrack (element) {
+  async deleteTrack (element) {
     const list = element.parentNode
     element.remove()
-    this.updateTracks(list)
+    await this.updateTracks(list)
   },
 
-  updateTracks (list) {
-    RightHtmlDetailTrack.setTracks(list)
+  async updateTracks (list) {
+    await RightHtmlDetailTrack.setTracks(list)
   },
 
-  updateTrackField (list) {
-    this.updateTracks(list)
+  async updateTrackField (list) {
+    await this.updateTracks(list)
   },
 
-  changeInputTextType (select) {
+  async changeInputTextType (select) {
     this.updateInputTypeForm(select)
-    this.setInputTextType(select.value)
+    await this.setInputTextType(select.value)
     HelperTrigger.triggerReload('html-section')
   },
 
@@ -237,17 +237,18 @@ export default {
     select.closest('form').dataset.type = select.value
   },
 
-  setInputTextType (type) {
+  async setInputTextType (type) {
     const element = StateSelectedElement.getElement()
-    RightHtmlCommon.changeAttributeCommand(HelperElement.getRef(element), {
+    const ref = HelperElement.getRef(element)
+    await RightHtmlCommon.changeAttributeCommand(ref, {
       ...RightHtmlCommon.getRemovableAttributes(element),
       type
     })
   },
 
-  setImageSrcset (button, file) {
+  async setImageSrcset (button, file) {
     this.addFileName(button.closest('.grid'), file)
-    this.saveImageSrcset(button.closest('form').elements)
+    await this.saveImageSrcset(button.closest('form').elements)
   },
 
   addFileName (container, file) {
@@ -255,8 +256,9 @@ export default {
     RightHtmlCommon.setFileName(field, file)
   },
 
-  saveImageSrcset (fields) {
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
+  async saveImageSrcset (fields) {
+    const ref = StateSelectedElement.getRef()
+    await RightHtmlCommon.changeAttributeCommand(ref, {
       srcset: this.buildSrcset(fields)
     })
   },
@@ -276,16 +278,15 @@ export default {
     return src
   },
 
-  setAttrSource (button, file, attr) {
+  async setAttrSource (button, file, attr) {
     this.addFileName(button.closest('.grid'), file)
-    RightHtmlCommon.changeAttributeCommand(StateSelectedElement.getRef(), {
-      [attr]: file
-    })
+    const ref = StateSelectedElement.getRef()
+    await RightHtmlCommon.changeAttributeCommand(ref, { [attr]: file })
   },
 
-  setTrackSource (button, file) {
+  async setTrackSource (button, file) {
     this.addFileName(button.closest('.grid'), file)
-    this.updateTrackField(button.closest('.style-html-track-list'))
+    await this.updateTrackField(button.closest('.style-html-track-list'))
   },
 
   toggleLiveButton (button) {

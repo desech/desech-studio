@@ -117,9 +117,10 @@ export default {
     })
   },
 
-  changeText (data) {
+  async changeText (data) {
     const element = HelperElement.getElement(data.ref)
     element.innerHTML = HelperLocalStore.getItem(data.textId)
+    await StateCommandCommon.overrideComponent(element, 'inner', element.innerHTML)
   },
 
   changeAttribute (data) {

@@ -21,21 +21,21 @@ export default {
     }
   },
 
-  clickDeleteSelectorEvent (event) {
+  async clickDeleteSelectorEvent (event) {
     if (event.target.closest('.delete-selector-button')) {
-      this.deleteSelector(event.target.closest('li'))
+      await this.deleteSelector(event.target.closest('li'))
     }
   },
 
-  clickUnlinkClassEvent (event) {
+  async clickUnlinkClassEvent (event) {
     if (event.target.closest('.unlink-class-button')) {
-      this.unlinkClass(event.target.closest('li'))
+      await this.unlinkClass(event.target.closest('li'))
     }
   },
 
-  dragdropbeforeSortSelectorEvent (event) {
+  async dragdropbeforeSortSelectorEvent (event) {
     if (event.target.classList.contains('selector-list')) {
-      this.sortSelector(event.target, event.detail)
+      await this.sortSelector(event.target, event.detail)
     }
   },
 
@@ -44,14 +44,14 @@ export default {
     RightSelectorCommon.selectSelector(element, container)
   },
 
-  deleteSelector (element) {
+  async deleteSelector (element) {
     element.remove()
     this.selectDefaultSelector()
-    this.callDeleteCommand(element.dataset.selector)
+    await this.callDeleteCommand(element.dataset.selector)
   },
 
-  unlinkClass (element) {
-    RightSelectorCommon.unlinkClass(element.dataset.selector)
+  async unlinkClass (element) {
+    await RightSelectorCommon.unlinkClass(element.dataset.selector)
   },
 
   selectDefaultSelector () {
@@ -59,7 +59,7 @@ export default {
     RightSelectorCommon.selectSelector(element)
   },
 
-  callDeleteCommand (selector) {
+  async callDeleteCommand (selector) {
     const command = {
       do: {
         command: 'removeSelector',
@@ -72,14 +72,14 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
-  sortSelector (list, data) {
+  async sortSelector (list, data) {
     const selector = data.from.element.dataset.selector
     const current = this.getSelectorCurrentPosition(list.children, data.from.index)
     const sorted = this.getSelectorSortPosition(list.children, data.to.index)
-    this.callSortCommand(selector, current, sorted)
+    await this.callSortCommand(selector, current, sorted)
   },
 
   getSelectorSortPosition (elements, pos) {
@@ -110,7 +110,7 @@ export default {
     }
   },
 
-  callSortCommand (selector, current, sorted) {
+  async callSortCommand (selector, current, sorted) {
     const command = {
       do: {
         command: 'sortSelector',
@@ -126,6 +126,6 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   }
 }

@@ -17,27 +17,27 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickAddCellEvent (event) {
+  async clickAddCellEvent (event) {
     if (event.target.closest('.add-grid-cell')) {
-      this.addCell(event.target.closest('button'))
+      await this.addCell(event.target.closest('button'))
     }
   },
 
-  clickDeleteCellEvent (event) {
+  async clickDeleteCellEvent (event) {
     if (event.target.closest('.delete-grid-cell')) {
-      this.deleteCell(event.target.closest('button'))
+      await this.deleteCell(event.target.closest('button'))
     }
   },
 
-  changeUpdateCellEvent (event) {
+  async changeUpdateCellEvent (event) {
     if (event.target.classList.contains('grid-track-cell')) {
-      CanvasOverlayGridTrack.updateCell(event.target, false) // don't reload the panel
+      await CanvasOverlayGridTrack.updateCell(event.target, false) // don't reload the panel
     }
   },
 
-  addCell (button) {
+  async addCell (button) {
     CanvasOverlayGrid.setOverlayMode('grid')
-    CanvasOverlayGridTrack.addCell(button.dataset.type, false) // don't reload the panel
+    await CanvasOverlayGridTrack.addCell(button.dataset.type, false) // don't reload the panel
     this.reloadTrack(button.closest('.grid-cell'), button.dataset.type)
   },
 
@@ -51,10 +51,10 @@ export default {
     HelperDOM.deleteChildren(container)
   },
 
-  deleteCell (button) {
+  async deleteCell (button) {
     CanvasOverlayGrid.setOverlayMode('grid')
     const index = button.closest('.cell').dataset.index
-    CanvasOverlayGridTrack.deleteCell(index, false) // don't reload the panel
+    await CanvasOverlayGridTrack.deleteCell(index, false) // don't reload the panel
     this.reloadTrack(button.closest('.grid-cell'), button.dataset.type)
   },
 

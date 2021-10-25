@@ -16,21 +16,21 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeStyleInputEvent (event) {
+  async changeStyleInputEvent (event) {
     if (event.target.classList.contains('change-style') &&
       ['INPUT', 'SELECT'].includes(event.target.tagName)) {
-      this.changeStyle(event.target)
+      await this.changeStyle(event.target)
     }
   },
 
-  clickButtonRightEvent (event) {
+  async clickButtonRightEvent (event) {
     if (event.target.closest('button.change-style')) {
-      this.changeStyle(event.target.closest('button'))
+      await this.changeStyle(event.target.closest('button'))
     }
   },
 
-  changeStyle (field) {
-    RightCommon.changeStyle({
+  async changeStyle (field) {
+    await RightCommon.changeStyle({
       [field.name]: this.getValue(field)
     })
   },

@@ -13,13 +13,13 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeEditMetaEvent (event) {
+  async changeEditMetaEvent (event) {
     if (event.target.classList.contains('right-page-field')) {
-      this.editMeta(event.target.closest('form').elements)
+      await this.editMeta(event.target.closest('form').elements)
     }
   },
 
-  editMeta (fields) {
+  async editMeta (fields) {
     const meta = {
       language: fields.language.value,
       title: fields.title.value,
@@ -36,6 +36,6 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   }
 }

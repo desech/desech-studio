@@ -4,23 +4,23 @@ import StateCommand from '../../../../state/StateCommand.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
 
 export default {
-  linkClass (selector) {
+  async linkClass (selector) {
     const ref = StateSelectedElement.getRef()
     const cls = HelperStyle.extractClassSelector(selector)
-    this.callLinkCommand(ref, cls, 'linkClass', 'unlinkClass')
+    await this.callLinkCommand(ref, cls, 'linkClass', 'unlinkClass')
     this.reloadSection(selector)
     HelperTrigger.triggerReload('sub-style-sections')
   },
 
-  unlinkClass (selector) {
+  async unlinkClass (selector) {
     const ref = StateSelectedElement.getRef()
     const cls = HelperStyle.extractClassSelector(selector)
-    this.callLinkCommand(ref, cls, 'unlinkClass', 'linkClass')
+    await this.callLinkCommand(ref, cls, 'unlinkClass', 'linkClass')
     this.reloadSection()
     HelperTrigger.triggerReload('sub-style-sections')
   },
 
-  callLinkCommand (ref, cls, doCommand, undoCommand) {
+  async callLinkCommand (ref, cls, doCommand, undoCommand) {
     const command = {
       do: {
         command: doCommand,
@@ -34,7 +34,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
   reloadSection (selector = null) {

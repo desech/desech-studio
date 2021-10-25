@@ -24,9 +24,9 @@ export default {
     }
   },
 
-  changeFieldEvent (event) {
+  async changeFieldEvent (event) {
     if (event.target.classList.contains('margpad-field')) {
-      this.changeField(event.target)
+      await this.changeField(event.target)
     }
   },
 
@@ -51,15 +51,15 @@ export default {
     }
   },
 
-  changeField (input) {
+  async changeField (input) {
     const type = (input.name.startsWith('margin')) ? 'margin' : 'padding'
     const value = InputUnitField.getValue(input)
     const fields = input.closest('form').elements
     if (fields[`${type}-constrain`].classList.contains('selected')) {
-      this.changeStyleAll(type, value)
+      await this.changeStyleAll(type, value)
       this.changeOtherFields(fields, type, value)
     } else {
-      RightCommon.changeStyle({ [input.name]: value })
+      await RightCommon.changeStyle({ [input.name]: value })
     }
   },
 
@@ -71,8 +71,8 @@ export default {
     }
   },
 
-  changeStyleAll (type, value) {
-    RightCommon.changeStyle({
+  async changeStyleAll (type, value) {
+    await RightCommon.changeStyle({
       [`${type}-top`]: value,
       [`${type}-left`]: value,
       [`${type}-right`]: value,

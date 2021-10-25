@@ -23,20 +23,27 @@ export default {
   },
 
   triggerColorChangeEvent (container, detail = {}) {
-    const event = new CustomEvent('colorchange', { detail: detail, bubbles: true, cancelable: true })
+    const data = { detail: detail, bubbles: true, cancelable: true }
+    const event = new CustomEvent('colorchange', data)
     container.dispatchEvent(event)
   },
 
-  setColor (properties, options = {}) {
+  async setColor (properties, options = {}) {
     if (options.temp) {
-      options.apply ? StateTempStyle.applyStyleValue() : StateTempStyle.setStyles(properties)
+      options.apply
+        ? await StateTempStyle.applyStyleValue()
+        : StateTempStyle.setStyles(properties)
     } else {
-      RightCommon.changeStyle(properties)
+      await RightCommon.changeStyle(properties)
     }
   },
 
   getRgbColor (data) {
-    const rgb = [data.colorInputs[0].value, data.colorInputs[1].value, data.colorInputs[2].value]
+    const rgb = [
+      data.colorInputs[0].value,
+      data.colorInputs[1].value,
+      data.colorInputs[2].value
+    ]
     const alpha = this.getAlpha(data)
     return HelperColor.rgbToCss(rgb, alpha)
   },
@@ -45,7 +52,8 @@ export default {
     const sidebar = document.getElementById('sidebar-right')
     const panel = document.getElementById('right-panel-style')
     const halfPin = this.getPinWidth() / 2
-    let x = (data.clientX - halfPin + panel.scrollLeft) - (sidebar.offsetLeft + container.offsetLeft)
+    let x = (data.clientX - halfPin + panel.scrollLeft) -
+      (sidebar.offsetLeft + container.offsetLeft)
     x = Math.max(x, -halfPin)
     x = Math.min(x, container.clientWidth - halfPin)
     return x
@@ -55,7 +63,8 @@ export default {
     const sidebar = document.getElementById('sidebar-right')
     const panel = document.getElementById('right-panel-style')
     const halfPin = this.getPinHeight() / 2
-    let y = (data.clientY - halfPin + panel.scrollTop) - (sidebar.offsetTop + container.offsetTop)
+    let y = (data.clientY - halfPin + panel.scrollTop) -
+      (sidebar.offsetTop + container.offsetTop)
     y = Math.max(y, -halfPin)
     y = Math.min(y, container.clientHeight - halfPin)
     return y
@@ -99,7 +108,8 @@ export default {
   },
 
   setPinColor (pin, color) {
-    pin.style.backgroundColor = `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]}, ${color.alpha})`
+    pin.style.backgroundColor = `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]}, ` +
+      `${color.alpha})`
   },
 
   updateVerticalPin (container, pin, data) {
@@ -150,14 +160,17 @@ export default {
   },
 
   positionPalettePin (data) {
-    const x = Math.round(data.palette.clientWidth * this.getSaturation(data) - data.palettePin.clientWidth / 2)
-    const y = Math.round(data.palette.clientHeight - this.getValue(data) * data.palette.clientHeight - data.palettePin.clientHeight / 2)
+    const x = Math.round(data.palette.clientWidth * this.getSaturation(data) -
+      data.palettePin.clientWidth / 2)
+    const y = Math.round(data.palette.clientHeight - this.getValue(data) *
+      data.palette.clientHeight - data.palettePin.clientHeight / 2)
     data.palettePin.style.left = x + 'px'
     data.palettePin.style.top = y + 'px'
   },
 
   positionHuePin (data) {
-    const y = Math.round(data.hue.clientHeight * this.getHue(data) - data.huePin.clientHeight / 2)
+    const y = Math.round(data.hue.clientHeight * this.getHue(data) -
+      data.huePin.clientHeight / 2)
     data.huePin.style.top = y + 'px'
   },
 
@@ -189,7 +202,8 @@ export default {
 
   positionAlphaPin (data) {
     const value = this.getAlpha(data)
-    const y = Math.round(data.alpha.clientHeight - value * data.alpha.clientHeight - data.alphaPin.clientHeight / 2)
+    const y = Math.round(data.alpha.clientHeight - value * data.alpha.clientHeight -
+      data.alphaPin.clientHeight / 2)
     data.alphaPin.style.top = y + 'px'
   },
 
@@ -245,7 +259,8 @@ export default {
   },
 
   setGradientFillBackground (data, pinData) {
-    data.gradient.style.backgroundImage = this.getGradientFillBackground(data, pinData, 'linear', 'to right')
+    const value = this.getGradientFillBackground(data, pinData, 'linear', 'to right')
+    data.gradient.style.backgroundImage = value
   },
 
   getGradientFillBackground (data, pinData, type, line = '') {
@@ -256,7 +271,8 @@ export default {
       bg += `${pin.color} ${pin.position}%`
     }
     const repeating = this.isRepeatingGradient(data.repeatingGradient) ? 'repeating-' : ''
-    line = line || this.getGradientLine(data.form.getElementsByClassName('gradient-form')[0], type)
+    const form = data.form.getElementsByClassName('gradient-form')[0]
+    line = line || this.getGradientLine(form, type)
     line = line ? line + ', ' : ''
     return `${repeating}${type}-gradient(${line}${bg})`
   },
@@ -281,7 +297,8 @@ export default {
   getRadialGradientLine (fields) {
     let line = ''
     if (fields.size.value === 'length') {
-      line += (InputUnitField.getValue(fields.width) + ' ' + InputUnitField.getValue(fields.height)).trim()
+      line += (InputUnitField.getValue(fields.width) + ' ' +
+        InputUnitField.getValue(fields.height)).trim()
     } else if (fields.size.value) {
       line += fields.size.value
     }

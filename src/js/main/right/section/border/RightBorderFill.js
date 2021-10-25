@@ -17,24 +17,26 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickSetBorderFillEvent (event) {
+  async clickSetBorderFillEvent (event) {
     if (event.target.closest('.border-details-container .color-button-main')) {
-      this.setBorderFill(event.target.closest('form'))
+      await this.setBorderFill(event.target.closest('form'))
     }
   },
 
-  changeSelectColorEvent () {
+  async changeSelectColorEvent () {
     if (event.target.closest('.border-details-container .color-button-select')) {
-      this.setSelectColor(event.target, event.target.closest('form'))
+      await this.setSelectColor(event.target, event.target.closest('form'))
     }
   },
 
-  setBorderFill (container) {
+  async setBorderFill (container) {
     const type = container.getElementsByClassName('border-details-container')[0].dataset.type
     const cssFill = RightBorderFillCommon.getFillValue(type)
     const button = container.getElementsByClassName('color-button')[0]
     const buttonFill = button.style.backgroundColor || button.style.backgroundImage
-    if (!cssFill && buttonFill) RightBorderFillProperty.updateFill(container, buttonFill)
+    if (!cssFill && buttonFill) {
+      await RightBorderFillProperty.updateFill(container, buttonFill)
+    }
     this.toggleFill(container.getElementsByClassName('color-button-main')[0])
   },
 
@@ -64,13 +66,13 @@ export default {
     fill.dataset.type = type
   },
 
-  setSelectColor (select, container) {
+  async setSelectColor (select, container) {
     if (select.value === 'choose') {
-      this.setBorderFill(container)
+      await this.setBorderFill(container)
     } else {
       const type = container.getElementsByClassName('border-details-container')[0].dataset.type
       const properties = RightBorderFillProperty.getAllBorderFillProperties(type, select.value)
-      RightCommon.changeStyle(properties)
+      await RightCommon.changeStyle(properties)
       RightBorderFillCommon.hideFillContainer(container)
     }
   },

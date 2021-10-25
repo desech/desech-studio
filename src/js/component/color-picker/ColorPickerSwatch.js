@@ -19,9 +19,9 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickSaveSwatchEvent (event) {
+  async clickSaveSwatchEvent (event) {
     if (event.target.closest('.save-swatch-button')) {
-      this.saveSwatch(event.target.closest('.save-swatch-button'))
+      await this.saveSwatch(event.target.closest('.save-swatch-button'))
     }
   },
 
@@ -34,10 +34,10 @@ export default {
     }
   },
 
-  dblclickDeleteSwatchEvent (event) {
+  async dblclickDeleteSwatchEvent (event) {
     if (event.target.closest('.swatch-color')) {
       this.clearTimeout()
-      this.deleteSwatch(event.target.closest('.swatch-color'))
+      await this.deleteSwatch(event.target.closest('.swatch-color'))
     }
   },
 
@@ -47,11 +47,11 @@ export default {
     this._timer = null
   },
 
-  saveSwatch (button) {
+  async saveSwatch (button) {
     const container = button.closest('.color-picker')
     const color = ColorPickerInput.getRgbColor(container)
     const name = this.getColorName(container)
-    this.saveAddSwatchColor(name, color)
+    await this.saveAddSwatchColor(name, color)
     this.addSwatchColor(button, name, color)
   },
 
@@ -61,7 +61,7 @@ export default {
     return '--color-' + (hex + alpha).toLowerCase()
   },
 
-  saveAddSwatchColor (name, color) {
+  async saveAddSwatchColor (name, color) {
     const command = {
       do: {
         command: 'addColor',
@@ -74,7 +74,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
   addSwatchColor (button, name, color) {
@@ -107,12 +107,12 @@ export default {
     palette.dataset.alpha = alpha
   },
 
-  deleteSwatch (swatch) {
-    this.saveRemoveSwatchColor(swatch.dataset.name, swatch.dataset.value)
+  async deleteSwatch (swatch) {
+    await this.saveRemoveSwatchColor(swatch.dataset.name, swatch.dataset.value)
     this.removeSwatchColor(swatch)
   },
 
-  saveRemoveSwatchColor (name, value) {
+  async saveRemoveSwatchColor (name, value) {
     const command = {
       do: {
         command: 'removeColor',
@@ -125,7 +125,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
   removeSwatchColor (swatch) {

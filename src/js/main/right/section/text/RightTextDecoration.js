@@ -16,16 +16,16 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickSetDecorationEvent (event) {
+  async clickSetDecorationEvent (event) {
     if (event.target.closest('button.text-decoration')) {
-      this.setDecoration(event.target.closest('button'))
+      await this.setDecoration(event.target.closest('button'))
     }
   },
 
-  setDecoration (button) {
+  async setDecoration (button) {
     this.validateState(button, button.parentNode.elements)
     const value = this.getButtonsValue(button.parentNode)
-    RightCommon.changeStyle({ 'text-decoration-line': value })
+    await RightCommon.changeStyle({ 'text-decoration-line': value })
   },
 
   validateState (button, fields) {

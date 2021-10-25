@@ -5,25 +5,23 @@ import RightCommon from '../../../../main/right/RightCommon.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
 
 export default {
-  addCell (type, reloadPanel = true) {
+  async addCell (type, reloadPanel = true) {
     const property = `grid-template-${type}s`
     const value = StateStyleSheet.getPropertyValue(property) + ' auto'
-    this.changeStyle(property, value, reloadPanel)
+    await this.changeStyle(property, value, reloadPanel)
   },
 
-  changeStyle (property, value, reloadPanel) {
+  async changeStyle (property, value, reloadPanel) {
     // this reloads the overlay and potentially the right panel too
-    RightCommon.changeStyle({
-      [property]: value
-    }, reloadPanel)
+    await RightCommon.changeStyle({ [property]: value }, reloadPanel)
   },
 
-  deleteCell (index, reloadPanel = true) {
+  async deleteCell (index, reloadPanel = true) {
     const type = this.extractTypeFromIndex(index)
     const trackArray = CanvasOverlayCommon.getTrackArray(type)
     const track = this.removeCellFromTrack(trackArray, index)
     const value = track.join(' ')
-    this.changeStyle(`grid-template-${type}s`, value, reloadPanel)
+    await this.changeStyle(`grid-template-${type}s`, value, reloadPanel)
   },
 
   extractTypeFromIndex (index) {
@@ -77,11 +75,11 @@ export default {
     HelperDOM.hide(input.closest('.track-cell-options'))
   },
 
-  updateCell (input, reloadPanel = true) {
+  async updateCell (input, reloadPanel = true) {
     const index = input.closest('.cell').dataset.index
     const type = this.extractTypeFromIndex(index)
     const value = this.getCellInputValue(input, type, index.substring(1))
-    this.changeStyle(`grid-template-${type}s`, value, reloadPanel)
+    await this.changeStyle(`grid-template-${type}s`, value, reloadPanel)
   },
 
   getCellInputValue (input, type, cellIndex) {

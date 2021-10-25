@@ -25,9 +25,9 @@ export default {
     }
   },
 
-  clickDeletePropertyEvent (event) {
+  async clickDeletePropertyEvent (event) {
     if (event.target.closest('.style-component-property-delete')) {
-      this.deleteProperty(event.target.closest('li'))
+      await this.deleteProperty(event.target.closest('li'))
     }
   },
 
@@ -37,9 +37,9 @@ export default {
     }
   },
 
-  changeEditPropertyEvent (event) {
+  async changeEditPropertyEvent (event) {
     if (event.target.classList.contains('style-component-property-field')) {
-      this.editProperty(event.target.closest('li'))
+      await this.editProperty(event.target.closest('li'))
     }
   },
 
@@ -50,10 +50,10 @@ export default {
     input.focus()
   },
 
-  deleteProperty (li) {
+  async deleteProperty (li) {
     const form = li.closest('form')
     li.remove()
-    this.changePropertiesCommand(form)
+    await this.changePropertiesCommand(form)
   },
 
   resetProperty (li) {
@@ -62,10 +62,12 @@ export default {
     name.reportValidity()
   },
 
-  editProperty (li) {
+  async editProperty (li) {
     const name = li.getElementsByClassName('style-component-property-name')[0]
     const valid = this.validatePropertyName(name)
-    if (name.value && valid) this.changePropertiesCommand(li.closest('form'))
+    if (name.value && valid) {
+      await this.changePropertiesCommand(li.closest('form'))
+    }
   },
 
   validatePropertyName (field) {
@@ -81,13 +83,13 @@ export default {
     name.reportValidity()
   },
 
-  changePropertiesCommand (form, execute = true) {
+  async changePropertiesCommand (form, execute = true) {
     const ref = StateSelectedElement.getRef()
     if (!ref) return
     const properties = this.getFormProperties(form)
     const command = this.getCommandData(properties, ref, form.dataset.type)
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
   getFormProperties (form) {

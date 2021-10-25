@@ -21,26 +21,26 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeFillTypeEvent (event) {
+  async changeFillTypeEvent (event) {
     if (event.target.closest('.background-fill-container .fill-type')) {
-      this.changeFillType(event.target.closest('.fill-type'))
+      await this.changeFillType(event.target.closest('.fill-type'))
     }
   },
 
-  changeFillType (select) {
-    if (this.validateFillNone(select)) return
+  async changeFillType (select) {
+    if (await this.validateFillNone(select)) return
     const form = select.closest('form.slide-container')
     const elemIndex = RightFillCommon.getActiveElementIndex(form.closest('#fill-section'))
     this.addMain(form, { type: select.value, value: '' }, elemIndex)
-    this.updateFill(form)
+    await this.updateFill(form)
   },
 
-  validateFillNone (select) {
+  async validateFillNone (select) {
     if (select.value !== 'none') return
     this.cleanForFillNone(select.closest('.sidebar-section'))
     const properties = RightFillCommon.getAllBlankProperties()
     properties['background-image'] = 'none'
-    RightCommon.changeStyle(properties)
+    await RightCommon.changeStyle(properties)
     return true
   },
 
@@ -125,12 +125,12 @@ export default {
     ColorPickerGradient.setBackgroundImageSource(container, image)
   },
 
-  updateFill (form) {
+  async updateFill (form) {
     const colorPicker = form.getElementsByClassName('color-picker')[0]
     if (colorPicker) {
       ColorPickerCommon.triggerColorChangeEvent(colorPicker)
     } else {
-      RightFillProperty.updateBackgroundImage(form)
+      await RightFillProperty.updateBackgroundImage(form)
     }
   }
 }

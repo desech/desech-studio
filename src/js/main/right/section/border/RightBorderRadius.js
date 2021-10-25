@@ -24,15 +24,15 @@ export default {
     }
   },
 
-  changeStyleAllEvent (event) {
+  async changeStyleAllEvent (event) {
     if (event.target.classList.contains('border-radius')) {
-      this.changeStyleAll(event.target)
+      await this.changeStyleAll(event.target)
     }
   },
 
-  changeStyleEachEvent (event) {
+  async changeStyleEachEvent (event) {
     if (event.target.classList.contains('border-radius-each')) {
-      this.changeStyleEach(event.target)
+      await this.changeStyleEach(event.target)
     }
   },
 
@@ -41,10 +41,10 @@ export default {
     this.injectInputs(button.closest('form'), style, button.value)
   },
 
-  changeStyleAll (input) {
+  async changeStyleAll (input) {
     const container = this.getInputAllContainer(input)
     const value = this.getRadiusValue(container)
-    RightCommon.changeStyle({
+    await RightCommon.changeStyle({
       'border-top-left-radius': value,
       'border-top-right-radius': value,
       'border-bottom-left-radius': value,
@@ -80,10 +80,10 @@ export default {
     return value
   },
 
-  changeStyleEach (input) {
+  async changeStyleEach (input) {
     const container = this.getInputEachContainer(input)
     const name = this.getInputName(input)
-    RightCommon.changeStyle({
+    await RightCommon.changeStyle({
       [name]: this.getRadiusValue(container)
     })
   },

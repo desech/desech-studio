@@ -50,10 +50,10 @@ export default {
     }
   },
 
-  mouseupEndMoveEvent (event) {
+  async mouseupEndMoveEvent (event) {
     if (this._element) {
       if (this._moving && HelperCanvas.getOperation() === 'moving') {
-        this.finalizeElementMove(event.altKey)
+        await this.finalizeElementMove(event.altKey)
       }
       // clear it when moving was initialized but not executed
       this.clearState()
@@ -105,23 +105,23 @@ export default {
     CanvasElementCreate.addPlacementMarker(target, clientX, clientY)
   },
 
-  finalizeElementMove (altKey) {
+  async finalizeElementMove (altKey) {
     HelperCanvas.deleteCanvasData('operation')
     HelperDOM.clearStyle(this._element)
     this._element.classList.remove('moving')
     if (altKey) {
       CanvasElementManage.duplicateElement(this._element)
     } else {
-      this.moveElementInCanvas(this._element)
+      await this.moveElementInCanvas(this._element)
     }
   },
 
-  moveElementInCanvas (element) {
+  async moveElementInCanvas (element) {
     const newElement = this.cloneMoveElement(element)
     CanvasElementManage.addPastedElement(newElement)
     HelperDOM.hide(element)
     CanvasElementSelect.selectElementNode(newElement)
-    CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
+    await CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 

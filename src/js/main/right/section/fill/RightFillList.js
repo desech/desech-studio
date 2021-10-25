@@ -19,15 +19,15 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickAddElementEvent (event) {
+  async clickAddElementEvent (event) {
     if (event.target.closest('.add-fill-button')) {
-      this.addElement(event.target.closest('.add-fill-button'))
+      await this.addElement(event.target.closest('.add-fill-button'))
     }
   },
 
-  clickDeleteElementEvent (event) {
+  async clickDeleteElementEvent (event) {
     if (event.target.closest('.delete-fill-button')) {
-      this.deleteElement(event.target.closest('li'))
+      await this.deleteElement(event.target.closest('li'))
       // don't let the edit button trigger
       event.preventDefault()
     }
@@ -39,19 +39,19 @@ export default {
     }
   },
 
-  dragdropbeforeElementEvent (event) {
+  async dragdropbeforeElementEvent (event) {
     if (event.target.classList.contains('fill-list')) {
-      this.dragdropElement(event.detail)
+      await this.dragdropElement(event.detail)
     }
   },
 
-  addElement (button) {
+  async addElement (button) {
     if (this.fillIsNone()) return
     const form = button.closest('form#fill-section')
     const list = form.getElementsByClassName('panel-list')[0]
     this.hideColorPicker(form)
     this.addElementLi(list)
-    RightFillProperty.updateBackgroundImage(form)
+    await RightFillProperty.updateBackgroundImage(form)
     RightFillImage.incrementBackgroundProperties()
     this.addColorPicker(form)
     RightCommon.toggleSidebarSection(form)
@@ -102,10 +102,10 @@ export default {
     if (active) active.classList.remove('active')
   },
 
-  deleteElement (li) {
+  async deleteElement (li) {
     const container = li.closest('.sidebar-section')
     const index = HelperDOM.getElementIndex(li)
-    RightFillProperty.deleteBackgroundFill(index, li.parentNode.children.length === 1)
+    await RightFillProperty.deleteBackgroundFill(index, li.parentNode.children.length === 1)
     this.deleteListElement(li)
     RightCommon.toggleSidebarSection(container)
   },
@@ -135,8 +135,8 @@ export default {
     this.hideColorPicker(li.closest('form'))
   },
 
-  dragdropElement (data) {
-    RightFillProperty.sortBackgroundFill(data.from.index, data.to.index)
+  async dragdropElement (data) {
+    await RightFillProperty.sortBackgroundFill(data.from.index, data.to.index)
   },
 
   countElements (container) {

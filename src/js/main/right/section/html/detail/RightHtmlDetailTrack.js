@@ -2,10 +2,10 @@ import RightHtmlCommon from '../RightHtmlCommon.js'
 import StateSelectedElement from '../../../../../state/StateSelectedElement.js'
 
 export default {
-  setTracks (list) {
+  async setTracks (list) {
     const element = StateSelectedElement.getElement()
     const node = this.buildTracks(list.getElementsByClassName('style-html-track-element'))
-    RightHtmlCommon.setListHtmlCommand('setTracks', element, node, 'track')
+    await RightHtmlCommon.setListHtmlCommand('setTracks', element, node, 'track')
   },
 
   buildTracks (forms) {

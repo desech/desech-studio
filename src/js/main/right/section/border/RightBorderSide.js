@@ -26,15 +26,15 @@ export default {
     }
   },
 
-  changeStyleAllEvent (event) {
+  async changeStyleAllEvent (event) {
     if (event.target.classList.contains('border-width')) {
-      this.changeWidthAll(event.target)
+      await this.changeWidthAll(event.target)
     }
   },
 
-  changeStyleEachEvent (event) {
+  async changeStyleEachEvent (event) {
     if (event.target.classList.contains('border-width-each')) {
-      this.changeWidthEach(event.target)
+      await this.changeWidthEach(event.target)
     }
   },
 
@@ -52,10 +52,10 @@ export default {
     button.classList.add('selected')
   },
 
-  changeStyle (input, infix = '') {
+  async changeStyle (input, infix = '') {
     const value = InputUnitField.getValue(input)
     const properties = this.getStyleProperties(value, infix)
-    RightCommon.changeStyle(properties)
+    await RightCommon.changeStyle(properties)
   },
 
   getStyleProperties (value, infix = '') {
@@ -95,13 +95,13 @@ export default {
     return infix ? infix.substring(1) : 'all'
   },
 
-  changeWidthAll (input) {
-    this.changeStyle(input)
+  async changeWidthAll (input) {
+    await this.changeStyle(input)
   },
 
-  changeWidthEach (input) {
+  async changeWidthEach (input) {
     const infix = '-' + input.name.split('-')[1]
-    this.changeStyle(input, infix)
+    await this.changeStyle(input, infix)
   },
 
   injectSide (form, style, type = 'all') {

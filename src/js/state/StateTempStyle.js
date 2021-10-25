@@ -23,11 +23,11 @@ export default {
     element.style['transition-property'] = 'none'
   },
 
-  applyStyleValue (panelReload = false, ignoreZeroValues = false) {
+  async applyStyleValue (panelReload = false, ignoreZeroValues = false) {
     const element = StateSelectedElement.getElement()
     const style = HelperStyle.getInlineStyle(element, ignoreZeroValues)
     if (style['transition-property']) delete style['transition-property']
     HelperDOM.clearStyle(element)
-    RightCommon.changeStyle(style, panelReload)
+    await RightCommon.changeStyle(style, panelReload)
   }
 }

@@ -40,7 +40,7 @@ export default {
     CanvasElementManage.addPastedPlacement()
     CanvasElementManage.addPastedElement(element)
     const ref = HelperElement.getRef(element)
-    CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
+    await CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
@@ -54,11 +54,11 @@ export default {
     return element
   },
 
-  assignComponentHole (container) {
+  async assignComponentHole (container) {
     const ref = StateSelectedElement.getRef()
     const hole = HelperComponent.getMainHole()
     this.swapButtons(container, ref !== hole)
-    this.execAssignComponentHole(ref, hole)
+    await this.execAssignComponentHole(ref, hole)
   },
 
   swapButtons (container, same) {
@@ -67,7 +67,7 @@ export default {
     HelperDOM.toggle(buttons[1], same)
   },
 
-  execAssignComponentHole (ref, hole, execute = true) {
+  async execAssignComponentHole (ref, hole, execute = true) {
     if (ref === hole) ref = null
     const command = {
       do: {
@@ -82,6 +82,6 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   }
 }

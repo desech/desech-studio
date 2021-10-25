@@ -56,27 +56,27 @@ export default {
     }
   },
 
-  clickDeleteResponsiveEvent (event) {
+  async clickDeleteResponsiveEvent (event) {
     if (event.target.closest('.responsive-delete')) {
-      this.deleteResponsive(event.target.closest('form'))
+      await this.deleteResponsive(event.target.closest('form'))
     }
   },
 
-  changeAddResponsiveEvent (event) {
+  async changeAddResponsiveEvent (event) {
     if (event.target.classList.contains('responsive-input-add')) {
-      this.addResponsive(event.target.closest('form'))
+      await this.addResponsive(event.target.closest('form'))
     }
   },
 
-  changeEditResponsiveEvent (event) {
+  async changeEditResponsiveEvent (event) {
     if (event.target.classList.contains('responsive-input-edit')) {
-      this.editResponsive(event.target.closest('form'))
+      await this.editResponsive(event.target.closest('form'))
     }
   },
 
-  changeCanvasSizeEvent (event) {
+  async changeCanvasSizeEvent (event) {
     if (event.target.classList.contains('canvas-size-field')) {
-      this.changeCanvasSize(event.target)
+      await this.changeCanvasSize(event.target)
     }
   },
 
@@ -128,10 +128,10 @@ export default {
     HelperTrigger.triggerReload('element-overlay')
   },
 
-  addResponsive (form) {
+  async addResponsive (form) {
     const data = this.getResponsiveValue(form.elements)
     if (ExtendJS.isEmpty(data)) return
-    this.createResponsiveMode(data)
+    await this.createResponsiveMode(data)
     this.clearCreateOverlay()
   },
 
@@ -147,7 +147,7 @@ export default {
     return parseInt(value) > 0 ? { [input.name]: value } : null
   },
 
-  createResponsiveMode (responsive) {
+  async createResponsiveMode (responsive) {
     const command = {
       do: {
         command: 'addResponsive',
@@ -159,22 +159,22 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
-  editResponsive (form) {
+  async editResponsive (form) {
     const data = this.getResponsiveValue(form.elements)
     const button = form.closest('.responsive-unit').children[0]
     const previous = JSON.parse(button.dataset.data)
-    TopCommon.editResponsiveMode(data, previous)
+    await TopCommon.editResponsiveMode(data, previous)
   },
 
-  deleteResponsive (form) {
+  async deleteResponsive (form) {
     const data = this.getResponsiveValue(form.elements)
-    this.deleteResponsiveMode(data)
+    await this.deleteResponsiveMode(data)
   },
 
-  deleteResponsiveMode (responsive) {
+  async deleteResponsiveMode (responsive) {
     const command = {
       do: {
         command: 'removeResponsive',
@@ -186,13 +186,13 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
-  changeCanvasSize (input) {
+  async changeCanvasSize (input) {
     const data = HelperCanvas.getCurrentResponsiveData()
     const current = this.getCurrentCanvasSizeData(input, data)
-    TopCommon.editResponsiveMode(current, this.getPreviousData(data))
+    await TopCommon.editResponsiveMode(current, this.getPreviousData(data))
   },
 
   getCurrentCanvasSizeData (input, data) {

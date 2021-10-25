@@ -6,14 +6,13 @@ import StyleSheetSelector from '../../state/stylesheet/StyleSheetSelector.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import CanvasCommon from '../canvas/CanvasCommon.js'
-import StateSelectedElement from '../../state/StateSelectedElement.js'
 
 export default {
-  changeStyle (properties, panelReload = false, doCommand = 'changeStyle') {
+  async changeStyle (properties, panelReload = false, doCommand = 'changeStyle') {
     const selector = StyleSheetSelector.getCurrentSelector()
     const command = this.initStyleCommand(selector, doCommand)
     this.setStyleProperties(command, properties, selector)
-    this.runCommand(command, panelReload)
+    await this.runCommand(command, panelReload)
     CanvasCommon.hideElementOverlay(Object.keys(properties))
   },
 
@@ -43,11 +42,11 @@ export default {
     }
   },
 
-  runCommand (command, panelReload) {
+  async runCommand (command, panelReload) {
     if (ExtendJS.isEmpty(command.do.properties)) return
     // we don't want to wait for the stacking to take effect, so no await
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do, true, panelReload)
+    await StateCommand.executeCommand(command.do, true, panelReload)
   },
 
   processToggle (container) {

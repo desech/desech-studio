@@ -16,11 +16,11 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  keydownDeleteElementEvent (event) {
+  async keydownDeleteElementEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
       (event.key.toLowerCase() === 'delete' || event.key.toLowerCase() === 'backspace')) {
-      CanvasElementManage.deleteElement()
+      await CanvasElementManage.deleteElement()
     }
   },
 

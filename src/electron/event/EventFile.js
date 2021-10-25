@@ -9,6 +9,7 @@ import ParseHtml from '../file/parse/ParseHtml.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import Font from '../lib/Font.js'
 import FileManage from '../file/FileManage.js'
+import FileComponent from '../file/FileComponent.js'
 
 export default {
   addEvents () {
@@ -24,6 +25,7 @@ export default {
     this.rendererSaveCurrentFileEvent()
     this.rendererAddFontEvent()
     this.rendererCopySvgCodeEvent()
+    this.rendererSaveComponentDataEvent()
   },
 
   rendererGetFolderEvent () {
@@ -95,6 +97,12 @@ export default {
   rendererCopySvgCodeEvent () {
     ipcMain.handle('rendererCopySvgCode', async (event, file) => {
       return await EventMain.handleEvent(this, 'copySvgCode', file)
+    })
+  },
+
+  rendererSaveComponentDataEvent () {
+    ipcMain.handle('rendererSaveComponentData', async (event, file, data) => {
+      return await EventMain.handleEvent(FileComponent, 'saveComponentData', file, data)
     })
   },
 

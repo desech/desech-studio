@@ -18,15 +18,15 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickAddElementEvent (event) {
+  async clickAddElementEvent (event) {
     if (event.target.closest('.add-effect-button')) {
-      this.addElement(event.target.closest('.add-effect-button'))
+      await this.addElement(event.target.closest('.add-effect-button'))
     }
   },
 
-  clickDeleteElementEvent (event) {
+  async clickDeleteElementEvent (event) {
     if (event.target.closest('.delete-effect-button')) {
-      this.deleteElement(event.target.closest('li'))
+      await this.deleteElement(event.target.closest('li'))
       // don't let the edit button trigger
       event.preventDefault()
     }
@@ -38,20 +38,20 @@ export default {
     }
   },
 
-  dragdropbeforeElementEvent (event) {
+  async dragdropbeforeElementEvent (event) {
     if (event.target.classList.contains('effect-list')) {
-      this.dragdropElement(event.detail)
+      await this.dragdropElement(event.detail)
     }
   },
 
-  addElement (button) {
+  async addElement (button) {
     const def = this.getDefaultEffectOnCreate()
     if (!def) return
     const section = button.closest('form')
     const list = section.getElementsByClassName(`effect-list-${def.property}`)[0]
     this.addElementLi(list, def.property, def.value)
     this.showEffectForm(section, def.property, def.value)
-    RightEffectType.setEffect(section, def.property, def.value)
+    await RightEffectType.setEffect(section, def.property, def.value)
     RightCommon.toggleSidebarSection(section)
   },
 
@@ -126,16 +126,12 @@ export default {
     return HelperDOM.getElementIndex(elem)
   },
 
-  deleteElement (li) {
+  async deleteElement (li) {
     const container = li.closest('.sidebar-section')
-    this.deleteEffect(li)
+    const index = HelperDOM.getElementIndex(li)
+    await RightEffectType.deleteEffect(li.dataset.type, index)
     this.deleteListElement(li)
     RightCommon.toggleSidebarSection(container)
-  },
-
-  deleteEffect (li) {
-    const index = HelperDOM.getElementIndex(li)
-    RightEffectType.deleteEffect(li.dataset.type, index)
   },
 
   deleteListElement (li) {
@@ -165,9 +161,9 @@ export default {
     this.hideEffectForm(li.closest('#effect-section'))
   },
 
-  dragdropElement (data) {
+  async dragdropElement (data) {
     const li = data.from.element
-    RightEffectType.sortEffects(li.dataset.type, data.from.index, data.to.index)
+    await RightEffectType.sortEffects(li.dataset.type, data.from.index, data.to.index)
   },
 
   injectList (section) {

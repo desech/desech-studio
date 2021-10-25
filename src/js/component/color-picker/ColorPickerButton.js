@@ -21,23 +21,23 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickButtonEvent (event) {
+  async clickButtonEvent (event) {
     const query = '.color-button-wrapper:not([data-no-interact]) .color-button-main'
     if (event.target.closest(query)) {
-      this.toggleButton(event.target.closest('.color-button-wrapper'))
+      await this.toggleButton(event.target.closest('.color-button-wrapper'))
     }
   },
 
-  changeSelectColorEvent () {
+  async changeSelectColorEvent () {
     const query = '.color-button-wrapper:not([data-no-interact]) .color-button-select'
     if (event.target.closest(query)) {
-      this.setSelectColor(event.target.closest('.color-button-wrapper'))
+      await this.setSelectColor(event.target.closest('.color-button-wrapper'))
     }
   },
 
-  colorChangeColorEvent (event) {
+  async colorChangeColorEvent (event) {
     if (event.target.closest('.color-button-wrapper:not([data-no-interact]) .color-picker')) {
-      this.changeColor(event.target.closest('.color-button-wrapper'), event.detail)
+      await this.changeColor(event.target.closest('.color-button-wrapper'), event.detail)
     }
   },
 
@@ -63,23 +63,23 @@ export default {
     }
   },
 
-  toggleButton (container) {
+  async toggleButton (container) {
     const nodes = this.getNodes(container)
     if (!nodes.buttonMain.classList.contains('active')) {
-      this.showColorPicker(nodes, nodes.select.value !== 'choose')
+      await this.showColorPicker(nodes, nodes.select.value !== 'choose')
     } else {
       this.hideColorPicker(nodes)
     }
   },
 
-  showColorPicker (nodes, update) {
+  async showColorPicker (nodes, update) {
     nodes.buttonMain.classList.add('active')
     const colorPicker = this.buildColorPicker(nodes.pickerContainer)
     const color = nodes.button.style.backgroundColor
     this.injectColorInPicker(colorPicker, color)
     if (update) {
       nodes.select.value = 'choose'
-      RightCommon.changeStyle({ [nodes.property]: color })
+      await RightCommon.changeStyle({ [nodes.property]: color })
     }
   },
 
@@ -102,20 +102,20 @@ export default {
     HelperDOM.deleteChildren(nodes.pickerContainer)
   },
 
-  setSelectColor (container) {
+  async setSelectColor (container) {
     const nodes = this.getNodes(container)
     if (nodes.select.value === 'choose') {
-      this.showColorPicker(nodes, true)
+      await this.showColorPicker(nodes, true)
     } else {
-      RightCommon.changeStyle({ [nodes.property]: nodes.select.value })
+      await RightCommon.changeStyle({ [nodes.property]: nodes.select.value })
       this.hideColorPicker(nodes)
     }
   },
 
-  changeColor (container, options = {}) {
+  async changeColor (container, options = {}) {
     const nodes = this.getNodes(container)
     const color = ColorPicker.getColorPickerValue(nodes.picker)
     nodes.button.style.backgroundColor = color
-    ColorPickerCommon.setColor({ [nodes.property]: color }, options)
+    await ColorPickerCommon.setColor({ [nodes.property]: color }, options)
   }
 }

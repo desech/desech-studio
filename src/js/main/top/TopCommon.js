@@ -66,7 +66,7 @@ export default {
     return Math.round((canvas.offsetLeft + canvas.offsetWidth) * zoom) + 'px'
   },
 
-  editResponsiveMode (current, previous) {
+  async editResponsiveMode (current, previous) {
     const command = {
       do: {
         command: 'changeResponsive',
@@ -80,7 +80,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do)
   },
 
   getResponsiveModes () {

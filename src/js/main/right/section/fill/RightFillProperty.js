@@ -26,20 +26,20 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changecolorEvent (event) {
+  async changecolorEvent (event) {
     if (event.target.closest('.background-fill-container .color-picker')) {
-      this.updateBackgroundImage(event.target.closest('form.slide-container'), event.detail)
+      const container = event.target.closest('form.slide-container')
+      await this.updateBackgroundImage(container, event.detail)
     }
   },
 
-  updateBackgroundImage (form, options = {}) {
+  async updateBackgroundImage (form, options = {}) {
     const main = form.closest('#fill-section')
     const elem = RightFillCommon.getActiveElement(main)
     const index = HelperDOM.getElementIndex(elem)
     const value = this.getBackgroundValue(form)
-    ColorPickerCommon.setColor({
-      'background-image': this.replaceBackgroundAtIndex(value, index)
-    }, options)
+    const bgImage = this.replaceBackgroundAtIndex(value, index)
+    await ColorPickerCommon.setColor({ 'background-image': bgImage }, options)
     RightFillCommon.setElementData(elem, value)
   },
 
@@ -113,7 +113,7 @@ export default {
     }, true)
   },
 
-  deleteBackgroundFill (index, clear) {
+  async deleteBackgroundFill (index, clear) {
     const properties = RightFillCommon.getAllBlankProperties()
     const selector = StyleSheetSelector.getCurrentSelector()
     if (!clear) {
@@ -121,7 +121,7 @@ export default {
         properties[name] = this.removeBackgroundProperty(name, selector, index)
       }
     }
-    RightCommon.changeStyle(properties)
+    await RightCommon.changeStyle(properties)
   },
 
   removeBackgroundProperty (property, selector, index) {
@@ -136,7 +136,7 @@ export default {
       : StateStyleSheet.getPropertyValue(property, selector).split(',')
   },
 
-  sortBackgroundFill (from, to) {
+  async sortBackgroundFill (from, to) {
     const properties = {}
     const selector = StyleSheetSelector.getCurrentSelector()
     const props = ['image', 'size', 'position', 'repeat', 'attachment', 'origin', 'blend-mode']
@@ -144,7 +144,7 @@ export default {
       properties['background-' + property] = this.replaceBackgroundProperty('background-' +
         property, selector, from, to)
     }
-    RightCommon.changeStyle(properties)
+    await RightCommon.changeStyle(properties)
   },
 
   replaceBackgroundProperty (property, selector, from, to) {

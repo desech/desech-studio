@@ -19,7 +19,7 @@ export default {
   },
 
   getHtmlForTag (type, selection, ref) {
-    let attributes = `class="element inline ${ref}"`
+    let attributes = `class="${ref} element inline"`
     if (type === 'a') attributes += ' href=""'
     return `<${type} ${attributes}>${selection}</${type}>`
   },

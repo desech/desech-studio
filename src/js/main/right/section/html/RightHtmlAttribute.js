@@ -22,15 +22,15 @@ export default {
     }
   },
 
-  clickDeleteAttributeEvent (event) {
+  async clickDeleteAttributeEvent (event) {
     if (event.target.closest('.style-html-attr-delete')) {
-      this.deleteAttribute(event.target.closest('li'))
+      await this.deleteAttribute(event.target.closest('li'))
     }
   },
 
-  changeEditAttributeEvent (event) {
+  async changeEditAttributeEvent (event) {
     if (event.target.classList.contains('style-html-attr-field')) {
-      this.editAttribute(event.target.closest('form'))
+      await this.editAttribute(event.target.closest('form'))
     }
   },
 
@@ -88,18 +88,18 @@ export default {
     input.focus()
   },
 
-  deleteAttribute (li) {
+  async deleteAttribute (li) {
     const form = li.getElementsByClassName('style-html-element-form')[0]
-    this.deleteAttributeCommand(form.elements.name.value)
+    await this.deleteAttributeCommand(form.elements.name.value)
     li.remove()
   },
 
-  editAttribute (form) {
+  async editAttribute (form) {
     const name = form.elements.name.value
     const value = form.elements.value.value
     const valid = this.validateAttrName(form.elements.name)
     if (name && valid) {
-      this.saveAttributeCommand(name, value)
+      await this.saveAttributeCommand(name, value)
       form.elements.name.setAttributeNS(null, 'disabled', '')
     }
   },
@@ -125,16 +125,14 @@ export default {
     name.reportValidity()
   },
 
-  saveAttributeCommand (name, value) {
+  async saveAttributeCommand (name, value) {
     const ref = StateSelectedElement.getRef()
-    RightHtmlCommon.changeAttributeCommand(ref, {
-      // when the value is empty then we set a boolean value
-      [name]: value || true
-    })
+    // when the value is empty then we set a boolean value
+    await RightHtmlCommon.changeAttributeCommand(ref, { [name]: value || true })
   },
 
-  deleteAttributeCommand (name) {
+  async deleteAttributeCommand (name) {
     const ref = StateSelectedElement.getRef()
-    RightHtmlCommon.changeAttributeCommand(ref, { [name]: null })
+    await RightHtmlCommon.changeAttributeCommand(ref, { [name]: null })
   }
 }

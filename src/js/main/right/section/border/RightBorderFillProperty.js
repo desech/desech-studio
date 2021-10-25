@@ -25,25 +25,25 @@ export default {
     }
   },
 
-  changeBorderStyleEvent (event) {
+  async changeBorderStyleEvent (event) {
     if (event.target.classList.contains('border-style-select')) {
-      this.changeBorderStyle(event.target)
+      await this.changeBorderStyle(event.target)
     }
   },
 
-  changeFill (picker, options = {}) {
+  async changeFill (picker, options = {}) {
     const value = ColorPicker.getColorPickerValue(picker)
     const container = picker.closest('#border-section')
     this.updatePreviewSwatch(container, value)
-    this.updateFill(container, value, options)
+    await this.updateFill(container, value, options)
   },
 
-  updateFill (container, value, options = {}) {
+  async updateFill (container, value, options = {}) {
     const type = container.getElementsByClassName('border-details-container')[0].dataset.type
     const properties = this.getBorderFillProperties(type, value)
     // we don't use the properties when we apply the temporary style,
     // we take them from style, directly
-    ColorPickerCommon.setColor(properties, options)
+    await ColorPickerCommon.setColor(properties, options)
   },
 
   updatePreviewSwatch (container, fill) {
@@ -86,10 +86,10 @@ export default {
     }
   },
 
-  changeBorderStyle (select) {
+  async changeBorderStyle (select) {
     const type = select.closest('.border-fill-container').dataset.type
     const properties = this.getBorderFillPropertiesByName(type, select.value, 'style')
-    RightCommon.changeStyle(properties)
+    await RightCommon.changeStyle(properties)
   },
 
   injectColor (container, borderType) {

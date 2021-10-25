@@ -22,21 +22,21 @@ export default {
     element.setAttributeNS(null, 'data-ss-token', tokens)
   },
 
-  addRemoveElementCommand (ref, doCommand, undoCommand, execute = true) {
+  async addRemoveElementCommand (ref, doCommand, undoCommand, execute = true) {
     const command = {
       do: { command: doCommand, ref },
       undo: { command: undoCommand, ref }
     }
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
-  tokenCommand (token, command, execute = true) {
+  async tokenCommand (token, command, execute = true) {
     const action = {
       do: { command, token },
       undo: { command, token }
     }
     StateCommand.stackCommand(action)
-    if (execute) StateCommand.executeCommand(action.do)
+    if (execute) await StateCommand.executeCommand(action.do)
   }
 }

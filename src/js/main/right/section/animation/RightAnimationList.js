@@ -20,15 +20,15 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickAddElementEvent (event) {
+  async clickAddElementEvent (event) {
     if (event.target.closest('.add-animation-button')) {
-      this.addElement(event.target.closest('.add-animation-button'))
+      await this.addElement(event.target.closest('.add-animation-button'))
     }
   },
 
-  clickDeleteElementEvent (event) {
+  async clickDeleteElementEvent (event) {
     if (event.target.closest('.delete-animation-button')) {
-      this.deleteElement(event.target.closest('li'))
+      await this.deleteElement(event.target.closest('li'))
       // don't let the edit button trigger
       event.preventDefault()
     }
@@ -52,18 +52,18 @@ export default {
     }
   },
 
-  dragdropbeforeElementEvent (event) {
+  async dragdropbeforeElementEvent (event) {
     if (event.target.classList.contains('animation-list')) {
-      this.dragdropElement(event.detail)
+      await this.dragdropElement(event.detail)
     }
   },
 
-  addElement (button) {
+  async addElement (button) {
     const section = button.closest('form')
     const list = section.getElementsByClassName('animation-list')[0]
     this.addElementLi(list)
     this.showAnimationForm(section)
-    RightAnimationForm.setAnimation(section)
+    await RightAnimationForm.setAnimation(section)
     RightCommon.toggleSidebarSection(section)
   },
 
@@ -130,16 +130,12 @@ export default {
     return HelperDOM.getElementIndex(elem)
   },
 
-  deleteElement (li) {
+  async deleteElement (li) {
     const container = li.closest('.sidebar-section')
-    this.deleteAnimation(li)
+    const index = HelperDOM.getElementIndex(li)
+    await RightAnimationForm.deleteAnimation(index)
     this.deleteListElement(li)
     RightCommon.toggleSidebarSection(container)
-  },
-
-  deleteAnimation (li) {
-    const index = HelperDOM.getElementIndex(li)
-    RightAnimationForm.deleteAnimation(index)
   },
 
   deleteListElement (li) {
@@ -184,8 +180,8 @@ export default {
     HelperDOM.show(container.children[0])
   },
 
-  dragdropElement (data) {
-    RightAnimationForm.sortAnimations(data.from.index, data.to.index)
+  async dragdropElement (data) {
+    await RightAnimationForm.sortAnimations(data.from.index, data.to.index)
   },
 
   injectPlayButtons (section) {

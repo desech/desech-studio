@@ -24,19 +24,19 @@ export default {
     }
   },
 
-  changeSetFontEvent (event) {
+  async changeSetFontEvent (event) {
     if (event.target.classList.contains('font-family')) {
-      this.setFont(event.target)
+      await this.setFont(event.target)
     }
   },
 
-  setFont (select) {
+  async setFont (select) {
     const option = select.selectedOptions[0]
     if (option.classList.contains('font-family-add-font')) {
       this.installFont(select.value, option.dataset.url || null)
       select.value = ''
     } else {
-      RightCommon.changeStyle({ 'font-family': select.value })
+      await RightCommon.changeStyle({ 'font-family': select.value })
     }
   },
 

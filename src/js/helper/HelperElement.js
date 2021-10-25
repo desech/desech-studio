@@ -29,6 +29,13 @@ export default {
     return refs[refs.length - 1]
   },
 
+  removeComponentRef (element) {
+    const refs = this.getAllRefs(element)
+    if (refs.length > 1) {
+      element.classList.remove(refs[0])
+    }
+  },
+
   getElement (ref) {
     const canvas = HelperCanvas.getCanvas()
     const nodes = canvas.getElementsByClassName(ref)

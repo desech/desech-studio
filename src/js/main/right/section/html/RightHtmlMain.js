@@ -21,15 +21,15 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeTagEvent (event) {
+  async changeTagEvent (event) {
     if (event.target.classList.contains('style-tag-dropdown')) {
-      this.setTagFromSelect(event.target)
+      await this.setTagFromSelect(event.target)
     }
   },
 
-  changeCustomTagEvent (event) {
+  async changeCustomTagEvent (event) {
     if (event.target.classList.contains('style-tag-custom')) {
-      this.setTagFromInput(event.target)
+      await this.setTagFromInput(event.target)
     }
   },
 
@@ -39,9 +39,9 @@ export default {
     }
   },
 
-  clickAssignComponentHoleEvent (event) {
+  async clickAssignComponentHoleEvent (event) {
     if (event.target.closest('.style-html-component-hole')) {
-      CanvasElementComponent.assignComponentHole(event.target.closest('form'))
+      await CanvasElementComponent.assignComponentHole(event.target.closest('form'))
     }
   },
 
@@ -57,9 +57,9 @@ export default {
     }
   },
 
-  clickDeleteElementEvent (event) {
+  async clickDeleteElementEvent (event) {
     if (event.target.closest('.style-html-delete')) {
-      CanvasElementManage.deleteElement()
+      await CanvasElementManage.deleteElement()
     }
   },
 
@@ -123,22 +123,23 @@ export default {
     CanvasElementComponent.swapButtons(container, same)
   },
 
-  setTagFromSelect (select) {
+  async setTagFromSelect (select) {
     if (select.value === 'custom') {
       this.showCustomTagInput(select.parentNode, select.nextElementSibling)
     } else if (select.value) {
-      this.setDropdownTag(select.parentNode, select.nextElementSibling, select.value)
+      await this.setDropdownTag(select.parentNode, select.nextElementSibling, select.value)
     }
   },
 
-  setDropdownTag (container, input, tag) {
+  async setDropdownTag (container, input, tag) {
     this.hideCustomTagInput(container, input)
-    this.changeTag(tag)
+    await this.changeTag(tag)
     HelperTrigger.triggerReload('html-section')
   },
 
-  changeTag (tag) {
-    RightHtmlCommon.changeTagCommand(StateSelectedElement.getRef(), tag)
+  async changeTag (tag) {
+    const ref = StateSelectedElement.getRef()
+    await RightHtmlCommon.changeTagCommand(ref, tag)
   },
 
   showCustomTagInput (container, input) {
@@ -152,9 +153,9 @@ export default {
     HelperDOM.hide(input)
   },
 
-  setTagFromInput (input) {
+  async setTagFromInput (input) {
     if (!input.value) return
-    this.changeTag(input.value.toLowerCase())
+    await this.changeTag(input.value.toLowerCase())
     HelperTrigger.triggerReload('html-section')
   },
 

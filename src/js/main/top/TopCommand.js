@@ -23,31 +23,31 @@ export default {
     }
   },
 
-  keydownUndoEvent (event) {
+  async keydownUndoEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'z' && HelperEvent.isCtrlCmd(event) && !event.shiftKey &&
       !event.altKey) {
-      this.undo()
+      await this.undo()
     }
   },
 
-  clickUndoEvent (event) {
+  async clickUndoEvent (event) {
     if (event.target.closest('#undo-button')) {
-      this.undo()
+      await this.undo()
     }
   },
 
-  keydownRedoEvent (event) {
+  async keydownRedoEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
-      event.key.toLowerCase() === 'z' && HelperEvent.isCtrlCmd(event) &&
-      event.shiftKey && !event.altKey) {
-      this.redo()
+      event.key.toLowerCase() === 'z' && HelperEvent.isCtrlCmd(event) && event.shiftKey &&
+      !event.altKey) {
+      await this.redo()
     }
   },
 
-  clickRedoEvent (event) {
+  async clickRedoEvent (event) {
     if (event.target.closest('#redo-button')) {
-      this.redo()
+      await this.redo()
     }
   },
 
@@ -153,27 +153,27 @@ export default {
     }
   },
 
-  undo () {
+  async undo () {
     // push the command that's in the stack, waiting to be dispatched
     StateCommand.forcePushCommand()
     const current = this.getCurrentCommand()
     if (!current.previousElementSibling) return
-    this.goToCommand(current, current.previousElementSibling, 'undo')
+    await this.goToCommand(current, current.previousElementSibling, 'undo')
   },
 
-  redo () {
+  async redo () {
     // push the command that's in the stack, waiting to be dispatched
     StateCommand.forcePushCommand()
     const current = this.getCurrentCommand()
     if (!current.nextElementSibling) return
-    this.goToCommand(current, current.nextElementSibling, 'do')
+    await this.goToCommand(current, current.nextElementSibling, 'do')
   },
 
-  goToCommand (current, other, dataType) {
+  async goToCommand (current, other, dataType) {
     this.setCurrentCommand(other)
     const data = JSON.parse(dataType === 'undo' ? current.dataset.data : other.dataset.data)
     // we do want to reload the side panel
-    StateCommand.executeCommand(data[dataType], true, true)
+    await StateCommand.executeCommand(data[dataType], true, true)
     this.updateButtonStates()
   }
 }

@@ -20,39 +20,39 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeOutsetEvent (event) {
+  async changeOutsetEvent (event) {
     if (event.target.classList.contains('border-image-outset')) {
-      this.inputOutset(event.target)
+      await this.inputOutset(event.target)
     }
   },
 
-  changeSliceEvent (event) {
+  async changeSliceEvent (event) {
     if (event.target.classList.contains('border-image-slice')) {
-      this.inputSlice(event.target)
+      await this.inputSlice(event.target)
     }
   },
 
-  clickSliceFillEvent (event) {
+  async clickSliceFillEvent (event) {
     if (event.target.closest('.border-slice-fill-button')) {
-      this.clickSliceFill(event.target.closest('.border-slice-fill-button'))
+      await this.clickSliceFill(event.target.closest('.border-slice-fill-button'))
     }
   },
 
-  changeRepeatEvent (event) {
+  async changeRepeatEvent (event) {
     if (event.target.classList.contains('border-image-repeat')) {
-      this.changeRepeat(event.target.closest('form').elements)
+      await this.changeRepeat(event.target.closest('form').elements)
     }
   },
 
-  setsourceImageEvent (event) {
+  async setsourceImageEvent (event) {
     if (event.target.closest('.border-fill-container #picker-source-image')) {
-      this.setImageSource(event.target, event.detail)
+      await this.setImageSource(event.target, event.detail)
     }
   },
 
-  inputOutset (input) {
+  async inputOutset (input) {
     const fullValue = StateStyleSheet.getPropertyValue('border-image-outset')
-    RightCommon.changeStyle({
+    await RightCommon.changeStyle({
       'border-image-outset': this.getInput4SidesValue(input, fullValue)
     })
   },
@@ -63,11 +63,11 @@ export default {
     return HelperStyle.set4SidesValue(type, value, fullValue)
   },
 
-  inputSlice (input) {
+  async inputSlice (input) {
     const fullValue = StateStyleSheet.getPropertyValue('border-image-slice')
     const allSides = this.getInput4SidesValue(input, this.removeFill(fullValue))
     const value = allSides + (this.hasFill(fullValue) ? ' fill' : '')
-    RightCommon.changeStyle({ 'border-image-slice': value })
+    await RightCommon.changeStyle({ 'border-image-slice': value })
   },
 
   removeFill (value) {
@@ -78,27 +78,27 @@ export default {
     return value.includes('fill')
   },
 
-  clickSliceFill (button) {
+  async clickSliceFill (button) {
     const value = this.removeFill(StateStyleSheet.getPropertyValue('border-image-slice'))
     const finalValue = button.classList.contains('selected') ? value + ' fill' : value
-    RightCommon.changeStyle({ 'border-image-slice': finalValue })
+    await RightCommon.changeStyle({ 'border-image-slice': finalValue })
   },
 
-  changeRepeat (fields) {
+  async changeRepeat (fields) {
     let value = (fields.repeat1.value || 'stretch') + ' ' +
       (fields.repeat2.value || 'stretch')
     for (const check of ['inherit', 'initial', 'unset']) {
       if (value.includes(check)) value = check
     }
-    RightCommon.changeStyle({ 'border-image-repeat': value })
+    await RightCommon.changeStyle({ 'border-image-repeat': value })
   },
 
-  setImageSource (button, file) {
+  async setImageSource (button, file) {
     file = encodeURI(file)
     ColorPickerGradient.setBackgroundImageSource(button.closest('.fill-image'), file)
     const background = `url("${file}")`
     RightBorderFillProperty.updatePreviewSwatch(button.closest('#border-section'), background)
-    RightCommon.changeStyle({ 'border-image-source': background })
+    await RightCommon.changeStyle({ 'border-image-source': background })
   },
 
   injectBorderImage (container) {

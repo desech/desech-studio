@@ -16,26 +16,28 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeEffectTypeEvent (event) {
+  async changeEffectTypeEvent (event) {
     if (event.target.closest('.effect-form-container .effect-type')) {
-      this.changeEffectType(event.target)
+      await this.changeEffectType(event.target)
     }
   },
 
-  changeEffectType (select) {
+  async changeEffectType (select) {
     const property = select.selectedOptions[0].dataset.type
     const container = select.closest('#effect-section')
-    if (this.validateGeneralValue(container, property, select.value)) return
+    if (await this.validateGeneralValue(container, property, select.value)) {
+      return
+    }
     RightEffectType.moveEffect(container, property)
     this.addMain(select.closest('form'), property, select.value)
-    RightEffectType.setEffect(container, property, select.value)
+    await RightEffectType.setEffect(container, property, select.value)
   },
 
-  validateGeneralValue (container, property, value) {
+  async validateGeneralValue (container, property, value) {
     const values = RightEffectCommon.getGeneralValues()
     if (!values.includes(value)) return
     this.cleanForGeneralValue(container, property, value)
-    RightCommon.changeStyle({ [property]: value })
+    await RightCommon.changeStyle({ [property]: value })
     return true
   },
 

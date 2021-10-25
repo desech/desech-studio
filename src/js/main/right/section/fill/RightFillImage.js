@@ -21,39 +21,39 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeSizeLengthEvent (event) {
+  async changeSizeLengthEvent (event) {
     if (event.target.classList.contains('background-image-size-length')) {
-      this.setBackgroundSize(event.target.closest('form'))
+      await this.setBackgroundSize(event.target.closest('form'))
     }
   },
 
-  changePositionEvent (event) {
+  async changePositionEvent (event) {
     if (event.target.classList.contains('background-image-position')) {
-      this.setBackgroundPosition(event.target.closest('form'))
+      await this.setBackgroundPosition(event.target.closest('form'))
     }
   },
 
-  changeSizeEvent (event) {
+  async changeSizeEvent (event) {
     if (event.target.classList.contains('background-image-size')) {
-      this.changeSize(event.target)
+      await this.changeSize(event.target)
     }
   },
 
-  changeSelectEvent (event) {
+  async changeSelectEvent (event) {
     if (event.target.classList.contains('background-image-select')) {
-      this.changeSelect(event.target)
+      await this.changeSelect(event.target)
     }
   },
 
-  setsourceImageEvent (event) {
+  async setsourceImageEvent (event) {
     if (event.target.closest('.background-fill-container #picker-source-image')) {
-      this.setImageSource(event.target, event.detail)
+      await this.setImageSource(event.target, event.detail)
     }
   },
 
-  changeSize (select) {
+  async changeSize (select) {
     this.toggleSizeLength(select)
-    this.setBackgroundSize(select.closest('form'))
+    await this.setBackgroundSize(select.closest('form'))
   },
 
   toggleSizeLength (select) {
@@ -61,10 +61,10 @@ export default {
     HelperDOM.toggle(container, select.value === 'length')
   },
 
-  setBackgroundSize (form) {
+  async setBackgroundSize (form) {
     const value = this.getBackgroundSize(form.elements)
     const index = RightFillCommon.getActiveElementIndex(form.closest('#fill-section'))
-    this.setBackgroundProperty('background-size', index, value)
+    await this.setBackgroundProperty('background-size', index, value)
   },
 
   getBackgroundSize (fields) {
@@ -79,21 +79,21 @@ export default {
     return (value1 + ' ' + value2).trim()
   },
 
-  setBackgroundProperty (property, index, value) {
+  async setBackgroundProperty (property, index, value) {
     value = value || HelperStyle.getDefaultProperty(property)
     const fullValue = RightFillProperty.replaceBackgroundPropertyAtIndex(property, index, value)
-    RightCommon.changeStyle({ [property]: fullValue })
+    await RightCommon.changeStyle({ [property]: fullValue })
   },
 
-  setBackgroundPosition (form) {
+  async setBackgroundPosition (form) {
     const value = this.getDoubleFields(form.elements.x, form.elements.y)
     const index = RightFillCommon.getActiveElementIndex(form.closest('#fill-section'))
-    this.setBackgroundProperty('background-position', index, value)
+    await this.setBackgroundProperty('background-position', index, value)
   },
 
-  changeSelect (select) {
+  async changeSelect (select) {
     const index = RightFillCommon.getActiveElementIndex(select.closest('#fill-section'))
-    this.setBackgroundProperty(select.dataset.type, index, select.value)
+    await this.setBackgroundProperty(select.dataset.type, index, select.value)
   },
 
   incrementBackgroundProperties () {
@@ -104,10 +104,10 @@ export default {
     }
   },
 
-  setImageSource (button, file) {
+  async setImageSource (button, file) {
     file = encodeURI(file)
     ColorPickerGradient.setBackgroundImageSource(button.closest('.fill-image'), file)
-    RightFillProperty.updateBackgroundImage(button.closest('form.slide-container'))
+    await RightFillProperty.updateBackgroundImage(button.closest('form.slide-container'))
   },
 
   injectBackgroundImage (container, elemIndex) {

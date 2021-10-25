@@ -17,14 +17,14 @@ import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperStyle from '../../../helper/HelperStyle.js'
 
 export default {
-  deleteElement () {
+  async deleteElement () {
     const ref = StateSelectedElement.getRef()
     const element = StateSelectedElement.getElement()
     if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
       return
     }
     CanvasElementSelect.deselectElement() // this first, before operation
-    CanvasElement.addRemoveElementCommand(ref, 'removeElement', 'addElement')
+    await CanvasElement.addRemoveElementCommand(ref, 'removeElement', 'addElement')
   },
 
   async copyElement () {
@@ -45,7 +45,7 @@ export default {
     CanvasElement.appendToken(element, token)
     await this.copyElementData(element, 'cut')
     CanvasElementSelect.deselectElement() // this first, before operation
-    CanvasElement.tokenCommand(token, 'cutElement')
+    await CanvasElement.tokenCommand(token, 'cutElement')
   },
 
   async pasteElement () {
@@ -54,7 +54,7 @@ export default {
     const newElement = this.createElementFromData(data.element)
     if (!this.addPastedPlacement()) return
     this.addPastedElement(newElement)
-    this.pasteExecute(newElement, data.element)
+    await this.pasteExecute(newElement, data.element)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
@@ -70,7 +70,7 @@ export default {
     if (!this.addPastedPlacement('bottom')) return
     this.addPastedElement(newElement)
     const ref = HelperElement.getRef(newElement)
-    CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
+    await CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
     CanvasElementSelect.selectElement(newElement)
   },
@@ -200,13 +200,13 @@ export default {
     if (!HelperElement.isHidden(element)) HelperDOM.show(element)
   },
 
-  pasteExecute (element, data) {
+  async pasteExecute (element, data) {
     if (data.action === 'copy') {
       const ref = HelperElement.getRef(element)
-      CanvasElement.addRemoveElementCommand(ref, 'pasteElement', 'removeElement', false)
+      await CanvasElement.addRemoveElementCommand(ref, 'pasteElement', 'removeElement', false)
     } else { // cut
       const token = data.attributes['data-ss-token']
-      CanvasElement.tokenCommand(token, 'pasteCutElement', false)
+      await CanvasElement.tokenCommand(token, 'pasteCutElement', false)
       this.clearClipboard()
     }
   },
@@ -300,7 +300,7 @@ export default {
     if (!ref) return
     const data = await this.getPastedData()
     if (!data.attributes && !data.style) return
-    this.pasteAllCommand(ref, data)
+    await this.pasteAllCommand(ref, data)
     HelperTrigger.triggerReload('right-panel-style')
   },
 
@@ -309,7 +309,7 @@ export default {
     return string ? ExtendJS.parseJsonNoError(string) : {}
   },
 
-  pasteAllCommand (ref, data, execute = true) {
+  async pasteAllCommand (ref, data, execute = true) {
     const command = {
       do: {
         command: 'pasteElementData',
@@ -323,7 +323,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
   getCurrentData (ref, pastedData) {
@@ -349,7 +349,7 @@ export default {
     const properties = await this.copySelector()
     if (!properties) return
     const empty = StyleSheetProperties.getEmptyProperties(properties)
-    RightCommon.changeStyle(empty, true, 'cutStyle')
+    await RightCommon.changeStyle(empty, true, 'cutStyle')
   },
 
   async pasteSelector () {
@@ -359,7 +359,7 @@ export default {
     const data = await this.getPastedData()
     if (!data.selector) return
     const properties = this.joinProperties(data.selector.properties)
-    RightCommon.changeStyle(properties, true, 'pasteStyle')
+    await RightCommon.changeStyle(properties, true, 'pasteStyle')
   },
 
   joinProperties (pastedProperties) {

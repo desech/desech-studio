@@ -67,11 +67,11 @@ export default {
     return this.pushCommand()
   },
 
-  executeCommand (data, overlayReload = true, panelReload = false) {
+  async executeCommand (data, overlayReload = true, panelReload = false) {
     if (typeof StateCommandExec[data.command] !== 'function') {
       throw new Error(`Unknown command "${data.command}"`)
     }
-    StateCommandExec[data.command](data)
+    await StateCommandExec[data.command](data)
     if (overlayReload) this.reloadContainers(panelReload)
   },
 

@@ -127,8 +127,9 @@ export default {
     if (file.type === 'file' && file.extension === 'html' && !isPathComponent) {
       await this.managePageDelete(file.path, root)
     } else if (file.type === 'file' && file.extension === 'html' && isPathComponent) {
-      // we don't want to remove all component references because when we will implement undo
-      // then how will we know where to add those references back?
+      // @todo remove all component references and store them in localstore so we can undo
+      // right now when you load a page with a missing component, it will remove it and after
+      // it is saved, then the component will be completely removed
     } else if (file.type === 'file') {
       // do nothing
     } else {

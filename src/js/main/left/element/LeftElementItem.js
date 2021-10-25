@@ -53,9 +53,9 @@ export default {
     }
   },
 
-  dragdropbeforeSortItemEvent (event) {
+  async dragdropbeforeSortItemEvent (event) {
     if (event.target.classList.contains('panel-element-list')) {
-      this.sortItem(event.detail)
+      await this.sortItem(event.detail)
     }
   },
 
@@ -65,10 +65,10 @@ export default {
     CanvasElementSelect.selectElement(element)
   },
 
-  sortItem (data) {
+  async sortItem (data) {
     this.placeItem(data.to.element.dataset.ref, data.direction)
     const currentElement = HelperElement.getElement(data.from.element.dataset.ref)
-    CanvasElementMove.moveElementInCanvas(currentElement)
+    await CanvasElementMove.moveElementInCanvas(currentElement)
   },
 
   placeItem (ref, direction) {

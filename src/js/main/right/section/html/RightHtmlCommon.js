@@ -17,13 +17,13 @@ export default {
     }
   },
 
-  changeAttributeCommand (ref, attributes, execute = true) {
+  async changeAttributeCommand (ref, attributes, execute = true) {
     const command = this.initAttributeCommand(ref)
     const element = HelperElement.getElement(ref)
     if (!element) return
     this.setAttributes(command, element, attributes)
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
   initAttributeCommand (ref) {
@@ -57,10 +57,10 @@ export default {
     }
   },
 
-  setListHtmlCommand (commandName, element, list, type, execute = true) {
+  async setListHtmlCommand (commandName, element, list, type, execute = true) {
     const command = this.initSetListHtmlCommand(commandName, element, list, type)
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
   initSetListHtmlCommand (command, element, list, type) {
@@ -81,10 +81,10 @@ export default {
     }
   },
 
-  setSvgCommand (currentNode, newNode, execute = true) {
+  async setSvgCommand (currentNode, newNode, execute = true) {
     const command = this.initSetSvgCommand(currentNode, newNode)
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
   initSetSvgCommand (currentNode, newNode) {
@@ -168,7 +168,7 @@ export default {
     ]
   },
 
-  changeTagCommand (ref, tag, execute = true) {
+  async changeTagCommand (ref, tag, execute = true) {
     const element = HelperElement.getElement(ref)
     const command = 'changeTag'
     const cmd = {
@@ -176,6 +176,6 @@ export default {
       undo: { command, ref, tag: HelperElement.getTag(element) }
     }
     StateCommand.stackCommand(cmd)
-    if (execute) StateCommand.executeCommand(cmd.do)
+    if (execute) await StateCommand.executeCommand(cmd.do)
   }
 }

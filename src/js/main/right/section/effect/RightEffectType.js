@@ -34,22 +34,22 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickEffectFieldsEvent (event) {
+  async clickEffectFieldsEvent (event) {
     if (event.target.closest('.effect-form-container .effect-button')) {
-      this.changeEffectFields(event.target.closest('#effect-section'))
+      await this.changeEffectFields(event.target.closest('#effect-section'))
     }
   },
 
-  changeEffectFieldsEvent (event) {
+  async changeEffectFieldsEvent (event) {
     if (event.target.closest('.effect-form-container .effect-field') ||
       event.target.closest('.effect-form-container .timing-field')) {
-      this.changeEffectFields(event.target.closest('#effect-section'))
+      await this.changeEffectFields(event.target.closest('#effect-section'))
     }
   },
 
-  colorchangeShadowEvent (event) {
+  async colorchangeShadowEvent (event) {
     if (event.target.closest('.effect-form-container .color-picker')) {
-      this.changeShadowColor(event.target, event.detail)
+      await this.changeShadowColor(event.target, event.detail)
     }
   },
 
@@ -65,12 +65,12 @@ export default {
     this.getModule(type).injectData(template, value, subtype)
   },
 
-  setEffect (section, type, subtype) {
+  async setEffect (section, type, subtype) {
     const current = RightEffectCommon.getActiveElement(section)
     const value = this.getModule(type).getDisplayedValue(section, subtype)
     const data = this.getModule(type).parseCSS(value)[0]
     this.setElementData(current, type, subtype, data)
-    RightCommon.changeStyle(this.getProperty(type, current, value))
+    await RightCommon.changeStyle(this.getProperty(type, current, value))
   },
 
   getDelimiter (type) {
@@ -92,9 +92,9 @@ export default {
     return results
   },
 
-  changeEffectFields (section) {
+  async changeEffectFields (section) {
     const [type, subtype] = this.getSectionTypes(section)
-    this.setEffect(section, type, subtype)
+    await this.setEffect(section, type, subtype)
   },
 
   getSectionTypes (section) {
@@ -112,18 +112,18 @@ export default {
     }
   },
 
-  changeShadowColor (container, options = {}) {
+  async changeShadowColor (container, options = {}) {
     const section = container.closest('#effect-section')
     const [type, subtype] = this.getSectionTypes(section)
     const value = this.getModule(type).getDisplayedValue(section, subtype)
     const data = this.getModule(type).parseCSS(value)[0]
     const current = RightEffectCommon.getActiveElement(section)
     this.setElementData(current, type, subtype, data)
-    ColorPickerCommon.setColor(this.getProperty(type, current, value), options)
+    await ColorPickerCommon.setColor(this.getProperty(type, current, value), options)
   },
 
-  deleteEffect (property, index) {
-    RightCommon.changeStyle({
+  async deleteEffect (property, index) {
+    await RightCommon.changeStyle({
       [property]: this.removeEffectAtIndex(property, index)
     })
   },
@@ -134,8 +134,8 @@ export default {
     return values.join(this.getDelimiter(type))
   },
 
-  sortEffects (property, from, to) {
-    RightCommon.changeStyle({
+  async sortEffects (property, from, to) {
+    await RightCommon.changeStyle({
       [property]: this.replaceEffectAtIndex(property, from, to)
     })
   },

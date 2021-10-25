@@ -20,8 +20,8 @@ export default {
   getEvents () {
     return {
       dblclick: ['dblclickStartEditEvent', 'dblclickSelectWordEvent'],
-      mousedown: ['mousedownEndEditEvent'],
-      keydown: ['keydownEndEditEvent', 'keydownNewLineEvent', 'keydownButtonSpaceEvent',
+      mousedown: ['mousedownFinishEditEvent'],
+      keydown: ['keydownFinishEditEvent', 'keydownNewLineEvent', 'keydownButtonSpaceEvent',
         'keydownFormatTextEvent'],
       keyup: ['keyupUpdateOverlayEvent'],
       paste: ['pasteTextEvent'],
@@ -43,16 +43,16 @@ export default {
     }
   },
 
-  mousedownEndEditEvent (event) {
+  async mousedownFinishEditEvent (event) {
     if (HelperCanvas.getOperation() === 'editing' &&
       !event.target.closest('.element.editable') && !event.target.closest('#text-overlay')) {
-      this.cancelEditText()
+      await this.finishEditText()
     }
   },
 
-  keydownEndEditEvent () {
+  async keydownFinishEditEvent () {
     if (event.key && HelperCanvas.getOperation() === 'editing' && event.key === 'Escape') {
-      this.cancelEditText()
+      await this.finishEditText()
     }
   },
 
@@ -149,9 +149,9 @@ export default {
     this._startHeight = pos.height
   },
 
-  cancelEditText () {
+  async finishEditText () {
     const element = StateSelectedElement.getElement()
-    this.addUndoCommand(element)
+    await this.addUndoCommand(element)
     this.cancelElementEditable(element)
     HelperCanvas.deleteCanvasData('operation')
     CanvasOverlay.setOverlayEditing()
@@ -159,12 +159,31 @@ export default {
     CanvasTextOverlay.clearOverlay()
   },
 
-  addUndoCommand (element) {
-    if (this._textChanged) this.changeTextCommand(element)
+  async addUndoCommand (element) {
+    // we are changing the text twice, but we need the execution to update component overrides
+    if (this._textChanged) {
+      if (HelperComponent.isComponent(element) || HelperComponent.isComponentElement(element)) {
+        this.updateHtmlNodesForComponent(element.children)
+      }
+      await this.changeTextCommand(element)
+    }
     delete element.dataset.textId
   },
 
-  changeTextCommand (element, execute = false) {
+  // make sure we have component-element and the second ref class
+  updateHtmlNodesForComponent (nodes) {
+    for (const node of nodes) {
+      if (!node.classList.contains('component-element')) {
+        node.classList.add('component-element')
+      }
+      if (HelperElement.getAllRefs(node).length === 1) {
+        HelperDOM.prependClass(node, HelperElement.generateElementRef())
+      }
+      if (node.children) this.updateHtmlNodesForComponent(node.children)
+    }
+  },
+
+  async changeTextCommand (element, execute = true) {
     const ref = HelperElement.getRef(element)
     const command = {
       do: {
@@ -179,7 +198,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    if (execute) StateCommand.executeCommand(command.do)
+    if (execute) await StateCommand.executeCommand(command.do)
   },
 
   cancelElementEditable (element) {

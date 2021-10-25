@@ -52,24 +52,24 @@ export default {
     }
   },
 
-  mousemoveCreateResizeBlockEvent (event) {
+  async mousemoveCreateResizeBlockEvent (event) {
     if (this._start && !this._create && event.buttons) {
       if (!this._moving) {
         this._moving = this.hasMoved(event.clientX, event.clientY)
       }
       if (this._moving) {
-        this.createResizeBlock(event.clientX, event.clientY)
+        await this.createResizeBlock(event.clientX, event.clientY)
       }
       // the resize event will be handled by CanvasOverlayResize after init
     }
   },
 
   // this can create a normal/resizing block or a regular element
-  clickCreateElementEvent (event) {
+  async clickCreateElementEvent (event) {
     this.reset()
     if (!this._create && event.target.closest('#canvas') && HelperProject.getFile() &&
       HelperCanvas.isCreateTool()) {
-      this.createElement(HelperCanvas.getTool())
+      await this.createElement(HelperCanvas.getTool())
       // stop reaching the selection logic, because it will deselect the element
       event.preventDefault()
     }
@@ -91,9 +91,9 @@ export default {
     return (diffX > delta || diffY > delta)
   },
 
-  createResizeBlock (clientX, clientY) {
+  async createResizeBlock (clientX, clientY) {
     this._create = true
-    const element = this.createElement('block')
+    const element = await this.createElement('block')
     this.setBlockDimensions(element, clientX, clientY)
     const resizeButton = document.querySelector('#element-overlay .resize-se')
     CanvasOverlayResize.prepareResize(resizeButton, clientX, clientY)
@@ -209,12 +209,12 @@ export default {
     }
   },
 
-  createElement (type) {
+  async createElement (type) {
     const element = this.getElementTemplate(type)
     const ref = HelperElement.getRef(element)
     this.createElementForPlacement(element)
     StateStyleSheet.initElementStyle(ref)
-    CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
+    await CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
     this.finishCreateElement(element)
     return element
   },

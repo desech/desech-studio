@@ -1,14 +1,13 @@
 import RightHtmlCommon from '../RightHtmlCommon.js'
 import StateSelectedElement from '../../../../../state/StateSelectedElement.js'
-import HelperElement from '../../../../../helper/HelperElement.js'
 import HelperDOM from '../../../../../helper/HelperDOM.js'
 
 export default {
-  setOptions (list) {
+  async setOptions (list) {
     const type = list.closest('.style-html-options').dataset.type
     const select = this.buildSelectOptions(list.getElementsByClassName('style-html-li-form'))
     const element = StateSelectedElement.getElement()
-    RightHtmlCommon.setListHtmlCommand('setOptions', element, select, type)
+    await RightHtmlCommon.setListHtmlCommand('setOptions', element, select, type)
   },
 
   buildSelectOptions (forms) {

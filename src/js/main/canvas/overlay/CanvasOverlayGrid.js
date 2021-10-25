@@ -34,15 +34,16 @@ export default {
     }
   },
 
-  clickAddCellEvent (event) {
+  async clickAddCellEvent (event) {
     if (event.target.closest('.track-add-cell')) {
-      CanvasOverlayGridTrack.addCell(event.target.closest('.track-add-cell').dataset.type)
+      await CanvasOverlayGridTrack.addCell(event.target.closest('.track-add-cell').dataset.type)
     }
   },
 
-  clickDeleteCellEvent (event) {
+  async clickDeleteCellEvent (event) {
     if (event.target.closest('.track-cell-delete')) {
-      CanvasOverlayGridTrack.deleteCell(event.target.closest('.track-cell-options').dataset.index)
+      const index = event.target.closest('.track-cell-options').dataset.index
+      await CanvasOverlayGridTrack.deleteCell(index)
     }
   },
 

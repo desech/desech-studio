@@ -18,23 +18,23 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  changeCreatePropertyEvent (event) {
+  async changeCreatePropertyEvent (event) {
     if (event.target.classList.contains('add-css-dropdown')) {
-      this.createProperty(event.target)
+      await this.createProperty(event.target)
     }
   },
 
-  clickDeletePropertyEvent (event) {
+  async clickDeletePropertyEvent (event) {
     if (event.target.closest('.style-css-delete-button')) {
-      this.deleteProperty(event.target.closest('li'))
+      await this.deleteProperty(event.target.closest('li'))
     }
   },
 
-  createProperty (createSelect) {
+  async createProperty (createSelect) {
     const element = this.addPropertyToList(createSelect)
     createSelect.value = ''
     const field = element.getElementsByClassName('style-css-field')[0]
-    RightCSSProperty.setPropertyStyle(field)
+    await RightCSSProperty.setPropertyStyle(field)
     RightCommon.toggleSidebarSection(createSelect.closest('.sidebar-section'))
   },
 
@@ -113,9 +113,9 @@ export default {
     if (data.value) field.value = data.value
   },
 
-  deleteProperty (element) {
+  async deleteProperty (element) {
     const field = element.getElementsByClassName('style-css-field')[0]
-    RightCSSProperty.removePropertyStyle(field.name)
+    await RightCSSProperty.removePropertyStyle(field.name)
     const section = element.closest('.sidebar-section')
     element.remove()
     RightCommon.toggleSidebarSection(section)

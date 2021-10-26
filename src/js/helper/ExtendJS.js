@@ -62,6 +62,10 @@ export default {
     return !obj || (Object.keys(obj).length === 0 && obj.constructor === Object)
   },
 
+  objectsEqual (obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2)
+  },
+
   arraysEqual (a, b) {
     if (a === b) return true
     if (a == null || b == null) return false

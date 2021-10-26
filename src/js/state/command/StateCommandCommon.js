@@ -5,7 +5,6 @@ import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StyleSheetCommon from '../stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../StateStyleSheet.js'
-import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   addSelectorLinkClass (selector) {
@@ -74,46 +73,5 @@ export default {
       const sheet = StateStyleSheet.getCreateSelectorSheet(selector)
       StyleSheetCommon.addRemoveRules(sheet, selector, rules)
     }
-  },
-
-  async overrideComponent (element, type, value) {
-    if (HelperComponent.isComponent(element) || HelperComponent.isComponentElement(element)) {
-      const component = element.closest('[data-ss-component]')
-      const data = this.getOverrideData(component, element, type, value)
-      HelperComponent.setInstanceData(component, data)
-      await this.saveComponentMainData(data)
-    }
-  },
-
-  getOverrideData (component, element, type, value) {
-    const data = HelperComponent.getInstanceData(component)
-    const ref = HelperElement.getStyleRef(element)
-    if (!data.overrides) data.overrides = {}
-    if (!data.overrides[ref]) data.overrides[ref] = {}
-    if (type === 'inner') value = this.cleanComponentInner(value)
-    data.overrides[ref][type] = value
-    return data
-  },
-
-  cleanComponentInner (inner) {
-    const container = document.createElement('div')
-    container.innerHTML = inner
-    this.cleanComponentInnerNode(container)
-    return container.innerHTML
-  },
-
-  cleanComponentInnerNode (node) {
-    if (node.classList.contains('component-element')) {
-      node.classList.remove('component-element')
-    }
-    HelperElement.removeComponentRef(node)
-    for (const child of node.children) {
-      this.cleanComponentInnerNode(child)
-    }
-  },
-
-  async saveComponentMainData (data) {
-    const mainData = { overrides: data.overrides }
-    await window.electron.invoke('rendererSaveComponentData', data.file, mainData)
   }
 }

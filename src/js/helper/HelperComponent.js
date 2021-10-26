@@ -19,13 +19,19 @@ export default {
       this.isComponentElement(element)
   },
 
-  getInstanceData (element) {
+  getComponentData (element) {
     const data = element.dataset.ssComponent
     return data ? JSON.parse(data) : null
   },
 
+  setComponentData (element, data) {
+    if (data) {
+      element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    }
+  },
+
   getInstanceFile (element) {
-    const data = this.getInstanceData(element)
+    const data = this.getComponentData(element)
     return data ? data.file : null
   },
 
@@ -36,12 +42,8 @@ export default {
   },
 
   getInstanceProperties (element) {
-    const data = this.getInstanceData(element)
+    const data = this.getComponentData(element)
     return data ? data.properties : null
-  },
-
-  setInstanceData (element, data) {
-    element.dataset.ssComponent = data ? JSON.stringify(data) : ''
   },
 
   getMainData () {

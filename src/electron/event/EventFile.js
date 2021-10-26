@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 import fs from 'fs'
+import { JSDOM } from 'jsdom'
 import EventMain from './EventMain.js'
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
@@ -9,10 +10,11 @@ import ParseHtml from '../file/parse/ParseHtml.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import Font from '../lib/Font.js'
 import FileManage from '../file/FileManage.js'
-import FileComponent from '../file/FileComponent.js'
+import HelperComponent from '../../js/helper/HelperComponent.js'
 
 export default {
   addEvents () {
+    this.rendererGetFileContentsEvent()
     this.rendererGetFolderEvent()
     this.rendererMoveToFolderEvent()
     this.rendererCreateFolderEvent()
@@ -24,8 +26,13 @@ export default {
     this.rendererParseComponentFileEvent()
     this.rendererSaveCurrentFileEvent()
     this.rendererAddFontEvent()
-    this.rendererCopySvgCodeEvent()
     this.rendererSaveComponentDataEvent()
+  },
+
+  rendererGetFileContentsEvent () {
+    ipcMain.handle('rendererGetFileContents', async (event, file) => {
+      return await EventMain.handleEvent(this, 'getFileContents', file)
+    })
   },
 
   rendererGetFolderEvent () {
@@ -94,16 +101,14 @@ export default {
     })
   },
 
-  rendererCopySvgCodeEvent () {
-    ipcMain.handle('rendererCopySvgCode', async (event, file) => {
-      return await EventMain.handleEvent(this, 'copySvgCode', file)
+  rendererSaveComponentDataEvent () {
+    ipcMain.handle('rendererSaveComponentData', async (event, file, data) => {
+      return await EventMain.handleEvent(this, 'saveComponentData', file, data)
     })
   },
 
-  rendererSaveComponentDataEvent () {
-    ipcMain.handle('rendererSaveComponentData', async (event, file, data) => {
-      return await EventMain.handleEvent(FileComponent, 'saveComponentData', file, data)
-    })
+  getFileContents (file) {
+    return fs.readFileSync(file).toString()
   },
 
   async getFolder () {
@@ -136,7 +141,11 @@ export default {
     await File.sendToTrash(file)
   },
 
-  copySvgCode (file) {
-    return fs.readFileSync(file).toString()
+  saveComponentData (file, data) {
+    const html = fs.readFileSync(file).toString()
+    const dom = new JSDOM(html)
+    const root = dom.window.document.body.children[0]
+    HelperComponent.setComponentData(root, data)
+    fs.writeFileSync(file, root.outerHTML)
   }
 }

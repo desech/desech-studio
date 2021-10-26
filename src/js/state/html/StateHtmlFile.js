@@ -70,7 +70,7 @@ export default {
   },
 
   setComponentInstanceData (div, root) {
-    const data = HelperComponent.getInstanceData(root)
+    const data = HelperComponent.getComponentData(root)
     data.file = HelperFile.getRelPath(data.file)
     if (data.main) delete data.main
     div.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
@@ -98,12 +98,14 @@ export default {
       const [file, scaling] = set.split(' ')
       values.push(HelperFile.getRelPath(file) + ' ' + scaling)
     }
-    node.srcset = values.join(', ')
+    node.setAttributeNS(null, 'srcset', values.join(', '))
   },
 
   setRelativeSourceAttr (node, attr) {
     const source = node.getAttributeNS(null, attr)
-    node[attr] = HelperFile.getRelPath(source)
+    if (!source) return
+    const rel = HelperFile.getRelPath(source)
+    node.setAttributeNS(null, attr, rel)
   },
 
   setBasic (node) {
@@ -123,7 +125,6 @@ export default {
 
   cleanAttributes (node) {
     for (const attr of node.attributes) {
-      if (attr.name === 'data-ss-hidden') node.setAttributeNS(null, 'hidden', '')
       if (this.getRemovedAttributes().includes(attr.name)) {
         node.removeAttributeNS(null, attr.name)
       }
@@ -135,12 +136,12 @@ export default {
     return ['data-ss-tag', 'data-ss-hidden', 'data-ss-component', 'data-ss-token']
   },
 
-  cleanClasses (node) {
+  cleanClasses (node, checkComponent = true) {
     const cls = node.getAttributeNS(null, 'class')
     if (!cls) return
     const array = []
     for (let val of cls.split(' ')) {
-      if (val.includes('_ss_') && !this.componentExists(val) &&
+      if (checkComponent && val.includes('_ss_') && !this.componentExists(val) &&
         !this.componentNotDesignSystem(val)) {
         continue
       }
@@ -163,13 +164,15 @@ export default {
     for (const val of this._css.componentCss) {
       if (!val[0]) continue
       const selector = val[0].selector.replace('.', '._ss_')
-      if (HelperStyle.extractClassSelector(selector) === cls) return true
+      if (HelperStyle.extractClassSelector(selector) === cls) {
+        return true
+      }
     }
     return false
   },
 
   componentNotDesignSystem (cls) {
-    if (!this._designSystemClasses) return
+    if (!this._designSystemClasses) return false
     for (const designClass of this._designSystemClasses) {
       if (designClass === cls.replace('_ss_', '')) return true
     }

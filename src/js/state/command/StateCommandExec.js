@@ -11,6 +11,7 @@ import ExtendJS from '../../helper/ExtendJS.js'
 import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperComponent from '../../helper/HelperComponent.js'
+import StateCommandComponent from './StateCommandComponent.js'
 
 export default {
   addElement (data) {
@@ -120,17 +121,18 @@ export default {
   async changeText (data) {
     const element = HelperElement.getElement(data.ref)
     element.innerHTML = HelperLocalStore.getItem(data.textId)
-    await StateCommandCommon.overrideComponent(element, 'inner', element.innerHTML)
+    await StateCommandComponent.overrideComponent(element, 'inner', element.innerHTML)
   },
 
-  changeAttribute (data) {
+  async changeAttribute (data) {
     const element = HelperElement.getElement(data.ref)
     for (const [name, value] of Object.entries(data.attributes)) {
       StateCommandCommon.setElementAttribute(element, name, value)
     }
+    await StateCommandComponent.overrideComponent(element, 'attributes', data.attributes)
   },
 
-  changeTag (data) {
+  async changeTag (data) {
     let element = HelperElement.getElement(data.ref)
     if (HelperElement.isNormalTag(data.tag)) {
       element = HelperDOM.changeTag(element, data.tag, document)
@@ -139,22 +141,26 @@ export default {
       element = HelperDOM.changeTag(element, 'div', document)
       element.setAttributeNS(null, 'data-ss-tag', data.tag)
     }
+    await StateCommandComponent.overrideComponent(element, 'tag', data.tag)
   },
 
-  setOptions (data) {
-    const node = HelperElement.getElement(data.ref)
-    node.innerHTML = data.html
-  },
-
-  setTracks (data) {
+  async setOptions (data) {
     const element = HelperElement.getElement(data.ref)
     element.innerHTML = data.html
+    await StateCommandComponent.overrideComponent(element, 'inner', data.html)
   },
 
-  changeSvg (data) {
+  async setTracks (data) {
+    await this.setOptions(data)
+  },
+
+  async changeSvg (data) {
     const element = HelperElement.getElement(data.ref)
     element.setAttributeNS(null, 'viewBox', data.viewBox)
+    await StateCommandComponent.overrideComponent(element, 'attributes',
+      { viewBox: data.viewBox })
     element.innerHTML = data.inner
+    await StateCommandComponent.overrideComponent(element, 'inner', data.inner)
   },
 
   changeProperties (data) {
@@ -168,13 +174,13 @@ export default {
 
   changeComponentProperties (data) {
     const element = HelperElement.getElement(data.ref)
-    const componentData = HelperComponent.getInstanceData(element)
+    const componentData = HelperComponent.getComponentData(element)
     if (ExtendJS.isEmpty(data.properties)) {
       delete componentData.properties
     } else {
       componentData.properties = data.properties
     }
-    HelperComponent.setInstanceData(element, componentData)
+    HelperComponent.setComponentData(element, componentData)
   },
 
   addResponsive (data) {

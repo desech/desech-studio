@@ -175,6 +175,7 @@ export default {
     if (node?.tagName !== 'svg' || node.getElementsByTagName('parsererror').length) {
       throw new Error('Invalid SVG')
     }
+    return node
   },
 
   async getSvgFromString (string, viewbox) {

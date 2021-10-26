@@ -218,7 +218,7 @@ export default {
   },
 
   async copySvgCode (item) {
-    const code = await window.electron.invoke('rendererCopySvgCode', item.dataset.ref)
+    const code = await window.electron.invoke('rendererGetFileContents', item.dataset.ref)
     await navigator.clipboard.writeText(code)
   }
 }

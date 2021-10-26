@@ -102,7 +102,7 @@ export default {
   processComponentAttribute (element, attrs, action) {
     // on copy regenerate the component ref
     if (action === 'copy' && HelperComponent.isComponent(element)) {
-      const data = HelperComponent.getInstanceData(element)
+      const data = HelperComponent.getComponentData(element)
       data.ref = HelperElement.generateElementRef()
       attrs['data-ss-component'] = JSON.stringify(data)
     }
@@ -184,10 +184,11 @@ export default {
   },
 
   addGeneralPastedPlacement (element) {
+    const isComponent = HelperComponent.isComponent(element)
     const hole = HelperComponent.getInstanceHole(element)
-    if (HelperComponent.isComponent(element) && hole) {
+    if (isComponent && hole) {
       hole.classList.add('placement', 'inside')
-    } else if (HelperElement.isContainer(element)) {
+    } else if (HelperElement.isContainer(element) && !isComponent) {
       element.classList.add('placement', 'inside')
     } else {
       element.classList.add('placement', 'bottom')

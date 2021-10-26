@@ -8,7 +8,8 @@ export default {
     await Log.info('Migrating to version 1.2.8')
     await ProjectCommon.updateHtmlFiles(folder, async (file, html) => {
       await Log.info(`Migrating file ${file}`)
-      html = html.replace(/data-element-properties="{(.*?)}"/g, 'data-ss-properties="{$1}"')
+      html = html.replace('<body>', '<body class="e000body">')
+        .replace(/data-element-properties="{(.*?)}"/g, 'data-ss-properties="{$1}"')
         .replace(/class="component-children/g, 'data-ss-component-hole="" class="block')
       return this.replaceComponent(html)
     })

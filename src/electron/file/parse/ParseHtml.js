@@ -18,13 +18,15 @@ export default {
     this.debugMsg('\n\nParsing started')
     this.init(document, file, folder, options)
     const body = this.getBody(document.body)
-    const componentData = this.extractComponentData(body)
-    const componentLevel = options.newComponent ? 1 : 0
-    if (body) this.prepareElement(body, componentLevel)
+    const component = {
+      data: this.extractComponentData(body),
+      level: options.newComponent ? 1 : 0
+    }
+    if (body) this.prepareElement(body, component)
     return {
       canvas: this.returnBody(body) || null,
       meta: this.returnMeta() || null,
-      component: componentData || null
+      component: component.data || null
     }
   },
 
@@ -63,46 +65,48 @@ export default {
     }
   },
 
-  prepareElement (node, componentLevel = 0, componentChildren = null) {
+  prepareElement (node, component) {
     const tag = HelperDOM.getTag(node)
     const mappedTag = this.getMappedTag(tag)
+    const ref = HelperElement.getRef(node)
     if (tag === 'body') {
       this.setBody(node)
     } else if (node.classList.contains('component')) {
-      this.setComponent(node, componentLevel)
+      this.setComponent(node, component)
     } else if (mappedTag) {
-      this.setBasic(node, mappedTag, componentLevel)
+      this.setBasic(node, mappedTag, component)
     } else if (tag === 'input') {
-      this.setInputElement(node, componentLevel)
+      this.setInputElement(node, component)
+    } else if (tag === 'select' || tag === 'datalist') {
+      this.setDropdownElement(node, tag, component, ref)
+    } else if (tag === 'svg') {
+      this.setIconElement(node, component, ref)
     } else if (tag === 'img') {
-      this.setImageElement(node, componentLevel)
+      this.setImageElement(node, component)
     } else if (tag === 'video' || tag === 'audio') {
-      this.setMediaElement(node, tag, componentLevel)
+      this.setMediaElement(node, tag, component, ref)
     } else if (node.classList.contains('text')) {
-      this.setTagElement(node, 'text', 'p', componentLevel)
+      this.setTextElement(node, component, ref)
     } else if (node.classList.contains('block')) {
-      this.setTagElement(node, 'block', 'div', componentLevel, componentChildren)
+      this.setTagElement(node, 'block', 'div', component)
     } else if (this.isInlineElement(node)) {
       // inline check is done at the end
-      this.setInlineElement(node, componentLevel)
+      this.setInlineElement(node, component)
     }
   },
 
-  prepareChildren (children, componentLevel, componentChildren = null) {
+  prepareChildren (children, component) {
     for (const node of children) {
-      this.prepareElement(node, componentLevel, componentChildren)
+      this.prepareElement(node, component)
     }
   },
 
   getMappedTag (tag) {
     const map = {
-      svg: 'icon',
       iframe: 'iframe',
       object: 'object',
       canvas: 'canvas',
       textarea: 'textarea',
-      select: 'dropdown',
-      datalist: 'datalist',
       progress: 'progress',
       meter: 'meter'
     }
@@ -114,22 +118,22 @@ export default {
     this.cleanClasses(body)
     body.classList.add('element')
     body.classList.add('body')
-    // @todo this is temporary for older projects; remove it later
-    if (!body.classList.contains('e000body')) body.classList.add('e000body')
-    if (body.children.length) this.prepareChildren(body.children)
+    if (body.children.length) this.prepareChildren(body.children, null)
   },
 
-  setComponent (node, componentLevel) {
-    const data = HelperComponent.getInstanceData(node)
+  setComponent (node, component) {
+    const data = HelperComponent.getComponentData(node)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
     const html = this.getHtmlFromFile(data.file)
     const element = this._document.createRange().createContextualFragment(html).children[0]
     this.mergeComponentData(element, data)
-    this.debugComponent(node, componentLevel)
-    componentLevel = this.adjustComponentLevel('component', componentLevel)
-    this.prepareElement(element, componentLevel, node.innerHTML)
+    this.debugComponent(node, component)
+    const children = node.innerHTML
+    // we need the replace before the prepare because the tag change will overwrite the node
     node.replaceWith(element)
+    const level = this.adjustComponentLevel('component', component?.level)
+    this.prepareElement(element, { data, level, children })
   },
 
   /**
@@ -147,6 +151,7 @@ export default {
    *    so the root element is level 1 while the children are level 2
    */
   adjustComponentLevel (type, level) {
+    if (!level) level = 0
     switch (type) {
       case 'component':
         return (level === 0 || level === 2) ? level + 1 : level
@@ -157,9 +162,10 @@ export default {
     }
   },
 
-  addComponentClasses (node, componentLevel) {
+  addComponentClasses (node, component) {
     // level 0 and 1 are regular elements, while level 2 and 3 are component elements
-    if ((componentLevel === 2 && !HelperComponent.isComponentHole(node)) || componentLevel > 2) {
+    if ((component?.level === 2 && !HelperComponent.isComponentHole(node)) ||
+      component?.level > 2) {
       node.classList.add('component-element')
     }
     // we need unique refs for each component element to be able to select them
@@ -170,29 +176,29 @@ export default {
       HelperComponent.isComponentHole(node)) || this._options.newComponent) {
       HelperDOM.prependClass(node, HelperElement.generateElementRef())
     }
-    this.debugNode(node, componentLevel)
+    this.debugNode(node, component)
   },
 
-  debugNode (node, componentLevel) {
+  debugNode (node, component) {
     if (!this._debug) return
-    const tab = (' ').repeat(componentLevel)
+    const tab = (' ').repeat(component?.level)
     const ref = HelperElement.getRef(node)
     if (HelperComponent.isComponent(node) && HelperComponent.isComponentHole(node)) {
-      console.info(tab, 'component root and hole', ref, componentLevel)
+      console.info(tab, 'component root and hole', ref, component?.level)
     } else if (HelperComponent.isComponent(node)) {
-      console.info(tab, 'component root', ref, componentLevel)
+      console.info(tab, 'component root', ref, component?.level)
     } else if (HelperComponent.isComponentHole(node)) {
-      console.info(tab, 'component hole', ref, componentLevel)
+      console.info(tab, 'component hole', ref, component?.level)
     } else { // element
-      console.info(tab, HelperElement.getType(node), ref, componentLevel)
+      console.info(tab, HelperElement.getType(node), ref, component?.level)
     }
   },
 
-  debugComponent (node, componentLevel) {
+  debugComponent (node, component) {
     if (!this._debug) return
-    const tab = (' ').repeat(componentLevel)
+    const tab = (' ').repeat(component.level)
     const file = HelperComponent.getInstanceFile(node).replace('.html', '')
-    console.info(tab, file, componentLevel)
+    console.info(tab, file, component.level)
   },
 
   debugMsg (msg) {
@@ -204,8 +210,9 @@ export default {
   },
 
   mergeComponentData (element, data) {
-    data.main = element.dataset.ssComponent
-    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    const main = HelperComponent.getComponentData(element)
+    if (main) data.main = main
+    HelperComponent.setComponentData(element, data)
   },
 
   errorEscapeHtml (text) {
@@ -255,15 +262,44 @@ export default {
     return (cls === 'block' || cls === 'text' || cls.startsWith('e0'))
   },
 
-  setBasic (node, type, componentLevel) {
+  setBasic (node, type, component) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
+    this.setOverrideAttributes(node, component)
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
     this.addCanvasClasses(node, type)
-    this.addComponentClasses(node, componentLevel)
+    this.addComponentClasses(node, component)
+  },
+
+  setOverrideAttributes (node, component) {
+    const ref = HelperElement.getRef(node)
+    if (component?.data?.overrides && component.data.overrides[ref]?.attributes) {
+      for (const [name, obj] of Object.entries(component.data.overrides[ref].attributes)) {
+        this.setOverrideAttribute(name, obj, node)
+      }
+    }
+  },
+
+  setOverrideAttribute (name, obj, node) {
+    if (obj.delete) {
+      node.removeAttributeNS(null, name)
+    } else {
+      const val = this.setAbsoluteUrlAttribute(name, obj.value)
+      node.setAttributeNS(null, name, val)
+    }
+  },
+
+  setAbsoluteUrlAttribute (name, value) {
+    if (['src', 'poster', 'data'].includes(name)) {
+      return File.resolve(this._folder, value)
+    } else if (name === 'srcset') {
+      return this.fixSrcSet(value)
+    } else {
+      return value
+    }
   },
 
   addCanvasClasses (node, type) {
@@ -273,17 +309,32 @@ export default {
     }
   },
 
-  setImageElement (node, componentLevel) {
-    // only the folder needs to be encoded because the images are saved as encoded in the html
-    const srcset = node.getAttributeNS(null, 'srcset')
-      .replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(this._folder)}/$3$4`)
-    node.setAttributeNS(null, 'srcset', srcset)
-    this.setBasic(node, 'image', componentLevel)
+  setIconElement (node, component, ref) {
+    this.setComponentInner(node, component, ref)
+    this.setBasic(node, 'icon', component)
   },
 
-  setMediaElement (node, tag, componentLevel) {
-    this.setBasic(node, tag, componentLevel)
+  setImageElement (node, component) {
+    const srcset = this.fixSrcSet(node.getAttributeNS(null, 'srcset'))
+    node.setAttributeNS(null, 'srcset', srcset)
+    this.setBasic(node, 'image', component)
+  },
+
+  fixSrcSet (value) {
+    // only the folder needs to be encoded because the images are saved as encoded in the html
+    return value.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(this._folder)}/$3$4`)
+  },
+
+  setMediaElement (node, tag, component, ref) {
+    this.setComponentInner(node, component, ref)
+    this.setBasic(node, tag, component)
     this.setTrackSource(node)
+  },
+
+  setComponentInner (node, component, ref) {
+    if (component?.data?.overrides && component.data.overrides[ref]?.inner) {
+      node.innerHTML = component.data.overrides[ref].inner
+    }
   },
 
   setTrackSource (node) {
@@ -292,14 +343,20 @@ export default {
     }
   },
 
-  setInputElement (node, componentLevel) {
+  setInputElement (node, component) {
     if (['range', 'color', 'file'].includes(node.type)) {
-      this.setBasic(node, node.type, componentLevel)
+      this.setBasic(node, node.type, component)
     } else if (node.type === 'checkbox' || node.type === 'radio') {
-      this.setBasic(node, 'checkbox', componentLevel)
+      this.setBasic(node, 'checkbox', component)
     } else {
-      this.setBasic(node, 'input', componentLevel)
+      this.setBasic(node, 'input', component)
     }
+  },
+
+  setDropdownElement (node, tag, component, ref) {
+    this.setComponentInner(node, component, ref)
+    const cls = (tag === 'select') ? 'dropdown' : tag
+    this.setBasic(node, cls, component)
   },
 
   isInlineElement (node) {
@@ -313,35 +370,58 @@ export default {
       'cite|dfn|samp|data|code|var|kbd|bdo|bdi|ruby|rt|rb)'
   },
 
-  setInlineElement (node, componentLevel) {
-    this.setBasic(node, 'inline', componentLevel)
-    if (node.children.length) this.prepareChildren(node.children, componentLevel)
+  setTextElement (node, component, ref) {
+    this.setComponentInner(node, component, ref)
+    this.setTagElement(node, 'text', 'p', component)
   },
 
-  setTagElement (node, type, tag, componentLevel, componentChildren = null) {
-    this.setBasic(node, type, componentLevel)
-    node = this.changeNodeSpecialTag(node)
-    this.setElementChildren(node, componentLevel, componentChildren)
-  },
-
-  setElementChildren (node, componentLevel, componentChildren) {
-    const children = HelperDOM.getChildren(node)
-    if (children) {
-      componentLevel = this.adjustComponentLevel('element', componentLevel)
-      this.prepareChildren(children, componentLevel, componentChildren)
-    } else if (componentChildren && HelperComponent.isComponentHole(node)) {
-      node.innerHTML = componentChildren
-      componentLevel = this.adjustComponentLevel('component-hole', componentLevel)
-      this.prepareChildren(node.children, componentLevel)
+  setInlineElement (node, component) {
+    this.setBasic(node, 'inline', component)
+    if (node.children.length) {
+      this.prepareChildren(node.children, component)
     }
   },
 
-  changeNodeSpecialTag (node) {
-    const tag = HelperDOM.getTag(node)
+  setTagElement (node, type, tag, component) {
+    node = this.processNodeTag(node, component)
+    this.setBasic(node, type, component)
+    this.setElementChildren(node, component)
+  },
+
+  processNodeTag (node, component) {
+    const ref = HelperElement.getRef(node)
+    let tag = HelperDOM.getTag(node)
+    if (component?.data?.overrides && component.data.overrides[ref]?.tag) {
+      tag = component.data.overrides[ref].tag
+      if (HelperElement.isNormalTag(tag)) {
+        node = HelperDOM.changeTag(node, tag, this._document)
+      }
+    }
+    node = this.changeNodeSpecialTag(node, tag)
+    return node
+  },
+
+  changeNodeSpecialTag (node, tag) {
     if (HelperElement.isNormalTag(tag)) return node
     node = HelperDOM.changeTag(node, 'div', this._document)
     node.setAttributeNS(null, 'data-ss-tag', tag)
     return node
+  },
+
+  setElementChildren (node, component) {
+    const children = HelperDOM.getChildren(node)
+    if (children) {
+      this.prepareChildren(children, {
+        ...component,
+        level: this.adjustComponentLevel('element', component?.level)
+      })
+    } else if (component?.children && HelperComponent.isComponentHole(node)) {
+      node.innerHTML = component.children
+      this.prepareChildren(node.children, {
+        ...component,
+        level: this.adjustComponentLevel('component-hole', component?.level)
+      })
+    }
   },
 
   // this is called when we add a component to the canvas

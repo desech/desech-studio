@@ -4,58 +4,67 @@ import ExtendJS from '../../helper/ExtendJS.js'
 import StateHtmlFile from '../html/StateHtmlFile.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperFile from '../../helper/HelperFile.js'
+import HelperStyle from '../../helper/HelperStyle.js'
 
 export default {
-  async overrideComponent (element, type, value) {
+  async overrideElement (element, type, value) {
     if (HelperComponent.isComponent(element) || HelperComponent.isComponentElement(element)) {
       const component = element.closest('[data-ss-component]')
-      const data = await this.processData(component, element, type, value)
+      const data = await this.processElementData(component, element, type, value)
       // await this.saveData(component, data)
       HelperComponent.setComponentData(component, data)
     }
   },
 
-  async processData (component, element, type, value) {
+  async processElementData (component, element, type, value) {
     const data = HelperComponent.getComponentData(component)
-    if (this.isInlineOverride(element, data)) {
+    if (this.isElementInlineOverride(element, data)) {
       element = element.closest('.text')
       type = 'inner'
       value = element.innerHTML
     }
     const ref = HelperElement.getStyleRef(element)
-    const originalNode = await this.getOriginalNode(data.file, ref)
-    this.processInstanceData(type, value, data, ref, originalNode)
+    const componentNode = await this.getComponentNode(data.file)
+    const originalNode = componentNode.getElementsByClassName(ref)[0]
+    const originalProps = HelperElement.getProperties(originalNode)
+    this.overrideData(type, value, data, ref, originalNode, originalProps)
     return data
   },
 
   // @todo when you undo this inner override, it will use existing inline overrides
   // this means that the compared values are different so it will be seen as an inner override
   // fix this by building the inner compare value, without the other inline overrides
-  isInlineOverride (element, data) {
+  isElementInlineOverride (element, data) {
     if (HelperElement.getType(element) !== 'inline') return
     const parent = element.closest('.text')
     const parentRef = HelperElement.getStyleRef(parent)
     return !!(data?.overrides && data.overrides[parentRef]?.inner)
   },
 
-  async getOriginalNode (file, ref) {
+  async getComponentNode (file, ref) {
     const div = document.createElement('div')
     const html = await window.electron.invoke('rendererParseComponentFile', file)
     div.innerHTML = html.canvas
-    return div.getElementsByClassName(ref)[0]
+    return div
   },
 
-  processInstanceData (type, value, data, ref, originalNode) {
+  overrideData (type, value, data, ref, originalNode, originalProps) {
     this.initOverrideData(data, ref)
     switch (type) {
       case 'tag':
-        this.processTag(value, data, ref, originalNode)
+        this.processElementTag(value, data, ref, originalNode)
         break
       case 'inner':
-        this.processInner(value, data, ref, originalNode)
+        this.processElementInner(value, data, ref, originalNode)
         break
       case 'attributes':
-        this.processAttributes(value, data, ref, originalNode)
+        this.processElementAttributes(value, data, ref, originalNode)
+        break
+      case 'properties': // element + component
+        this.processProperties(data, ref, originalProps, value)
+        break
+      case 'classes':
+        this.processElementClasses(value, data, ref, originalNode)
         break
     }
     this.cleanOverrideData(data, ref)
@@ -67,6 +76,11 @@ export default {
   },
 
   cleanOverrideData (data, ref) {
+    for (const type of ['attributes', 'properties', 'classes']) {
+      if (ExtendJS.isEmpty(data.overrides[ref][type])) {
+        delete data.overrides[ref][type]
+      }
+    }
     if (ExtendJS.isEmpty(data.overrides[ref])) {
       delete data.overrides[ref]
     }
@@ -75,7 +89,7 @@ export default {
     }
   },
 
-  processTag (value, data, ref, originalNode) {
+  processElementTag (value, data, ref, originalNode) {
     const originalValue = HelperDOM.getTag(originalNode)
     if (value === originalValue) {
       delete data.overrides[ref].tag
@@ -84,9 +98,9 @@ export default {
     }
   },
 
-  processInner (value, data, ref, originalNode) {
-    value = this.cleanInner(value, originalNode)
-    const originalValue = this.cleanInner(originalNode.innerHTML, originalNode)
+  processElementInner (value, data, ref, originalNode) {
+    value = this.cleanElementInner(value, originalNode)
+    const originalValue = this.cleanElementInner(originalNode.innerHTML, originalNode)
     if (value === originalValue) {
       delete data.overrides[ref].inner
     } else {
@@ -94,9 +108,9 @@ export default {
     }
   },
 
-  cleanInner (value, originalNode) {
+  cleanElementInner (value, originalNode) {
     const container = this.getNodeFromString(value, originalNode)
-    this.cleanInnerNode(container)
+    this.cleanElementInnerNode(container)
     return container.innerHTML.trim()
   },
 
@@ -107,30 +121,30 @@ export default {
     return container
   },
 
-  cleanInnerNode (node) {
+  cleanElementInnerNode (node) {
     StateHtmlFile.setRelativeSourceAttr(node, 'src')
     StateHtmlFile.cleanAttributes(node)
     StateHtmlFile.cleanClasses(node, false)
     node.classList.remove('component-element')
     HelperElement.removeComponentRef(node)
     for (const child of node.children) {
-      this.cleanInnerNode(child)
+      this.cleanElementInnerNode(child)
     }
   },
 
-  processAttributes (attributes, data, ref, originalNode) {
+  processElementAttributes (attributes, data, ref, originalNode) {
     if (!data.overrides[ref].attributes) {
       data.overrides[ref].attributes = {}
     }
     for (const [name, value] of Object.entries(attributes)) {
-      this.processAttribute(data, ref, originalNode, name, value)
+      this.processElementAttribute(data, ref, originalNode, name, value)
     }
   },
 
-  processAttribute (data, ref, originalNode, name, value) {
+  processElementAttribute (data, ref, originalNode, name, value) {
     if (name === 'data-ss-hidden') return
-    const attrValue = this.getAttributeValue(value)
-    const originalValue = this.getAttributeValue(originalNode.getAttributeNS(null, name))
+    const attrValue = this.getElementAttributeValue(value)
+    const originalValue = this.getElementAttributeValue(originalNode.getAttributeNS(null, name))
     if (!ExtendJS.objectsEqual(attrValue, originalValue)) {
       data.overrides[ref].attributes[name] = attrValue
     } else {
@@ -138,7 +152,7 @@ export default {
     }
   },
 
-  getAttributeValue (value) {
+  getElementAttributeValue (value) {
     if (typeof value === 'boolean' && value) {
       return { value: '' }
     } else if (value) {
@@ -146,6 +160,90 @@ export default {
     } else {
       return { delete: true }
     }
+  },
+
+  processProperties (data, ref, originalProps, newProps) {
+    if (!data.overrides[ref].properties) {
+      data.overrides[ref].properties = {}
+    }
+    this.updateDeleteProperties(originalProps, newProps, data.overrides[ref].properties)
+    this.addProperties(originalProps, newProps, data.overrides[ref].properties)
+    this.clearProperties(originalProps, newProps, data.overrides[ref].properties)
+  },
+
+  updateDeleteProperties (originalProps, newProps, properties) {
+    for (const [name, value] of Object.entries(originalProps)) {
+      if (!newProps[name]) {
+        properties[name] = { delete: true }
+      } else if (value !== newProps[name]) {
+        properties[name] = { value: newProps[name] }
+      } else {
+        delete properties[name]
+      }
+    }
+  },
+
+  addProperties (originalProps, newProps, properties) {
+    for (const [name, value] of Object.entries(newProps)) {
+      if (!originalProps[name]) {
+        properties[name] = { value }
+      }
+    }
+  },
+
+  clearProperties (originalProps, newProps, properties) {
+    for (const name of Object.keys(properties)) {
+      if (!originalProps[name] && !newProps[name]) {
+        delete properties[name]
+      }
+    }
+  },
+
+  processElementClasses (value, data, ref, originalNode) {
+    if (!data.overrides[ref].classes) {
+      data.overrides[ref].classes = {}
+    }
+    const exists = originalNode.classList.contains(value.cls)
+    const cls = HelperStyle.getViewableClass(value.cls)
+    this.processElementClass(cls, value.action, data, ref, exists)
+  },
+
+  processElementClass (cls, action, data, ref, exists) {
+    if (exists && action === 'delete') {
+      data.overrides[ref].classes[cls] = { delete: true }
+    } else if (!exists && action === 'add') {
+      data.overrides[ref].classes[cls] = { add: true }
+    } else {
+      delete data.overrides[ref].classes[cls]
+    }
+  },
+
+  async overrideComponent (element, type, value) {
+    if (HelperComponent.isComponentElement(element)) {
+      const component = element.parentNode.closest('[data-ss-component]')
+      const data = await this.processComponentData(component, element, type, value)
+      // await this.saveData(component, data)
+      HelperComponent.setComponentData(component, data)
+    }
+  },
+
+  async processComponentData (component, element, type, value) {
+    const data = HelperComponent.getComponentData(component)
+    const ref = HelperComponent.getComponentData(element).ref
+    const originalNode = await this.getOriginalComponent(data.file, ref)
+    const originalProps = HelperComponent.getComponentData(originalNode).properties
+    this.overrideData(type, value, data, ref, originalNode, originalProps)
+    return data
+  },
+
+  async getOriginalComponent (file, ref) {
+    const component = await this.getComponentNode(file)
+    const nodes = component.querySelectorAll('.component-element[data-ss-component]')
+    for (const node of nodes) {
+      const data = HelperComponent.getComponentData(node)
+      if (data.ref === ref) return node
+    }
+    throw new Error("Can't find the original component")
   }
 
   // async saveData (component, data) {
@@ -158,7 +256,8 @@ export default {
   // },
 
   // saveMainDataAllComponents (file, mainData) {
-  //   const components = HelperCanvas.getCanvas().querySelectorAll(`[data-ss-component*="${file}"]`)
+  //   const components = HelperCanvas.getCanvas()
+  //      .querySelectorAll(`[data-ss-component*="${file}"]`)
   //   for (const component of components) {
   //     const data = HelperComponent.getComponentData(component)
   //     data.main = mainData

@@ -7,11 +7,11 @@ import StyleSheetCommon from '../stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../StateStyleSheet.js'
 
 export default {
-  addSelectorLinkClass (selector) {
+  async addSelectorLinkClass (selector) {
     if (!HelperStyle.isClassSelector(selector)) return
     const ref = StateSelectedElement.getRef()
     const cls = HelperStyle.extractClassSelector(selector)
-    StyleSheetSelector.linkClass(cls, ref)
+    await StyleSheetSelector.linkClass(cls, ref)
   },
 
   setElementAttribute (element, name, value) {

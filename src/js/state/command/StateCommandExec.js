@@ -76,30 +76,91 @@ export default {
     StateCommandCommon.pasteStyle(element, data.ref, data.data.style)
   },
 
-  addSelector (data) {
-    const style = StyleSheetSelector.getDeletedSelector(data.previous || data.selector)
-    const properties = style && style.length ? style : [{}]
-    StateStyleSheet.addSelector(data.selector, properties)
-    StateCommandCommon.addSelectorLinkClass(data.selector)
-  },
-
-  removeSelector (data) {
-    StateStyleSheet.saveDeletedSelector(data.selector)
-    StyleSheetSelector.deleteSelector(data.selector)
-    if (data.ref) StyleSheetSelector.unlinkDeletedClassSelector(data.selector, data.ref)
-  },
-
   sortSelector (data) {
     StateStyleSheet.insertSheetAtPosition(data.selector, data.position, data.target)
     HelperDOM.reflow()
   },
 
-  linkClass (data) {
-    StyleSheetSelector.linkClass(data.cls, data.ref)
+  async addSelector (data) {
+    const style = StyleSheetSelector.getDeletedSelector(data.previous || data.selector)
+    const properties = style && style.length ? style : [{}]
+    StateStyleSheet.addSelector(data.selector, properties)
+    await StateCommandCommon.addSelectorLinkClass(data.selector)
   },
 
-  unlinkClass (data) {
-    StyleSheetSelector.unlinkClass(data.cls, data.ref)
+  async removeSelector (data) {
+    StateStyleSheet.saveDeletedSelector(data.selector)
+    StyleSheetSelector.deleteSelector(data.selector)
+    if (data.ref) {
+      await StyleSheetSelector.unlinkDeletedClassSelector(data.selector, data.ref)
+    }
+  },
+
+  async linkClass (data) {
+    await StyleSheetSelector.linkClass(data.cls, data.ref)
+  },
+
+  async unlinkClass (data) {
+    await StyleSheetSelector.unlinkClass(data.cls, data.ref)
+  },
+
+  async changeTag (data) {
+    let element = HelperElement.getElement(data.ref)
+    if (HelperElement.isNormalTag(data.tag)) {
+      element = HelperDOM.changeTag(element, data.tag, document)
+      element.removeAttributeNS(null, 'data-ss-tag')
+    } else {
+      element = HelperDOM.changeTag(element, 'div', document)
+      element.setAttributeNS(null, 'data-ss-tag', data.tag)
+    }
+    await StateCommandComponent.overrideElement(element, 'tag', data.tag)
+  },
+
+  async changeText (data) {
+    const element = HelperElement.getElement(data.ref)
+    element.innerHTML = HelperLocalStore.getItem(data.textId)
+    await StateCommandComponent.overrideElement(element, 'inner', element.innerHTML)
+  },
+
+  async setOptions (data) {
+    const element = HelperElement.getElement(data.ref)
+    element.innerHTML = data.html
+    await StateCommandComponent.overrideElement(element, 'inner', data.html)
+  },
+
+  async setTracks (data) {
+    await this.setOptions(data)
+  },
+
+  async changeSvg (data) {
+    const element = HelperElement.getElement(data.ref)
+    element.setAttributeNS(null, 'viewBox', data.viewBox)
+    const attrs = { viewBox: data.viewBox }
+    await StateCommandComponent.overrideElement(element, 'attributes', attrs)
+    element.innerHTML = data.inner
+    await StateCommandComponent.overrideElement(element, 'inner', data.inner)
+  },
+
+  async changeAttribute (data) {
+    const element = HelperElement.getElement(data.ref)
+    for (const [name, value] of Object.entries(data.attributes)) {
+      StateCommandCommon.setElementAttribute(element, name, value)
+    }
+    await StateCommandComponent.overrideElement(element, 'attributes', data.attributes)
+  },
+
+  async changeProperties (data) {
+    const element = HelperElement.getElement(data.ref)
+    HelperElement.setProperties(element, data.properties)
+    await StateCommandComponent.overrideElement(element, 'properties', data.properties)
+  },
+
+  async changeComponentProperties (data) {
+    const element = HelperElement.getElement(data.ref)
+    const componentData = HelperComponent.getComponentData(element)
+    HelperComponent.updateComponentData(element, componentData, data.properties)
+    HelperComponent.setComponentData(element, componentData)
+    await StateCommandComponent.overrideComponent(element, 'properties', data.properties)
   },
 
   addColor (data) {
@@ -116,74 +177,6 @@ export default {
       selector: ':root',
       property: data.name
     })
-  },
-
-  async changeText (data) {
-    const element = HelperElement.getElement(data.ref)
-    element.innerHTML = HelperLocalStore.getItem(data.textId)
-    await StateCommandComponent.overrideComponent(element, 'inner', element.innerHTML)
-  },
-
-  async changeAttribute (data) {
-    const element = HelperElement.getElement(data.ref)
-    for (const [name, value] of Object.entries(data.attributes)) {
-      StateCommandCommon.setElementAttribute(element, name, value)
-    }
-    await StateCommandComponent.overrideComponent(element, 'attributes', data.attributes)
-  },
-
-  async changeTag (data) {
-    let element = HelperElement.getElement(data.ref)
-    if (HelperElement.isNormalTag(data.tag)) {
-      element = HelperDOM.changeTag(element, data.tag, document)
-      element.removeAttributeNS(null, 'data-ss-tag')
-    } else {
-      element = HelperDOM.changeTag(element, 'div', document)
-      element.setAttributeNS(null, 'data-ss-tag', data.tag)
-    }
-    await StateCommandComponent.overrideComponent(element, 'tag', data.tag)
-  },
-
-  async setOptions (data) {
-    const element = HelperElement.getElement(data.ref)
-    element.innerHTML = data.html
-    await StateCommandComponent.overrideComponent(element, 'inner', data.html)
-  },
-
-  async setTracks (data) {
-    await this.setOptions(data)
-  },
-
-  async changeSvg (data) {
-    const element = HelperElement.getElement(data.ref)
-    element.setAttributeNS(null, 'viewBox', data.viewBox)
-    await StateCommandComponent.overrideComponent(element, 'attributes',
-      { viewBox: data.viewBox })
-    element.innerHTML = data.inner
-    await StateCommandComponent.overrideComponent(element, 'inner', data.inner)
-  },
-
-  async changeProperties (data) {
-    const element = HelperElement.getElement(data.ref)
-    let properties = null
-    if (ExtendJS.isEmpty(data.properties)) {
-      delete element.dataset.ssProperties
-    } else {
-      element.dataset.ssProperties = properties = JSON.stringify(data.properties)
-    }
-    await StateCommandComponent.overrideComponent(element, 'attributes',
-      { 'data-ss-properties': properties })
-  },
-
-  changeComponentProperties (data) {
-    const element = HelperElement.getElement(data.ref)
-    const componentData = HelperComponent.getComponentData(element)
-    if (ExtendJS.isEmpty(data.properties)) {
-      delete componentData.properties
-    } else {
-      componentData.properties = data.properties
-    }
-    HelperComponent.setComponentData(element, componentData)
   },
 
   addResponsive (data) {

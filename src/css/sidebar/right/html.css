@@ -112,3 +112,11 @@
 .sidebar-right #html-section ul.panel-list>li.dragdrop-start svg {
   color: var(--list-fields-txt);
 }
+
+.sidebar-right #html-section .style-html-element-form.grid,
+.sidebar-right #html-section .style-component-property .grid,
+.sidebar-right #component-section .style-component-property .grid {
+  grid-template-columns: auto auto 18px;
+  column-gap: 5px;
+  padding: 3px 15px;
+}

@@ -2,6 +2,7 @@ import HelperStyle from './HelperStyle.js'
 import HelperCrypto from './HelperCrypto.js'
 import HelperCanvas from './HelperCanvas.js'
 import HelperDOM from './HelperDOM.js'
+import ExtendJS from './ExtendJS.js'
 
 export default {
   generateElementRef () {
@@ -59,6 +60,14 @@ export default {
   getProperties (element) {
     const props = element.dataset.ssProperties
     return props ? JSON.parse(props) : null
+  },
+
+  setProperties (element, properties) {
+    if (ExtendJS.isEmpty(properties)) {
+      delete element.dataset.ssProperties
+    } else {
+      element.dataset.ssProperties = JSON.stringify(properties)
+    }
   },
 
   getClasses (element, viewable = false) {

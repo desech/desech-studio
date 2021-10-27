@@ -4,6 +4,7 @@ import HelperStyle from '../../helper/HelperStyle.js'
 import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import ExtendJS from '../../helper/ExtendJS.js'
+import StateCommandComponent from '../command/StateCommandComponent.js'
 
 export default {
   getDisplayElementSelectors () {
@@ -103,12 +104,12 @@ export default {
   },
 
   // if all class selectors are deleted, then unlink this class
-  unlinkDeletedClassSelector (selector, ref) {
+  async unlinkDeletedClassSelector (selector, ref) {
     if (!HelperStyle.isClassSelector(selector)) return
     const cls = HelperStyle.extractClassSelector(selector)
     // do we still have class selectors
     if (this.classSelectorExists(cls)) return
-    this.unlinkClass(cls, ref)
+    await this.unlinkClass(cls, ref)
   },
 
   classSelectorExists (cls) {
@@ -122,13 +123,15 @@ export default {
     return false
   },
 
-  linkClass (cls, ref) {
+  async linkClass (cls, ref) {
     const element = HelperElement.getElement(ref)
     element.classList.add(cls)
+    await StateCommandComponent.overrideElement(element, 'classes', { cls, action: 'add' })
   },
 
-  unlinkClass (cls, ref) {
+  async unlinkClass (cls, ref) {
     const element = HelperElement.getElement(ref)
     element.classList.remove(cls)
+    await StateCommandComponent.overrideElement(element, 'classes', { cls, action: 'delete' })
   }
 }

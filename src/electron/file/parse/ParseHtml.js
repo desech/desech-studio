@@ -7,6 +7,8 @@ import File from '../File.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
 import HelperFile from '../../../js/helper/HelperFile.js'
 import Language from '../../lib/Language.js'
+import ParseCommon from './ParseCommon.js'
+import ParseOverride from './ParseOverride.js'
 
 export default {
   _document: null,
@@ -115,16 +117,22 @@ export default {
   },
 
   setBody (body) {
-    // somewhere the page failed to be loaded properly
-    if (!body.classList.contains('e000body')) {
-      throw new Error(Language.localize('Failed to load the html page. ' +
-        'Please try opening the html page again'))
-    }
+    this.checkIfBodyFailed(body)
     this.cleanAttributes(body)
     this.cleanClasses(body)
     body.classList.add('element')
     body.classList.add('body')
     if (body.children.length) this.prepareChildren(body.children, null)
+  },
+
+  checkIfBodyFailed (body) {
+    if (body.children.length > 0) return
+    const html = fs.readFileSync(this._file).toString()
+    const dom = new JSDOM(html)
+    if (dom.window.document.body.children.length > 0) {
+      throw new Error(Language.localize('Failed to load the html page. ' +
+        'Please try opening the html page again'))
+    }
   },
 
   setComponent (node, component) {
@@ -139,6 +147,7 @@ export default {
     // we need the replace before the prepare because the tag change will overwrite the node
     node.replaceWith(element)
     const level = this.adjustComponentLevel('component', component?.level)
+    ParseOverride.setOverrideComponentProperties(element, component)
     this.prepareElement(element, { data, level, children })
   },
 
@@ -202,9 +211,10 @@ export default {
 
   debugComponent (node, component) {
     if (!this._debug) return
-    const tab = (' ').repeat(component.level)
+    const level = component?.level || 0
+    const tab = (' ').repeat(level)
     const file = HelperComponent.getInstanceFile(node).replace('.html', '')
-    console.info(tab, file, component.level)
+    console.info(tab, file, level)
   },
 
   debugMsg (msg) {
@@ -268,40 +278,14 @@ export default {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
-    this.setOverrideAttributes(node, component)
+    ParseOverride.setOverrideAttributes(node, component, this._folder)
+    ParseOverride.setOverrideElementProperties(node, component)
+    ParseOverride.setOverrideClasses(node, component)
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
     this.addCanvasClasses(node, type)
     this.addComponentClasses(node, component)
-  },
-
-  setOverrideAttributes (node, component) {
-    const ref = HelperElement.getRef(node)
-    if (component?.data?.overrides && component.data.overrides[ref]?.attributes) {
-      for (const [name, obj] of Object.entries(component.data.overrides[ref].attributes)) {
-        this.setOverrideAttribute(name, obj, node)
-      }
-    }
-  },
-
-  setOverrideAttribute (name, obj, node) {
-    if (obj.delete) {
-      node.removeAttributeNS(null, name)
-    } else {
-      const val = this.setAbsoluteUrlAttribute(name, obj.value)
-      node.setAttributeNS(null, name, val)
-    }
-  },
-
-  setAbsoluteUrlAttribute (name, value) {
-    if (['src', 'poster', 'data'].includes(name)) {
-      return File.resolve(this._folder, value)
-    } else if (name === 'srcset') {
-      return this.fixSrcSet(value)
-    } else {
-      return value
-    }
   },
 
   addCanvasClasses (node, type) {
@@ -312,31 +296,20 @@ export default {
   },
 
   setIconElement (node, component, ref) {
-    this.setComponentInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component, ref)
     this.setBasic(node, 'icon', component)
   },
 
   setImageElement (node, component) {
-    const srcset = this.fixSrcSet(node.getAttributeNS(null, 'srcset'))
+    const srcset = ParseCommon.fixSrcSet(node.getAttributeNS(null, 'srcset'), this._folder)
     node.setAttributeNS(null, 'srcset', srcset)
     this.setBasic(node, 'image', component)
   },
 
-  fixSrcSet (value) {
-    // only the folder needs to be encoded because the images are saved as encoded in the html
-    return value.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(this._folder)}/$3$4`)
-  },
-
   setMediaElement (node, tag, component, ref) {
-    this.setComponentInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component, ref)
     this.setBasic(node, tag, component)
     this.setTrackSource(node)
-  },
-
-  setComponentInner (node, component, ref) {
-    if (component?.data?.overrides && component.data.overrides[ref]?.inner) {
-      node.innerHTML = component.data.overrides[ref].inner
-    }
   },
 
   setTrackSource (node) {
@@ -356,7 +329,7 @@ export default {
   },
 
   setDropdownElement (node, tag, component, ref) {
-    this.setComponentInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component, ref)
     const cls = (tag === 'select') ? 'dropdown' : tag
     this.setBasic(node, cls, component)
   },
@@ -373,7 +346,7 @@ export default {
   },
 
   setTextElement (node, component, ref) {
-    this.setComponentInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component, ref)
     this.setTagElement(node, 'text', 'p', component)
   },
 
@@ -391,16 +364,13 @@ export default {
   },
 
   processNodeTag (node, component) {
-    const ref = HelperElement.getRef(node)
-    let tag = HelperDOM.getTag(node)
-    if (component?.data?.overrides && component.data.overrides[ref]?.tag) {
-      tag = component.data.overrides[ref].tag
-      if (HelperElement.isNormalTag(tag)) {
-        node = HelperDOM.changeTag(node, tag, this._document)
-      }
+    const data = {
+      node,
+      tag: HelperDOM.getTag(node),
+      ref: HelperElement.getRef(node)
     }
-    node = this.changeNodeSpecialTag(node, tag)
-    return node
+    ParseOverride.setOverrideTag(component, data, this._document)
+    return this.changeNodeSpecialTag(data.node, data.tag)
   },
 
   changeNodeSpecialTag (node, tag) {

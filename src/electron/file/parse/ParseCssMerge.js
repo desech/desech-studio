@@ -1,5 +1,5 @@
 import HelperStyle from '../../../js/helper/HelperStyle.js'
-import ParseFileCommon from './ParseFileCommon.js'
+import ParseCommon from './ParseCommon.js'
 import HelperParserBackground from '../../../js/helper/parser/HelperParserBackground.js'
 import HelperColor from '../../../js/helper/HelperColor.js'
 
@@ -64,22 +64,22 @@ export default {
   },
 
   mergeBorderRadius (props) {
-    const names = ParseFileCommon.getBorderRadiusProperties()
+    const names = ParseCommon.getBorderRadiusProperties()
     this.mergeEqualProperties(props, names, 'border-radius')
   },
 
   mergeBorderStyle (props) {
-    const names = ParseFileCommon.getBorderStyleProperties()
+    const names = ParseCommon.getBorderStyleProperties()
     this.mergeEqualProperties(props, names, 'border-style')
   },
 
   mergeBorderWidth (props) {
-    const names = ParseFileCommon.getBorderWidthProperties()
+    const names = ParseCommon.getBorderWidthProperties()
     this.mergeEqualProperties(props, names, 'border-width')
   },
 
   mergeBorderColor (props) {
-    const names = ParseFileCommon.getBorderColorProperties()
+    const names = ParseCommon.getBorderColorProperties()
     this.mergeEqualProperties(props, names, 'border-color')
   },
 
@@ -102,7 +102,7 @@ export default {
   },
 
   cleanBackgroundImage (props) {
-    const names = ParseFileCommon.getBackgroundProperties()
+    const names = ParseCommon.getBackgroundProperties()
     for (const name of names) {
       if (props[name] && props[name].value === HelperStyle.getDefaultProperty(name)) {
         delete props[name]

@@ -1,5 +1,6 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
+import ExtendJS from './ExtendJS.js'
 
 export default {
   isComponent (element) {
@@ -19,14 +20,22 @@ export default {
       this.isComponentElement(element)
   },
 
-  getComponentData (element) {
-    const data = element.dataset.ssComponent
+  getComponentData (node) {
+    const data = node.dataset.ssComponent
     return data ? JSON.parse(data) : null
   },
 
-  setComponentData (element, data) {
+  setComponentData (node, data) {
     if (data) {
-      element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+      node.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    }
+  },
+
+  updateComponentData (node, data, properties) {
+    if (ExtendJS.isEmpty(properties)) {
+      delete data.properties
+    } else {
+      data.properties = properties
     }
   },
 

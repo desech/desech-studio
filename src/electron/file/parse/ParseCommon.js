@@ -17,5 +17,10 @@ export default {
 
   getBackgroundProperties () {
     return ['background-size', 'background-position', 'background-repeat', 'background-attachment', 'background-origin', 'background-blend-mode']
+  },
+
+  fixSrcSet (value, folder) {
+    // only the folder needs to be encoded because the images are saved as encoded in the html
+    return value.replace(/(,)?( )?(.+?)( .x)/g, `$1$2${encodeURI(folder)}/$3$4`)
   }
 }

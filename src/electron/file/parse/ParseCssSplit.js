@@ -1,7 +1,6 @@
 import HelperStyle from '../../../js/helper/HelperStyle.js'
-import ParseFileCommon from './ParseFileCommon.js'
+import ParseCommon from './ParseCommon.js'
 import HelperRegex from '../../../js/helper/HelperRegex.js'
-import HelperColor from '../../../js/helper/HelperColor.js'
 
 export default {
   splitRules (style, name, value) {
@@ -44,22 +43,22 @@ export default {
   },
 
   splitBorderRadius (value) {
-    const names = ParseFileCommon.getBorderRadiusProperties()
+    const names = ParseCommon.getBorderRadiusProperties()
     return this.splitEqualProperties(names, value)
   },
 
   splitBorderStyle (value) {
-    const names = ParseFileCommon.getBorderStyleProperties()
+    const names = ParseCommon.getBorderStyleProperties()
     return this.splitEqualProperties(names, value)
   },
 
   splitBorderWidth (value) {
-    const names = ParseFileCommon.getBorderWidthProperties()
+    const names = ParseCommon.getBorderWidthProperties()
     return this.splitEqualProperties(names, value)
   },
 
   splitBorderColor (value) {
-    const names = ParseFileCommon.getBorderColorProperties()
+    const names = ParseCommon.getBorderColorProperties()
     return this.splitEqualProperties(names, value)
   },
 
@@ -74,7 +73,7 @@ export default {
 
   splitBackgroundImage (style, name, value) {
     const rules = [{ name, value }]
-    for (const prop of ParseFileCommon.getBackgroundProperties()) {
+    for (const prop of ParseCommon.getBackgroundProperties()) {
       if (!style[prop]) {
         // re-add the default background props
         rules.push({ name: prop, value: HelperStyle.getDefaultProperty(prop) })

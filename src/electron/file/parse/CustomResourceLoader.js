@@ -11,8 +11,8 @@ export default class CustomResourceLoader extends ResourceLoader {
 
   async formatCssFile (url, options) {
     const file = File.basename(url)
+    // ignore this file
     if (file === 'reset.css') {
-      // ignore this file
       return Promise.resolve(Buffer.from(''))
     }
     if (file === 'component-css.css') {

@@ -460,6 +460,7 @@
   "Fade out top": "Fade out top",
   "Fade out top left": "Fade out top left",
   "Fade out top right": "Fade out top right",
+  "Failed to load the html page. ' + 'Please try opening the html page again": "Failed to load the html page. ' + 'Please try opening the html page again",
   "Farthest corner": "Farthest corner",
   "Farthest side": "Farthest side",
   "Fetching <b>{{method}}</b>": "Fetching <b>{{method}}</b>",

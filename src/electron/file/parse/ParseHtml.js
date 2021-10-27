@@ -6,6 +6,7 @@ import HelperDOM from '../../../js/helper/HelperDOM.js'
 import File from '../File.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
 import HelperFile from '../../../js/helper/HelperFile.js'
+import Language from '../../lib/Language.js'
 
 export default {
   _document: null,
@@ -114,6 +115,11 @@ export default {
   },
 
   setBody (body) {
+    // somewhere the page failed to be loaded properly
+    if (!body.classList.contains('e000body')) {
+      throw new Error(Language.localize('Failed to load the html page. ' +
+        'Please try opening the html page again'))
+    }
     this.cleanAttributes(body)
     this.cleanClasses(body)
     body.classList.add('element')
@@ -125,7 +131,7 @@ export default {
     const data = HelperComponent.getComponentData(node)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
-    const html = this.getHtmlFromFile(data.file)
+    const html = fs.readFileSync(data.file).toString()
     const element = this._document.createRange().createContextualFragment(html).children[0]
     this.mergeComponentData(element, data)
     this.debugComponent(node, component)
@@ -203,10 +209,6 @@ export default {
 
   debugMsg (msg) {
     if (this._debug) console.info(msg)
-  },
-
-  getHtmlFromFile (file) {
-    return fs.readFileSync(file).toString()
   },
 
   mergeComponentData (element, data) {

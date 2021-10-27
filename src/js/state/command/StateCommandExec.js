@@ -163,13 +163,16 @@ export default {
     await StateCommandComponent.overrideComponent(element, 'inner', data.inner)
   },
 
-  changeProperties (data) {
+  async changeProperties (data) {
     const element = HelperElement.getElement(data.ref)
+    let properties = null
     if (ExtendJS.isEmpty(data.properties)) {
       delete element.dataset.ssProperties
     } else {
-      element.dataset.ssProperties = JSON.stringify(data.properties)
+      element.dataset.ssProperties = properties = JSON.stringify(data.properties)
     }
+    await StateCommandComponent.overrideComponent(element, 'attributes',
+      { 'data-ss-properties': properties })
   },
 
   changeComponentProperties (data) {

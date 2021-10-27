@@ -140,9 +140,11 @@ export default {
     data.language = data.language || 'en'
     data.title = data.title || 'Desech Studio page'
     data.meta = data.meta || `<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="Desech Studio">
-<meta name="description" content="Desech Studio page">`
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Desech Studio">
+  <meta name="description" content="Desech Studio page">`
+    data.body = data.body || `<body class="e000body">
+</body>`
     return `<!doctype html>
 <html lang="${data.language}">
 <head>

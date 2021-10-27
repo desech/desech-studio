@@ -1,6 +1,5 @@
 import HelperComponent from '../../helper/HelperComponent.js'
 import HelperElement from '../../helper/HelperElement.js'
-// import HelperCanvas from '../../helper/HelperCanvas.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import StateHtmlFile from '../html/StateHtmlFile.js'
 import HelperDOM from '../../helper/HelperDOM.js'
@@ -18,10 +17,25 @@ export default {
 
   async processData (component, element, type, value) {
     const data = HelperComponent.getComponentData(component)
+    if (this.isInlineOverride(element, data)) {
+      element = element.closest('.text')
+      type = 'inner'
+      value = element.innerHTML
+    }
     const ref = HelperElement.getStyleRef(element)
     const originalNode = await this.getOriginalNode(data.file, ref)
     this.processInstanceData(type, value, data, ref, originalNode)
     return data
+  },
+
+  // @todo when you undo this inner override, it will use existing inline overrides
+  // this means that the compared values are different so it will be seen as an inner override
+  // fix this by building the inner compare value, without the other inline overrides
+  isInlineOverride (element, data) {
+    if (HelperElement.getType(element) !== 'inline') return
+    const parent = element.closest('.text')
+    const parentRef = HelperElement.getStyleRef(parent)
+    return !!(data?.overrides && data.overrides[parentRef]?.inner)
   },
 
   async getOriginalNode (file, ref) {

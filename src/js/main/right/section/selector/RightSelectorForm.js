@@ -146,14 +146,13 @@ export default {
   },
 
   async saveSelector (dialog) {
-    const preview = dialog.getElementsByClassName('dialog-selector-add-preview')[0]
-    const selector = preview.dataset.selector
+    const data = dialog.getElementsByClassName('dialog-selector-add-preview')[0].dataset
     try {
-      document.querySelector(selector)
-      await this.saveSelectorSuccess(selector)
+      document.querySelector(data.selector)
+      await this.saveSelectorSuccess(data.selector)
       this.reloadSuccess()
     } catch (error) {
-      HelperError.error(error, new Error(preview.dataset.error))
+      HelperError.error(error, new Error(data.error))
     }
   },
 

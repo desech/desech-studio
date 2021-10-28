@@ -79,7 +79,9 @@ export default {
     }
   },
 
-  // order = 1) :root, 2) ref selectors, 3) class selectors
+  // the order is the one from the <link> css files: root, component-css, component-html, page
+  // when we create a new class selector it gets added at the end of all css component selectors
+  // when we create a new element (component or page) it gets added at the end of all selectors
   getInsertSheetPosition (array, selector) {
     if (array.length === 1) return 1
     const ref = HelperStyle.extractRefFromSelector(selector)

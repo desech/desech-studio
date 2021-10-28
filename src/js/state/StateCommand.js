@@ -1,6 +1,9 @@
 import StateCommandExec from './command/StateCommandExec.js'
 import ExtendJS from '../helper/ExtendJS.js'
 import HelperTrigger from '../helper/HelperTrigger.js'
+import StateSelectedElement from './StateSelectedElement.js'
+import CanvasElementSelect from '../main/canvas/element/CanvasElementSelect.js'
+import HelperElement from '../helper/HelperElement.js'
 
 export default {
   _DELAY: 250, // ms
@@ -72,7 +75,15 @@ export default {
       throw new Error(`Unknown command "${data.command}"`)
     }
     await StateCommandExec[data.command](data)
+    this.clearInvalidSelected()
     if (overlayReload) this.reloadContainers(panelReload)
+  },
+
+  clearInvalidSelected () {
+    const selected = StateSelectedElement.getElement(false)
+    if (selected && !HelperElement.isCanvasElement(selected)) {
+      CanvasElementSelect.deselectElement()
+    }
   },
 
   reloadContainers (panelReload) {

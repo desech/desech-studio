@@ -136,7 +136,7 @@ export default {
   },
 
   setComponent (node, component) {
-    const data = HelperComponent.getComponentData(node)
+    const data = ParseOverride.setOverrideComponentFile(node, component)
     data.file = File.resolve(this._folder, data.file)
     if (!fs.existsSync(data.file)) return node.remove()
     const html = fs.readFileSync(data.file).toString()

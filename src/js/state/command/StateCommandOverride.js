@@ -66,6 +66,9 @@ export default {
       case 'classes':
         this.processElementClasses(value, data, ref, originalNode)
         break
+      case 'component': // component file
+        this.processComponentFile(value, data, ref, originalNode)
+        break
     }
     this.cleanOverrideData(data, ref)
   },
@@ -229,7 +232,7 @@ export default {
 
   async processComponentData (component, element, type, value) {
     const data = HelperComponent.getComponentData(component)
-    const ref = HelperComponent.getComponentData(element).ref
+    const ref = HelperComponent.getInstanceRef(element)
     const originalNode = await this.getOriginalComponent(data.file, ref)
     const originalProps = HelperComponent.getComponentData(originalNode).properties
     this.overrideData(type, value, data, ref, originalNode, originalProps)
@@ -244,6 +247,14 @@ export default {
       if (data.ref === ref) return node
     }
     throw new Error("Can't find the original component")
+  },
+
+  processComponentFile (value, data, ref, originalNode) {
+    if (value === HelperComponent.getInstanceFile(originalNode)) {
+      delete data.overrides[ref].component
+    } else {
+      data.overrides[ref].component = HelperFile.getRelPath(value)
+    }
   }
 
   // async saveData (component, data) {

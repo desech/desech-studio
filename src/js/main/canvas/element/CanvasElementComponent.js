@@ -44,14 +44,22 @@ export default {
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  async buildComponentElement (file) {
+  async buildComponentElement (file, swapRef = null) {
     const html = await window.electron.invoke('rendererParseComponentFile', file)
     const element = document.createRange().createContextualFragment(html.canvas).children[0]
     if (!element) return
-    const ref = HelperElement.getRef(element)
+    const ref = swapRef || HelperElement.generateElementRef()
     const data = { ref, file, main: element.dataset.ssComponent }
     element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    if (swapRef) this.makeComponentElement(element)
     return element
+  },
+
+  makeComponentElement (component) {
+    component.classList.add('component-element')
+    for (const node of component.querySelectorAll(':not(.component-element)')) {
+      node.classList.add('component-element')
+    }
   },
 
   async assignComponentHole (container) {

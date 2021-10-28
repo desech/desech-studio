@@ -5,7 +5,6 @@ import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import LeftCommon from '../../left/LeftCommon.js'
-import CanvasCommon from '../CanvasCommon.js'
 
 export default {
   _node: null,
@@ -97,10 +96,8 @@ export default {
   },
 
   deselectElement () {
-    // this expects an actual canvas element, not a hidden one by operations like delete/cut/move
-    const element = StateSelectedElement.getElement()
-    if (!element) return
-    element.classList.remove('selected')
+    const selected = HelperCanvas.getCanvas().getElementsByClassName('selected')[0]
+    if (selected) selected.classList.remove('selected')
     HelperCanvas.deleteCanvasData('selectedElement')
     this.updateUiAfterElementDeselect()
   },

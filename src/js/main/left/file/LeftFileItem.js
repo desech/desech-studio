@@ -175,10 +175,10 @@ export default {
     })
   },
 
-  highlightSourceFileCallback (container) {
-    const button = container.closest('.grid').getElementsByClassName('choose-source-button')[0]
-    const item = document.querySelector(`.panel-item[data-ref="${container.value}"]`)
-    if (!item) throw new Error(`Unknown file ${container.value}`)
+  highlightSourceFileCallback (node) {
+    const button = node.closest('.grid').getElementsByClassName('choose-source-button')[0]
+    const item = document.querySelector(`.panel-item[data-ref="${node.value}"]`)
+    if (!item) throw new Error(`Unknown file ${node.value}`)
     LeftCommon.selectItem(item, 'selected')
     item.parentNode.dataset.selectFile = button.id
   },

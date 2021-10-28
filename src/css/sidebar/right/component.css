@@ -1,0 +1,6 @@
+.sidebar-right #component-section .swap-component-button {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 7px;
+}

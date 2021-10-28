@@ -7,10 +7,12 @@ export default {
     return canvas.dataset.selectedElement
   },
 
-  getElement () {
+  getElement (checkValid = true) {
     const ref = this.getRef()
     for (const node of HelperCanvas.getCanvas().getElementsByClassName(ref)) {
-      if (HelperElement.isCanvasElement(node)) return node
+      if (!checkValid || HelperElement.isCanvasElement(node)) {
+        return node
+      }
     }
   },
 

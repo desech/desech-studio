@@ -241,3 +241,12 @@
 .sidebar-right #border-section .color-picker {
   padding-bottom: 10px;
 }
+
+.sidebar-right .style-html-source-name {
+  font-size: 12px;
+  height: 25px;
+  line-height: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

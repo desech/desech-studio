@@ -51,14 +51,14 @@ export default {
   setOverrideElementProperties (node, component) {
     const properties = HelperElement.getProperties(node)
     const ref = HelperElement.getRef(node)
-    this.overrideProperties(component, ref, properties)
-    HelperElement.setProperties(node, properties)
+    const changed = this.overrideProperties(component, ref, properties)
+    if (changed) HelperElement.setProperties(node, properties)
   },
 
   setOverrideComponentProperties (node, component) {
     const data = HelperComponent.getComponentData(node)
-    this.overrideProperties(component, data.ref, data.properties)
-    HelperComponent.setComponentData(node, data)
+    const changed = this.overrideProperties(component, data.ref, data.properties)
+    if (changed) HelperComponent.setComponentData(node, data)
   },
 
   overrideProperties (component, ref, originalProps) {
@@ -66,6 +66,9 @@ export default {
       for (const [name, obj] of Object.entries(component.data.overrides[ref].properties)) {
         this.overrideProperty(name, obj, originalProps)
       }
+      return true
+    } else {
+      return false
     }
   },
 
@@ -92,5 +95,14 @@ export default {
     } else if (obj.delete) {
       node.classList.remove(cls)
     }
+  },
+
+  setOverrideComponentFile (node, component) {
+    const data = HelperComponent.getComponentData(node)
+    if (component?.data?.overrides && component.data.overrides[data.ref]?.component) {
+      data.file = component.data.overrides[data.ref].component
+      HelperComponent.setComponentData(node, data)
+    }
+    return data
   }
 }

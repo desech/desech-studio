@@ -4,7 +4,7 @@ import HelperStyle from '../../helper/HelperStyle.js'
 import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import ExtendJS from '../../helper/ExtendJS.js'
-import StateCommandComponent from '../command/StateCommandComponent.js'
+import StateCommandOverride from '../command/StateCommandOverride.js'
 
 export default {
   getDisplayElementSelectors () {
@@ -126,12 +126,12 @@ export default {
   async linkClass (cls, ref) {
     const element = HelperElement.getElement(ref)
     element.classList.add(cls)
-    await StateCommandComponent.overrideElement(element, 'classes', { cls, action: 'add' })
+    await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'add' })
   },
 
   async unlinkClass (cls, ref) {
     const element = HelperElement.getElement(ref)
     element.classList.remove(cls)
-    await StateCommandComponent.overrideElement(element, 'classes', { cls, action: 'delete' })
+    await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'delete' })
   }
 }

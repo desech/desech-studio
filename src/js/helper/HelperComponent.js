@@ -39,6 +39,11 @@ export default {
     }
   },
 
+  getInstanceRef (element) {
+    const data = this.getComponentData(element)
+    return data ? data.ref : null
+  },
+
   getInstanceFile (element) {
     const data = this.getComponentData(element)
     return data ? data.file : null

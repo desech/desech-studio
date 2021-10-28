@@ -3,7 +3,6 @@ import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import ColorPickerButton from '../../../../component/color-picker/ColorPickerButton.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
-import HelperDOM from '../../../../helper/HelperDOM.js'
 
 export default {
   getEvents () {

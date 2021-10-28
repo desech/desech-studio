@@ -7,11 +7,10 @@ import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StateCommandCommon from './StateCommandCommon.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
 import ProjectResponsive from '../../start/project/ProjectResponsive.js'
-import ExtendJS from '../../helper/ExtendJS.js'
 import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperComponent from '../../helper/HelperComponent.js'
-import StateCommandComponent from './StateCommandComponent.js'
+import StateCommandOverride from './StateCommandOverride.js'
 
 export default {
   addElement (data) {
@@ -113,19 +112,19 @@ export default {
       element = HelperDOM.changeTag(element, 'div', document)
       element.setAttributeNS(null, 'data-ss-tag', data.tag)
     }
-    await StateCommandComponent.overrideElement(element, 'tag', data.tag)
+    await StateCommandOverride.overrideElement(element, 'tag', data.tag)
   },
 
   async changeText (data) {
     const element = HelperElement.getElement(data.ref)
     element.innerHTML = HelperLocalStore.getItem(data.textId)
-    await StateCommandComponent.overrideElement(element, 'inner', element.innerHTML)
+    await StateCommandOverride.overrideElement(element, 'inner', element.innerHTML)
   },
 
   async setOptions (data) {
     const element = HelperElement.getElement(data.ref)
     element.innerHTML = data.html
-    await StateCommandComponent.overrideElement(element, 'inner', data.html)
+    await StateCommandOverride.overrideElement(element, 'inner', data.html)
   },
 
   async setTracks (data) {
@@ -136,9 +135,9 @@ export default {
     const element = HelperElement.getElement(data.ref)
     element.setAttributeNS(null, 'viewBox', data.viewBox)
     const attrs = { viewBox: data.viewBox }
-    await StateCommandComponent.overrideElement(element, 'attributes', attrs)
+    await StateCommandOverride.overrideElement(element, 'attributes', attrs)
     element.innerHTML = data.inner
-    await StateCommandComponent.overrideElement(element, 'inner', data.inner)
+    await StateCommandOverride.overrideElement(element, 'inner', data.inner)
   },
 
   async changeAttribute (data) {
@@ -146,13 +145,13 @@ export default {
     for (const [name, value] of Object.entries(data.attributes)) {
       StateCommandCommon.setElementAttribute(element, name, value)
     }
-    await StateCommandComponent.overrideElement(element, 'attributes', data.attributes)
+    await StateCommandOverride.overrideElement(element, 'attributes', data.attributes)
   },
 
   async changeProperties (data) {
     const element = HelperElement.getElement(data.ref)
     HelperElement.setProperties(element, data.properties)
-    await StateCommandComponent.overrideElement(element, 'properties', data.properties)
+    await StateCommandOverride.overrideElement(element, 'properties', data.properties)
   },
 
   async changeComponentProperties (data) {
@@ -160,7 +159,16 @@ export default {
     const componentData = HelperComponent.getComponentData(element)
     HelperComponent.updateComponentData(element, componentData, data.properties)
     HelperComponent.setComponentData(element, componentData)
-    await StateCommandComponent.overrideComponent(element, 'properties', data.properties)
+    await StateCommandOverride.overrideComponent(element, 'properties', data.properties)
+  },
+
+  async swapComponent (data) {
+    const currentElem = HelperElement.getElement(data.currentRef)
+    const newElem = HelperElement.getElement(data.newRef)
+    HelperDOM.hide(currentElem)
+    HelperDOM.show(newElem)
+    const componentData = HelperComponent.getComponentData(newElem)
+    await StateCommandOverride.overrideComponent(newElem, 'component', componentData.file)
   },
 
   addColor (data) {

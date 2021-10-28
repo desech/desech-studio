@@ -74,6 +74,7 @@ import RightAnimationList from '../main/right/section/animation/RightAnimationLi
 import RightAnimationForm from '../main/right/section/animation/RightAnimationForm.js'
 import RightCSSList from '../main/right/section/css/RightCSSList.js'
 import RightCSSProperty from '../main/right/section/css/RightCSSProperty.js'
+import RightComponentMain from '../main/right/section/component/RightComponentMain.js'
 import RightComponentProperty from '../main/right/section/component/RightComponentProperty.js'
 
 export default {
@@ -277,6 +278,9 @@ export default {
   },
 
   getRightComponentEvents () {
-    return [RightComponentProperty]
+    return [
+      RightComponentMain,
+      RightComponentProperty
+    ]
   }
 }

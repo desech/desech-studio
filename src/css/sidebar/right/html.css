@@ -28,15 +28,6 @@
   box-shadow: var(--btn-shadow) 0 0 1px 0;
 }
 
-.sidebar-right #html-section .style-html-source-name {
-  font-size: 12px;
-  height: 25px;
-  line-height: 25px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .sidebar-right #html-section .slider-extra-container .grid {
   gap: 5px;
 }

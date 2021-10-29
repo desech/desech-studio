@@ -1,9 +1,5 @@
-// import fs from 'fs'
 import File from '../File.js'
 import ParseCssSplit from './ParseCssSplit.js'
-// import HelperFile from '../../../js/helper/HelperFile.js'
-// import HelperStyle from '../../../js/helper/HelperStyle.js'
-// import HelperRegex from '../../../js/helper/HelperRegex.js'
 
 export default {
   _colors: [],
@@ -12,7 +8,6 @@ export default {
     this._colors = []
     const css = {}
     this.addStyle(document, css, folder, options)
-    // this.cleanProjectCss(css, folder)
     return Object.values(css)
   },
 
@@ -20,6 +15,7 @@ export default {
     const files = this.getCssFiles(document, folder)
     for (let i = 0; i < document.styleSheets.length; i++) {
       if (!this.isCssFileAllowed(files[i], options)) continue
+      this.addPageBodyRule(files[i], css)
       this.buildRules(document.styleSheets[i], css, folder)
     }
   },
@@ -41,6 +37,13 @@ export default {
       'css/general/design-system.css'
     ]
     return (!options.ignoreElementCss || !file.startsWith('css/page/')) && !files.includes(file)
+  },
+
+  // we need the empty body sheet to separate between component selectors and page selectors
+  addPageBodyRule (file, css) {
+    if (file.startsWith('css/page/')) {
+      this.addToCss('@media { .e000body { } }', '.e000body', css)
+    }
   },
 
   buildRules (sheet, css, folder) {
@@ -120,50 +123,4 @@ export default {
     css[selector] = css[selector] || []
     css[selector].push(rule)
   }
-
-  // we don't want to delete these classes because of file switching
-  // cleanProjectCss (css, folder) {
-  //   const files = File.readFolder(folder, {
-  //     sort: false,
-  //     ignoreFiles: HelperFile.getIgnoredFileFolders()
-  //   })
-  //   const htmlFiles = this.getHtmlFiles(files)
-  //   const classes = this.getHtmlClasses(htmlFiles)
-  //   this.removeClassesNotFoundInHtmlFiles(css, classes)
-  // },
-
-  // getHtmlFiles (files, html = []) {
-  //   for (const file of files) {
-  //     if (file.extension === 'html') html.push(file.path)
-  //     if (file.children.length) this.getHtmlFiles(file.children, html)
-  //   }
-  //   return html
-  // },
-
-  // getHtmlClasses (files) {
-  //   const classes = []
-  //   for (const file of files) {
-  //     const html = fs.readFileSync(file).toString()
-  //     if (html) this.addHtmlClasses(html, classes)
-  //   }
-  //   return classes
-  // },
-
-  // addHtmlClasses (html, classes) {
-  //   const regex = HelperRegex.getMatchingGroups(html, /class="(?<cls>.*?)"/gi)
-  //   for (const val of regex) {
-  //     for (let cls of val.cls.split(' ')) {
-  //       cls = cls.trim()
-  //       if (cls && !['text', 'block'].includes(cls)) classes.push(cls)
-  //     }
-  //   }
-  // },
-
-  // removeClassesNotFoundInHtmlFiles (css, classes) {
-  //   for (const selector in css) {
-  //     if (selector === ':root') continue
-  //     const cls = HelperStyle.getClassFromSelector(selector).replace('_ss_', '')
-  //     if (!classes.includes(cls)) delete css[selector]
-  //   }
-  // }
 }

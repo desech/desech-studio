@@ -40,7 +40,8 @@ export default {
     this.loadFilePanel(file)
     TopZoom.setSavedZoomLevel()
     TopCommon.positionDragHandle()
-    if (!file) TopCommandSave.setFirstSaveTimeout()
+    // @todo fix the bug where the index.html would load empty; check ParseHtml.checkIfBodyFailed()
+    // if (!file) TopCommandSave.setFirstSaveTimeout()
   },
 
   loadFilePanel (file) {

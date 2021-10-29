@@ -1,8 +1,6 @@
 import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
-import HelperElement from '../../helper/HelperElement.js'
-import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   reloadStyle (css) {
@@ -45,9 +43,13 @@ export default {
 
   getStyle () {
     const css = this.initStyleCss()
+    let foundBody = false
     for (const sheet of document.adoptedStyleSheets) {
       for (const rule of sheet.cssRules) {
-        this.addStyleRule(rule, css)
+        const selector = rule.cssRules[0].selectorText
+        if (selector === '.e000body') foundBody = true
+        const type = this.getSelectorType(selector, foundBody)
+        this.addStyleRule(rule, selector, type, css)
       }
     }
     return this.formatReturn(css)
@@ -62,10 +64,20 @@ export default {
     }
   },
 
-  addStyleRule (rule, css) {
-    const selector = rule.cssRules[0].selectorText
+  getSelectorType (selector, foundBody) {
+    if (selector === ':root') {
+      return 'root'
+    } else if (selector.includes('._ss_')) {
+      return 'componentCss'
+    } else if (HelperFile.isComponentFile() || !foundBody) {
+      return 'componentHtml'
+    } else if (foundBody) {
+      return 'element'
+    }
+  },
+
+  addStyleRule (rule, selector, type, css) {
     const index = selector + rule.conditionText
-    const type = this.getSelectorType(selector)
     switch (type) {
       case 'root':
         this.addStyleItem(css.color, ':root', rule, css)
@@ -79,19 +91,7 @@ export default {
       case 'element':
         this.addStyleItem(css.element, index, rule, css)
         break
-      default:
-        // ignore
     }
-  },
-
-  getSelectorType (selector) {
-    if (selector === ':root') return 'root'
-    if (selector.includes('._ss_')) return 'componentCss'
-    if (HelperFile.isComponentFile()) return 'componentHtml'
-    const ref = HelperStyle.extractRefFromSelector(selector)
-    const element = HelperElement.getElement(ref)
-    if (!element) return
-    return HelperComponent.belongsToAComponent(element) ? 'componentHtml' : 'element'
   },
 
   addStyleItem (sheet, index, rule, css) {

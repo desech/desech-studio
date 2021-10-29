@@ -129,6 +129,8 @@ export default {
     if (body.children.length > 0) return
     const html = fs.readFileSync(this._file).toString()
     const dom = new JSDOM(html)
+    // @todo fix the bug where the index.html would load empty; check Page.loadMain()
+    console.log('check', body.children.length, dom.window.document.body.children.length)
     if (dom.window.document.body.children.length > 0) {
       throw new Error(Language.localize('Failed to load the html page. ' +
         'Please try opening the html page again'))

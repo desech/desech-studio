@@ -5,6 +5,9 @@ import StyleSheetCommon from './stylesheet/StyleSheetCommon.js'
 import ExtendJS from '../helper/ExtendJS.js'
 import StyleSheetSelector from './stylesheet/StyleSheetSelector.js'
 import StateSelectedElement from './StateSelectedElement.js'
+import HelperFile from '../helper/HelperFile.js'
+import HelperComponent from '../helper/HelperComponent.js'
+import HelperElement from '../helper/HelperElement.js'
 
 export default {
   getPropertyValue (property, selector = '', checkResponsive = true) {
@@ -80,27 +83,30 @@ export default {
   },
 
   // the order is the one from the <link> css files: root, component-css, component-html, page
-  // when we create a new class selector it gets added at the end of all css component selectors
-  // when we create a new element (component or page) it gets added at the end of all selectors
+  // new class selectors are added at the end of all component-css selectors
+  // new ref component selectors
+  //  - inside components -> are added at the end of all selectors
+  //  - inside pages -> are added at the end of all ref component selectors, before .e000body
+  // new ref page selectors are added at the end of all selectors
   getInsertSheetPosition (array, selector) {
     if (array.length === 1) return 1
     const ref = HelperStyle.extractRefFromSelector(selector)
     const cls = HelperStyle.extractClassSelector(selector)
-    const pos = this.getInsertSheetInnerPosition(array, ref, cls)
-    return pos || array.length
+    const foundPos = this.getInsertSheetInnerPosition(array, ref, cls)
+    return foundPos || this.getLastRefPosition(array, ref)
   },
 
   getInsertSheetInnerPosition (array, ref, cls) {
     for (let i = 1; i < array.length; i++) {
       const previousSelector = array[i - 1].cssRules[0].cssRules[0].selectorText
       const currentSelector = array[i].cssRules[0].cssRules[0].selectorText
-      let pos
+      let foundPos
       if (cls) {
-        pos = this.getClassInsertSheetInnerPosition(previousSelector, currentSelector, cls, i)
+        foundPos = this.getClassInsertSheetInnerPosition(previousSelector, currentSelector, cls, i)
       } else if (ref) {
-        pos = this.getRefInsertSheetInnerPosition(previousSelector, currentSelector, ref, i)
+        foundPos = this.getRefInsertSheetInnerPosition(previousSelector, currentSelector, ref, i)
       }
-      if (pos) return pos
+      if (foundPos) return foundPos
     }
   },
 
@@ -120,6 +126,17 @@ export default {
     if (isPrevious && !isCurrent) {
       // if we are at the end of our ref selectors
       return pos
+    }
+  },
+
+  // only if we are inside a page and this is a component ref, then we need the position right
+  // before the e000body element, otherwise we just return the last position of the array
+  getLastRefPosition (array, ref) {
+    if (HelperFile.isPageFile() &&
+      HelperComponent.belongsToAComponent(HelperElement.getElement(ref))) {
+      return StyleSheetCommon.getSelectorSheetIndex('.e000body')
+    } else {
+      return array.length
     }
   },
 

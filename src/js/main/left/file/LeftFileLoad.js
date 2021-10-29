@@ -8,9 +8,7 @@ import CanvasElementSelect from '../../canvas/element/CanvasElementSelect.js'
 export default {
   async loadFile (file) {
     const data = await window.electron.invoke('rendererParseHtmlCssFile', file)
-    console.log('loadFile', data) // @todo remove when fixed
     if (!data) return
-    console.log('savingFile') // @todo remove when fixed
     this.loadHtml(data.html)
     this.loadCss(data.css)
     this.setData(file, data)

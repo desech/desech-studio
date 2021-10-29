@@ -26,7 +26,16 @@ export default {
     await this.saveStyleToFile(css.color, css.color, folder, 'css/general/root.css')
     await this.saveStyleToFile(css.componentCss, css.color, folder,
       'css/general/component-css.css')
-    await this.savePageOrComponentStyle(css, htmlFile, folder)
+    await this.saveStyleToFile(css.componentHtml, css.color, folder,
+      'css/general/component-html.css')
+    await this.savePageStyle(css, htmlFile, folder)
+  },
+
+  async savePageStyle (css, htmlFile, folder) {
+    if (HelperFile.isPageFile(htmlFile, folder)) {
+      const pageCssFile = HelperFile.getPageCssFile(htmlFile, folder)
+      await this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
+    }
   },
 
   async saveStyleToFile (data, colors, folder, file) {
@@ -82,16 +91,6 @@ export default {
     }
     if (rule.length && rule[0].selector === ':root') return properties
     return ParseCssMerge.mergeProperties(properties, colors)
-  },
-
-  async savePageOrComponentStyle (css, htmlFile, folder) {
-    if (HelperFile.isComponentFile(htmlFile, folder)) {
-      await this.saveStyleToFile(css.componentHtml, css.color, folder,
-        'css/general/component-html.css')
-    } else {
-      const pageCssFile = HelperFile.getPageCssFile(htmlFile, folder)
-      await this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
-    }
   },
 
   async exportCode (data) {

@@ -109,8 +109,8 @@ export default {
 
   confirmAddStructure (form, data) {
     HelperDOM.hide(form)
-    const preview = form.closest('.dialog-body')
-      .getElementsByClassName('dialog-selector-add-preview')[0]
+    const body = form.closest('.dialog-body')
+    const preview = body.getElementsByClassName('dialog-selector-add-preview')[0]
     this.initSelector(preview, data)
     preview.dataset.selector += this.getStructureCss(data)
     preview.textContent = preview.dataset.selector.replaceAll('_ss_', '')
@@ -120,7 +120,7 @@ export default {
 
   initSelector (preview, data) {
     if (!preview.dataset.selector && !data.component) {
-      const ref = StateSelectedElement.getRef()
+      const ref = StateSelectedElement.getStyleRef()
       preview.dataset.selector = HelperStyle.buildRefSelector(ref)
     }
   },

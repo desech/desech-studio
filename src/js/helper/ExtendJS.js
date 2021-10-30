@@ -62,6 +62,18 @@ export default {
     return !obj || (Object.keys(obj).length === 0 && obj.constructor === Object)
   },
 
+  clearEmptyObjects (obj) {
+    for (const prop in obj) {
+      if (!obj[prop] || typeof obj[prop] !== 'object') {
+        continue
+      }
+      this.clearEmptyObjects(obj[prop])
+      if (this.isEmpty(obj[prop])) {
+        delete obj[prop]
+      }
+    }
+  },
+
   objectsEqual (obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2)
   },

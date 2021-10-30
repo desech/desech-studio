@@ -5,30 +5,40 @@ import StateHtmlFile from '../html/StateHtmlFile.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
+import HelperCanvas from '../../helper/HelperCanvas.js'
 
 export default {
   async overrideElement (element, type, value) {
     if (HelperComponent.isComponent(element) || HelperComponent.isComponentElement(element)) {
-      const component = element.closest('[data-ss-component]')
-      const data = await this.processElementData(component, element, type, value)
-      // await this.saveData(component, data)
-      HelperComponent.setComponentData(component, data)
+      const parents = this.getComponentParents(element)
+      await this.processElementData(parents, element, type, value)
+      await this.saveData(parents)
     }
   },
 
-  async processElementData (component, element, type, value) {
-    const data = HelperComponent.getComponentData(component)
-    if (this.isElementInlineOverride(element, data)) {
+  getComponentParents (element, structure = []) {
+    const component = element.closest('[data-ss-component]')
+    structure.unshift({
+      element: component,
+      data: HelperComponent.getComponentData(component)
+    })
+    if (HelperComponent.isComponentElement(component)) {
+      this.getComponentParents(component.parentNode, structure)
+    }
+    return structure
+  },
+
+  async processElementData (parents, element, type, value) {
+    if (this.isElementInlineOverride(element, parents[0].data)) {
       element = element.closest('.text')
       type = 'inner'
       value = element.innerHTML
     }
     const ref = HelperElement.getStyleRef(element)
-    const componentNode = await this.getComponentNode(data.file)
+    const componentNode = await this.getComponentNode(parents[0].data.file)
     const originalNode = componentNode.getElementsByClassName(ref)[0]
     const originalProps = HelperElement.getProperties(originalNode)
-    this.overrideData(type, value, data, ref, originalNode, originalProps)
-    return data
+    this.overrideData(type, value, parents, ref, originalNode, originalProps)
   },
 
   // @todo when you undo this inner override, it will use existing inline overrides
@@ -48,66 +58,67 @@ export default {
     return div
   },
 
-  overrideData (type, value, data, ref, originalNode, originalProps) {
-    this.initOverrideData(data, ref)
+  overrideData (type, value, parents, ref, originalNode, originalProps) {
+    const data = this.initOverrideData(parents, ref)
     switch (type) {
       case 'tag':
-        this.processElementTag(value, data, ref, originalNode)
+        this.processElementTag(value, data, originalNode)
         break
       case 'inner':
-        this.processElementInner(value, data, ref, originalNode)
+        this.processElementInner(value, data, originalNode)
         break
       case 'attributes':
-        this.processElementAttributes(value, data, ref, originalNode)
+        this.processElementAttributes(value, data, originalNode)
         break
       case 'properties': // element + component
-        this.processProperties(data, ref, originalProps, value)
+        this.processProperties(data, originalProps, value)
         break
       case 'classes':
-        this.processElementClasses(value, data, ref, originalNode)
+        this.processElementClasses(value, data, originalNode)
         break
       case 'component': // component file
-        this.processComponentFile(value, data, ref, originalNode)
+        this.processComponentFile(value, data, originalNode)
         break
     }
-    this.cleanOverrideData(data, ref)
+    ExtendJS.clearEmptyObjects(parents[0].data)
   },
 
-  initOverrideData (data, ref) {
+  initOverrideData (parents, ref) {
+    let data = this.getInitialData(parents[0].data)
+    for (let i = 1; i < parents.length; i++) {
+      data = this.initOverrideDataParent(data, parents[i].data.ref)
+    }
+    if (!data[ref]) data[ref] = {}
+    return data[ref]
+  },
+
+  getInitialData (data) {
     if (!data.overrides) data.overrides = {}
-    if (!data.overrides[ref]) data.overrides[ref] = {}
+    return data.overrides
   },
 
-  cleanOverrideData (data, ref) {
-    for (const type of ['attributes', 'properties', 'classes']) {
-      if (ExtendJS.isEmpty(data.overrides[ref][type])) {
-        delete data.overrides[ref][type]
-      }
-    }
-    if (ExtendJS.isEmpty(data.overrides[ref])) {
-      delete data.overrides[ref]
-    }
-    if (ExtendJS.isEmpty(data.overrides)) {
-      delete data.overrides
-    }
+  initOverrideDataParent (data, ref) {
+    if (!data[ref]) data[ref] = {}
+    if (!data[ref].children) data[ref].children = {}
+    return data[ref].children
   },
 
-  processElementTag (value, data, ref, originalNode) {
+  processElementTag (value, data, originalNode) {
     const originalValue = HelperDOM.getTag(originalNode)
     if (value === originalValue) {
-      delete data.overrides[ref].tag
+      delete data.tag
     } else {
-      data.overrides[ref].tag = value
+      data.tag = value
     }
   },
 
-  processElementInner (value, data, ref, originalNode) {
+  processElementInner (value, data, originalNode) {
     value = this.cleanElementInner(value, originalNode)
     const originalValue = this.cleanElementInner(originalNode.innerHTML, originalNode)
     if (value === originalValue) {
-      delete data.overrides[ref].inner
+      delete data.inner
     } else {
-      data.overrides[ref].inner = value
+      data.inner = value
     }
   },
 
@@ -135,23 +146,21 @@ export default {
     }
   },
 
-  processElementAttributes (attributes, data, ref, originalNode) {
-    if (!data.overrides[ref].attributes) {
-      data.overrides[ref].attributes = {}
-    }
+  processElementAttributes (attributes, data, originalNode) {
+    if (!data.attributes) data.attributes = {}
     for (const [name, value] of Object.entries(attributes)) {
-      this.processElementAttribute(data, ref, originalNode, name, value)
+      this.processElementAttribute(data, originalNode, name, value)
     }
   },
 
-  processElementAttribute (data, ref, originalNode, name, value) {
+  processElementAttribute (data, originalNode, name, value) {
     if (name === 'data-ss-hidden') return
     const attrValue = this.getElementAttributeValue(value)
     const originalValue = this.getElementAttributeValue(originalNode.getAttributeNS(null, name))
     if (!ExtendJS.objectsEqual(attrValue, originalValue)) {
-      data.overrides[ref].attributes[name] = attrValue
+      data.attributes[name] = attrValue
     } else {
-      delete data.overrides[ref].attributes[name]
+      delete data.attributes[name]
     }
   },
 
@@ -165,13 +174,11 @@ export default {
     }
   },
 
-  processProperties (data, ref, originalProps, newProps) {
-    if (!data.overrides[ref].properties) {
-      data.overrides[ref].properties = {}
-    }
-    this.updateDeleteProperties(originalProps, newProps, data.overrides[ref].properties)
-    this.addProperties(originalProps, newProps, data.overrides[ref].properties)
-    this.clearProperties(originalProps, newProps, data.overrides[ref].properties)
+  processProperties (data, originalProps, newProps) {
+    if (!data.properties) data.properties = {}
+    this.updateDeleteProperties(originalProps, newProps, data.properties)
+    this.addProperties(originalProps, newProps, data.properties)
+    this.clearProperties(originalProps, newProps, data.properties)
   },
 
   updateDeleteProperties (originalProps, newProps, properties) {
@@ -202,41 +209,36 @@ export default {
     }
   },
 
-  processElementClasses (value, data, ref, originalNode) {
-    if (!data.overrides[ref].classes) {
-      data.overrides[ref].classes = {}
-    }
+  processElementClasses (value, data, originalNode) {
+    if (!data.classes) data.classes = {}
     const exists = originalNode.classList.contains(value.cls)
     const cls = HelperStyle.getViewableClass(value.cls)
-    this.processElementClass(cls, value.action, data, ref, exists)
+    this.processElementClass(cls, value.action, data, exists)
   },
 
-  processElementClass (cls, action, data, ref, exists) {
+  processElementClass (cls, action, data, exists) {
     if (exists && action === 'delete') {
-      data.overrides[ref].classes[cls] = { delete: true }
+      data.classes[cls] = { delete: true }
     } else if (!exists && action === 'add') {
-      data.overrides[ref].classes[cls] = { add: true }
+      data.classes[cls] = { add: true }
     } else {
-      delete data.overrides[ref].classes[cls]
+      delete data.classes[cls]
     }
   },
 
   async overrideComponent (element, type, value) {
     if (HelperComponent.isComponentElement(element)) {
-      const component = element.parentNode.closest('[data-ss-component]')
-      const data = await this.processComponentData(component, element, type, value)
-      // await this.saveData(component, data)
-      HelperComponent.setComponentData(component, data)
+      const parents = this.getComponentParents(element.parentNode)
+      await this.processComponentData(parents, element, type, value)
+      await this.saveData(parents)
     }
   },
 
-  async processComponentData (component, element, type, value) {
-    const data = HelperComponent.getComponentData(component)
+  async processComponentData (parents, element, type, value) {
     const ref = HelperComponent.getInstanceRef(element)
-    const originalNode = await this.getOriginalComponent(data.file, ref)
+    const originalNode = await this.getOriginalComponent(parents[0].data.file, ref)
     const originalProps = HelperComponent.getComponentData(originalNode).properties
-    this.overrideData(type, value, data, ref, originalNode, originalProps)
-    return data
+    this.overrideData(type, value, parents, ref, originalNode, originalProps)
   },
 
   async getOriginalComponent (file, ref) {
@@ -249,30 +251,29 @@ export default {
     throw new Error("Can't find the original component")
   },
 
-  processComponentFile (value, data, ref, originalNode) {
+  processComponentFile (value, data, originalNode) {
     if (value === HelperComponent.getInstanceFile(originalNode)) {
-      delete data.overrides[ref].component
+      delete data.component
     } else {
-      data.overrides[ref].component = HelperFile.getRelPath(value)
+      data.component = HelperFile.getRelPath(value)
+    }
+  },
+
+  async saveData (parents) {
+    // save the instance data to our component
+    HelperComponent.setComponentData(parents[0].element, parents[0].data)
+    // save the main data to the file
+    // await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
+    // save the main data of all the component instances found in the current opened file
+    // this.saveMainDataAllComponents(data.file, data.main)
+  },
+
+  saveMainDataAllComponents (file, mainData) {
+    const components = HelperCanvas.getCanvas().querySelectorAll(`[data-ss-component*="${file}"]`)
+    for (const component of components) {
+      const data = HelperComponent.getComponentData(component)
+      data.main = mainData
+      HelperComponent.setComponentData(component, data)
     }
   }
-
-  // async saveData (component, data) {
-  //   // save the instance data to our component
-  //   HelperComponent.setComponentData(component, data)
-  //   // save the main data to the file
-  //   await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
-  //   // save the main data of all the component instances found in the current opened file
-  //   this.saveMainDataAllComponents(data.file, data.main)
-  // },
-
-  // saveMainDataAllComponents (file, mainData) {
-  //   const components = HelperCanvas.getCanvas()
-  //      .querySelectorAll(`[data-ss-component*="${file}"]`)
-  //   for (const component of components) {
-  //     const data = HelperComponent.getComponentData(component)
-  //     data.main = mainData
-  //     HelperComponent.setComponentData(component, data)
-  //   }
-  // }
 }

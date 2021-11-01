@@ -9,31 +9,49 @@ import HelperCanvas from '../../helper/HelperCanvas.js'
 
 export default {
   async overrideElement (element, type, value) {
+    // although we check if it's a component, we are actually interested in the root element
     if (HelperComponent.isComponent(element) || HelperComponent.isComponentElement(element)) {
-      const parents = this.getComponentParents(element)
+      const parents = this.getElementParents(element)
       await this.processElementData(parents, element, type, value)
       await this.saveData(parents)
     }
   },
 
-  getComponentParents (element, structure = []) {
+  getElementParents (element, structure = []) {
+    // if this is a root element, then the component is the element itself
     const component = element.closest('[data-ss-component]')
     structure.unshift({
       element: component,
       data: HelperComponent.getComponentData(component)
     })
-    if (HelperComponent.isComponentElement(component)) {
-      this.getComponentParents(component.parentNode, structure)
+    this.getComponentParents(component.parentNode, structure)
+    return structure
+  },
+
+  // this is also called by overrideComponent()
+  getComponentParents (element, structure = []) {
+    const node = element.closest('[data-ss-component], [data-ss-component-hole]')
+    if (HelperComponent.isComponentHole(node)) {
+      // when we find a hole, we need to skip its component
+      this.getComponentParents(element.closest('[data-ss-component]').parentNode, structure)
+    } else { // component
+      structure.unshift({
+        element: node,
+        data: HelperComponent.getComponentData(node)
+      })
+      if (HelperComponent.isComponentElement(node)) {
+        this.getComponentParents(node.parentNode, structure)
+      }
     }
     return structure
   },
 
   async processElementData (parents, element, type, value) {
-    if (this.isElementInlineOverride(element, parents[0].data)) {
-      element = element.closest('.text')
-      type = 'inner'
-      value = element.innerHTML
-    }
+    // if (this.isElementInlineOverride(element, parents[0].data)) {
+    //   element = element.closest('.text')
+    //   type = 'inner'
+    //   value = element.innerHTML
+    // }
     const ref = HelperElement.getStyleRef(element)
     const componentNode = await this.getComponentNode(parents[0].data.file)
     const originalNode = componentNode.getElementsByClassName(ref)[0]

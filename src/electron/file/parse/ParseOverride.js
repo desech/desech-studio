@@ -3,27 +3,49 @@ import File from '../File.js'
 import ParseCommon from './ParseCommon.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
+import ExtendJS from '../../../js/helper/ExtendJS.js'
 
 export default {
-  setOverrideTag (component, data, document) {
-    if (component?.data?.overrides && component.data.overrides[data.ref]?.tag) {
-      data.tag = component.data.overrides[data.ref].tag
-      if (HelperElement.isNormalTag(data.tag)) {
-        data.node = HelperDOM.changeTag(data.node, data.tag, document)
+  getSubComponentData (parent, child) {
+    // we clone the object because we don't want to change the original data
+    const data = ExtendJS.cloneData(child)
+    if (parent?.overrides && parent?.overrides[child.ref]?.children) {
+      if (!data.overrides) data.overrides = {}
+      this.mergeParentChildData(parent.overrides[child.ref].children, data.overrides)
+    }
+    return data
+  },
+
+  mergeParentChildData (parent, child) {
+    Object.assign(child, parent)
+    // if we have these pairs value/delete or add/delete, remove the first value
+    child = Object.keys(child).reduce((val, key) => {
+      val[key] = (child[key], key) => {
+        
+      }
+      return val
+    }, {})
+  },
+
+  setOverrideTag (nodeData, overrides, document) {
+    if (overrides && overrides[nodeData.ref]?.tag) {
+      nodeData.tag = overrides[nodeData.ref].tag
+      if (HelperElement.isNormalTag(nodeData.tag)) {
+        nodeData.node = HelperDOM.changeTag(nodeData.node, nodeData.tag, document)
       }
     }
   },
 
-  setOverrideInner (node, component, ref) {
-    if (component?.data?.overrides && component.data.overrides[ref]?.inner) {
-      node.innerHTML = component.data.overrides[ref].inner
+  setOverrideInner (node, overrides, ref) {
+    if (overrides && overrides[ref]?.inner) {
+      node.innerHTML = overrides[ref].inner
     }
   },
 
-  setOverrideAttributes (node, component, folder) {
+  setOverrideAttributes (node, overrides, folder) {
     const ref = HelperElement.getRef(node)
-    if (component?.data?.overrides && component.data.overrides[ref]?.attributes) {
-      for (const [name, obj] of Object.entries(component.data.overrides[ref].attributes)) {
+    if (overrides && overrides[ref]?.attributes) {
+      for (const [name, obj] of Object.entries(overrides[ref].attributes)) {
         this.setOverrideAttribute(name, obj, node, folder)
       }
     }
@@ -48,22 +70,22 @@ export default {
     }
   },
 
-  setOverrideElementProperties (node, component) {
+  setOverrideElementProperties (node, overrides) {
     const properties = HelperElement.getProperties(node)
     const ref = HelperElement.getRef(node)
-    const changed = this.overrideProperties(component, ref, properties)
+    const changed = this.overrideProperties(overrides, ref, properties)
     if (changed) HelperElement.setProperties(node, properties)
   },
 
-  setOverrideComponentProperties (node, component) {
+  setOverrideComponentProperties (node, overrides) {
     const data = HelperComponent.getComponentData(node)
-    const changed = this.overrideProperties(component, data.ref, data.properties)
+    const changed = this.overrideProperties(overrides, data.ref, data.properties)
     if (changed) HelperComponent.setComponentData(node, data)
   },
 
-  overrideProperties (component, ref, originalProps) {
-    if (component?.data?.overrides && component.data.overrides[ref]?.properties) {
-      for (const [name, obj] of Object.entries(component.data.overrides[ref].properties)) {
+  overrideProperties (overrides, ref, originalProps) {
+    if (overrides && overrides[ref]?.properties) {
+      for (const [name, obj] of Object.entries(overrides[ref].properties)) {
         this.overrideProperty(name, obj, originalProps)
       }
       return true
@@ -80,10 +102,10 @@ export default {
     }
   },
 
-  setOverrideClasses (node, component) {
+  setOverrideClasses (node, overrides) {
     const ref = HelperElement.getRef(node)
-    if (component?.data?.overrides && component.data.overrides[ref]?.classes) {
-      for (const [cls, obj] of Object.entries(component.data.overrides[ref].classes)) {
+    if (overrides && overrides[ref]?.classes) {
+      for (const [cls, obj] of Object.entries(overrides[ref].classes)) {
         this.setOverrideClass(cls, obj, node)
       }
     }
@@ -97,12 +119,9 @@ export default {
     }
   },
 
-  setOverrideComponentFile (node, component) {
-    const data = HelperComponent.getComponentData(node)
-    if (component?.data?.overrides && component.data.overrides[data.ref]?.component) {
-      data.file = component.data.overrides[data.ref].component
-      HelperComponent.setComponentData(node, data)
+  setOverrideComponentFile (data, overrides) {
+    if (overrides && overrides[data.ref]?.component) {
+      data.file = overrides[data.ref].component
     }
-    return data
   }
 }

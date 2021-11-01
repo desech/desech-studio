@@ -122,5 +122,24 @@ export default {
       if (value > 0) return 1
     }
     return 0
+  },
+
+  deepMap (obj, fn) {
+    const deepMapper = (val, key) => {
+      return (typeof val === 'object') ? this.deepMap(val, fn) : fn(val, key)
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(deepMapper)
+    } else if (typeof obj === 'object') {
+      return this.mapObject(obj, deepMapper)
+    }
+    return obj
+  },
+
+  mapObject (obj, fn) {
+    return Object.keys(obj).reduce((res, key) => {
+      res[key] = fn(obj[key], key)
+      return res
+    }, {})
   }
 }

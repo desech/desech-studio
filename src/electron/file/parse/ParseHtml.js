@@ -122,7 +122,9 @@ export default {
     this.cleanClasses(body)
     body.classList.add('element')
     body.classList.add('body')
-    if (body.children.length) this.prepareChildren(body.children, null)
+    if (body.children.length) {
+      this.prepareChildren(body.children, null)
+    }
   },
 
   checkIfBodyFailed (body) {
@@ -137,20 +139,45 @@ export default {
     }
   },
 
-  setComponent (node, component) {
-    const data = ParseOverride.setOverrideComponentFile(node, component)
-    data.file = File.resolve(this._folder, data.file)
-    if (!fs.existsSync(data.file)) return node.remove()
-    const html = fs.readFileSync(data.file).toString()
-    const element = this._document.createRange().createContextualFragment(html).children[0]
-    this.mergeComponentData(element, data)
-    this.debugComponent(node, component)
-    const children = node.innerHTML
-    // we need the replace before the prepare because the tag change will overwrite the node
-    node.replaceWith(element)
-    const level = this.adjustComponentLevel('component', component?.level)
-    ParseOverride.setOverrideComponentProperties(element, component)
-    this.prepareElement(element, { data, level, children })
+  setComponent (div, parentData) {
+    const instanceData = HelperComponent.getComponentData(div)
+    ParseOverride.setOverrideComponentFile(instanceData, parentData?.data?.overrides)
+    const mainComponent = this.getMainComponent(div, instanceData)
+    if (!mainComponent) return
+    this.mergeComponentData(mainComponent, instanceData)
+    this.debugComponent(div, parentData)
+    const children = div.innerHTML
+    // we need the replace before the prepare because the tag change will overwrite the div
+    div.replaceWith(mainComponent)
+    this.prepareComponent(mainComponent, parentData, instanceData, children)
+  },
+
+  getMainComponent (div, instanceData) {
+    instanceData.file = File.resolve(this._folder, instanceData.file)
+    if (!fs.existsSync(instanceData.file)) {
+      div.remove()
+      return
+    }
+    const html = fs.readFileSync(instanceData.file).toString()
+    return this._document.createRange().createContextualFragment(html).children[0]
+  },
+
+  mergeComponentData (mainComponent, instanceData) {
+    const main = HelperComponent.getComponentData(mainComponent)
+    if (main) instanceData.main = main
+    HelperComponent.setComponentData(mainComponent, instanceData)
+  },
+
+  prepareComponent (mainComponent, parentData, instanceData, children) {
+    const level = this.adjustComponentLevel('component', parentData?.level)
+    ParseOverride.setOverrideComponentProperties(mainComponent, parentData?.data?.overrides)
+    const overrideData = ParseOverride.getSubComponentData(parentData?.data, instanceData)
+    this.prepareElement(mainComponent, {
+      data: overrideData,
+      level,
+      parent: parentData,
+      children
+    })
   },
 
   /**
@@ -223,12 +250,6 @@ export default {
     if (this._debug) console.info(msg)
   },
 
-  mergeComponentData (element, data) {
-    const main = HelperComponent.getComponentData(element)
-    if (main) data.main = main
-    HelperComponent.setComponentData(element, data)
-  },
-
   errorEscapeHtml (text) {
     const map = {
       '&': '&amp;',
@@ -280,14 +301,18 @@ export default {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
-    ParseOverride.setOverrideAttributes(node, component, this._folder)
-    ParseOverride.setOverrideElementProperties(node, component)
-    ParseOverride.setOverrideClasses(node, component)
+    this.setBasicOverrides(node, component?.data?.overrides)
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
     this.addCanvasClasses(node, type)
     this.addComponentClasses(node, component)
+  },
+
+  setBasicOverrides (node, overrides) {
+    ParseOverride.setOverrideAttributes(node, overrides, this._folder)
+    ParseOverride.setOverrideElementProperties(node, overrides)
+    ParseOverride.setOverrideClasses(node, overrides)
   },
 
   addCanvasClasses (node, type) {
@@ -298,7 +323,7 @@ export default {
   },
 
   setIconElement (node, component, ref) {
-    ParseOverride.setOverrideInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
     this.setBasic(node, 'icon', component)
   },
 
@@ -309,7 +334,7 @@ export default {
   },
 
   setMediaElement (node, tag, component, ref) {
-    ParseOverride.setOverrideInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
     this.setBasic(node, tag, component)
     this.setTrackSource(node)
   },
@@ -331,7 +356,7 @@ export default {
   },
 
   setDropdownElement (node, tag, component, ref) {
-    ParseOverride.setOverrideInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
     const cls = (tag === 'select') ? 'dropdown' : tag
     this.setBasic(node, cls, component)
   },
@@ -348,7 +373,7 @@ export default {
   },
 
   setTextElement (node, component, ref) {
-    ParseOverride.setOverrideInner(node, component, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
     this.setTagElement(node, 'text', 'p', component)
   },
 
@@ -371,7 +396,7 @@ export default {
       tag: HelperDOM.getTag(node),
       ref: HelperElement.getRef(node)
     }
-    ParseOverride.setOverrideTag(component, data, this._document)
+    ParseOverride.setOverrideTag(data, component?.data?.overrides, this._document)
     return this.changeNodeSpecialTag(data.node, data.tag)
   },
 
@@ -392,7 +417,7 @@ export default {
     } else if (component?.children && HelperComponent.isComponentHole(node)) {
       node.innerHTML = component.children
       this.prepareChildren(node.children, {
-        ...component,
+        ...component?.parent,
         level: this.adjustComponentLevel('component-hole', component?.level)
       })
     }

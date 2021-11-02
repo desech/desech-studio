@@ -1,16 +1,6 @@
 import StateCommand from '../../state/StateCommand.js'
 
 export default {
-  getMouseX (x) {
-    const scroll = document.getElementsByClassName('canvas-container')[0].scrollLeft
-    return x + scroll
-  },
-
-  getMouseY (y) {
-    const scroll = document.getElementsByClassName('canvas-container')[0].scrollTop
-    return y + scroll
-  },
-
   removeHidden (element) {
     // we don't allow hidden elements to be moved, because it will be impossible to undo
     element.removeAttributeNS(null, 'data-ss-hidden')

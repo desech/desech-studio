@@ -5,6 +5,16 @@ import ExtendJS from '../../helper/ExtendJS.js'
 export default {
   _overlayTimer: null,
 
+  getMouseX (x) {
+    const container = document.getElementsByClassName('canvas-container')[0]
+    return (x + container.scrollLeft)
+  },
+
+  getMouseY (y) {
+    const container = document.getElementsByClassName('canvas-container')[0]
+    return (y + container.scrollTop)
+  },
+
   enablePanelButton (type) {
     this.activatePanelButton(type)
     if (!HelperCanvas.isCreateTool()) this.removePlacementMarker()

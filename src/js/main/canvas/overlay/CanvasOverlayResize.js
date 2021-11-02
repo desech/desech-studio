@@ -1,6 +1,5 @@
 import ExtendJS from '../../../helper/ExtendJS.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
-import CanvasElement from '../CanvasElement.js'
 import CanvasOverlayResizeSize from './resize/CanvasOverlayResizeSize.js'
 import CanvasOverlayResizeMargin from './resize/CanvasOverlayResizeMargin.js'
 import CanvasOverlayResizePadding from './resize/CanvasOverlayResizePadding.js'
@@ -8,6 +7,7 @@ import CanvasOverlayCommon from './CanvasOverlayCommon.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import StateTempStyle from '../../../state/StateTempStyle.js'
 import CanvasOverlayGridSetup from './grid/CanvasOverlayGridSetup.js'
+import CanvasCommon from '../CanvasCommon.js'
 
 export default {
   // the resize button dictating the operation type (size, margin, padding) and direction
@@ -53,8 +53,8 @@ export default {
   prepareResize (button, clientX, clientY) {
     HelperCanvas.setCanvasData('operation', 'resizing')
     this._button = button
-    this._startX = CanvasElement.getMouseX(clientX)
-    this._startY = CanvasElement.getMouseY(clientY)
+    this._startX = CanvasCommon.getMouseX(clientX)
+    this._startY = CanvasCommon.getMouseY(clientY)
   },
 
   resizeElement (clientX, clientY, altKey, shiftKey) {
@@ -68,8 +68,8 @@ export default {
   },
 
   initMousePosition (clientX, clientY) {
-    const mouseX = CanvasElement.getMouseX(clientX)
-    const mouseY = CanvasElement.getMouseY(clientY)
+    const mouseX = CanvasCommon.getMouseX(clientX)
+    const mouseY = CanvasCommon.getMouseY(clientY)
     const { changeX, changeY } = this.getMouseChange(mouseX, mouseY)
     this.setMouseStart(changeX, changeY, mouseX, mouseY)
     return { changeX, changeY }

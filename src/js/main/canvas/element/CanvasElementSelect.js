@@ -1,4 +1,3 @@
-import CanvasOverlay from '../CanvasOverlay.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
@@ -92,7 +91,7 @@ export default {
 
   updateUiAfterElementSelect (ref) {
     LeftCommon.selectItemByRef(ref)
-    CanvasOverlay.reloadOverlay()
+    HelperTrigger.triggerReload('element-overlay')
   },
 
   deselectElement () {
@@ -104,7 +103,7 @@ export default {
 
   updateUiAfterElementDeselect () {
     LeftCommon.deselectItem()
-    CanvasOverlay.clearOverlay()
+    HelperTrigger.triggerClear('element-overlay')
     HelperTrigger.triggerClear('right-panel-style')
   },
 

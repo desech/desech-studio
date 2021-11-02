@@ -17,6 +17,7 @@ export default {
   getEvents () {
     return {
       reloadcontainer: ['reloadcontainerEvent'],
+      clearcontainer: ['clearcontainerEvent'],
       resize: ['resizeWindowEvent'],
       wheel: ['wheelPositionElementOverlayEvent']
     }
@@ -29,6 +30,12 @@ export default {
   reloadcontainerEvent (event) {
     if (event.target.id === 'element-overlay') {
       this.reloadOverlay(event.detail ? event.detail.panelReload : null)
+    }
+  },
+
+  clearcontainerEvent (event) {
+    if (event.target.id === 'element-overlay') {
+      this.clearOverlay()
     }
   },
 

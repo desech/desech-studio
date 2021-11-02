@@ -31,6 +31,7 @@ export default {
   // this is also called by overrideComponent()
   getComponentParents (element, structure = []) {
     const node = element.closest('[data-ss-component], [data-ss-component-hole]')
+    if (!node) return structure
     if (HelperComponent.isComponentHole(node)) {
       // when we find a hole, we need to skip its component
       this.getComponentParents(element.closest('[data-ss-component]').parentNode, structure)

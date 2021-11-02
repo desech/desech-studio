@@ -18,13 +18,19 @@ export default {
 
   mergeParentChildData (parent, child) {
     Object.assign(child, parent)
+    this.mergeParentChildFix(child)
+  },
+
+  mergeParentChildFix (obj) {
+    // Object.assign will merge everything including the attribute/property/class values
     // if we have these pairs value/delete or add/delete, remove the first value
-    child = Object.keys(child).reduce((val, key) => {
-      val[key] = (child[key], key) => {
-        
-      }
-      return val
-    }, {})
+    if (obj.length === 2 && (('value' in obj && 'delete' in obj) ||
+      ('add' in obj && 'delete' in obj))) {
+      delete obj[Object.keys(obj)[0]]
+    }
+    for (const val of Object.values(obj)) {
+      if (typeof val === 'object') this.mergeParentChildFix(val)
+    }
   },
 
   setOverrideTag (nodeData, overrides, document) {

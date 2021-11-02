@@ -1,12 +1,12 @@
 import HelperStyle from './HelperStyle.js'
-import HelperCrypto from './HelperCrypto.js'
 import HelperCanvas from './HelperCanvas.js'
 import HelperDOM from './HelperDOM.js'
 import ExtendJS from './ExtendJS.js'
+import Crypto from '../../electron/lib/Crypto.js'
 
 export default {
   generateElementRef () {
-    return 'e0' + HelperCrypto.generateSmallHash()
+    return 'e0' + Crypto.generateSmallID()
   },
 
   getAllRefs (element) {

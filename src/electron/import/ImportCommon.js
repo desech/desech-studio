@@ -1,11 +1,11 @@
-import HelperCrypto from '../../js/helper/HelperCrypto.js'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 import HelperColor from '../../js/helper/HelperColor.js'
+import Crypto from '../lib/Crypto.js'
 
 export default {
   getName (string, obj = null) {
     let name = this.sanitizeName(string)
-    if (obj && obj[name]) name += '-' + HelperCrypto.generateSmallHash()
+    if (obj && obj[name]) name += '-' + Crypto.generateSmallID()
     return name
   },
 

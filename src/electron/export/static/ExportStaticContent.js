@@ -1,15 +1,15 @@
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import FileParse from '../../file/FileParse.js'
-import HelperCrypto from '../../../js/helper/HelperCrypto.js'
 import File from '../../file/File.js'
 import ExportCommon from '../ExportCommon.js'
+import Crypto from '../../lib/Crypto.js'
 
 export default {
   getPageHtml (folder, file, css) {
     // we replace <template>'s because they are parsed differently than regular html elements,
     // and we don't want that
-    const rand = HelperCrypto.generateSmallHash()
+    const rand = Crypto.generateID()
     const initialHtml = this.replaceTemplate(fs.readFileSync(file).toString(), rand)
     const dom = new JSDOM(initialHtml)
     const document = dom.window.document

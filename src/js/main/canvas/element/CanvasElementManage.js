@@ -12,9 +12,9 @@ import StateCommand from '../../../state/StateCommand.js'
 import RightCommon from '../../right/RightCommon.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
 import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties.js'
-import HelperCrypto from '../../../helper/HelperCrypto.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperStyle from '../../../helper/HelperStyle.js'
+import Crypto from '../../../../electron/lib/Crypto.js'
 
 export default {
   async deleteElement () {
@@ -41,7 +41,7 @@ export default {
       return
     }
     CanvasElement.removeHidden(element)
-    const token = HelperCrypto.generateSmallHash()
+    const token = Crypto.generateSmallID()
     CanvasElement.appendToken(element, token)
     await this.copyElementData(element, 'cut')
     CanvasElementSelect.deselectElement() // this first, before operation
@@ -94,7 +94,7 @@ export default {
   getCopiedAttributes (element, action) {
     const filter = (action === 'copy') ? { attr: true, cls: false } : { attr: false, cls: false }
     const attrs = this.getAttributesList(element, filter)
-    if (action === 'cut') attrs['data-ss-token'] = HelperCrypto.generateSmallHash()
+    if (action === 'cut') attrs['data-ss-token'] = Crypto.generateSmallID()
     this.processComponentAttribute(element, attrs, action)
     return attrs
   },

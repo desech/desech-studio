@@ -7,8 +7,8 @@ import CanvasElementManage from './CanvasElementManage.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
-import HelperCrypto from '../../../helper/HelperCrypto.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import Crypto from '../../../../electron/lib/Crypto.js'
 
 export default {
   // check if we started movement; we use `pointer-events: none`
@@ -128,7 +128,7 @@ export default {
   cloneMoveElement (element) {
     element.classList.remove('selected')
     CanvasElement.removeHidden(element)
-    const token = HelperCrypto.generateSmallHash()
+    const token = Crypto.generateSmallID()
     const clone = element.cloneNode(true)
     // the clone has the token, while the previous element has the previous token + the new token
     clone.setAttributeNS(null, 'data-ss-token', token)

@@ -2,8 +2,8 @@ import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import HelperElement from '../../../../helper/HelperElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
-import HelperCrypto from '../../../../helper/HelperCrypto.js'
 import HelperProject from '../../../../helper/HelperProject.js'
+import Crypto from '../../../../../electron/lib/Crypto.js'
 
 export default {
   getSelectedElementData () {
@@ -121,7 +121,8 @@ export default {
 
   addTrackToList (list, data = null) {
     const template = HelperDOM.getTemplate('template-style-html-attr-media-track')
-    template.elements.source.id = `source-track-detail-${HelperCrypto.generateSmallHash()}`
+    const id = Crypto.generateSmallID()
+    template.elements.source.id = `source-track-detail-${id}`
     if (data) this.addTrackData(template.elements, data)
     list.appendChild(template)
   },

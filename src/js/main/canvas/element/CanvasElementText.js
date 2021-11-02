@@ -7,10 +7,10 @@ import HelperElement from '../../../helper/HelperElement.js'
 import CanvasTextOverlay from '../CanvasTextOverlay.js'
 import StateCommand from '../../../state/StateCommand.js'
 import HelperLocalStore from '../../../helper/HelperLocalStore.js'
-import HelperCrypto from '../../../helper/HelperCrypto.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import CanvasElementSelect from './CanvasElementSelect.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import Crypto from '../../../../electron/lib/Crypto.js'
 
 export default {
   _startWidth: null,
@@ -131,7 +131,7 @@ export default {
   },
 
   saveHtmlContent (html) {
-    const id = 'text-' + HelperCrypto.generateSmallHash()
+    const id = 'text-' + Crypto.generateSmallID()
     HelperLocalStore.setItem(id, html)
     return id
   },

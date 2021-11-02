@@ -1,7 +1,7 @@
 import FigmaImage from './style/FigmaImage.js'
 import ImportCommon from '../ImportCommon.js'
-import HelperCrypto from '../../../js/helper/HelperCrypto.js'
 import File from '../../file/File.js'
+import Crypto from '../../lib/Crypto.js'
 
 export default {
   async addSvgContent (data, node, settings) {
@@ -23,7 +23,7 @@ export default {
 
   fixIdRefs (svg) {
     // figma exports the same ids for each gradient, etc, so we need to make them unique
-    const rand = HelperCrypto.generateSmallHash()
+    const rand = Crypto.generateSmallID()
     return svg.replace(/url\(#(.*?)\)/g, `url(#$1-${rand})`)
       .replace(/id="(.*?)"/g, `id="$1-${rand}"`)
       .replace(/"#image(.*?)"/g, `"#image$1-${rand}"`)

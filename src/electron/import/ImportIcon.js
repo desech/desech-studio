@@ -1,6 +1,6 @@
 import fs from 'fs'
 import File from '../file/File.js'
-import HelperCrypto from '../../js/helper/HelperCrypto.js'
+import Crypto from '../lib/Crypto.js'
 
 export default {
   getSvgCode (viewBox, content) {
@@ -11,7 +11,7 @@ export default {
 
   buildSvgContent (data, nodeContent) {
     const nodes = []
-    const nodeId = 'node-' + HelperCrypto.generateSmallHash()
+    const nodeId = 'node-' + Crypto.generateSmallID()
     const fillAttr = this.processFills(data.style.fills, nodes, nodeId)
     const strokeAttr = this.processStroke(data.style.stroke, nodes, nodeId)
     // move it in front so it's the first svg child
@@ -72,7 +72,7 @@ export default {
   },
 
   getSvgGradient (val, type, nodeId) {
-    const gradientId = 'gradient-' + HelperCrypto.generateSmallHash()
+    const gradientId = 'gradient-' + Crypto.generateSmallID()
     return {
       def: this.getGradientNode(val, gradientId),
       use: `<use ${type}="url(#${gradientId})" href="#${nodeId}"/>`,
@@ -107,7 +107,7 @@ export default {
   },
 
   getSvgImage (val, type, nodeId) {
-    const imageId = 'image-' + HelperCrypto.generateSmallHash()
+    const imageId = 'image-' + Crypto.generateSmallID()
     const opacity = (val.opacity && val.opacity < 1) ? `${type}-opacity="${val.opacity}"` : ''
     return {
       def: this.getImageNode(val, imageId),

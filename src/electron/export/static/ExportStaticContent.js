@@ -1,9 +1,9 @@
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
-import FileParse from '../../file/FileParse.js'
 import File from '../../file/File.js'
 import ExportCommon from '../ExportCommon.js'
 import Crypto from '../../lib/Crypto.js'
+import Html from '../../lib/Html.js'
 
 export default {
   getPageHtml (folder, file, css) {
@@ -18,7 +18,7 @@ export default {
     this.replaceJsScripts(document)
     this.cleanClasses(document, css)
     const html = this.replaceTemplateBack(this.regexHtmlRender(dom.serialize()), rand)
-    return FileParse.beautifyHtml(html)
+    return Html.beautifyHtml(html)
   },
 
   replaceTemplate (html, rand) {

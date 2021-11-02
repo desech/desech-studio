@@ -2,11 +2,11 @@ import fs from 'fs'
 import Language from '../lib/Language.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
-import FileParse from '../file/FileParse.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import ImportPosition from './ImportPosition.js'
 import ImportCommon from './ImportCommon.js'
 import ImportImage from './ImportImage.js'
+import Html from '../lib/Html.js'
 
 export default {
   processHtml (artboard, params, file) {
@@ -49,7 +49,7 @@ export default {
 
   getFullHtml (body, params, file) {
     const html = this.getHtmlNode(body, params)
-    const beauty = FileParse.beautifyHtml(html)
+    const beauty = Html.beautifyHtml(html)
     return HelperFile.getFullHtml(file, beauty, {}, params.folder, params.settings.designSystem)
   },
 

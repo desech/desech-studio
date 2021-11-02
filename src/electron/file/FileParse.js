@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import { URL } from 'whatwg-url'
-import beautify from 'js-beautify'
 import ParseHtml from './parse/ParseHtml.js'
 import ParseCss from './parse/ParseCss.js'
 import CustomResourceLoader from './parse/CustomResourceLoader.js'
@@ -56,12 +55,5 @@ export default {
     const options = { ignoreFonts: true, ignoreHtml: true, ignoreElementCss: true }
     const data = await this.parseHtmlCssFile(index, options)
     return data.css
-  },
-
-  beautifyHtml (body) {
-    return beautify.html(body, {
-      indent_size: 2,
-      preserve_newlines: false
-    })
   }
 }

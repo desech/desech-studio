@@ -5,7 +5,7 @@ import HelperStyle from '../../helper/HelperStyle.js'
 import HelperDesignSystem from '../../helper/HelperDesignSystem.js'
 import HelperProject from '../../helper/HelperProject.js'
 import HelperComponent from '../../helper/HelperComponent.js'
-import '../../compiled/beautify-html.js'
+import Html from '../../../electron/lib/Html.js'
 
 export default {
   _css: null,
@@ -187,11 +187,7 @@ export default {
   },
 
   beautifyHtml (body) {
-    if (!body) return ''
-    return this.formatHtmlString(window.html_beautify(body, {
-      indent_size: 2,
-      preserve_newlines: false
-    }))
+    return body ? this.formatHtmlString(Html.beautifyHtml(body)) : ''
   },
 
   formatHtmlString (html) {

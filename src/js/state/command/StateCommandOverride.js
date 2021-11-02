@@ -18,13 +18,15 @@ export default {
   },
 
   getElementParents (element, structure = []) {
-    // if this is a root element, then the component is the element itself
-    const component = element.closest('[data-ss-component]')
-    structure.unshift({
-      element: component,
-      data: HelperComponent.getComponentData(component)
-    })
-    this.getComponentParents(component.parentNode, structure)
+    if (HelperComponent.isComponent(element)) {
+      // if this is a root element, then the component is the element itself
+      const data = HelperComponent.getComponentData(element)
+      structure.unshift({ element, data })
+      this.getComponentParents(element.parentNode, structure)
+    } else {
+      this.getComponentParents(element, structure)
+    }
+    console.log('getElementParents', structure)
     return structure
   },
 
@@ -34,7 +36,7 @@ export default {
     if (!node) return structure
     if (HelperComponent.isComponentHole(node)) {
       // when we find a hole, we need to skip its component
-      this.getComponentParents(element.closest('[data-ss-component]').parentNode, structure)
+      this.getComponentParents(node.closest('[data-ss-component]').parentNode, structure)
     } else { // component
       structure.unshift({
         element: node,
@@ -170,6 +172,7 @@ export default {
     for (const [name, value] of Object.entries(attributes)) {
       this.processElementAttribute(data, originalNode, name, value)
     }
+    this.clearRemovedAttributes(originalNode.attributes, attributes, data.attributes)
   },
 
   processElementAttribute (data, originalNode, name, value) {
@@ -190,6 +193,14 @@ export default {
       return { value: HelperFile.getRelPath(value) }
     } else {
       return { delete: true }
+    }
+  },
+
+  clearRemovedAttributes (originalAttributes, changedAttributes, dataAttributes) {
+    for (const attr of Object.keys(dataAttributes)) {
+      if (!(attr in originalAttributes) && !(attr in changedAttributes)) {
+        delete dataAttributes[attr]
+      }
     }
   },
 

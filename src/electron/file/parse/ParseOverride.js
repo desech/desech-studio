@@ -17,19 +17,25 @@ export default {
   },
 
   mergeParentChildData (parent, child) {
-    Object.assign(child, parent)
+    console.log('-------------------------')
+    console.log(JSON.stringify(child))
+    console.log(JSON.stringify(parent))
+    ExtendJS.mergeDeep(child, parent)
     this.mergeParentChildFix(child)
+    console.log(JSON.stringify(child))
   },
 
   mergeParentChildFix (obj) {
-    // Object.assign will merge everything including the attribute/property/class values
+    // mergeDeep will merge everything including the attribute/property/class values
     // if we have these pairs value/delete or add/delete, remove the first value
-    if (obj.length === 2 && (('value' in obj && 'delete' in obj) ||
+    if (Object.keys(obj).length === 2 && (('value' in obj && 'delete' in obj) ||
       ('add' in obj && 'delete' in obj))) {
       delete obj[Object.keys(obj)[0]]
     }
-    for (const val of Object.values(obj)) {
-      if (typeof val === 'object') this.mergeParentChildFix(val)
+    for (const key in obj) {
+      if (typeof obj[key] === 'object') {
+        this.mergeParentChildFix(obj[key])
+      }
     }
   },
 

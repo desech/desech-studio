@@ -115,8 +115,8 @@ export default {
 
   addPlacementMarker (node, clientX, clientY) {
     CanvasCommon.removePlacementMarker()
-    const mouseX = CanvasElement.getMouseY(clientX)
-    const mouseY = CanvasElement.getMouseY(clientY)
+    const mouseX = CanvasCommon.getMouseY(clientX)
+    const mouseY = CanvasCommon.getMouseY(clientY)
     const element = this.getMarkerElement(node, mouseX, mouseY)
     if (element) this.addCanvasElementMarker(element, mouseY)
   },

@@ -124,22 +124,19 @@ export default {
     return 0
   },
 
-  deepMap (obj, fn) {
-    const deepMapper = (val, key) => {
-      return (typeof val === 'object') ? this.deepMap(val, fn) : fn(val, key)
+  mergeDeep (target, ...sources) {
+    if (!sources.length) return target
+    const source = sources.shift()
+    if (typeof target === 'object' && typeof source === 'object') {
+      for (const key in source) {
+        if (typeof source[key] === 'object') {
+          if (!target[key]) Object.assign(target, { [key]: {} })
+          this.mergeDeep(target[key], source[key])
+        } else {
+          Object.assign(target, { [key]: source[key] })
+        }
+      }
     }
-    if (Array.isArray(obj)) {
-      return obj.map(deepMapper)
-    } else if (typeof obj === 'object') {
-      return this.mapObject(obj, deepMapper)
-    }
-    return obj
-  },
-
-  mapObject (obj, fn) {
-    return Object.keys(obj).reduce((res, key) => {
-      res[key] = fn(obj[key], key)
-      return res
-    }, {})
+    return this.mergeDeep(target, ...sources)
   }
 }

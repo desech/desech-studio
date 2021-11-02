@@ -105,6 +105,7 @@ export default {
   getCommandData (properties, ref, type) {
     const element = HelperElement.getElement(ref)
     const command = (type === 'component') ? 'changeComponentProperties' : 'changeProperties'
+    // @todo fix this for inherited overrides
     const currentProperties = (type === 'component')
       ? HelperComponent.getInstanceProperties(element)
       : HelperElement.getProperties(element)

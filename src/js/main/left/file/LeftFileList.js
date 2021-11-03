@@ -6,6 +6,7 @@ import HelperError from '../../../helper/HelperError.js'
 import HelperFile from '../../../helper/HelperFile.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperForm from '../../../helper/HelperForm.js'
+import Page from '../../../page/Page.js'
 
 export default {
   getEvents () {
@@ -203,6 +204,7 @@ export default {
     const file = folder + '/' + this.addHtmlExtension(name)
     if (HelperFile.getFileExtension(file) === 'html') {
       await this.createHtmlFile(file, folder)
+      await Page.loadMain(file)
     } else {
       await this.createRegularFile(file)
     }

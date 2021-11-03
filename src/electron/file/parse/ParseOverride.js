@@ -17,12 +17,8 @@ export default {
   },
 
   mergeParentChildData (parent, child) {
-    console.log('-------------------------')
-    console.log(JSON.stringify(child))
-    console.log(JSON.stringify(parent))
     ExtendJS.mergeDeep(child, parent)
     this.mergeParentChildFix(child)
-    console.log(JSON.stringify(child))
   },
 
   mergeParentChildFix (obj) {

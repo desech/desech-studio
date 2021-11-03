@@ -9,9 +9,9 @@ import HelperCanvas from '../../helper/HelperCanvas.js'
 
 export default {
   async overrideElement (element, type, value) {
-    // although we check if it's a component, we are actually interested in the root element
-    if (HelperComponent.isComponent(element) || HelperComponent.isComponentElement(element)) {
+    if (HelperComponent.belongsToAComponent(element)) {
       const parents = this.getElementParents(element)
+      if (!parents.length) return
       await this.processElementData(parents, element, type, value)
       await this.saveData(parents)
     }
@@ -19,29 +19,37 @@ export default {
 
   getElementParents (element, structure = []) {
     if (HelperComponent.isComponent(element)) {
-      // if this is a root element, then the component is the element itself
-      const data = HelperComponent.getComponentData(element)
-      structure.unshift({ element, data })
-      this.getComponentParents(element.parentNode, structure)
+      // the component root element
+      this.addElementToStructure(element, structure)
+      return this.getComponentParents(element.parentNode, structure)
+    } else if (HelperComponent.isComponentHole(element)) {
+      // the component hole element
+      const component = element.closest('[data-ss-component]')
+      if (!component) return structure
+      this.addElementToStructure(component, structure)
+      return this.getComponentParents(component.parentNode, structure)
     } else {
-      this.getComponentParents(element, structure)
+      // a regular component element
+      return this.getComponentParents(element, structure)
     }
-    console.log('getElementParents', structure)
-    return structure
+  },
+
+  addElementToStructure (element, structure) {
+    const data = HelperComponent.getComponentData(element)
+    structure.unshift({ element, data })
   },
 
   // this is also called by overrideComponent()
   getComponentParents (element, structure = []) {
+    if (!element) return structure
     const node = element.closest('[data-ss-component], [data-ss-component-hole]')
     if (!node) return structure
     if (HelperComponent.isComponentHole(node)) {
       // when we find a hole, we need to skip its component
-      this.getComponentParents(node.closest('[data-ss-component]').parentNode, structure)
+      const parent = node.closest('[data-ss-component]')?.parentNode
+      this.getComponentParents(parent, structure)
     } else { // component
-      structure.unshift({
-        element: node,
-        data: HelperComponent.getComponentData(node)
-      })
+      this.addElementToStructure(node, structure)
       if (HelperComponent.isComponentElement(node)) {
         this.getComponentParents(node.parentNode, structure)
       }
@@ -50,26 +58,11 @@ export default {
   },
 
   async processElementData (parents, element, type, value) {
-    // if (this.isElementInlineOverride(element, parents[0].data)) {
-    //   element = element.closest('.text')
-    //   type = 'inner'
-    //   value = element.innerHTML
-    // }
     const ref = HelperElement.getStyleRef(element)
     const componentNode = await this.getComponentNode(parents[0].data.file)
     const originalNode = componentNode.getElementsByClassName(ref)[0]
     const originalProps = HelperElement.getProperties(originalNode)
     this.overrideData(type, value, parents, ref, originalNode, originalProps)
-  },
-
-  // @todo when you undo this inner override, it will use existing inline overrides
-  // this means that the compared values are different so it will be seen as an inner override
-  // fix this by building the inner compare value, without the other inline overrides
-  isElementInlineOverride (element, data) {
-    if (HelperElement.getType(element) !== 'inline') return
-    const parent = element.closest('.text')
-    const parentRef = HelperElement.getStyleRef(parent)
-    return !!(data?.overrides && data.overrides[parentRef]?.inner)
   },
 
   async getComponentNode (file, ref) {
@@ -80,7 +73,7 @@ export default {
   },
 
   overrideData (type, value, parents, ref, originalNode, originalProps) {
-    const data = this.initOverrideData(parents, ref)
+    const data = this.getOverrideData(parents, ref)
     switch (type) {
       case 'tag':
         this.processElementTag(value, data, originalNode)
@@ -104,10 +97,10 @@ export default {
     ExtendJS.clearEmptyObjects(parents[0].data)
   },
 
-  initOverrideData (parents, ref) {
+  getOverrideData (parents, ref) {
     let data = this.getInitialData(parents[0].data)
     for (let i = 1; i < parents.length; i++) {
-      data = this.initOverrideDataParent(data, parents[i].data.ref)
+      data = this.getOverrideDataParent(data, parents[i].data.ref)
     }
     if (!data[ref]) data[ref] = {}
     return data[ref]
@@ -118,7 +111,7 @@ export default {
     return data.overrides
   },
 
-  initOverrideDataParent (data, ref) {
+  getOverrideDataParent (data, ref) {
     if (!data[ref]) data[ref] = {}
     if (!data[ref].children) data[ref].children = {}
     return data[ref].children

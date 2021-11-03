@@ -172,7 +172,8 @@ export default {
   addPastedPlacement (placement = null) {
     const element = StateSelectedElement.getElement()
     if (!HelperElement.isCanvasElement(element) || HelperElement.getType(element) === 'inline' ||
-      !HelperComponent.isMovableElement(element)) {
+      (!HelperComponent.isMovableElement(element) && (!HelperComponent.isComponentHole(element) ||
+      HelperComponent.isComponentElement(element)))) {
       return false
     }
     if (placement) {
@@ -183,12 +184,14 @@ export default {
     return true
   },
 
+  // check CanvasElementCreate.addCanvasElementMarker()
   addGeneralPastedPlacement (element) {
     const isComponent = HelperComponent.isComponent(element)
     const hole = HelperComponent.getInstanceHole(element)
     if (isComponent && hole) {
       hole.classList.add('placement', 'inside')
-    } else if (HelperElement.isContainer(element) && !isComponent) {
+    } else if (HelperElement.isContainer(element) && !isComponent &&
+      (!HelperComponent.isComponentHole(element) || element.closest('[data-ss-component]'))) {
       element.classList.add('placement', 'inside')
     } else {
       element.classList.add('placement', 'bottom')

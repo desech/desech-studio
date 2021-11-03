@@ -39,19 +39,19 @@ export default {
   },
 
   async clickLoadHtmlEvent (event) {
-    if (event.target.classList.contains('panel-option-load-html')) {
+    if (event.target.closest('.panel-option-load-html:not(.disabled)')) {
       await this.loadHtmlFile(this.getActiveMenuElement())
     }
   },
 
   async clickAddComponentHtmlEvent (event) {
-    if (event.target.classList.contains('panel-option-add-component')) {
+    if (event.target.closest('.panel-option-add-component:not(.disabled)')) {
       await this.addComponentHtml(this.getActiveMenuElement())
     }
   },
 
   async clickOpenFileEvent (event) {
-    if (event.target.classList.contains('panel-option-open-file')) {
+    if (event.target.closest('.panel-option-open-file:not(.disabled)')) {
       await this.openFile(this.getActiveMenuElement())
     }
   },
@@ -69,7 +69,7 @@ export default {
   },
 
   async clickCopySvgEvent (event) {
-    if (event.target.classList.contains('panel-option-copy-svg')) {
+    if (event.target.closest('.panel-option-copy-svg:not(.disabled)')) {
       await this.copySvgCode(this.getActiveMenuElement())
     }
   },
@@ -121,13 +121,13 @@ export default {
   getMenuOptions (item) {
     const type = this.getItemType(item)
     const template = HelperDOM.getTemplate(`template-contextmenu-file-${type}`)
+    this.disableCurrentComponent(item, template)
     this.disableWritable(item, template)
     return template
   },
 
   getItemType (item) {
-    if (HelperFile.isComponentFile(item.dataset.ref) &&
-      HelperProject.getFile() !== item.dataset.ref) {
+    if (HelperFile.isComponentFile(item.dataset.ref)) {
       return 'component'
     } else if (item.dataset.extension === 'svg') {
       return 'svg'
@@ -139,10 +139,18 @@ export default {
     }
   },
 
+  disableCurrentComponent (item, menu) {
+    if (HelperProject.getFile() === item.dataset.ref) {
+      for (const li of menu.getElementsByClassName('menu-list')[0].children) {
+        li.classList.add('disabled')
+      }
+    }
+  },
+
   disableWritable (item, menu) {
     const check = HelperFile.isReadonly(item.dataset.ref) || item.classList.contains('loaded')
-    for (const node of menu.getElementsByClassName('writable')) {
-      node.classList.toggle('disabled', check)
+    for (const li of menu.getElementsByClassName('writable')) {
+      li.classList.toggle('disabled', check)
     }
   },
 

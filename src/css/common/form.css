@@ -136,4 +136,14 @@
 
 .desech-studio input[disabled] {
   background-color: var(--field-bg-disabled);
-} 
+}
+
+.desech-studio select.override,
+.desech-studio input.override,
+.desech-studio textarea.override {
+  color: var(--override-color);
+}
+
+.desech-studio button.override {
+  background-color: var(--override-btn);
+}

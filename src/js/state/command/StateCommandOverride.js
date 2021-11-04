@@ -6,55 +6,16 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
+import HelperOverride from '../../helper/HelperOverride.js'
 
 export default {
   async overrideElement (element, type, value) {
     if (HelperComponent.belongsToAComponent(element)) {
-      const parents = this.getElementParents(element)
+      const parents = HelperOverride.getElementParents(element)
       if (!parents.length) return
       await this.processElementData(parents, element, type, value)
       await this.saveData(parents)
     }
-  },
-
-  getElementParents (element, structure = []) {
-    if (HelperComponent.isComponent(element)) {
-      // the component root element
-      this.addElementToStructure(element, structure)
-      return this.getComponentParents(element.parentNode, structure)
-    } else if (HelperComponent.isComponentHole(element)) {
-      // the component hole element
-      const component = element.closest('[data-ss-component]')
-      if (!component) return structure
-      this.addElementToStructure(component, structure)
-      return this.getComponentParents(component.parentNode, structure)
-    } else {
-      // a regular component element
-      return this.getComponentParents(element, structure)
-    }
-  },
-
-  addElementToStructure (element, structure) {
-    const data = HelperComponent.getComponentData(element)
-    structure.unshift({ element, data })
-  },
-
-  // this is also called by overrideComponent()
-  getComponentParents (element, structure = []) {
-    if (!element) return structure
-    const node = element.closest('[data-ss-component], [data-ss-component-hole]')
-    if (!node) return structure
-    if (HelperComponent.isComponentHole(node)) {
-      // when we find a hole, we need to skip its component
-      const parent = node.closest('[data-ss-component]')?.parentNode
-      this.getComponentParents(parent, structure)
-    } else { // component
-      this.addElementToStructure(node, structure)
-      if (HelperComponent.isComponentElement(node)) {
-        this.getComponentParents(node.parentNode, structure)
-      }
-    }
-    return structure
   },
 
   async processElementData (parents, element, type, value) {
@@ -73,7 +34,7 @@ export default {
   },
 
   overrideData (type, value, parents, ref, originalNode, originalProps) {
-    const data = this.getOverrideData(parents, ref)
+    const data = HelperOverride.getOverrideData(parents, ref)
     switch (type) {
       case 'tag':
         this.processElementTag(value, data, originalNode)
@@ -95,26 +56,6 @@ export default {
         break
     }
     ExtendJS.clearEmptyObjects(parents[0].data)
-  },
-
-  getOverrideData (parents, ref) {
-    let data = this.getInitialData(parents[0].data)
-    for (let i = 1; i < parents.length; i++) {
-      data = this.getOverrideDataParent(data, parents[i].data.ref)
-    }
-    if (!data[ref]) data[ref] = {}
-    return data[ref]
-  },
-
-  getInitialData (data) {
-    if (!data.overrides) data.overrides = {}
-    return data.overrides
-  },
-
-  getOverrideDataParent (data, ref) {
-    if (!data[ref]) data[ref] = {}
-    if (!data[ref].children) data[ref].children = {}
-    return data[ref].children
   },
 
   processElementTag (value, data, originalNode) {
@@ -165,13 +106,12 @@ export default {
     for (const [name, value] of Object.entries(attributes)) {
       this.processElementAttribute(data, originalNode, name, value)
     }
-    this.clearRemovedAttributes(originalNode.attributes, attributes, data.attributes)
   },
 
   processElementAttribute (data, originalNode, name, value) {
     if (name === 'data-ss-hidden') return
     const attrValue = this.getElementAttributeValue(value)
-    const originalValue = this.getElementAttributeValue(originalNode.getAttributeNS(null, name))
+    const originalValue = this.getNodeAttributeValue(originalNode, name)
     if (!ExtendJS.objectsEqual(attrValue, originalValue)) {
       data.attributes[name] = attrValue
     } else {
@@ -180,20 +120,21 @@ export default {
   },
 
   getElementAttributeValue (value) {
-    if (typeof value === 'boolean' && value) {
-      return { value: '' }
-    } else if (value) {
-      return { value: HelperFile.getRelPath(value) }
-    } else {
+    if (value === false) {
       return { delete: true }
+    } else if (value === true) {
+      return { value: '' }
+    } else {
+      return { value: HelperFile.getRelPath(value) }
     }
   },
 
-  clearRemovedAttributes (originalAttributes, changedAttributes, dataAttributes) {
-    for (const attr of Object.keys(dataAttributes)) {
-      if (!(attr in originalAttributes) && !(attr in changedAttributes)) {
-        delete dataAttributes[attr]
-      }
+  getNodeAttributeValue (node, name) {
+    if (!node.hasAttributeNS(null, name)) {
+      return { delete: true }
+    } else {
+      const value = node.getAttributeNS(null, name)
+      return { value: HelperFile.getRelPath(value) }
     }
   },
 
@@ -251,7 +192,8 @@ export default {
 
   async overrideComponent (element, type, value) {
     if (HelperComponent.isComponentElement(element)) {
-      const parents = this.getComponentParents(element.parentNode)
+      const parents = HelperOverride.getComponentParents(element.parentNode)
+      if (!parents.length) return
       await this.processComponentData(parents, element, type, value)
       await this.saveData(parents)
     }

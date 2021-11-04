@@ -15,12 +15,12 @@ export default {
   },
 
   setElementAttribute (element, name, value) {
-    if (typeof value === 'boolean' && value) {
-      element.setAttributeNS(null, name, '')
-    } else if (value) {
-      element.setAttributeNS(null, name, value)
-    } else {
+    if (value === false) {
       element.removeAttributeNS(null, name)
+    } else if (value === true) {
+      element.setAttributeNS(null, name, '')
+    } else {
+      element.setAttributeNS(null, name, value)
     }
   },
 

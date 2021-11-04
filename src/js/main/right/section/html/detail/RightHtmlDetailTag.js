@@ -198,9 +198,9 @@ export default {
   },
 
   injectMediaFiles (fields, element) {
-    RightHtmlCommon.setFileName(fields.src, element.getAttributeNS(null, 'src'))
-    if (fields.poster && element.poster) {
-      RightHtmlCommon.setFileName(fields.poster, element.getAttributeNS(null, 'poster'))
+    RightHtmlCommon.setFileName(fields['src-value'], element.getAttributeNS(null, 'src'))
+    if (fields['poster-value'] && element.poster) {
+      RightHtmlCommon.setFileName(fields['poster-value'], element.getAttributeNS(null, 'poster'))
     }
   },
 

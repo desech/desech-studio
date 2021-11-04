@@ -3,6 +3,7 @@ import HelperStyle from '../../../helper/HelperStyle.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import RightSelectorCommon from './selector/RightSelectorCommon.js'
 import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
+import HelperOverride from '../../../helper/HelperOverride.js'
 
 export default {
   getSection () {
@@ -20,6 +21,7 @@ export default {
     const selectors = StyleSheetSelector.getDisplayElementSelectors()
     this.injectSelectors(selectors, template)
     this.activateSelector(template)
+    this.highlightOverides(template)
   },
 
   injectDefaultSelector (container) {
@@ -89,5 +91,12 @@ export default {
     const element = container.querySelector('.class-selector-list li') ||
       container.querySelector('.default-selector-list li')
     RightSelectorCommon.activateSelector(element, container)
+  },
+
+  highlightOverides (template) {
+    const element = StateSelectedElement.getElement()
+    const overrides = HelperOverride.getSectionOverrides('selector', element)
+    HelperOverride.highlightOverideClasses(template, overrides?.classes)
+    HelperOverride.highlightOverideClassesWarning(template, overrides?.classes)
   }
 }

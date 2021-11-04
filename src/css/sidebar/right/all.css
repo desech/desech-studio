@@ -250,3 +250,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.sidebar-right .style-override-warning {
+  padding: 7px 15px;
+}

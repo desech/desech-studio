@@ -113,7 +113,9 @@ export default {
   injectCustomLogic (form, data) {
     const name = ExtendJS.capitalize(ExtendJS.toCamelCase(data.template))
     const method = `injectForm${name}`
-    if (typeof this[method] !== 'undefined') this[method](form, data)
+    if (typeof this[method] !== 'undefined') {
+      this[method](form, data)
+    }
   },
 
   injectFormButton (form, data) {
@@ -131,7 +133,7 @@ export default {
 
   injectFormObject (form, data) {
     const value = data.element.getAttributeNS(null, 'data')
-    if (value) RightHtmlCommon.setFileName(form.elements.data, value)
+    if (value) RightHtmlCommon.setFileName(form.elements['data-value'], value)
   },
 
   injectFormMedia (form, data) {

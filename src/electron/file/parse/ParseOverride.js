@@ -63,18 +63,7 @@ export default {
     if (obj.delete) {
       node.removeAttributeNS(null, name)
     } else {
-      const val = this.setAbsoluteUrlAttribute(name, obj.value, folder)
-      node.setAttributeNS(null, name, val)
-    }
-  },
-
-  setAbsoluteUrlAttribute (name, value, folder) {
-    if (['src', 'poster', 'data'].includes(name)) {
-      return File.resolve(folder, value)
-    } else if (name === 'srcset') {
-      return ParseCommon.fixSrcSet(value, folder)
-    } else {
-      return value
+      node.setAttributeNS(null, name, obj.value)
     }
   },
 

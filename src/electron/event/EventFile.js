@@ -84,8 +84,8 @@ export default {
   },
 
   rendererParseComponentFileEvent () {
-    ipcMain.handle('rendererParseComponentFile', async (event, file) => {
-      return await EventMain.handleEvent(ParseHtml, 'parseComponentFile', file)
+    ipcMain.handle('rendererParseComponentFile', async (event, file, componentData = null) => {
+      return await EventMain.handleEvent(ParseHtml, 'parseComponentFile', file, componentData)
     })
   },
 

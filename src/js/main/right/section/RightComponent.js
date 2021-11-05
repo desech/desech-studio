@@ -43,7 +43,7 @@ export default {
 
   highlightOverides (template) {
     const element = StateSelectedElement.getElement()
-    const overrides = HelperOverride.getSectionOverrides('component', element)
+    const overrides = HelperOverride.getOverrides(element, 'component')
     HelperOverride.highlightOveride(template, overrides?.component, 'swap-component-button')
     HelperOverride.highlightOverideProperties(template, overrides?.properties)
     HelperOverride.highlightOverideWarning(template, overrides)

@@ -68,7 +68,7 @@ export default {
   },
 
   setOverrideElementProperties (node, overrides) {
-    const properties = HelperElement.getProperties(node)
+    const properties = HelperElement.getProperties(node) || {}
     const ref = HelperElement.getRef(node)
     const changed = this.overrideProperties(overrides, ref, properties)
     if (changed) HelperElement.setProperties(node, properties)
@@ -76,6 +76,7 @@ export default {
 
   setOverrideComponentProperties (node, overrides) {
     const data = HelperComponent.getComponentData(node)
+    if (!data.properties) data.properties = {}
     const changed = this.overrideProperties(overrides, data.ref, data.properties)
     if (changed) HelperComponent.setComponentData(node, data)
   },

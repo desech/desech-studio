@@ -46,10 +46,15 @@ export default {
   },
 
   extractComponentData (body) {
-    if (!this._options.isComponent || !body) return
-    const data = body.dataset.ssComponent
+    if ((!this._options.isComponent && !this._options.componentData) || !body) return
+    const main = body.dataset.ssComponent
     body.removeAttributeNS(null, 'data-ss-component')
-    return data ? JSON.parse(data) : null
+    if (this._options.componentData) {
+      this._options.componentData.main = main
+      return this._options.componentData
+    } else {
+      return main ? { main: JSON.parse(main) } : null
+    }
   },
 
   returnBody (body) {
@@ -424,10 +429,11 @@ export default {
   },
 
   // this is called when we add a component to the canvas
-  async parseComponentFile (file) {
+  async parseComponentFile (file, componentData = null) {
     const folder = await Cookie.getCookie('currentFolder')
     const html = fs.readFileSync(file).toString()
     const dom = new JSDOM(html)
-    return this.parseHtml(dom.window.document, file, folder, { newComponent: true })
+    const options = { newComponent: true, componentData }
+    return this.parseHtml(dom.window.document, file, folder, options)
   }
 }

@@ -65,10 +65,17 @@ export default {
 
   injectMain (template) {
     const data = RightHtmlCommon.getSelectedElementData()
+    this.injectResetOverrides(template, data)
     this.injectTitle(template, data)
     this.injectTagInDropdown(template, data)
     this.injectRef(template, data)
     this.injectTopLine(template, data)
+  },
+
+  injectResetOverrides (template, data) {
+    const node = template.getElementsByClassName('style-reset-overrides')[0]
+    const element = StateSelectedElement.getElement()
+    HelperDOM.toggle(node, HelperComponent.belongsToAComponent(element))
   },
 
   injectTitle (template, data) {

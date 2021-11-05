@@ -5,6 +5,7 @@ import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StyleSheetCommon from '../stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../StateStyleSheet.js'
+import ExtendJS from '../../helper/ExtendJS.js'
 
 export default {
   async addSelectorLinkClass (selector) {
@@ -15,10 +16,8 @@ export default {
   },
 
   setElementAttribute (element, name, value) {
-    if (value === false) {
+    if (value === null) {
       element.removeAttributeNS(null, name)
-    } else if (value === true) {
-      element.setAttributeNS(null, name, '')
     } else {
       element.setAttributeNS(null, name, value)
     }

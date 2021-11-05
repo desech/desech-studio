@@ -138,5 +138,17 @@ export default {
       }
     }
     return this.mergeDeep(target, ...sources)
+  },
+
+  removeDeepIndex (obj, index, childrenIndex = 'children') {
+    for (const key of Object.keys(obj)) {
+      if (key === index) {
+        delete obj[key]
+        return
+      }
+      if (obj[key][childrenIndex]) {
+        this.removeDeepIndex(obj[key][childrenIndex], index, childrenIndex)
+      }
+    }
   }
 }

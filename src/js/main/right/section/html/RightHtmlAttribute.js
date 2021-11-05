@@ -127,8 +127,7 @@ export default {
 
   async saveAttributeCommand (name, value) {
     const ref = StateSelectedElement.getRef()
-    // when the value is empty then we set a boolean value
-    await RightHtmlCommon.changeAttributeCommand(ref, { [name]: value || true })
+    await RightHtmlCommon.changeAttributeCommand(ref, { [name]: value })
   },
 
   async deleteAttributeCommand (name) {

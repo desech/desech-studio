@@ -1027,6 +1027,8 @@
 "Repeat X",
 "Repeat Y",
 "Required",
+"Reset component overrides",
+"Reset element overrides",
 "Reset zoom",
 "Resize",
 "Resize all sides of the element",

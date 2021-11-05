@@ -9,6 +9,8 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import StateCommand from '../../../state/StateCommand.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
+import HelperOverride from '../../../helper/HelperOverride.js'
+import ExtendJS from '../../../helper/ExtendJS.js'
 
 export default {
   getEvents () {
@@ -45,12 +47,9 @@ export default {
   },
 
   async buildComponentElement (file, swapRef = null) {
-    const html = await window.electron.invoke('rendererParseComponentFile', file)
-    const element = document.createRange().createContextualFragment(html.canvas).children[0]
-    if (!element) return
     const ref = swapRef || HelperElement.generateElementRef()
-    const data = { ref, file, main: element.dataset.ssComponent }
-    element.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    const element = await HelperComponent.fetchComponent({ file, ref })
+    if (!element) return
     if (swapRef) this.makeComponentElement(element)
     return element
   },
@@ -77,19 +76,49 @@ export default {
 
   async execAssignComponentHole (ref, hole, execute = true) {
     if (ref === hole) ref = null
-    const command = {
-      do: {
-        command: 'assignComponentHole',
-        current: ref,
-        previous: hole
-      },
-      undo: {
-        command: 'assignComponentHole',
-        current: hole,
-        previous: ref
-      }
+    const command = 'assignComponentHole'
+    const cmd = {
+      do: { command, current: ref, previous: hole },
+      undo: { command, current: hole, previous: ref }
     }
-    StateCommand.stackCommand(command)
-    if (execute) await StateCommand.executeCommand(command.do)
+    StateCommand.stackCommand(cmd)
+    if (execute) await StateCommand.executeCommand(cmd.do)
+  },
+
+  // we are only resetting the overrides of a particular element or a particular component
+  // from inside that component
+  // to reset the whole component, you need to do it at the actual component level
+  async resetOverrides (type, execute = true) {
+    const command = (type === 'component') ? 'resetComponentOverrides' : 'resetElementOverrides'
+    const element = StateSelectedElement.getElement()
+    const parents = this.getParents(element, type)
+    const file = parents[0].data.file
+    const ref = parents[0].data.ref
+    const overrides = this.getResetedOverrides(parents[0], element, type)
+    const cmd = {
+      do: { command, file, ref, overrides },
+      undo: { command, file, ref, overrides: parents[0].data?.overrides }
+    }
+    StateCommand.stackCommand(cmd)
+    if (execute) await StateCommand.executeCommand(cmd.do)
+  },
+
+  getParents (element, type) {
+    const parents = HelperOverride.getParents(element, type)
+    // top level components, don't have any parents, but we should be able to reset them
+    if (!parents && HelperComponent.isComponent(element)) {
+      const data = HelperComponent.getComponentData(element)
+      return [{ element, data, topLevel: true }]
+    }
+    return parents
+  },
+
+  getResetedOverrides (parent, element, type) {
+    if (parent?.topLevel || !parent?.data?.overrides) return null
+    const ref = HelperOverride.getOverrideRef(element, type)
+    const obj = ExtendJS.cloneData(parent.data.overrides)
+    ExtendJS.removeDeepIndex(obj, ref)
+    ExtendJS.clearEmptyObjects(obj)
+    return obj
   }
 }

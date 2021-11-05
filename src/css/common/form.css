@@ -141,10 +141,12 @@
 .desech-studio div.override,
 .desech-studio select.override,
 .desech-studio input.override,
-.desech-studio textarea.override {
+.desech-studio textarea.override,
+.desech-studio .style-reset-overrides {
   color: var(--override-color);
 }
 
 .desech-studio button.override {
   background-color: var(--override-btn);
 }
+

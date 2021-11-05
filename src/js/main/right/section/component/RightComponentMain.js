@@ -10,7 +10,8 @@ import HelperComponent from '../../../../helper/HelperComponent.js'
 export default {
   getEvents () {
     return {
-      setsource: ['setsourceSwapComponentEvent']
+      setsource: ['setsourceSwapComponentEvent'],
+      click: ['clickResetOverridesEvent']
     }
   },
 
@@ -21,6 +22,13 @@ export default {
   async setsourceSwapComponentEvent (event) {
     if (event.target.id === 'swap-component-detail') {
       await this.swapComponent(event.detail)
+    }
+  },
+
+  async clickResetOverridesEvent (event) {
+    if (event.target.closest('.style-reset-overrides')) {
+      const type = event.target.closest('button').dataset.type
+      await CanvasElementComponent.resetOverrides(type)
     }
   },
 

@@ -5,6 +5,14 @@ import ExtendJS from './ExtendJS.js'
 import HelperStyle from './HelperStyle.js'
 
 export default {
+  getParents (element, type) {
+    if (type === 'element' && HelperComponent.belongsToAComponent(element)) {
+      return this.getElementParents(element)
+    } else if (type === 'component' && HelperComponent.isComponentElement(element)) {
+      return this.getComponentParents(element.parentNode)
+    }
+  },
+
   getElementParents (element, structure = []) {
     if (HelperComponent.isComponent(element)) {
       // the component root element
@@ -16,7 +24,7 @@ export default {
       if (!component) return structure
       this.addElementToStructure(component, structure)
       return this.getComponentParents(component.parentNode, structure)
-    } else {
+    } else if (HelperComponent.isComponentElement(element)) {
       // a regular component element
       return this.getComponentParents(element, structure)
     }
@@ -44,24 +52,15 @@ export default {
     return structure
   },
 
-  getSectionOverrides (section, element) {
-    const parents = this.getSectionParents(section, element)
+  getOverrides (element, type) {
+    const parents = this.getParents(element, type)
     if (!parents?.length) return
-    const ref = this.getSectionRef(section, element)
+    const ref = this.getOverrideRef(element, type)
     return this.getOverrideData(parents, ref)
   },
 
-  // section: component, html, selector
-  getSectionParents (section, element) {
-    if (section !== 'component' && HelperComponent.belongsToAComponent(element)) {
-      return this.getElementParents(element)
-    } else if (section === 'component' && HelperComponent.isComponentElement(element)) {
-      return this.getComponentParents(element.parentNode)
-    }
-  },
-
-  getSectionRef (section, element) {
-    return (section !== 'component')
+  getOverrideRef (element, type) {
+    return (type === 'element')
       ? HelperElement.getStyleRef(element)
       : HelperComponent.getInstanceRef(element)
   },
@@ -114,6 +113,7 @@ export default {
     const forms = template.getElementsByClassName('style-html-element-form')
     for (const form of forms) {
       if (form.elements.name.value in attributes) {
+        form.elements.name.classList.add('override')
         form.elements.value.classList.add('override')
       }
     }

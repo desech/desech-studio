@@ -18,30 +18,24 @@ export default {
   },
 
   async changeAttributeCommand (ref, attributes, execute = true) {
-    const command = this.initAttributeCommand(ref)
     const element = HelperElement.getElement(ref)
     if (!element) return
-    this.setAttributes(command, element, attributes)
+    const command = this.initAttributeCommand(ref)
+    this.setCommandAttributes(command, element, attributes)
     StateCommand.stackCommand(command)
     if (execute) await StateCommand.executeCommand(command.do)
   },
 
   initAttributeCommand (ref) {
+    const command = 'changeAttribute'
     return {
-      do: {
-        command: 'changeAttribute',
-        ref,
-        attributes: {}
-      },
-      undo: {
-        command: 'changeAttribute',
-        ref,
-        attributes: {}
-      }
+      do: { command, ref, attributes: {} },
+      undo: { command, ref, attributes: {} }
     }
   },
 
-  setAttributes (command, element, attributes) {
+  // value: null = delete attr, string = new regular attr
+  setCommandAttributes (command, element, attributes) {
     for (const [name, value] of Object.entries(attributes)) {
       if (!name) continue
       command.do.attributes[name] = value
@@ -50,11 +44,7 @@ export default {
   },
 
   getAttributeValue (element, name, value) {
-    if (typeof value === 'boolean') {
-      return element.hasAttributeNS(null, name)
-    } else {
-      return element.getAttributeNS(null, name) || ''
-    }
+    return element.hasAttributeNS(null, name) ? element.getAttributeNS(null, name) : null
   },
 
   async setListHtmlCommand (commandName, element, list, type, execute = true) {

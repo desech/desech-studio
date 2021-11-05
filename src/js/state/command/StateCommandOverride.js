@@ -26,7 +26,7 @@ export default {
     this.overrideData(type, value, parents, ref, originalNode, originalProps)
   },
 
-  async getComponentNode (file, ref) {
+  async getComponentNode (file) {
     const div = document.createElement('div')
     const html = await window.electron.invoke('rendererParseComponentFile', file)
     div.innerHTML = html.canvas
@@ -120,10 +120,8 @@ export default {
   },
 
   getElementAttributeValue (value) {
-    if (value === false) {
+    if (value === null) {
       return { delete: true }
-    } else if (value === true) {
-      return { value: '' }
     } else {
       return { value: HelperFile.getRelPath(value) }
     }
@@ -140,6 +138,7 @@ export default {
 
   processProperties (data, originalProps, newProps) {
     if (!data.properties) data.properties = {}
+    if (!originalProps) originalProps = {}
     this.updateDeleteProperties(originalProps, newProps, data.properties)
     this.addProperties(originalProps, newProps, data.properties)
     this.clearProperties(originalProps, newProps, data.properties)
@@ -240,5 +239,9 @@ export default {
       data.main = mainData
       HelperComponent.setComponentData(component, data)
     }
+  },
+
+  reloadComponent () {
+    
   }
 }

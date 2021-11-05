@@ -11,6 +11,7 @@ import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 import StateCommandOverride from './StateCommandOverride.js'
+import CanvasElementSelect from '../../main/canvas/element/CanvasElementSelect.js'
 
 export default {
   addElement (data) {
@@ -157,7 +158,7 @@ export default {
   async changeComponentProperties (data) {
     const element = HelperElement.getElement(data.ref)
     const componentData = HelperComponent.getComponentData(element)
-    HelperComponent.updateComponentData(element, componentData, data.properties)
+    HelperComponent.updateComponentData(componentData, 'properties', data.properties)
     HelperComponent.setComponentData(element, componentData)
     await StateCommandOverride.overrideComponent(element, 'properties', data.properties)
   },
@@ -212,5 +213,16 @@ export default {
     const current = canvas.getElementsByClassName(data.current)[0]
     if (previous) previous.removeAttributeNS(null, 'data-ss-component-hole')
     if (current) current.setAttributeNS(null, 'data-ss-component-hole', '')
+  },
+
+  async resetComponentOverrides (data) {
+    const component = await HelperComponent.fetchComponent(data)
+    const element = HelperComponent.getByRef(data.ref)
+    element.replaceWith(component)
+    CanvasElementSelect.selectElementNode(element)
+  },
+
+  async resetElementOverrides (data) {
+    await this.resetComponentOverrides(data)
   }
 }

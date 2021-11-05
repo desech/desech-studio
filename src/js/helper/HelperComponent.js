@@ -1,6 +1,7 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
+import HelperCanvas from './HelperCanvas.js'
 
 export default {
   isComponent (element) {
@@ -31,11 +32,11 @@ export default {
     }
   },
 
-  updateComponentData (node, data, properties) {
-    if (ExtendJS.isEmpty(properties)) {
-      delete data.properties
+  updateComponentData (data, name, value) {
+    if (ExtendJS.isEmpty(value)) {
+      delete data[name]
     } else {
-      data.properties = properties
+      data[name] = value
     }
   },
 
@@ -119,5 +120,21 @@ export default {
     return !this.isComponentElement(node) &&
       (!this.isComponentHole(node) || this.isComponent(node) ||
       (HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()))
+  },
+
+  getByRef (ref) {
+    return HelperCanvas.getCanvas().querySelector(`[data-ss-component*="${ref}"]`)
+  },
+
+  async fetchComponent (data) {
+    const html = await window.electron.invoke('rendererParseComponentFile', data.file, data)
+    const element = document.createRange().createContextualFragment(html.canvas).children[0]
+    this.setComponentData(element, {
+      file: data.file,
+      ref: data.ref,
+      main: element.dataset.ssComponent ? JSON.parse(element.dataset.ssComponent) : undefined,
+      overrides: data.overrides || null
+    })
+    return element
   }
 }

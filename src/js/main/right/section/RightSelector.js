@@ -95,7 +95,7 @@ export default {
 
   highlightOverides (template) {
     const element = StateSelectedElement.getElement()
-    const overrides = HelperOverride.getSectionOverrides('selector', element)
+    const overrides = HelperOverride.getOverrides(element, 'element')
     HelperOverride.highlightOverideClasses(template, overrides?.classes)
     HelperOverride.highlightOverideClassesWarning(template, overrides?.classes)
   }

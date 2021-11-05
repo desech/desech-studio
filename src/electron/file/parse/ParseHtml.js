@@ -14,20 +14,20 @@ export default {
   _document: null,
   _folder: null,
   _options: null,
+  _body: null,
   // change this when you want to debug
   _debug: false,
 
   parseHtml (document, file, folder, options) {
     this.debugMsg('\n\nParsing started')
     this.init(document, file, folder, options)
-    const body = this.getBody(document.body)
     const component = {
-      data: this.extractComponentData(body),
+      data: this.extractComponentData(),
       level: options.newComponent ? 1 : 0
     }
-    if (body) this.prepareElement(body, component)
+    if (this._body) this.prepareElement(this._body, component)
     return {
-      canvas: this.returnBody(body) || null,
+      canvas: this.returnBody() || null,
       meta: this.returnMeta() || null,
       component: component.data || null
     }
@@ -38,6 +38,7 @@ export default {
     this._file = file
     this._folder = folder
     this._options = options
+    this._body = this.getBody(document.body)
   },
 
   getBody (body) {
@@ -45,10 +46,12 @@ export default {
     return (this._options.isComponent || this._options.newComponent) ? body.children[0] : body
   },
 
-  extractComponentData (body) {
-    if ((!this._options.isComponent && !this._options.componentData) || !body) return
-    const main = body.dataset.ssComponent
-    body.removeAttributeNS(null, 'data-ss-component')
+  extractComponentData () {
+    if ((!this._options.isComponent && !this._options.componentData) || !this._body) {
+      return
+    }
+    const main = this._body.dataset.ssComponent
+    this._body.removeAttributeNS(null, 'data-ss-component')
     if (this._options.componentData) {
       this._options.componentData.main = main
       return this._options.componentData
@@ -57,9 +60,9 @@ export default {
     }
   },
 
-  returnBody (body) {
-    if (body) {
-      return body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+  returnBody () {
+    if (this._body) {
+      return this._body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
     }
   },
 
@@ -390,22 +393,25 @@ export default {
   },
 
   setTagElement (node, type, tag, component) {
-    node = this.processNodeTag(node, component)
+    node = this.processNodeTag(node, component, node === this._body)
     this.setBasic(node, type, component)
     this.setElementChildren(node, component)
   },
 
-  processNodeTag (node, component) {
-    const data = {
-      node,
-      tag: HelperDOM.getTag(node),
-      ref: HelperElement.getRef(node)
-    }
+  processNodeTag (node, component, isBody) {
+    // we store the node tag into a data object, in order for setOverrideTag to overwrite the node
+    const tag = HelperDOM.getTag(node)
+    const ref = HelperElement.getRef(node)
+    const data = { node, tag, ref }
     ParseOverride.setOverrideTag(data, component?.data?.overrides, this._document)
-    return this.changeNodeSpecialTag(data.node, data.tag)
+    node = this.changeNodeSpecialTag(data.node, data.tag)
+    // although we overwrite the node, if this is the body, then we also need to update body
+    if (isBody) this._body = node
+    return node
   },
 
   changeNodeSpecialTag (node, tag) {
+    // changing the tag will replace the node, this is why we need to return it
     if (HelperElement.isNormalTag(tag)) return node
     node = HelperDOM.changeTag(node, 'div', this._document)
     node.setAttributeNS(null, 'data-ss-tag', tag)

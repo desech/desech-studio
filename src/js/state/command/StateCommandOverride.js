@@ -22,6 +22,7 @@ export default {
     const ref = HelperElement.getStyleRef(element)
     const componentNode = await this.getComponentNode(parents[0].data.file)
     const originalNode = componentNode.getElementsByClassName(ref)[0]
+    console.log(originalNode)
     const originalProps = HelperElement.getProperties(originalNode)
     this.overrideData(type, value, parents, ref, originalNode, originalProps)
   },
@@ -239,9 +240,5 @@ export default {
       data.main = mainData
       HelperComponent.setComponentData(component, data)
     }
-  },
-
-  reloadComponent () {
-    
   }
 }

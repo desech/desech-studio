@@ -56,18 +56,8 @@ export default {
   initSetListHtmlCommand (command, element, list, type) {
     const ref = HelperElement.getRef(element)
     return {
-      do: {
-        command,
-        ref,
-        type,
-        html: list.innerHTML
-      },
-      undo: {
-        command,
-        ref,
-        type,
-        html: element.innerHTML
-      }
+      do: { command, ref, type, html: list.innerHTML },
+      undo: { command, ref, type, html: element.innerHTML }
     }
   },
 
@@ -131,7 +121,9 @@ export default {
     field.textContent = decodeURI(HelperProject.getFileName(decodeURI(file)))
   },
 
-  setHidden (value) {
+  setHidden (hidden) {
+    // null will delete the attribute, while '' will set it as a name only attribute
+    const value = hidden ? '' : null
     this.changeAttributeCommand(StateSelectedElement.getRef(), {
       hidden: value,
       'data-ss-hidden': value
@@ -143,7 +135,7 @@ export default {
     const ignore = this.getIgnoredAttributes()
     for (const attr of HelperElement.getAttributes(element)) {
       if (!ignore.includes(attr.name)) {
-        remove[attr.name] = attr.value ? '' : false
+        remove[attr.name] = null
       }
     }
     return remove

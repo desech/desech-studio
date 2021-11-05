@@ -143,6 +143,7 @@ export default {
 
   async changeAttribute (data) {
     const element = HelperElement.getElement(data.ref)
+    if (!element) return
     for (const [name, value] of Object.entries(data.attributes)) {
       StateCommandCommon.setElementAttribute(element, name, value)
     }

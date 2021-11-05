@@ -39,12 +39,12 @@ export default {
     })
   },
 
+  // value: null = delete attr, string = new regular attr
   getButtonValue (button) {
-    const boolean = !button.value
     if (button.classList.contains('selected')) {
-      return boolean ? true : button.value
+      return button.value || ''
     } else {
-      return boolean ? false : (button.dataset.default || '')
+      return button.dataset.default || null
     }
   },
 

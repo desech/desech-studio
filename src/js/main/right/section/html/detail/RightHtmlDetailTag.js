@@ -259,9 +259,8 @@ export default {
 
   async saveImageSrcset (fields) {
     const ref = StateSelectedElement.getRef()
-    await RightHtmlCommon.changeAttributeCommand(ref, {
-      srcset: this.buildSrcset(fields)
-    })
+    const srcset = this.buildSrcset(fields)
+    await RightHtmlCommon.changeAttributeCommand(ref, { srcset })
   },
 
   buildSrcset (fields) {

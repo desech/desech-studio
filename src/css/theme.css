@@ -56,6 +56,7 @@ body {
   --link-hover: rgb(0, 140, 255);
   --override-color: rgb(253, 106, 21);
   --override-btn: rgba(253, 106, 21, 0.2);
+  --override-selector-bg: rgba(0, 140, 255, 0.3);
 }
 
 /* theme light */

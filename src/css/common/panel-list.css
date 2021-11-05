@@ -90,3 +90,9 @@
 .desech-studio ul.panel-list>li.effect-element:last-child {
   margin-bottom: 10px;
 }
+
+.desech-studio ul.panel-list>li.active.selector-element.override,
+.desech-studio ul.panel-list>li:hover.selector-element.override {
+  background-color: var(--override-selector-bg);
+  color: var(--override-color);
+}

@@ -6,12 +6,13 @@ import HelperElement from '../../../../helper/HelperElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import CanvasElementSelect from '../../../canvas/element/CanvasElementSelect.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
+import DialogComponent from '../../../../component/DialogComponent.js'
 
 export default {
   getEvents () {
     return {
       setsource: ['setsourceSwapComponentEvent'],
-      click: ['clickResetOverridesEvent']
+      click: ['clickPromptResetOverridesEvent', 'clickConfirmResetOverridesEvent']
     }
   },
 
@@ -25,8 +26,14 @@ export default {
     }
   },
 
-  async clickResetOverridesEvent (event) {
+  clickPromptResetOverridesEvent (event) {
     if (event.target.closest('.style-reset-overrides')) {
+      this.promptResetOverrides(event.target.closest('.style-reset-overrides'))
+    }
+  },
+
+  async clickConfirmResetOverridesEvent (event) {
+    if (event.target.closest('.dialog-reset-overrides-confirm')) {
       const type = event.target.closest('button').dataset.type
       await CanvasElementComponent.resetOverrides(type)
     }
@@ -66,5 +73,15 @@ export default {
     }
     StateCommand.stackCommand(command)
     if (execute) await StateCommand.executeCommand(command.do)
+  },
+
+  promptResetOverrides (button) {
+    const dialog = DialogComponent.showDialog({
+      header: DialogComponent.getContentHtml('reset-overrides', 'header'),
+      body: DialogComponent.getContentHtml('reset-overrides', 'body'),
+      footer: DialogComponent.getContentHtml('reset-overrides', 'footer')
+    })
+    const dialogButton = dialog.getElementsByClassName('dialog-reset-overrides-confirm')[0]
+    dialogButton.dataset.type = button.dataset.type
   }
 }

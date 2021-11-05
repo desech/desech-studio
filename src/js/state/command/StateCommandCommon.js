@@ -5,7 +5,6 @@ import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StyleSheetCommon from '../stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../StateStyleSheet.js'
-import ExtendJS from '../../helper/ExtendJS.js'
 
 export default {
   async addSelectorLinkClass (selector) {

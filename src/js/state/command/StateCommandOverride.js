@@ -22,9 +22,9 @@ export default {
     const ref = HelperElement.getStyleRef(element)
     const componentNode = await this.getComponentNode(parents[0].data.file)
     const originalNode = componentNode.getElementsByClassName(ref)[0]
-    console.log(originalNode)
-    const originalProps = HelperElement.getProperties(originalNode)
-    this.overrideData(type, value, parents, ref, originalNode, originalProps)
+    // when we swap components, then we can't find children of that component in our original cmp
+    const originalProps = originalNode ? HelperElement.getProperties(originalNode) : null
+    this.overrideData(type, value, parents, element, ref, originalNode, originalProps)
   },
 
   async getComponentNode (file) {
@@ -34,14 +34,14 @@ export default {
     return div
   },
 
-  overrideData (type, value, parents, ref, originalNode, originalProps) {
+  overrideData (type, value, parents, element, ref, originalNode, originalProps) {
     const data = HelperOverride.getOverrideData(parents, ref)
     switch (type) {
       case 'tag':
         this.processElementTag(value, data, originalNode)
         break
       case 'inner':
-        this.processElementInner(value, data, originalNode)
+        this.processElementInner(value, data, originalNode, element)
         break
       case 'attributes':
         this.processElementAttributes(value, data, originalNode)
@@ -60,7 +60,7 @@ export default {
   },
 
   processElementTag (value, data, originalNode) {
-    const originalValue = HelperDOM.getTag(originalNode)
+    const originalValue = originalNode ? HelperDOM.getTag(originalNode) : null
     if (value === originalValue) {
       delete data.tag
     } else {
@@ -68,9 +68,11 @@ export default {
     }
   },
 
-  processElementInner (value, data, originalNode) {
-    value = this.cleanElementInner(value, originalNode)
-    const originalValue = this.cleanElementInner(originalNode.innerHTML, originalNode)
+  processElementInner (value, data, originalNode, element) {
+    value = this.cleanElementInner(value, originalNode, element)
+    const originalValue = originalNode
+      ? this.cleanElementInner(originalNode.innerHTML, originalNode)
+      : null
     if (value === originalValue) {
       delete data.inner
     } else {
@@ -78,14 +80,14 @@ export default {
     }
   },
 
-  cleanElementInner (value, originalNode) {
-    const container = this.getNodeFromString(value, originalNode)
+  cleanElementInner (value, originalNode, element = null) {
+    const container = this.getNodeFromString(value, originalNode, element)
     this.cleanElementInnerNode(container)
     return container.innerHTML.trim()
   },
 
-  getNodeFromString (value, node) {
-    const tag = HelperDOM.getTag(node)
+  getNodeFromString (value, node, element) {
+    const tag = HelperDOM.getTag(node || element)
     const container = HelperDOM.createElement(tag, document)
     container.innerHTML = value
     return container
@@ -112,7 +114,7 @@ export default {
   processElementAttribute (data, originalNode, name, value) {
     if (name === 'data-ss-hidden') return
     const attrValue = this.getElementAttributeValue(value)
-    const originalValue = this.getNodeAttributeValue(originalNode, name)
+    const originalValue = originalNode ? this.getNodeAttributeValue(originalNode, name) : null
     if (!ExtendJS.objectsEqual(attrValue, originalValue)) {
       data.attributes[name] = attrValue
     } else {
@@ -175,7 +177,7 @@ export default {
 
   processElementClasses (value, data, originalNode) {
     if (!data.classes) data.classes = {}
-    const exists = originalNode.classList.contains(value.cls)
+    const exists = originalNode ? originalNode.classList.contains(value.cls) : false
     const cls = HelperStyle.getViewableClass(value.cls)
     this.processElementClass(cls, value.action, data, exists)
   },
@@ -202,8 +204,11 @@ export default {
   async processComponentData (parents, element, type, value) {
     const ref = HelperComponent.getInstanceRef(element)
     const originalNode = await this.getOriginalComponent(parents[0].data.file, ref)
-    const originalProps = HelperComponent.getComponentData(originalNode).properties
-    this.overrideData(type, value, parents, ref, originalNode, originalProps)
+    // when we swap components, then we can't find children of that component in our original cmp
+    const originalProps = originalNode
+      ? HelperComponent.getComponentData(originalNode).properties
+      : null
+    this.overrideData(type, value, parents, element, ref, originalNode, originalProps)
   },
 
   async getOriginalComponent (file, ref) {
@@ -213,11 +218,11 @@ export default {
       const data = HelperComponent.getComponentData(node)
       if (data.ref === ref) return node
     }
-    throw new Error("Can't find the original component")
   },
 
   processComponentFile (value, data, originalNode) {
-    if (value === HelperComponent.getInstanceFile(originalNode)) {
+    const originalValue = originalNode ? HelperComponent.getInstanceFile(originalNode) : null
+    if (value === originalValue) {
       delete data.component
     } else {
       data.component = HelperFile.getRelPath(value)

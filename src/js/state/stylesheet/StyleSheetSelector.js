@@ -125,12 +125,16 @@ export default {
 
   async linkClass (cls, ref) {
     const element = HelperElement.getElement(ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     element.classList.add(cls)
     await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'add' })
   },
 
   async unlinkClass (cls, ref) {
     const element = HelperElement.getElement(ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     element.classList.remove(cls)
     await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'delete' })
   }

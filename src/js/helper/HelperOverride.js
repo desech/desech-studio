@@ -143,7 +143,7 @@ export default {
     const selectorClass = HelperStyle.getClassFromSelector(li.dataset.selector)
     const cls = HelperStyle.getViewableClass(selectorClass)
     if (classes[cls]) {
-      li.getElementsByClassName('selector-title')[0].classList.add('override')
+      li.classList.add('override')
     }
   },
 

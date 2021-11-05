@@ -16,11 +16,15 @@ import CanvasElementSelect from '../../main/canvas/element/CanvasElementSelect.j
 export default {
   addElement (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     HelperDOM.show(element)
   },
 
   removeElement (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     element.removeAttributeNS(null, 'data-ss-hidden')
     HelperDOM.hide(element)
   },
@@ -72,6 +76,8 @@ export default {
   // and also integrate the missing components
   pasteElementData (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     StateCommandCommon.pasteAttributes(element, data.data.attributes)
     StateCommandCommon.pasteStyle(element, data.ref, data.data.style)
   },
@@ -106,6 +112,8 @@ export default {
 
   async changeTag (data) {
     let element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     if (HelperElement.isNormalTag(data.tag)) {
       element = HelperDOM.changeTag(element, data.tag, document)
       element.removeAttributeNS(null, 'data-ss-tag')
@@ -118,12 +126,16 @@ export default {
 
   async changeText (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     element.innerHTML = HelperLocalStore.getItem(data.textId)
     await StateCommandOverride.overrideElement(element, 'inner', element.innerHTML)
   },
 
   async setOptions (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     element.innerHTML = data.html
     await StateCommandOverride.overrideElement(element, 'inner', data.html)
   },
@@ -134,6 +146,8 @@ export default {
 
   async changeSvg (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     element.setAttributeNS(null, 'viewBox', data.viewBox)
     const attrs = { viewBox: data.viewBox }
     await StateCommandOverride.overrideElement(element, 'attributes', attrs)
@@ -143,6 +157,7 @@ export default {
 
   async changeAttribute (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
     if (!element) return
     for (const [name, value] of Object.entries(data.attributes)) {
       StateCommandCommon.setElementAttribute(element, name, value)
@@ -152,12 +167,16 @@ export default {
 
   async changeProperties (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     HelperElement.setProperties(element, data.properties)
     await StateCommandOverride.overrideElement(element, 'properties', data.properties)
   },
 
   async changeComponentProperties (data) {
     const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
     const componentData = HelperComponent.getComponentData(element)
     HelperComponent.updateComponentData(componentData, 'properties', data.properties)
     HelperComponent.setComponentData(element, componentData)
@@ -167,6 +186,8 @@ export default {
   async swapComponent (data) {
     const currentElem = HelperElement.getElement(data.currentRef)
     const newElem = HelperElement.getElement(data.newRef)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!currentElem || !newElem) return
     HelperDOM.hide(currentElem)
     HelperDOM.show(newElem)
     const componentData = HelperComponent.getComponentData(newElem)
@@ -217,8 +238,10 @@ export default {
   },
 
   async resetComponentOverrides (data) {
-    const component = await HelperComponent.fetchComponent(data)
     const element = HelperComponent.getByRef(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
+    const component = await HelperComponent.fetchComponent(data)
     element.replaceWith(component)
     CanvasElementSelect.selectElementNode(element)
   },

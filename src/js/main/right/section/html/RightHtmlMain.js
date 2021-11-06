@@ -7,6 +7,7 @@ import CanvasElementManage from '../../../canvas/element/CanvasElementManage.js'
 import CanvasElementComponent from '../../../canvas/element/CanvasElementComponent.js'
 import HelperElement from '../../../../helper/HelperElement.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
+import RightCommon from '../../RightCommon.js'
 
 export default {
   getEvents () {
@@ -63,19 +64,13 @@ export default {
     }
   },
 
-  injectMain (template) {
+  injectMain (template, overrides) {
     const data = RightHtmlCommon.getSelectedElementData()
-    this.injectResetOverrides(template, data)
+    RightCommon.injectResetOverrides(template, overrides)
     this.injectTitle(template, data)
     this.injectTagInDropdown(template, data)
     this.injectRef(template, data)
     this.injectTopLine(template, data)
-  },
-
-  injectResetOverrides (template, data) {
-    const node = template.getElementsByClassName('style-reset-overrides')[0]
-    const element = StateSelectedElement.getElement()
-    HelperDOM.toggle(node, HelperComponent.belongsToAComponent(element))
   },
 
   injectTitle (template, data) {

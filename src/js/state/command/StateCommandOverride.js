@@ -142,6 +142,7 @@ export default {
   processProperties (data, originalProps, newProps) {
     if (!data.properties) data.properties = {}
     if (!originalProps) originalProps = {}
+    if (!newProps) newProps = {}
     this.updateDeleteProperties(originalProps, newProps, data.properties)
     this.addProperties(originalProps, newProps, data.properties)
     this.clearProperties(originalProps, newProps, data.properties)
@@ -149,7 +150,7 @@ export default {
 
   updateDeleteProperties (originalProps, newProps, properties) {
     for (const [name, value] of Object.entries(originalProps)) {
-      if (!newProps[name]) {
+      if (!(name in newProps)) {
         properties[name] = { delete: true }
       } else if (value !== newProps[name]) {
         properties[name] = { value: newProps[name] }
@@ -161,7 +162,7 @@ export default {
 
   addProperties (originalProps, newProps, properties) {
     for (const [name, value] of Object.entries(newProps)) {
-      if (!originalProps[name]) {
+      if (!(name in originalProps)) {
         properties[name] = { value }
       }
     }
@@ -169,7 +170,7 @@ export default {
 
   clearProperties (originalProps, newProps, properties) {
     for (const name of Object.keys(properties)) {
-      if (!originalProps[name] && !newProps[name]) {
+      if (!(name in originalProps) && !(name in newProps)) {
         delete properties[name]
       }
     }

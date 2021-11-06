@@ -118,5 +118,10 @@ export default {
   setPropertyInputs (fields, name, value) {
     fields[0].value = name
     fields[1].value = value
+  },
+
+  injectResetOverrides (template, overrides) {
+    const node = template.getElementsByClassName('style-reset-overrides')[0]
+    HelperDOM.toggle(node, !ExtendJS.isEmpty(overrides))
   }
 }

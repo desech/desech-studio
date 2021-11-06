@@ -56,10 +56,11 @@ export default {
     }
   },
 
-  injectDetails (template) {
+  injectDetails (template, overrides) {
     const data = RightHtmlCommon.getSelectedElementData()
     data.template = this.getTemplateType(data)
     SliderComponent.setOpened(template)
+    this.highlightOverrideDetails(template, overrides)
     const container = this.prepareContainer(template, data)
     if (data.template) this.injectDetailsTemplate(container, data)
   },
@@ -73,6 +74,13 @@ export default {
       'select', 'textarea', 'datalist', 'time', 'data', 'q', 'map', 'area', 'progress', 'meter',
       'details']
     if (tags.includes(data.tag)) return data.tag
+  },
+
+  highlightOverrideDetails (template, overrides) {
+    if (!ExtendJS.isEmpty(overrides?.attributes) || !ExtendJS.isEmpty(overrides?.properties)) {
+      const div = template.getElementsByClassName('slider-extra-button')[0]
+      div.classList.add('override')
+    }
   },
 
   prepareContainer (template, data) {

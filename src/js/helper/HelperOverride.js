@@ -10,6 +10,10 @@ export default {
       return this.getElementParents(element)
     } else if (type === 'component' && HelperComponent.isComponentElement(element)) {
       return this.getComponentParents(element.parentNode)
+    } else if (type === 'component') {
+      // top level components, don't have any parents, but we should be able to reset them
+      const data = HelperComponent.getComponentData(element)
+      return [{ element, data, topLevel: true }]
     }
   },
 
@@ -70,8 +74,7 @@ export default {
     for (let i = 1; i < parents.length; i++) {
       data = this.getOverrideDataParent(data, parents[i].data.ref)
     }
-    if (!data[ref]) data[ref] = {}
-    return data[ref]
+    return this.returnOverrideData(parents, data, ref)
   },
 
   getInitialData (data) {
@@ -83,6 +86,16 @@ export default {
     if (!data[ref]) data[ref] = {}
     if (!data[ref].children) data[ref].children = {}
     return data[ref].children
+  },
+
+  returnOverrideData (parents, data, ref) {
+    // usually we get data from our ref index, but when we are at the top, we check for any data
+    if (parents[0].topLevel) {
+      return !ExtendJS.isEmpty(data) ? { children: data } : {}
+    } else {
+      if (!data[ref]) data[ref] = {}
+      return data[ref]
+    }
   },
 
   highlightOveride (template, check, cls) {

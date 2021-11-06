@@ -15,11 +15,13 @@ export default {
   },
 
   injectData (template, element, data) {
+    const overrides = HelperOverride.getOverrides(element, 'component')
+    RightCommon.injectResetOverrides(template, overrides)
     this.injectComponentRef(template, data)
     this.injectComponentName(template, element, data)
     this.injectComponentFile(template, data)
-    this.injectComponentProperties(template, data)
-    this.highlightOverides(template)
+    RightCommon.injectPropertyFields(template, data.properties)
+    this.highlightOverides(template, overrides)
   },
 
   injectComponentRef (container, data) {
@@ -37,13 +39,7 @@ export default {
     RightHtmlCommon.setFileName(field, data.file)
   },
 
-  injectComponentProperties (container, data) {
-    RightCommon.injectPropertyFields(container, data.properties)
-  },
-
-  highlightOverides (template) {
-    const element = StateSelectedElement.getElement()
-    const overrides = HelperOverride.getOverrides(element, 'component')
+  highlightOverides (template, overrides) {
     HelperOverride.highlightOveride(template, overrides?.component, 'swap-component-button')
     HelperOverride.highlightOverideProperties(template, overrides?.properties)
     HelperOverride.highlightOverideWarning(template, overrides)

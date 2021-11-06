@@ -91,7 +91,7 @@ export default {
   async resetOverrides (type, execute = true) {
     const command = (type === 'component') ? 'resetComponentOverrides' : 'resetElementOverrides'
     const element = StateSelectedElement.getElement()
-    const parents = this.getParents(element, type)
+    const parents = HelperOverride.getParents(element, type)
     const file = parents[0].data.file
     const ref = parents[0].data.ref
     const overrides = this.getResetedOverrides(parents[0], element, type)
@@ -101,16 +101,6 @@ export default {
     }
     StateCommand.stackCommand(cmd)
     if (execute) await StateCommand.executeCommand(cmd.do)
-  },
-
-  getParents (element, type) {
-    const parents = HelperOverride.getParents(element, type)
-    // top level components, don't have any parents, but we should be able to reset them
-    if (!parents && HelperComponent.isComponent(element)) {
-      const data = HelperComponent.getComponentData(element)
-      return [{ element, data, topLevel: true }]
-    }
-    return parents
   },
 
   getResetedOverrides (parent, element, type) {

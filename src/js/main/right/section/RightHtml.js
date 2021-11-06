@@ -19,11 +19,13 @@ export default {
   },
 
   injectData (template) {
-    RightHtmlMain.injectMain(template)
-    RightHtmlDetail.injectDetails(template)
+    const element = StateSelectedElement.getElement()
+    const overrides = HelperOverride.getOverrides(element, 'element')
+    RightHtmlMain.injectMain(template, overrides)
+    RightHtmlDetail.injectDetails(template, overrides)
     RightHtmlAttribute.injectAttributes(template)
     this.injectProperties(template)
-    this.highlightOverides(template)
+    this.highlightOverides(template, element, overrides)
   },
 
   injectProperties (template) {
@@ -34,10 +36,8 @@ export default {
     RightCommon.injectPropertyFields(container, properties)
   },
 
-  highlightOverides (template) {
-    const element = StateSelectedElement.getElement()
+  highlightOverides (template, element, overrides) {
     const type = HelperElement.getType(element)
-    const overrides = HelperOverride.getOverrides(element, 'element')
     HelperOverride.highlightOveride(template, overrides?.tag, 'style-tag-dropdown')
     HelperOverride.highlightOveride(template, overrides?.inner, 'style-html-inner-field')
     HelperOverride.highlightOverideAttributes(template, overrides?.attributes)

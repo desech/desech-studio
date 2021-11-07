@@ -19,6 +19,7 @@ export default {
     const data = { bubbles: true, cancelable: true }
     if (detail) data.detail = detail
     const event = new CustomEvent(type, data)
-    document.getElementById(id).dispatchEvent(event)
+    const node = document.getElementById(id)
+    if (node) node.dispatchEvent(event)
   }
 }

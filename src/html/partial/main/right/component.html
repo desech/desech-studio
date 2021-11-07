@@ -18,7 +18,10 @@
     </div>
 
     <div class="sidebar-content sidebar-content-list">
-      {{> mainRightComponentVariant }}
+      <div class="style-variant-section" hidden>
+        <ul class="style-variant-elements"></ul>
+        {{> mainRightComponentVariant }}
+      </div>
       {{> mainRightComponentSwap }}
       {{> mainRightComponentProperty }}
     </div>
@@ -40,3 +43,5 @@
     </div>
   </li>
 </template>
+
+{{> mainRightComponentVariantList }}

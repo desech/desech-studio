@@ -28,7 +28,7 @@ export default {
     HelperProject.setFile(file)
     HelperProject.setFileMeta(data.html.meta)
     HelperProject.setFontList(data.font)
-    HelperComponent.setMainData(data.html.component)
+    HelperComponent.setMainData(data.html.component?.main)
   },
 
   async reloadCurrentFile () {

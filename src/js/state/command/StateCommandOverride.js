@@ -7,15 +7,16 @@ import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperOverride from '../../helper/HelperOverride.js'
+import HelperTrigger from '../../helper/HelperTrigger.js'
 
 export default {
   async overrideElement (element, type, value) {
-    if (HelperComponent.belongsToAComponent(element)) {
-      const parents = HelperOverride.getElementParents(element)
-      if (!parents.length) return
-      await this.processElementData(parents, element, type, value)
-      await this.saveData(parents)
-    }
+    if (!HelperComponent.belongsToAComponent(element)) return
+    const parents = HelperOverride.getElementParents(element)
+    if (!parents.length) return
+    await this.processElementData(parents, element, type, value)
+    HelperComponent.setComponentData(parents[0].element, parents[0].data)
+    HelperTrigger.triggerReload('right-panel-style')
   },
 
   async processElementData (parents, element, type, value) {
@@ -29,13 +30,13 @@ export default {
 
   async getComponentNode (file) {
     const div = document.createElement('div')
-    const html = await window.electron.invoke('rendererParseComponentFile', file)
+    const html = await window.electron.invoke('rendererParseComponentFile', { file })
     div.innerHTML = html.canvas
     return div
   },
 
   overrideData (type, value, parents, element, ref, originalNode, originalProps) {
-    const data = HelperOverride.getOverrideData(parents, ref)
+    const data = HelperOverride.getOverrideData(parents, ref, 'original')
     switch (type) {
       case 'tag':
         this.processElementTag(value, data, originalNode)
@@ -194,12 +195,12 @@ export default {
   },
 
   async overrideComponent (element, type, value) {
-    if (HelperComponent.isComponentElement(element)) {
-      const parents = HelperOverride.getComponentParents(element.parentNode)
-      if (!parents.length) return
-      await this.processComponentData(parents, element, type, value)
-      await this.saveData(parents)
-    }
+    if (!HelperComponent.isComponentElement(element)) return
+    const parents = HelperOverride.getComponentParents(element.parentNode)
+    if (!parents.length) return
+    await this.processComponentData(parents, element, type, value)
+    HelperComponent.setComponentData(parents[0].element, parents[0].data)
+    HelperTrigger.triggerReload('component-section')
   },
 
   async processComponentData (parents, element, type, value) {
@@ -230,22 +231,6 @@ export default {
     }
   },
 
-  async saveData (parents) {
-    // save the instance data to our component
-    HelperComponent.setComponentData(parents[0].element, parents[0].data)
-    // save the main data of all the component instances found in the current opened file
-    // this.saveMainDataAllComponents(data.file, data.main)
-  },
-
-  saveMainDataAllComponents (file, mainData) {
-    const components = HelperCanvas.getCanvas().querySelectorAll(`[data-ss-component*="${file}"]`)
-    for (const component of components) {
-      const data = HelperComponent.getComponentData(component)
-      data.main = mainData
-      HelperComponent.setComponentData(component, data)
-    }
-  },
-
   addVariantToMain (data, name, value) {
     if (!data.main) data.main = {}
     if (!data.main.variants) data.main.variants = {}
@@ -253,10 +238,14 @@ export default {
     data.main.variants[name][value] = data.overrides
   },
 
-  addVariantToInstance (element, data, name, value) {
-    delete data.overrides
+  updateVariantInstance (element, data, name, value) {
     if (!data.variants) data.variants = {}
-    data.variants[name] = value
+    if (value) {
+      data.variants[name] = value
+    } else {
+      delete data.variants[name]
+    }
+    ExtendJS.clearEmptyObjects(data)
     HelperComponent.setComponentData(element, data)
   },
 
@@ -273,5 +262,15 @@ export default {
     delete data.variants[name]
     ExtendJS.clearEmptyObjects(data)
     HelperComponent.setComponentData(element, data)
+    this.saveMainDataAllComponents(data.file, data.main)
+  },
+
+  saveMainDataAllComponents (file, mainData) {
+    const components = HelperCanvas.getCanvas().querySelectorAll(`[data-ss-component*="${file}"]`)
+    for (const component of components) {
+      const data = HelperComponent.getComponentData(component)
+      data.main = mainData
+      HelperComponent.setComponentData(component, data)
+    }
   }
 }

@@ -9,6 +9,7 @@ import HelperFile from '../../../js/helper/HelperFile.js'
 import Language from '../../lib/Language.js'
 import ParseCommon from './ParseCommon.js'
 import ParseOverride from './ParseOverride.js'
+import HelperOverride from '../../../js/helper/HelperOverride.js'
 
 export default {
   _document: null,
@@ -47,13 +48,19 @@ export default {
   },
 
   extractComponentData () {
-    if ((!this._options.isComponent && !this._options.componentData) || !this._body) {
-      return
-    }
+    if ((!this._options.isComponent && !this._options.componentData) || !this._body) return null
     const main = this._body.dataset.ssComponent
     this._body.removeAttributeNS(null, 'data-ss-component')
+    const data = this.getComponentData(main)
+    return {
+      ...data,
+      fullOverrides: HelperOverride.getFullOverrides(data)
+    }
+  },
+
+  getComponentData (main) {
     if (this._options.componentData) {
-      this._options.componentData.main = main
+      if (main) this._options.componentData.main = JSON.parse(main)
       return this._options.componentData
     } else {
       return main ? { main: JSON.parse(main) } : null
@@ -149,7 +156,7 @@ export default {
 
   setComponent (div, parentData) {
     const instanceData = HelperComponent.getComponentData(div)
-    ParseOverride.setOverrideComponentFile(instanceData, parentData?.data?.overrides)
+    ParseOverride.setOverrideComponentFile(instanceData, parentData?.data?.fullOverrides)
     const mainComponent = this.getMainComponent(div, instanceData)
     if (!mainComponent) return
     this.mergeComponentData(mainComponent, instanceData)
@@ -178,7 +185,7 @@ export default {
 
   prepareComponent (mainComponent, parentData, instanceData, children) {
     const level = this.adjustComponentLevel('component', parentData?.level)
-    ParseOverride.setOverrideComponentProperties(mainComponent, parentData?.data?.overrides)
+    ParseOverride.setOverrideComponentProperties(mainComponent, parentData?.data?.fullOverrides)
     const overrideData = ParseOverride.getSubComponentData(parentData?.data, instanceData)
     this.prepareElement(mainComponent, {
       data: overrideData,
@@ -309,7 +316,7 @@ export default {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
     }
-    this.setBasicOverrides(node, component?.data?.overrides)
+    this.setBasicOverrides(node, component?.data?.fullOverrides)
     this.setAbsoluteSource(node)
     this.cleanAttributes(node)
     this.cleanClasses(node)
@@ -331,7 +338,7 @@ export default {
   },
 
   setIconElement (node, component, ref) {
-    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.fullOverrides, ref)
     this.setBasic(node, 'icon', component)
   },
 
@@ -342,7 +349,7 @@ export default {
   },
 
   setMediaElement (node, tag, component, ref) {
-    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.fullOverrides, ref)
     this.setBasic(node, tag, component)
     this.setTrackSource(node)
   },
@@ -364,7 +371,7 @@ export default {
   },
 
   setDropdownElement (node, tag, component, ref) {
-    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.fullOverrides, ref)
     const cls = (tag === 'select') ? 'dropdown' : tag
     this.setBasic(node, cls, component)
   },
@@ -381,7 +388,7 @@ export default {
   },
 
   setTextElement (node, component, ref) {
-    ParseOverride.setOverrideInner(node, component?.data?.overrides, ref)
+    ParseOverride.setOverrideInner(node, component?.data?.fullOverrides, ref)
     this.setTagElement(node, 'text', 'p', component)
   },
 
@@ -403,7 +410,7 @@ export default {
     const tag = HelperDOM.getTag(node)
     const ref = HelperElement.getRef(node)
     const data = { node, tag, ref }
-    ParseOverride.setOverrideTag(data, component?.data?.overrides, this._document)
+    ParseOverride.setOverrideTag(data, component?.data?.fullOverrides, this._document)
     node = this.changeNodeSpecialTag(data.node, data.tag)
     // although we overwrite the node, if this is the body, then we also need to update body
     if (isBody) this._body = node
@@ -435,11 +442,11 @@ export default {
   },
 
   // this is called when we add a component to the canvas
-  async parseComponentFile (file, componentData = null) {
+  async parseComponentFile (data) {
     const folder = await Cookie.getCookie('currentFolder')
-    const html = fs.readFileSync(file).toString()
+    const html = fs.readFileSync(data.file).toString()
     const dom = new JSDOM(html)
-    const options = { newComponent: true, componentData }
-    return this.parseHtml(dom.window.document, file, folder, options)
+    const options = { newComponent: true, componentData: data }
+    return this.parseHtml(dom.window.document, data.file, folder, options)
   }
 }

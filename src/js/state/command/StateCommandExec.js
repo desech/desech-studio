@@ -12,6 +12,7 @@ import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import CanvasElementSelect from '../../main/canvas/element/CanvasElementSelect.js'
+import StateCommandVariant from './StateCommandVariant.js'
 
 export default {
   addElement (data) {
@@ -241,9 +242,7 @@ export default {
     const element = HelperComponent.getByRef(data.ref)
     // when we swap components, we lose the original ref and `undo` will not find it
     if (!element) return
-    const component = await HelperComponent.fetchComponent(data)
-    element.replaceWith(component)
-    CanvasElementSelect.selectElementNode(element)
+    await HelperComponent.replaceComponent(element, data)
   },
 
   async resetElementOverrides (data) {
@@ -251,27 +250,23 @@ export default {
   },
 
   async saveVariant (data) {
-    const element = HelperElement.getElement(data.ref)
+    const element = HelperComponent.getByRef(data.ref)
     // when we swap components, we lose the original ref and `undo` will not find it
     if (!element) return
-    const component = HelperComponent.getComponentData(element)
-    StateCommandOverride.addVariantToMain(component, data.name, data.value)
-    await window.electron.invoke('rendererSaveComponentData', component.file, component.main)
-    StateCommandOverride.addVariantToInstance(element, component, data.name, data.value)
+    await StateCommandVariant.saveVariant(element, data.name, data.value)
   },
 
   async deleteVariant (data) {
-    const element = HelperElement.getElement(data.ref)
+    const element = HelperComponent.getByRef(data.ref)
     // when we swap components, we lose the original ref and `undo` will not find it
     if (!element) return
-    const component = HelperComponent.getComponentData(element)
-    const overrides = StateCommandOverride.deleteVariantFromMain(component, data.name, data.value)
-    await window.electron.invoke('rendererSaveComponentData', component.file, component.main)
-    if (data.undo) {
-      StateCommandOverride.undoVariantFromInstance(element, component, data.name, overrides)
-    } else {
-      // @todo
-      console.log('delete variant from all component instances in all files')
-    }
+    await StateCommandVariant.deleteVariant(element, data.name, data.value, data.undo)
+  },
+
+  async switchVariant (data) {
+    const element = HelperComponent.getByRef(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
+    await StateCommandVariant.switchVariant(element, data.name, data.value)
   }
 }

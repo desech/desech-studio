@@ -60,7 +60,7 @@ export default {
     const parents = this.getParents(element, type)
     if (!parents?.length) return
     const ref = this.getOverrideRef(element, type)
-    return this.getOverrideData(parents, ref)
+    return this.getOverrideData(parents, ref, 'full')
   },
 
   getOverrideRef (element, type) {
@@ -69,17 +69,24 @@ export default {
       : HelperComponent.getInstanceRef(element)
   },
 
-  getOverrideData (parents, ref) {
-    let data = this.getInitialData(parents[0].data)
+  // type: original, full
+  getOverrideData (parents, ref, type) {
+    let data = this.getInitialData(parents[0].data, type)
     for (let i = 1; i < parents.length; i++) {
       data = this.getOverrideDataParent(data, parents[i].data.ref)
     }
     return this.returnOverrideData(parents, data, ref)
   },
 
-  getInitialData (data) {
-    if (!data.overrides) data.overrides = {}
-    return data.overrides
+  getInitialData (data, type) {
+    if (type === 'original') {
+      // this mutates data and is needed when setting values directly
+      if (!data.overrides) data.overrides = {}
+      return data.overrides
+    } else if (type === 'full') {
+      // this doesn't mutate and is needed for checking against overwritten values
+      return this.getFullOverrides(data)
+    }
   },
 
   getOverrideDataParent (data, ref) {
@@ -95,6 +102,41 @@ export default {
     } else {
       if (!data[ref]) data[ref] = {}
       return data[ref]
+    }
+  },
+
+  getFullOverrides (data) {
+    const overrides = {}
+    if (data?.variants) {
+      for (const [name, value] of Object.entries(data.variants)) {
+        this.merge2Objects(overrides, data.main.variants[name][value])
+      }
+    }
+    if (data?.fullOverrides) {
+      this.merge2Objects(overrides, data.fullOverrides)
+    } else if (data?.overrides) {
+      this.merge2Objects(overrides, data.overrides)
+    }
+    return overrides
+  },
+
+  // obj1 is mutated
+  merge2Objects (obj1, obj2) {
+    ExtendJS.mergeDeep(obj1, obj2)
+    this.merge2ObjectsFix(obj1)
+  },
+
+  merge2ObjectsFix (obj) {
+    // mergeDeep will merge everything including the attribute/property/class values
+    // if we have these pairs value/delete or add/delete, remove the first value
+    if (Object.keys(obj).length === 2 && (('value' in obj && 'delete' in obj) ||
+      ('add' in obj && 'delete' in obj))) {
+      delete obj[Object.keys(obj)[0]]
+    }
+    for (const key in obj) {
+      if (typeof obj[key] === 'object') {
+        this.merge2ObjectsFix(obj[key])
+      }
     }
   },
 

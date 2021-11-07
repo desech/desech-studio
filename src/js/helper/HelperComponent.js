@@ -2,6 +2,7 @@ import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
 import HelperCanvas from './HelperCanvas.js'
+import CanvasElementSelect from '../main/canvas/element/CanvasElementSelect.js'
 
 export default {
   isComponent (element) {
@@ -63,11 +64,6 @@ export default {
   getInstanceProperties (element) {
     const data = this.getComponentData(element)
     return data ? data.properties : null
-  },
-
-  getInstanceOverrides (element) {
-    const data = this.getComponentData(element)
-    return data ? data.overrides : null
   },
 
   getMainData () {
@@ -135,14 +131,22 @@ export default {
     return HelperCanvas.getCanvas().querySelector(`[data-ss-component*="${ref}"]`)
   },
 
+  async replaceComponent (element, data) {
+    const component = await this.fetchComponent(data)
+    element.replaceWith(component)
+    const newElement = this.getByRef(data.ref)
+    CanvasElementSelect.selectElementNode(newElement)
+  },
+
   async fetchComponent (data) {
-    const html = await window.electron.invoke('rendererParseComponentFile', data.file, data)
-    const element = document.createRange().createContextualFragment(html.canvas).children[0]
+    const render = await window.electron.invoke('rendererParseComponentFile', data)
+    const element = document.createRange().createContextualFragment(render.canvas).children[0]
     this.setComponentData(element, {
       file: data.file,
       ref: data.ref,
-      main: element.dataset.ssComponent ? JSON.parse(element.dataset.ssComponent) : undefined,
-      overrides: data.overrides || null
+      main: render.component.main,
+      overrides: render.component?.overrides || null,
+      variants: render.component?.variants || null
     })
     return element
   }

@@ -1,38 +1,16 @@
 import HelperElement from '../../../js/helper/HelperElement.js'
-import File from '../File.js'
-import ParseCommon from './ParseCommon.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
-import ExtendJS from '../../../js/helper/ExtendJS.js'
+import HelperOverride from '../../../js/helper/HelperOverride.js'
 
 export default {
   getSubComponentData (parent, child) {
-    // we clone the object because we don't want to change the original data
-    const data = ExtendJS.cloneData(child)
-    if (parent?.overrides && parent?.overrides[child.ref]?.children) {
-      if (!data.overrides) data.overrides = {}
-      this.mergeParentChildData(parent.overrides[child.ref].children, data.overrides)
+    const parentOverrides = HelperOverride.getFullOverrides(parent)
+    const childOverrides = HelperOverride.getFullOverrides(child)
+    if (parentOverrides[child.ref]?.children) {
+      HelperOverride.merge2Objects(childOverrides, parentOverrides[child.ref].children)
     }
-    return data
-  },
-
-  mergeParentChildData (parent, child) {
-    ExtendJS.mergeDeep(child, parent)
-    this.mergeParentChildFix(child)
-  },
-
-  mergeParentChildFix (obj) {
-    // mergeDeep will merge everything including the attribute/property/class values
-    // if we have these pairs value/delete or add/delete, remove the first value
-    if (Object.keys(obj).length === 2 && (('value' in obj && 'delete' in obj) ||
-      ('add' in obj && 'delete' in obj))) {
-      delete obj[Object.keys(obj)[0]]
-    }
-    for (const key in obj) {
-      if (typeof obj[key] === 'object') {
-        this.mergeParentChildFix(obj[key])
-      }
-    }
+    return { ...child, fullOverrides: childOverrides }
   },
 
   setOverrideTag (nodeData, overrides, document) {

@@ -7,6 +7,11 @@
 
 .sidebar-right #component-section .style-variant-form {
   grid-template-columns: 1fr 1fr 18px;
-  column-gap:5px;
+  column-gap: 5px;
   padding-bottom: 20px;
+}
+
+.sidebar-right #component-section .style-variant-element {
+  grid-template-columns: 1fr 1fr 18px 18px;
+  column-gap: 5px;
 }

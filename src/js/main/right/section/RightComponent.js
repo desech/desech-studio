@@ -4,6 +4,7 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import RightHtmlCommon from './html/RightHtmlCommon.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
+import RightComponentVariant from './component/RightComponentVariant.js'
 
 export default {
   getSection () {
@@ -19,6 +20,7 @@ export default {
     RightCommon.injectResetOverrides(template, overrides)
     this.injectComponentRef(template, data)
     this.injectComponentName(template, element, data)
+    RightComponentVariant.injectVariants(template, overrides)
     this.injectComponentFile(template, data)
     RightCommon.injectPropertyFields(template, data.properties)
     this.highlightOverides(template, overrides)

@@ -31,7 +31,7 @@ export default {
     return visible
   },
 
-  toggle (node, visible) {
+  toggle (node, visible = null) {
     if (visible === null) {
       visible = !this.isVisible(node)
     }

@@ -44,6 +44,7 @@ export default {
     }
   },
 
+  // @todo this is redundant; we should check form.checkValidity()
   validateForm (form, data) {
     for (const field of form.elements) {
       field.setCustomValidity('')
@@ -57,5 +58,13 @@ export default {
   focusFirstInput (container) {
     const input = container.getElementsByTagName('input')[0]
     if (input) input.focus()
+  },
+
+  resetValidity (form) {
+    for (const field of form.elements) {
+      if (!field.checkValidity()) {
+        field.setCustomValidity('')
+      }
+    }
   }
 }

@@ -57,6 +57,7 @@ export default {
   },
 
   resetProperty (li) {
+    // @todo check HelperForm.resetValidity(form)
     const name = li.getElementsByClassName('style-component-property-name')[0]
     name.setCustomValidity('')
     name.reportValidity()

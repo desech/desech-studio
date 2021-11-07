@@ -76,6 +76,7 @@ import RightCSSList from '../main/right/section/css/RightCSSList.js'
 import RightCSSProperty from '../main/right/section/css/RightCSSProperty.js'
 import RightComponentMain from '../main/right/section/component/RightComponentMain.js'
 import RightComponentProperty from '../main/right/section/component/RightComponentProperty.js'
+import RightComponentVariant from '../main/right/section/component/RightComponentVariant.js'
 
 export default {
   addEvents () {
@@ -280,7 +281,8 @@ export default {
   getRightComponentEvents () {
     return [
       RightComponentMain,
-      RightComponentProperty
+      RightComponentProperty,
+      RightComponentVariant
     ]
   }
 }

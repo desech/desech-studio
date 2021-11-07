@@ -68,7 +68,7 @@ export default {
     let item = parent.nextElementSibling
     while (item) {
       if (this.getLevel(item) <= this.getLevel(parent)) break
-      HelperDOM.toggle(item, false)
+      HelperDOM.hide(item)
       item = item.nextElementSibling
     }
   },
@@ -81,7 +81,7 @@ export default {
         item = item.nextElementSibling
         continue
       }
-      HelperDOM.toggle(item, true)
+      HelperDOM.show(item)
       if (state.includes(item.dataset.ref)) {
         this.expandChildren(item, state)
       }

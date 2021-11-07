@@ -248,5 +248,30 @@ export default {
 
   async resetElementOverrides (data) {
     await this.resetComponentOverrides(data)
+  },
+
+  async saveVariant (data) {
+    const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
+    const component = HelperComponent.getComponentData(element)
+    StateCommandOverride.addVariantToMain(component, data.name, data.value)
+    await window.electron.invoke('rendererSaveComponentData', component.file, component.main)
+    StateCommandOverride.addVariantToInstance(element, component, data.name, data.value)
+  },
+
+  async deleteVariant (data) {
+    const element = HelperElement.getElement(data.ref)
+    // when we swap components, we lose the original ref and `undo` will not find it
+    if (!element) return
+    const component = HelperComponent.getComponentData(element)
+    const overrides = StateCommandOverride.deleteVariantFromMain(component, data.name, data.value)
+    await window.electron.invoke('rendererSaveComponentData', component.file, component.main)
+    if (data.undo) {
+      StateCommandOverride.undoVariantFromInstance(element, component, data.name, overrides)
+    } else {
+      // @todo
+      console.log('delete variant from all component instances in all files')
+    }
   }
 }

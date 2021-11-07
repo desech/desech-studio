@@ -20,7 +20,7 @@ export default {
     RightCommon.injectResetOverrides(template, overrides)
     this.injectComponentRef(template, data)
     this.injectComponentName(template, element, data)
-    RightComponentVariant.injectVariants(template, overrides)
+    RightComponentVariant.injectVariants(template, element, overrides)
     this.injectComponentFile(template, data)
     RightCommon.injectPropertyFields(template, data.properties)
     this.highlightOverides(template, overrides)

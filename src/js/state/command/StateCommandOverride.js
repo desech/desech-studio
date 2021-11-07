@@ -233,8 +233,6 @@ export default {
   async saveData (parents) {
     // save the instance data to our component
     HelperComponent.setComponentData(parents[0].element, parents[0].data)
-    // save the main data to the file
-    // await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     // save the main data of all the component instances found in the current opened file
     // this.saveMainDataAllComponents(data.file, data.main)
   },
@@ -246,5 +244,34 @@ export default {
       data.main = mainData
       HelperComponent.setComponentData(component, data)
     }
+  },
+
+  addVariantToMain (data, name, value) {
+    if (!data.main) data.main = {}
+    if (!data.main.variants) data.main.variants = {}
+    if (!data.main.variants[name]) data.main.variants[name] = {}
+    data.main.variants[name][value] = data.overrides
+  },
+
+  addVariantToInstance (element, data, name, value) {
+    delete data.overrides
+    if (!data.variants) data.variants = {}
+    data.variants[name] = value
+    HelperComponent.setComponentData(element, data)
+  },
+
+  deleteVariantFromMain (data, name, value) {
+    const overrides = ExtendJS.cloneData(data.main.variants[name][value])
+    delete data.main.variants[name][value]
+    ExtendJS.clearEmptyObjects(data)
+    return overrides
+  },
+
+  // this delete action is only used by undo delete when we only have one instance using the data
+  undoVariantFromInstance (element, data, name, overrides) {
+    data.overrides = overrides
+    delete data.variants[name]
+    ExtendJS.clearEmptyObjects(data)
+    HelperComponent.setComponentData(element, data)
   }
 }

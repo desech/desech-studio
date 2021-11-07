@@ -336,6 +336,7 @@
 "Delete selected element",
 "Delete Selector",
 "Delete track",
+"Delete variant",
 "Deletion",
 "Dense",
 "Descendant",
@@ -1200,6 +1201,7 @@
 "Save file",
 "Save files to this empty folder",
 "Save Settings",
+"Save variant",
 "Save zip file",
 "Saved","Salvat"
 "Saving",

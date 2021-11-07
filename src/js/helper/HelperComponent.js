@@ -26,9 +26,13 @@ export default {
     return data ? JSON.parse(data) : null
   },
 
+  // set instance and main component data
   setComponentData (node, data) {
-    if (data) {
+    if (!ExtendJS.isEmpty(data)) {
       node.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    } else {
+      // this is needed when we set the main data to our root element, not on the instance
+      node.removeAttributeNS(null, 'data-ss-component')
     }
   },
 
@@ -59,6 +63,11 @@ export default {
   getInstanceProperties (element) {
     const data = this.getComponentData(element)
     return data ? data.properties : null
+  },
+
+  getInstanceOverrides (element) {
+    const data = this.getComponentData(element)
+    return data ? data.overrides : null
   },
 
   getMainData () {

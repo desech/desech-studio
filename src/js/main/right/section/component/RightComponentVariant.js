@@ -1,15 +1,17 @@
-import ExtendJS from '../../../../helper/ExtendJS.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
+import DialogComponent from '../../../../component/DialogComponent.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickShowSaveVariantEvent', 'clickConfirmSaveVariantEvent'],
+      click: ['clickShowSaveEvent', 'clickConfirmSaveEvent', 'clickPromptDeleteEvent',
+        'clickConfirmDeleteEvent', 'clickShowRenameEvent', 'clickCancelRenameEvent',
+        'clickConfirmRenameEvent'],
       input: ['inputResetInvalidFieldsEvent'],
       change: ['changeSwitchVariantEvent']
     }
@@ -19,102 +21,74 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickShowSaveVariantEvent (event) {
+  clickShowSaveEvent (event) {
     if (event.target.classList.contains('style-variant-save-button')) {
-      this.showSaveVariant(event.target.closest('.style-variant-section'))
+      this.showSave(event.target.closest('.style-variant-section'))
     }
   },
 
-  async clickConfirmSaveVariantEvent (event) {
+  async clickConfirmSaveEvent (event) {
     if (event.target.closest('.style-variant-confirm-button')) {
-      await this.confirmSaveVariant(event.target.closest('form'))
+      await this.confirmSave(event.target.closest('form'))
     }
   },
 
-  inputResetInvalidFieldsEvent () {
+  inputResetInvalidFieldsEvent (event) {
     if (event.target.classList.contains('style-variant-field')) {
       HelperForm.resetValidity(event.target.closest('form'))
     }
   },
 
-  async changeSwitchVariantEvent () {
+  async changeSwitchVariantEvent (event) {
     if (event.target.classList.contains('style-variant-element-value')) {
-      await this.switchVariant(event.target.name, event.target.value)
+      const fields = event.target.closest('form').elements
+      await this.switchVariant(fields.name.value, fields.value.value)
     }
   },
 
-  // this is a component
-  injectVariants (template, element, data) {
-    if (HelperComponent.isComponentElement(element)) return
-    const container = template.getElementsByClassName('style-variant-section')[0]
-    HelperDOM.show(container)
-    this.injectVariantsList(container, data)
-    this.injectVariantsForm(container, data)
-  },
-
-  injectVariantsList (container, data) {
-    if (ExtendJS.isEmpty(data.main?.variants)) return
-    const list = container.getElementsByClassName('style-variant-elements')[0]
-    for (const [name, values] of Object.entries(data.main.variants)) {
-      this.injectVariantElement(list, name, Object.keys(values), data?.variants)
+  clickPromptDeleteEvent (event) {
+    if (event.target.closest('.style-variant-element-delete')) {
+      this.promptDelete(event.target.closest('li'))
     }
   },
 
-  injectVariantElement (list, name, values, variants) {
-    const template = HelperDOM.getTemplate('template-style-component-variant')
-    template.getElementsByClassName('style-variant-element-name')[0].textContent = name
-    const select = template.getElementsByClassName('style-variant-element-value')[0]
-    select.name = name
-    this.injectVariantOptions(select, values, variants ? variants[name] : null)
-    list.appendChild(template)
-  },
-
-  injectVariantOptions (select, values, selected) {
-    for (const value of values) {
-      const option = document.createElement('option')
-      select.appendChild(option)
-      this.setVariantOption(option, value, selected)
+  async clickConfirmDeleteEvent (event) {
+    if (event.target.closest('.dialog-delete-variant-confirm')) {
+      await this.confirmDelete(event.target.closest('button'))
     }
   },
 
-  setVariantOption (option, value, selected) {
-    option.value = option.textContent = value
-    if (!selected) return
-    if (value === selected) option.setAttributeNS(null, 'selected', '')
-    const buttons = option.closest('li').getElementsByTagName('button')
-    HelperDOM.show(buttons)
-  },
-
-  injectVariantsForm (container, data) {
-    if (ExtendJS.isEmpty(data?.overrides)) return
-    const node = container.getElementsByClassName('style-variant-form-container')[0]
-    HelperDOM.show(node)
-    this.injectVariantsDatalist(container, data)
-  },
-
-  injectVariantsDatalist (container, data) {
-    if (ExtendJS.isEmpty(data.main?.variants)) return
-    const datalist = container.getElementsByClassName('style-variant-list-names')[0]
-    for (const name of Object.keys(data.main.variants)) {
-      const option = document.createElement('option')
-      option.value = option.textContent = name
-      datalist.appendChild(option)
+  clickShowRenameEvent (event) {
+    if (event.target.closest('.style-variant-element-rename')) {
+      this.showRename(event.target.closest('li'))
     }
   },
 
-  showSaveVariant (container) {
+  clickCancelRenameEvent (event) {
+    if (event.target.closest('.style-variant-rename-cancel-button')) {
+      this.cancelRename(event.target.closest('li'))
+    }
+  },
+
+  async clickConfirmRenameEvent (event) {
+    if (event.target.closest('.style-variant-rename-confirm-button')) {
+      await this.confirmRename(event.target.closest('li'))
+    }
+  },
+
+  showSave (container) {
     const form = container.getElementsByClassName('style-variant-form')[0]
     HelperDOM.toggle(form)
     form.elements.name.focus()
   },
 
-  async confirmSaveVariant (form) {
+  async confirmSave (form) {
     const element = StateSelectedElement.getElement()
     if (form.checkValidity()) this.validateNames(form)
     if (form.checkValidity()) this.validateExists(element, form.elements)
     if (form.checkValidity()) {
       HelperDOM.hide(form)
-      await this.successSaveVariant(element, form.elements.name.value, form.elements.value.value)
+      await this.successSave(element, form.elements.name.value, form.elements.value.value)
     }
   },
 
@@ -126,12 +100,18 @@ export default {
     }
   },
 
-  validateExists (element, fields) {
+  validateExists (element, fields, existingData = null) {
     const name = fields.name.value
     const value = fields.value.value
     const data = HelperComponent.getComponentData(element)
-    const valid = !data?.main?.variants[name] || !data?.main?.variants[name][value]
-    this.reportFieldError(fields.value, valid, 'existsError')
+    const variants = data?.main?.variants || {}
+    if (existingData) {
+      const validName = !variants[name] || name === existingData.name
+      this.reportFieldError(fields.name, validName, 'existsError')
+    }
+    const validValue = !variants[name] || !variants[name][value] ||
+      (existingData && value === existingData.value)
+    this.reportFieldError(fields.value, validValue, 'existsError')
   },
 
   reportFieldError (field, valid, errorMsg) {
@@ -140,18 +120,19 @@ export default {
     field.reportValidity()
   },
 
-  async successSaveVariant (element, name, value, execute = true) {
-    const ref = HelperComponent.getInstanceRef(element)
+  async successSave (element, name, value, execute = true) {
+    const component = HelperComponent.getComponentData(element)
     const cmd = {
       do: {
         command: 'saveVariant',
-        ref,
+        ref: component.ref,
         name,
-        value
+        value,
+        overrides: component.overrides
       },
       undo: {
         command: 'deleteVariant',
-        ref,
+        ref: component.ref,
         name,
         value,
         undo: true
@@ -176,6 +157,106 @@ export default {
         ref: data.ref,
         name,
         value: data?.variants ? data?.variants[name] : null
+      }
+    }
+    StateCommand.stackCommand(cmd)
+    await StateCommand.executeCommand(cmd.do)
+  },
+
+  promptDelete (li) {
+    const dialog = DialogComponent.showDialog({
+      header: DialogComponent.getContentHtml('delete-variant', 'header'),
+      footer: DialogComponent.getContentHtml('delete-variant', 'footer')
+    })
+    const button = dialog.getElementsByClassName('dialog-delete-variant-confirm')[0]
+    button.dataset.value = li.dataset.value
+  },
+
+  async confirmDelete (button) {
+    const data = JSON.parse(button.dataset.value)
+    const element = StateSelectedElement.getElement()
+    const component = HelperComponent.getComponentData(element)
+    await this.executeDelete(component, data.name, data.value)
+  },
+
+  async executeDelete (component, name, value, execute = true) {
+    const cmd = {
+      do: {
+        command: 'deleteVariant',
+        ref: component.ref,
+        name,
+        value
+      },
+      undo: {
+        command: 'saveVariant',
+        ref: component.ref,
+        name,
+        value,
+        overrides: component.main.variants[name][value],
+        undo: true
+      }
+    }
+    StateCommand.stackCommand(cmd)
+    await StateCommand.executeCommand(cmd.do)
+  },
+
+  showRename (li) {
+    const template = HelperDOM.getTemplate('template-style-component-variant-form')
+    li.children[1].innerHTML = template.innerHTML
+    this.addFormRenameData(li)
+    HelperDOM.hide(li.children[0])
+    HelperDOM.show(li.children[1])
+  },
+
+  addFormRenameData (li) {
+    const data = JSON.parse(li.dataset.value)
+    const fields = li.children[1].elements
+    fields.name.value = data.name
+    fields.value.value = data.value
+  },
+
+  cancelRename (li) {
+    HelperDOM.hide(li.children[1])
+    HelperDOM.show(li.children[0])
+  },
+
+  async confirmRename (li) {
+    const form = li.children[1]
+    const element = StateSelectedElement.getElement()
+    const data = JSON.parse(li.dataset.value)
+    if (form.checkValidity()) this.validateNames(form)
+    if (form.checkValidity()) this.validateExists(element, form.elements, data)
+    if (form.checkValidity()) {
+      if (form.elements.name.value === data.name && form.elements.value.value === data.value) {
+        this.cancelRename(li)
+      } else {
+        await this.saveRename(element, form.elements, data)
+      }
+    }
+  },
+
+  async saveRename (element, fields, oldData) {
+    const ref = HelperComponent.getInstanceRef(element)
+    const cmd = {
+      do: {
+        command: 'renameVariant',
+        ref,
+        data: {
+          name: fields.name.value,
+          value: fields.value.value,
+          oldName: oldData.name,
+          oldValue: oldData.value
+        }
+      },
+      undo: {
+        command: 'renameVariant',
+        ref,
+        data: {
+          name: oldData.name,
+          value: oldData.value,
+          oldName: fields.name.value,
+          oldValue: fields.value.value
+        }
       }
     }
     StateCommand.stackCommand(cmd)

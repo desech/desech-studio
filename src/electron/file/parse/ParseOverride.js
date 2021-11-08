@@ -8,7 +8,7 @@ export default {
     const parentOverrides = HelperOverride.getFullOverrides(parent)
     const childOverrides = HelperOverride.getFullOverrides(child)
     if (parentOverrides[child.ref]?.children) {
-      HelperOverride.merge2Objects(childOverrides, parentOverrides[child.ref].children)
+      HelperOverride.mergeObjects(childOverrides, parentOverrides[child.ref].children)
     }
     return { ...child, fullOverrides: childOverrides }
   },

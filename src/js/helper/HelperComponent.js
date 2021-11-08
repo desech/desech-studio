@@ -30,10 +30,25 @@ export default {
   // set instance and main component data
   setComponentData (node, data) {
     if (!ExtendJS.isEmpty(data)) {
+      this.removeMissingInstanceVariants(node, data)
+      ExtendJS.clearEmptyObjects(data)
       node.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
     } else {
       // this is needed when we set the main data to our root element, not on the instance
       node.removeAttributeNS(null, 'data-ss-component')
+    }
+  },
+
+  removeMissingInstanceVariants (node, data) {
+    if (!data?.variants) return
+    const allData = this.getComponentData(node)
+    if (!allData?.main?.variants) return
+    for (const [name, value] of Object.entries(data.variants)) {
+      if (!allData.main.variants[name]) {
+        delete data.variants[name]
+      } else if (!allData.main.variants[name][value]) {
+        delete data.variants[name][value]
+      }
     }
   },
 

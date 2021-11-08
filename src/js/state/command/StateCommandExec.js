@@ -11,7 +11,6 @@ import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 import StateCommandOverride from './StateCommandOverride.js'
-import CanvasElementSelect from '../../main/canvas/element/CanvasElementSelect.js'
 import StateCommandVariant from './StateCommandVariant.js'
 
 export default {
@@ -81,6 +80,41 @@ export default {
     if (!element) return
     StateCommandCommon.pasteAttributes(element, data.data.attributes)
     StateCommandCommon.pasteStyle(element, data.ref, data.data.style)
+  },
+
+  addColor (data) {
+    StyleSheetCommon.addRemoveStyleRules({
+      selector: ':root',
+      properties: {
+        [data.name]: data.value
+      }
+    }, true)
+  },
+
+  removeColor (data) {
+    StateStyleSheet.removeStyleRule({
+      selector: ':root',
+      property: data.name
+    })
+  },
+
+  addResponsive (data) {
+    ProjectResponsive.insertResponsive(data.responsive)
+    HelperTrigger.triggerReload('responsive-mode-list')
+  },
+
+  removeResponsive (data) {
+    ProjectResponsive.deleteResponsive(data.responsive)
+    HelperTrigger.triggerReload('responsive-mode-list')
+  },
+
+  changeResponsive (data) {
+    ProjectResponsive.editResponsive(data.current, data.previous)
+    HelperTrigger.triggerReload('responsive-mode-list')
+  },
+
+  changeMeta (data) {
+    HelperProject.setFileMeta(data.meta)
   },
 
   sortSelector (data) {
@@ -195,41 +229,6 @@ export default {
     await StateCommandOverride.overrideComponent(newElem, 'component', componentData.file)
   },
 
-  addColor (data) {
-    StyleSheetCommon.addRemoveStyleRules({
-      selector: ':root',
-      properties: {
-        [data.name]: data.value
-      }
-    }, true)
-  },
-
-  removeColor (data) {
-    StateStyleSheet.removeStyleRule({
-      selector: ':root',
-      property: data.name
-    })
-  },
-
-  addResponsive (data) {
-    ProjectResponsive.insertResponsive(data.responsive)
-    HelperTrigger.triggerReload('responsive-mode-list')
-  },
-
-  removeResponsive (data) {
-    ProjectResponsive.deleteResponsive(data.responsive)
-    HelperTrigger.triggerReload('responsive-mode-list')
-  },
-
-  changeResponsive (data) {
-    ProjectResponsive.editResponsive(data.current, data.previous)
-    HelperTrigger.triggerReload('responsive-mode-list')
-  },
-
-  changeMeta (data) {
-    HelperProject.setFileMeta(data.meta)
-  },
-
   assignComponentHole (data) {
     const canvas = document.getElementById('canvas')
     const previous = canvas.getElementsByClassName(data.previous)[0]
@@ -239,10 +238,8 @@ export default {
   },
 
   async resetComponentOverrides (data) {
-    const element = HelperComponent.getByRef(data.ref)
-    // when we swap components, we lose the original ref and `undo` will not find it
-    if (!element) return
-    await HelperComponent.replaceComponent(element, data)
+    const component = HelperComponent.getByRef(data.ref)
+    await HelperComponent.replaceComponent(component, data)
   },
 
   async resetElementOverrides (data) {
@@ -250,23 +247,23 @@ export default {
   },
 
   async saveVariant (data) {
-    const element = HelperComponent.getByRef(data.ref)
-    // when we swap components, we lose the original ref and `undo` will not find it
-    if (!element) return
-    await StateCommandVariant.saveVariant(element, data.name, data.value)
+    const component = HelperComponent.getByRef(data.ref)
+    await StateCommandVariant.saveVariant(component, data.name, data.value, data.overrides,
+      data.undo)
   },
 
   async deleteVariant (data) {
-    const element = HelperComponent.getByRef(data.ref)
-    // when we swap components, we lose the original ref and `undo` will not find it
-    if (!element) return
-    await StateCommandVariant.deleteVariant(element, data.name, data.value, data.undo)
+    const component = HelperComponent.getByRef(data.ref)
+    await StateCommandVariant.deleteVariant(component, data.name, data.value, data.undo)
   },
 
   async switchVariant (data) {
-    const element = HelperComponent.getByRef(data.ref)
-    // when we swap components, we lose the original ref and `undo` will not find it
-    if (!element) return
-    await StateCommandVariant.switchVariant(element, data.name, data.value)
+    const component = HelperComponent.getByRef(data.ref)
+    await StateCommandVariant.switchVariant(component, data.name, data.value)
+  },
+
+  async renameVariant (data) {
+    const component = HelperComponent.getByRef(data.ref)
+    await StateCommandVariant.renameVariant(component, data)
   }
 }

@@ -1,7 +1,7 @@
 import packageJson from '../../../package.json'
 import ExtendJS from '../../js/helper/ExtendJS.js'
 import ProjectCommon from './ProjectCommon.js'
-import migrate128 from './migrate/migrate128.js'
+import migrate130 from './migrate/migrate130.js'
 
 export default {
   async migrateVersion (folder, settings) {
@@ -23,7 +23,7 @@ export default {
 
   getMap () {
     return {
-      '1.2.8': migrate128
+      '1.3.0': migrate130
     }
   }
 }

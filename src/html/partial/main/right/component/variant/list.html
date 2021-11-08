@@ -1,21 +1,44 @@
 <template id="template-style-component-variant">
-  <li class="style-variant-element grid">
-    <div class="style-variant-element-name"></div>
-    <select class="style-variant-element-value" name="">
-      <option>{{#i18n}} - Default - {{/i18n}}</option>
-    </select>
+  <li>
+    <form class="style-variant-element-form grid">
+      <input class="style-variant-element-name" readonly name="name">
+      <select class="style-variant-element-value" name="value">
+        <option>{{#i18n}} - Default - {{/i18n}}</option>
+      </select>
 
-    <button hidden type="button" class="style-variant-element-rename small tooltip left" data-tooltip="{{#i18n}} Rename {{/i18n}}">
-      <svg width="18" height="18" viewBox="0 0 24 24">
-        <path d="M0 0h24v24H0z" fill="none"></path>
-        <path d="M18.41 5.8L17.2 4.59c-.78-.78-2.05-.78-2.83 0l-2.68 2.68L3 15.96V20h4.04l8.74-8.74 2.63-2.63c.79-.78.79-2.05 0-2.83zM6.21 18H5v-1.21l8.66-8.66 1.21 1.21L6.21 18zM11 20l4-4h6v4H11z"></path>
-      </svg>
-    </button>
-    <button hidden type="button" class="style-variant-element-delete small tooltip left" data-tooltip="{{#i18n}} Delete {{/i18n}}">
-      <svg width="18" height="18" viewBox="0 0 24 24">
-        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-        <path d="M0 0h24v24H0z" fill="none"></path>
-      </svg>
-    </button>
+      <button hidden type="button" class="style-variant-element-rename small tooltip left" data-tooltip="{{#i18n}} Rename {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M0 0h24v24H0z" fill="none"></path>
+          <path d="M18.41 5.8L17.2 4.59c-.78-.78-2.05-.78-2.83 0l-2.68 2.68L3 15.96V20h4.04l8.74-8.74 2.63-2.63c.79-.78.79-2.05 0-2.83zM6.21 18H5v-1.21l8.66-8.66 1.21 1.21L6.21 18zM11 20l4-4h6v4H11z"></path>
+        </svg>
+      </button>
+      <button hidden type="button" class="style-variant-element-delete small tooltip left" data-tooltip="{{#i18n}} Delete {{/i18n}}">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+          <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+      </button>
+    </form>
+    <form hidden class="style-variant-element-form grid"></form>
   </li>
+</template>
+
+<template id="template-style-component-variant-form">
+  <div>
+    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" required data-invalid-error="{{#i18n}} Only letters, numbers and - is allowed {{/i18n}}" data-exists-error="{{#i18n}} Variant name already exists {{/i18n}}">
+    <input class="style-variant-field" type="text" name="value" placeholder="{{#i18n}} Value {{/i18n}}" required data-invalid-error="{{#i18n}} Only letters, numbers and - is allowed {{/i18n}}" data-exists-error="{{#i18n}} Variant value already exists {{/i18n}}">
+
+    <button type="submit" class="style-variant-rename-confirm-button small tooltip left" data-tooltip="{{#i18n}} Confirm {{/i18n}}">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"></path>
+      </svg>
+    </button>
+    <button type="button" class="style-variant-rename-cancel-button small tooltip left" data-tooltip="{{#i18n}} Cancel {{/i18n}}">
+      <svg width="16" height="16" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
+      </svg>
+    </button>
+  </div>
 </template>

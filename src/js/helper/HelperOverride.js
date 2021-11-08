@@ -107,26 +107,33 @@ export default {
 
   getFullOverrides (data) {
     const overrides = {}
-    if (data?.variants) {
-      for (const [name, value] of Object.entries(data.variants)) {
-        this.merge2Objects(overrides, data.main.variants[name][value])
-      }
-    }
+    this.mergeVariants(data, overrides)
     if (data?.fullOverrides) {
-      this.merge2Objects(overrides, data.fullOverrides)
+      this.mergeObjects(overrides, data.fullOverrides)
     } else if (data?.overrides) {
-      this.merge2Objects(overrides, data.overrides)
+      this.mergeObjects(overrides, data.overrides)
     }
     return overrides
   },
 
-  // obj1 is mutated
-  merge2Objects (obj1, obj2) {
-    ExtendJS.mergeDeep(obj1, obj2)
-    this.merge2ObjectsFix(obj1)
+  mergeVariants (data, overrides) {
+    if (!data?.variants) return
+    for (const [name, value] of Object.entries(data.variants)) {
+      // when we delete variants, we don't cleanup because of undo
+      // this means we can have missing variants
+      if (data?.main?.variants[name] && data.main.variants[name][value]) {
+        this.mergeObjects(overrides, data.main.variants[name][value])
+      }
+    }
   },
 
-  merge2ObjectsFix (obj) {
+  // obj1 is mutated
+  mergeObjects (obj1, obj2) {
+    ExtendJS.mergeDeep(obj1, obj2)
+    this.mergeObjectsFix(obj1)
+  },
+
+  mergeObjectsFix (obj) {
     // mergeDeep will merge everything including the attribute/property/class values
     // if we have these pairs value/delete or add/delete, remove the first value
     if (Object.keys(obj).length === 2 && (('value' in obj && 'delete' in obj) ||
@@ -135,7 +142,7 @@ export default {
     }
     for (const key in obj) {
       if (typeof obj[key] === 'object') {
-        this.merge2ObjectsFix(obj[key])
+        this.mergeObjectsFix(obj[key])
       }
     }
   },

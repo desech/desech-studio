@@ -28,7 +28,8 @@ export default {
   },
 
   focusinInputEvent (event) {
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+    if ((event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') &&
+      !event.target.hasAttributeNS(null, 'readonly')) {
       event.target.select()
     }
   },

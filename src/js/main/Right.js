@@ -56,7 +56,7 @@ export default {
 
   loadPanel (selector) {
     const element = StateSelectedElement.getElement()
-    if (!HelperElement.isCanvasElement(element)) return
+    if (!element || !HelperElement.isCanvasElement(element)) return
     const sectionClasses = RightSection.getSectionClasses()
     const sections = RightSection.getList(sectionClasses)
     this.selectPreviousSelector(sections[1], selector)

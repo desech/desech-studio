@@ -5,7 +5,6 @@ import StateHtmlFile from '../html/StateHtmlFile.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
-import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperOverride from '../../helper/HelperOverride.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
 
@@ -228,49 +227,6 @@ export default {
       delete data.component
     } else {
       data.component = HelperFile.getRelPath(value)
-    }
-  },
-
-  addVariantToMain (data, name, value) {
-    if (!data.main) data.main = {}
-    if (!data.main.variants) data.main.variants = {}
-    if (!data.main.variants[name]) data.main.variants[name] = {}
-    data.main.variants[name][value] = data.overrides
-  },
-
-  updateVariantInstance (element, data, name, value) {
-    if (!data.variants) data.variants = {}
-    if (value) {
-      data.variants[name] = value
-    } else {
-      delete data.variants[name]
-    }
-    ExtendJS.clearEmptyObjects(data)
-    HelperComponent.setComponentData(element, data)
-  },
-
-  deleteVariantFromMain (data, name, value) {
-    const overrides = ExtendJS.cloneData(data.main.variants[name][value])
-    delete data.main.variants[name][value]
-    ExtendJS.clearEmptyObjects(data)
-    return overrides
-  },
-
-  // this delete action is only used by undo delete when we only have one instance using the data
-  undoVariantFromInstance (element, data, name, overrides) {
-    data.overrides = overrides
-    delete data.variants[name]
-    ExtendJS.clearEmptyObjects(data)
-    HelperComponent.setComponentData(element, data)
-    this.saveMainDataAllComponents(data.file, data.main)
-  },
-
-  saveMainDataAllComponents (file, mainData) {
-    const components = HelperCanvas.getCanvas().querySelectorAll(`[data-ss-component*="${file}"]`)
-    for (const component of components) {
-      const data = HelperComponent.getComponentData(component)
-      data.main = mainData
-      HelperComponent.setComponentData(component, data)
     }
   }
 }

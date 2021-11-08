@@ -11,7 +11,12 @@
   padding-bottom: 20px;
 }
 
-.sidebar-right #component-section .style-variant-element {
+.sidebar-right #component-section .style-variant-element-form {
   grid-template-columns: 1fr 1fr 18px 18px;
   column-gap: 5px;
+}
+
+.sidebar-right #component-section .style-variant-element-name {
+  box-shadow: none;
+  user-select: none;
 }

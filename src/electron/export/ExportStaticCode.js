@@ -27,7 +27,7 @@ export default {
 
   async syncJs (folder) {
     const scriptFile = File.resolve(folder, '_export/js/script.js')
-    if (!fs.existsSync(scriptFile)) this.createScriptJs(scriptFile, folder)
+    this.createScriptJs(scriptFile, folder)
     await this.syncCustomJs(folder)
   },
 

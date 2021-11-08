@@ -16,7 +16,7 @@ export default {
   _folder: null,
   _options: null,
   _body: null,
-  // change this when you want to debug
+  // change this when you want to debug component inheritance
   _debug: false,
 
   parseHtml (document, file, folder, options) {
@@ -39,6 +39,8 @@ export default {
     this._file = file
     this._folder = folder
     this._options = options
+    // we have 2 ui options: editor (default) and export
+    if (!this._options.ui) this._options.ui = 'editor'
     this._body = this.getBody(document.body)
   },
 
@@ -135,11 +137,16 @@ export default {
     this.checkIfBodyFailed(body)
     this.cleanAttributes(body)
     this.cleanClasses(body)
-    body.classList.add('element')
-    body.classList.add('body')
+    this.cleanBody(body)
     if (body.children.length) {
       this.prepareChildren(body.children, null)
     }
+  },
+
+  cleanBody (body) {
+    if (this._options.ui === 'export') return
+    body.classList.add('element')
+    body.classList.add('body')
   },
 
   checkIfBodyFailed (body) {
@@ -222,6 +229,7 @@ export default {
   },
 
   addComponentClasses (node, component) {
+    if (this._options.ui === 'export') return
     // level 0 and 1 are regular elements, while level 2 and 3 are component elements
     if ((component?.level === 2 && !HelperComponent.isComponentHole(node)) ||
       component?.level > 2) {
@@ -265,19 +273,9 @@ export default {
     if (this._debug) console.info(msg)
   },
 
-  errorEscapeHtml (text) {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    }
-    return text.replace(/[&<>"']/g, m => map[m])
-  },
-
   // check RightHtmlCommon.getIgnoredAttributes()
   cleanAttributes (node) {
+    if (this._options.ui === 'export') return
     for (const attr of node.attributes) {
       if (attr.name === 'hidden') {
         node.setAttributeNS(null, 'data-ss-hidden', attr.value)
@@ -286,6 +284,7 @@ export default {
   },
 
   setAbsoluteSource (node) {
+    if (this._options.ui === 'export') return
     const tag = HelperDOM.getTag(node)
     if (tag !== 'iframe' && node.src) node.src = this.getAbsPath(node, 'src')
     if (node.poster) node.poster = this.getAbsPath(node, 'poster')
@@ -297,6 +296,7 @@ export default {
   },
 
   cleanClasses (node) {
+    if (this._options.ui === 'export') return
     const classes = []
     for (const cls of node.classList) {
       if (this.isStandardClass(cls)) {
@@ -314,7 +314,7 @@ export default {
 
   setBasic (node, type, component) {
     if (!node.getAttributeNS(null, 'class')) {
-      throw new Error(`Unknown ${type} element ${this.errorEscapeHtml(node.outerHTML)}`)
+      throw new Error(`Unknown ${type} element ${HelperDOM.escapeHtml(node.outerHTML)}`)
     }
     this.setBasicOverrides(node, component?.data?.fullOverrides)
     this.setAbsoluteSource(node)
@@ -331,6 +331,7 @@ export default {
   },
 
   addCanvasClasses (node, type) {
+    if (this._options.ui === 'export') return
     node.classList.add('element')
     if (type !== 'block' && type !== 'text') {
       node.classList.add(type)
@@ -343,9 +344,14 @@ export default {
   },
 
   setImageElement (node, component) {
+    this.setSrcSet(node)
+    this.setBasic(node, 'image', component)
+  },
+
+  setSrcSet (node) {
+    if (this._options.ui === 'export') return
     const srcset = ParseCommon.fixSrcSet(node.getAttributeNS(null, 'srcset'), this._folder)
     node.setAttributeNS(null, 'srcset', srcset)
-    this.setBasic(node, 'image', component)
   },
 
   setMediaElement (node, tag, component, ref) {
@@ -428,17 +434,25 @@ export default {
   setElementChildren (node, component) {
     const children = HelperDOM.getChildren(node)
     if (children) {
-      this.prepareChildren(children, {
-        ...component,
-        level: this.adjustComponentLevel('element', component?.level)
-      })
+      this.setStandardChildren(component, children)
     } else if (component?.children && HelperComponent.isComponentHole(node)) {
-      node.innerHTML = component.children
-      this.prepareChildren(node.children, {
-        ...component?.parent,
-        level: this.adjustComponentLevel('component-hole', component?.level)
-      })
+      this.setComponentChildren(node, component)
     }
+  },
+
+  setStandardChildren (component, children) {
+    this.prepareChildren(children, {
+      ...component,
+      level: this.adjustComponentLevel('element', component?.level)
+    })
+  },
+
+  setComponentChildren (node, component) {
+    node.innerHTML = component.children
+    this.prepareChildren(node.children, {
+      ...component?.parent,
+      level: this.adjustComponentLevel('component-hole', component?.level)
+    })
   },
 
   // this is called when we add a component to the canvas

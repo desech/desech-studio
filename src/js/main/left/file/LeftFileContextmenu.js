@@ -121,7 +121,7 @@ export default {
   getMenuOptions (item) {
     const type = this.getItemType(item)
     const template = HelperDOM.getTemplate(`template-contextmenu-file-${type}`)
-    this.disableCurrentComponent(item, template)
+    this.disableCurrentComponent(item.dataset.ref, template)
     this.disableWritable(item, template)
     return template
   },
@@ -139,8 +139,8 @@ export default {
     }
   },
 
-  disableCurrentComponent (item, menu) {
-    if (HelperProject.getFile() === item.dataset.ref) {
+  disableCurrentComponent (file, menu) {
+    if (HelperFile.isComponentFile(file) && HelperProject.getFile() === file) {
       for (const li of menu.getElementsByClassName('menu-list')[0].children) {
         li.classList.add('disabled')
       }

@@ -202,6 +202,17 @@ export default {
     return null
   },
 
+  escapeHtml (html) {
+    const map = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }
+    return html.replace(/[&<>"']/g, m => map[m])
+  },
+
   clearStyle (node) {
     // sometimes it still leaves a style="" attribute, which we remove on save
     // check StateHtmlFile.formatHtmlString(), RightHtmlCommon.getIgnoredAttributes()

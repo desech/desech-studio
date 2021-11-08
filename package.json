@@ -34,37 +34,37 @@
     "update-packages": "ncu -u"
   },
   "devDependencies": {
-    "adm-zip": "^0.5.6",
+    "adm-zip": "^0.5.9",
     "archiver": "^5.3.0",
     "ava": "^3.15.0",
     "circular-dependency-plugin": "^5.2.2",
-    "clean-css": "^5.2.1",
+    "clean-css": "^5.2.2",
     "csv": "^5.5.3",
-    "electron": "^15.0.0",
-    "electron-builder": "22.11.7",
+    "electron": "^15.3.0",
+    "electron-builder": "22.13.1",
     "electron-notarize": "^1.1.1",
     "electron-updater": "^4.3.9",
-    "eslint": "^7.32.0",
+    "eslint": "8.2.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-standard": "^4.1.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "handlebars": "^4.7.7",
     "html-minifier": "^4.0.0",
-    "javascript-obfuscator": "^2.19.0",
+    "javascript-obfuscator": "3.0.0",
     "jimp": "^0.16.1",
     "js-beautify": "^1.14.0",
-    "jsdom": "^17.0.0",
+    "jsdom": "^18.0.1",
     "nanoid": "^3.1.30",
     "node-fetch": "2.6.2",
     "npm-run-all": "^4.1.5",
-    "webpack": "^5.55.1",
-    "webpack-cli": "^4.8.0",
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1",
     "webpack-node-externals": "^3.0.0",
-    "webpack-obfuscator": "^3.4.1"
+    "webpack-obfuscator": "3.5.0"
   },
   "ava": {
     "files": [
@@ -87,7 +87,9 @@
     },
     "linux": {
       "target": [
-        "deb"
+        "deb",
+        "rpm",
+        "pacman"
       ],
       "executableArgs": [
         "--no-sandbox"

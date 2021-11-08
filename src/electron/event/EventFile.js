@@ -11,6 +11,8 @@ import HelperFile from '../../js/helper/HelperFile.js'
 import Font from '../lib/Font.js'
 import FileManage from '../file/FileManage.js'
 import HelperComponent from '../../js/helper/HelperComponent.js'
+import ProjectCommon from '../project/ProjectCommon.js'
+import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
   addEvents () {
@@ -27,6 +29,7 @@ export default {
     this.rendererSaveCurrentFileEvent()
     this.rendererAddFontEvent()
     this.rendererSaveComponentDataEvent()
+    this.rendererRenameVariantEvent()
   },
 
   rendererGetFileContentsEvent () {
@@ -107,6 +110,12 @@ export default {
     })
   },
 
+  rendererRenameVariantEvent () {
+    ipcMain.handle('rendererRenameVariant', async (event, file, data) => {
+      return await EventMain.handleEvent(this, 'renameVariant', file, data)
+    })
+  },
+
   getFileContents (file) {
     return fs.readFileSync(file).toString()
   },
@@ -147,5 +156,25 @@ export default {
     const root = dom.window.document.body.children[0]
     HelperComponent.setComponentData(root, data)
     fs.writeFileSync(file, root.outerHTML)
+  },
+
+  async renameVariant (componentFile, data) {
+    const root = await Cookie.getCookie('currentFolder')
+    await ProjectCommon.updateHtmlFiles(root, async (file, html) => {
+      return html.replace(/(data-ss-component=")(.*?)(")/g, (match, x1, component, x2) => {
+        const json = JSON.parse(component.replaceAll('&quot;', '"'))
+        this.renameVariantInInstance(componentFile, json, data)
+        return x1 + JSON.stringify(json).replaceAll('"', '&quot;') + x2
+      })
+    })
+  },
+
+  renameVariantInInstance (componentFile, json, data) {
+    // when parsing main component data, there's no file value
+    if (!json.file || componentFile !== json.file || !json?.variants) return
+    json.variants[data.name] = data.value
+    if (data.name !== data.oldName && json.variants[data.oldName]) {
+      delete json.variants[data.oldName]
+    }
   }
 }

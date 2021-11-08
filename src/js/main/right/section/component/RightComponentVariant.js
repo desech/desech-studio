@@ -241,7 +241,7 @@ export default {
       do: {
         command: 'renameVariant',
         ref,
-        data: {
+        values: {
           name: fields.name.value,
           value: fields.value.value,
           oldName: oldData.name,
@@ -251,7 +251,7 @@ export default {
       undo: {
         command: 'renameVariant',
         ref,
-        data: {
+        values: {
           name: oldData.name,
           value: oldData.value,
           oldName: fields.name.value,

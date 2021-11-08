@@ -4,6 +4,7 @@ import LeftFileLoad from '../../main/left/file/LeftFileLoad.js'
 import CanvasElementSelect from '../../main/canvas/element/CanvasElementSelect.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
+import HelperFile from '../../helper/HelperFile.js'
 
 export default {
   async saveVariant (element, name, value, overrides, undo) {
@@ -15,7 +16,7 @@ export default {
       this.addVariantToInstances(element, name, value, data)
     } else {
       // this happens when we undo a variant delete
-      await this.reloadSelectComponent(data)
+      await this.reloadSelectComponent(data.ref)
     }
   },
 
@@ -61,7 +62,7 @@ export default {
       this.deleteVariantFromInstances(element, data, name, overrides)
     } else {
       // this happens when we delete an existing variant which can be used by other instances
-      await this.reloadSelectComponent(data)
+      await this.reloadSelectComponent(data.ref)
     }
   },
 
@@ -79,9 +80,9 @@ export default {
     this.saveMainDataAllComponents(data.file, data.main)
   },
 
-  async reloadSelectComponent (data) {
+  async reloadSelectComponent (ref) {
     await LeftFileLoad.reloadCurrentFile()
-    const element = HelperComponent.getByRef(data.ref)
+    const element = HelperComponent.getByRef(ref)
     CanvasElementSelect.selectElementNode(element)
   },
 
@@ -93,6 +94,21 @@ export default {
 
   async renameVariant (element, data) {
     const component = HelperComponent.getComponentData(element)
-    
+    this.renameVariantInMain(component.main.variants, data.values)
+    await window.electron.invoke('rendererSaveComponentData', component.file, component.main)
+    const file = HelperFile.getRelPath(component.file)
+    await window.electron.invoke('rendererRenameVariant', file, data.values)
+    await this.reloadSelectComponent(data.ref)
+  },
+
+  renameVariantInMain (variants, data) {
+    if (data.name !== data.oldName) {
+      variants[data.name] = ExtendJS.cloneData(variants[data.oldName])
+      delete variants[data.oldName]
+    }
+    if (data.value !== data.oldValue) {
+      variants[data.name][data.value] = ExtendJS.cloneData(variants[data.name][data.oldValue])
+      delete variants[data.name][data.oldValue]
+    }
   }
 }

@@ -39,10 +39,11 @@ export default {
   },
 
   getRgbColor (data) {
+    // on position 0 we have the hex color input
     const rgb = [
-      data.colorInputs[0].value,
       data.colorInputs[1].value,
-      data.colorInputs[2].value
+      data.colorInputs[2].value,
+      data.colorInputs[3].value
     ]
     const alpha = this.getAlpha(data)
     return HelperColor.rgbToCss(rgb, alpha)
@@ -129,10 +130,10 @@ export default {
   },
 
   updateColorInputs (inputs, color) {
-    inputs[0].value = color.rgb[0]
-    inputs[1].value = color.rgb[1]
-    inputs[2].value = color.rgb[2]
-    inputs[3].value = color.hex
+    inputs[0].value = color.hex
+    inputs[1].value = color.rgb[0]
+    inputs[2].value = color.rgb[1]
+    inputs[3].value = color.rgb[2]
     inputs[4].value = Math.round(color.hsl[0] * 360)
     inputs[5].value = Math.round(color.hsl[1] * 100)
     inputs[6].value = Math.round(color.hsl[2] * 100)

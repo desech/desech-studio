@@ -67,7 +67,7 @@ export default {
       throw new Error('Only one top level element is allowed. ' +
         `Please delete the other ${nodes.length - 1}`)
     }
-    if (HelperFile.isComponentFile() && HelperComponent.isComponent(nodes[0])) {
+    if (nodes.length && HelperFile.isComponentFile() && HelperComponent.isComponent(nodes[0])) {
       throw new Error('Components are not allowed as the root element')
     }
   },

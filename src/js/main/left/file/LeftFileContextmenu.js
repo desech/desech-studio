@@ -183,7 +183,8 @@ export default {
 
   makeLabelEditable (item) {
     const label = item.getElementsByClassName('panel-item-name')[0]
-    label.innerHTML = `<input class="panel-file-input" value="${label.textContent}">`
+    label.innerHTML = '<input class="panel-file-box panel-file-input" ' +
+      `value="${label.textContent}">`
     label.children[0].select()
   },
 

@@ -13,7 +13,7 @@ export default {
     return {
       click: ['clickCreateFolderOverlayEvent', 'clickCreateFileOverlayEvent',
         'clickCloseOverlayEvent'], // order matters
-      input: ['inputSearchEvent'],
+      input: ['inputSearchEvent', 'inputFixFileNameEvent'],
       keydown: ['keydownCycleNextSearchEvent', 'keydownCyclePreviousSearchEvent',
         'keydownClearOverlayEvent'],
       change: ['changeCreateFolderEvent', 'changeCreateFileEvent']
@@ -47,6 +47,12 @@ export default {
   inputSearchEvent (event) {
     if (event.target.classList.contains('panel-file-search')) {
       this.searchList(event.target)
+    }
+  },
+
+  inputFixFileNameEvent (event) {
+    if (event.target.classList.contains('panel-file-box')) {
+      this.fixFileName(event.target)
     }
   },
 
@@ -235,5 +241,9 @@ export default {
     await LeftFileCommon.createFile(file, contents).catch(error => {
       HelperError.error(error)
     })
+  },
+
+  fixFileName (input) {
+    input.value = input.value.toLowerCase().replace(/[^a-z0-9-.]/g, '-').replace(/-+/g, '-')
   }
 }

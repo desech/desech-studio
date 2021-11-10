@@ -38,21 +38,21 @@
 
   <div class="grid" style="grid-template-columns: 55px auto 40px;">
     <select class="fill-color-type">
-      <option selected value="rgb">RGB</option>
-      <option value="hex">HEX</option>
+      <option selected value="hex">HEX</option>
+      <option value="rgb">RGB</option>
       <option value="hsl">HSL</option>
       <option value="hsv">HSB</option>
     </select>
   
     <div class="fill-color-inputs">
-      <div class="grid color-rgb">
-        <input class="color-input color-rgb-input" type="number" step="1" min="0" max="255" value="0">
-        <input class="color-input color-rgb-input" type="number" step="1" min="0" max="255" value="0">
-        <input class="color-input color-rgb-input" type="number" step="1" min="0" max="255" value="0">
-      </div>
-      <div class="grid color-hex" hidden>
+      <div class="grid color-hex">
         <div>#</div>
         <input class="color-input color-hex-input" type="text" value="000000" style="box-shadow: none;">
+      </div>
+      <div class="grid color-rgb" hidden>
+        <input class="color-input color-rgb-input" type="number" step="1" min="0" max="255" value="0">
+        <input class="color-input color-rgb-input" type="number" step="1" min="0" max="255" value="0">
+        <input class="color-input color-rgb-input" type="number" step="1" min="0" max="255" value="0">
       </div>
       <div class="grid color-hsl" hidden>
         <input class="color-input color-hsl-input" type="number" step="1" min="0" max="360" value="0">

@@ -80,7 +80,7 @@ export default {
     const component = File.resolve(root, 'component')
     const oldLink = File.relative(component, oldPath)
     const newLink = File.relative(component, newPath)
-    const template = '&quot;,&quot;file&quot;:&quot;component/XXX&quot;'
+    const template = '&quot;file&quot;:&quot;component/XXX&quot;'
     await ProjectCommon.updateHtmlFiles(root, async (file, html) => {
       return html.replaceAll(template.replace('XXX', oldLink), template.replace('XXX', newLink))
     })

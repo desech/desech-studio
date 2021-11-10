@@ -25,7 +25,6 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: auto 90px auto;
-  text-align: center;
 }
 
 #page-start .start-col {
@@ -41,6 +40,11 @@
   align-self: center;
 }
 
+#page-start .start-col-block {
+  width: 160px;
+  margin: 0 auto;
+}
+
 #page-start .start-block p {
   padding-bottom: 10px;
   line-height: 20px;
@@ -49,6 +53,7 @@
 #page-start .start-or {
   align-self: center;
   font-size: 20px;
+  text-align: center;
 }
 
 #page-start button {
@@ -57,7 +62,6 @@
   grid-template-columns: auto auto;
   column-gap: 15px;
   align-items: center;
-  margin: 0 auto;
   padding: 0;
   font-size: 15px;
 }

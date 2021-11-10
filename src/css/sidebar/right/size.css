@@ -58,7 +58,14 @@
 }
 
 .sidebar-right #size-section .margin-grid .margin input {
-  color: var(--resize-margin-txt);
+  background-color: var(--resize-margin-bg);
+}
+
+.sidebar-right #size-section .margin-grid .margin input[disabled],
+.sidebar-right #size-section .margin-grid .margin select[disabled],
+.sidebar-right #size-section .margin-grid .padding input[disabled],
+.sidebar-right #size-section .margin-grid .padding select[disabled] {
+  opacity: 0.3;
 }
 
 .sidebar-right #size-section .margin-grid .padding .component-input-unit:hover,
@@ -67,7 +74,7 @@
 }
 
 .sidebar-right #size-section .margin-grid .padding input {
-  color: var(--resize-padding-txt);
+  background-color: var(--resize-padding-bg);
 }
 
 .sidebar-right #size-section .margin-grid .grid {
@@ -89,7 +96,7 @@
 .sidebar-right #size-section .margin-grid .button-link {
   float: right;
   height: 18px;
-  margin: 0 -30px -18px 0;
+  margin: 0 -23px -18px 0;
   padding: 0;
 }
 

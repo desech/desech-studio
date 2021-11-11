@@ -66,7 +66,7 @@ export default {
   getOverrideRef (element, type) {
     return (type === 'element')
       ? HelperElement.getStyleRef(element)
-      : HelperComponent.getInstanceRef(element)
+      : HelperElement.getComponentRef(element)
   },
 
   // type: original, full
@@ -112,7 +112,7 @@ export default {
       this.mergeObjects(overrides, data.fullOverrides)
     } else if (data?.overrides) {
       this.mergeObjects(overrides, data.overrides)
-    }
+    }console.log('getFullOverrides', overrides)
     return overrides
   },
 

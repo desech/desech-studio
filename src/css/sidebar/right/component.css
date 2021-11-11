@@ -1,5 +1,5 @@
 .sidebar-right #component-section .sidebar-component-name {
-  width: 110px;
+  max-width: 110px;
   height: 20px;
   display: inline-block;
   overflow: hidden;

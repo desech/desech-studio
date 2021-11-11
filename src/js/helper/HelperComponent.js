@@ -1,7 +1,6 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
-import HelperCanvas from './HelperCanvas.js'
 import CanvasElementSelect from '../main/canvas/element/CanvasElementSelect.js'
 
 export default {
@@ -54,9 +53,10 @@ export default {
     const allData = this.getComponentData(node)
     if (!allData?.main?.variants) return
     for (const [name, value] of Object.entries(data.variants)) {
-      if (!allData.main.variants[name]) {
+      if (!allData.main.variants[name] && !data.main.variants[name]) {
         delete data.variants[name]
-      } else if (!allData.main.variants[name][value]) {
+      } else if (allData.main.variants[name] && !allData.main.variants[name][value] &&
+        data.main.variants[name] && !data.main.variants[name][value]) {
         delete data.variants[name][value]
       }
     }
@@ -68,11 +68,6 @@ export default {
     } else {
       data[name] = value
     }
-  },
-
-  getInstanceRef (element) {
-    const data = this.getComponentData(element)
-    return data ? data.ref : null
   },
 
   getInstanceFile (element) {
@@ -89,6 +84,11 @@ export default {
   getInstanceProperties (element) {
     const data = this.getComponentData(element)
     return data ? data.properties : null
+  },
+
+  getInstanceVariants (element) {
+    const data = this.getComponentData(element)
+    return data ? data.variants : null
   },
 
   getMainData () {
@@ -152,15 +152,11 @@ export default {
       (HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()))
   },
 
-  getByRef (ref) {
-    return HelperCanvas.getCanvas().querySelector(`[data-ss-component*="${ref}"]`)
-  },
-
-  async replaceComponent (element, data) {
+  async replaceComponent (element, data, selectRef = null) {
     const component = await this.fetchComponent(data)
     element.replaceWith(component)
-    const newElement = this.getByRef(data.ref)
-    CanvasElementSelect.selectElementNode(newElement)
+    const selectElement = HelperElement.getElement(selectRef || data.ref)
+    CanvasElementSelect.selectElementNode(selectElement)
   },
 
   async fetchComponent (data) {

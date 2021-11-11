@@ -52,7 +52,7 @@ export default {
 
   getSwapRef (element) {
     if (HelperComponent.isComponentElement(element)) {
-      return HelperComponent.getInstanceRef(element)
+      return HelperElement.getComponentRef(element)
     }
   },
 

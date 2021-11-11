@@ -42,50 +42,53 @@ export default {
   },
 
   injectVariants (template, element, data) {
-    if (HelperComponent.isComponentElement(element)) return
     const container = template.getElementsByClassName('style-variant-section')[0]
-    HelperDOM.show(container)
-    this.injectVariantsList(container, data)
-    this.injectVariantsForm(container, data)
+    const isComponentElement = HelperComponent.isComponentElement(element)
+    this.injectVariantsList(container, data, isComponentElement)
+    this.injectVariantsForm(container, data, isComponentElement)
   },
 
-  injectVariantsList (container, data) {
+  injectVariantsList (container, data, isComponentElement) {
     if (ExtendJS.isEmpty(data.main?.variants)) return
     const list = container.getElementsByClassName('style-variant-elements')[0]
+    HelperDOM.show(list)
     for (const [name, values] of Object.entries(data.main.variants)) {
-      this.injectVariantElement(list, name, Object.keys(values), data?.variants)
+      this.injectVariantElement(list, name, Object.keys(values), data?.variants,
+        isComponentElement)
     }
   },
 
-  injectVariantElement (list, name, values, variants) {
+  injectVariantElement (list, name, values, variants, isComponentElement) {
     const li = HelperDOM.getTemplate('template-style-component-variant')
     const fields = li.children[0].elements
     fields.name.value = name
-    this.injectVariantOptions(li, fields.value, name, values, variants ? variants[name] : null)
+    const selected = variants ? variants[name] : null
+    this.injectVariantOptions(li, fields.value, name, values, selected, isComponentElement)
     list.appendChild(li)
   },
 
-  injectVariantOptions (li, select, name, values, selected) {
+  injectVariantOptions (li, select, name, values, selected, isComponentElement) {
     for (const value of values) {
       const option = document.createElement('option')
       select.appendChild(option)
-      this.setVariantOption(li, option, name, value, selected)
+      this.setVariantOption(li, option, name, value, selected, isComponentElement)
     }
   },
 
-  setVariantOption (li, option, name, value, selected) {
+  setVariantOption (li, option, name, value, selected, isComponentElement) {
     option.value = option.textContent = value
     if (value !== selected) return
     li.dataset.value = JSON.stringify({ name, value })
     option.setAttributeNS(null, 'selected', '')
+    if (isComponentElement) return
     const buttons = option.closest('li').getElementsByTagName('button')
     HelperDOM.show(buttons)
   },
 
-  injectVariantsForm (container, data) {
-    if (ExtendJS.isEmpty(data?.overrides)) return
-    const node = container.getElementsByClassName('style-variant-form-container')[0]
-    HelperDOM.show(node)
+  injectVariantsForm (container, data, isComponentElement) {
+    if (isComponentElement || ExtendJS.isEmpty(data?.overrides)) return
+    const form = container.getElementsByClassName('style-variant-form-container')[0]
+    HelperDOM.show(form)
     this.injectVariantsDatalist(container, data)
   },
 

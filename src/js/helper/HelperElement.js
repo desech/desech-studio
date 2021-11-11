@@ -9,6 +9,10 @@ export default {
     return 'e0' + Crypto.generateSmallID()
   },
 
+  // 1st - positioning, 2nd - component ref, 3rd - style ref
+  // elements have 1 ref (style ref)
+  // component elements have 2 refs (position + style ref)
+  // components have 3 refs (position ref, component ref, root element style ref)
   getAllRefs (element) {
     const refs = []
     for (const name of element.classList) {
@@ -19,18 +23,24 @@ export default {
   },
 
   getRef (element) {
+    // when we have 2 or 3 refs, the first ref is used for positioning only
     const refs = this.getAllRefs(element)
-    // when we have 2 refs, the first ref is used for positioning only
     return refs[0]
   },
 
   getStyleRef (element) {
-    // when we have 2 refs, the style is the last ref
+    // when we have 2 or 3 refs, the style is the last ref
     const refs = this.getAllRefs(element)
     return refs[refs.length - 1]
   },
 
-  removeComponentRef (element) {
+  getComponentRef (element) {
+    // when we have 3 refs, the middle ref is the component ref
+    const refs = this.getAllRefs(element)
+    return refs[1]
+  },
+
+  removePositionRef (element) {
     const refs = this.getAllRefs(element)
     if (refs.length > 1) {
       element.classList.remove(refs[0])

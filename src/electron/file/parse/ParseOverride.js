@@ -4,10 +4,9 @@ import HelperComponent from '../../../js/helper/HelperComponent.js'
 import HelperOverride from '../../../js/helper/HelperOverride.js'
 
 export default {
-  getSubComponentData (parent, child) {
-    const parentOverrides = HelperOverride.getFullOverrides(parent)
+  getSubComponentData (child, parentOverrides) {
     const childOverrides = HelperOverride.getFullOverrides(child)
-    if (parentOverrides[child.ref]?.children) {
+    if (parentOverrides && parentOverrides[child.ref]?.children) {
       HelperOverride.mergeObjects(childOverrides, parentOverrides[child.ref].children)
     }
     return { ...child, fullOverrides: childOverrides }
@@ -48,21 +47,21 @@ export default {
   setOverrideElementProperties (node, overrides) {
     const properties = HelperElement.getProperties(node) || {}
     const ref = HelperElement.getRef(node)
-    const changed = this.overrideProperties(overrides, ref, properties)
+    const changed = this.overrideObjects(overrides, 'properties', ref, properties)
     if (changed) HelperElement.setProperties(node, properties)
   },
 
   setOverrideComponentProperties (node, overrides) {
     const data = HelperComponent.getComponentData(node)
     if (!data.properties) data.properties = {}
-    const changed = this.overrideProperties(overrides, data.ref, data.properties)
+    const changed = this.overrideObjects(overrides, 'properties', data.ref, data.properties)
     if (changed) HelperComponent.setComponentData(node, data)
   },
 
-  overrideProperties (overrides, ref, originalProps) {
-    if (overrides && overrides[ref]?.properties) {
-      for (const [name, obj] of Object.entries(overrides[ref].properties)) {
-        this.overrideProperty(name, obj, originalProps)
+  overrideObjects (overrides, type, ref, oldObj) {
+    if (overrides && overrides[ref] && overrides[ref][type]) {
+      for (const [name, obj] of Object.entries(overrides[ref][type])) {
+        this.overrideObject(name, obj, oldObj)
       }
       return true
     } else {
@@ -70,11 +69,11 @@ export default {
     }
   },
 
-  overrideProperty (name, obj, originalProps) {
+  overrideObject (name, obj, oldObj) {
     if (obj.delete) {
-      delete originalProps[name]
+      delete oldObj[name]
     } else {
-      originalProps[name] = obj.value
+      oldObj[name] = obj.value
     }
   },
 
@@ -99,5 +98,12 @@ export default {
     if (overrides && overrides[data.ref]?.component) {
       data.file = overrides[data.ref].component
     }
+  },
+
+  setOverrideComponentVariants (node, overrides) {
+    const data = HelperComponent.getComponentData(node)
+    if (!data.variants) data.variants = {}
+    const changed = this.overrideObjects(overrides, 'variants', data.ref, data.variants)
+    if (changed) HelperComponent.setComponentData(node, data)
   }
 }

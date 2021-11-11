@@ -16,15 +16,14 @@ export default {
     await this.processElementData(parents, element, type, value)
     HelperComponent.setComponentData(parents[0].element, parents[0].data)
     HelperTrigger.triggerReload('right-panel-style')
+    return parents
   },
 
   async processElementData (parents, element, type, value) {
     const ref = HelperElement.getStyleRef(element)
     const componentNode = await this.getComponentNode(parents[0].data.file)
     const originalNode = componentNode.getElementsByClassName(ref)[0]
-    // when we swap components, then we can't find children of that component in our original cmp
-    const originalProps = originalNode ? HelperElement.getProperties(originalNode) : null
-    this.overrideData(type, value, parents, element, ref, originalNode, originalProps)
+    this.overrideData(type, value, parents, element, ref, originalNode)
   },
 
   async getComponentNode (file) {
@@ -34,7 +33,7 @@ export default {
     return div
   },
 
-  overrideData (type, value, parents, element, ref, originalNode, originalProps) {
+  overrideData (type, value, parents, element, ref, originalNode) {
     const data = HelperOverride.getOverrideData(parents, ref, 'original')
     switch (type) {
       case 'tag':
@@ -46,8 +45,8 @@ export default {
       case 'attributes':
         this.processElementAttributes(value, data, originalNode)
         break
-      case 'properties': // element + component
-        this.processProperties(data, originalProps, value)
+      case 'properties':
+        this.processObject(data, 'properties', this.getElementProperties(originalNode), value)
         break
       case 'classes':
         this.processElementClasses(value, data, originalNode)
@@ -55,8 +54,29 @@ export default {
       case 'component': // component file
         this.processComponentFile(value, data, originalNode)
         break
+      case 'component-properties':
+        this.processObject(data, 'properties', this.getComponentProperties(originalNode), value)
+        break
+      case 'variants':
+        this.processObject(data, 'variants', this.getComponentVariants(originalNode), value)
+        break
     }
     ExtendJS.clearEmptyObjects(parents[0].data)
+  },
+
+  getElementProperties (originalNode) {
+    // when we swap components, then we can't find children of that component in our original cmp
+    return originalNode ? HelperElement.getProperties(originalNode) : null
+  },
+
+  getComponentProperties (originalNode) {
+    // when we swap components, then we can't find children of that component in our original cmp
+    return originalNode ? HelperComponent.getInstanceProperties(originalNode) : null
+  },
+
+  getComponentVariants (originalNode) {
+    // when we swap components, then we can't find children of that component in our original cmp
+    return originalNode ? HelperComponent.getInstanceVariants(originalNode) : null
   },
 
   processElementTag (value, data, originalNode) {
@@ -98,7 +118,7 @@ export default {
     StateHtmlFile.cleanAttributes(node)
     StateHtmlFile.cleanClasses(node, false)
     node.classList.remove('component-element')
-    HelperElement.removeComponentRef(node)
+    HelperElement.removePositionRef(node)
     for (const child of node.children) {
       this.cleanElementInnerNode(child)
     }
@@ -139,39 +159,39 @@ export default {
     }
   },
 
-  processProperties (data, originalProps, newProps) {
-    if (!data.properties) data.properties = {}
-    if (!originalProps) originalProps = {}
-    if (!newProps) newProps = {}
-    this.updateDeleteProperties(originalProps, newProps, data.properties)
-    this.addProperties(originalProps, newProps, data.properties)
-    this.clearProperties(originalProps, newProps, data.properties)
+  processObject (data, type, oldObj, newObj) {
+    if (!data[type]) data[type] = {}
+    if (!oldObj) oldObj = {}
+    if (!newObj) newObj = {}
+    this.updateDeleteObject(oldObj, newObj, data[type])
+    this.addObject(oldObj, newObj, data[type])
+    this.clearObject(oldObj, newObj, data[type])
   },
 
-  updateDeleteProperties (originalProps, newProps, properties) {
-    for (const [name, value] of Object.entries(originalProps)) {
-      if (!(name in newProps)) {
-        properties[name] = { delete: true }
-      } else if (value !== newProps[name]) {
-        properties[name] = { value: newProps[name] }
+  updateDeleteObject (oldObj, newObj, obj) {
+    for (const [name, value] of Object.entries(oldObj)) {
+      if (!(name in newObj)) {
+        obj[name] = { delete: true }
+      } else if (value !== newObj[name]) {
+        obj[name] = { value: newObj[name] }
       } else {
-        delete properties[name]
+        delete obj[name]
       }
     }
   },
 
-  addProperties (originalProps, newProps, properties) {
-    for (const [name, value] of Object.entries(newProps)) {
-      if (!(name in originalProps)) {
-        properties[name] = { value }
+  addObject (oldObj, newObj, obj) {
+    for (const [name, value] of Object.entries(newObj)) {
+      if (!(name in oldObj)) {
+        obj[name] = { value }
       }
     }
   },
 
-  clearProperties (originalProps, newProps, properties) {
-    for (const name of Object.keys(properties)) {
-      if (!(name in originalProps) && !(name in newProps)) {
-        delete properties[name]
+  clearObject (oldObj, newObj, obj) {
+    for (const name of Object.keys(obj)) {
+      if (!(name in oldObj) && !(name in newObj)) {
+        delete obj[name]
       }
     }
   },
@@ -200,24 +220,22 @@ export default {
     await this.processComponentData(parents, element, type, value)
     HelperComponent.setComponentData(parents[0].element, parents[0].data)
     HelperTrigger.triggerReload('component-section')
+    return parents
   },
 
   async processComponentData (parents, element, type, value) {
-    const ref = HelperComponent.getInstanceRef(element)
+    const ref = HelperElement.getComponentRef(element)
     const originalNode = await this.getOriginalComponent(parents[0].data.file, ref)
-    // when we swap components, then we can't find children of that component in our original cmp
-    const originalProps = originalNode
-      ? HelperComponent.getComponentData(originalNode).properties
-      : null
-    this.overrideData(type, value, parents, element, ref, originalNode, originalProps)
+    this.overrideData(type, value, parents, element, ref, originalNode)
   },
 
   async getOriginalComponent (file, ref) {
     const component = await this.getComponentNode(file)
     const nodes = component.querySelectorAll('.component-element[data-ss-component]')
     for (const node of nodes) {
-      const data = HelperComponent.getComponentData(node)
-      if (data.ref === ref) return node
+      if (HelperElement.getComponentRef(node) === ref) {
+        return node
+      }
     }
   },
 

@@ -5,6 +5,7 @@ import HelperComponent from '../../../../helper/HelperComponent.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
+import HelperElement from '../../../../helper/HelperElement.js'
 
 export default {
   getEvents () {
@@ -234,7 +235,7 @@ export default {
   },
 
   async saveRename (element, fields, oldData) {
-    const ref = HelperComponent.getInstanceRef(element)
+    const ref = HelperElement.getComponentRef(element)
     const cmd = {
       do: {
         command: 'renameVariant',

@@ -215,7 +215,7 @@ export default {
     const componentData = HelperComponent.getComponentData(element)
     HelperComponent.updateComponentData(componentData, 'properties', data.properties)
     HelperComponent.setComponentData(element, componentData)
-    await StateCommandOverride.overrideComponent(element, 'properties', data.properties)
+    await StateCommandOverride.overrideComponent(element, 'component-properties', data.properties)
   },
 
   async swapComponent (data) {
@@ -238,7 +238,7 @@ export default {
   },
 
   async resetComponentOverrides (data) {
-    const component = HelperComponent.getByRef(data.ref)
+    const component = HelperElement.getElement(data.ref)
     await HelperComponent.replaceComponent(component, data)
   },
 
@@ -247,23 +247,23 @@ export default {
   },
 
   async saveVariant (data) {
-    const component = HelperComponent.getByRef(data.ref)
+    const component = HelperElement.getElement(data.ref)
     await StateCommandVariant.saveVariant(component, data.name, data.value, data.overrides,
       data.undo)
   },
 
   async deleteVariant (data) {
-    const component = HelperComponent.getByRef(data.ref)
+    const component = HelperElement.getElement(data.ref)
     await StateCommandVariant.deleteVariant(component, data.name, data.value, data.undo)
   },
 
   async switchVariant (data) {
-    const component = HelperComponent.getByRef(data.ref)
+    const component = HelperElement.getElement(data.ref)
     await StateCommandVariant.switchVariant(component, data.name, data.value)
   },
 
   async renameVariant (data) {
-    const component = HelperComponent.getByRef(data.ref)
-    await StateCommandVariant.renameVariant(component, data)
+    const component = HelperElement.getElement(data.ref)
+    await StateCommandVariant.renameVariant(component, data.ref, data.values)
   }
 }

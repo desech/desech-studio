@@ -153,7 +153,7 @@ export default {
     if (body.children.length > 0) return
     const html = fs.readFileSync(this._file).toString()
     const dom = new JSDOM(html)
-    // @todo fix the bug where the index.html would load empty; check Page.loadMain()
+    // @todo fix the bug where the index.html would load empty; uncomment in Page.loadMain()
     console.log('check', body.children.length, dom.window.document.body.children.length)
     if (dom.window.document.body.children.length > 0) {
       throw new Error(Language.localize('Failed to load the html page. ' +
@@ -171,7 +171,7 @@ export default {
     const children = div.innerHTML
     // we need the replace before the prepare because the tag change will overwrite the div
     div.replaceWith(mainComponent)
-    this.prepareComponent(mainComponent, parentData, instanceData, children)
+    this.prepareComponent(mainComponent, parentData, children)
   },
 
   getMainComponent (div, instanceData) {
@@ -181,7 +181,9 @@ export default {
       return
     }
     const html = fs.readFileSync(instanceData.file).toString()
-    return this._document.createRange().createContextualFragment(html).children[0]
+    const element = this._document.createRange().createContextualFragment(html).children[0]
+    HelperDOM.prependClass(element, instanceData.ref)
+    return element
   },
 
   mergeComponentData (mainComponent, instanceData) {
@@ -190,16 +192,23 @@ export default {
     HelperComponent.setComponentData(mainComponent, instanceData)
   },
 
-  prepareComponent (mainComponent, parentData, instanceData, children) {
+  prepareComponent (mainComponent, parentData, children) {
     const level = this.adjustComponentLevel('component', parentData?.level)
-    ParseOverride.setOverrideComponentProperties(mainComponent, parentData?.data?.fullOverrides)
-    const overrideData = ParseOverride.getSubComponentData(parentData?.data, instanceData)
+    const overrideData = this.overrideComponent(mainComponent, parentData?.data?.fullOverrides)
     this.prepareElement(mainComponent, {
       data: overrideData,
       level,
       parent: parentData,
       children
     })
+  },
+
+  overrideComponent (mainComponent, fullOverrides) {
+    ParseOverride.setOverrideComponentVariants(mainComponent, fullOverrides)
+    ParseOverride.setOverrideComponentProperties(mainComponent, fullOverrides)
+    // we need the fresh component data that might have been overridden earlier
+    const data = HelperComponent.getComponentData(mainComponent)
+    return ParseOverride.getSubComponentData(data, fullOverrides)
   },
 
   /**
@@ -229,12 +238,28 @@ export default {
   },
 
   addComponentClasses (node, component) {
+    this.addComponentDataRef(node, component)
     if (this._options.ui === 'export') return
+    this.addComponentElementCls(node, component)
+    this.addComponentPositionRef(node)
+    this.debugNode(node, component)
+  },
+
+  addComponentDataRef (node, component) {
+    if ((this._options.isComponent || this._options.newComponent) && this._body === node) {
+      HelperDOM.prependClass(node, component.data.ref)
+    }
+  },
+
+  addComponentElementCls (node, component) {
     // level 0 and 1 are regular elements, while level 2 and 3 are component elements
     if ((component?.level === 2 && !HelperComponent.isComponentHole(node)) ||
       component?.level > 2) {
       node.classList.add('component-element')
     }
+  },
+
+  addComponentPositionRef (node) {
     // we need unique refs for each component element to be able to select them
     // we also need it for the component root element and the hole when we are in a page
     // this happens when we parse existing components, or we add new components
@@ -243,7 +268,6 @@ export default {
       HelperComponent.isComponentHole(node)) || this._options.newComponent) {
       HelperDOM.prependClass(node, HelperElement.generateElementRef())
     }
-    this.debugNode(node, component)
   },
 
   debugNode (node, component) {

@@ -6,14 +6,15 @@ export default {
   async createFolder (name, root = null) {
     await window.electron.invoke('rendererCreateFolder', {
       root: root || HelperProject.getFolder(),
-      folder: HelperFile.sanitizeFile(name) || 'new'
+      folder: HelperFile.sanitizeFolder(name)
     })
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
   },
 
   async copyFile (file, root = null) {
     root = root || HelperProject.getFolder()
-    await window.electron.invoke('rendererCopyFile', { root, file })
+    const name = HelperFile.sanitizeFile(HelperFile.getBasename(file))
+    await window.electron.invoke('rendererCopyFile', { root, file, name })
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
   },
 

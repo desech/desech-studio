@@ -26,7 +26,7 @@
       <select name="parent" class="panel-choose-folder">
         <option value="">{{#i18n}} -- Parent folder -- {{/i18n}}</option>
       </select>
-      <input name="folder" class="panel-file-box panel-folder-name" placeholder="{{#i18n}} New folder {{/i18n}}">
+      <input name="folder" class="panel-folder-name" placeholder="{{#i18n}} New folder {{/i18n}}">
     </form>
   </div>
 </template>
@@ -39,7 +39,7 @@
         <option value="">{{#i18n}} -- Parent folder -- {{/i18n}}</option>
       </select>
       <div class="panel-file-container">
-        <input name="name" class="panel-file-box panel-file-name" placeholder="file.html">
+        <input name="name" class="panel-file-name" placeholder="file.html">
         <div>{{#i18n}} or {{/i18n}}</div>
         <label class="upload-button" for="panel-upload-file">{{#i18n}} Choose file {{/i18n}}</label>
         <input hidden id="panel-upload-file" name="file" type="file">

@@ -1,6 +1,7 @@
 import HelperEvent from '../helper/HelperEvent.js'
 
 export default {
+  // these are the first events after the component and start events, but before other main events
   getEvents () {
     return {
       click: ['clickOpenLinkEvent'],
@@ -17,7 +18,7 @@ export default {
 
   async clickOpenLinkEvent (event) {
     if (event.target.closest('.desech-external-link')) {
-      await this.openLink(event.target.closest('.desech-external-link'))
+      await window.electron.shellOpenExternal(event.target.closest('a').href)
     }
   },
 
@@ -40,9 +41,5 @@ export default {
 
   submitIgnoreEvent (event) {
     event.preventDefault()
-  },
-
-  async openLink (a) {
-    await window.electron.shellOpenExternal(a.href)
   }
 }

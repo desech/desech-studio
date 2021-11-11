@@ -101,7 +101,8 @@ export default {
   },
 
   copyFileIfMissing (data) {
-    const newPath = this.resolve(data.root, this.basename(data.file))
+    const name = data.name || this.basename(data.file)
+    const newPath = this.resolve(data.root, name)
     if (!fs.existsSync(newPath)) fs.copyFileSync(data.file, newPath)
   },
 

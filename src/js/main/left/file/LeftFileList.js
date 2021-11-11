@@ -13,7 +13,7 @@ export default {
     return {
       click: ['clickCreateFolderOverlayEvent', 'clickCreateFileOverlayEvent',
         'clickCloseOverlayEvent'], // order matters
-      input: ['inputSearchEvent', 'inputFixFileNameEvent'],
+      input: ['inputSearchEvent'],
       keydown: ['keydownCycleNextSearchEvent', 'keydownCyclePreviousSearchEvent',
         'keydownClearOverlayEvent'],
       change: ['changeCreateFolderEvent', 'changeCreateFileEvent']
@@ -47,12 +47,6 @@ export default {
   inputSearchEvent (event) {
     if (event.target.classList.contains('panel-file-search')) {
       this.searchList(event.target)
-    }
-  },
-
-  inputFixFileNameEvent (event) {
-    if (event.target.classList.contains('panel-file-box')) {
-      this.fixFileName(event.target)
     }
   },
 
@@ -207,7 +201,7 @@ export default {
 
   async createFile (name, folder) {
     folder = folder || HelperProject.getFolder()
-    const file = folder + '/' + this.addHtmlExtension(name)
+    const file = folder + '/' + this.fixFileName(name)
     if (HelperFile.getFileExtension(file) === 'html') {
       await this.createHtmlFile(file, folder)
       await Page.loadMain(file)
@@ -216,11 +210,10 @@ export default {
     }
   },
 
-  addHtmlExtension (name) {
-    name = HelperFile.sanitizeFile(name) || 'new'
+  fixFileName (name) {
     const ext = HelperFile.getFileExtension(name)
-    if (!ext) return name + '.html'
-    return name
+    if (!ext) name += '.html'
+    return HelperFile.sanitizeFile(name)
   },
 
   async createHtmlFile (file, folder) {
@@ -241,9 +234,5 @@ export default {
     await LeftFileCommon.createFile(file, contents).catch(error => {
       HelperError.error(error)
     })
-  },
-
-  fixFileName (input) {
-    input.value = input.value.toLowerCase().replace(/[^a-z0-9-.]/g, '-').replace(/-+/g, '-')
   }
 }

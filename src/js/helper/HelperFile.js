@@ -3,8 +3,20 @@ import HelperDesignSystem from './HelperDesignSystem.js'
 import HelperProject from './HelperProject.js'
 
 export default {
-  sanitizeFile (path) {
-    return path.replace(/[\\/:*?"<>|]/g, '')
+  sanitizeFolder (name) {
+    // only allow alphanumeric and dashes
+    return name.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+  },
+
+  sanitizeFile (name) {
+    // only allow alphanumeric, dashes and one dot
+    name = name.toLowerCase().replace(/[^a-z0-9-.]/g, '-')
+    if (name.includes('.')) {
+      const part1 = name.substring(0, name.lastIndexOf('.')).replaceAll('.', '-')
+      const part2 = name.substring(name.lastIndexOf('.'))
+      name = part1 + part2
+    }
+    return name.replace(/-+/g, '-')
   },
 
   convertPathForWin (file, os = navigator.platform) {

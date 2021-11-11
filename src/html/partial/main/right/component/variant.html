@@ -4,10 +4,10 @@
   </div>
 
   <form class="style-variant-form grid" hidden>
-    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" list="style-variant-list-names" required data-invalid-error="{{#i18n}} Only letters, numbers and - is allowed {{/i18n}}">
+    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" list="style-variant-list-names" required>
     <datalist class="style-variant-list-names" id="style-variant-list-names"></datalist>
 
-    <input class="style-variant-field" type="text" name="value" placeholder="{{#i18n}} Value {{/i18n}}" required data-invalid-error="{{#i18n}} Only letters, numbers and - is allowed {{/i18n}}" data-exists-error="{{#i18n}} Variant already exists {{/i18n}}">
+    <input class="style-variant-field" type="text" name="value" placeholder="{{#i18n}} Value {{/i18n}}" required data-exists-error="{{#i18n}} Variant already exists {{/i18n}}">
 
     <button type="submit" class="style-variant-confirm-button small tooltip left" data-tooltip="{{#i18n}} Confirm {{/i18n}}">
       <svg width="16" height="16" viewBox="0 0 24 24">

@@ -5,6 +5,11 @@ import HelperCanvas from './HelperCanvas.js'
 import CanvasElementSelect from '../main/canvas/element/CanvasElementSelect.js'
 
 export default {
+  sanitizeComponent (name) {
+    // only allow alphanumeric and dashes
+    return name.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+  },
+
   isComponent (element) {
     return element.hasAttributeNS(null, 'data-ss-component')
   },

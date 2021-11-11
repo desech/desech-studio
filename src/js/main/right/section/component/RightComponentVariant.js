@@ -84,7 +84,7 @@ export default {
 
   async confirmSave (form) {
     const element = StateSelectedElement.getElement()
-    if (form.checkValidity()) this.validateNames(form)
+    if (form.checkValidity()) this.fixNames(form)
     if (form.checkValidity()) this.validateExists(element, form.elements)
     if (form.checkValidity()) {
       HelperDOM.hide(form)
@@ -92,11 +92,9 @@ export default {
     }
   },
 
-  validateNames (form) {
+  fixNames (form) {
     for (const field of form.elements) {
-      if (!field.value) continue
-      const valid = /^([a-z0-9-])+$/g.test(field.value)
-      this.reportFieldError(field, valid, 'invalidError')
+      field.value = HelperComponent.sanitizeComponent(field.value)
     }
   },
 
@@ -224,7 +222,7 @@ export default {
     const form = li.children[1]
     const element = StateSelectedElement.getElement()
     const data = JSON.parse(li.dataset.value)
-    if (form.checkValidity()) this.validateNames(form)
+    if (form.checkValidity()) this.fixNames(form)
     if (form.checkValidity()) this.validateExists(element, form.elements, data)
     if (form.checkValidity()) {
       if (form.elements.name.value === data.name && form.elements.value.value === data.value) {

@@ -10,6 +10,7 @@ import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.
 import HelperDesignSystem from '../../../../helper/HelperDesignSystem.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperError from '../../../../helper/HelperError.js'
+import HelperComponent from '../../../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -100,6 +101,7 @@ export default {
   },
 
   validateComponent (form, data) {
+    data.component = HelperComponent.sanitizeComponent(data.component)
     if (!data.component || !['block', 'text'].includes(data.component)) {
       return true
     }

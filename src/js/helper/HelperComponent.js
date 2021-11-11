@@ -10,6 +10,11 @@ export default {
     return name.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
   },
 
+  getEmptyComponent () {
+    const ref = HelperElement.generateElementRef()
+    return `<div class="block ${ref}"></div>`
+  },
+
   isComponent (element) {
     return element.hasAttributeNS(null, 'data-ss-component')
   },

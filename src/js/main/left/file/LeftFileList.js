@@ -7,6 +7,7 @@ import HelperFile from '../../../helper/HelperFile.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperForm from '../../../helper/HelperForm.js'
 import Page from '../../../page/Page.js'
+import HelperComponent from '../../../helper/HelperComponent.js'
 
 export default {
   getEvents () {
@@ -218,7 +219,7 @@ export default {
 
   async createHtmlFile (file, folder) {
     if (HelperFile.isComponentFile(file)) {
-      return await this.createRegularFile(file)
+      return await this.createRegularFile(file, HelperComponent.getEmptyComponent())
     } else {
       const success = await this.createRegularFile(file, HelperFile.getFullHtml(file))
       if (success) await this.createPageCssFile(file)

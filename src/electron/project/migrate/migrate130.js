@@ -29,6 +29,7 @@ export default {
       })
   },
 
+  // we are only renaming the components, not folders, but let's hope the folders are ok
   renameComponent (file, folder) {
     const name = File.basename(file)
     const newName = HelperFile.sanitizeFile(name)

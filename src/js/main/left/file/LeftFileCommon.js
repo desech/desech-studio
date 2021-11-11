@@ -19,8 +19,9 @@ export default {
   },
 
   async createFile (file, contents) {
-    await window.electron.invoke('rendererCreateFile', { file, contents })
+    const success = await window.electron.invoke('rendererCreateFile', { file, contents })
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    return success
   },
 
   setActiveItem (item) {

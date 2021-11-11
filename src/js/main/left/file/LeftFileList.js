@@ -203,8 +203,8 @@ export default {
     folder = folder || HelperProject.getFolder()
     const file = folder + '/' + this.fixFileName(name)
     if (HelperFile.getFileExtension(file) === 'html') {
-      await this.createHtmlFile(file, folder)
-      await Page.loadMain(file)
+      const success = await this.createHtmlFile(file, folder)
+      if (success) await Page.loadMain(file)
     } else {
       await this.createRegularFile(file)
     }
@@ -218,10 +218,11 @@ export default {
 
   async createHtmlFile (file, folder) {
     if (HelperFile.isComponentFile(file)) {
-      await this.createRegularFile(file)
+      return await this.createRegularFile(file)
     } else {
-      await this.createRegularFile(file, HelperFile.getFullHtml(file))
-      await this.createPageCssFile(file)
+      const success = await this.createRegularFile(file, HelperFile.getFullHtml(file))
+      if (success) await this.createPageCssFile(file)
+      return success
     }
   },
 
@@ -231,7 +232,7 @@ export default {
   },
 
   async createRegularFile (file, contents = '') {
-    await LeftFileCommon.createFile(file, contents).catch(error => {
+    return await LeftFileCommon.createFile(file, contents).catch(error => {
       HelperError.error(error)
     })
   }

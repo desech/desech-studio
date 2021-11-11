@@ -52,19 +52,19 @@ export default {
 
   rendererCreateFolderEvent () {
     ipcMain.handle('rendererCreateFolder', async (event, data) => {
-      return await EventMain.handleEvent(File, 'createFolder', data.root, data.folder)
+      return await EventMain.handleEvent(this, 'createFolder', data)
     })
   },
 
   rendererCopyFileEvent () {
     ipcMain.handle('rendererCopyFile', async (event, data) => {
-      return await EventMain.handleEvent(File, 'copyFileIfMissing', data)
+      return await EventMain.handleEvent(this, 'copyFile', data)
     })
   },
 
   rendererCreateFileEvent () {
     ipcMain.handle('rendererCreateFile', async (event, data) => {
-      return await EventMain.handleEvent(File, 'createFileIfMissing', data.file, data.contents)
+      return await EventMain.handleEvent(this, 'createFile', data)
     })
   },
 
@@ -120,6 +120,25 @@ export default {
     return fs.readFileSync(file).toString()
   },
 
+  async createFolder (data) {
+    const folder = File.resolve(data.root, data.folder)
+    await FileManage.validateCreate(folder)
+    File.createFolder(data.root, data.folder)
+  },
+
+  async copyFile (data) {
+    const name = data.name || File.basename(data.file)
+    const newPath = File.resolve(data.root, name)
+    await FileManage.validateCreate(newPath)
+    File.copyFileIfMissing(data)
+  },
+
+  async createFile (data) {
+    await FileManage.validateCreate(data.file)
+    File.createFileIfMissing(data.file, data.contents)
+    return true
+  },
+
   async getFolder () {
     const folder = await Cookie.getCookie('currentFolder')
     return File.readFolder(folder, {
@@ -140,7 +159,7 @@ export default {
   async renamePath (file, name) {
     if (File.basename(file) === name || !fs.existsSync(file)) return
     const newPath = File.resolve(File.dirname(file), name)
-    await FileManage.validateRename(file, newPath)
+    await FileManage.validateCreate(newPath)
     await FileManage.manageMove(file, newPath)
     fs.renameSync(file, newPath)
   },

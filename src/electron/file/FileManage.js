@@ -8,11 +8,9 @@ import File from './File.js'
 export default {
   async validateMove (oldPath, newPath) {
     const root = await Cookie.getCookie('currentFolder')
-    if (fs.existsSync(newPath)) {
-      throw new Error(Language.localize('File/folder already exists with that name'))
-    }
+    await this.validateCreate(newPath)
     const isPathComponent = HelperFile.isFolderFile(newPath, 'component', root)
-    // @todo apply this to folders with pages/components too
+    // @todo apply this to folders with pages/components too for the oldPath
     if (HelperFile.isPageFile(oldPath, root) && isPathComponent) {
       throw new Error(Language.localize("You can't convert pages to components"))
     }
@@ -21,7 +19,7 @@ export default {
     }
   },
 
-  async validateRename (oldPath, newPath) {
+  async validateCreate (newPath) {
     if (fs.existsSync(newPath)) {
       throw new Error(Language.localize('File/folder already exists with that name'))
     }

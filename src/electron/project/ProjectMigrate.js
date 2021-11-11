@@ -6,9 +6,8 @@ import migrate130 from './migrate/migrate130.js'
 export default {
   async migrateVersion (folder, settings) {
     let migration = false
-    const currentVersion = settings?.version || packageJson.version
     for (const [version, func] of Object.entries(this.getMap())) {
-      if (ExtendJS.versionCompare(currentVersion, version) < 0) {
+      if (!settings?.version || ExtendJS.versionCompare(settings?.version, version) < 0) {
         migration = true
         await func.migrate(folder)
       }

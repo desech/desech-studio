@@ -1,9 +1,6 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
-import HelperElement from '../../../helper/HelperElement.js'
-import HelperTrigger from '../../../helper/HelperTrigger.js'
-import LeftCommon from '../../left/LeftCommon.js'
 
 export default {
   _node: null,
@@ -32,7 +29,7 @@ export default {
   mouseupEndSelectElementEvent (event) {
     if (this._node && this._node.classList.contains('element')) {
       if (HelperCanvas.getOperation() === 'selecting') {
-        this.selectElement(this._node)
+        StateSelectedElement.selectElement(this._node)
       }
       this.clearState()
     }
@@ -41,7 +38,7 @@ export default {
   mouseupEndDeselectElementEvent (event) {
     if (this._node && !this._node.classList.contains('element')) {
       if (HelperCanvas.getOperation() === 'selecting') {
-        this.deselectElement()
+        StateSelectedElement.deselectElement()
       }
       this.clearState()
     }
@@ -59,7 +56,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
       event.key === 'Escape') {
-      this.deselectElement()
+      StateSelectedElement.deselectElement()
     }
   },
 
@@ -71,48 +68,5 @@ export default {
   clearState () {
     this._node = null
     HelperCanvas.deleteCanvasData('operation')
-  },
-
-  selectElement (element) {
-    const selectedElement = StateSelectedElement.getElement()
-    if (selectedElement === element) return element
-    this.selectElementNode(element)
-    return element
-  },
-
-  selectElementNode (element) {
-    this.deselectElement()
-    element.classList.add('selected')
-    const ref = HelperElement.getRef(element)
-    HelperCanvas.setCanvasData('selectedElement', ref)
-    this.updateUiAfterElementSelect(ref)
-    this.scrollToItem(element)
-  },
-
-  updateUiAfterElementSelect (ref) {
-    LeftCommon.selectItemByRef(ref)
-    HelperTrigger.triggerReload('element-overlay')
-  },
-
-  deselectElement () {
-    const selected = HelperCanvas.getCanvas().getElementsByClassName('selected')[0]
-    if (selected) selected.classList.remove('selected')
-    HelperCanvas.deleteCanvasData('selectedElement')
-    this.updateUiAfterElementDeselect()
-  },
-
-  updateUiAfterElementDeselect () {
-    LeftCommon.deselectItem()
-    HelperTrigger.triggerClear('element-overlay')
-    HelperTrigger.triggerClear('right-panel-style')
-  },
-
-  scrollToItem (element) {
-    // doesn't work right, disable it for now
-    // const pos = HelperElement.getPosition(element)
-    // const container = element.closest('.canvas-container')
-    // if (HelperDOM.isInView(pos.leftWithScroll, pos.topWithScroll, container)) return
-    // const align = (pos.height < 300) ? 'center' : 'start'
-    // element.scrollIntoView({ block: align, inline: align })
   }
 }

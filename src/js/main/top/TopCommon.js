@@ -6,7 +6,7 @@ import HelperProject from '../../helper/HelperProject.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import CanvasCommon from '../canvas/CanvasCommon.js'
-import CanvasElementSelect from '../canvas/element/CanvasElementSelect.js'
+import StateSelectedElement from '../../state/StateSelectedElement.js'
 
 export default {
   createOverlay (container, type) {
@@ -159,7 +159,7 @@ export default {
 
   enablePreview (button) {
     CanvasCommon.enablePanelButton('select')
-    CanvasElementSelect.deselectElement()
+    StateSelectedElement.deselectElement()
     button.classList.add('selected')
     HelperCanvas.addPreview()
   },

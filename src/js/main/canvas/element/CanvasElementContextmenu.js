@@ -5,7 +5,6 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import CanvasElementManage from './CanvasElementManage.js'
 import Contextmenu from '../../../component/Contextmenu.js'
-import CanvasElementSelect from './CanvasElementSelect.js'
 import CanvasElementComponent from './CanvasElementComponent.js'
 import Page from '../../../page/Page.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
@@ -147,7 +146,7 @@ export default {
 
   showContextmenu (element, x, y) {
     // select the correct element when dealing with components
-    element = CanvasElementSelect.selectElement(element)
+    element = StateSelectedElement.selectElement(element)
     const menu = document.getElementById('element-contextmenu')
     const options = this.getMenuOptions(element)
     Contextmenu.reloadMenu(menu, options, x, y)

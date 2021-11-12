@@ -1,6 +1,5 @@
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import CanvasElement from '../CanvasElement.js'
-import CanvasElementSelect from './CanvasElementSelect.js'
 import CanvasElementCreate from './CanvasElementCreate.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import CanvasCommon from '../CanvasCommon.js'
@@ -23,7 +22,7 @@ export default {
     if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
       return
     }
-    CanvasElementSelect.deselectElement() // this first, before operation
+    StateSelectedElement.deselectElement() // this first, before operation
     await CanvasElement.addRemoveElementCommand(ref, 'removeElement', 'addElement')
   },
 
@@ -44,7 +43,7 @@ export default {
     const token = Crypto.generateSmallID()
     CanvasElement.appendToken(element, token)
     await this.copyElementData(element, 'cut')
-    CanvasElementSelect.deselectElement() // this first, before operation
+    StateSelectedElement.deselectElement() // this first, before operation
     await CanvasElement.tokenCommand(token, 'cutElement')
   },
 
@@ -72,7 +71,7 @@ export default {
     const ref = HelperElement.getRef(newElement)
     await CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-    CanvasElementSelect.selectElement(newElement)
+    StateSelectedElement.selectElement(newElement)
   },
 
   isElementAllowed (ref) {

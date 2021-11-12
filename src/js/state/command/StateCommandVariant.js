@@ -1,12 +1,10 @@
 import HelperComponent from '../../helper/HelperComponent.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
 import LeftFileLoad from '../../main/left/file/LeftFileLoad.js'
-import CanvasElementSelect from '../../main/canvas/element/CanvasElementSelect.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperFile from '../../helper/HelperFile.js'
 import StateCommandOverride from './StateCommandOverride.js'
-import HelperElement from '../../helper/HelperElement.js'
 
 export default {
   async saveVariant (component, name, value, overrides, undo) {
@@ -18,7 +16,7 @@ export default {
       this.addVariantToInstances(data, name, value, component)
     } else {
       // this happens when we undo a variant delete
-      await this.reloadPageAndSelectRef(data.ref)
+      await LeftFileLoad.reloadCurrentFile()
     }
   },
 
@@ -65,7 +63,7 @@ export default {
       this.deleteVariantFromInstances(component, data, name, overrides)
     } else {
       // this happens when we delete an existing variant which can be used by other instances
-      await this.reloadPageAndSelectRef(data.ref)
+      await LeftFileLoad.reloadCurrentFile()
     }
   },
 
@@ -83,12 +81,6 @@ export default {
     this.saveMainDataAllComponents(data.file, data.main)
   },
 
-  async reloadPageAndSelectRef (ref) {
-    await LeftFileLoad.reloadCurrentFile()
-    const component = HelperElement.getElement(ref)
-    CanvasElementSelect.selectElementNode(component)
-  },
-
   async switchVariant (component, name, value) {
     const data = HelperComponent.getComponentData(component)
     if (HelperComponent.isComponentElement(component)) {
@@ -102,16 +94,16 @@ export default {
   async switchOverrideVariant (data, name, value, component) {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
-    await HelperComponent.replaceComponent(parents[0].element, parents[0].data, data.ref)
+    await HelperComponent.replaceComponent(parents[0].element, parents[0].data)
   },
 
-  async renameVariant (component, ref, values) {
+  async renameVariant (component, values) {
     const data = HelperComponent.getComponentData(component)
     this.renameVariantInMain(data.main.variants, values)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     const file = HelperFile.getRelPath(data.file)
     await window.electron.invoke('rendererRenameVariant', file, values)
-    await this.reloadPageAndSelectRef(ref)
+    await LeftFileLoad.reloadCurrentFile()
   },
 
   renameVariantInMain (variants, data) {

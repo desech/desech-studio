@@ -120,18 +120,19 @@ export default {
   },
 
   async successSave (element, name, value, execute = true) {
-    const component = HelperComponent.getComponentData(element)
+    const data = HelperComponent.getComponentData(element)
+    const ref = HelperElement.getRef(element)
     const cmd = {
       do: {
         command: 'saveVariant',
-        ref: component.ref,
+        ref,
         name,
         value,
-        overrides: component.overrides
+        overrides: data.overrides
       },
       undo: {
         command: 'deleteVariant',
-        ref: component.ref,
+        ref,
         name,
         value,
         undo: true
@@ -143,17 +144,18 @@ export default {
 
   async switchVariant (name, value, execute = true) {
     const element = StateSelectedElement.getElement()
+    const ref = HelperElement.getRef(element)
     const data = HelperComponent.getComponentData(element)
     const cmd = {
       do: {
         command: 'switchVariant',
-        ref: data.ref,
+        ref,
         name,
         value
       },
       undo: {
         command: 'switchVariant',
-        ref: data.ref,
+        ref,
         name,
         value: data?.variants ? data?.variants[name] : null
       }
@@ -235,7 +237,7 @@ export default {
   },
 
   async saveRename (element, fields, oldData) {
-    const ref = HelperElement.getComponentRef(element)
+    const ref = HelperElement.getRef(element)
     const cmd = {
       do: {
         command: 'renameVariant',

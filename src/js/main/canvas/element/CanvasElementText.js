@@ -8,7 +8,6 @@ import CanvasTextOverlay from '../CanvasTextOverlay.js'
 import StateCommand from '../../../state/StateCommand.js'
 import HelperLocalStore from '../../../helper/HelperLocalStore.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
-import CanvasElementSelect from './CanvasElementSelect.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import Crypto from '../../../../electron/lib/Crypto.js'
 
@@ -118,7 +117,7 @@ export default {
 
   startEditText (element) {
     if (!element) return
-    CanvasElementSelect.selectElement(element)
+    StateSelectedElement.selectElement(element)
     this.prepareElementForUndo(element)
     this.makeElementEditable(element)
     HelperCanvas.setCanvasData('operation', 'editing')

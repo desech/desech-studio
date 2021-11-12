@@ -1,6 +1,5 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
-import CanvasElementSelect from './CanvasElementSelect.js'
 import CanvasElementCreate from './CanvasElementCreate.js'
 import CanvasElement from '../CanvasElement.js'
 import CanvasElementManage from './CanvasElementManage.js'
@@ -9,6 +8,7 @@ import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import Crypto from '../../../../electron/lib/Crypto.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
 
 export default {
   // check if we started movement; we use `pointer-events: none`
@@ -84,7 +84,7 @@ export default {
     this._moving = true
     HelperCanvas.setCanvasData('operation', 'moving')
     // we don't want selection when moving
-    CanvasElementSelect.deselectElement()
+    StateSelectedElement.deselectElement()
     this._element.classList.add('moving')
     this.moveElement(target, clientX, clientY)
   },
@@ -120,7 +120,7 @@ export default {
     const newElement = this.cloneMoveElement(element)
     CanvasElementManage.addPastedElement(newElement)
     HelperDOM.hide(element)
-    CanvasElementSelect.selectElementNode(newElement)
+    StateSelectedElement.selectElementNode(newElement)
     await CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },

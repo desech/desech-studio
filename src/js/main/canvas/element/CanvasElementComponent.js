@@ -86,7 +86,7 @@ export default {
   },
 
   // we are only resetting the overrides of a particular element or a particular component
-  // from inside that component
+  //    from inside that component
   // to reset the whole component, you need to do it at the actual component level
   async resetOverrides (type, execute = true) {
     const command = (type === 'component') ? 'resetComponentOverrides' : 'resetElementOverrides'
@@ -101,7 +101,7 @@ export default {
 
   getResetedOverridesCommand (command, parents, overrides, variants) {
     const file = parents[0].data.file
-    const ref = parents[0].data.ref
+    const ref = HelperElement.getRef(parents[0].element)
     return {
       do: { command, file, ref, overrides, variants },
       undo: {

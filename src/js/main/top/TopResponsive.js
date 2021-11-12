@@ -7,7 +7,7 @@ import HelperTrigger from '../../helper/HelperTrigger.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import CheckButtonField from '../../component/CheckButtonField.js'
-import CanvasElementSelect from '../canvas/element/CanvasElementSelect.js'
+import StateSelectedElement from '../../state/StateSelectedElement.js'
 
 export default {
   _resize: null,
@@ -240,7 +240,7 @@ export default {
 
   initDragResize (clientX) {
     if (Math.abs(this._resize.startX - clientX) > 10) {
-      CanvasElementSelect.deselectElement()
+      StateSelectedElement.deselectElement()
       this._resize.moving = true
     }
   },

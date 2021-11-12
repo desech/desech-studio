@@ -1,7 +1,6 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import StateStyleSheet from '../../../state/StateStyleSheet.js'
 import CanvasElement from '../CanvasElement.js'
-import CanvasElementSelect from './CanvasElementSelect.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperElement from '../../../helper/HelperElement.js'
@@ -11,6 +10,7 @@ import HelperFile from '../../../helper/HelperFile.js'
 import CanvasOverlayResize from '../overlay/CanvasOverlayResize.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperProject from '../../../helper/HelperProject.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
 
 export default {
   _start: false,
@@ -264,7 +264,7 @@ export default {
   },
 
   finishCreateElement (element) {
-    CanvasElementSelect.selectElement(element)
+    StateSelectedElement.selectElement(element)
     // go back to the selection tool
     CanvasCommon.enablePanelButton('select')
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })

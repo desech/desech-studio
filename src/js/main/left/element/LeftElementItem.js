@@ -1,9 +1,9 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import LeftCommon from '../LeftCommon.js'
-import CanvasElementSelect from '../../canvas/element/CanvasElementSelect.js'
 import CanvasElementMove from '../../canvas/element/CanvasElementMove.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
 
 export default {
   getEvents () {
@@ -43,7 +43,7 @@ export default {
 
   clickDeselectItemEvent (event) {
     if (event.target.classList.contains('panel-list-elements-box')) {
-      CanvasElementSelect.deselectElement()
+      StateSelectedElement.deselectElement()
     }
   },
 
@@ -62,7 +62,7 @@ export default {
   selectItem (event) {
     const li = event.target.closest('.panel-element-item')
     const element = HelperElement.getElement(li.dataset.ref)
-    CanvasElementSelect.selectElement(element)
+    StateSelectedElement.selectElement(element)
   },
 
   async sortItem (data) {

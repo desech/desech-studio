@@ -42,6 +42,7 @@ export default {
 
   getSectionClasses () {
     const element = StateSelectedElement.getElement()
+    if (!element) return
     if (HelperComponent.isComponent(element)) {
       return {
         component: RightComponent,
@@ -167,6 +168,7 @@ export default {
   },
 
   loadSection (section, container) {
+    if (!container || !section) return
     container.parentNode.replaceChild(section, container)
   }
 }

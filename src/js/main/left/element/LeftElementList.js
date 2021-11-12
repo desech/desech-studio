@@ -2,7 +2,7 @@ import HelperElement from '../../../helper/HelperElement.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import LeftCommon from '../LeftCommon.js'
-import CanvasElementSelect from '../../canvas/element/CanvasElementSelect.js'
+import StateSelectedElement from '../../../state/StateSelectedElement.js'
 
 export default {
   getEvents () {
@@ -55,12 +55,12 @@ export default {
   showSearchSelectItem (li, cycle) {
     HelperDOM.show(cycle)
     const element = HelperElement.getElement(li.dataset.ref)
-    CanvasElementSelect.selectElement(element)
+    StateSelectedElement.selectElement(element)
   },
 
   clearSearchSelectItem (cycle) {
     HelperDOM.hide(cycle)
-    CanvasElementSelect.deselectElement()
+    StateSelectedElement.deselectElement()
   },
 
   cycleSearch (cycleType) {

@@ -1,7 +1,7 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
-import CanvasElementSelect from '../main/canvas/element/CanvasElementSelect.js'
+import StateSelectedElement from '../state/StateSelectedElement.js'
 
 export default {
   sanitizeComponent (name) {
@@ -133,6 +133,16 @@ export default {
     return root.querySelector('[data-ss-component-hole]:not(.component-element)')
   },
 
+  getInstanceChildren (element) {
+    const hole = this.getInstanceHole(element)
+    if (hole && hole.children.length) return hole.innerHTML
+  },
+
+  setInstanceChildren (element, children) {
+    const hole = this.getInstanceHole(element)
+    hole.innerHTML = children
+  },
+
   getMovableElement (node) {
     node = node.closest('.element:not(.component-element)')
     // if this is not the main component hole, then jump directly to the component,
@@ -152,11 +162,15 @@ export default {
       (HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()))
   },
 
-  async replaceComponent (element, data, selectRef = null) {
+  async replaceComponent (element, data) {
+    const ref = HelperElement.getRef(element)
+    const children = this.getInstanceChildren(element)
     const component = await this.fetchComponent(data)
     element.replaceWith(component)
-    const selectElement = HelperElement.getElement(selectRef || data.ref)
-    CanvasElementSelect.selectElementNode(selectElement)
+    HelperElement.replacePositionRef(component, ref)
+    if (children) this.setInstanceChildren(component, children)
+    // the positioning ref gets replaced, so undo will not work anymore
+    StateSelectedElement.selectElement(component)
   },
 
   async fetchComponent (data) {

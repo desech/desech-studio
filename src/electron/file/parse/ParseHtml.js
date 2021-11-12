@@ -246,7 +246,7 @@ export default {
 
   addComponentDataRef (node, component) {
     if ((this._options.isComponent || this._options.newComponent) && this._body === node &&
-      HelperFile.isPageFile(this._file, this._folder)) {
+      component.data.ref) {
       HelperDOM.prependClass(node, component.data.ref)
     }
   },

@@ -47,6 +47,11 @@ export default {
     }
   },
 
+  replacePositionRef (element, newRef) {
+    const currentRef = this.getRef(element)
+    element.classList.replace(currentRef, newRef)
+  },
+
   getElement (ref) {
     const canvas = HelperCanvas.getCanvas()
     const nodes = canvas.getElementsByClassName(ref)

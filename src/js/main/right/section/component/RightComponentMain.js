@@ -4,7 +4,6 @@ import CanvasElementManage from '../../../canvas/element/CanvasElementManage.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import HelperElement from '../../../../helper/HelperElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
-import CanvasElementSelect from '../../../canvas/element/CanvasElementSelect.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 
@@ -46,7 +45,7 @@ export default {
     if (!newComp) return
     selected.classList.add('placement', 'bottom')
     CanvasElementManage.addPastedElement(newComp)
-    CanvasElementSelect.selectElementNode(newComp)
+    StateSelectedElement.selectElementNode(newComp)
     await this.swapComponentCommand(selected, newComp)
   },
 
@@ -78,7 +77,6 @@ export default {
   promptResetOverrides (button) {
     const dialog = DialogComponent.showDialog({
       header: DialogComponent.getContentHtml('reset-overrides', 'header'),
-      body: DialogComponent.getContentHtml('reset-overrides', 'body'),
       footer: DialogComponent.getContentHtml('reset-overrides', 'footer')
     })
     const dialogButton = dialog.getElementsByClassName('dialog-reset-overrides-confirm')[0]

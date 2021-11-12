@@ -56,11 +56,14 @@ export default {
     return structure
   },
 
-  getOverrides (element, type) {
+  // get a node's full overrides, used to highlight the overrides in the UI
+  // full overrides means that the variant data is also added to the overrides
+  getNodeFullOverrides (element, type) {
     const parents = this.getParents(element, type)
     if (!parents?.length) return
     const ref = this.getOverrideRef(element, type)
-    return this.getOverrideData(parents, ref, 'full')
+    const data = this.getComponentFullOverrides(parents)
+    return this.processParentData(data, parents, ref)
   },
 
   getOverrideRef (element, type) {
@@ -69,24 +72,20 @@ export default {
       : HelperElement.getComponentRef(element)
   },
 
-  // type: original, full
-  getOverrideData (parents, ref, type) {
-    let data = this.getInitialData(parents[0].data, type)
+  // get a node's simple overrides, used to create new overrides
+  // this will give you the override data needed for the component to be saved
+  // this will not include the full data coming from variants
+  // the returned object is the direct object which will be later mutated
+  getNodeSimpleOverrides (parents, ref) {
+    if (!parents[0].data.overrides) parents[0].data.overrides = {}
+    return this.processParentData(parents[0].data.overrides, parents, ref)
+  },
+
+  processParentData (data, parents, ref) {
     for (let i = 1; i < parents.length; i++) {
       data = this.getOverrideDataParent(data, parents[i].data.ref)
     }
     return this.returnOverrideData(parents, data, ref)
-  },
-
-  getInitialData (data, type) {
-    if (type === 'original') {
-      // this mutates data and is needed when setting values directly
-      if (!data.overrides) data.overrides = {}
-      return data.overrides
-    } else if (type === 'full') {
-      // this doesn't mutate and is needed for checking against overwritten values
-      return this.getFullOverrides(data)
-    }
   },
 
   getOverrideDataParent (data, ref) {
@@ -105,15 +104,47 @@ export default {
     }
   },
 
-  getFullOverrides (data) {
+  // get a component's full overrides, used in parsing
+  // this gives you the regular overrides + the ones coming from the top variants,
+  //    not the overridden variants too
+  getTopComponentFullOverrides (data) {
     const overrides = {}
     this.mergeVariants(data, overrides)
-    if (data?.fullOverrides) {
-      this.mergeObjects(overrides, data.fullOverrides)
-    } else if (data?.overrides) {
-      this.mergeObjects(overrides, data.overrides)
-    }console.log('getFullOverrides', overrides)
+    this.mergeOverrides(data, overrides)
     return overrides
+  },
+
+  // get a component's full overrides, including all overridden variants too
+  // used by getNodeFullOverrides() when building the highlighted overrides
+  getComponentFullOverrides (parents) {
+    const overrides = {}
+    this.mergeVariants(parents[0].data, overrides)
+    this.mergeOverriddenVariants(parents[0].data?.overrides, overrides, parents)
+    this.mergeOverrides(parents[0].data, overrides)
+    ExtendJS.clearEmptyObjects(overrides)
+    return overrides
+  },
+
+  mergeOverriddenVariants (parentOverrides, overrides, parents) {
+    if (!parentOverrides) return
+    for (const [ref, record] of Object.entries(parentOverrides)) {
+      if (!overrides[ref]) overrides[ref] = {}
+      if (record.children) {
+        if (!overrides[ref].children) overrides[ref].children = {}
+        this.mergeOverriddenVariants(record.children, overrides[ref].children, parents)
+      }
+      if (record.variants) {
+        record.main = this.getParentMainData(parents, ref)
+        this.mergeVariants(record, overrides[ref].children)
+      }
+    }
+  },
+
+  getParentMainData (parents, ref) {
+    for (const parent of parents) {
+      if (parent.data.ref === ref) return parent.data.main
+    }
+    return null
   },
 
   mergeVariants (data, overrides) {
@@ -121,9 +152,17 @@ export default {
     for (const [name, value] of Object.entries(data.variants)) {
       // when we delete variants, we don't cleanup because of undo
       // this means we can have missing variants
-      if (data?.main?.variants[name] && data.main.variants[name][value]) {
-        this.mergeObjects(overrides, data.main.variants[name][value])
+      if (data?.main?.variants[name] && data?.main?.variants[name][value]) {
+        this.mergeObjects(overrides, data?.main?.variants[name][value])
       }
+    }
+  },
+
+  mergeOverrides (data, overrides) {
+    if (data?.fullOverrides) {
+      this.mergeObjects(overrides, data.fullOverrides)
+    } else if (data?.overrides) {
+      this.mergeObjects(overrides, data.overrides)
     }
   },
 
@@ -136,6 +175,7 @@ export default {
   mergeObjectsFix (obj) {
     // mergeDeep will merge everything including the attribute/property/class values
     // if we have these pairs value/delete or add/delete, remove the first value
+    if (ExtendJS.isEmpty(obj)) return
     if (Object.keys(obj).length === 2 && (('value' in obj && 'delete' in obj) ||
       ('add' in obj && 'delete' in obj))) {
       delete obj[Object.keys(obj)[0]]
@@ -274,6 +314,18 @@ export default {
         node.dataset.tooltip += ' ' + records.join(', ')
       } else {
         delete node.dataset.tooltip
+      }
+    }
+  },
+
+  highlightOverideVariants (template, variants) {
+    if (!variants) return
+    const blocks = template.getElementsByClassName('style-variant-element-li')
+    for (const block of blocks) {
+      const fields = block.getElementsByClassName('style-variant-element-form')[0].elements
+      if (fields[0].value in variants) {
+        fields[0].classList.add('override')
+        fields[1].classList.add('override')
       }
     }
   }

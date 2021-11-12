@@ -20,7 +20,7 @@ export default {
 
   injectData (template) {
     const element = StateSelectedElement.getElement()
-    const overrides = HelperOverride.getOverrides(element, 'element')
+    const overrides = HelperOverride.getNodeFullOverrides(element, 'element')
     RightHtmlMain.injectMain(template, overrides)
     RightHtmlDetail.injectDetails(template, overrides)
     RightHtmlAttribute.injectAttributes(template)

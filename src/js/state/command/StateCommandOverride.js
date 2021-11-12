@@ -34,7 +34,7 @@ export default {
   },
 
   overrideData (type, value, parents, element, ref, originalNode) {
-    const data = HelperOverride.getOverrideData(parents, ref, 'original')
+    const data = HelperOverride.getNodeSimpleOverrides(parents, ref)
     switch (type) {
       case 'tag':
         this.processElementTag(value, data, originalNode)
@@ -58,7 +58,7 @@ export default {
         this.processObject(data, 'properties', this.getComponentProperties(originalNode), value)
         break
       case 'variants':
-        this.processObject(data, 'variants', this.getComponentVariants(originalNode), value)
+        this.processComponentVariants(value, data, originalNode)
         break
     }
     ExtendJS.clearEmptyObjects(parents[0].data)
@@ -72,11 +72,6 @@ export default {
   getComponentProperties (originalNode) {
     // when we swap components, then we can't find children of that component in our original cmp
     return originalNode ? HelperComponent.getInstanceProperties(originalNode) : null
-  },
-
-  getComponentVariants (originalNode) {
-    // when we swap components, then we can't find children of that component in our original cmp
-    return originalNode ? HelperComponent.getInstanceVariants(originalNode) : null
   },
 
   processElementTag (value, data, originalNode) {
@@ -239,12 +234,23 @@ export default {
     }
   },
 
-  processComponentFile (value, data, originalNode) {
-    const originalValue = originalNode ? HelperComponent.getInstanceFile(originalNode) : null
-    if (value === originalValue) {
+  processComponentFile (file, data, originalNode) {
+    const originalFile = originalNode ? HelperComponent.getInstanceFile(originalNode) : null
+    if (file === originalFile) {
       delete data.component
     } else {
-      data.component = HelperFile.getRelPath(value)
+      data.component = HelperFile.getRelPath(file)
+    }
+  },
+
+  processComponentVariants (variant, data, originalNode) {
+    const originalVars = originalNode ? HelperComponent.getInstanceVariants(originalNode) : {}
+    if (!data.variants) data.variants = {}
+    if (!originalVars || !originalVars[variant.name] ||
+      originalVars[variant.name] !== variant.value) {
+      data.variants[variant.name] = variant.value
+    } else {
+      delete data.variants[variant.name]
     }
   }
 }

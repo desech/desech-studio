@@ -56,7 +56,7 @@ export default {
     const data = this.getComponentData(main)
     return {
       ...data,
-      fullOverrides: HelperOverride.getFullOverrides(data)
+      fullOverrides: HelperOverride.getTopComponentFullOverrides(data)
     }
   },
 
@@ -194,21 +194,20 @@ export default {
 
   prepareComponent (mainComponent, parentData, children) {
     const level = this.adjustComponentLevel('component', parentData?.level)
-    const overrideData = this.overrideComponent(mainComponent, parentData?.data?.fullOverrides)
+    const data = this.overrideComponent(mainComponent, parentData)
     this.prepareElement(mainComponent, {
-      data: overrideData,
+      data,
       level,
       parent: parentData,
       children
     })
   },
 
-  overrideComponent (mainComponent, fullOverrides) {
+  overrideComponent (mainComponent, parentData) {
+    const fullOverrides = parentData?.data?.fullOverrides
     ParseOverride.setOverrideComponentVariants(mainComponent, fullOverrides)
     ParseOverride.setOverrideComponentProperties(mainComponent, fullOverrides)
-    // we need the fresh component data that might have been overridden earlier
-    const data = HelperComponent.getComponentData(mainComponent)
-    return ParseOverride.getSubComponentData(data, fullOverrides)
+    return ParseOverride.getSubComponentData(mainComponent, fullOverrides)
   },
 
   /**
@@ -246,7 +245,8 @@ export default {
   },
 
   addComponentDataRef (node, component) {
-    if ((this._options.isComponent || this._options.newComponent) && this._body === node) {
+    if ((this._options.isComponent || this._options.newComponent) && this._body === node &&
+      HelperFile.isPageFile(this._file, this._folder)) {
       HelperDOM.prependClass(node, component.data.ref)
     }
   },

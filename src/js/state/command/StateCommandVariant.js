@@ -100,10 +100,8 @@ export default {
   },
 
   async switchOverrideVariant (data, name, value, component) {
-    if (!data.variants) data.variants = {}
-    data.variants[name] = value
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
-      data.variants)
+      { name, value })
     await HelperComponent.replaceComponent(parents[0].element, parents[0].data, data.ref)
   },
 

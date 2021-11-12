@@ -5,11 +5,13 @@ import HelperOverride from '../../../js/helper/HelperOverride.js'
 
 export default {
   getSubComponentData (child, parentOverrides) {
-    const childOverrides = HelperOverride.getFullOverrides(child)
-    if (parentOverrides && parentOverrides[child.ref]?.children) {
-      HelperOverride.mergeObjects(childOverrides, parentOverrides[child.ref].children)
+    // this will fetch the latest overwritten data
+    const data = HelperComponent.getComponentData(child)
+    data.fullOverrides = HelperOverride.getTopComponentFullOverrides(data)
+    if (parentOverrides && parentOverrides[data.ref]?.children) {
+      HelperOverride.mergeObjects(data.fullOverrides, parentOverrides[data.ref].children)
     }
-    return { ...child, fullOverrides: childOverrides }
+    return data
   },
 
   setOverrideTag (nodeData, overrides, document) {
@@ -102,8 +104,19 @@ export default {
 
   setOverrideComponentVariants (node, overrides) {
     const data = HelperComponent.getComponentData(node)
+    if (!overrides || !overrides[data.ref]?.variants) return
+    this.overrideVariants(data, overrides[data.ref].variants)
+    HelperComponent.setComponentData(node, data)
+  },
+
+  overrideVariants (data, overrideVariants) {
     if (!data.variants) data.variants = {}
-    const changed = this.overrideObjects(overrides, 'variants', data.ref, data.variants)
-    if (changed) HelperComponent.setComponentData(node, data)
+    for (const [name, value] of Object.entries(overrideVariants)) {
+      if (value) {
+        data.variants[name] = value
+      } else {
+        delete data.variants[name]
+      }
+    }
   }
 }

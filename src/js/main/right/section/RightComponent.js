@@ -16,7 +16,7 @@ export default {
   },
 
   injectData (template, element, data) {
-    const overrides = HelperOverride.getOverrides(element, 'component')
+    const overrides = HelperOverride.getNodeFullOverrides(element, 'component')
     RightCommon.injectResetOverrides(template, overrides)
     this.injectComponentRef(template, data)
     this.injectComponentName(template, element, data)
@@ -104,6 +104,7 @@ export default {
 
   highlightOverides (template, overrides) {
     HelperOverride.highlightOveride(template, overrides?.component, 'swap-component-button')
+    HelperOverride.highlightOverideVariants(template, overrides?.variants)
     HelperOverride.highlightOverideProperties(template, overrides?.properties)
     HelperOverride.highlightOverideWarning(template, overrides)
   }

@@ -1,22 +1,30 @@
 import HelperDOM from './HelperDOM.js'
 
 export default {
-  getFormValues (form) {
+  getFormValues (form, fieldClasses = null) {
     const data = {}
-    const fields = this.getFormElements(form)
+    const fields = this.getFormElements(form, fieldClasses)
     for (const [name, field] of Object.entries(fields)) {
       data[name] = this.getFieldValue(field)
     }
     return data
   },
 
-  getFormElements (form) {
+  getFormElements (form, fieldClasses = null) {
     const fields = {}
     for (const field of form.elements) {
       if (!field.name || !HelperDOM.isVisible(field, true)) continue
+      if (fieldClasses && !this.fieldContainsClass(field, fieldClasses)) continue
       this.getFormField(fields, field)
     }
     return fields
+  },
+
+  fieldContainsClass (field, allowed) {
+    for (const cls of field.classList) {
+      if (allowed.includes(cls)) return true
+    }
+    return false
   },
 
   getFormField (fields, field) {

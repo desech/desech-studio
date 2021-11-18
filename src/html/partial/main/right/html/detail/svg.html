@@ -5,7 +5,11 @@
         <div style="font-size:12px">{{#i18n}} ViewBox {{/i18n}}</div>
         <input type="text" class="style-html-field" name="viewBox" placeholder="{{#i18n}} ViewBox {{/i18n}}">
       </div>
+      
       <textarea spellcheck="false" class="style-html-svg-code style-html-inner-field scrollbar" name="code" placeholder="{{#i18n}} Paste SVG code or paste an url {{/i18n}}"></textarea>
+
+      <input type="hidden" name="xmlns" class="style-html-other">
+      <input type="hidden" name="xmlns:xlink" class="style-html-other">
     </div>
   </form>
 </template>

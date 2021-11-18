@@ -135,7 +135,7 @@ export default {
 
   setBody (body) {
     this.checkIfBodyFailed(body)
-    this.cleanAttributes(body)
+    this.addDataHidden(body)
     this.cleanClasses(body)
     this.cleanBody(body)
     if (body.children.length) {
@@ -182,8 +182,21 @@ export default {
     }
     const html = fs.readFileSync(instanceData.file).toString()
     const element = this._document.createRange().createContextualFragment(html).children[0]
-    HelperDOM.prependClass(element, instanceData.ref)
+    this.setComponentCssRequirements(element, instanceData)
     return element
+  },
+
+  setComponentCssRequirements (element, data) {
+    HelperDOM.prependClass(element, data.ref)
+    const variants = this.getVariantsAttribute(data.variants)
+    if (variants) element.setAttributeNS(null, 'data-variant', variants)
+  },
+
+  getVariantsAttribute (variants) {
+    if (!variants) return
+    return Object.entries(variants).reduce((array, variant) => {
+      return [...array, variant.join('=')]
+    }, []).join(' ')
   },
 
   mergeComponentData (mainComponent, instanceData) {
@@ -237,18 +250,14 @@ export default {
   },
 
   addComponentClasses (node, component) {
-    this.addComponentDataRef(node, component)
+    if ((this._options.isComponent || this._options.newComponent) && this._body === node &&
+      component.data.ref) {
+      this.setComponentCssRequirements(node, component.data)
+    }
     if (this._options.ui === 'export') return
     this.addComponentElementCls(node, component)
     this.addComponentPositionRef(node)
     this.debugNode(node, component)
-  },
-
-  addComponentDataRef (node, component) {
-    if ((this._options.isComponent || this._options.newComponent) && this._body === node &&
-      component.data.ref) {
-      HelperDOM.prependClass(node, component.data.ref)
-    }
   },
 
   addComponentElementCls (node, component) {
@@ -297,13 +306,10 @@ export default {
     if (this._debug) console.info(msg)
   },
 
-  // check RightHtmlCommon.getIgnoredAttributes()
-  cleanAttributes (node) {
+  addDataHidden (node) {
     if (this._options.ui === 'export') return
-    for (const attr of node.attributes) {
-      if (attr.name === 'hidden') {
-        node.setAttributeNS(null, 'data-ss-hidden', attr.value)
-      }
+    if (node.hasAttributeNS(null, 'hidden')) {
+      node.setAttributeNS(null, 'data-ss-hidden', '')
     }
   },
 
@@ -342,7 +348,7 @@ export default {
     }
     this.setBasicOverrides(node, component?.data?.fullOverrides)
     this.setAbsoluteSource(node)
-    this.cleanAttributes(node)
+    this.addDataHidden(node)
     this.cleanClasses(node)
     this.addCanvasClasses(node, type)
     this.addComponentClasses(node, component)

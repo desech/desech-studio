@@ -13,9 +13,9 @@ export default {
   },
 
   // filter = all, ref, classes
-  getElementSelectors (element, filter = 'all') {
+  getElementSelectors (element, filter = 'all', ref = null) {
     const selectors = []
-    const ref = HelperElement.getStyleRef(element)
+    if (!ref) ref = HelperElement.getStyleRef(element)
     const classes = HelperElement.getClasses(element)
     for (const sheet of document.adoptedStyleSheets) {
       const rules = this.getElementSelector(sheet, ref, classes, filter)

@@ -7,6 +7,7 @@ import CustomResourceLoader from './parse/CustomResourceLoader.js'
 import Cookie from '../lib/Cookie.js'
 import Font from '../lib/Font.js'
 import File from './File.js'
+import HelperFile from '../../js/helper/HelperFile.js'
 
 export default {
   async parseHtmlCssFile (file, options = {}) {
@@ -35,7 +36,7 @@ export default {
   },
 
   async parseDom (document, file, folder, options) {
-    const opts = { isComponent: file.startsWith(folder + '/component') }
+    const opts = { isComponent: HelperFile.isComponentFile(file, folder) }
     const html = options.ignoreHtml ? null : ParseHtml.parseHtml(document, file, folder, opts)
     const css = await this.parseCss(document, folder, options)
     return { html, css }

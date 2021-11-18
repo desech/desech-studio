@@ -27,6 +27,7 @@ export default {
     for (const node of document.querySelectorAll('[class*="e0"]')) {
       if (node.classList.contains('text')) node.classList.remove('text')
       // remove the ref classes that don't have any css styles
+      // @todo make sure we don't remove the component root ref class if we have css
       const ref = this.getRefFromClasses(node)
       if (!css.includes('.' + ref)) node.classList.remove(ref)
       if (!node.getAttributeNS(null, 'class')) {

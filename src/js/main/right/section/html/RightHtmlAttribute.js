@@ -49,15 +49,17 @@ export default {
   },
 
   getExistingFields (container, element) {
-    const ignore = RightHtmlCommon.getIgnoredAttributes(element)
+    const ignore = RightHtmlCommon.getIgnoredAttributes()
     const fields = this.getDetailFields(container)
     return [...ignore, ...fields]
   },
 
   getDetailFields (container) {
     const form = container.getElementsByClassName('style-html-details')[0]
-    const fields = form ? Object.keys(HelperForm.getFormValues(form)) : []
-    return fields
+    if (!form) return []
+    const allowedClasses = ['style-html-field', 'style-html-button', 'style-html-other']
+    const fields = HelperForm.getFormValues(form, allowedClasses)
+    return Object.keys(fields)
   },
 
   addAttributeFields (list, fields, element) {

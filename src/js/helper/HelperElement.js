@@ -9,17 +9,8 @@ export default {
     return 'e0' + Crypto.generateSmallID()
   },
 
-  // 1st - positioning, 2nd - component ref, 3rd - style ref
-  // elements have 1 ref (style ref)
-  // component elements have 2 refs (position + style ref)
-  // components have 3 refs (position ref, component ref, root element style ref)
   getAllRefs (element) {
-    const refs = []
-    for (const name of element.classList) {
-      // ui classes used are: element, block, selected, _ss_foo...
-      if (name.startsWith('e0')) refs.push(name)
-    }
-    return refs
+    return this.getAllRefsByClass(element.classList)
   },
 
   getRef (element) {
@@ -38,6 +29,43 @@ export default {
     // when we have 3 refs, the middle ref is the component ref
     const refs = this.getAllRefs(element)
     return refs[1]
+  },
+
+  // 1st - positioning, 2nd - component ref, 3rd - style ref
+  // elements have 1 ref (style ref)
+  // component elements have 2 refs (position + style ref)
+  // components have 3 refs (position ref, component ref, root element style ref)
+  getAllRefsByClass (classList) {
+    const refs = []
+    for (const name of classList) {
+      if (name.startsWith('e0')) refs.push(name)
+    }
+    return refs
+  },
+
+  getAllRefsObject (classList) {
+    const refs = this.getAllRefsByClass(classList)
+    switch (refs.length) {
+      case 1:
+        return {
+          type: 'element',
+          position: refs[0],
+          style: refs[0]
+        }
+      case 2:
+        return {
+          type: 'component-element',
+          position: refs[0],
+          style: refs[1]
+        }
+      case 3:
+        return {
+          type: 'component',
+          position: refs[0],
+          component: refs[1],
+          style: refs[2]
+        }
+    }
   },
 
   removePositionRef (element) {

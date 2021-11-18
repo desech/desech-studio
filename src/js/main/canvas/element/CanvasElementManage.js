@@ -84,9 +84,8 @@ export default {
     const tag = HelperDOM.getTag(element)
     const attributes = this.getCopiedAttributes(element, action)
     const html = element.innerHTML
-    // all these refs will be replaced on paste by generateNewRefs()
-    const refs = this.getAllRefs(element.outerHTML)
-    const style = this.getAllRefsStyle(refs)
+    const refs = this.getAllReplaceableRefs(element.outerHTML)
+    const style = this.getStyleByRefs(refs)
     await this.saveToClipboard({ element: { action, tag, attributes, html, refs, style } })
   },
 
@@ -94,36 +93,39 @@ export default {
     const filter = (action === 'copy') ? { attr: true, cls: false } : { attr: false, cls: false }
     const attrs = this.getAttributesList(element, filter)
     if (action === 'cut') attrs['data-ss-token'] = Crypto.generateSmallID()
-    this.processComponentAttribute(element, attrs, action)
     return attrs
   },
 
-  processComponentAttribute (element, attrs, action) {
-    // on copy regenerate the component ref
-    if (action === 'copy' && HelperComponent.isComponent(element)) {
-      const data = HelperComponent.getComponentData(element)
-      data.ref = HelperElement.generateElementRef()
-      attrs['data-ss-component'] = JSON.stringify(data)
+  // all these refs will be replaced on paste by generateNewRefs()
+  getAllReplaceableRefs (html) {
+    const allRefs = []
+    for (const classes of html.matchAll(/class="(.*?)"/g)) {
+      if (!classes) continue
+      const refs = HelperElement.getAllRefsObject(classes[1].split(' '))
+      if (refs.position) allRefs.push(refs.position)
+      if (refs.component) allRefs.push(refs.component)
     }
+    return allRefs
   },
 
-  getAllRefs (html) {
-    const refs = []
-    const matches = html.matchAll(/class="(.*?)"/g)
-    for (const match of matches) {
-      const ref = match[1].match(/e0[a-z0-9]+/g)
-      if (!ref) continue
-      refs.push(ref[0])
-    }
-    return refs
-  },
-
-  getAllRefsStyle (refs) {
+  // when copying components, we will have here the position refs which have no style
+  // the component ref might have some override style
+  getStyleByRefs (refs) {
     let style = {}
     for (const ref of refs) {
       const element = HelperElement.getElement(ref)
-      const elementStyle = this.getStyle(element)
+      const elementStyle = this.getStyle(element, ref)
       style = { ...style, ...elementStyle }
+    }
+    return style
+  },
+
+  getStyle (element, ref = null) {
+    const style = {}
+    const selectors = StyleSheetSelector.getElementSelectors(element, 'ref', ref)
+    for (const selector of selectors) {
+      const css = StateStyleSheet.getSelectorStyle(selector)
+      if (css.length) style[selector] = css
     }
     return style
   },
@@ -200,7 +202,9 @@ export default {
   addPastedElement (element) {
     CanvasElementCreate.createElementForPlacement(element)
     CanvasCommon.removePlacementMarker()
-    if (!HelperElement.isHidden(element)) HelperDOM.show(element)
+    if (!HelperElement.isHidden(element)) {
+      HelperDOM.show(element)
+    }
   },
 
   async pasteExecute (element, data) {
@@ -257,8 +261,9 @@ export default {
   },
 
   // check RightHtmlCommon.getIgnoredAttributes()
+  // this is used when we copy attributes from elements
   getCopyIgnoredAttributes () {
-    return ['style', 'data-ss-token', 'data-ss-component', 'data-ss-component-hole']
+    return ['style', 'data-ss-token', 'data-ss-component-hole']
   },
 
   getAttributeValue (attr, filterCls) {
@@ -284,16 +289,6 @@ export default {
     if (['icon', 'video', 'audio', 'dropdown'].includes(type)) {
       return element.innerHTML
     }
-  },
-
-  getStyle (element) {
-    const style = {}
-    const selectors = StyleSheetSelector.getElementSelectors(element, 'ref')
-    for (const selector of selectors) {
-      const css = StateStyleSheet.getSelectorStyle(selector)
-      if (css.length) style[selector] = css
-    }
-    return style
   },
 
   // paste all attributes and styles

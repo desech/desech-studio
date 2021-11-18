@@ -133,7 +133,7 @@ export default {
 
   // check RightHtmlCommon.getIgnoredAttributes()
   getRemovedAttributes () {
-    // we remove the component data, because we add it with addComponentDataToRoot() at the end
+    // we remove the component data, because we add it with addComponentDataToRoot() at the end,
     // and with setComponentInstanceData() on the div node
     return ['data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-component']
   },

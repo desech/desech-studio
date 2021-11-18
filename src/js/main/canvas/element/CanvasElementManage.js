@@ -251,9 +251,10 @@ export default {
   },
 
   getAttributesList (element, filter) {
+    const ignored = this.getCopyIgnoredAttributes(element)
     const attributes = {}
     for (const attr of element.attributes) {
-      if (!filter.attr || !this.getCopyIgnoredAttributes().includes(attr.name)) {
+      if (!filter.attr || !ignored.includes(attr.name)) {
         attributes[attr.name] = this.getAttributeValue(attr, filter.cls)
       }
     }
@@ -262,8 +263,14 @@ export default {
 
   // check RightHtmlCommon.getIgnoredAttributes()
   // this is used when we copy attributes from elements
-  getCopyIgnoredAttributes () {
-    return ['style', 'data-ss-token', 'data-ss-component-hole']
+  getCopyIgnoredAttributes (element) {
+    const attrs = ['style', 'data-ss-token']
+    // we don't want to copy the hole attr when it belongs to the main component, because only
+    // one hole is allowed, but we do allow it when it's part of some other component
+    if (!HelperComponent.isComponent(element) && !HelperComponent.isComponentElement(element)) {
+      attrs.push('data-ss-component-hole')
+    }
+    return attrs
   },
 
   getAttributeValue (attr, filterCls) {

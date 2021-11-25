@@ -44,6 +44,8 @@ export default {
     HelperComponent.setComponentData(component, data)
   },
 
+  // this only applies to new variants which are no used yet
+  // for existing variants, we will reload the file to make sure we have the proper overrides
   saveMainDataAllComponents (file, mainData) {
     const components = HelperCanvas.getCanvas().querySelectorAll('[data-ss-component]')
     for (const component of components) {
@@ -60,7 +62,7 @@ export default {
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     if (undo) {
       // this happens when we undo a variant create
-      this.deleteVariantFromInstances(component, data, name, overrides)
+      this.undoCreateVariantInInstances(component, data, name, overrides)
     } else {
       // this happens when we delete an existing variant which can be used by other instances
       await LeftFileLoad.reloadCurrentFile()
@@ -74,10 +76,11 @@ export default {
     return overrides
   },
 
-  deleteVariantFromInstances (component, data, name, overrides) {
+  undoCreateVariantInInstances (component, data, name, overrides) {
     data.overrides = overrides
     delete data.variants[name]
     HelperComponent.setComponentData(component, data)
+    // update all components' main data
     this.saveMainDataAllComponents(data.file, data.main)
   },
 
@@ -89,12 +92,13 @@ export default {
       this.updateVariantInstance(data, name, value, component)
       await HelperComponent.replaceComponent(component, data)
     }
+    HelperTrigger.triggerReload('right-panel')
   },
 
   async switchOverrideVariant (data, name, value, component) {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
-    await HelperComponent.replaceComponent(parents[0].element, parents[0].data)
+    return await HelperComponent.replaceComponent(parents[0].element, parents[0].data)
   },
 
   async renameVariant (component, values) {

@@ -230,6 +230,7 @@ export default {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
     await HelperComponent.replaceComponent(element, data)
+    HelperTrigger.triggerReload('right-panel')
   },
 
   async resetElementOverrides (data) {

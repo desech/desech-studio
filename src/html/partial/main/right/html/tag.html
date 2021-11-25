@@ -4,7 +4,7 @@
       <option value="">{{#i18n}} - HTML Tag - {{/i18n}}</option>
       <optgroup label="{{#i18n}} Common {{/i18n}}">
         <option value="div">{{#i18n}} Block {{/i18n}} &lt;div&gt;</option>
-        <option value="p">{{#i18n}} Paragraph {{/i18n}} &lt;p&gt;</option>
+        <option value="p">{{#i18n}} Paragraph (no blocks inside) {{/i18n}} &lt;p&gt;</option>
         <option value="button">{{#i18n}} Button {{/i18n}} &lt;button&gt;</option>
         <option value="a">{{#i18n}} Link {{/i18n}} &lt;a&gt;</option>
       </optgroup>
@@ -27,9 +27,9 @@
       <optgroup label="{{#i18n}} Form {{/i18n}}">
         <option value="form">{{#i18n}} Form {{/i18n}} &lt;form&gt;</option>
         <option value="label">{{#i18n}} Label {{/i18n}} &lt;label&gt;</option>
-        <option value="fieldset">{{#i18n}} Fieldset (no grid/flex) {{/i18n}} &lt;fieldset&gt;</option>
         <option value="legend">{{#i18n}} Legend {{/i18n}} &lt;legend&gt;</option>
         <option value="output">{{#i18n}} Output {{/i18n}} &lt;output&gt;</option>
+        <option value="fieldset">{{#i18n}} Fieldset (no grid/flex) {{/i18n}} &lt;fieldset&gt;</option>
       </optgroup>
       <optgroup label="{{#i18n}} List {{/i18n}}">
         <option value="ul">{{#i18n}} Unordered List {{/i18n}} &lt;ul&gt;</option>
@@ -44,9 +44,6 @@
         <option value="blockquote">{{#i18n}} Quote {{/i18n}} &lt;blockquote&gt;</option>
         <option value="figure">{{#i18n}} Figure {{/i18n}} &lt;figure&gt;</option>
         <option value="figcaption">{{#i18n}} Figure Caption {{/i18n}} &lt;figcaption&gt;</option>
-        <option value="hr">{{#i18n}} Horizontal Rule {{/i18n}} &lt;hr&gt;</option>
-        <option value="details">{{#i18n}} Details {{/i18n}} &lt;details&gt;</option>
-        <option value="summary">{{#i18n}} Summary {{/i18n}} &lt;summary&gt;</option>
       </optgroup>
       <optgroup label="{{#i18n}} Table {{/i18n}}">
         <option value="table">{{#i18n}} Table {{/i18n}} &lt;table&gt;</option>
@@ -56,19 +53,22 @@
         <option value="tr">{{#i18n}} Table row {{/i18n}} &lt;tr&gt;</option>
         <option value="td">{{#i18n}} Table cell {{/i18n}} &lt;td&gt;</option>
         <option value="th">{{#i18n}} Table head cell {{/i18n}} &lt;th&gt;</option>
-        <option value="colgroup">{{#i18n}} Column group {{/i18n}} &lt;colgroup&gt;</option>
-        <option value="col">{{#i18n}} Column {{/i18n}} &lt;col&gt;</option>
         <option value="caption">{{#i18n}} Table caption {{/i18n}} &lt;caption&gt;</option>
+      </optgroup>
+      <optgroup label="{{#i18n}} With requirements (breaks undo) {{/i18n}}">
+        <option value="hr">{{#i18n}} Horizontal Rule (no elements inside) {{/i18n}} &lt;hr&gt;</option>
+        <option value="details">{{#i18n}} Details (needs "summary" children) {{/i18n}} &lt;details&gt;</option>
+        <option value="summary">{{#i18n}} Summary (needs "details" as parent) {{/i18n}} &lt;summary&gt;</option>
+        <option value="colgroup">{{#i18n}} Table column group (hidden) {{/i18n}} &lt;colgroup&gt;</option>
+        <option value="col">{{#i18n}} Table column (hidden) {{/i18n}} &lt;col&gt;</option>
+        <option value="map">{{#i18n}} Map (needs "area" children) {{/i18n}} &lt;map&gt;</option>
+        <option value="area">{{#i18n}} Area (needs "map" as parent) {{/i18n}} &lt;area&gt;</option>
       </optgroup>
       <optgroup label="{{#i18n}} Programming {{/i18n}}">
         <option value="template">{{#i18n}} Template {{/i18n}} &lt;template&gt;</option>
         <option value="slot">{{#i18n}} Slot {{/i18n}} &lt;slot&gt;</option>
         <option value="noscript">{{#i18n}} Noscript {{/i18n}} &lt;noscript&gt;</option>
         <option value="custom">{{#i18n}} Custom {{/i18n}}</option>
-      </optgroup>
-      <optgroup label="{{#i18n}} Rarely used {{/i18n}}">
-        <option value="map">{{#i18n}} Map {{/i18n}} &lt;map&gt;</option>
-        <option value="area">{{#i18n}} Area {{/i18n}} &lt;area&gt;</option>
       </optgroup>
     </select>
     <input hidden class="style-tag-custom" type="text" placeholder="{{#i18n}} Custom tag {{/i18n}}">

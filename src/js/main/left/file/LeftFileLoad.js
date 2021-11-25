@@ -13,7 +13,7 @@ export default {
     this.loadCss(data.css)
     this.setData(file, data)
     StateSelectedElement.deselectElement()
-    HelperTrigger.triggerClear('right-panel-style')
+    HelperTrigger.triggerClear('right-panel')
   },
 
   loadHtml (html) {

@@ -184,5 +184,23 @@ export default {
       variants: render.component?.variants || null
     })
     return element
+  },
+
+  buildDataVariant (data) {
+    // data-variant="foo-var=bar-val foo2=bar2 foo3=bar3"
+    if (!data.variants) return
+    return Object.entries(data.variants).reduce((array, variant) => {
+      return [...array, variant.join('=')]
+    }, []).join(' ')
+  },
+
+  setDataVariant (element, data = null) {
+    if (!data) data = this.getComponentData(element)
+    const value = this.buildDataVariant(data)
+    if (value) {
+      element.setAttributeNS(null, 'data-variant', value)
+    } else {
+      element.removeAttributeNS(null, 'data-variant')
+    }
   }
 }

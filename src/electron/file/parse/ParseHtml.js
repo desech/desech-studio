@@ -88,7 +88,7 @@ export default {
   prepareElement (node, component) {
     const tag = HelperDOM.getTag(node)
     const mappedTag = this.getMappedTag(tag)
-    const ref = HelperElement.getRef(node)
+    const ref = HelperElement.getStyleRef(node)
     if (tag === 'body') {
       this.setBody(node)
     } else if (node.classList.contains('component')) {
@@ -181,22 +181,7 @@ export default {
       return
     }
     const html = fs.readFileSync(instanceData.file).toString()
-    const element = this._document.createRange().createContextualFragment(html).children[0]
-    this.setComponentCssRequirements(element, instanceData)
-    return element
-  },
-
-  setComponentCssRequirements (element, data) {
-    HelperDOM.prependClass(element, data.ref)
-    const variants = this.getVariantsAttribute(data.variants)
-    if (variants) element.setAttributeNS(null, 'data-variant', variants)
-  },
-
-  getVariantsAttribute (variants) {
-    if (!variants) return
-    return Object.entries(variants).reduce((array, variant) => {
-      return [...array, variant.join('=')]
-    }, []).join(' ')
+    return this._document.createRange().createContextualFragment(html).children[0]
   },
 
   mergeComponentData (mainComponent, instanceData) {
@@ -208,6 +193,7 @@ export default {
   prepareComponent (mainComponent, parentData, children) {
     const level = this.adjustComponentLevel('component', parentData?.level)
     const data = this.overrideComponent(mainComponent, parentData)
+    this.setComponentCssRequirements(mainComponent, data)
     this.prepareElement(mainComponent, {
       data,
       level,
@@ -221,6 +207,11 @@ export default {
     ParseOverride.setOverrideComponentVariants(mainComponent, fullOverrides)
     ParseOverride.setOverrideComponentProperties(mainComponent, fullOverrides)
     return ParseOverride.getSubComponentData(mainComponent, fullOverrides)
+  },
+
+  setComponentCssRequirements (element, data) {
+    HelperDOM.prependClass(element, data.ref)
+    HelperComponent.setDataVariant(element, data)
   },
 
   /**
@@ -282,7 +273,7 @@ export default {
   debugNode (node, component) {
     if (!this._debug) return
     const tab = (' ').repeat(component?.level)
-    const ref = HelperElement.getRef(node)
+    const ref = HelperElement.getStyleRef(node)
     if (HelperComponent.isComponent(node) && HelperComponent.isComponentHole(node)) {
       console.info(tab, 'component root and hole', ref, component?.level)
     } else if (HelperComponent.isComponent(node)) {
@@ -444,7 +435,7 @@ export default {
   processNodeTag (node, component, isBody) {
     // we store the node tag into a data object, in order for setOverrideTag to overwrite the node
     const tag = HelperDOM.getTag(node)
-    const ref = HelperElement.getRef(node)
+    const ref = HelperElement.getStyleRef(node)
     const data = { node, tag, ref }
     ParseOverride.setOverrideTag(data, component?.data?.fullOverrides, this._document)
     node = this.changeNodeSpecialTag(data.node, data.tag)

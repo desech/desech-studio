@@ -7,26 +7,7 @@
     <select name="child" required>
       <option value="">{{#i18n}} - Child Tag - {{/i18n}}</option>
       <option value="*">{{#i18n}} All Children {{/i18n}} &lt;*&gt;</option>
-      <optgroup label="{{#i18n}} Dropdown {{/i18n}}">
-        <option value="select">{{#i18n}} Dropdown {{/i18n}} &lt;select&gt;</option>
-        <option value="datalist">{{#i18n}} Datalist {{/i18n}} &lt;datalist&gt;</option>
-        <option value="option">{{#i18n}} Option {{/i18n}} &lt;option&gt;</option>
-        <option value="optgroup">{{#i18n}} Group {{/i18n}} &lt;optgroup&gt;</option>
-      </optgroup>
-
-      {{> mainRightSelectorFormChildText }}
-      {{> mainRightSelectorFormChildBlock }}
-
-      <optgroup label="{{#i18n}} Media {{/i18n}}">
-        <option value="img">{{#i18n}} Image {{/i18n}} &lt;img&gt;</option>
-        <option value="video">{{#i18n}} Video {{/i18n}} &lt;video&gt;</option>
-        <option value="audio">{{#i18n}} Audio {{/i18n}} &lt;audio&gt;</option>
-        <option value="iframe">{{#i18n}} Iframe {{/i18n}} &lt;iframe&gt;</option>
-        <option value="object">{{#i18n}} Object {{/i18n}} &lt;object&gt;</option>
-        <option value="canvas">{{#i18n}} Canvas {{/i18n}} &lt;canvas&gt;</option>
-      </optgroup>
-
-      {{> mainRightSelectorFormChildSvg }}
+      {{> mainRightSelectorFormChildList }}
     </select>
   </div>
 </template>

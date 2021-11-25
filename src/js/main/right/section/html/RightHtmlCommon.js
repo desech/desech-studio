@@ -146,7 +146,7 @@ export default {
     return [
       'class', 'style', 'hidden',
       'data-ss-tag', 'data-ss-hidden', 'data-ss-token',
-      'data-ss-properties', 'data-ss-component', 'data-ss-component-hole'
+      'data-ss-properties', 'data-ss-component', 'data-ss-component-hole', 'data-variant'
     ]
   },
 

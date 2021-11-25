@@ -20,13 +20,13 @@ export default {
   },
 
   reloadcontainerEvent (event) {
-    if (event.target.id === 'right-panel-style') {
+    if (event.target.id === 'right-panel') {
       this.reloadPanel()
     }
   },
 
   clearcontainerEvent (event) {
-    if (event.target.id === 'right-panel-style') {
+    if (event.target.id === 'right-panel') {
       this.loadDefaultPanel()
     }
   },

@@ -66,7 +66,7 @@ export default {
     const element = StateSelectedElement.getElement()
     if (!HelperElement.isCanvasElement(element)) return
     this.injectOverlay()
-    if (panelReload !== false) HelperTrigger.triggerReload('right-panel-style')
+    if (panelReload !== false) HelperTrigger.triggerReload('right-panel')
   },
 
   injectOverlay () {

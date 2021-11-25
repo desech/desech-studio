@@ -51,7 +51,7 @@ export default {
 
   getPinX (container, data) {
     const sidebar = document.getElementById('sidebar-right')
-    const panel = document.getElementById('right-panel-style')
+    const panel = document.getElementById('right-panel')
     const halfPin = this.getPinWidth() / 2
     let x = (data.clientX - halfPin + panel.scrollLeft) -
       (sidebar.offsetLeft + container.offsetLeft)
@@ -62,7 +62,7 @@ export default {
 
   getPinY (container, data) {
     const sidebar = document.getElementById('sidebar-right')
-    const panel = document.getElementById('right-panel-style')
+    const panel = document.getElementById('right-panel')
     const halfPin = this.getPinHeight() / 2
     let y = (data.clientY - halfPin + panel.scrollTop) -
       (sidebar.offsetTop + container.offsetTop)

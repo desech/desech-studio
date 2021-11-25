@@ -306,7 +306,7 @@ export default {
     const data = await this.getPastedData()
     if (!data.attributes && !data.style) return
     await this.pasteAllCommand(ref, data)
-    HelperTrigger.triggerReload('right-panel-style')
+    HelperTrigger.triggerReload('right-panel')
   },
 
   async getPastedData () {

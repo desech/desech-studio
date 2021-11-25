@@ -15,7 +15,7 @@ export default {
     if (!parents.length) return
     await this.processElementData(parents, element, type, value)
     HelperComponent.setComponentData(parents[0].element, parents[0].data)
-    HelperTrigger.triggerReload('right-panel-style')
+    HelperTrigger.triggerReload('right-panel')
     return parents
   },
 
@@ -65,12 +65,12 @@ export default {
   },
 
   getElementProperties (originalNode) {
-    // when we swap components, then we can't find children of that component in our original cmp
+    // when we swap components, we will not find children of that component in our original cmp
     return originalNode ? HelperElement.getProperties(originalNode) : null
   },
 
   getComponentProperties (originalNode) {
-    // when we swap components, then we can't find children of that component in our original cmp
+    // when we swap components, we will not find children of that component in our original cmp
     return originalNode ? HelperComponent.getInstanceProperties(originalNode) : null
   },
 

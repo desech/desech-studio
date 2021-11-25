@@ -198,7 +198,7 @@ export default {
     Contextmenu.emptyMenu()
     RightHtmlCommon.setHidden(hidden)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-    HelperTrigger.triggerReload('right-panel-style')
+    HelperTrigger.triggerReload('right-panel')
   },
 
   loadComponent () {

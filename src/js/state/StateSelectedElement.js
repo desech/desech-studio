@@ -50,7 +50,7 @@ export default {
   updateUiAfterElementDeselect () {
     LeftCommon.deselectItem()
     HelperTrigger.triggerClear('element-overlay')
-    HelperTrigger.triggerClear('right-panel-style')
+    HelperTrigger.triggerClear('right-panel')
   },
 
   selectElement (element) {

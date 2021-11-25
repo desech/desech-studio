@@ -8,7 +8,6 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 export default {
   async loadFile (file) {
     const data = await window.electron.invoke('rendererParseHtmlCssFile', file)
-    if (!data) return
     this.loadHtml(data.html)
     this.loadCss(data.css)
     this.setData(file, data)

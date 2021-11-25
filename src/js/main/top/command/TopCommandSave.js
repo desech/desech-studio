@@ -10,7 +10,6 @@ import HelperFile from '../../../helper/HelperFile.js'
 
 export default {
   _AUTOSAVE_TIME: 60 * 1000, // in ms
-  _FIRST_SAVE_TIME: 3 * 1000,
 
   getEvents () {
     return {
@@ -44,12 +43,6 @@ export default {
         resolve(interval)
       }, this._AUTOSAVE_TIME)
     })
-  },
-
-  setFirstSaveTimeout () {
-    // save again when we open the project, to make sure we are on the latest reset css file
-    // after the import, this also fixes our font-family and generates the first _export folder
-    setTimeout(async () => { await this.save() }, this._FIRST_SAVE_TIME)
   },
 
   async save (checkAlreadySaved = false) {

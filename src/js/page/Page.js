@@ -37,17 +37,16 @@ export default {
     Project.addProjectFontCss()
     await Project.addDesignSystemCss()
     HelperLocalStore.removeAllTemporary()
-    this.loadFilePanel(file)
+    this.loadMainFilePanel(file)
     TopZoom.setSavedZoomLevel()
     TopCommon.positionDragHandle()
-    // @todo fix the bug where the index.html would load empty; check ParseHtml.checkIfBodyFailed()
-    // if (!file) TopCommandSave.setFirstSaveTimeout()
   },
 
-  loadFilePanel (file) {
+  loadMainFilePanel (file) {
     HelperTrigger.triggerOpenPanel('panel-button-file', {
       force: true,
-      loadFile: file || HelperProject.getFolder() + '/index.html'
+      loadFile: file || HelperProject.getFolder() + '/index.html',
+      projectSave: !file
     })
   },
 

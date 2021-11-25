@@ -137,6 +137,7 @@ export default {
   },
 
   buildList (container, type, list, options) {
+    // this is async, so the error will be reported in catch()
     this.getList()[type].buildList(container, type, list, options).catch(error => {
       HelperError.error(error)
     })

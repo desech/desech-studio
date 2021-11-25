@@ -6,7 +6,6 @@ import HelperDOM from '../../../js/helper/HelperDOM.js'
 import File from '../File.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
 import HelperFile from '../../../js/helper/HelperFile.js'
-import Language from '../../lib/Language.js'
 import ParseCommon from './ParseCommon.js'
 import ParseOverride from './ParseOverride.js'
 import HelperOverride from '../../../js/helper/HelperOverride.js'
@@ -134,7 +133,6 @@ export default {
   },
 
   setBody (body) {
-    this.checkIfBodyFailed(body)
     this.addDataHidden(body)
     this.cleanClasses(body)
     this.cleanBody(body)
@@ -147,18 +145,6 @@ export default {
     if (this._options.ui === 'export') return
     body.classList.add('element')
     body.classList.add('body')
-  },
-
-  checkIfBodyFailed (body) {
-    if (body.children.length > 0) return
-    const html = fs.readFileSync(this._file).toString()
-    const dom = new JSDOM(html)
-    // @todo fix the bug where the index.html would load empty; uncomment in Page.loadMain()
-    console.log('check', body.children.length, dom.window.document.body.children.length)
-    if (dom.window.document.body.children.length > 0) {
-      throw new Error(Language.localize('Failed to load the html page. ' +
-        'Please try opening the html page again'))
-    }
   },
 
   setComponent (div, parentData) {

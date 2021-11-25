@@ -21,16 +21,24 @@ export default {
 
   async processElementData (parents, element, type, value) {
     const ref = HelperElement.getStyleRef(element)
-    const componentNode = await this.getComponentNode(parents[0].data.file)
+    const componentNode = await this.getComponentNode(parents[0].data, type)
     const originalNode = componentNode.getElementsByClassName(ref)[0]
     this.overrideData(type, value, parents, element, ref, originalNode)
   },
 
-  async getComponentNode (file) {
+  async getComponentNode (data, type) {
     const div = document.createElement('div')
-    const html = await window.electron.invoke('rendererParseComponentFile', { file })
+    const cmpData = this.getOriginalComponentData(data, type)
+    const html = await window.electron.invoke('rendererParseComponentFile', cmpData)
     div.innerHTML = html.canvas
     return div
+  },
+
+  getOriginalComponentData (data, type) {
+    const cmpData = { file: data.file }
+    // we also want the variants because overrides sit on top of variants
+    if (data?.variants) cmpData.variants = data.variants
+    return cmpData
   },
 
   overrideData (type, value, parents, element, ref, originalNode) {
@@ -220,15 +228,15 @@ export default {
 
   async processComponentData (parents, element, type, value) {
     const ref = HelperElement.getComponentRef(element)
-    const originalNode = await this.getOriginalComponent(parents[0].data.file, ref)
+    const originalNode = await this.getOriginalComponent(parents[0].data, ref, type)
     this.overrideData(type, value, parents, element, ref, originalNode)
   },
 
-  async getOriginalComponent (file, ref) {
-    const component = await this.getComponentNode(file)
+  async getOriginalComponent (data, childRef, type) {
+    const component = await this.getComponentNode(data, type)
     const nodes = component.querySelectorAll('.component-element[data-ss-component]')
     for (const node of nodes) {
-      if (HelperElement.getComponentRef(node) === ref) {
+      if (HelperElement.getComponentRef(node) === childRef) {
         return node
       }
     }

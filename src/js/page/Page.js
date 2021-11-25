@@ -43,6 +43,7 @@ export default {
   },
 
   loadMainFilePanel (file) {
+    // this is async because of Left.openpanelEvent()
     HelperTrigger.triggerOpenPanel('panel-button-file', {
       force: true,
       loadFile: file || HelperProject.getFolder() + '/index.html',

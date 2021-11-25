@@ -20,6 +20,7 @@ export default {
     if (detail) data.detail = detail
     const event = new CustomEvent(type, data)
     const node = document.getElementById(id)
+    // errors are caught by HelperEvent.handleEvents()
     if (node) node.dispatchEvent(event)
   }
 }

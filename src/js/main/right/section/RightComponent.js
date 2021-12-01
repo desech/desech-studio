@@ -7,11 +7,11 @@ import HelperOverride from '../../../helper/HelperOverride.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
 
 export default {
-  getSection () {
+  getSection (sectionData) {
     const template = HelperDOM.getTemplate('template-style-component')
     const element = StateSelectedElement.getElement()
-    const data = HelperComponent.getComponentData(element)
-    this.injectData(template, element, data)
+    const componentData = HelperComponent.getComponentData(element)
+    this.injectData(template, element, componentData)
     return template
   },
 

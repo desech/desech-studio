@@ -2,9 +2,9 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import RightFillList from './fill/RightFillList.js'
 
 export default {
-  getSection (style) {
+  getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template, style)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -12,7 +12,7 @@ export default {
     return HelperDOM.getTemplate('template-style-fill')
   },
 
-  injectData (template, style) {
-    RightFillList.injectList(template)
+  injectData (template, sectionData) {
+    RightFillList.injectList(template, sectionData)
   }
 }

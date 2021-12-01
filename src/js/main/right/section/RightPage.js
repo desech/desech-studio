@@ -9,7 +9,7 @@ export default {
     container.appendChild(section)
   },
 
-  getSection () {
+  getSection (sectionData) {
     const template = HelperDOM.getTemplate('template-style-page')
     if (HelperFile.isComponentFile()) {
       this.hideFields(template)

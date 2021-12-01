@@ -64,6 +64,7 @@ export default {
   },
 
   getBackgroundValues (string) {
+    if (!string) return []
     const backgrounds = HelperRegex.getMatchingGroups(string,
       /(?<value>(repeating-)?((linear)?(radial)?-gradient|url)\(.*?(%|\.jpg|\.png|\.gif|\.svg)(")?\))/gi)
     const result = []

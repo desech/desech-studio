@@ -143,12 +143,12 @@ export default {
     return container.getElementsByClassName('panel-list')[0].children.length
   },
 
-  injectList (container) {
+  injectList (container, data) {
     const list = container.getElementsByClassName('fill-list')[0]
     if (this.fillIsNone()) {
       RightFillCommon.insertElement(list, 'none')
     } else {
-      const backgrounds = RightFillProperty.getBackgrounds()
+      const backgrounds = RightFillProperty.getBackgroundsFromStyle(data.style)
       for (const background of backgrounds) {
         RightFillCommon.insertElement(list, background)
       }

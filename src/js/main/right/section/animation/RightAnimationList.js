@@ -191,9 +191,9 @@ export default {
     HelperDOM.show(container.children[1])
   },
 
-  injectList (section) {
+  injectList (section, data) {
     const list = section.getElementsByClassName('animation-list')[0]
-    const values = RightAnimationForm.getParsedValues()
+    const values = RightAnimationForm.getValuesFromStyle(data.style)
     for (const data of values) {
       this.insertElement(list, data)
     }

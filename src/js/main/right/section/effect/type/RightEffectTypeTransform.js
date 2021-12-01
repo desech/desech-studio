@@ -10,8 +10,8 @@ export default {
     return HelperDOM.getTemplate(`template-effect-transform-${type}`)
   },
 
-  getParsedValues () {
-    const value = StateStyleSheet.getPropertyValue('transform')
+  getParsedValues (style = null) {
+    const value = style ? style.transform : StateStyleSheet.getPropertyValue('transform')
     if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
     return this.parseCSS(value)
   },

@@ -54,19 +54,16 @@ export default {
     return false
   },
 
-  getCurrentSelectorLi (container = document) {
-    return container.querySelector('.selector-list-container .selector-element.active')
-  },
-
   getCurrentSelector (container = document, useDefault = true) {
-    const elem = this.getCurrentSelectorLi(container)
-    if (elem) return elem.dataset.selector
+    const record = container.querySelector('.selector-list-container .selector-element.active')
+    if (record) return record.dataset.selector
     if (useDefault) return this.getDefaultSelector()
   },
 
   getDefaultSelector () {
-    const ref = StateSelectedElement.getStyleRef()
-    return HelperStyle.buildRefSelector(ref)
+    const element = StateSelectedElement.getElement()
+    const refs = HelperElement.getAllRefsObject(element.classList)
+    return HelperStyle.buildRefSelector(refs.style)
   },
 
   getCssSelector (ref, selectorLabel) {

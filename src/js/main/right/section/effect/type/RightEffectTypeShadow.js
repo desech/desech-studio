@@ -11,8 +11,8 @@ export default {
     return HelperDOM.getTemplate('template-effect-box-shadow')
   },
 
-  getParsedValues () {
-    const value = StateStyleSheet.getPropertyValue('box-shadow')
+  getParsedValues (style = null) {
+    const value = style ? style['box-shadow'] : StateStyleSheet.getPropertyValue('box-shadow')
     if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
     return this.parseCSS(value)
   },

@@ -2,9 +2,9 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import RightEffectList from './effect/RightEffectList.js'
 
 export default {
-  getSection (style) {
+  getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template, style)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -12,7 +12,7 @@ export default {
     return HelperDOM.getTemplate('template-style-effect')
   },
 
-  injectData (template, style) {
-    RightEffectList.injectList(template)
+  injectData (template, sectionData) {
+    RightEffectList.injectList(template, sectionData)
   }
 }

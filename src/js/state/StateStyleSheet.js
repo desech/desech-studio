@@ -102,15 +102,15 @@ export default {
       const currentSelector = array[i].cssRules[0].cssRules[0].selectorText
       let foundPos
       if (cls) {
-        foundPos = this.getClassInsertSheetInnerPosition(previousSelector, currentSelector, cls, i)
+        foundPos = this.getClassInsertSheetInnerPos(previousSelector, currentSelector, cls, i)
       } else if (ref) {
-        foundPos = this.getRefInsertSheetInnerPosition(previousSelector, currentSelector, ref, i)
+        foundPos = this.getRefInsertSheetInnerPos(previousSelector, currentSelector, ref, i)
       }
       if (foundPos) return foundPos
     }
   },
 
-  getClassInsertSheetInnerPosition (previousSelector, currentSelector, cls, pos) {
+  getClassInsertSheetInnerPos (previousSelector, currentSelector, cls, pos) {
     const isPrevious = HelperStyle.selectorHasClass(previousSelector, cls)
     const isCurrent = HelperStyle.selectorHasClass(currentSelector, cls)
     const isClass = HelperStyle.isClassSelector(currentSelector)
@@ -120,7 +120,7 @@ export default {
     }
   },
 
-  getRefInsertSheetInnerPosition (previousSelector, currentSelector, ref, pos) {
+  getRefInsertSheetInnerPos (previousSelector, currentSelector, ref, pos) {
     const isPrevious = HelperStyle.selectorHasRef(previousSelector, ref)
     const isCurrent = HelperStyle.selectorHasRef(currentSelector, ref)
     if (isPrevious && !isCurrent) {
@@ -171,8 +171,8 @@ export default {
     HelperLocalStore.setItem('selector-' + selector, style)
   },
 
-  getCurrentStyleObject () {
-    const selector = StyleSheetSelector.getCurrentSelector()
+  getCurrentStyleObject (selector = null) {
+    if (!selector) selector = StyleSheetSelector.getCurrentSelector()
     const style = this.getSelectorStyle(selector)
     return this.convertStyleArrayToObject(style)
   },

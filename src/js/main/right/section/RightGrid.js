@@ -3,9 +3,9 @@ import ChangeStyleField from '../../../component/ChangeStyleField.js'
 import RightGridTrack from './grid/RightGridTrack.js'
 
 export default {
-  getSection (style) {
+  getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template, style)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -13,8 +13,8 @@ export default {
     return HelperDOM.getTemplate('template-style-grid')
   },
 
-  injectData (template, style) {
-    ChangeStyleField.injectFields(template, style)
+  injectData (template, sectionData) {
+    ChangeStyleField.injectFields(template, sectionData)
     RightGridTrack.injectTrack(template, 'row')
     RightGridTrack.injectTrack(template, 'column')
   }

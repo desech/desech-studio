@@ -64,7 +64,7 @@ export default {
   },
 
   changeOtherFields (fields, type, value) {
-    const style = StateSelectedElement.getStyle()
+    const style = StateSelectedElement.getComputedStyle()
     for (const dir of ['left', 'right', 'bottom']) {
       const name = `${type}-${dir}`
       InputUnitField.setValue(fields[name], value, style[name])
@@ -80,12 +80,10 @@ export default {
     })
   },
 
-  injectFields (container, style) {
-    const selector = StyleSheetSelector.getCurrentSelector()
+  injectFields (container, data) {
     for (const field of container.elements) {
       if (!field.classList.contains('margpad-field')) continue
-      const css = StateStyleSheet.getPropertyValue(field.name, selector)
-      InputUnitField.setValue(field, css, style[field.name])
+      InputUnitField.setValue(field, data.style[field.name], data.computedStyle[field.name])
     }
   },
 

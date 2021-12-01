@@ -6,7 +6,6 @@ import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
-import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 
 export default {
   getEvents () {
@@ -42,8 +41,8 @@ export default {
     this.selectButton(button)
     const form = button.closest('form')
     RightBorderFillCommon.hideFillContainer(form)
-    const style = StateSelectedElement.getStyle()
-    this.injectSide(form, style, button.value)
+    const data = RightCommon.getSectionData()
+    this.injectSide(form, data, button.value)
   },
 
   selectButton (button) {
@@ -104,9 +103,9 @@ export default {
     await this.changeStyle(input, infix)
   },
 
-  injectSide (form, style, type = 'all') {
+  injectSide (form, data, type = 'all') {
     this.injectSideContainer(form, type)
-    this.injectSize(form, style, type)
+    this.injectSize(form, data, type)
     RightBorderFill.injectFill(form, type)
   },
 
@@ -116,24 +115,27 @@ export default {
     HelperDOM.replaceOnlyChild(block, template)
   },
 
-  injectSize (form, style, type) {
-    // style has all the computed style properties, while css contains the element sheet css
-    const css = StateStyleSheet.getCurrentStyleObject()
+  injectSize (form, data, type) {
     if (type === 'all') {
-      this.injectSizeAll(form.elements['border-width'], css, style)
+      this.injectSizeAll(form.elements['border-width'], data)
       return form.elements['border-width']
     } else {
-      // top, bottom, left, right
-      const name = `border-${type}-width`
-      InputUnitField.setValue(form.elements[name], css[name], style[name])
-      return form.elements[name]
+      this.injectOneSize(form, data, type)
     }
   },
 
-  injectSizeAll (field, css, style) {
-    if (css['border-top-width'] && css['border-right-width'] && css['border-bottom-width'] &&
-      css['border-left-width']) {
-      InputUnitField.setValue(field, css['border-top-width'], style['border-top-width'])
+  injectSizeAll (field, data) {
+    if (data.style['border-top-width'] && data.style['border-right-width'] &&
+      data.style['border-bottom-width'] && data.style['border-left-width']) {
+      InputUnitField.setValue(field, data.style['border-top-width'],
+        data.computedStyle['border-top-width'])
     }
+  },
+
+  injectOneSize (form, data, type) {
+    // top, bottom, left, right
+    const name = `border-${type}-width`
+    InputUnitField.setValue(form.elements[name], data.style[name], data.computedStyle[name])
+    return form.elements[name]
   }
 }

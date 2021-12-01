@@ -23,13 +23,13 @@ export default {
     return HelperElement.getStyleRef(element)
   },
 
-  getStyle (element = null) {
+  getComputedStyle (element = null) {
     element = element || this.getElement()
     return getComputedStyle(element)
   },
 
   getComputed (property, style = null) {
-    style = style || this.getStyle()
+    style = style || this.getComputedStyle()
     return style.getPropertyValue(property) || ''
   },
 

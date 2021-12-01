@@ -3,14 +3,15 @@ import RightCSSList from './css/RightCSSList.js'
 import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties.js'
 
 export default {
-  getSection () {
+  getSection (sectionData) {
     const template = HelperDOM.getTemplate('template-style-css')
-    this.injectData(template)
+    this.injectData(template, sectionData)
     return template
   },
 
-  injectData (template) {
-    const properties = StyleSheetProperties.getCustomProperties()
-    RightCSSList.injectList(template.getElementsByClassName('add-css-dropdown')[0], properties)
+  injectData (template, sectionData) {
+    const select = template.getElementsByClassName('add-css-dropdown')[0]
+    const properties = StyleSheetProperties.getCustomProperties(sectionData.style)
+    RightCSSList.injectList(select, properties)
   }
 }

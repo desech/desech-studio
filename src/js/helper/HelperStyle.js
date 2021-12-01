@@ -187,7 +187,7 @@ export default {
   },
 
   parseCSSValues (string, options) {
-    if (!string.trim()) return []
+    if (!string || !string.trim()) return []
     const values = HelperRegex.splitByCharacter(string, options.valuesDelimiter)
     const result = []
     for (const val of values) {

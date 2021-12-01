@@ -11,8 +11,8 @@ export default {
     return HelperDOM.getTemplate(`template-effect-filter-${name}`)
   },
 
-  getParsedValues () {
-    const value = StateStyleSheet.getPropertyValue('filter')
+  getParsedValues (style = null) {
+    const value = style ? style.filter : StateStyleSheet.getPropertyValue('filter')
     if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
     return this.parseCSS(value)
   },

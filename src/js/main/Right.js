@@ -4,8 +4,8 @@ import RightSection from './right/RightSection.js'
 import StateSelectedElement from '../state/StateSelectedElement.js'
 import HelperEvent from '../helper/HelperEvent.js'
 import HelperElement from '../helper/HelperElement.js'
-import StyleSheetSelector from '../state/stylesheet/StyleSheetSelector.js'
 import RightPage from './right/section/RightPage.js'
+import RightCommon from './right/RightCommon.js'
 
 export default {
   getEvents () {
@@ -33,9 +33,8 @@ export default {
 
   reloadPanel () {
     if (StateSelectedElement.getRef() && this.getContainer()) {
-      const selector = StyleSheetSelector.getCurrentSelector(document, false)
       this.clearPanel()
-      this.loadPanel(selector)
+      this.loadPanel()
     }
   },
 
@@ -54,28 +53,13 @@ export default {
     return document.getElementById('main-style-sections')
   },
 
-  loadPanel (selector) {
+  loadPanel () {
     const element = StateSelectedElement.getElement()
     if (!element || !HelperElement.isCanvasElement(element)) return
-    const sectionClasses = RightSection.getSectionClasses()
-    const sections = RightSection.getList(sectionClasses)
-    this.selectPreviousSelector(sections[1], selector)
+    const classes = RightSection.getSectionClasses()
+    const data = RightCommon.getSectionData()
+    const sections = RightSection.getList(classes, data)
     RightSection.addToPanel(sections, this.getContainer())
-    RightSubPanel.loadPanel()
-  },
-
-  selectPreviousSelector (container, selector) {
-    if (!container || !selector) return
-    const defaultLi = container.querySelector('.selector-element.active')
-    const selectorLi = this.getCurrentSelector(container, selector)
-    if (!defaultLi || !selectorLi) return
-    defaultLi.classList.remove('active')
-    selectorLi.classList.add('active')
-  },
-
-  getCurrentSelector (container, selector) {
-    for (const li of container.getElementsByClassName('selector-element')) {
-      if (li.dataset.selector === selector) return li
-    }
+    RightSubPanel.loadPanel(data)
   }
 }

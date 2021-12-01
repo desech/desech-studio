@@ -8,7 +8,7 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
 
 export default {
-  getSection () {
+  getSection (sectionData) {
     const template = this.getTemplate()
     this.injectData(template)
     return template

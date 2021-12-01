@@ -6,7 +6,7 @@ import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
 
 export default {
-  getSection () {
+  getSection (sectionData) {
     const template = this.getTemplate()
     this.injectData(template)
     return template
@@ -17,6 +17,8 @@ export default {
   },
 
   injectData (template) {
+    // @todo in the future show all selectors for that element like dev tools
+    // use `element.is(rules[i].selectorText)`
     this.injectDefaultSelector(template)
     const selectors = StyleSheetSelector.getDisplayElementSelectors()
     this.injectSelectors(selectors, template)
@@ -26,8 +28,8 @@ export default {
 
   injectDefaultSelector (container) {
     const selector = StyleSheetSelector.getDefaultSelector()
-    const element = this.getSelectorElement(selector, container)
-    container.getElementsByClassName('default-selector-list')[0].appendChild(element)
+    const record = this.getSelectorRecord(selector, container)
+    container.getElementsByClassName('default-selector-list')[0].appendChild(record)
   },
 
   injectSelectors (selectors, template) {
@@ -46,51 +48,51 @@ export default {
   },
 
   injectSelector (selector, template, refList, classList) {
-    const element = this.getSelectorElement(selector, template)
+    const record = this.getSelectorRecord(selector, template)
     const classSelector = HelperStyle.isClassSelector(selector)
-    classSelector ? classList.appendChild(element) : refList.appendChild(element)
+    classSelector ? classList.appendChild(record) : refList.appendChild(record)
   },
 
-  getSelectorElement (selector, container) {
-    const element = HelperDOM.getTemplate('template-style-selector-element')
-    this.prefillSelector(element, selector)
-    return element
+  getSelectorRecord (selector, container) {
+    const record = HelperDOM.getTemplate('template-style-selector-element')
+    this.prefillSelector(record, selector)
+    return record
   },
 
-  prefillSelector (element, selector) {
-    element.dataset.selector = selector
+  prefillSelector (record, selector) {
+    record.dataset.selector = selector
     const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getStyleRef())
     const isDefault = (title === '')
-    this.prefillSelectorDrag(element, !isDefault)
-    this.prefillSelectorTitle(element, title)
-    this.prefillSelectorButtons(selector, element, !isDefault)
+    this.prefillSelectorDrag(record, !isDefault)
+    this.prefillSelectorTitle(record, title)
+    this.prefillSelectorButtons(selector, record, !isDefault)
   },
 
-  prefillSelectorDrag (element, show) {
+  prefillSelectorDrag (record, show) {
     if (!show) return
-    const button = element.getElementsByClassName('sort-selector-button')[0]
+    const button = record.getElementsByClassName('sort-selector-button')[0]
     button.style.removeProperty('visibility')
   },
 
-  prefillSelectorTitle (element, title) {
+  prefillSelectorTitle (record, title) {
     if (!title) return
-    const node = element.getElementsByClassName('selector-title')[0]
+    const node = record.getElementsByClassName('selector-title')[0]
     node.textContent = title
     node.dataset.tooltip = title
   },
 
-  prefillSelectorButtons (selector, element, show) {
+  prefillSelectorButtons (selector, record, show) {
     if (!show) return
-    HelperDOM.show(element.getElementsByClassName('list-elem-buttons')[0])
+    HelperDOM.show(record.getElementsByClassName('list-elem-buttons')[0])
     if (HelperStyle.isClassSelector(selector)) {
-      HelperDOM.show(element.getElementsByClassName('unlink-class-button')[0])
+      HelperDOM.show(record.getElementsByClassName('unlink-class-button')[0])
     }
   },
 
   activateSelector (container) {
-    const element = container.querySelector('.class-selector-list li') ||
+    const record = container.querySelector('.class-selector-list li') ||
       container.querySelector('.default-selector-list li')
-    RightSelectorCommon.activateSelector(element, container)
+    RightSelectorCommon.activateSelector(record, container)
   },
 
   highlightOverides (template) {

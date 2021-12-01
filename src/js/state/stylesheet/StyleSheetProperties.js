@@ -121,9 +121,8 @@ export default {
     ]
   },
 
-  getCustomProperties () {
+  getCustomProperties (style) {
     const editorProperties = this.getEditorProperties()
-    const style = StateStyleSheet.getCurrentStyleObject()
     const difference = ExtendJS.arrayDifference(Object.keys(style), editorProperties)
     const merged = difference.reduce((obj, val) => ({ ...obj, [val]: style[val] }), {})
     this.fixBackgroundClipBug(merged)

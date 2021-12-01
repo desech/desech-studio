@@ -3,9 +3,9 @@ import ChangeStyleField from '../../../component/ChangeStyleField.js'
 import RightSizeMargin from './size/RightSizeMargin.js'
 
 export default {
-  getSection (style) {
+  getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template, style)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -13,9 +13,9 @@ export default {
     return HelperDOM.getTemplate('template-style-size')
   },
 
-  injectData (template, style) {
-    ChangeStyleField.injectFields(template, style)
-    RightSizeMargin.injectFields(template, style)
+  injectData (template, sectionData) {
+    ChangeStyleField.injectFields(template, sectionData)
+    RightSizeMargin.injectFields(template, sectionData)
     RightSizeMargin.injectConstraints(template)
   }
 }

@@ -3,7 +3,6 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import StateStyleSheet from '../../../state/StateStyleSheet.js'
 import HelperRegex from '../../../helper/HelperRegex.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
-import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
 import InputUnitField from '../../../component/InputUnitField.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
@@ -13,9 +12,10 @@ export default {
     const overlay = document.getElementById('element-overlay')
     const element = StateSelectedElement.getElement()
     if (!element) return
+    const style = StateSelectedElement.getComputedStyle()
     const pos = HelperElement.getPosition(element)
     this.setPosition(overlay, pos)
-    this.setBorders(element, overlay)
+    this.setBorders(element, overlay, style)
   },
 
   setPosition (overlay, pos) {
@@ -25,8 +25,8 @@ export default {
     overlay.style.top = pos.relativeTop + 'px'
   },
 
-  setBorders (element, overlay) {
-    this.setSizeBorders(overlay)
+  setBorders (element, overlay, style) {
+    this.setSizeBorders(overlay, style)
     if (HelperElement.getType(element) === 'component') {
       HelperDOM.hide(overlay.getElementsByClassName('resize-button'))
     } else {
@@ -34,20 +34,18 @@ export default {
     }
   },
 
-  setSizeBorders (overlay) {
+  setSizeBorders (overlay, style) {
     const box = overlay.getElementsByClassName('resize-size')[0]
     if (!box) return
-    const selector = StyleSheetSelector.getDefaultSelector()
     for (const dir of ['top', 'bottom', 'left', 'right']) {
-      this.setSizeBorder(box, dir, selector)
+      this.setSizeBorder(box, dir, style)
     }
   },
 
-  setSizeBorder (box, dir, selector) {
+  setSizeBorder (box, dir, style) {
     const property = `border-${dir}-width`
-    const value = StateStyleSheet.getPropertyValue(property, selector)
     // min value is 1px
-    box.style[property] = parseInt(value) > 1 ? value : '1px'
+    box.style[property] = parseInt(style[property]) > 1 ? style[property] : '1px'
   },
 
   setPaddingBorders (overlay) {

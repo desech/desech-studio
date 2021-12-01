@@ -6,9 +6,10 @@ export default {
     return HelperDOM.getTemplate('template-effect-mix-blend-mode')
   },
 
-  getParsedValues () {
-    const source = StateStyleSheet.getPropertyValue('mix-blend-mode')
-    return this.parseCSS(source)
+  getParsedValues (style = null) {
+    const name = 'mix-blend-mode'
+    const value = style ? style[name] : StateStyleSheet.getPropertyValue(name)
+    return this.parseCSS(value)
   },
 
   parseCSS (value) {

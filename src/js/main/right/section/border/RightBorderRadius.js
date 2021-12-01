@@ -1,10 +1,7 @@
-import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
 import TabComponent from '../../../../component/TabComponent.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
-import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
-import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 
 export default {
   getEvents () {
@@ -37,8 +34,8 @@ export default {
   },
 
   switchRadius (button) {
-    const style = StateSelectedElement.getStyle()
-    this.injectInputs(button.closest('form'), style, button.value)
+    const data = RightCommon.getSectionData()
+    this.injectInputs(button.closest('form'), button.value, data)
   },
 
   async changeStyleAll (input) {
@@ -96,27 +93,26 @@ export default {
     return input.name.replace('-vertical', '')
   },
 
-  injectRadius (container, style) {
-    const type = this.getRadiusType()
+  injectRadius (container, data) {
+    const type = this.getRadiusType(data)
     this.injectSwitchButton(container, type)
-    this.injectInputs(container, style, type)
+    this.injectInputs(container, type, data)
   },
 
-  getRadiusType () {
-    const values = this.getRadiusTypeValues()
+  getRadiusType (data) {
+    const values = this.getRadiusTypeValues(data)
     for (const val of values) {
       if (val !== values[0]) return 'each'
     }
     return 'all'
   },
 
-  getRadiusTypeValues () {
-    const selector = StyleSheetSelector.getCurrentSelector()
+  getRadiusTypeValues (data) {
     return [
-      StateStyleSheet.getPropertyValue('border-top-left-radius', selector),
-      StateStyleSheet.getPropertyValue('border-top-right-radius', selector),
-      StateStyleSheet.getPropertyValue('border-bottom-left-radius', selector),
-      StateStyleSheet.getPropertyValue('border-bottom-right-radius', selector)
+      data.style['border-top-left-radius'],
+      data.style['border-top-right-radius'],
+      data.style['border-bottom-left-radius'],
+      data.style['border-bottom-right-radius']
     ]
   },
 
@@ -125,16 +121,16 @@ export default {
     TabComponent.selectTab(button)
   },
 
-  injectInputs (container, style, type) {
-    const selector = StyleSheetSelector.getCurrentSelector()
+  injectInputs (container, type, data) {
     for (const field of container.elements) {
       if ((type === 'all' && field.classList.contains('border-radius')) ||
         (type !== 'all' && field.classList.contains('border-radius-each'))) {
         const name = field.classList.contains('border-radius')
           ? 'border-top-left-radius'
           : this.getInputName(field)
-        const cssValues = StateStyleSheet.getPropertyValue(name, selector).split(' ')
-        const styleValues = style[name].split(' ')
+        if (!data.style[name]) continue
+        const cssValues = data.style[name].split(' ')
+        const styleValues = data.computedStyle[name].split(' ')
         this.injectInput(field, cssValues, styleValues)
       }
     }

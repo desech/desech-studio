@@ -1,6 +1,7 @@
 import HelperDOM from '../../helper/HelperDOM.js'
 import RightSection from './RightSection.js'
 import HelperEvent from '../../helper/HelperEvent.js'
+import RightCommon from './RightCommon.js'
 
 export default {
   getEvents () {
@@ -20,8 +21,9 @@ export default {
   },
 
   reloadPanel () {
+    const data = RightCommon.getSectionData()
     this.clearPanel()
-    this.loadPanel()
+    this.loadPanel(data)
   },
 
   clearPanel () {
@@ -36,9 +38,10 @@ export default {
     return document.getElementById('sub-style-sections')
   },
 
-  loadPanel () {
+  loadPanel (data) {
     if (!document.getElementById('selector-section')) return
-    const sections = RightSection.getList(RightSection.getSubSectionClasses())
+    const classes = RightSection.getSubSectionClasses()
+    const sections = RightSection.getList(classes, data)
     RightSection.addToPanel(sections, this.getContainer())
   }
 }

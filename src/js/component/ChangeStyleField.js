@@ -1,4 +1,3 @@
-import StateStyleSheet from '../state/StateStyleSheet.js'
 import InputUnitField from './InputUnitField.js'
 import CheckButtonField from './CheckButtonField.js'
 import HelperEvent from '../helper/HelperEvent.js'
@@ -46,11 +45,10 @@ export default {
     }
   },
 
-  injectFields (form, style) {
-    const css = StateStyleSheet.getCurrentStyleObject()
+  injectFields (form, data) {
     for (const field of form.elements) {
       if (field.classList.contains('change-style')) {
-        this.setValue(field, css[field.name], style[field.name])
+        this.setValue(field, data.style[field.name], data.computedStyle[field.name])
       }
     }
   },

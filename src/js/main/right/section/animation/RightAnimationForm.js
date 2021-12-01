@@ -42,6 +42,10 @@ export default {
     return this.parseCSS(source)
   },
 
+  getValuesFromStyle (style) {
+    return this.parseCSS(style.animation)
+  },
+
   parseCSS (source) {
     return HelperStyle.parseCSSValues(source, {
       valuesDelimiter: ', ',

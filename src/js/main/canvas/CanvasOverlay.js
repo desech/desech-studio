@@ -87,7 +87,7 @@ export default {
   },
 
   marginPaddingOverlay () {
-    const style = StateSelectedElement.getStyle()
+    const style = StateSelectedElement.getComputedStyle()
     for (const type of ['margin', 'padding']) {
       this.marginPaddingDirection(style, type)
     }

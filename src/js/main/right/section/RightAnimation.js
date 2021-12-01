@@ -2,9 +2,9 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import RightAnimationList from './animation/RightAnimationList.js'
 
 export default {
-  getSection (style) {
+  getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template, style)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -12,8 +12,8 @@ export default {
     return HelperDOM.getTemplate('template-style-animation')
   },
 
-  injectData (template, style) {
+  injectData (template, sectionData) {
     RightAnimationList.injectPlayButtons(template)
-    RightAnimationList.injectList(template)
+    RightAnimationList.injectList(template, sectionData)
   }
 }

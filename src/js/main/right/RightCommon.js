@@ -6,8 +6,18 @@ import StyleSheetSelector from '../../state/stylesheet/StyleSheetSelector.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import CanvasCommon from '../canvas/CanvasCommon.js'
+import StateSelectedElement from '../../state/StateSelectedElement.js'
 
 export default {
+  getSectionData () {
+    const currentSelector = StyleSheetSelector.getCurrentSelector()
+    return {
+      currentSelector,
+      style: StateStyleSheet.getCurrentStyleObject(currentSelector),
+      computedStyle: StateSelectedElement.getComputedStyle()
+    }
+  },
+
   async changeStyle (properties, panelReload = false, doCommand = 'changeStyle') {
     const selector = StyleSheetSelector.getCurrentSelector()
     const command = this.initStyleCommand(selector, doCommand)

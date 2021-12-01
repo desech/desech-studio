@@ -154,9 +154,9 @@ export default {
     }
   },
 
-  injectListType (section, property) {
+  injectListType (section, property, style) {
     const list = section.getElementsByClassName(`effect-list-${property}`)[0]
-    const values = this.getModule(property).getParsedValues()
+    const values = this.getModule(property).getParsedValues(style)
     for (const data of values) {
       const subtype = this.getSubtype(property, data)
       this.insertElement(list, property, subtype, data)

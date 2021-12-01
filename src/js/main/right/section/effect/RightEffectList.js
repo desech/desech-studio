@@ -166,10 +166,10 @@ export default {
     await RightEffectType.sortEffects(li.dataset.type, data.from.index, data.to.index)
   },
 
-  injectList (section) {
+  injectList (section, data) {
     const effects = RightEffectCommon.getEffectProperties()
     for (const type of effects) {
-      RightEffectType.injectListType(section, type)
+      RightEffectType.injectListType(section, type, data.style)
     }
   }
 }

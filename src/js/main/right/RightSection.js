@@ -77,23 +77,22 @@ export default {
     if (options && options.callback) options.callback(options.arg1)
   },
 
-  getList (classes) {
+  getList (classes, data) {
     const sections = []
     for (const [name, obj] of Object.entries(classes)) {
-      this.pushSectionToList(sections, name, obj)
+      this.pushSectionToList(sections, name, obj, data)
     }
     return sections
   },
 
-  pushSectionToList (sections, name, obj) {
-    const node = this.getSection(obj)
+  pushSectionToList (sections, name, obj, data) {
+    const node = this.getSection(obj, data)
     if (!this.isSectionAllowed(name)) this.disableSection(node)
     sections.push(node)
   },
 
-  getSection (obj) {
-    const style = StateSelectedElement.getStyle()
-    const container = obj.getSection(style)
+  getSection (obj, data) {
+    const container = obj.getSection(data)
     if (container) RightCommon.processToggle(container)
     return container
   },
@@ -153,9 +152,10 @@ export default {
   },
 
   getSectionByName (name) {
+    const data = RightCommon.getSectionData()
     const classes = { ...this.getSectionClasses(), ...this.getSubSectionClasses() }
     for (const [label, obj] of Object.entries(classes)) {
-      if (label === name) return this.getSection(obj)
+      if (label === name) return this.getSection(obj, data)
     }
   },
 

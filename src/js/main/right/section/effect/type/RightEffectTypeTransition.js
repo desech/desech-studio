@@ -10,8 +10,8 @@ export default {
     return HelperDOM.getTemplate('template-effect-transition')
   },
 
-  getParsedValues () {
-    const value = StateStyleSheet.getPropertyValue('transition')
+  getParsedValues (style = null) {
+    const value = style ? style.transition : StateStyleSheet.getPropertyValue('transition')
     if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
     return this.parseCSS(value)
   },

@@ -27,7 +27,7 @@ export default {
 
   addComputedProps () {
     const data = {}
-    const style = StateSelectedElement.getStyle()
+    const style = StateSelectedElement.getComputedStyle()
     const properties = [
       'padding-top', 'padding-bottom', 'padding-left', 'padding-right',
       'border-top-width', 'border-bottom-width', 'border-left-width', 'border-right-width',

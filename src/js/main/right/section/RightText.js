@@ -6,9 +6,9 @@ import SliderComponent from '../../../component/SliderComponent.js'
 import ColorPickerButton from '../../../component/color-picker/ColorPickerButton.js'
 
 export default {
-  getSection (style) {
+  getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template, style)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -16,8 +16,8 @@ export default {
     return HelperDOM.getTemplate('template-style-text')
   },
 
-  injectData (template, style) {
-    ChangeStyleField.injectFields(template, style)
+  injectData (template, sectionData) {
+    ChangeStyleField.injectFields(template, sectionData)
     RightTextFont.injectFontList(template)
     RightTextFont.injectFontFamily(template)
     const colorContainer = template.querySelector('.color-button-wrapper[data-property="color"]')

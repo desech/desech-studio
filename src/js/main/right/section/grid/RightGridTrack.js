@@ -58,9 +58,9 @@ export default {
     this.reloadTrack(button.closest('.grid-cell'), button.dataset.type)
   },
 
-  injectTrack (template, type) {
+  injectTrack (template, type, style = null) {
     const container = this.getTrackContainer(template, type)
-    const cells = CanvasOverlayCommon.getTrackArray(type)
+    const cells = CanvasOverlayCommon.getTrackArray(type, style)
     if (!cells) return
     for (let i = 0; i < cells.length; i++) {
       this.injectCell(container, {

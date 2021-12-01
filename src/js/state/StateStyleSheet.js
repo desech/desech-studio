@@ -221,14 +221,5 @@ export default {
     const value = StyleSheetCommon.getValue(rule, name)
     if (!name || !value) return
     return { responsive, name, value }
-  },
-
-  getSelectorStyleProperties (selector, checkResponsive = true) {
-    const style = this.getSelectorStyle(selector, checkResponsive)
-    const properties = {}
-    for (const rule of style) {
-      properties[rule.name] = rule.value
-    }
-    return properties
   }
 }

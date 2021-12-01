@@ -77,9 +77,9 @@ export default {
     }
   },
 
-  injectFill (container, type) {
+  injectFill (container, data, type) {
     const select = container.getElementsByClassName('color-button-select')[0]
-    const value = RightBorderFillCommon.getFillValue(type)
+    const value = RightBorderFillCommon.getFillValueByStyle(type, data.style)
     if (value.includes('rgb') || value.includes('url')) {
       select.value = 'choose'
       const preview = container.getElementsByClassName('color-button')[0]

@@ -57,10 +57,12 @@ export default {
     RightCommon.toggleSidebarSection(form)
   },
 
-  fillIsNone () {
+  fillIsNone (style = null) {
     // don't allow other backgrounds when we have set it to none
     // you will have to delete this one before adding other backgrounds
-    const bg = StateStyleSheet.getPropertyValue('background-image')
+    const bg = style
+      ? style['background-image']
+      : StateStyleSheet.getPropertyValue('background-image')
     return (bg === 'none')
   },
 
@@ -145,7 +147,7 @@ export default {
 
   injectList (container, data) {
     const list = container.getElementsByClassName('fill-list')[0]
-    if (this.fillIsNone()) {
+    if (this.fillIsNone(data.style)) {
       RightFillCommon.insertElement(list, 'none')
     } else {
       const backgrounds = RightFillProperty.getBackgroundsFromStyle(data.style)

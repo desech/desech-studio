@@ -15,7 +15,7 @@ export default {
 
   injectData (template, sectionData) {
     ChangeStyleField.injectFields(template, sectionData)
-    RightGridTrack.injectTrack(template, 'row')
-    RightGridTrack.injectTrack(template, 'column')
+    RightGridTrack.injectTrack(template, 'row', sectionData.style)
+    RightGridTrack.injectTrack(template, 'column', sectionData.style)
   }
 }

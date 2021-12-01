@@ -19,10 +19,10 @@ export default {
   injectData (template, sectionData) {
     ChangeStyleField.injectFields(template, sectionData)
     RightTextFont.injectFontList(template)
-    RightTextFont.injectFontFamily(template)
+    RightTextFont.injectFontFamily(template, sectionData.style)
     const colorContainer = template.querySelector('.color-button-wrapper[data-property="color"]')
-    ColorPickerButton.injectPropertyColor(colorContainer)
-    RightTextDecoration.injectTextDecorationLine(template)
+    ColorPickerButton.injectPropertyColor(colorContainer, sectionData.style)
+    RightTextDecoration.injectTextDecorationLine(template, sectionData.style)
     SliderComponent.setOpened(template)
   }
 }

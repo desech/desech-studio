@@ -49,27 +49,27 @@ export default {
     return values.join(' ')
   },
 
-  injectTextDecorationLine (container) {
-    this.injectDecorationLine(container)
-    this.injectDecorationColor(container)
+  injectTextDecorationLine (container, style) {
+    this.injectDecorationLine(container, style)
+    this.injectDecorationColor(container, style)
   },
 
-  injectDecorationLine (container) {
-    const values = this.getStyleValues()
+  injectDecorationLine (container, style) {
+    const values = this.getStyleValues(style)
     if (!values) return
     for (const button of container.getElementsByClassName('text-decoration')) {
       if (values.includes(button.value)) button.classList.add('selected')
     }
   },
 
-  getStyleValues () {
-    const value = StateStyleSheet.getPropertyValue('text-decoration-line')
+  getStyleValues (style) {
+    const value = style['text-decoration-line']
     return value ? value.split(' ') : null
   },
 
-  injectDecorationColor (container) {
+  injectDecorationColor (container, style) {
     const query = '.color-button-wrapper[data-property="text-decoration-color"]'
     const colorContainer = container.querySelector(query)
-    ColorPickerButton.injectPropertyColor(colorContainer)
+    ColorPickerButton.injectPropertyColor(colorContainer, style)
   }
 }

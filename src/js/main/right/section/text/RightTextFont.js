@@ -88,9 +88,8 @@ export default {
     return option
   },
 
-  injectFontFamily (container) {
+  injectFontFamily (container, style) {
     const select = container.getElementsByClassName('font-family')[0]
-    const value = StateStyleSheet.getPropertyValue('font-family').replaceAll('"', '')
-    select.value = value
+    select.value = style['font-family'] ? style['font-family'].replaceAll('"', '') : ''
   }
 }

@@ -4,6 +4,16 @@ import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 
 export default {
+  getFillValueByStyle (type, style) {
+    if (style['border-image-source']) {
+      return style['border-image-source']
+    } else if (type === 'all') {
+      return style['border-top-color'] || ''
+    } else {
+      return style[`border-${type}-color`] || ''
+    }
+  },
+
   getFillValue (type) {
     const selector = StyleSheetSelector.getCurrentSelector()
     return StateStyleSheet.getPropertyValue('border-image-source', selector) ||

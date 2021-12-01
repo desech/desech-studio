@@ -106,7 +106,7 @@ export default {
   injectSide (form, data, type = 'all') {
     this.injectSideContainer(form, type)
     this.injectSize(form, data, type)
-    RightBorderFill.injectFill(form, type)
+    RightBorderFill.injectFill(form, data, type)
   },
 
   injectSideContainer (container, type) {

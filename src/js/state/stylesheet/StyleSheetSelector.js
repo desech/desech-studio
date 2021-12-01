@@ -5,6 +5,8 @@ import StyleSheetCommon from './StyleSheetCommon.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import StateCommandOverride from '../command/StateCommandOverride.js'
+import HelperComponent from '../../helper/HelperComponent.js'
+import HelperOverride from '../../helper/HelperOverride.js'
 
 export default {
   getDisplayElementSelectors () {
@@ -54,16 +56,45 @@ export default {
     return false
   },
 
-  getCurrentSelector (container = document, useDefault = true) {
-    const record = container.querySelector('.selector-list-container .selector-element.active')
-    if (record) return record.dataset.selector
-    if (useDefault) return this.getDefaultSelector()
+  getCurrentSelector () {
+    const record = document.querySelector('.selector-list-container .selector-element.active')
+    return record ? record.dataset.selector : this.getDefaultSelector()
   },
 
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
-    const refs = HelperElement.getAllRefsObject(element.classList)
-    return HelperStyle.buildRefSelector(refs.style)
+    if (HelperComponent.belongsToAComponent(element)) {
+      console.log(this.getComponentSelector(element))
+      return this.getComponentSelector(element)
+    } else {
+      const ref = HelperElement.getStyleRef(element)
+      return HelperStyle.buildRefSelector(ref)
+    }
+  },
+
+  getComponentSelector (element) {
+    const parent = this.buildComponentParentsSelector(element)
+    const ref = HelperElement.getStyleRef(element)
+    const selector = HelperStyle.buildRefSelector(ref)
+    return HelperComponent.isComponent(element) ? parent + selector : parent + ' ' + selector
+  },
+
+  buildComponentParentsSelector (element) {
+    const parents = HelperOverride.getElementParents(element)
+    const parts = []
+    for (const parent of parents) {
+      parts.push(this.buildComponentSelector(parent.data.ref, parent.data.variants))
+    }
+    return parts.join(' ')
+  },
+
+  buildComponentSelector (ref, variants) {
+    return '.' + ref + this.buildVariantSelector(variants)
+  },
+
+  buildVariantSelector (variants) {
+    const value = HelperComponent.buildDataVariant(variants)
+    return value ? `[data-variant="${value}"]` : '[data-variant]'
   },
 
   getCssSelector (ref, selectorLabel) {

@@ -52,10 +52,10 @@ export default {
     }
   },
 
-  injectPropertyColor (container) {
+  injectPropertyColor (container, style = null) {
     const nodes = this.getNodes(container)
-    const color = StateStyleSheet.getPropertyValue(nodes.property)
-    if (color.startsWith('rgb')) {
+    const color = style ? style[nodes.property] : StateStyleSheet.getPropertyValue(nodes.property)
+    if (color && color.startsWith('rgb')) {
       nodes.select.value = 'choose'
       nodes.button.style.backgroundColor = color
     } else if (color) {

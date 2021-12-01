@@ -77,9 +77,9 @@ export default {
     counter.style.opacity = 1
   },
 
-  getTrackArray (type) {
+  getTrackArray (type, style = null) {
     const property = `grid-template-${type}s`
-    const track = StateStyleSheet.getPropertyValue(property)
+    const track = style ? style[property] : StateStyleSheet.getPropertyValue(property)
     if (!track) return
     const array = HelperRegex.splitNoParenthesis(track)
     return this.formatArray(array)

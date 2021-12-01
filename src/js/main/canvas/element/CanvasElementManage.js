@@ -345,7 +345,7 @@ export default {
   async copySelector () {
     const selector = StyleSheetSelector.getCurrentSelector()
     if (!selector) return null
-    const properties = StateStyleSheet.getSelectorStyleProperties(selector)
+    const properties = StateStyleSheet.getCurrentStyleObject(selector)
     await this.saveToClipboard({ selector: { selector, properties } })
     return properties
   },
@@ -368,8 +368,7 @@ export default {
   },
 
   joinProperties (pastedProperties) {
-    const selector = StyleSheetSelector.getCurrentSelector()
-    const currentProperties = StateStyleSheet.getSelectorStyleProperties(selector)
+    const currentProperties = StateStyleSheet.getCurrentStyleObject()
     const empty = StyleSheetProperties.getEmptyProperties(currentProperties)
     return { ...empty, ...pastedProperties }
   }

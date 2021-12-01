@@ -32,39 +32,16 @@ export default {
     StyleSheetCommon.haveAtLeastOneRule(sheet, data.selector)
   },
 
-  initElementStyle (ref, createElement = true) {
-    const selectors = { default: { '': '' } }
-    this.addStyleSelectors(ref, selectors)
-  },
-
-  addStyleSelectors (ref, selectors) {
-    for (const [selectorLabel, style] of Object.entries(selectors)) {
-      const selector = StyleSheetSelector.getCssSelector(ref, selectorLabel)
-      const data = this.convertStyleObjectToArray(style)
-      this.addSelector(selector, data)
-    }
-  },
-
-  convertStyleObjectToArray (object) {
-    const array = []
-    for (const [name, value] of Object.entries(object)) {
-      array.push({ name, value })
-    }
-    return array
-  },
-
-  convertStyleArrayToObject (array) {
-    const object = {}
-    for (const prop of array) {
-      object[prop.name] = prop.value
-    }
-    return object
+  initElementStyle (ref) {
+    const selector = HelperStyle.buildRefSelector(ref)
+    return this.addSelector(selector, [{ name: '', value: '' }])
   },
 
   addSelector (selector, style) {
     const sheet = StyleSheetCommon.initStyleSheet()
     StyleSheetCommon.addRemoveRules(sheet, selector, style)
     this.addPositionedSheet(sheet, selector)
+    return sheet
   },
 
   addPositionedSheet (sheet, selector) {
@@ -184,20 +161,8 @@ export default {
 
   getCreateSelectorSheet (selector) {
     let sheet = StyleSheetCommon.getSelectorSheet(selector)
-    if (!sheet) sheet = this.createMissingSheet(selector)
+    if (!sheet) sheet = this.addSelector(selector, [{ name: '', value: '' }])
     return sheet
-  },
-
-  createMissingSheet (selector) {
-    // the selector can have the responsive class in front
-    if (/\.e0([a-z0-9]*)$/g.test(selector)) {
-      // init the default element sheet
-      this.initElementStyle(StateSelectedElement.getStyleRef(), false)
-    } else {
-      // create the selector sheet
-      this.addSelector(selector, [{}])
-    }
-    return StyleSheetCommon.getSelectorSheet(selector)
   },
 
   extractStyleFromRules (rules, checkResponsive) {
@@ -221,5 +186,13 @@ export default {
     const value = StyleSheetCommon.getValue(rule, name)
     if (!name || !value) return
     return { responsive, name, value }
+  },
+
+  convertStyleArrayToObject (array) {
+    const object = {}
+    for (const prop of array) {
+      object[prop.name] = prop.value
+    }
+    return object
   }
 }

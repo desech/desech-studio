@@ -97,12 +97,6 @@ export default {
     return value ? `[data-variant="${value}"]` : '[data-variant]'
   },
 
-  getCssSelector (ref, selectorLabel) {
-    let selector = HelperStyle.buildRefSelector(ref)
-    selector += (selectorLabel !== 'default') ? selectorLabel : ''
-    return selector
-  },
-
   selectorExists (selector) {
     const sheet = StyleSheetCommon.getSelectorSheet(selector)
     return sheet ? Boolean(sheet.cssRules.length) : false

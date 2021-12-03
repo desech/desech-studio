@@ -102,7 +102,7 @@ export default {
 
   validateComponent (form, data) {
     data.component = HelperComponent.sanitizeComponent(data.component)
-    if (!data.component || !['block', 'text'].includes(data.component)) {
+    if (!data.component || HelperStyle.isValidComponent(data.component)) {
       return true
     }
     form.elements.component.setCustomValidity(form.dataset.error)

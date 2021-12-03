@@ -277,5 +277,9 @@ export default {
       case 'background-blend-mode':
         return 'normal'
     }
+  },
+
+  isValidComponent (cls) {
+    return (cls !== 'block' && cls !== 'text' && !cls.startsWith('e0'))
   }
 }

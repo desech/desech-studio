@@ -6,6 +6,7 @@ import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperFile from '../../helper/HelperFile.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import TopCommandCommon from '../../main/top/command/TopCommandCommon.js'
+import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
 
 export default {
   async createVariant (component, obj) {
@@ -33,6 +34,7 @@ export default {
     delete data.overrides
     this.updateVariantInstance(data, name, value, component)
     this.saveMainDataAllComponents(data.file, data.main)
+    StyleSheetComponent.convertOverrideToVariant(data.ref, name, value)
     HelperTrigger.triggerReload('component-section')
   },
 

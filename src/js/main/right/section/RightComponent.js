@@ -5,6 +5,7 @@ import HelperComponent from '../../../helper/HelperComponent.js'
 import RightHtmlCommon from './html/RightHtmlCommon.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
+import StyleSheetComponent from '../../../state/stylesheet/StyleSheetComponent.js'
 
 export default {
   getSection (sectionData) {
@@ -86,10 +87,14 @@ export default {
   },
 
   injectVariantsForm (container, data, isComponentElement) {
-    if (isComponentElement || ExtendJS.isEmpty(data?.overrides)) return
+    if (isComponentElement || !this.hasOverrides(data)) return
     const form = container.getElementsByClassName('style-variant-form-container')[0]
     HelperDOM.show(form)
     this.injectVariantsDatalist(container, data)
+  },
+
+  hasOverrides (data) {
+    return !ExtendJS.isEmpty(data?.overrides) || StyleSheetComponent.hasOverrides(data.ref)
   },
 
   injectVariantsDatalist (container, data) {

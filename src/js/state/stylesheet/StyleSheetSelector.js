@@ -6,7 +6,7 @@ import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import StateCommandOverride from '../command/StateCommandOverride.js'
 import HelperComponent from '../../helper/HelperComponent.js'
-import HelperOverride from '../../helper/HelperOverride.js'
+import StyleSheetComponent from './StyleSheetComponent.js'
 
 export default {
   getDisplayElementSelectors () {
@@ -20,8 +20,8 @@ export default {
     if (!ref) ref = HelperElement.getStyleRef(element)
     const classes = HelperElement.getClasses(element)
     for (const sheet of document.adoptedStyleSheets) {
-      const rules = this.getElementSelector(sheet, ref, classes, filter)
-      if (rules) selectors.push(rules)
+      const selector = this.getElementSelector(sheet, ref, classes, filter)
+      if (selector) selectors.push(selector)
     }
     this.addOrphanClassesToSelectors(selectors, classes)
     return ExtendJS.unique(selectors)
@@ -64,27 +64,11 @@ export default {
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
     if (HelperComponent.belongsToAComponent(element)) {
-      return this.getComponentRefSelector(element)
+      return StyleSheetComponent.getRefSelector(element)
     } else {
       const ref = HelperElement.getStyleRef(element)
       return HelperStyle.buildRefSelector(ref)
     }
-  },
-
-  getComponentRefSelector (element) {
-    const parent = this.buildComponentRefParentsSelector(element)
-    const ref = HelperElement.getStyleRef(element)
-    const selector = HelperStyle.buildRefSelector(ref)
-    return HelperComponent.isComponent(element) ? parent + selector : parent + ' ' + selector
-  },
-
-  buildComponentRefParentsSelector (element) {
-    const parents = HelperOverride.getElementParents(element)
-    const parts = []
-    for (const parent of parents) {
-      parts.push(`.${parent.data.ref}[data-variant]`)
-    }
-    return parts.join(' ')
   },
 
   selectorExists (selector) {

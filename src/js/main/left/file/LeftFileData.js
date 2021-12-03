@@ -3,13 +3,13 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperFile from '../../../helper/HelperFile.js'
 import LeftFileLoad from './LeftFileLoad.js'
 import HelperProject from '../../../helper/HelperProject.js'
-import TopCommandSave from '../../top/command/TopCommandSave.js'
+import TopCommandCommon from '../../top/command/TopCommandCommon.js'
 
 export default {
   async buildList (container, type, list, options) {
     if (options.loadFile) {
       await LeftFileLoad.loadFile(options.loadFile)
-      if (options.projectSave) await TopCommandSave.save()
+      if (options.projectSave) await TopCommandCommon.executeSaveFile()
     }
     await this.insertItems(list)
     LeftCommon.expandStateItems(container, type)

@@ -166,7 +166,7 @@ export default {
     }
   },
 
-  // obj1 is mutated
+  // obj1 is mutated; obj2 is placed on top of obj1
   mergeObjects (obj1, obj2) {
     ExtendJS.mergeDeep(obj1, obj2)
     this.mergeObjectsFix(obj1)

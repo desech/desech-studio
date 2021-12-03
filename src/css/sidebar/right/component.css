@@ -7,13 +7,6 @@
   vertical-align: middle;
 }
 
-.sidebar-right #component-section .swap-component-button {
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  gap: 7px;
-}
-
 .sidebar-right #component-section .style-variant-form {
   grid-template-columns: 1fr 1fr 18px;
   column-gap: 5px;

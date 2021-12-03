@@ -59,8 +59,15 @@ export default {
   },
 
   // the order is the one from the <link> css files: root, component-css, component-html, page
-  // new class selectors are added at the end of all component-css selectors
-  // new ref component selectors
+  //  1. root variables
+  //  2. component-css classes
+  //  3. component-html variants
+  //  4. component-html refs and overrides in random order
+  //  5. e000body
+  //  6. page refs
+  // new class selectors + new variant component selectors
+  //  - are added at the end of all component-css class selectors
+  // new ref component selectors + component ref override selectors
   //  - inside components -> are added at the end of all selectors
   //  - inside pages -> are added at the end of all ref component selectors, before .e000body
   // new ref page selectors are added at the end of all selectors

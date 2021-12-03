@@ -237,17 +237,22 @@ export default {
     await this.resetComponentOverrides(data)
   },
 
-  async saveVariant (data) {
+  async createVariant (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    await StateCommandVariant.saveVariant(element, data.name, data.value, data.overrides,
-      data.undo)
+    await StateCommandVariant.createVariant(element, data)
+  },
+
+  async updateVariant (data) {
+    const element = HelperElement.getElement(data.ref)
+    if (!element) return
+    await StateCommandVariant.updateVariant(element, data)
   },
 
   async deleteVariant (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    await StateCommandVariant.deleteVariant(element, data.name, data.value, data.undo)
+    await StateCommandVariant.deleteVariant(element, data)
   },
 
   async switchVariant (data) {

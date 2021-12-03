@@ -6,13 +6,15 @@ import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperElement from '../../../../helper/HelperElement.js'
+import HelperOverride from '../../../../helper/HelperOverride.js'
+import ExtendJS from '../../../../helper/ExtendJS.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickShowSaveEvent', 'clickConfirmSaveEvent', 'clickPromptDeleteEvent',
-        'clickConfirmDeleteEvent', 'clickShowRenameEvent', 'clickCancelRenameEvent',
-        'clickConfirmRenameEvent'],
+      click: ['clickShowCreateEvent', 'clickConfirmCreateEvent', 'clickUpdateVariantEvent',
+        'clickPromptDeleteEvent', 'clickConfirmDeleteEvent', 'clickShowRenameEvent',
+        'clickCancelRenameEvent', 'clickConfirmRenameEvent'],
       input: ['inputResetInvalidFieldsEvent'],
       change: ['changeSwitchVariantEvent']
     }
@@ -22,15 +24,21 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickShowSaveEvent (event) {
-    if (event.target.classList.contains('style-variant-save-button')) {
-      this.showSave(event.target.closest('.style-variant-section'))
+  clickShowCreateEvent (event) {
+    if (event.target.classList.contains('style-variant-create-button')) {
+      this.showCreate(event.target.closest('.style-variant-section'))
     }
   },
 
-  async clickConfirmSaveEvent (event) {
+  async clickConfirmCreateEvent (event) {
     if (event.target.closest('.style-variant-confirm-button')) {
-      await this.confirmSave(event.target.closest('form'))
+      await this.confirmCreate(event.target.closest('form'))
+    }
+  },
+
+  async clickUpdateVariantEvent (event) {
+    if (event.target.classList.contains('style-variant-update-button')) {
+      await this.updateVariant()
     }
   },
 
@@ -43,7 +51,7 @@ export default {
   async changeSwitchVariantEvent (event) {
     if (event.target.classList.contains('style-variant-element-value')) {
       const fields = event.target.closest('form').elements
-      await this.switchVariant(fields.name.value, fields.value.value)
+      await this.executeSwitch(fields.name.value, fields.value.value)
     }
   },
 
@@ -77,19 +85,26 @@ export default {
     }
   },
 
-  showSave (container) {
+  showCreate (container) {
+    this.validateCreate()
     const form = container.getElementsByClassName('style-variant-form')[0]
     HelperDOM.toggle(form)
     form.elements.name.focus()
   },
 
-  async confirmSave (form) {
+  validateCreate () {
+    const element = StateSelectedElement.getElement()
+    const data = HelperComponent.getComponentData(element)
+    if (data.variants) throw new Error('Please make sure no variants are selected')
+  },
+
+  async confirmCreate (form) {
     const element = StateSelectedElement.getElement()
     if (form.checkValidity()) this.fixNames(form)
     if (form.checkValidity()) this.validateExists(element, form.elements)
     if (form.checkValidity()) {
       HelperDOM.hide(form)
-      await this.successSave(element, form.elements.name.value, form.elements.value.value)
+      await this.executeCreate(element, form.elements.name.value, form.elements.value.value)
     }
   },
 
@@ -119,43 +134,83 @@ export default {
     field.reportValidity()
   },
 
-  async successSave (element, name, value, execute = true) {
+  async executeCreate (element, name, value, execute = true) {
     const data = HelperComponent.getComponentData(element)
-    const ref = HelperElement.getRef(element)
     const cmd = {
       do: {
-        command: 'saveVariant',
-        ref,
+        command: 'createVariant',
+        ref: data.ref,
         name,
         value,
-        overrides: data.overrides
+        overrides: data.overrides,
+        newVariant: true
       },
       undo: {
         command: 'deleteVariant',
-        ref,
+        ref: data.ref,
         name,
         value,
-        undo: true
+        newVariant: true
       }
     }
     StateCommand.stackCommand(cmd)
     await StateCommand.executeCommand(cmd.do)
   },
 
-  async switchVariant (name, value, execute = true) {
+  async updateVariant () {
     const element = StateSelectedElement.getElement()
-    const ref = HelperElement.getRef(element)
+    const data = HelperComponent.getComponentData(element)
+    if (!data.variants) {
+      throw new Error('Please make sure a variant is selected')
+    } else if (Object.keys(data.variants).length > 1) {
+      throw new Error('Please make sure only one variant is selected')
+    }
+    await this.executeUpdate(element, data)
+  },
+
+  async executeUpdate (element, data, execute = true) {
+    const name = Object.keys(data.variants)[0]
+    const value = data.variants[name]
+    const cmd = {
+      do: {
+        command: 'updateVariant',
+        ref: data.ref,
+        name,
+        value,
+        variantOverrides: this.getMergedOverrides(data, name, value)
+      },
+      undo: {
+        command: 'updateVariant',
+        ref: data.ref,
+        name,
+        value,
+        overrides: data.overrides,
+        variantOverrides: data.main.variants[name][value]
+      }
+    }
+    StateCommand.stackCommand(cmd)
+    await StateCommand.executeCommand(cmd.do)
+  },
+
+  getMergedOverrides (data, name, value) {
+    const current = ExtendJS.cloneData(data.main.variants[name][value])
+    HelperOverride.mergeObjects(current, data.overrides)
+    return current
+  },
+
+  async executeSwitch (name, value, execute = true) {
+    const element = StateSelectedElement.getElement()
     const data = HelperComponent.getComponentData(element)
     const cmd = {
       do: {
         command: 'switchVariant',
-        ref,
+        ref: data.ref,
         name,
         value
       },
       undo: {
         command: 'switchVariant',
-        ref,
+        ref: data.ref,
         name,
         value: data?.variants ? data?.variants[name] : null
       }
@@ -174,27 +229,26 @@ export default {
   },
 
   async confirmDelete (button) {
-    const data = JSON.parse(button.dataset.value)
+    const buttonData = JSON.parse(button.dataset.value)
     const element = StateSelectedElement.getElement()
-    const component = HelperComponent.getComponentData(element)
-    await this.executeDelete(component, data.name, data.value)
+    const data = HelperComponent.getComponentData(element)
+    await this.executeDelete(data, buttonData.name, buttonData.value)
   },
 
-  async executeDelete (component, name, value, execute = true) {
+  async executeDelete (data, name, value, execute = true) {
     const cmd = {
       do: {
         command: 'deleteVariant',
-        ref: component.ref,
+        ref: data.ref,
         name,
         value
       },
       undo: {
-        command: 'saveVariant',
-        ref: component.ref,
+        command: 'createVariant',
+        ref: data.ref,
         name,
         value,
-        overrides: component.main.variants[name][value],
-        undo: true
+        overrides: data.main.variants[name][value]
       }
     }
     StateCommand.stackCommand(cmd)
@@ -231,17 +285,17 @@ export default {
       if (form.elements.name.value === data.name && form.elements.value.value === data.value) {
         this.cancelRename(li)
       } else {
-        await this.saveRename(element, form.elements, data)
+        await this.executeRename(element, form.elements, data)
       }
     }
   },
 
-  async saveRename (element, fields, oldData) {
-    const ref = HelperElement.getRef(element)
+  async executeRename (element, fields, oldData) {
+    const data = HelperComponent.getComponentData(element)
     const cmd = {
       do: {
         command: 'renameVariant',
-        ref,
+        ref: data.ref,
         values: {
           name: fields.name.value,
           value: fields.value.value,
@@ -251,7 +305,7 @@ export default {
       },
       undo: {
         command: 'renameVariant',
-        ref,
+        ref: data.ref,
         values: {
           name: oldData.name,
           value: oldData.value,

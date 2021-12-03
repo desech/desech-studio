@@ -3,7 +3,7 @@ import HelperDOM from '../helper/HelperDOM.js'
 import Start from '../start/Start.js'
 import Auth from '../start/Auth.js'
 import DialogComponent from '../component/DialogComponent.js'
-import TopCommandSave from '../main/top/command/TopCommandSave.js'
+import TopCommandCommon from '../main/top/command/TopCommandCommon.js'
 
 export default {
   addEvents () {
@@ -54,7 +54,7 @@ export default {
   triggerPremiumPrompt () {
     // 30 minutes
     setTimeout(async () => {
-      await TopCommandSave.save()
+      await TopCommandCommon.executeSaveFile()
       this.showPremiumPrompt()
     }, 1000 * 60 * 30)
   },

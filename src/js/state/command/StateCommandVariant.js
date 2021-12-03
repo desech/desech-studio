@@ -5,15 +5,16 @@ import ExtendJS from '../../helper/ExtendJS.js'
 import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperFile from '../../helper/HelperFile.js'
 import StateCommandOverride from './StateCommandOverride.js'
+import TopCommandCommon from '../../main/top/command/TopCommandCommon.js'
 
 export default {
-  async saveVariant (component, name, value, overrides, undo) {
+  async createVariant (component, obj) {
     const data = HelperComponent.getComponentData(component)
-    this.addVariantToMain(data, name, value, overrides)
+    this.addVariantToMain(data, obj.name, obj.value, obj.overrides)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
-    if (!undo) {
+    if (obj.newVariant) {
       // this happens when we create a new variant from overrides
-      this.addVariantToInstances(data, name, value, component)
+      this.addVariantToInstances(data, obj.name, obj.value, component)
     } else {
       // this happens when we undo a variant delete
       await LeftFileLoad.reloadCurrentFile()
@@ -24,6 +25,7 @@ export default {
     if (!data.main) data.main = {}
     if (!data.main.variants) data.main.variants = {}
     if (!data.main.variants[name]) data.main.variants[name] = {}
+    // if the variant already exists, it will override it
     data.main.variants[name][value] = overrides
   },
 
@@ -56,13 +58,28 @@ export default {
     }
   },
 
-  async deleteVariant (component, name, value, undo) {
+  async updateVariant (component, obj) {
     const data = HelperComponent.getComponentData(component)
-    const overrides = this.deleteVariantFromMain(data, name, value)
+    this.addVariantToMain(data, obj.name, obj.value, obj.variantOverrides)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
-    if (undo) {
+    await this.resetOverridesSaveFile(component, data, obj.overrides)
+    await LeftFileLoad.reloadCurrentFile()
+  },
+
+  async resetOverridesSaveFile (component, data, overrides) {
+    // if the overrides don't exist, then it will just be empty
+    data.overrides = overrides
+    HelperComponent.setComponentData(component, data)
+    await TopCommandCommon.executeSaveFile()
+  },
+
+  async deleteVariant (component, obj) {
+    const data = HelperComponent.getComponentData(component)
+    const overrides = this.deleteVariantFromMain(data, obj.name, obj.value)
+    await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
+    if (obj.newVariant) {
       // this happens when we undo a variant create
-      this.undoCreateVariantInInstances(component, data, name, overrides)
+      this.undoCreateVariantInInstances(component, data, obj.name, overrides)
     } else {
       // this happens when we delete an existing variant which can be used by other instances
       await LeftFileLoad.reloadCurrentFile()

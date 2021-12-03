@@ -1,12 +1,11 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import TopCommand from '../TopCommand.js'
-import StyleSheetFile from '../../../state/stylesheet/StyleSheetFile.js'
-import StateHtmlFile from '../../../state/html/StateHtmlFile.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperFile from '../../../helper/HelperFile.js'
+import TopCommandCommon from './TopCommandCommon.js'
 
 export default {
   _AUTOSAVE_TIME: 60 * 1000, // in ms
@@ -80,18 +79,10 @@ export default {
   },
 
   async saveCurrentFile (button) {
-    await window.electron.invoke('rendererSaveCurrentFile', this.getCurrentFileData())
+    await TopCommandCommon.executeSaveFile()
     // saving can take a long time and we might not even be inside the project
     if (!HelperProject.getFile()) return
     button.classList.replace('loading', 'inactive')
     TopCommand.updateButtonStates()
-  },
-
-  getCurrentFileData () {
-    const folder = HelperProject.getFolder()
-    const htmlFile = HelperProject.getFile()
-    const css = StyleSheetFile.getStyle()
-    const html = StateHtmlFile.getHtml(htmlFile, css)
-    return { folder, htmlFile, html, css }
   }
 }

@@ -64,36 +64,27 @@ export default {
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
     if (HelperComponent.belongsToAComponent(element)) {
-      return this.getComponentSelector(element)
+      return this.getComponentRefSelector(element)
     } else {
       const ref = HelperElement.getStyleRef(element)
       return HelperStyle.buildRefSelector(ref)
     }
   },
 
-  getComponentSelector (element) {
-    const parent = this.buildComponentParentsSelector(element)
+  getComponentRefSelector (element) {
+    const parent = this.buildComponentRefParentsSelector(element)
     const ref = HelperElement.getStyleRef(element)
     const selector = HelperStyle.buildRefSelector(ref)
     return HelperComponent.isComponent(element) ? parent + selector : parent + ' ' + selector
   },
 
-  buildComponentParentsSelector (element) {
+  buildComponentRefParentsSelector (element) {
     const parents = HelperOverride.getElementParents(element)
     const parts = []
     for (const parent of parents) {
-      parts.push(this.buildComponentSelector(parent.data.ref, parent.data.variants))
+      parts.push(`.${parent.data.ref}[data-variant]`)
     }
     return parts.join(' ')
-  },
-
-  buildComponentSelector (ref, variants) {
-    return '.' + ref + this.buildVariantSelector(variants)
-  },
-
-  buildVariantSelector (variants) {
-    const value = HelperComponent.buildDataVariant(variants)
-    return value ? `[data-variant="${value}"]` : '[data-variant]'
   },
 
   selectorExists (selector) {

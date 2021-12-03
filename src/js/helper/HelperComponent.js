@@ -189,16 +189,13 @@ export default {
   setDataVariant (element, data = null) {
     if (!data) data = this.getComponentData(element)
     const value = this.buildDataVariant(data?.variants)
-    if (value) {
-      element.setAttributeNS(null, 'data-variant', value)
-    } else {
-      element.removeAttributeNS(null, 'data-variant')
-    }
+    // we always need the attribute for the selectors
+    element.setAttributeNS(null, 'data-variant', value)
   },
 
   buildDataVariant (variants) {
     // data-variant="foo-var=bar-val foo2=bar2 foo3=bar3"
-    if (!variants) return
+    if (!variants) return ''
     return Object.entries(variants).reduce((array, variant) => {
       return [...array, variant.join('=')]
     }, []).join(' ')

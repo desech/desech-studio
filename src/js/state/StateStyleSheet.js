@@ -4,7 +4,6 @@ import HelperCanvas from '../helper/HelperCanvas.js'
 import StyleSheetCommon from './stylesheet/StyleSheetCommon.js'
 import ExtendJS from '../helper/ExtendJS.js'
 import StyleSheetSelector from './stylesheet/StyleSheetSelector.js'
-import StateSelectedElement from './StateSelectedElement.js'
 import HelperFile from '../helper/HelperFile.js'
 import HelperComponent from '../helper/HelperComponent.js'
 import HelperElement from '../helper/HelperElement.js'
@@ -109,8 +108,8 @@ export default {
   // only if we are inside a page and this is a component ref, then we need the position right
   // before the e000body element, otherwise we just return the last position of the array
   getLastRefPosition (array, ref) {
-    if (HelperFile.isPageFile() &&
-      HelperComponent.belongsToAComponent(HelperElement.getElement(ref))) {
+    const element = HelperElement.getElement(ref)
+    if (HelperFile.isPageFile() && HelperComponent.belongsToAComponent(element)) {
       return StyleSheetCommon.getSelectorSheetIndex('.e000body')
     } else {
       return array.length

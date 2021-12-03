@@ -64,7 +64,6 @@ export default {
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
     if (HelperComponent.belongsToAComponent(element)) {
-      console.log(this.getComponentSelector(element))
       return this.getComponentSelector(element)
     } else {
       const ref = HelperElement.getStyleRef(element)

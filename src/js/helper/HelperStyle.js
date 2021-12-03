@@ -40,7 +40,9 @@ export default {
   },
 
   getSelectorLabel (selector, ref) {
-    return this.sanitizeSelector(selector.replace('.' + ref, ''))
+    const label = selector.replace(/\.e0[a-z0-9]+\[data-variant.*?]/g, '')
+      .replace('.' + ref, '').replace(/  +/g, ' ').trim()
+    return this.sanitizeSelector(label)
   },
 
   sanitizeSelector (value) {

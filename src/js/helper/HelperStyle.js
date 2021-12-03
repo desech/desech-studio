@@ -280,6 +280,6 @@ export default {
   },
 
   isValidComponent (cls) {
-    return (cls !== 'block' && cls !== 'text' && !cls.startsWith('e0'))
+    return (cls !== 'block' && cls !== 'text' && !cls.startsWith('e0') && !cls.startsWith('cmp-'))
   }
 }

@@ -9,6 +9,7 @@ import HelperFile from '../../../js/helper/HelperFile.js'
 import ParseCommon from './ParseCommon.js'
 import ParseOverride from './ParseOverride.js'
 import HelperOverride from '../../../js/helper/HelperOverride.js'
+import HelperStyle from '../../../js/helper/HelperStyle.js'
 
 export default {
   _document: null,
@@ -198,6 +199,8 @@ export default {
   setComponentCssRequirements (element, data) {
     HelperDOM.prependClass(element, data.ref)
     HelperComponent.setDataVariant(element, data)
+    const cls = HelperComponent.getComponentClass(data.file, this._folder)
+    element.classList.add(cls)
   },
 
   /**
@@ -306,17 +309,13 @@ export default {
     if (this._options.ui === 'export') return
     const classes = []
     for (const cls of node.classList) {
-      if (this.isStandardClass(cls)) {
-        classes.push(cls)
-      } else {
+      if (HelperStyle.isValidComponent(cls)) {
         classes.push('_ss_' + cls)
+      } else {
+        classes.push(cls)
       }
     }
     node.setAttributeNS(null, 'class', classes.join(' '))
-  },
-
-  isStandardClass (cls) {
-    return (cls === 'block' || cls === 'text' || cls.startsWith('e0'))
   },
 
   setBasic (node, type, component) {

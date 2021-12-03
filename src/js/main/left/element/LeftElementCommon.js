@@ -45,7 +45,7 @@ export default {
 
   addComponentNode (element, comp) {
     comp.data = HelperComponent.getComponentData(element)
-    comp.name = HelperComponent.getInstanceName(null, comp.data.file)
+    comp.name = HelperComponent.getComponentName(comp.data.file)
     comp.isComponent = true
     if (HelperComponent.isComponentHole(element)) {
       comp.isComponentHole = true

@@ -38,11 +38,7 @@ export default {
 
   updateVariantInstance (data, name, value, component) {
     if (!data.variants) data.variants = {}
-    if (value) {
-      data.variants[name] = value
-    } else {
-      delete data.variants[name]
-    }
+    HelperComponent.updateComponentData(data.variants, name, value)
     HelperComponent.setComponentData(component, data)
   },
 
@@ -67,8 +63,7 @@ export default {
   },
 
   async resetOverridesSaveFile (component, data, overrides) {
-    // if the overrides don't exist, then it will just be empty
-    data.overrides = overrides
+    HelperComponent.updateComponentData(data, 'overrides', overrides)
     HelperComponent.setComponentData(component, data)
     await TopCommandCommon.executeSaveFile()
   },

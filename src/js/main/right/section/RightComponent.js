@@ -33,7 +33,7 @@ export default {
 
   injectComponentName (container, element, data) {
     const node = container.getElementsByClassName('sidebar-component-name')[0]
-    node.textContent = HelperComponent.getInstanceName(element, data.file)
+    node.textContent = HelperComponent.getComponentName(data.file)
   },
 
   injectComponentFile (container, data) {

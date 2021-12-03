@@ -75,10 +75,14 @@ export default {
     return data ? data.file : null
   },
 
-  getInstanceName (element = null, file = null, folder = null) {
-    if (!file) file = this.getInstanceFile(element)
+  getComponentName (file, folder = null) {
     const name = HelperFile.getRelPath(file, HelperFile.getAbsPath('component', folder))
     return name.replace('.html', '')
+  },
+
+  getComponentClass (file, folder = null) {
+    const name = this.getComponentName(file, folder)
+    return 'cmp-' + name.replaceAll('/', '-')
   },
 
   getInstanceProperties (element) {

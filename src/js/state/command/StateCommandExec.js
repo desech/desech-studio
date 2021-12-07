@@ -229,7 +229,7 @@ export default {
   async resetComponentOverrides (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    await HelperComponent.replaceComponent(element, data)
+    await StateCommandVariant.replaceComponent(element, data)
     HelperTrigger.triggerReload('right-panel')
   },
 

@@ -180,6 +180,7 @@ export default {
   prepareComponent (mainComponent, parentData, children) {
     const level = this.adjustComponentLevel('component', parentData?.level)
     const data = this.overrideComponent(mainComponent, parentData)
+    this.cleanComponentData(mainComponent, data)
     this.setComponentCssRequirements(mainComponent, data)
     this.prepareElement(mainComponent, {
       data,
@@ -194,6 +195,11 @@ export default {
     ParseOverride.setOverrideComponentVariants(mainComponent, fullOverrides)
     ParseOverride.setOverrideComponentProperties(mainComponent, fullOverrides)
     return ParseOverride.getSubComponentData(mainComponent, fullOverrides)
+  },
+
+  cleanComponentData (element, data) {
+    // when we set the data again, it will also remove the missing variants
+    HelperComponent.setComponentData(element, data)
   },
 
   setComponentCssRequirements (element, data) {

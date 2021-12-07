@@ -8,6 +8,7 @@ import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperElement from '../../../../helper/HelperElement.js'
 import HelperOverride from '../../../../helper/HelperOverride.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
+import StyleSheetComponent from '../../../../state/stylesheet/StyleSheetComponent.js'
 
 export default {
   getEvents () {
@@ -142,7 +143,6 @@ export default {
         ref: data.ref,
         name,
         value,
-        overrides: data.overrides,
         newVariant: true
       },
       undo: {
@@ -151,68 +151,6 @@ export default {
         name,
         value,
         newVariant: true
-      }
-    }
-    StateCommand.stackCommand(cmd)
-    await StateCommand.executeCommand(cmd.do)
-  },
-
-  async updateVariant () {
-    const element = StateSelectedElement.getElement()
-    const data = HelperComponent.getComponentData(element)
-    if (!data.variants) {
-      throw new Error('Please make sure a variant is selected')
-    } else if (Object.keys(data.variants).length > 1) {
-      throw new Error('Please make sure only one variant is selected')
-    }
-    await this.executeUpdate(element, data)
-  },
-
-  async executeUpdate (element, data, execute = true) {
-    const name = Object.keys(data.variants)[0]
-    const value = data.variants[name]
-    const cmd = {
-      do: {
-        command: 'updateVariant',
-        ref: data.ref,
-        name,
-        value,
-        variantOverrides: this.getMergedOverrides(data, name, value)
-      },
-      undo: {
-        command: 'updateVariant',
-        ref: data.ref,
-        name,
-        value,
-        overrides: data.overrides,
-        variantOverrides: data.main.variants[name][value]
-      }
-    }
-    StateCommand.stackCommand(cmd)
-    await StateCommand.executeCommand(cmd.do)
-  },
-
-  getMergedOverrides (data, name, value) {
-    const current = ExtendJS.cloneData(data.main.variants[name][value])
-    HelperOverride.mergeObjects(current, data.overrides)
-    return current
-  },
-
-  async executeSwitch (name, value, execute = true) {
-    const element = StateSelectedElement.getElement()
-    const data = HelperComponent.getComponentData(element)
-    const cmd = {
-      do: {
-        command: 'switchVariant',
-        ref: data.ref,
-        name,
-        value
-      },
-      undo: {
-        command: 'switchVariant',
-        ref: data.ref,
-        name,
-        value: data?.variants ? data?.variants[name] : null
       }
     }
     StateCommand.stackCommand(cmd)
@@ -236,19 +174,98 @@ export default {
   },
 
   async executeDelete (data, name, value, execute = true) {
+    const style = StyleSheetComponent.getVariantOverrides(data.file, name, value)
     const cmd = {
       do: {
         command: 'deleteVariant',
         ref: data.ref,
         name,
-        value
+        value,
+        style
       },
       undo: {
         command: 'createVariant',
         ref: data.ref,
         name,
         value,
-        overrides: data.main.variants[name][value]
+        style
+      }
+    }
+    StateCommand.stackCommand(cmd)
+    await StateCommand.executeCommand(cmd.do)
+  },
+
+  async updateVariant () {
+    const element = StateSelectedElement.getElement()
+    const data = HelperComponent.getComponentData(element)
+    if (!data.variants) {
+      throw new Error('Please make sure a variant is selected')
+    } else if (Object.keys(data.variants).length > 1) {
+      throw new Error('Please make sure only one variant is selected')
+    }
+    await this.executeUpdate(element, data)
+  },
+
+  async executeUpdate (element, data, execute = true) {
+    const name = Object.keys(data.variants)[0]
+    const value = data.variants[name]
+    const overrideStyle = StyleSheetComponent.getOverrides(data.ref)
+    const variantStyle = StyleSheetComponent.getVariantOverrides(data.file, name, value)
+    const cmd = {
+      do: {
+        command: 'updateVariant',
+        ref: data.ref,
+        name,
+        value,
+        overrides: {
+          manual: null,
+          variant: this.getMergedOverrides(data, name, value),
+          style: null,
+          variantStyle: this.getMergedStyleOverrides(overrideStyle, variantStyle)
+        }
+      },
+      undo: {
+        command: 'updateVariant',
+        ref: data.ref,
+        name,
+        value,
+        overrides: {
+          manual: data.overrides,
+          variant: data.main.variants[name][value],
+          style: overrideStyle,
+          variantStyle: variantStyle
+        }
+      }
+    }
+    StateCommand.stackCommand(cmd)
+    await StateCommand.executeCommand(cmd.do)
+  },
+
+  getMergedOverrides (data, name, value) {
+    const current = ExtendJS.cloneData(data.main.variants[name][value])
+    HelperOverride.mergeObjects(current, data.overrides)
+    return current
+  },
+
+  getMergedStyleOverrides (overrideStyle, variantStyle) {
+
+  },
+
+  async executeSwitch (name, value, execute = true) {
+    const element = StateSelectedElement.getElement()
+    const data = HelperComponent.getComponentData(element)
+    const cmd = {
+      do: {
+        command: 'switchVariant',
+        ref: data.ref,
+        name,
+        value
+      },
+      undo: {
+        command: 'switchVariant',
+        ref: data.ref,
+        name,
+        value: data?.variants ? data?.variants[name] : null
       }
     }
     StateCommand.stackCommand(cmd)

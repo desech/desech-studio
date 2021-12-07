@@ -1,9 +1,9 @@
 import ColorPickerInput from './ColorPickerInput.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import StateCommand from '../../state/StateCommand.js'
-import StateStyleSheet from '../../state/StateStyleSheet.js'
 import HelperEvent from '../../helper/HelperEvent.js'
 import HelperColor from '../../helper/HelperColor.js'
+import StyleSheetCommon from '../../state/stylesheet/StyleSheetCommon.js'
 
 export default {
   _timer: null,
@@ -144,7 +144,7 @@ export default {
 
   getSwatches () {
     const colors = {}
-    const style = StateStyleSheet.getSelectorStyle(':root', false)
+    const style = StyleSheetCommon.getSelectorStyle(':root', false)
     for (const prop of style) {
       if (prop.name && prop.name.startsWith('--color-')) colors[prop.name] = prop.value
     }

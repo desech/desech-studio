@@ -7,18 +7,22 @@ import HelperFile from '../../helper/HelperFile.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import TopCommandCommon from '../../main/top/command/TopCommandCommon.js'
 import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
+import HelperElement from '../../helper/HelperElement.js'
+import StateSelectedElement from '../StateSelectedElement.js'
+import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
+import StateStyleSheet from '../StateStyleSheet.js'
 
 export default {
   async createVariant (component, obj) {
     const data = HelperComponent.getComponentData(component)
-    this.addVariantToMain(data, obj.name, obj.value, obj.overrides)
+    this.addVariantToMain(data, obj.name, obj.value, data.overrides)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     if (obj.newVariant) {
       // this happens when we create a new variant from overrides
-      this.addVariantToInstances(data, obj.name, obj.value, component)
+      this.addVariantToInstances(component, data, obj)
     } else {
       // this happens when we undo a variant delete
-      await LeftFileLoad.reloadCurrentFile()
+      await this.undoDeleteVariant(component, data, obj)
     }
   },
 
@@ -27,14 +31,15 @@ export default {
     if (!data.main.variants) data.main.variants = {}
     if (!data.main.variants[name]) data.main.variants[name] = {}
     // if the variant already exists, it will override it
-    data.main.variants[name][value] = overrides
+    // when we only have style overrides, we need to set this to null
+    data.main.variants[name][value] = overrides || null
   },
 
-  addVariantToInstances (data, name, value, component) {
+  addVariantToInstances (component, data, obj) {
     delete data.overrides
-    this.updateVariantInstance(data, name, value, component)
+    this.updateVariantInstance(data, obj.name, obj.value, component)
     this.saveMainDataAllComponents(data.file, data.main)
-    StyleSheetComponent.convertOverrideToVariant(data.ref, name, value)
+    StyleSheetComponent.convertOverrideToVariant(data, obj.name, obj.value)
     HelperTrigger.triggerReload('component-section')
   },
 
@@ -42,6 +47,7 @@ export default {
     if (!data.variants) data.variants = {}
     HelperComponent.updateComponentData(data.variants, name, value)
     HelperComponent.setComponentData(component, data)
+    HelperComponent.setDataVariant(component, data)
   },
 
   // this only applies to new variants which are no used yet
@@ -56,18 +62,19 @@ export default {
     }
   },
 
-  async updateVariant (component, obj) {
-    const data = HelperComponent.getComponentData(component)
-    this.addVariantToMain(data, obj.name, obj.value, obj.variantOverrides)
-    await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
-    await this.resetOverridesSaveFile(component, data, obj.overrides)
-    await LeftFileLoad.reloadCurrentFile()
+  async undoDeleteVariant (component, data, obj) {
+    // we need to set the variant again
+    this.updateVariantInstance(data, obj.name, obj.value, component)
+    StateStyleSheet.addSelectors(obj.style)
+    // @todo because of reload and ParseHtml removing the missing variants, we end up clearing
+    // the variant value in other components, so it's not a clean undo
+    await this.saveReload()
   },
 
-  async resetOverridesSaveFile (component, data, overrides) {
-    HelperComponent.updateComponentData(data, 'overrides', overrides)
-    HelperComponent.setComponentData(component, data)
+  async saveReload () {
+    // we need to save before reloading the html and css files
     await TopCommandCommon.executeSaveFile()
+    await LeftFileLoad.reloadCurrentFile()
   },
 
   async deleteVariant (component, obj) {
@@ -76,10 +83,11 @@ export default {
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     if (obj.newVariant) {
       // this happens when we undo a variant create
-      this.undoCreateVariantInInstances(component, data, obj.name, overrides)
+      this.undoCreateVariantInInstances(component, data, obj.name, obj.value, overrides)
     } else {
       // this happens when we delete an existing variant which can be used by other instances
-      await LeftFileLoad.reloadCurrentFile()
+      StyleSheetSelector.deleteSelectors(Object.keys(obj.style))
+      await this.saveReload()
     }
   },
 
@@ -90,12 +98,25 @@ export default {
     return overrides
   },
 
-  undoCreateVariantInInstances (component, data, name, overrides) {
+  undoCreateVariantInInstances (component, data, name, value, overrides) {
     data.overrides = overrides
     delete data.variants[name]
     HelperComponent.setComponentData(component, data)
-    // update all components' main data
     this.saveMainDataAllComponents(data.file, data.main)
+    StyleSheetComponent.convertVariantToOverride(data, name, value)
+  },
+
+  async updateVariant (component, obj) {
+    const data = HelperComponent.getComponentData(component)
+    this.addVariantToMain(data, obj.name, obj.value, obj.variantOverrides)
+    await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
+    await this.resetOverridesSaveFile(component, data, obj.overrides)
+    await this.saveReload()
+  },
+
+  async resetOverridesSaveFile (component, data, overrides) {
+    HelperComponent.updateComponentData(data, 'overrides', overrides)
+    HelperComponent.setComponentData(component, data)
   },
 
   async switchVariant (component, name, value) {
@@ -104,7 +125,7 @@ export default {
       await this.switchOverrideVariant(data, name, value, component)
     } else {
       this.updateVariantInstance(data, name, value, component)
-      await HelperComponent.replaceComponent(component, data)
+      await this.replaceComponent(component, data)
     }
     HelperTrigger.triggerReload('right-panel')
   },
@@ -112,7 +133,7 @@ export default {
   async switchOverrideVariant (data, name, value, component) {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
-    return await HelperComponent.replaceComponent(parents[0].element, parents[0].data)
+    return await this.replaceComponent(parents[0].element, parents[0].data)
   },
 
   async renameVariant (component, values) {
@@ -121,7 +142,7 @@ export default {
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     const file = HelperFile.getRelPath(data.file)
     await window.electron.invoke('rendererRenameVariant', file, values)
-    await LeftFileLoad.reloadCurrentFile()
+    await this.saveReload()
   },
 
   renameVariantInMain (variants, data) {
@@ -133,5 +154,16 @@ export default {
       variants[data.name][data.value] = ExtendJS.cloneData(variants[data.name][data.oldValue])
       delete variants[data.name][data.oldValue]
     }
+  },
+
+  async replaceComponent (element, data) {
+    const ref = HelperElement.getRef(element)
+    const children = HelperComponent.getInstanceChildren(element)
+    const component = await HelperComponent.fetchComponent(data)
+    element.replaceWith(component)
+    HelperElement.replacePositionRef(component, ref)
+    if (children) HelperComponent.setInstanceChildren(component, children)
+    // the positioning ref gets replaced, so undo will not work anymore
+    StateSelectedElement.selectElement(component)
   }
 }

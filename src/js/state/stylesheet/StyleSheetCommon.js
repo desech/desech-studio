@@ -1,5 +1,6 @@
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperProject from '../../helper/HelperProject.js'
+import HelperCanvas from '../../helper/HelperCanvas.js'
 
 export default {
   getProperty (rule) {
@@ -104,5 +105,32 @@ export default {
 
   initStyleSheet () {
     return new CSSStyleSheet()
+  },
+
+  getSelectorStyle (selector, matchResponsive = true) {
+    const sheet = this.getSelectorSheet(selector)
+    if (sheet) return this.extractStyleFromRules(sheet.cssRules, matchResponsive)
+  },
+
+  extractStyleFromRules (rules, matchResponsive) {
+    const style = []
+    const responsive = matchResponsive ? HelperCanvas.getCurrentResponsiveWidth() : null
+    for (const rule of rules) {
+      if (matchResponsive && !this.equalResponsiveRules(rule.cssRules[0], responsive)) {
+        continue
+      }
+      const data = this.getRuleStyle(rule.cssRules[0])
+      if (data) style.push(data)
+    }
+    return style
+  },
+
+  getRuleStyle (rule) {
+    const responsive = HelperStyle.getSelectorResponsive(rule.selectorText)
+    if (!responsive && !rule.style.length) return null
+    const name = this.getProperty(rule)
+    const value = this.getValue(rule, name)
+    if (!name || !value) return
+    return { responsive, name, value }
   }
 }

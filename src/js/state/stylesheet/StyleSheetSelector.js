@@ -6,7 +6,7 @@ import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import StateCommandOverride from '../command/StateCommandOverride.js'
 import HelperComponent from '../../helper/HelperComponent.js'
-import StyleSheetComponent from './StyleSheetComponent.js'
+import HelperOverride from '../../helper/HelperOverride.js'
 
 export default {
   getDisplayElementSelectors () {
@@ -64,11 +64,27 @@ export default {
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
     if (HelperComponent.belongsToAComponent(element)) {
-      return StyleSheetComponent.getRefSelector(element)
+      return this.getComponentRefSelector(element)
     } else {
       const ref = HelperElement.getStyleRef(element)
       return HelperStyle.buildRefSelector(ref)
     }
+  },
+
+  getComponentRefSelector (element) {
+    const parent = this.getComponentRefParentsSelector(element)
+    const ref = HelperElement.getStyleRef(element)
+    const selector = HelperStyle.buildRefSelector(ref)
+    return HelperComponent.isComponent(element) ? parent + selector : parent + ' ' + selector
+  },
+
+  getComponentRefParentsSelector (element) {
+    const parents = HelperOverride.getElementParents(element)
+    const parts = []
+    for (const parent of parents) {
+      parts.push(`.${parent.data.ref}[data-variant]`)
+    }
+    return parts.join(' ')
   },
 
   selectorExists (selector) {
@@ -77,9 +93,13 @@ export default {
   },
 
   deleteSelector (selector) {
+    this.deleteSelectors([selector])
+  },
+
+  deleteSelectors (selectors) {
     const newSheets = []
     for (const sheet of document.adoptedStyleSheets) {
-      if (sheet.cssRules[0].cssRules[0].selectorText !== selector) {
+      if (!selectors.includes(sheet.cssRules[0].cssRules[0].selectorText)) {
         newSheets.push(sheet)
       }
     }

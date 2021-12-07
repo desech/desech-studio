@@ -1,7 +1,6 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
-import StateSelectedElement from '../state/StateSelectedElement.js'
 
 export default {
   sanitizeComponent (name) {
@@ -85,6 +84,11 @@ export default {
     return 'cmp-' + name.replaceAll('/', '-')
   },
 
+  getComponentClassSelector (file, variantName, variantValue) {
+    const cls = this.getComponentClass(file)
+    return `.${cls}[data-variant~="${variantName}=${variantValue}"]`
+  },
+
   getInstanceProperties (element) {
     const data = this.getComponentData(element)
     return data ? data.properties : null
@@ -164,17 +168,6 @@ export default {
     return !this.isComponentElement(node) &&
       (!this.isComponentHole(node) || this.isComponent(node) ||
       (HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()))
-  },
-
-  async replaceComponent (element, data) {
-    const ref = HelperElement.getRef(element)
-    const children = this.getInstanceChildren(element)
-    const component = await this.fetchComponent(data)
-    element.replaceWith(component)
-    HelperElement.replacePositionRef(component, ref)
-    if (children) this.setInstanceChildren(component, children)
-    // the positioning ref gets replaced, so undo will not work anymore
-    StateSelectedElement.selectElement(component)
   },
 
   async fetchComponent (data) {

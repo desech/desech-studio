@@ -14,6 +14,7 @@ import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties
 import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperStyle from '../../../helper/HelperStyle.js'
 import Crypto from '../../../../electron/lib/Crypto.js'
+import StyleSheetCommon from '../../../state/stylesheet/StyleSheetCommon.js'
 
 export default {
   async deleteElement () {
@@ -124,7 +125,7 @@ export default {
     const style = {}
     const selectors = StyleSheetSelector.getElementSelectors(element, 'ref', ref)
     for (const selector of selectors) {
-      const css = StateStyleSheet.getSelectorStyle(selector)
+      const css = StyleSheetCommon.getSelectorStyle(selector, false)
       if (css.length) style[selector] = css
     }
     return style

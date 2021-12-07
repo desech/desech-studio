@@ -53,14 +53,24 @@ export default {
     return value.replace(/.responsive-(.*?) /, '')
   },
 
+  extractComponentSelector (selector) {
+    const match = /\.(cmp-[a-z0-9-]+\[data-variant~=".*?"\])/gi.exec(selector)
+    return match ? match[1] : null
+  },
+
+  extractRefSelector (selector) {
+    const match = /\.(e0[a-z0-9]+)/g.exec(selector)
+    return match ? match[1] : null
+  },
+
   extractClassSelector (selector) {
-    const match = /(_ss_[a-z0-9-_]+)/gi.exec(selector)
+    const match = /\.(_ss_[a-z0-9-_]+)/gi.exec(selector)
     return match ? match[0] : null
   },
 
   getClassFromSelector (selector) {
     if (selector === ':root') return ''
-    const match = /^.([a-z0-9-_]+)/gi.exec(selector)
+    const match = /^\.([a-z0-9-_]+)/gi.exec(selector)
     return match && match[1] ? match[1] : ''
   },
 
@@ -73,9 +83,9 @@ export default {
     return selector.includes(this.buildRefSelector(ref))
   },
 
-  selectorHasClass (selector, cls) {
-    // can have a responsive class in front
-    return selector.includes(this.buildClassSelector(cls))
+  isSelectorRefComponent (selector, ref) {
+    const regex = new RegExp(`(?<!e0.*?)${ref}`, 'g')
+    return regex.test(selector)
   },
 
   isClassSelector (selector) {
@@ -95,11 +105,6 @@ export default {
   classBelongsToElement (selector, classes) {
     const name = this.extractClassSelector(selector)
     return classes.includes(name)
-  },
-
-  extractRefFromSelector (selector) {
-    const match = /.(e0[a-z0-9]+)/.exec(selector)
-    return match ? match[1] : null
   },
 
   get4SidesValue (side, fullValue) {

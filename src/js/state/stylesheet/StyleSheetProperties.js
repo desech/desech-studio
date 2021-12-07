@@ -1,4 +1,3 @@
-import StateStyleSheet from '../StateStyleSheet.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 
 export default {

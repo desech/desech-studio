@@ -9,14 +9,14 @@ import HelperComponent from '../helper/HelperComponent.js'
 import HelperElement from '../helper/HelperElement.js'
 
 export default {
-  getPropertyValue (property, selector = '', checkResponsive = true) {
+  getPropertyValue (property, selector = '', matchResponsive = true) {
     selector = selector || StyleSheetSelector.getCurrentSelector()
-    const responsive = checkResponsive ? HelperCanvas.getCurrentResponsiveWidth() : null
+    const responsive = matchResponsive ? HelperCanvas.getCurrentResponsiveWidth() : null
     const sheet = StyleSheetCommon.getSelectorSheet(selector)
     if (!sheet) return ''
     for (const r of sheet.cssRules) {
       const rule = r.cssRules[0]
-      if (checkResponsive && !StyleSheetCommon.equalResponsiveRules(rule, responsive)) {
+      if (matchResponsive && !StyleSheetCommon.equalResponsiveRules(rule, responsive)) {
         continue
       }
       const value = rule ? rule.style.getPropertyValue(property) : null
@@ -31,9 +31,21 @@ export default {
     StyleSheetCommon.haveAtLeastOneRule(sheet, data.selector)
   },
 
+  getCreateSelectorSheet (selector) {
+    let sheet = StyleSheetCommon.getSelectorSheet(selector)
+    if (!sheet) sheet = this.addSelector(selector, [{ name: '', value: '' }])
+    return sheet
+  },
+
   initElementStyle (ref) {
     const selector = HelperStyle.buildRefSelector(ref)
     return this.addSelector(selector, [{ name: '', value: '' }])
+  },
+
+  addSelectors (styles) {
+    for (const [selector, style] of Object.entries(styles)) {
+      this.addSelector(selector, style)
+    }
   },
 
   addSelector (selector, style) {
@@ -73,50 +85,53 @@ export default {
   // new ref page selectors are added at the end of all selectors
   getInsertSheetPosition (array, selector) {
     if (array.length === 1) return 1
-    const ref = HelperStyle.extractRefFromSelector(selector)
-    const cls = HelperStyle.extractClassSelector(selector)
-    const foundPos = this.getInsertSheetInnerPosition(array, ref, cls)
-    return foundPos || this.getLastRefPosition(array, ref)
+    const data = this.getSelectorTypeData(selector)
+    const foundPos = this.getInsertSheetInnerPosition(array, data)
+    return foundPos || this.getLastRefPosition(array, data.ref)
   },
 
-  getInsertSheetInnerPosition (array, ref, cls) {
-    for (let i = 1; i < array.length; i++) {
-      const previousSelector = array[i - 1].cssRules[0].cssRules[0].selectorText
-      const currentSelector = array[i].cssRules[0].cssRules[0].selectorText
-      let foundPos
-      if (cls) {
-        foundPos = this.getClassInsertSheetInnerPos(previousSelector, currentSelector, cls, i)
-      } else if (ref) {
-        foundPos = this.getRefInsertSheetInnerPos(previousSelector, currentSelector, ref, i)
+  getSelectorTypeData (selector) {
+    const component = HelperStyle.extractComponentSelector(selector)
+    if (component) {
+      return {
+        type: 'component',
+        part: component
       }
-      if (foundPos) return foundPos
+    }
+    const cls = HelperStyle.extractClassSelector(selector)
+    if (cls) {
+      return {
+        type: 'class',
+        part: cls
+      }
+    }
+    const ref = HelperStyle.extractRefSelector(selector)
+    if (ref) {
+      return {
+        type: 'ref',
+        part: ref,
+        ref
+      }
     }
   },
 
-  getClassInsertSheetInnerPos (previousSelector, currentSelector, cls, pos) {
-    const isPrevious = HelperStyle.selectorHasClass(previousSelector, cls)
-    const isCurrent = HelperStyle.selectorHasClass(currentSelector, cls)
-    const isClass = HelperStyle.isClassSelector(currentSelector)
-    if ((isPrevious && !isCurrent) || !isClass) {
-      // if we are at the end of our class selectors, or we are entering the ref selectors
-      return pos
-    }
-  },
-
-  getRefInsertSheetInnerPos (previousSelector, currentSelector, ref, pos) {
-    const isPrevious = HelperStyle.selectorHasRef(previousSelector, ref)
-    const isCurrent = HelperStyle.selectorHasRef(currentSelector, ref)
-    if (isPrevious && !isCurrent) {
-      // if we are at the end of our ref selectors
-      return pos
+  getInsertSheetInnerPosition (array, data) {
+    for (let pos = 1; pos < array.length; pos++) {
+      const previousSelector = array[pos - 1].cssRules[0].cssRules[0].selectorText
+      const currentSelector = array[pos].cssRules[0].cssRules[0].selectorText
+      if ((previousSelector.includes(data.part) && !currentSelector.includes(data.part)) ||
+        (data.type !== 'ref' && !HelperStyle.isClassSelector(currentSelector))) {
+        // if we are at the end of our class selectors, or we are entering the ref selectors
+        return pos
+      }
     }
   },
 
   // only if we are inside a page and this is a component ref, then we need the position right
   // before the e000body element, otherwise we just return the last position of the array
   getLastRefPosition (array, ref) {
-    const element = HelperElement.getElement(ref)
-    if (HelperFile.isPageFile() && HelperComponent.belongsToAComponent(element)) {
+    if (ref && HelperFile.isPageFile() &&
+      HelperComponent.belongsToAComponent(HelperElement.getElement(ref))) {
       return StyleSheetCommon.getSelectorSheetIndex('.e000body')
     } else {
       return array.length
@@ -150,48 +165,15 @@ export default {
   },
 
   saveDeletedSelector (selector) {
-    const style = this.getSelectorStyle(selector, false)
+    const style = StyleSheetCommon.getSelectorStyle(selector, false)
     HelperLocalStore.setItem('selector-' + selector, style)
   },
 
   getCurrentStyleObject (selector = null) {
     if (!selector) selector = StyleSheetSelector.getCurrentSelector()
-    const style = this.getSelectorStyle(selector)
-    return this.convertStyleArrayToObject(style)
-  },
-
-  getSelectorStyle (selector, checkResponsive = true) {
     const sheet = this.getCreateSelectorSheet(selector)
-    return this.extractStyleFromRules(sheet.cssRules, checkResponsive)
-  },
-
-  getCreateSelectorSheet (selector) {
-    let sheet = StyleSheetCommon.getSelectorSheet(selector)
-    if (!sheet) sheet = this.addSelector(selector, [{ name: '', value: '' }])
-    return sheet
-  },
-
-  extractStyleFromRules (rules, checkResponsive) {
-    const style = []
-    const responsive = checkResponsive ? HelperCanvas.getCurrentResponsiveWidth() : null
-    for (const rule of rules) {
-      if (checkResponsive &&
-        !StyleSheetCommon.equalResponsiveRules(rule.cssRules[0], responsive)) {
-        continue
-      }
-      const data = this.getRuleStyle(rule.cssRules[0])
-      if (data) style.push(data)
-    }
-    return style
-  },
-
-  getRuleStyle (rule) {
-    const responsive = HelperStyle.getSelectorResponsive(rule.selectorText)
-    if (!responsive && !rule.style.length) return null
-    const name = StyleSheetCommon.getProperty(rule)
-    const value = StyleSheetCommon.getValue(rule, name)
-    if (!name || !value) return
-    return { responsive, name, value }
+    const style = StyleSheetCommon.extractStyleFromRules(sheet.cssRules)
+    return this.convertStyleArrayToObject(style)
   },
 
   convertStyleArrayToObject (array) {

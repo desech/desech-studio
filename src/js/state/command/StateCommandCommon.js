@@ -69,7 +69,7 @@ export default {
     for (const [tmpSelector, rules] of Object.entries(style)) {
       const selector = tmpSelector.replace(/\.e0[a-z0-9]+/, '.' + ref)
       const sheet = StateStyleSheet.getCreateSelectorSheet(selector)
-      StyleSheetCommon.addRemoveRules(sheet, selector, rules)
+      StyleSheetCommon.addRemoveRules(sheet, selector, rules, true)
     }
   }
 }

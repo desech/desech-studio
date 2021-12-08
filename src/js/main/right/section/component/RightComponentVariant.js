@@ -209,32 +209,26 @@ export default {
   async executeUpdate (element, data, execute = true) {
     const name = Object.keys(data.variants)[0]
     const value = data.variants[name]
-    const overrideStyle = StyleSheetComponent.getOverrides(data.ref)
-    const variantStyle = StyleSheetComponent.getVariantOverrides(data.file, name, value)
+    const style = StyleSheetComponent.getAllVariantOverrides(data, name, value)
     const cmd = {
       do: {
         command: 'updateVariant',
         ref: data.ref,
         name,
         value,
-        overrides: {
-          manual: null,
-          variant: this.getMergedOverrides(data, name, value),
-          style: null,
-          variantStyle: this.getMergedStyleOverrides(overrideStyle, variantStyle)
-        }
+        overrides: null,
+        variantOverrides: this.getMergedOverrides(data, name, value),
+        styleAction: 'convert'
       },
       undo: {
         command: 'updateVariant',
         ref: data.ref,
         name,
         value,
-        overrides: {
-          manual: data.overrides,
-          variant: data.main.variants[name][value],
-          style: overrideStyle,
-          variantStyle: variantStyle
-        }
+        overrides: data.overrides,
+        variantOverrides: data.main.variants[name][value],
+        styleAction: 'reset',
+        style
       }
     }
     StateCommand.stackCommand(cmd)
@@ -245,31 +239,6 @@ export default {
     const current = ExtendJS.cloneData(data.main.variants[name][value])
     HelperOverride.mergeObjects(current, data.overrides)
     return current
-  },
-
-  getMergedStyleOverrides (overrideStyle, variantStyle) {
-
-  },
-
-  async executeSwitch (name, value, execute = true) {
-    const element = StateSelectedElement.getElement()
-    const data = HelperComponent.getComponentData(element)
-    const cmd = {
-      do: {
-        command: 'switchVariant',
-        ref: data.ref,
-        name,
-        value
-      },
-      undo: {
-        command: 'switchVariant',
-        ref: data.ref,
-        name,
-        value: data?.variants ? data?.variants[name] : null
-      }
-    }
-    StateCommand.stackCommand(cmd)
-    await StateCommand.executeCommand(cmd.do)
   },
 
   showRename (li) {
@@ -329,6 +298,27 @@ export default {
           oldName: fields.name.value,
           oldValue: fields.value.value
         }
+      }
+    }
+    StateCommand.stackCommand(cmd)
+    await StateCommand.executeCommand(cmd.do)
+  },
+
+  async executeSwitch (name, value, execute = true) {
+    const element = StateSelectedElement.getElement()
+    const data = HelperComponent.getComponentData(element)
+    const cmd = {
+      do: {
+        command: 'switchVariant',
+        ref: data.ref,
+        name,
+        value
+      },
+      undo: {
+        command: 'switchVariant',
+        ref: data.ref,
+        name,
+        value: data?.variants ? data?.variants[name] : null
       }
     }
     StateCommand.stackCommand(cmd)

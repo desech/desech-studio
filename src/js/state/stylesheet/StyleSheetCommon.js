@@ -29,11 +29,18 @@ export default {
     }
   },
 
-  addRemoveRules (sheet, selector, style, ignoreAddEmpty = false) {
+  addRemoveStyleRules (data, addEmptyValues = false) {
+    const sheet = this.getSelectorSheet(data.selector)
+    const style = this.prepareStyleData(data.properties, data.responsive || null)
+    this.addRemoveRules(sheet, data.selector, style, addEmptyValues)
+    this.haveAtLeastOneRule(sheet, data.selector)
+  },
+
+  addRemoveRules (sheet, selector, style, addEmptyValues = false) {
     for (const prop of style) {
       this.deleteExistingRule(sheet, prop.name, prop.responsive)
       // empty values are skipped
-      if (ignoreAddEmpty && !prop.value) continue
+      if (!addEmptyValues && !prop.value) continue
       const rule = HelperStyle.buildRule(selector, prop.name, prop.value, prop.responsive)
       const index = this.getRulePosition(sheet, selector, prop.responsive)
       this.addRule(sheet, rule, index)
@@ -79,13 +86,6 @@ export default {
 
   addRule (sheet, rule, index = 0) {
     sheet.insertRule(rule, index)
-  },
-
-  addRemoveStyleRules (data, ignoreAddEmpty = false) {
-    const sheet = this.getSelectorSheet(data.selector)
-    const style = this.prepareStyleData(data.properties, data.responsive || null)
-    this.addRemoveRules(sheet, data.selector, style, ignoreAddEmpty)
-    this.haveAtLeastOneRule(sheet, data.selector)
   },
 
   prepareStyleData (properties, responsive = null) {

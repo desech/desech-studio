@@ -114,7 +114,7 @@ export default {
       properties: {
         [property]: parts.join(', ')
       }
-    }, true)
+    })
   },
 
   async deleteBackgroundFill (index, clear) {

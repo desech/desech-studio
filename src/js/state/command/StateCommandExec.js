@@ -58,7 +58,7 @@ export default {
   },
 
   changeStyle (data) {
-    StyleSheetCommon.addRemoveStyleRules(data, true)
+    StyleSheetCommon.addRemoveStyleRules(data)
   },
 
   cutStyle (data) {
@@ -85,7 +85,7 @@ export default {
       properties: {
         [data.name]: data.value
       }
-    }, true)
+    })
   },
 
   removeColor (data) {

@@ -44,6 +44,12 @@ export default {
     return style
   },
 
+  getAllVariantOverrides (data, varName, varValue) {
+    const overrideStyle = this.getOverrides(data.ref)
+    const variantStyle = this.getVariantOverrides(data.file, varName, varValue)
+    return { ...overrideStyle, ...variantStyle }
+  },
+
   convertOverrideToVariant (data, varName, varValue) {
     const styles = this.getOverrides(data.ref)
     if (!styles) return
@@ -51,7 +57,8 @@ export default {
     const cmpSelector = HelperComponent.getComponentClassSelector(data.file, varName, varValue)
     for (const [refSelector, style] of Object.entries(styles)) {
       const selector = refSelector.replace(`.${data.ref}[data-variant]`, cmpSelector)
-      StateStyleSheet.addSelector(selector, style)
+      // on variant update, the selector can already exist and we need to merge
+      StateStyleSheet.addMergeSelector(selector, style)
     }
   },
 
@@ -64,5 +71,17 @@ export default {
       const selector = cmpSelector.replace(selectorPart, `.${data.ref}[data-variant]`)
       StateStyleSheet.addSelector(selector, style)
     }
+  },
+
+  resetStyle (data, varName, varValue, styles) {
+    const refStyles = this.getOverrides(data.ref)
+    StyleSheetSelector.deleteSelectors(Object.keys(refStyles))
+    const componentStyles = this.getVariantOverrides(data.file, varName, varValue)
+    StyleSheetSelector.deleteSelectors(Object.keys(componentStyles))
+    StateStyleSheet.addSelectors(styles)
+  },
+
+  renameVariant (data, values) {
+
   }
 }

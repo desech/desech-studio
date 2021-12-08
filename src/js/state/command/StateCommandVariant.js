@@ -110,36 +110,34 @@ export default {
     const data = HelperComponent.getComponentData(component)
     this.addVariantToMain(data, obj.name, obj.value, obj.variantOverrides)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
-    await this.resetOverridesSaveFile(component, data, obj.overrides)
-    await this.saveReload()
+    this.updateVariantStyle(data, obj)
+    await this.resetOverridesSaveFile(component, data, obj)
   },
 
-  async resetOverridesSaveFile (component, data, overrides) {
-    HelperComponent.updateComponentData(data, 'overrides', overrides)
-    HelperComponent.setComponentData(component, data)
-  },
-
-  async switchVariant (component, name, value) {
-    const data = HelperComponent.getComponentData(component)
-    if (HelperComponent.isComponentElement(component)) {
-      await this.switchOverrideVariant(data, name, value, component)
-    } else {
-      this.updateVariantInstance(data, name, value, component)
-      await this.replaceComponent(component, data)
+  updateVariantStyle (data, obj) {
+    switch (obj.styleAction) {
+      case 'convert':
+        StyleSheetComponent.convertOverrideToVariant(data, obj.name, obj.value)
+        break
+      case 'reset':
+        StyleSheetComponent.resetStyle(data, obj.name, obj.value, obj.style)
+        break
+      default:
+        throw new Error('Unknown style action on update variant')
     }
-    HelperTrigger.triggerReload('right-panel')
   },
 
-  async switchOverrideVariant (data, name, value, component) {
-    const parents = await StateCommandOverride.overrideComponent(component, 'variants',
-      { name, value })
-    return await this.replaceComponent(parents[0].element, parents[0].data)
+  async resetOverridesSaveFile (component, data, obj) {
+    HelperComponent.updateComponentData(data, 'overrides', obj.overrides)
+    HelperComponent.setComponentData(component, data)
+    await this.saveReload()
   },
 
   async renameVariant (component, values) {
     const data = HelperComponent.getComponentData(component)
     this.renameVariantInMain(data.main.variants, values)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
+    StyleSheetComponent.renameVariant(data, values)
     const file = HelperFile.getRelPath(data.file)
     await window.electron.invoke('rendererRenameVariant', file, values)
     await this.saveReload()
@@ -165,5 +163,22 @@ export default {
     if (children) HelperComponent.setInstanceChildren(component, children)
     // the positioning ref gets replaced, so undo will not work anymore
     StateSelectedElement.selectElement(component)
+  },
+
+  async switchVariant (component, name, value) {
+    const data = HelperComponent.getComponentData(component)
+    if (HelperComponent.isComponentElement(component)) {
+      await this.switchOverrideVariant(data, name, value, component)
+    } else {
+      this.updateVariantInstance(data, name, value, component)
+      await this.replaceComponent(component, data)
+    }
+    HelperTrigger.triggerReload('right-panel')
+  },
+
+  async switchOverrideVariant (data, name, value, component) {
+    const parents = await StateCommandOverride.overrideComponent(component, 'variants',
+      { name, value })
+    return await this.replaceComponent(parents[0].element, parents[0].data)
   }
 }

@@ -31,12 +31,6 @@ export default {
     StyleSheetCommon.haveAtLeastOneRule(sheet, data.selector)
   },
 
-  getCreateSelectorSheet (selector) {
-    let sheet = StyleSheetCommon.getSelectorSheet(selector)
-    if (!sheet) sheet = this.addSelector(selector, [{ name: '', value: '' }])
-    return sheet
-  },
-
   initElementStyle (ref) {
     const selector = HelperStyle.buildRefSelector(ref)
     return this.addSelector(selector, [{ name: '', value: '' }])
@@ -50,9 +44,18 @@ export default {
 
   addSelector (selector, style) {
     const sheet = StyleSheetCommon.initStyleSheet()
-    StyleSheetCommon.addRemoveRules(sheet, selector, style)
+    StyleSheetCommon.addRemoveRules(sheet, selector, style, true)
     this.addPositionedSheet(sheet, selector)
     return sheet
+  },
+
+  addMergeSelector (selector, style) {
+    const sheet = StyleSheetCommon.getSelectorSheet(selector)
+    if (sheet) {
+      StyleSheetCommon.addRemoveRules(sheet, selector, style)
+    } else {
+      this.addSelector(selector, style)
+    }
   },
 
   addPositionedSheet (sheet, selector) {
@@ -92,27 +95,11 @@ export default {
 
   getSelectorTypeData (selector) {
     const component = HelperStyle.extractComponentSelector(selector)
-    if (component) {
-      return {
-        type: 'component',
-        part: component
-      }
-    }
+    if (component) return { type: 'component', part: component }
     const cls = HelperStyle.extractClassSelector(selector)
-    if (cls) {
-      return {
-        type: 'class',
-        part: cls
-      }
-    }
+    if (cls) return { type: 'class', part: cls }
     const ref = HelperStyle.extractRefSelector(selector)
-    if (ref) {
-      return {
-        type: 'ref',
-        part: ref,
-        ref
-      }
-    }
+    if (ref) return { type: 'ref', part: ref, ref }
   },
 
   getInsertSheetInnerPosition (array, data) {
@@ -174,6 +161,12 @@ export default {
     const sheet = this.getCreateSelectorSheet(selector)
     const style = StyleSheetCommon.extractStyleFromRules(sheet.cssRules)
     return this.convertStyleArrayToObject(style)
+  },
+
+  getCreateSelectorSheet (selector) {
+    let sheet = StyleSheetCommon.getSelectorSheet(selector)
+    if (!sheet) sheet = this.addSelector(selector, [{ name: '', value: '' }])
+    return sheet
   },
 
   convertStyleArrayToObject (array) {

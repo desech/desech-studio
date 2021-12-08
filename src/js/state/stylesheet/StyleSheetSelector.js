@@ -153,5 +153,12 @@ export default {
     if (!element) return
     element.classList.remove(cls)
     await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'delete' })
+  },
+
+  renameSelector (oldSelector, newSelector) {
+    const sheet = StyleSheetCommon.getSelectorSheet(oldSelector)
+    for (const rules of sheet.cssRules) {
+      rules.cssRules[0].selectorText = newSelector
+    }
   }
 }

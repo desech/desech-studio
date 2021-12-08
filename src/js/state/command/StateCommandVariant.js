@@ -137,10 +137,17 @@ export default {
     const data = HelperComponent.getComponentData(component)
     this.renameVariantInMain(data.main.variants, values)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
-    StyleSheetComponent.renameVariant(data, values)
+    await this.renameStyle(data, values)
     const file = HelperFile.getRelPath(data.file)
     await window.electron.invoke('rendererRenameVariant', file, values)
-    await this.saveReload()
+    // we only need to reload because files have already been saved
+    await LeftFileLoad.reloadCurrentFile()
+  },
+
+  async renameStyle (data, values) {
+    // change the css and then save the file before we reload the current file
+    StyleSheetComponent.renameVariant(data, values)
+    await TopCommandCommon.executeSaveFile()
   },
 
   renameVariantInMain (variants, data) {

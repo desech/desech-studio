@@ -182,14 +182,15 @@ export default {
     await ProjectCommon.updateHtmlFiles(root, async (file, html) => {
       return html.replace(/(data-ss-component=")(.*?)(")/g, (match, x1, component, x2) => {
         const json = JSON.parse(component.replaceAll('&quot;', '"'))
-        this.renameVariantInInstance(componentFile, json, data)
+        this.renameVariantInInstance(componentFile, json, data, file)
         return x1 + JSON.stringify(json).replaceAll('"', '&quot;') + x2
       })
     })
   },
 
-  renameVariantInInstance (componentFile, json, data) {
-    // when parsing main component data, there's no file value
+  renameVariantInInstance (componentFile, json, data, file) {
+    // only process component instances
+    // the main component data was changed in `rendererSaveComponentData`
     if (!json.file || componentFile !== json.file || !json?.variants) return
     json.variants[data.name] = data.value
     if (data.name !== data.oldName && json.variants[data.oldName]) {

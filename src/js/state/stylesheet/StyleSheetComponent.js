@@ -82,6 +82,14 @@ export default {
   },
 
   renameVariant (data, values) {
-
+    const oldPart = HelperComponent.getComponentClassSelector(data.file, values.oldName,
+      values.oldValue)
+    const newPart = HelperComponent.getComponentClassSelector(data.file, values.name, values.value)
+    const componentStyles = this.getVariantOverridesBySelector(oldPart)
+    if (!componentStyles) return
+    for (const oldSelector of Object.keys(componentStyles)) {
+      const newSelector = oldSelector.replace(oldPart, newPart)
+      StyleSheetSelector.renameSelector(oldSelector, newSelector)
+    }
   }
 }

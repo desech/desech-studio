@@ -209,7 +209,7 @@ export default {
   async executeUpdate (element, data, execute = true) {
     const name = Object.keys(data.variants)[0]
     const value = data.variants[name]
-    const style = StyleSheetComponent.getAllVariantOverrides(data, name, value)
+    const style = StyleSheetComponent.getAllOverrides(data, name, value)
     const cmd = {
       do: {
         command: 'updateVariant',

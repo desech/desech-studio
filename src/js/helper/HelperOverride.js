@@ -63,8 +63,8 @@ export default {
 
   // get a node's full overrides, used to highlight the overrides in the UI
   // full overrides means that the variant data is also added to the overrides
-  getNodeFullOverrides (element, type) {
-    const parents = this.getParents(element, type)
+  getNodeFullOverrides (element, type, parents = null) {
+    if (parents === null) parents = this.getParents(element, type)
     if (!parents?.length) return
     const ref = this.getOverrideRef(element, type)
     const data = this.getComponentFullOverrides(parents)
@@ -250,6 +250,20 @@ export default {
     const selectorClass = HelperStyle.extractClassSelector(li.dataset.selector)
     const cls = HelperStyle.getViewableClass(selectorClass)
     if (classes[cls]) {
+      li.classList.add('override')
+    }
+  },
+
+  highlightOverrideSelectors (template, selectorOverrides) {
+    if (!selectorOverrides) return
+    const records = template.getElementsByClassName('selector-element')
+    for (const li of records) {
+      this.highlightOverideSelector(li, selectorOverrides)
+    }
+  },
+
+  highlightOverideSelector (li, selectors) {
+    if (selectors.includes(li.dataset.selector)) {
       li.classList.add('override')
     }
   },

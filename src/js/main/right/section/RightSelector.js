@@ -4,6 +4,7 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import RightSelectorCommon from './selector/RightSelectorCommon.js'
 import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
+import StyleSheetComponent from '../../../state/stylesheet/StyleSheetComponent.js'
 
 export default {
   getSection (sectionData) {
@@ -24,7 +25,7 @@ export default {
     const selectors = StyleSheetSelector.getDisplayElementSelectors()
     this.injectSelectors(selectors, template, ref)
     this.activateSelector(template)
-    this.highlightOverides(template)
+    this.highlightOverides(template, ref)
   },
 
   injectDefaultSelector (container, ref) {
@@ -113,10 +114,14 @@ export default {
     RightSelectorCommon.activateSelector(record, container)
   },
 
-  highlightOverides (template) {
+  highlightOverides (template, ref) {
     const element = StateSelectedElement.getElement()
-    const overrides = HelperOverride.getNodeFullOverrides(element, 'element')
+    const parents = HelperOverride.getParents(element, 'element')
+    if (!parents) return
+    const overrides = HelperOverride.getNodeFullOverrides(element, 'element', parents)
+    const selectorOverrides = StyleSheetComponent.getOverrideSelectors(parents[0].data.ref, ref)
     HelperOverride.highlightOverideClasses(template, overrides?.classes)
     HelperOverride.highlightOverideClassesWarning(template, overrides?.classes)
+    HelperOverride.highlightOverrideSelectors(template, selectorOverrides)
   }
 }

@@ -5,26 +5,33 @@ import StyleSheetSelector from './StyleSheetSelector.js'
 import StateStyleSheet from '../StateStyleSheet.js'
 
 export default {
-  hasOverrides (ref) {
+  hasOverrides (componentRef) {
     for (const sheet of document.adoptedStyleSheets) {
       const rule = sheet.cssRules[0].cssRules[0]
-      if (HelperStyle.selectorStartsWith(rule.selectorText, '.' + ref) && rule.style.length) {
+      if (HelperStyle.selectorStartsWith(rule.selectorText, '.' + componentRef) &&
+        rule.style.length) {
         return true
       }
     }
     return false
   },
 
-  getOverrides (ref) {
+  getOverrides (componentRef) {
     const style = {}
     for (const sheet of document.adoptedStyleSheets) {
       const rule = sheet.cssRules[0].cssRules[0]
       const selector = rule.selectorText
-      if (HelperStyle.selectorStartsWith(selector, '.' + ref) && rule.style.length) {
+      if (HelperStyle.selectorStartsWith(selector, '.' + componentRef) && rule.style.length) {
         style[selector] = StyleSheetCommon.extractStyleFromRules(sheet.cssRules, false)
       }
     }
     return style
+  },
+
+  getOverrideSelectors (componentRef, elementRef = null) {
+    const selectors = Object.keys(this.getOverrides(componentRef))
+    if (!elementRef) return selectors
+    return selectors.filter(selector => selector.includes(elementRef))
   },
 
   getVariantOverrides (file, varName, varValue) {
@@ -44,7 +51,7 @@ export default {
     return style
   },
 
-  getAllVariantOverrides (data, varName, varValue) {
+  getAllOverrides (data, varName, varValue) {
     const overrideStyle = this.getOverrides(data.ref)
     const variantStyle = this.getVariantOverrides(data.file, varName, varValue)
     return { ...overrideStyle, ...variantStyle }
@@ -74,8 +81,8 @@ export default {
   },
 
   resetStyle (data, varName, varValue, styles) {
-    const refStyles = this.getOverrides(data.ref)
-    StyleSheetSelector.deleteSelectors(Object.keys(refStyles))
+    const refSelectors = this.getOverrideSelectors(data.ref)
+    StyleSheetSelector.deleteSelectors(refSelectors)
     const componentStyles = this.getVariantOverrides(data.file, varName, varValue)
     StyleSheetSelector.deleteSelectors(Object.keys(componentStyles))
     StateStyleSheet.addSelectors(styles)

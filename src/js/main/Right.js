@@ -55,9 +55,11 @@ export default {
 
   loadPanel () {
     const element = StateSelectedElement.getElement()
-    if (!element || !HelperElement.isCanvasElement(element)) return
+    if (!element || !HelperElement.isCanvasElement(element)) {
+      return
+    }
     const classes = RightSection.getSectionClasses()
-    const data = RightCommon.getSectionData()
+    const data = RightCommon.getSectionData(element, true)
     const sections = RightSection.getList(classes, data)
     RightSection.addToPanel(sections, this.getContainer())
     RightSubPanel.loadPanel(data)

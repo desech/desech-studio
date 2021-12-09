@@ -119,8 +119,8 @@ export default {
       case 'convert':
         StyleSheetComponent.convertOverrideToVariant(data, obj.name, obj.value)
         break
-      case 'reset':
-        StyleSheetComponent.resetStyle(data, obj.name, obj.value, obj.style)
+      case 'revert':
+        StyleSheetComponent.revertStyle(data, obj.name, obj.value, obj.style)
         break
       default:
         throw new Error('Unknown style action on update variant')
@@ -161,17 +161,6 @@ export default {
     }
   },
 
-  async replaceComponent (element, data) {
-    const ref = HelperElement.getRef(element)
-    const children = HelperComponent.getInstanceChildren(element)
-    const component = await HelperComponent.fetchComponent(data)
-    element.replaceWith(component)
-    HelperElement.replacePositionRef(component, ref)
-    if (children) HelperComponent.setInstanceChildren(component, children)
-    // the positioning ref gets replaced, so undo will not work anymore
-    StateSelectedElement.selectElement(component)
-  },
-
   async switchVariant (component, name, value) {
     const data = HelperComponent.getComponentData(component)
     if (HelperComponent.isComponentElement(component)) {
@@ -187,5 +176,17 @@ export default {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
     return await this.replaceComponent(parents[0].element, parents[0].data)
+  },
+
+  async replaceComponent (element, data) {
+    const ref = HelperElement.getRef(element)
+    const children = HelperComponent.getInstanceChildren(element)
+    const component = await HelperComponent.fetchComponent(data)
+    element.replaceWith(component)
+    HelperElement.replacePositionRef(component, ref)
+    if (children) HelperComponent.setInstanceChildren(component, children)
+    // the positioning refs of the component elements get replaced, so undo will not work
+    // anymore on the previous actions of the component elements
+    StateSelectedElement.selectElement(component)
   }
 }

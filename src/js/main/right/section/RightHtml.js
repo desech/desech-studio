@@ -10,7 +10,7 @@ import HelperOverride from '../../../helper/HelperOverride.js'
 export default {
   getSection (sectionData) {
     const template = this.getTemplate()
-    this.injectData(template)
+    this.injectData(template, sectionData)
     return template
   },
 
@@ -18,14 +18,13 @@ export default {
     return HelperDOM.getTemplate('template-style-html')
   },
 
-  injectData (template) {
+  injectData (template, sectionData) {
     const element = StateSelectedElement.getElement()
-    const overrides = HelperOverride.getNodeFullOverrides(element, 'element')
-    RightHtmlMain.injectMain(template, overrides)
-    RightHtmlDetail.injectDetails(template, overrides)
+    RightHtmlMain.injectMain(template, sectionData.overrides.element.exists)
+    RightHtmlDetail.injectDetails(template, sectionData.overrides.element?.overrides)
     RightHtmlAttribute.injectAttributes(template)
     this.injectProperties(template)
-    this.highlightOverides(template, element, overrides)
+    this.highlightOverides(template, element, sectionData.overrides.element?.overrides)
   },
 
   injectProperties (template) {

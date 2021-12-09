@@ -5,7 +5,6 @@ import HelperComponent from '../../../../helper/HelperComponent.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
-import HelperElement from '../../../../helper/HelperElement.js'
 import HelperOverride from '../../../../helper/HelperOverride.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
 import StyleSheetComponent from '../../../../state/stylesheet/StyleSheetComponent.js'
@@ -227,7 +226,7 @@ export default {
         value,
         overrides: data.overrides,
         variantOverrides: data.main.variants[name][value],
-        styleAction: 'reset',
+        styleAction: 'revert',
         style
       }
     }

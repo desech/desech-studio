@@ -64,9 +64,9 @@ export default {
     }
   },
 
-  injectMain (template, overrides) {
+  injectMain (template, overridesExist) {
     const data = RightHtmlCommon.getSelectedElementData()
-    RightCommon.injectResetOverrides(template, overrides)
+    RightCommon.injectResetOverrides(template, overridesExist)
     this.injectTitle(template, data)
     this.injectTagInDropdown(template, data)
     this.injectRef(template, data)

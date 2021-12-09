@@ -12,19 +12,18 @@ export default {
     const template = HelperDOM.getTemplate('template-style-component')
     const element = StateSelectedElement.getElement()
     const componentData = HelperComponent.getComponentData(element)
-    this.injectData(template, element, componentData)
+    this.injectData(template, element, sectionData, componentData)
     return template
   },
 
-  injectData (template, element, data) {
-    const overrides = HelperOverride.getNodeFullOverrides(element, 'component')
-    RightCommon.injectResetOverrides(template, overrides)
-    this.injectComponentRef(template, data)
-    this.injectComponentName(template, element, data)
-    this.injectVariants(template, element, data)
-    this.injectComponentFile(template, data)
-    RightCommon.injectPropertyFields(template, data.properties)
-    this.highlightOverides(template, overrides)
+  injectData (template, element, sectionData, componentData) {
+    RightCommon.injectResetOverrides(template, sectionData.overrides.component.exists)
+    this.injectComponentRef(template, componentData)
+    this.injectComponentName(template, element, componentData)
+    this.injectVariants(template, element, componentData)
+    this.injectComponentFile(template, componentData)
+    RightCommon.injectPropertyFields(template, componentData.properties)
+    this.highlightOverides(template, sectionData.overrides.component.overrides)
   },
 
   injectComponentRef (container, data) {

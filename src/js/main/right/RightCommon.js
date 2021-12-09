@@ -7,15 +7,18 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import HelperLocalStore from '../../helper/HelperLocalStore.js'
 import CanvasCommon from '../canvas/CanvasCommon.js'
 import StateSelectedElement from '../../state/StateSelectedElement.js'
+import HelperOverride from '../../helper/HelperOverride.js'
+import StyleSheetComponent from '../../state/stylesheet/StyleSheetComponent.js'
+import HelperElement from '../../helper/HelperElement.js'
 
 export default {
-  getSectionData () {
+  getSectionData (element = null, addOverrides = false) {
     const currentSelector = StyleSheetSelector.getCurrentSelector()
-    return {
-      currentSelector,
-      style: StateStyleSheet.getCurrentStyleObject(currentSelector),
-      computedStyle: StateSelectedElement.getComputedStyle()
-    }
+    const style = StateStyleSheet.getCurrentStyleObject(currentSelector)
+    const computedStyle = StateSelectedElement.getComputedStyle()
+    const data = { currentSelector, style, computedStyle }
+    if (addOverrides) data.overrides = this.getFullOverrides(element)
+    return data
   },
 
   async changeStyle (properties, panelReload = false, doCommand = 'changeStyle') {
@@ -130,8 +133,43 @@ export default {
     fields[1].value = value
   },
 
-  injectResetOverrides (template, overrides) {
+  injectResetOverrides (template, overridesExist) {
     const node = template.getElementsByClassName('style-reset-overrides')[0]
-    HelperDOM.toggle(node, !ExtendJS.isEmpty(overrides))
+    HelperDOM.toggle(node, overridesExist)
+  },
+
+  // get the node's full overrides and the style overrides
+  getFullOverrides (element) {
+    const componentParents = HelperOverride.getParents(element, 'component')
+    const elementParents = HelperOverride.getParents(element, 'element')
+    return {
+      component: this.getComponentFullOverrides(element, componentParents),
+      element: this.getElementFullOverrides(element, elementParents)
+    }
+  },
+
+  getComponentFullOverrides (element, parents) {
+    if (!parents) return { exists: false }
+    const overrides = HelperOverride.getNodeFullOverrides(element, 'component', parents)
+    // selector overrides are needed for the main component only, since sub-components
+    // can't have styles, only elements have it
+    const selectors = (element === parents[0].element)
+      ? StyleSheetComponent.getOverrideSelectors(parents[0].data.ref)
+      : []
+    const exists = this.checkExists(overrides, selectors)
+    return { overrides, selectors, exists }
+  },
+
+  getElementFullOverrides (element, parents) {
+    if (!parents) return { exists: false }
+    const ref = HelperElement.getStyleRef(element)
+    const overrides = HelperOverride.getNodeFullOverrides(element, 'element', parents)
+    const selectors = StyleSheetComponent.getOverrideSelectors(parents[0].data.ref, ref)
+    const exists = this.checkExists(overrides, selectors)
+    return { overrides, selectors, exists }
+  },
+
+  checkExists (overrides, selectors) {
+    return Boolean(!ExtendJS.isEmpty(overrides) || selectors.length)
   }
 }

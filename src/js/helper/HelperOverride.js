@@ -15,7 +15,7 @@ export default {
       return this.getElementParents(element)
     } else if (type === 'component' && HelperComponent.isComponentElement(element)) {
       return this.getComponentParents(element.parentNode)
-    } else if (type === 'component') {
+    } else if (type === 'component' && HelperComponent.isComponent(element)) {
       // top level components, don't have any parents, but we should be able to reset them
       const data = HelperComponent.getComponentData(element)
       return [{ element, data, topLevel: true }]
@@ -63,8 +63,7 @@ export default {
 
   // get a node's full overrides, used to highlight the overrides in the UI
   // full overrides means that the variant data is also added to the overrides
-  getNodeFullOverrides (element, type, parents = null) {
-    if (parents === null) parents = this.getParents(element, type)
+  getNodeFullOverrides (element, type, parents) {
     if (!parents?.length) return
     const ref = this.getOverrideRef(element, type)
     const data = this.getComponentFullOverrides(parents)

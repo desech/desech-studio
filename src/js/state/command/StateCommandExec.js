@@ -12,6 +12,7 @@ import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import StateCommandVariant from './StateCommandVariant.js'
+import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
 
 export default {
   addElement (data) {
@@ -229,7 +230,8 @@ export default {
   async resetComponentOverrides (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    await StateCommandVariant.replaceComponent(element, data)
+    StyleSheetComponent.resetComponentStyles(data.style, data.styleAction)
+    await StateCommandVariant.replaceComponent(element, data.component)
     HelperTrigger.triggerReload('right-panel')
   },
 

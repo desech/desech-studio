@@ -11,6 +11,7 @@ import HelperComponent from '../../../helper/HelperComponent.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
+import StyleSheetComponent from '../../../state/stylesheet/StyleSheetComponent.js'
 
 export default {
   getEvents () {
@@ -85,41 +86,61 @@ export default {
     if (execute) await StateCommand.executeCommand(cmd.do)
   },
 
-  // we are only resetting the overrides of a particular element or a particular component
-  //    from inside that component
-  // to reset the whole component, you need to do it at the actual component level
+  // we are only resetting the overrides of a particular element or component from inside
+  // that component; to reset the whole component, you need to do it at the top component level
+  // variants are reseted only when we do it at the top level component
+  // on elements we only reset the element style
+  // on the top level component or any sub-component we reset all the styles
   async resetOverrides (type, execute = true) {
     const command = (type === 'component') ? 'resetComponentOverrides' : 'resetElementOverrides'
     const element = StateSelectedElement.getElement()
+    const elementRef = (type === 'element') ? HelperElement.getStyleRef(element) : null
     const parent = HelperOverride.getMainParent(element, type)
     const overrides = this.getResetedOverrides(parent, element, type)
     const variants = parent.topLevel ? null : parent.data.variants
-    const cmd = this.getResetedOverridesCommand(command, parent, overrides, variants)
+    const style = StyleSheetComponent.getOverrides(parent.data.ref, elementRef)
+    const cmd = this.getResetedOverridesCommand(command, style, parent, overrides, variants)
     StateCommand.stackCommand(cmd)
     if (execute) await StateCommand.executeCommand(cmd.do)
-  },
-
-  getResetedOverridesCommand (command, parent, overrides, variants) {
-    const file = parent.data.file
-    const ref = HelperElement.getRef(parent.element)
-    return {
-      do: { command, file, ref, overrides, variants },
-      undo: {
-        command,
-        file,
-        ref,
-        overrides: parent.data?.overrides,
-        variants: parent.data?.variants
-      }
-    }
   },
 
   getResetedOverrides (parent, element, type) {
     if (parent?.topLevel || !parent?.data?.overrides) return null
     const ref = HelperOverride.getOverrideRef(element, type)
     const obj = ExtendJS.cloneData(parent.data.overrides)
+    // remove the component/element overrides from our component data
     ExtendJS.removeDeepIndex(obj, ref)
     ExtendJS.clearEmptyObjects(obj)
     return obj
+  },
+
+  getResetedOverridesCommand (command, style, parent, overrides, variants) {
+    const ref = HelperElement.getRef(parent.element)
+    return {
+      do: {
+        command,
+        ref,
+        styleAction: 'remove',
+        style,
+        component: {
+          file: parent.data.file,
+          ref: parent.data.ref,
+          overrides,
+          variants
+        }
+      },
+      undo: {
+        command,
+        ref,
+        styleAction: 'add',
+        style,
+        component: {
+          file: parent.data.file,
+          ref: parent.data.ref,
+          overrides: parent.data?.overrides,
+          variants: parent.data?.variants
+        }
+      }
+    }
   }
 }

@@ -16,7 +16,7 @@ export default {
     return false
   },
 
-  getOverrides (componentRef) {
+  getOverrides (componentRef, elementRef = null) {
     const style = {}
     for (const sheet of document.adoptedStyleSheets) {
       const rule = sheet.cssRules[0].cssRules[0]
@@ -25,13 +25,18 @@ export default {
         style[selector] = StyleSheetCommon.extractStyleFromRules(sheet.cssRules, false)
       }
     }
-    return style
+    return this.filterByElement(style, elementRef)
+  },
+
+  filterByElement (styles, ref) {
+    for (const selector of Object.keys(styles)) {
+      if (ref && !selector.includes(ref)) delete styles[selector]
+    }
+    return styles
   },
 
   getOverrideSelectors (componentRef, elementRef = null) {
-    const selectors = Object.keys(this.getOverrides(componentRef))
-    if (!elementRef) return selectors
-    return selectors.filter(selector => selector.includes(elementRef))
+    return Object.keys(this.getOverrides(componentRef, elementRef))
   },
 
   getVariantOverrides (file, varName, varValue) {
@@ -80,11 +85,13 @@ export default {
     }
   },
 
-  resetStyle (data, varName, varValue, styles) {
+  revertStyle (data, varName, varValue, styles) {
+    // delete all the existing selectors
     const refSelectors = this.getOverrideSelectors(data.ref)
     StyleSheetSelector.deleteSelectors(refSelectors)
     const componentStyles = this.getVariantOverrides(data.file, varName, varValue)
     StyleSheetSelector.deleteSelectors(Object.keys(componentStyles))
+    // add again all our style selectors
     StateStyleSheet.addSelectors(styles)
   },
 
@@ -97,6 +104,14 @@ export default {
     for (const oldSelector of Object.keys(componentStyles)) {
       const newSelector = oldSelector.replace(oldPart, newPart)
       StyleSheetSelector.renameSelector(oldSelector, newSelector)
+    }
+  },
+
+  resetComponentStyles (styles, action) {
+    if (action === 'add') {
+      StateStyleSheet.addSelectors(styles)
+    } else { // remove
+      StyleSheetSelector.deleteSelectors(Object.keys(styles))
     }
   }
 }

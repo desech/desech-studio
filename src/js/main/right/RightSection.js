@@ -152,7 +152,8 @@ export default {
   },
 
   getSectionByName (name) {
-    const data = RightCommon.getSectionData()
+    const element = StateSelectedElement.getElement()
+    const data = RightCommon.getSectionData(element, true)
     const classes = { ...this.getSectionClasses(), ...this.getSubSectionClasses() }
     for (const [label, obj] of Object.entries(classes)) {
       if (label === name) return this.getSection(obj, data)

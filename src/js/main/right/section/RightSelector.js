@@ -19,49 +19,67 @@ export default {
   injectData (template) {
     // @todo in the future show all selectors for that element like dev tools
     // use `element.is(rules[i].selectorText)`
-    this.injectDefaultSelector(template)
+    const ref = StateSelectedElement.getStyleRef()
+    this.injectDefaultSelector(template, ref)
     const selectors = StyleSheetSelector.getDisplayElementSelectors()
-    this.injectSelectors(selectors, template)
+    this.injectSelectors(selectors, template, ref)
     this.activateSelector(template)
     this.highlightOverides(template)
   },
 
-  injectDefaultSelector (container) {
+  injectDefaultSelector (container, ref) {
     const selector = StyleSheetSelector.getDefaultSelector()
-    const record = this.getSelectorRecord(selector, container)
+    const record = this.getSelectorRecord(selector, container, ref)
     container.getElementsByClassName('default-selector-list')[0].appendChild(record)
   },
 
-  injectSelectors (selectors, template) {
-    const refList = template.getElementsByClassName('ref-selector-list')[0]
-    const classList = template.getElementsByClassName('class-selector-list')[0]
+  injectSelectors (selectors, template, ref) {
+    const lists = this.getLists(template)
     for (const selector of selectors) {
-      if (this.isDefaultSelector(selector)) continue
-      this.injectSelector(selector, template, refList, classList)
+      if (this.isDefaultSelector(selector, ref)) continue
+      this.injectSelector(selector, template, lists, ref)
     }
   },
 
-  isDefaultSelector (selector) {
-    const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getStyleRef())
+  getLists (template) {
+    const lists = {}
+    for (const list of template.getElementsByClassName('selector-list')) {
+      lists[list.dataset.type] = list
+    }
+    return lists
+  },
+
+  isDefaultSelector (selector, ref) {
+    const title = HelperStyle.getSelectorLabel(selector, ref)
     // empty title means default selector
     return !title
   },
 
-  injectSelector (selector, template, refList, classList) {
-    const record = this.getSelectorRecord(selector, template)
-    const classSelector = HelperStyle.isClassSelector(selector)
-    classSelector ? classList.appendChild(record) : refList.appendChild(record)
+  injectSelector (selector, template, lists, ref) {
+    const type = this.getRecordType(selector)
+    const record = this.getSelectorRecord(selector, template, ref, type)
+    lists[type].appendChild(record)
   },
 
-  getSelectorRecord (selector, container) {
+  getRecordType (selector) {
+    if (HelperStyle.isVariantSelector(selector)) {
+      return 'variant'
+    } else if (HelperStyle.isClassSelector(selector)) {
+      return 'class'
+    } else {
+      return 'element'
+    }
+  },
+
+  getSelectorRecord (selector, container, ref, type) {
     const record = HelperDOM.getTemplate('template-style-selector-element')
-    this.prefillSelector(record, selector)
+    this.prefillSelector(record, selector, ref, type)
     return record
   },
 
-  prefillSelector (record, selector) {
+  prefillSelector (record, selector, ref, type) {
     record.dataset.selector = selector
-    const title = HelperStyle.getSelectorLabel(selector, StateSelectedElement.getStyleRef())
+    const title = HelperStyle.getSelectorLabel(selector, ref, type)
     const isDefault = (title === '')
     this.prefillSelectorDrag(record, !isDefault)
     this.prefillSelectorTitle(record, title)

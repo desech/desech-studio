@@ -14,28 +14,42 @@ export default {
     return this.getElementSelectors(element)
   },
 
-  // filter = all, ref, classes
-  getElementSelectors (element, filter = 'all', ref = null) {
+  // filter = class, variant, ref
+  getElementSelectors (element, filter = null, ref = null) {
     const selectors = []
     if (!ref) ref = HelperElement.getStyleRef(element)
     const classes = HelperElement.getClasses(element)
+    const cmpParent = HelperOverride.getMainParent(element, 'element')
     for (const sheet of document.adoptedStyleSheets) {
-      const selector = this.getElementSelector(sheet, ref, classes, filter)
+      const selector = this.getElementSelector(sheet, ref, classes, cmpParent?.data, filter)
       if (selector) selectors.push(selector)
     }
     this.addOrphanClassesToSelectors(selectors, classes)
     return ExtendJS.unique(selectors)
   },
 
-  getElementSelector (sheet, ref, classes, filter) {
+  getElementSelector (sheet, ref, classes, cmpData, filter) {
     const selector = sheet.cssRules[0].cssRules[0].selectorText
-    const isRef = HelperStyle.selectorHasRef(selector, ref)
     const isClass = HelperStyle.classBelongsToElement(selector, classes)
-    if ((filter === 'all' && (isRef || isClass)) || (filter === 'ref' && isRef) ||
-      (filter === 'classes' && isClass)) {
+    const isVariant = this.isVariantSelector(selector, ref, cmpData)
+    const isRef = this.isRefSelector(selector, ref, cmpData)
+    if ((!filter && (isClass || isVariant || isRef)) || (filter === 'class' && isClass) ||
+      (filter === 'variant' && isVariant) || (filter === 'ref' && isRef)) {
       return selector
     }
     return null
+  },
+
+  isVariantSelector (selector, ref, cmpData) {
+    return HelperComponent.selectorHasVariant(selector, cmpData) &&
+      HelperStyle.selectorHasRef(selector, ref, cmpData)
+  },
+
+  isRefSelector (selector, ref, cmpData) {
+    // selector has ref, is not a variant selector, is not part of a component or the ref matches
+    return HelperStyle.selectorHasRef(selector, ref) &&
+      !HelperStyle.isVariantSelector(selector) &&
+      (!cmpData || HelperStyle.isSelectorRefComponent(selector, cmpData.ref))
   },
 
   addOrphanClassesToSelectors (selectors, classes) {

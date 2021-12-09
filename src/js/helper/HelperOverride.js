@@ -5,6 +5,11 @@ import ExtendJS from './ExtendJS.js'
 import HelperStyle from './HelperStyle.js'
 
 export default {
+  getMainParent (element, type) {
+    const parents = this.getParents(element, type)
+    if (parents) return parents[0]
+  },
+
   getParents (element, type) {
     if (type === 'element' && HelperComponent.belongsToAComponent(element)) {
       return this.getElementParents(element)
@@ -242,7 +247,7 @@ export default {
   },
 
   highlightOverideClass (li, classes) {
-    const selectorClass = HelperStyle.getClassFromSelector(li.dataset.selector)
+    const selectorClass = HelperStyle.extractClassSelector(li.dataset.selector)
     const cls = HelperStyle.getViewableClass(selectorClass)
     if (classes[cls]) {
       li.classList.add('override')

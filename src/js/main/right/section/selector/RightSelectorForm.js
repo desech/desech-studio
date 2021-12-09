@@ -101,12 +101,14 @@ export default {
   },
 
   validateComponent (form, data) {
+    if (!data.component) return true
     data.component = HelperComponent.sanitizeComponent(data.component)
-    if (!data.component || HelperStyle.isValidComponent(data.component)) {
+    if (HelperStyle.isValidComponent(data.component)) {
       return true
+    } else {
+      form.elements.component.setCustomValidity(form.dataset.error)
+      return false
     }
-    form.elements.component.setCustomValidity(form.dataset.error)
-    return false
   },
 
   confirmAddStructure (form, data) {
@@ -122,8 +124,7 @@ export default {
 
   initSelector (preview, data) {
     if (!preview.dataset.selector && !data.component) {
-      const ref = StateSelectedElement.getStyleRef()
-      preview.dataset.selector = HelperStyle.buildRefSelector(ref)
+      preview.dataset.selector = StyleSheetSelector.getDefaultSelector()
     }
   },
 
@@ -136,7 +137,7 @@ export default {
     } else if (data.pseudo_element) {
       return data.pseudo_element
     } else if (data.child) {
-      return (data.combinator || '') + data.child
+      return data.combinator + data.child
     } else if (data.attr_name) {
       const value = data.attr_value ? `${data.attr_sign}"${data.attr_value}"` : ''
       return `[${data.attr_name}${value}]`

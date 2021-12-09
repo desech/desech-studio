@@ -286,7 +286,7 @@ export default {
   removeNonComponentClasses (string) {
     const classes = string.trim().split(' ')
     for (let i = classes.length - 1; i >= 0; i--) {
-      if (!classes[i] || !HelperStyle.isComponentClass(classes[i])) {
+      if (!classes[i] || !HelperStyle.isCssComponentClass(classes[i])) {
         classes.splice(i, 1)
       }
     }

@@ -39,10 +39,18 @@ export default {
     return { [widthType]: value }
   },
 
-  getSelectorLabel (selector, ref) {
-    const label = selector.replace(/\.e0[a-z0-9]+\[data-variant.*?]/g, '')
-      .replace('.' + ref, '').replace(/  +/g, ' ').trim()
+  getSelectorLabel (selector, ref, type = null) {
+    let label = (type === 'variant')
+      ? this.getVariantSelectorLabel(selector, ref)
+      : selector.replace(/\.e0[a-z0-9]+\[data-variant.*?]/g, '')
+    label = label.replace('.' + ref, '').replace(/  +/g, ' ').trim()
     return this.sanitizeSelector(label)
+  },
+
+  getVariantSelectorLabel (selector, ref) {
+    const first = this.extractVariantSelector(selector)
+    const last = selector.substring(selector.indexOf(ref) + ref.length)
+    return first + last
   },
 
   sanitizeSelector (value) {
@@ -58,19 +66,26 @@ export default {
     return match ? match[1] : null
   },
 
+  extractVariantSelector (selector) {
+    const match = /data-variant~="(.*?)"/g.exec(selector)
+    return match ? match[1] : null
+  },
+
+  extractComponentVariant (selector) {
+    const match = /\.(cmp-.*?)\[data-variant~="(.*?)"\]/g.exec(selector)
+    if (!match) return null
+    const [varName, varValue] = match[2].split('=')
+    return { name: match[1], varName, varValue }
+  },
+
   extractRefSelector (selector) {
     const match = /\.(e0[a-z0-9]+)/g.exec(selector)
     return match ? match[1] : null
   },
 
   extractClassSelector (selector) {
-    const match = /\.(_ss_[a-z0-9-_]+)/gi.exec(selector)
-    return match ? match[0] : null
-  },
-
-  getClassFromSelector (selector) {
     if (selector === ':root') return ''
-    const match = /^\.([a-z0-9-_]+)/gi.exec(selector)
+    const match = /^\.(_ss_[a-z0-9-_]+)/gi.exec(selector)
     return match && match[1] ? match[1] : ''
   },
 
@@ -84,7 +99,7 @@ export default {
   },
 
   isSelectorRefComponent (selector, ref) {
-    const regex = new RegExp(`(?<!e0.*?)${ref}`, 'g')
+    const regex = new RegExp(`^(\\.responsive-[0-9]+px )?\\.${ref}`, 'g')
     return regex.test(selector)
   },
 
@@ -93,7 +108,11 @@ export default {
     return selector.includes('._ss_')
   },
 
-  isComponentClass (cls) {
+  isVariantSelector (selector) {
+    return /\.(cmp-[a-z0-9-]+\[data-variant~=".*?"\])/gi.test(selector)
+  },
+
+  isCssComponentClass (cls) {
     return cls.startsWith('_ss_')
   },
 

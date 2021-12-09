@@ -91,25 +91,25 @@ export default {
   async resetOverrides (type, execute = true) {
     const command = (type === 'component') ? 'resetComponentOverrides' : 'resetElementOverrides'
     const element = StateSelectedElement.getElement()
-    const parents = HelperOverride.getParents(element, type)
-    const overrides = this.getResetedOverrides(parents[0], element, type)
-    const variants = parents[0].topLevel ? null : parents[0].data.variants
-    const cmd = this.getResetedOverridesCommand(command, parents, overrides, variants)
+    const parent = HelperOverride.getMainParent(element, type)
+    const overrides = this.getResetedOverrides(parent, element, type)
+    const variants = parent.topLevel ? null : parent.data.variants
+    const cmd = this.getResetedOverridesCommand(command, parent, overrides, variants)
     StateCommand.stackCommand(cmd)
     if (execute) await StateCommand.executeCommand(cmd.do)
   },
 
-  getResetedOverridesCommand (command, parents, overrides, variants) {
-    const file = parents[0].data.file
-    const ref = HelperElement.getRef(parents[0].element)
+  getResetedOverridesCommand (command, parent, overrides, variants) {
+    const file = parent.data.file
+    const ref = HelperElement.getRef(parent.element)
     return {
       do: { command, file, ref, overrides, variants },
       undo: {
         command,
         file,
         ref,
-        overrides: parents[0].data?.overrides,
-        variants: parents[0].data?.variants
+        overrides: parent.data?.overrides,
+        variants: parent.data?.variants
       }
     }
   },

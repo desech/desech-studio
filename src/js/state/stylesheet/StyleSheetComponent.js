@@ -8,7 +8,7 @@ export default {
   hasOverrides (ref) {
     for (const sheet of document.adoptedStyleSheets) {
       const rule = sheet.cssRules[0].cssRules[0]
-      if (HelperStyle.isSelectorRefComponent(rule.selectorText, ref) && rule.style.length) {
+      if (HelperStyle.selectorStartsWith(rule.selectorText, '.' + ref) && rule.style.length) {
         return true
       }
     }
@@ -20,7 +20,7 @@ export default {
     for (const sheet of document.adoptedStyleSheets) {
       const rule = sheet.cssRules[0].cssRules[0]
       const selector = rule.selectorText
-      if (HelperStyle.isSelectorRefComponent(selector, ref) && rule.style.length) {
+      if (HelperStyle.selectorStartsWith(selector, '.' + ref) && rule.style.length) {
         style[selector] = StyleSheetCommon.extractStyleFromRules(sheet.cssRules, false)
       }
     }

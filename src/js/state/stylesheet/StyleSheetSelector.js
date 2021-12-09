@@ -15,24 +15,23 @@ export default {
   },
 
   // filter = class, variant, ref
-  getElementSelectors (element, filter = null, ref = null) {
+  getElementSelectors (element, filter = null) {
     const selectors = []
-    if (!ref) ref = HelperElement.getStyleRef(element)
     const classes = HelperElement.getClasses(element)
-    const cmpParent = HelperOverride.getMainParent(element, 'element')
+    const refSelectors = this.getRefSelectors(element)
     for (const sheet of document.adoptedStyleSheets) {
-      const selector = this.getElementSelector(sheet, ref, classes, cmpParent?.data, filter)
+      const selector = this.getElementSelector(sheet, classes, refSelectors, filter)
       if (selector) selectors.push(selector)
     }
     this.addOrphanClassesToSelectors(selectors, classes)
     return ExtendJS.unique(selectors)
   },
 
-  getElementSelector (sheet, ref, classes, cmpData, filter) {
+  getElementSelector (sheet, classes, refSelectors, filter) {
     const selector = sheet.cssRules[0].cssRules[0].selectorText
     const isClass = HelperStyle.classBelongsToElement(selector, classes)
-    const isVariant = this.isVariantSelector(selector, ref, cmpData)
-    const isRef = this.isRefSelector(selector, ref, cmpData)
+    const isVariant = this.isVariantSelector(selector, refSelectors.variants)
+    const isRef = HelperStyle.selectorStartsWith(selector, refSelectors.ref)
     if ((!filter && (isClass || isVariant || isRef)) || (filter === 'class' && isClass) ||
       (filter === 'variant' && isVariant) || (filter === 'ref' && isRef)) {
       return selector
@@ -40,16 +39,14 @@ export default {
     return null
   },
 
-  isVariantSelector (selector, ref, cmpData) {
-    return HelperComponent.selectorHasVariant(selector, cmpData) &&
-      HelperStyle.selectorHasRef(selector, ref, cmpData)
-  },
-
-  isRefSelector (selector, ref, cmpData) {
-    // selector has ref, is not a variant selector, is not part of a component or the ref matches
-    return HelperStyle.selectorHasRef(selector, ref) &&
-      !HelperStyle.isVariantSelector(selector) &&
-      (!cmpData || HelperStyle.isSelectorRefComponent(selector, cmpData.ref))
+  isVariantSelector (selector, variantSelectors) {
+    if (!variantSelectors) return false
+    for (const variantSelector of variantSelectors) {
+      if (HelperStyle.selectorStartsWith(selector, variantSelector)) {
+        return true
+      }
+    }
+    return false
   },
 
   addOrphanClassesToSelectors (selectors, classes) {
@@ -77,28 +74,64 @@ export default {
 
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
+    const selectors = this.getRefSelectors(element)
+    return selectors.ref
+  },
+
+  getRefSelectors (element) {
     if (HelperComponent.belongsToAComponent(element)) {
-      return this.getComponentRefSelector(element)
+      return this.getComponentSelectors(element)
     } else {
       const ref = HelperElement.getStyleRef(element)
-      return HelperStyle.buildRefSelector(ref)
+      return { ref: HelperStyle.buildRefSelector(ref) }
     }
   },
 
-  getComponentRefSelector (element) {
-    const parent = this.getComponentRefParentsSelector(element)
+  getComponentSelectors (element) {
+    const parents = HelperOverride.getElementParents(element)
     const ref = HelperElement.getStyleRef(element)
-    const selector = HelperStyle.buildRefSelector(ref)
-    return HelperComponent.isComponent(element) ? parent + selector : parent + ' ' + selector
+    const isComponent = HelperComponent.isComponent(element)
+    const refSelector = this.getComponentRefSelector(parents, ref, isComponent)
+    const variants = this.getComponentVariantSelectors(parents, ref, isComponent)
+    return { ref: refSelector, variants }
   },
 
-  getComponentRefParentsSelector (element) {
-    const parents = HelperOverride.getElementParents(element)
+  getComponentRefSelector (parents, ref, isComponent) {
+    let selector = this.getComponentParentsSelector(parents)
+    selector += this.getRefSelectorPart(ref, isComponent)
+    return selector
+  },
+
+  getComponentParentsSelector (parents) {
     const parts = []
     for (const parent of parents) {
       parts.push(`.${parent.data.ref}[data-variant]`)
     }
     return parts.join(' ')
+  },
+
+  getComponentVariantSelectors (parents, ref, isComponent) {
+    if (!parents[0].data.variants) return
+    const selectors = []
+    const subPart = this.getComponentParentsSelector(parents.slice(1))
+    for (const [name, value] of Object.entries(parents[0].data.variants)) {
+      const selector = this.getComponentVariantSelector(ref, isComponent, parents[0].data.file,
+        name, value, subPart)
+      selectors.push(selector)
+    }
+    return selectors
+  },
+
+  getComponentVariantSelector (ref, isComponent, file, varName, varValue, subPart) {
+    let selector = HelperComponent.getComponentClassSelector(file, varName, varValue)
+    if (subPart) selector += ' ' + subPart
+    selector += this.getRefSelectorPart(ref, isComponent)
+    return selector
+  },
+
+  getRefSelectorPart (ref, isComponent) {
+    const selector = HelperStyle.buildRefSelector(ref)
+    return isComponent ? selector : ' ' + selector
   },
 
   selectorExists (selector) {

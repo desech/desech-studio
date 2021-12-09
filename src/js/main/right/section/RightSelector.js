@@ -67,7 +67,7 @@ export default {
     } else if (HelperStyle.isClassSelector(selector)) {
       return 'class'
     } else {
-      return 'element'
+      return 'ref'
     }
   },
 

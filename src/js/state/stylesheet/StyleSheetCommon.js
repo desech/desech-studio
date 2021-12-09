@@ -16,8 +16,9 @@ export default {
   getSelectorSheet (selector) {
     for (const sheet of document.adoptedStyleSheets) {
       const ruleSelector = sheet.cssRules[0].cssRules[0].selectorText
-      // the selector can have the responsive class in front
-      if (ruleSelector.endsWith(selector)) return sheet
+      if (HelperStyle.equalsSelector(ruleSelector, selector)) {
+        return sheet
+      }
     }
   },
 
@@ -112,7 +113,7 @@ export default {
     if (sheet) return this.extractStyleFromRules(sheet.cssRules, matchResponsive)
   },
 
-  extractStyleFromRules (rules, matchResponsive) {
+  extractStyleFromRules (rules, matchResponsive = true) {
     const style = []
     const responsive = matchResponsive ? HelperCanvas.getCurrentResponsiveWidth() : null
     for (const rule of rules) {

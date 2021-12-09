@@ -115,15 +115,15 @@ export default {
     let style = {}
     for (const ref of refs) {
       const element = HelperElement.getElement(ref)
-      const elementStyle = this.getStyle(element, ref)
+      const elementStyle = this.getStyle(element)
       style = { ...style, ...elementStyle }
     }
     return style
   },
 
-  getStyle (element, ref = null) {
+  getStyle (element) {
     const style = {}
-    const selectors = StyleSheetSelector.getElementSelectors(element, 'ref', ref)
+    const selectors = StyleSheetSelector.getElementSelectors(element, 'ref')
     for (const selector of selectors) {
       const css = StyleSheetCommon.getSelectorStyle(selector, false)
       if (css.length) style[selector] = css

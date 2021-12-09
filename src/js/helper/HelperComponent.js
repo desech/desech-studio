@@ -1,7 +1,6 @@
 import HelperFile from './HelperFile.js'
 import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
-import HelperStyle from './HelperStyle.js'
 
 export default {
   sanitizeComponent (name) {
@@ -197,12 +196,5 @@ export default {
     return Object.entries(variants).reduce((array, variant) => {
       return [...array, variant.join('=')]
     }, []).join(' ')
-  },
-
-  selectorHasVariant (selector, cmpData) {
-    if (!cmpData || !cmpData.variants) return false
-    const selData = HelperStyle.extractComponentVariant(selector)
-    return (selData && selData.name === this.getComponentClass(cmpData.file) &&
-      cmpData.variants[selData.varName] === selData.varValue)
   }
 }

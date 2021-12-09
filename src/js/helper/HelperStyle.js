@@ -1,5 +1,6 @@
 import HelperRegex from './HelperRegex.js'
 import HelperProject from './HelperProject.js'
+import ExtendJS from './ExtendJS.js'
 
 export default {
   buildRefSelector (ref) {
@@ -93,9 +94,15 @@ export default {
     return name ? name.replace('_ss_', '') : ''
   },
 
-  selectorHasRef (selector, ref) {
-    // can have a responsive class in front
-    return selector.includes(this.buildRefSelector(ref))
+  equalsSelector (selector, part, ends = true) {
+    const endPart = ends ? '$' : ''
+    const query = `^(\\.responsive-[0-9]+px )?${ExtendJS.escapeRegExp(part)}${endPart}`
+    const regex = new RegExp(query, 'gi')
+    return regex.test(selector)
+  },
+
+  selectorStartsWith (selector, part) {
+    return this.equalsSelector(selector, part, false)
   },
 
   isSelectorRefComponent (selector, ref) {

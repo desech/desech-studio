@@ -60,7 +60,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'c' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && event.shiftKey) {
-      await CanvasElementManage.copyAll()
+      await CanvasElementManage.copyAttrStyle()
     }
   },
 
@@ -84,7 +84,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'v' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && event.shiftKey) {
-      await CanvasElementManage.pasteAll()
+      await CanvasElementManage.pasteAttrStyle()
     }
   },
 

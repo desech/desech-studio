@@ -131,6 +131,11 @@ export default {
     return style
   },
 
+  async getPastedData () {
+    const string = await navigator.clipboard.readText()
+    return string ? ExtendJS.parseJsonNoError(string) : {}
+  },
+
   async saveToClipboard (data) {
     await navigator.clipboard.writeText(JSON.stringify(data, null, 2))
   },
@@ -219,7 +224,7 @@ export default {
     }
   },
 
-  async copyAll () {
+  async copyAttrStyle () {
     const element = StateSelectedElement.getElement()
     const type = HelperElement.getType(element)
     const data = {
@@ -300,22 +305,17 @@ export default {
   },
 
   // paste all attributes and styles
-  async pasteAll () {
+  async pasteAttrStyle () {
     const ref = StateSelectedElement.getRef()
     // we can only paste inside elements
     if (!ref) return
     const data = await this.getPastedData()
     if (!data.attributes && !data.style) return
-    await this.pasteAllCommand(ref, data)
+    await this.pasteAttrStyleCommand(ref, data)
     HelperTrigger.triggerReload('right-panel')
   },
 
-  async getPastedData () {
-    const string = await navigator.clipboard.readText()
-    return string ? ExtendJS.parseJsonNoError(string) : {}
-  },
-
-  async pasteAllCommand (ref, data, execute = true) {
+  async pasteAttrStyleCommand (ref, data, execute = true) {
     const command = {
       do: {
         command: 'pasteElementData',

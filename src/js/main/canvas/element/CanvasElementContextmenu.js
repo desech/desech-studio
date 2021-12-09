@@ -92,7 +92,7 @@ export default {
 
   async clickCopyAllEvent (event) {
     if (event.target.classList.contains('element-menu-copy-all')) {
-      await CanvasElementManage.copyAll()
+      await CanvasElementManage.copyAttrStyle()
     }
   },
 
@@ -110,7 +110,7 @@ export default {
 
   async clickPasteAllEvent (event) {
     if (event.target.classList.contains('element-menu-paste-data')) {
-      await CanvasElementManage.pasteAll()
+      await CanvasElementManage.pasteAttrStyle()
     }
   },
 

@@ -123,12 +123,22 @@ export default {
 
   getStyle (element) {
     const style = {}
+    const ref = HelperElement.getStyleRef(element)
     const selectors = StyleSheetSelector.getElementSelectors(element, 'ref')
     for (const selector of selectors) {
       const css = StyleSheetCommon.getSelectorStyle(selector, false)
-      if (css.length) style[selector] = css
+      if (css.length) {
+        const key = this.removeComponentFromSelector(selector, ref)
+        style[key] = css
+      }
     }
     return style
+  },
+
+  removeComponentFromSelector (selector, ref) {
+    return ExtendJS.removeExtraSpace(selector
+      .replace(/\.e0[a-z0-9]+\[data-variant\]/g, '')
+      .replace(/\..*?\[data-variant~=".*?"\]/, ''))
   },
 
   async getPastedData () {
@@ -318,12 +328,12 @@ export default {
   async pasteAttrStyleCommand (ref, data, execute = true) {
     const command = {
       do: {
-        command: 'pasteElementData',
+        command: 'pasteAttrStyle',
         ref,
         data
       },
       undo: {
-        command: 'pasteElementData',
+        command: 'pasteAttrStyle',
         ref,
         data: this.getCurrentData(ref, data)
       }

@@ -74,8 +74,11 @@ export default {
 
   getDefaultSelector () {
     const element = StateSelectedElement.getElement()
-    const selectors = this.getRefSelectors(element)
-    return selectors.ref
+    return this.getRefSelector(element)
+  },
+
+  getRefSelector (element) {
+    return this.getRefSelectors(element).ref
   },
 
   getRefSelectors (element) {

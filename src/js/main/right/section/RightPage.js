@@ -1,6 +1,7 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperFile from '../../../helper/HelperFile.js'
+import ExtendJS from '../../../helper/ExtendJS.js'
 
 export default {
   loadSection () {
@@ -30,6 +31,6 @@ export default {
     if (!data) return
     fields.language.value = data.language
     fields.title.value = data.title
-    fields.meta.value = data.meta.replace(/  +/g, '')
+    fields.meta.value = ExtendJS.removeExtraSpace(data.meta)
   }
 }

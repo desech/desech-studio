@@ -52,10 +52,10 @@ export default {
     if (content) element.innerHTML = content
   },
 
-  pasteStyle (element, ref, style) {
+  pasteStyle (element, style) {
     if (!style) return
     this.pasteRemoveOldStyle(element)
-    this.pasteAddNewStyle(ref, style)
+    this.pasteAddNewStyle(element, style)
   },
 
   pasteRemoveOldStyle (element) {
@@ -65,9 +65,10 @@ export default {
     }
   },
 
-  pasteAddNewStyle (ref, style) {
+  pasteAddNewStyle (element, style) {
+    const refSelector = StyleSheetSelector.getRefSelector(element)
     for (const [tmpSelector, rules] of Object.entries(style)) {
-      const selector = tmpSelector.replace(/\.e0[a-z0-9]+/, '.' + ref)
+      const selector = tmpSelector.replace(/\.e0[a-z0-9]+/, refSelector)
       const sheet = StateStyleSheet.getCreateSelectorSheet(selector)
       StyleSheetCommon.addRemoveRules(sheet, selector, rules, true)
     }

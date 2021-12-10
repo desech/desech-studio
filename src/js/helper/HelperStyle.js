@@ -44,7 +44,7 @@ export default {
     let label = (type === 'variant')
       ? this.getVariantSelectorLabel(selector, ref)
       : selector.replace(/\.e0[a-z0-9]+\[data-variant.*?]/g, '')
-    label = label.replace('.' + ref, '').replace(/  +/g, ' ').trim()
+    label = ExtendJS.removeExtraSpace(label.replace('.' + ref, ''))
     return this.sanitizeSelector(label)
   },
 

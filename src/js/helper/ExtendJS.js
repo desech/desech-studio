@@ -30,6 +30,10 @@ export default {
     return string.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
   },
 
+  removeExtraSpace (string) {
+    return string.replace(/  +/g, ' ').trim()
+  },
+
   unique (array) {
     return [...new Set(array)]
   },

@@ -1,22 +1,14 @@
-import { app, crashReporter } from 'electron'
+import { app } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import Window from './Window.js'
 import Log from '../lib/Log.js'
 
 export default {
   async bootstrap () {
-    this.onCrash()
     await Log.initLogs()
     this.ready()
     this.activate()
     if (app.isPackaged) this.updateEvents()
-  },
-
-  onCrash () {
-    crashReporter.start({
-      submitURL: '',
-      uploadToServer: false
-    })
   },
 
   ready () {

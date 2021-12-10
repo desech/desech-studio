@@ -17,16 +17,16 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^15.3.0"
+    "electron": "^16.0.4"
   },
   "dependencies": {
     "adm-zip": "^0.5.9",
     "archiver": "^5.3.0",
-    "electron-updater": "^4.3.9",
+    "electron-updater": "^4.6.1",
     "fs-extra": "^10.0.0",
     "jimp": "^0.16.1",
     "js-beautify": "^1.14.0",
-    "jsdom": "^18.0.1",
+    "jsdom": "^19.0.0",
     "nanoid": "^3.1.30",
     "node-fetch": "2.6.2"
   }

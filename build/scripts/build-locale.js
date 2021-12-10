@@ -1,7 +1,7 @@
 import glob from 'glob'
 import fs from 'fs'
-import csvStringify from 'csv-stringify/lib/sync.js'
-import csvParse from 'csv-parse/lib/sync.js'
+import { stringify } from 'csv-stringify/sync'
+import { parse } from 'csv-parse/sync'
 import HelperRegex from '../../src/js/helper/HelperRegex.js'
 import ExtendJS from '../../src/js/helper/ExtendJS.js'
 
@@ -75,7 +75,7 @@ function convertJsonToCsv (data) {
       Translated: null
     })
   }
-  const csv = csvStringify(obj, {
+  const csv = stringify(obj, {
     columns: ['Original', 'Translated'],
     header: true,
     quoted: true
@@ -87,8 +87,8 @@ function mergeTemplateWithCsv (locale) {
   const file = `./build/i18n/${locale}.csv`
   const templateString = fs.readFileSync('./build/i18n/template.csv').toString()
   const localeString = fs.existsSync(file) ? fs.readFileSync(file).toString() : ''
-  const templateData = csvParse(templateString, { columns: true })
-  const localeData = csvParse(localeString, { columns: true })
+  const templateData = parse(templateString, { columns: true })
+  const localeData = parse(localeString, { columns: true })
 
   for (let i = 0; i < templateData.length; i++) {
     for (const localeVal of localeData) {
@@ -98,7 +98,7 @@ function mergeTemplateWithCsv (locale) {
     }
   }
 
-  const csv = csvStringify(templateData, {
+  const csv = stringify(templateData, {
     columns: ['Original', 'Translated'],
     header: true,
     quoted: true
@@ -108,7 +108,7 @@ function mergeTemplateWithCsv (locale) {
 
 function convertCsvToJson (locale) {
   const csv = fs.readFileSync(`./build/i18n/${locale}.csv`).toString()
-  const data = csvParse(csv, { columns: true })
+  const data = parse(csv, { columns: true })
   const obj = {}
   for (const val of data) {
     obj[val.Original] = val.Translated || val.Original

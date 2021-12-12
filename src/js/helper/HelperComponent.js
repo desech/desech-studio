@@ -36,29 +36,43 @@ export default {
     return data ? JSON.parse(data) : null
   },
 
-  // set instance and main component data
+  // set the instance component data
   setComponentData (node, data) {
-    if (!ExtendJS.isEmpty(data)) {
-      this.removeMissingInstanceVariants(node, data)
-      ExtendJS.clearEmptyObjects(data)
-      node.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
-    } else {
-      // this is needed when we set the main data to our root element, not on the instance
-      node.removeAttributeNS(null, 'data-ss-component')
+    this.cleanPermanentData(data)
+    node.setAttributeNS(null, 'data-ss-component', this.getCleanTemporaryData(data))
+    // reset the data variant attribute too
+    this.setDataVariant(node, data)
+  },
+
+  cleanPermanentData (data) {
+    this.removeMissingInstanceVariants(data)
+    ExtendJS.clearEmptyObjects(data)
+  },
+
+  removeMissingInstanceVariants (data) {
+    if (!data?.variants || !data?.main?.variants) return
+    for (const [name, value] of Object.entries(data.variants)) {
+      if (!(name in data.main.variants) || !(value in data.main.variants[name])) {
+        delete data.variants[name]
+      }
     }
   },
 
-  removeMissingInstanceVariants (node, data) {
-    if (!data?.variants) return
-    const allData = this.getComponentData(node)
-    if (!allData?.main?.variants) return
-    for (const [name, value] of Object.entries(data.variants)) {
-      if (!allData.main.variants[name] && !data.main.variants[name]) {
-        delete data.variants[name]
-      } else if (allData.main.variants[name] && !allData.main.variants[name][value] &&
-        data.main.variants[name] && !data.main.variants[name][value]) {
-        delete data.variants[name][value]
-      }
+  // if we have fullOverrides in our data, then we don't want to delete it permanently because
+  // it will still be used by code, but we don't want to save it on the file
+  getCleanTemporaryData (data) {
+    const cleanData = ExtendJS.cloneData(data)
+    if (cleanData.fullOverrides) delete cleanData.fullOverrides
+    return JSON.stringify(cleanData)
+  },
+
+  // set the component data on the main component
+  setMainComponentData (node, data) {
+    if (!ExtendJS.isEmpty(data)) {
+      this.cleanPermanentData(data)
+      node.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+    } else {
+      node.removeAttributeNS(null, 'data-ss-component')
     }
   },
 

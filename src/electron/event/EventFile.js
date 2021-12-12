@@ -173,7 +173,7 @@ export default {
     const html = fs.readFileSync(file).toString()
     const dom = new JSDOM(html)
     const root = dom.window.document.body.children[0]
-    HelperComponent.setComponentData(root, data)
+    HelperComponent.setMainComponentData(root, data)
     fs.writeFileSync(file, root.outerHTML)
   },
 

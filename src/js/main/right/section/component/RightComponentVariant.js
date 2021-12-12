@@ -100,8 +100,9 @@ export default {
 
   async confirmCreate (form) {
     const element = StateSelectedElement.getElement()
+    const data = HelperComponent.getComponentData(element)
     if (form.checkValidity()) this.fixNames(form)
-    if (form.checkValidity()) this.validateExists(element, form.elements)
+    if (form.checkValidity()) this.validateExists(data, form.elements)
     if (form.checkValidity()) {
       HelperDOM.hide(form)
       await this.executeCreate(element, form.elements.name.value, form.elements.value.value)
@@ -114,10 +115,9 @@ export default {
     }
   },
 
-  validateExists (element, fields, existingData = null) {
+  validateExists (data, fields, existingData = null) {
     const name = fields.name.value
     const value = fields.value.value
-    const data = HelperComponent.getComponentData(element)
     const variants = data?.main?.variants || {}
     if (existingData) {
       const validName = !variants[name] || name === existingData.name

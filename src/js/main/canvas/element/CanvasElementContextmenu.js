@@ -10,6 +10,7 @@ import Page from '../../../page/Page.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import CanvasElementText from './CanvasElementText.js'
 
 export default {
   getEvents () {
@@ -19,7 +20,7 @@ export default {
         'clickDuplicateElementEvent', 'clickDeleteElementEvent', 'clickCopyAllEvent',
         'clickCopyAttributesEvent', 'clickCopyStyleEvent', 'clickPasteAllEvent',
         'clickCopySelectorEvent', 'clickCutSelectorEvent', 'clickPasteSelectorEvent',
-        'clickAssignComponentHoleEvent', 'clickLoadComponentEvent'],
+        'clickAssignComponentHoleEvent', 'clickLoadComponentEvent', 'clickEditText'],
       contextmenu: ['contextmenuCanvasShowMenuEvent', 'contextmenuSidebarShowMenuEvent']
     }
   },
@@ -144,6 +145,12 @@ export default {
     }
   },
 
+  clickEditText (event) {
+    if (event.target.classList.contains('element-menu-edit-text')) {
+      this.editText()
+    }
+  },
+
   showContextmenu (element, x, y) {
     // select the correct element when dealing with components
     element = StateSelectedElement.selectElement(element)
@@ -153,15 +160,16 @@ export default {
   },
 
   getMenuOptions (element) {
-    const menuType = this.getMenuOptionsType(element)
+    const type = HelperElement.getType(element)
+    const menuType = this.getMenuOptionsType(element, type)
     const template = HelperDOM.getTemplate(`template-contextmenu-element-${menuType}`)
+    template.classList.add(type)
     this.toggleComponent(element, template)
     if (!HelperDOM.isVisible(element)) template.classList.add('hidden')
     return template
   },
 
-  getMenuOptionsType (element) {
-    const type = HelperElement.getType(element)
+  getMenuOptionsType (element, type) {
     if (HelperComponent.isComponent(element)) {
       return 'component'
     } else if (type === 'body' || type === 'inline') {
@@ -205,5 +213,10 @@ export default {
     const element = StateSelectedElement.getElement()
     const file = HelperComponent.getInstanceFile(element)
     Page.loadMain(file)
+  },
+
+  editText () {
+    const element = StateSelectedElement.getElement()
+    CanvasElementText.startEditText(element)
   }
 }

@@ -31,6 +31,7 @@
   color: var(--menu-txt-hover);
 }
 
+.desech-studio .contextmenu .menu-list-container:not(.text) .element-menu-edit-text,
 .desech-studio .contextmenu .menu-list-container.hidden .element-menu-hide,
 .desech-studio .contextmenu .menu-list-container:not(.hidden) .element-menu-show,
 .desech-studio .contextmenu .menu-list-container.component-element .element-menu-delete,

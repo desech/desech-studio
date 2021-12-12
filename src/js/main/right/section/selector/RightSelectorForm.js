@@ -105,7 +105,7 @@ export default {
   validateComponent (form, data) {
     if (!data.component) return true
     data.component = HelperComponent.sanitizeComponent(data.component)
-    if (HelperStyle.isValidComponent(data.component)) {
+    if (HelperStyle.isValidCssClass(data.component)) {
       return true
     } else {
       form.elements.component.setCustomValidity(form.dataset.error)

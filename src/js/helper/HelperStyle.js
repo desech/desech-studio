@@ -311,7 +311,7 @@ export default {
     }
   },
 
-  isValidComponent (cls) {
+  isValidCssClass (cls) {
     return (cls !== 'block' && cls !== 'text' && !cls.startsWith('e0') && !cls.startsWith('cmp-'))
   }
 }

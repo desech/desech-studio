@@ -43,6 +43,8 @@ export default {
     } else if (HelperComponent.isComponent(node)) {
       this.setComponentInstance(node)
     } else {
+      // we also remove the _ss_ from classes of nodes that are svg children
+      // check ParseHtml.formatSvgChildren()
       this.setRelativeSource(node)
       this.setBasic(node)
     }

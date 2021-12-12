@@ -315,7 +315,7 @@ export default {
     if (this._options.ui === 'export') return
     const classes = []
     for (const cls of node.classList) {
-      if (HelperStyle.isValidComponent(cls)) {
+      if (HelperStyle.isValidCssClass(cls)) {
         classes.push('_ss_' + cls)
       } else {
         classes.push(cls)
@@ -353,6 +353,16 @@ export default {
   setIconElement (node, component, ref) {
     ParseOverride.setOverrideInner(node, component?.data?.fullOverrides, ref)
     this.setBasic(node, 'icon', component)
+    this.formatSvgChildren(node.children)
+  },
+
+  formatSvgChildren (children) {
+    for (const child of children) {
+      this.cleanClasses(child)
+      if (child.children) {
+        this.formatSvgChildren(child.children)
+      }
+    }
   },
 
   setImageElement (node, component) {

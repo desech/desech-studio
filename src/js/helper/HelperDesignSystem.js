@@ -1,5 +1,6 @@
 import HelperStyle from '../helper/HelperStyle.js'
 import HelperProject from './HelperProject.js'
+import ExtendJS from './ExtendJS.js'
 
 export default {
   hasDesignSystem () {
@@ -15,7 +16,7 @@ export default {
       if (rule.constructor.name !== 'CSSStyleRule') continue
       HelperStyle.addSelectorClass(rule.selectorText, classes)
     }
-    return classes.sort()
+    return ExtendJS.unique(classes).sort()
   },
 
   getDesignSystemSheet () {

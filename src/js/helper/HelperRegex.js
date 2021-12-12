@@ -1,8 +1,7 @@
 export default {
   getMatchingGroups (string, regex) {
-    const matches = string.matchAll(regex)
     const results = []
-    for (const match of matches) {
+    for (const match of string.matchAll(regex)) {
       const data = {}
       for (const [name, val] of Object.entries(match.groups)) {
         data[name] = val || ''

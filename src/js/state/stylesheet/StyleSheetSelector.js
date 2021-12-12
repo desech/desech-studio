@@ -166,7 +166,7 @@ export default {
       const selector = sheet.cssRules[0].cssRules[0].selectorText
       HelperStyle.addSelectorClass(selector, classes)
     }
-    return classes.sort()
+    return ExtendJS.unique(classes).sort()
   },
 
   // if all class selectors are deleted, then unlink this class

@@ -276,9 +276,10 @@ export default {
   },
 
   addSelectorClass (selector, classes) {
-    if (!this.isClassSelector(selector)) return
-    const cls = this.getViewableClass(this.extractClassSelector(selector))
-    if (!classes.includes(cls)) classes.push(cls)
+    const matches = selector.matchAll(/\._ss_([a-z0-9-]+)/g)
+    for (const match of matches) {
+      classes.push(match[1])
+    }
   },
 
   getInlineStyle (element, ignoreZeroValues = false) {

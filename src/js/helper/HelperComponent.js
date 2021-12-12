@@ -50,9 +50,10 @@ export default {
   },
 
   removeMissingInstanceVariants (data) {
-    if (!data?.variants || !data?.main?.variants) return
+    if (!data?.variants) return
     for (const [name, value] of Object.entries(data.variants)) {
-      if (!(name in data.main.variants) || !(value in data.main.variants[name])) {
+      if (!data.main?.variants || !(name in data.main.variants) ||
+        !(value in data.main.variants[name])) {
         delete data.variants[name]
       }
     }
@@ -67,10 +68,10 @@ export default {
   },
 
   // set the component data on the main component
-  setMainComponentData (node, data) {
-    if (!ExtendJS.isEmpty(data)) {
-      this.cleanPermanentData(data)
-      node.setAttributeNS(null, 'data-ss-component', JSON.stringify(data))
+  setMainComponentData (node, mainData) {
+    if (!ExtendJS.isEmpty(mainData)) {
+      ExtendJS.clearEmptyObjects(mainData)
+      node.setAttributeNS(null, 'data-ss-component', JSON.stringify(mainData))
     } else {
       node.removeAttributeNS(null, 'data-ss-component')
     }

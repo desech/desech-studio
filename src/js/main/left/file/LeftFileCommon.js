@@ -1,6 +1,7 @@
 import HelperFile from '../../../helper/HelperFile.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperProject from '../../../helper/HelperProject.js'
+import HelperForm from '../../../helper/HelperForm.js'
 
 export default {
   async createFolder (name, root = null) {
@@ -47,5 +48,12 @@ export default {
   revertEditableLabel (item) {
     const label = item.getElementsByClassName('panel-item-name')[0]
     label.innerHTML = label.children[0].value
+  },
+
+  validateFileName (form) {
+    const fields = form.elements
+    const valid = !HelperFile.sanitizeFile(fields.name.value).startsWith('component')
+    HelperForm.reportFieldError(fields.name, valid, 'invalidError')
+    return form.checkValidity()
   }
 }

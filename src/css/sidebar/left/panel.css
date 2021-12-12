@@ -139,7 +139,7 @@
   cursor: text;
 }
 
-#sidebar-left-panel ul.panel-file-list .panel-file-input {
+#sidebar-left-panel ul.panel-file-list .panel-file-rename-input {
   background-color: var(--field-edit-bg);
   height: 21px;
 }

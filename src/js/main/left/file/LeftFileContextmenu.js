@@ -75,14 +75,14 @@ export default {
   },
 
   async keydownFinishRenameItemEvent (event) {
-    if (event.key && HelperEvent.isNotCtrlAltShift(event) && (event.key === 'Escape' ||
-      event.key === 'Enter')) {
+    if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'Enter') {
       await this.finishRenameItem()
     }
   },
 
   keydownCloseEvent (event) {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'Escape') {
+      this.cancelRenameFile()
       this.closeActiveItem()
       this.hideMenu()
     }
@@ -183,15 +183,27 @@ export default {
 
   makeLabelEditable (item) {
     const label = item.getElementsByClassName('panel-item-name')[0]
-    label.innerHTML = `<input class="panel-file-input" value="${label.textContent}">`
-    label.children[0].select()
+    const form = HelperDOM.getTemplate('template-panel-file-rename-file')
+    form.elements.name.setAttributeNS(null, 'value', label.textContent)
+    label.innerHTML = form.outerHTML
+    label.children[0].elements.name.select()
+  },
+
+  cancelRenameFile () {
+    const form = document.getElementsByClassName('panel-file-rename-form')[0]
+    if (!form) return
+    const li = form.closest('li')
+    form.parentNode.innerHTML = li.dataset.search
+    li.classList.remove('editing')
+    li.setAttributeNS(null, 'draggable', 'true')
   },
 
   async finishRenameItem () {
-    const input = document.querySelector('.panel-file-list .panel-file-input')
-    if (!input) return
-    const item = input.closest('.panel-file-item')
-    const name = HelperFile.sanitizeFile(input.value)
+    const form = document.getElementsByClassName('panel-file-rename-form')[0]
+    if (!form) return
+    if (!LeftFileCommon.validateFileName(form)) return
+    const item = form.elements.name.closest('.panel-file-item')
+    const name = HelperFile.sanitizeFile(form.elements.name.value)
     await TopCommandSave.save(true)
     await window.electron.invoke('rendererRenamePath', item.dataset.ref, name)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })

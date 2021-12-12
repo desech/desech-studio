@@ -181,28 +181,21 @@ export default {
   },
 
   async createFolder (form) {
-    if (!this.validateFileName(form)) return
+    if (!LeftFileCommon.validateFileName(form)) return
     const fields = form.elements
-    await LeftFileCommon.createFolder(fields.folder.value, fields.parent.value).catch(error => {
+    await LeftFileCommon.createFolder(fields.name.value, fields.parent.value).catch(error => {
       HelperError.error(error)
     })
   },
 
   async createCopyFile (form) {
-    if (!this.validateFileName(form)) return
+    if (!LeftFileCommon.validateFileName(form)) return
     const fields = form.elements
     if (fields.file.files.length) {
       await this.copyFile(fields.file.files[0].path, fields.parent.value)
     } else {
       await this.createFile(fields.name.value, fields.parent.value)
     }
-  },
-
-  validateFileName (form) {
-    const fields = form.elements
-    const valid = !HelperFile.sanitizeFile(fields.name.value).startsWith('component')
-    HelperForm.reportFieldError(fields.name, valid, 'invalidError')
-    return form.checkValidity()
   },
 
   async copyFile (file, folder) {

@@ -117,12 +117,13 @@ export default {
   // only if we are inside a page and this is a component ref, then we need the position right
   // before the e000body element, otherwise we just return the last position of the array
   getLastRefPosition (array, ref) {
-    if (ref && HelperFile.isPageFile() &&
-      HelperComponent.belongsToAComponent(HelperElement.getElement(ref))) {
-      return StyleSheetCommon.getSelectorSheetIndex('.e000body')
-    } else {
-      return array.length
+    if (ref && HelperFile.isPageFile()) {
+      const element = HelperElement.getElement(ref)
+      if (element && HelperComponent.belongsToAComponent(element)) {
+        return StyleSheetCommon.getSelectorSheetIndex('.e000body')
+      }
     }
+    return array.length
   },
 
   insertSheetAtPosition (selector, position, target) {
@@ -153,7 +154,9 @@ export default {
 
   saveDeletedSelector (selector) {
     const style = StyleSheetCommon.getSelectorStyle(selector, false)
-    HelperLocalStore.setItem('selector-' + selector, style)
+    if (style) {
+      HelperLocalStore.setItem('selector-' + selector, style)
+    }
   },
 
   getCurrentStyleObject (selector = null) {

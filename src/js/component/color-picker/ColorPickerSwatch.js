@@ -145,6 +145,7 @@ export default {
   getSwatches () {
     const colors = {}
     const style = StyleSheetCommon.getSelectorStyle(':root', false)
+    if (!style) return colors
     for (const prop of style) {
       if (prop.name && prop.name.startsWith('--color-')) colors[prop.name] = prop.value
     }

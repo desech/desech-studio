@@ -127,7 +127,7 @@ export default {
     const selectors = StyleSheetSelector.getElementSelectors(element, 'ref')
     for (const selector of selectors) {
       const css = StyleSheetCommon.getSelectorStyle(selector, false)
-      if (css.length) {
+      if (css && css.length) {
         const key = this.removeComponentFromSelector(selector, ref)
         style[key] = css
       }

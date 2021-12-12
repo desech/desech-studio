@@ -74,5 +74,11 @@ export default {
         field.setCustomValidity('')
       }
     }
+  },
+
+  reportFieldError (field, valid, errorKey) {
+    const output = valid ? '' : field.dataset[errorKey]
+    field.setCustomValidity(output)
+    field.reportValidity()
   }
 }

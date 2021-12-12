@@ -71,14 +71,14 @@ export default {
 
   async changeCreateFolderEvent (event) {
     if (event.target.classList.contains('panel-folder-name')) {
-      await this.createFolder(event.target.closest('form').elements)
+      await this.createFolder(event.target.closest('form'))
     }
   },
 
   async changeCreateFileEvent (event) {
     if (event.target.classList.contains('panel-file-name') ||
       event.target.id === 'panel-upload-file') {
-      await this.createCopyFile(event.target.closest('form').elements)
+      await this.createCopyFile(event.target.closest('form'))
     }
   },
 
@@ -180,18 +180,29 @@ export default {
     if (li) this.showSearchSelectItem(li, cycle)
   },
 
-  async createFolder (fields) {
+  async createFolder (form) {
+    if (!this.validateFileName(form)) return
+    const fields = form.elements
     await LeftFileCommon.createFolder(fields.folder.value, fields.parent.value).catch(error => {
       HelperError.error(error)
     })
   },
 
-  async createCopyFile (fields) {
+  async createCopyFile (form) {
+    if (!this.validateFileName(form)) return
+    const fields = form.elements
     if (fields.file.files.length) {
       await this.copyFile(fields.file.files[0].path, fields.parent.value)
     } else {
       await this.createFile(fields.name.value, fields.parent.value)
     }
+  },
+
+  validateFileName (form) {
+    const fields = form.elements
+    const valid = !HelperFile.sanitizeFile(fields.name.value).startsWith('component')
+    HelperForm.reportFieldError(fields.name, valid, 'invalidError')
+    return form.checkValidity()
   },
 
   async copyFile (file, folder) {

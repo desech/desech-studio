@@ -121,17 +121,11 @@ export default {
     const variants = data?.main?.variants || {}
     if (existingData) {
       const validName = !variants[name] || name === existingData.name
-      this.reportFieldError(fields.name, validName, 'existsError')
+      HelperForm.reportFieldError(fields.name, validName, 'existsError')
     }
     const validValue = !variants[name] || !variants[name][value] ||
       (existingData && value === existingData.value)
-    this.reportFieldError(fields.value, validValue, 'existsError')
-  },
-
-  reportFieldError (field, valid, errorMsg) {
-    const output = valid ? '' : field.dataset[errorMsg]
-    field.setCustomValidity(output)
-    field.reportValidity()
+    this.HelperForm(fields.value, validValue, 'existsError')
   },
 
   async executeCreate (element, name, value, execute = true) {

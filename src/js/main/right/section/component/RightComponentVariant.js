@@ -125,7 +125,7 @@ export default {
     }
     const validValue = !variants[name] || !variants[name][value] ||
       (existingData && value === existingData.value)
-    this.HelperForm(fields.value, validValue, 'existsError')
+    HelperForm.reportFieldError(fields.value, validValue, 'existsError')
   },
 
   async executeCreate (element, name, value, execute = true) {

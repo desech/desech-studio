@@ -15,7 +15,7 @@ import StateStyleSheet from '../StateStyleSheet.js'
 export default {
   async createVariant (component, obj) {
     const data = HelperComponent.getComponentData(component)
-    this.addVariantToMain(data, obj.name, obj.value, data.overrides)
+    this.addVariantToMain(data, obj.name, obj.value, obj.overrides)
     await window.electron.invoke('rendererSaveComponentData', data.file, data.main)
     if (obj.newVariant) {
       // this happens when we create a new variant from overrides
@@ -37,17 +37,16 @@ export default {
 
   addVariantToInstances (component, data, obj) {
     delete data.overrides
-    this.updateVariantInstance(data, obj.name, obj.value, component)
+    this.updateVariantInstance(component, obj.name, obj.value, data)
     this.saveMainDataAllComponents(data.file, data.main)
     StyleSheetComponent.convertOverrideToVariant(data, obj.name, obj.value)
     HelperTrigger.triggerReload('component-section')
   },
 
-  updateVariantInstance (data, name, value, component) {
+  updateVariantInstance (component, name, value, data) {
     if (!data.variants) data.variants = {}
     HelperComponent.updateComponentData(data.variants, name, value)
     HelperComponent.setComponentData(component, data)
-    HelperComponent.setDataVariant(component, data)
   },
 
   // this only applies to new variants which are no used yet
@@ -63,8 +62,8 @@ export default {
   },
 
   async undoDeleteVariant (component, data, obj) {
-    // we need to set the variant again
-    this.updateVariantInstance(data, obj.name, obj.value, component)
+    // we need to set the variant again; the overrides were already set by addVariantToMain()
+    this.updateVariantInstance(component, obj.name, obj.value, data)
     StateStyleSheet.addSelectors(obj.style)
     // @todo because of reload and ParseHtml removing the missing variants, we end up clearing
     // the variant value in other components, so it's not a clean undo
@@ -166,7 +165,7 @@ export default {
     if (HelperComponent.isComponentElement(component)) {
       await this.switchOverrideVariant(data, name, value, component)
     } else {
-      this.updateVariantInstance(data, name, value, component)
+      this.updateVariantInstance(component, name, value, data)
       await this.replaceComponent(component, data)
     }
     HelperTrigger.triggerReload('right-panel')

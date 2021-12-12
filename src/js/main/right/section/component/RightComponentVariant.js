@@ -142,6 +142,7 @@ export default {
         ref: data.ref,
         name,
         value,
+        overrides: data.overrides,
         newVariant: true
       },
       undo: {
@@ -187,6 +188,7 @@ export default {
         ref: data.ref,
         name,
         value,
+        overrides: data.main.variants[name][value],
         style
       }
     }

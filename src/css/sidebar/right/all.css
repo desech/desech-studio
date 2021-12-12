@@ -247,8 +247,8 @@
   height: 25px;
   line-height: 25px;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .sidebar-right .style-override-warning {

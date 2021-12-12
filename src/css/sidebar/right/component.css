@@ -2,9 +2,10 @@
   max-width: 110px;
   height: 20px;
   display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
   vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .sidebar-right #component-section .style-variant-form {

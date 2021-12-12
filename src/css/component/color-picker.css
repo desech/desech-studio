@@ -127,9 +127,9 @@
   height: 20px;
   line-height: 20px;
   font-size: 12px;
-  text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .sidebar-right .slide-container .subtitle {

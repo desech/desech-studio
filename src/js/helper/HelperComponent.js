@@ -26,7 +26,7 @@ export default {
     return node.classList.contains('component-element')
   },
 
-  belongsToAComponent (node, exceptMainHole = true) {
+  belongsToAComponent (node, exceptMainHole = false) {
     return this.isComponent(node) || this.isComponentElement(node) ||
       (this.isComponentHole(node) && (!exceptMainHole || !this.isMainHole(node)))
   },

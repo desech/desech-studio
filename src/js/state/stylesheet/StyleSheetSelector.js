@@ -82,7 +82,7 @@ export default {
   },
 
   getRefSelectors (element) {
-    if (HelperComponent.belongsToAComponent(element)) {
+    if (HelperComponent.belongsToAComponent(element, true)) {
       return this.getComponentSelectors(element)
     } else {
       const ref = HelperElement.getStyleRef(element)

@@ -26,9 +26,9 @@ export default {
     return node.classList.contains('component-element')
   },
 
-  belongsToAComponent (node) {
+  belongsToAComponent (node, exceptMainHole = true) {
     return this.isComponent(node) || this.isComponentElement(node) ||
-      (this.isComponentHole(node) && !this.isMainHole(node))
+      (this.isComponentHole(node) && (!exceptMainHole || !this.isMainHole(node)))
   },
 
   // not movable are component elements and holes that are not also components or non main holes

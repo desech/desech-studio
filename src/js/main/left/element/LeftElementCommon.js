@@ -29,7 +29,7 @@ export default {
   },
 
   getComponentData (element) {
-    if (!HelperComponent.belongsToAComponent(element)) return null
+    if (!HelperComponent.belongsToAComponent(element, false)) return null
     const comp = {
       draggable: (element === HelperComponent.getMovableElement(element))
     }

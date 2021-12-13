@@ -14,21 +14,27 @@ export default {
     return `<div class="block ${ref}"></div>`
   },
 
-  isComponent (element) {
-    return element.hasAttributeNS(null, 'data-ss-component')
+  isComponent (node) {
+    return node.hasAttributeNS(null, 'data-ss-component')
   },
 
-  isComponentHole (element) {
-    return element.hasAttributeNS(null, 'data-ss-component-hole')
+  isComponentHole (node) {
+    return node.hasAttributeNS(null, 'data-ss-component-hole')
   },
 
-  isComponentElement (element) {
-    return element.classList.contains('component-element')
+  isComponentElement (node) {
+    return node.classList.contains('component-element')
   },
 
-  belongsToAComponent (element) {
-    return this.isComponent(element) || this.isComponentHole(element) ||
-      this.isComponentElement(element)
+  belongsToAComponent (node) {
+    return this.isComponent(node) || this.isComponentElement(node) ||
+      (this.isComponentHole(node) && !this.isMainHole(node))
+  },
+
+  // not movable are component elements and holes that are not also components or non main holes
+  isMovableElement (node) {
+    return !this.isComponentElement(node) &&
+      (!this.isComponentHole(node) || this.isComponent(node) || this.isMainHole(node))
   },
 
   getComponentData (node) {
@@ -137,6 +143,10 @@ export default {
     return true
   },
 
+  isMainHole (node) {
+    return HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()
+  },
+
   getMainHole () {
     const query = '[data-ss-component-hole]:not(.component-element)'
     const elements = document.getElementById('canvas').querySelectorAll(query)
@@ -176,14 +186,6 @@ export default {
       node = node.closest('[data-ss-component]')
     }
     return node
-  },
-
-  isMovableElement (node) {
-    // not movable are component elements and holes that are not also components
-    // or non main holes
-    return !this.isComponentElement(node) &&
-      (!this.isComponentHole(node) || this.isComponent(node) ||
-      (HelperFile.isComponentFile() && HelperElement.getRef(node) === this.getMainHole()))
   },
 
   async fetchComponent (data) {

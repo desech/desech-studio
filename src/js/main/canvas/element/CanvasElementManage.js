@@ -28,9 +28,14 @@ export default {
   },
 
   async copyElement () {
+    // normally we should allow the copy of elements from inside a component, but we need to
+    // clean it up to look like a non-component, which is hard
+    // @todo maybe implement this later; for now it's not possible
     const ref = StateSelectedElement.getRef()
-    if (!this.isElementAllowed(ref)) return
-    const element = HelperElement.getElement(ref)
+    const element = StateSelectedElement.getElement()
+    if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
+      return
+    }
     await this.copyElementData(element)
   },
 

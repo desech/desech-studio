@@ -105,11 +105,11 @@ export default {
   // all these refs will be replaced on paste by generateNewRefs()
   getAllReplaceableRefs (html) {
     const allRefs = []
-    for (const classes of html.matchAll(/class="(.*?)"/g)) {
-      if (!classes) continue
-      const refs = HelperElement.getAllRefsObject(classes[1].split(' '))
-      if (refs.position) allRefs.push(refs.position)
-      if (refs.component) allRefs.push(refs.component)
+    for (const match of html.matchAll(/class="(.*?)"/g)) {
+      if (!match) continue
+      const refs = HelperElement.getAllRefsObject(match[1].split(' '))
+      if (refs?.position) allRefs.push(refs.position)
+      if (refs?.component) allRefs.push(refs.component)
     }
     return allRefs
   },

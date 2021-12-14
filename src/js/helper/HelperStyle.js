@@ -276,7 +276,7 @@ export default {
   },
 
   addSelectorClass (selector, classes) {
-    const matches = selector.matchAll(/\._ss_([a-z0-9-]+)/g)
+    const matches = selector.matchAll(/\._ss_([a-z0-9-_]+)/g)
     for (const match of matches) {
       classes.push(match[1])
     }
@@ -309,6 +309,12 @@ export default {
       case 'background-blend-mode':
         return 'normal'
     }
+  },
+
+  sanitizeClass (name) {
+    // only allow alphanumeric, dashes and underscore
+    // material design uses BEM, so we need to allow weirdness like -- and __
+    return name.toLowerCase().replace(/[^a-z0-9-_]/g, '-')
   },
 
   isValidCssClass (cls) {

@@ -104,7 +104,7 @@ export default {
 
   validateComponent (form, data) {
     if (!data.component) return true
-    data.component = HelperComponent.sanitizeComponent(data.component)
+    data.component = HelperStyle.sanitizeClass(data.component)
     if (HelperStyle.isValidCssClass(data.component)) {
       return true
     } else {

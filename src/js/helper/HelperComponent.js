@@ -3,7 +3,6 @@ import HelperElement from './HelperElement.js'
 import ExtendJS from './ExtendJS.js'
 
 export default {
-  // also check the material design repo -> Build.sanitizeClass()
   sanitizeComponent (name) {
     // only allow alphanumeric and dashes
     return name.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')

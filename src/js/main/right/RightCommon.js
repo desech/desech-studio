@@ -149,7 +149,7 @@ export default {
   },
 
   getComponentFullOverrides (element, parents) {
-    if (!parents) return { exists: false }
+    if (!parents || !parents.length) return { exists: false }
     const overrides = HelperOverride.getNodeFullOverrides(element, 'component', parents)
     // selector overrides are needed for the main component only, since sub-components
     // can't have styles, only elements have it
@@ -161,7 +161,7 @@ export default {
   },
 
   getElementFullOverrides (element, parents) {
-    if (!parents) return { exists: false }
+    if (!parents || !parents.length) return { exists: false }
     const ref = HelperElement.getStyleRef(element)
     const overrides = HelperOverride.getNodeFullOverrides(element, 'element', parents)
     const selectors = StyleSheetComponent.getOverrideSelectors(parents[0].data.ref, ref)

@@ -174,8 +174,7 @@ export default {
   async switchOverrideVariant (data, name, value, component) {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
-    const subRef = HelperElement.getStyleRef(component)
-    await this.replaceComponent(parents[0].element, parents[0].data, subRef)
+    await this.replaceComponent(parents[0].element, parents[0].data, data.ref)
   },
 
   async replaceComponent (element, data, subRef = null) {
@@ -188,15 +187,15 @@ export default {
     this.selectReplaceComponent(component, subRef)
   },
 
-  selectReplaceComponent (element, subRef) {
+  selectReplaceComponent (component, subCmpRef) {
     // the positioning refs of the component elements get replaced, so undo will not work
     // anymore on the previous actions of the component elements
-    if (subRef) {
-      // select this component element instead
-      const subElement = HelperElement.getElement(subRef)
-      StateSelectedElement.selectElement(subElement)
+    if (subCmpRef) {
+      // select this sub component instead
+      const subComponent = HelperElement.getElement(subCmpRef)
+      StateSelectedElement.selectElement(subComponent)
     } else {
-      StateSelectedElement.selectElement(element)
+      StateSelectedElement.selectElement(component)
     }
   }
 }

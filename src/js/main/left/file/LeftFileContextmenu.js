@@ -148,7 +148,8 @@ export default {
   },
 
   disableWritable (item, menu) {
-    const check = HelperFile.isReadonly(item.dataset.ref) || item.classList.contains('loaded')
+    // we now allow the rename/delete of current files because we reload the index file on finish
+    const check = HelperFile.isReadonly(item.dataset.ref)
     for (const li of menu.getElementsByClassName('writable')) {
       li.classList.toggle('disabled', check)
     }
@@ -207,12 +208,15 @@ export default {
     await TopCommandSave.save(true)
     await window.electron.invoke('rendererRenamePath', item.dataset.ref, name)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
-    await LeftFileLoad.reloadCurrentFile()
+    // we can't reload the current file because it might have been renamed by the operation
+    await LeftFileLoad.reloadIndexFile()
   },
 
   async deleteItem (item) {
     await window.electron.invoke('rendererDeletePath', item.dataset.ref)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    // we can't reload the current file because it might have been renamed by the operation
+    await LeftFileLoad.reloadIndexFile()
   },
 
   closeActiveItem () {

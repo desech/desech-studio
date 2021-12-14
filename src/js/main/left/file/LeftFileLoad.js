@@ -33,5 +33,10 @@ export default {
   async reloadCurrentFile () {
     const file = HelperProject.getFile()
     await this.loadFile(file)
+  },
+
+  async reloadIndexFile () {
+    const file = HelperProject.getFolder() + '/index.html'
+    await this.loadFile(file)
   }
 }

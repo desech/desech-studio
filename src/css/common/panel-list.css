@@ -12,7 +12,10 @@
 
 .desech-studio ul.panel-list>li:hover,
 .desech-studio ul.panel-list>li.active,
-.desech-studio ul.panel-list>li.dragdrop-start {
+.desech-studio ul.panel-list>li.dragdrop-start,
+.desech-studio ul.panel-list>li:hover .panel-item-name,
+.desech-studio ul.panel-list>li.active .panel-item-name,
+.desech-studio ul.panel-list>li.dragdrop-start .panel-item-name {
   background-color: var(--list-bg-hover);
   color: var(--list-txt-hover);
 }

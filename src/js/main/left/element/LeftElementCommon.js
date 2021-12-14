@@ -30,31 +30,32 @@ export default {
 
   getComponentData (element) {
     if (!HelperComponent.belongsToAComponent(element)) return null
-    const comp = {
+    const obj = {
       draggable: (element === HelperComponent.getMovableElement(element))
     }
     if (HelperComponent.isComponent(element)) {
-      this.addComponentNode(element, comp)
+      this.addComponentNode(element, obj)
     } else if (HelperComponent.isComponentHole(element)) {
-      this.addComponentHole(element, comp)
+      this.addComponentHole(element, obj)
     } else {
-      comp.isElement = true
+      obj.isElement = true
     }
-    return comp
+    return obj
   },
 
-  addComponentNode (element, comp) {
-    comp.data = HelperComponent.getComponentData(element)
-    comp.name = HelperComponent.getComponentName(comp.data.file)
-    comp.isComponent = true
+  addComponentNode (element, obj) {
+    obj.data = HelperComponent.getComponentData(element)
+    obj.name = HelperComponent.getComponentName(obj.data.file)
+    obj.isComponent = true
     if (HelperComponent.isComponentHole(element)) {
-      comp.isComponentHole = true
-      if (comp.draggable) comp.container = true
+      obj.isComponentHole = true
+      if (obj.draggable) obj.container = true
     }
   },
 
-  addComponentHole (element, comp) {
-    comp.isComponentHole = true
-    comp.containerOnly = element.closest('[data-ss-component]')
+  addComponentHole (element, obj) {
+    obj.isComponentHole = true
+    obj.containerOnly = element.closest('[data-ss-component]') &&
+      !HelperComponent.isComponentElement(element)
   }
 }

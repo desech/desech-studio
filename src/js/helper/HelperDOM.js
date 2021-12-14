@@ -213,6 +213,14 @@ export default {
     return html.replace(/[&<>"']/g, m => map[m])
   },
 
+  addRemoveAttribute (node, name, value) {
+    if (value) {
+      node.setAttributeNS(null, name, value)
+    } else {
+      node.removeAttributeNS(null, name)
+    }
+  },
+
   clearStyle (node) {
     // sometimes it still leaves a style="" attribute, which we remove on save
     // check StateHtmlFile.formatHtmlString(), RightHtmlCommon.getIgnoredAttributes()

@@ -323,7 +323,7 @@ export default {
         classes.push(cls)
       }
     }
-    node.setAttributeNS(null, 'class', classes.join(' '))
+    HelperDOM.addRemoveAttribute(node, 'class', classes.join(' '))
   },
 
   setBasic (node, type, component) {

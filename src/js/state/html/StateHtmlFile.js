@@ -13,11 +13,11 @@ export default {
 
   getHtml (file, css) {
     this.init(css)
-    const canvas = HelperCanvas.getCanvas().cloneNode(true)
-    this.removeNonCanvasElements(canvas)
-    this.prepareElement(canvas.children[0])
-    this.addComponentDataToRoot(file, canvas.children[0])
-    return this.returnHtml(canvas.innerHTML, file)
+    const clone = HelperCanvas.getCanvas().cloneNode(true)
+    this.removeNonCanvasElements(clone)
+    this.prepareElement(clone.children[0])
+    this.addComponentDataToRoot(file, clone.children[0])
+    return this.returnHtml(clone.innerHTML, file)
   },
 
   init (css) {
@@ -25,8 +25,8 @@ export default {
     this._designSystemClasses = HelperDesignSystem.getDesignSystemClasses()
   },
 
-  removeNonCanvasElements (canvas) {
-    canvas.querySelectorAll('[hidden]:not([data-ss-hidden])').forEach(el => el.remove())
+  removeNonCanvasElements (clone) {
+    clone.querySelectorAll('[hidden]:not([data-ss-hidden])').forEach(el => el.remove())
   },
 
   addComponentDataToRoot (file, root) {
@@ -143,16 +143,16 @@ export default {
   cleanClasses (node, checkComponent = true) {
     const cls = node.getAttributeNS(null, 'class')
     if (!cls) return
-    const array = []
+    const classes = []
     for (let val of cls.split(' ')) {
       if (checkComponent && val.includes('_ss_') && !this.componentExists(val) &&
         !this.componentNotDesignSystem(val)) {
         continue
       }
       val = this.filterClass(val.trim())
-      if (val) array.push(val)
+      if (val) classes.push(val)
     }
-    node.setAttributeNS(null, 'class', array.join(' '))
+    HelperDOM.addRemoveAttribute(node, 'class', classes.join(' '))
   },
 
   filterClass (cls) {

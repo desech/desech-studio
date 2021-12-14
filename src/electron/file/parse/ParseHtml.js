@@ -50,7 +50,9 @@ export default {
   },
 
   extractComponentData () {
-    if ((!this._options.isComponent && !this._options.componentData) || !this._body) return null
+    if ((!this._options.isComponent && !this._options.componentData) || !this._body) {
+      return null
+    }
     const main = this._body.dataset.ssComponent
     this._body.removeAttributeNS(null, 'data-ss-component')
     const data = this.getComponentData(main)

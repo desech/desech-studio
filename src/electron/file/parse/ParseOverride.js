@@ -30,7 +30,7 @@ export default {
   },
 
   setOverrideAttributes (node, overrides, folder) {
-    const ref = HelperElement.getRef(node)
+    const ref = HelperElement.getStyleRef(node)
     if (overrides && overrides[ref]?.attributes) {
       for (const [name, obj] of Object.entries(overrides[ref].attributes)) {
         this.setOverrideAttribute(name, obj, node, folder)
@@ -48,7 +48,7 @@ export default {
 
   setOverrideElementProperties (node, overrides) {
     const properties = HelperElement.getProperties(node) || {}
-    const ref = HelperElement.getRef(node)
+    const ref = HelperElement.getStyleRef(node)
     const changed = this.overrideObjects(overrides, 'properties', ref, properties)
     if (changed) HelperElement.setProperties(node, properties)
   },
@@ -80,7 +80,7 @@ export default {
   },
 
   setOverrideClasses (node, overrides) {
-    const ref = HelperElement.getRef(node)
+    const ref = HelperElement.getStyleRef(node)
     if (overrides && overrides[ref]?.classes) {
       for (const [cls, obj] of Object.entries(overrides[ref].classes)) {
         this.setOverrideClass(cls, obj, node)

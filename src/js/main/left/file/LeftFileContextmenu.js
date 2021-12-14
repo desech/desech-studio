@@ -207,13 +207,15 @@ export default {
     const name = HelperFile.sanitizeFile(form.elements.name.value)
     await TopCommandSave.save(true)
     await window.electron.invoke('rendererRenamePath', item.dataset.ref, name)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
-    // we can't reload the current file because it might have been renamed by the operation
-    await LeftFileLoad.reloadIndexFile()
+    await this.finishDestructiveOperation()
   },
 
   async deleteItem (item) {
     await window.electron.invoke('rendererDeletePath', item.dataset.ref)
+    await this.finishDestructiveOperation()
+  },
+
+  async finishDestructiveOperation () {
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
     // we can't reload the current file because it might have been renamed by the operation
     await LeftFileLoad.reloadIndexFile()

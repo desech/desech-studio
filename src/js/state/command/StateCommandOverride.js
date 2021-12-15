@@ -44,6 +44,7 @@ export default {
   },
 
   getOriginalElement (element, component, originalComponent) {
+    if (element === component) return originalComponent
     const path = this.buildParentPath(element, component)
     return this.getNodeFromPath(originalComponent, path)
   },

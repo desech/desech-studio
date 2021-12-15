@@ -1,6 +1,7 @@
 .sidebar-right #html-section .style-html-top-line {
   grid-auto-flow: column;
   column-gap: 0;
+  grid-template-columns: inherit;
 }
 
 .sidebar-right #html-section .style-html-top-line.body,

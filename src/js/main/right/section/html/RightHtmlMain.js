@@ -103,7 +103,9 @@ export default {
 
   injectRef (template, data) {
     const div = template.getElementsByClassName('style-html-ref')[0]
-    div.textContent = data.styleRef
+    div.textContent = (data.refs.type === 'element')
+      ? data.refs.position
+      : data.refs.position + ' / ' + data.refs.style
   },
 
   injectTopLine (template, data) {

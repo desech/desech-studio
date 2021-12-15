@@ -22,10 +22,12 @@ export default {
   async processElementData (parents, element, type, value) {
     const ref = HelperElement.getStyleRef(element)
     const componentNode = await this.getComponentNode(parents[0].data, type)
-    const originalNode = componentNode.getElementsByClassName(ref)[0]
+    const originalNode = this.getOriginalElement(element, parents[0].element,
+      componentNode.children[0])
     this.overrideData(type, value, parents, element, ref, originalNode)
   },
 
+  // this returns a <div> that wraps the component inside, that's why we will use children[0] later
   async getComponentNode (data, type) {
     const div = document.createElement('div')
     const cmpData = this.getOriginalComponentData(data, type)
@@ -39,6 +41,27 @@ export default {
     // we also want the variants because overrides sit on top of variants
     if (data?.variants) cmpData.variants = data.variants
     return cmpData
+  },
+
+  getOriginalElement (element, component, originalComponent) {
+    const path = this.buildParentPath(element, component)
+    return this.getNodeFromPath(originalComponent, path)
+  },
+
+  buildParentPath (node, topParent, path = []) {
+    path.unshift(HelperDOM.getChildIndex(node))
+    if (node.parentNode !== topParent) {
+      this.buildParentPath(node.parentNode, topParent, path)
+    }
+    return path
+  },
+
+  getNodeFromPath (node, path, index = 0) {
+    if (index <= path.length - 1) {
+      return this.getNodeFromPath(node.children[path[index]], path, index + 1)
+    } else {
+      return node
+    }
   },
 
   overrideData (type, value, parents, element, ref, originalNode) {

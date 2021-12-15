@@ -221,6 +221,10 @@ export default {
     }
   },
 
+  getChildIndex (node) {
+    return Array.prototype.indexOf.call(node.parentNode.children, node)
+  },
+
   clearStyle (node) {
     // sometimes it still leaves a style="" attribute, which we remove on save
     // check StateHtmlFile.formatHtmlString(), RightHtmlCommon.getIgnoredAttributes()

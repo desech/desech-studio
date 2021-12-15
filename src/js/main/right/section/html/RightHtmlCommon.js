@@ -10,8 +10,7 @@ export default {
     const element = StateSelectedElement.getElement()
     return {
       element,
-      ref: HelperElement.getRef(element),
-      styleRef: HelperElement.getStyleRef(element),
+      refs: HelperElement.getAllRefsObject(element.classList),
       type: HelperElement.getType(element),
       tag: HelperElement.getTag(element)
     }

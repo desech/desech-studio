@@ -61,7 +61,7 @@ export default {
   injectVariantElement (list, name, values, variants, isComponentElement) {
     const li = HelperDOM.getTemplate('template-style-component-variant')
     const fields = li.children[0].elements
-    fields.name.value = name
+    fields.name.value = fields.name.dataset.tooltip = name
     const selected = variants ? variants[name] : null
     this.injectVariantOptions(li, fields.value, name, values, selected, isComponentElement)
     list.appendChild(li)

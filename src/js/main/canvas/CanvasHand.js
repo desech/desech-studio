@@ -24,14 +24,16 @@ export default {
   keydownPanStartSpaceEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && event.code === 'Space') {
-      if (!HelperCanvas.getOperation()) this.panStart(event.clientX, event.clientY)
+      if (!HelperCanvas.getOperation()) {
+        this.panStart(event.clientX, event.clientY)
+      }
       // stop scrolling down with default Space key
       event.preventDefault()
     }
   },
 
   keyupPanEndSpaceEvent (event) {
-    if (event.key && HelperCanvas.getOperation() === 'panning' &&
+    if (event.key && HelperCanvas.isOperation('panning') &&
       HelperEvent.areMainShortcutsAllowed(event) && HelperEvent.isNotCtrlAltShift(event) &&
       event.code === 'Space') {
       this.panEnd()

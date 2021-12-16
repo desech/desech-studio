@@ -34,7 +34,7 @@ export default {
   },
 
   dblclickStartEditEvent (event) {
-    if (HelperCanvas.getOperation() !== 'editing' && !HelperCanvas.isPreview() &&
+    if (!HelperCanvas.isOperation('editing') && !HelperCanvas.isPreview() &&
       event.target.closest('.element.text')) {
       this.startEditText(event.target.closest('.element.text'))
       // so we don't deselect the text
@@ -43,26 +43,26 @@ export default {
   },
 
   async mousedownFinishEditEvent (event) {
-    if (HelperCanvas.getOperation() === 'editing' &&
-      !event.target.closest('.element.editable') && !event.target.closest('#text-overlay')) {
+    if (HelperCanvas.isOperation('editing') && !event.target.closest('.element.editable') &&
+      !event.target.closest('#text-overlay')) {
       await this.finishEditText()
     }
   },
 
   async keydownFinishEditEvent () {
-    if (event.key && HelperCanvas.getOperation() === 'editing' && event.key === 'Escape') {
+    if (event.key && HelperCanvas.isOperation('editing') && event.key === 'Escape') {
       await this.finishEditText()
     }
   },
 
   keyupUpdateOverlayEvent () {
-    if (HelperCanvas.getOperation() === 'editing') {
+    if (HelperCanvas.isOperation('editing')) {
       this.updateOverlaySizeAfterTyping()
     }
   },
 
   pasteTextEvent (event) {
-    if (HelperCanvas.getOperation() === 'editing') {
+    if (HelperCanvas.isOperation('editing')) {
       this.pasteCleanText(event.clipboardData)
       // stop the actual pasting of text
       event.preventDefault()
@@ -70,7 +70,7 @@ export default {
   },
 
   keydownNewLineEvent (event) {
-    if (event.key && HelperCanvas.getOperation() === 'editing' && event.key === 'Enter') {
+    if (event.key && HelperCanvas.isOperation('editing') && event.key === 'Enter') {
       this.addNewLine()
       // stop the actual div inserting
       event.preventDefault()
@@ -78,34 +78,34 @@ export default {
   },
 
   keydownButtonSpaceEvent (event) {
-    if (event.key && HelperCanvas.getOperation() === 'editing' && event.code === 'Space' &&
+    if (event.key && HelperCanvas.isOperation('editing') && event.code === 'Space' &&
       HelperDOM.getTag(event.target) === 'button') {
       this.addButtonSpace()
     }
   },
 
   keydownFormatTextEvent (event) {
-    if (event.key && HelperCanvas.getOperation() === 'editing' && HelperEvent.isCtrlCmd(event) &&
+    if (event.key && HelperCanvas.isOperation('editing') && HelperEvent.isCtrlCmd(event) &&
       !event.altKey && !event.shiftKey && ['b', 'i', 'u'].includes(event.key.toLowerCase())) {
       event.preventDefault()
     }
   },
 
   dblclickSelectWordEvent () {
-    if (HelperCanvas.getOperation() === 'editing') {
+    if (HelperCanvas.isOperation('editing')) {
       this.selectWord()
     }
   },
 
   inputTextEvent (event) {
-    if (HelperCanvas.getOperation() === 'editing' && event.target.closest('.element') &&
+    if (HelperCanvas.isOperation('editing') && event.target.closest('.element') &&
       !this._textChanged) {
       this.textHasChanged()
     }
   },
 
   dragstartTextEvent (event) {
-    if (HelperCanvas.getOperation() === 'editing') {
+    if (HelperCanvas.isOperation('editing')) {
       // stop d&d inside the text
       event.preventDefault()
     }
@@ -117,12 +117,22 @@ export default {
 
   startEditText (element) {
     if (!element) return
+    this.fixEmptyText(element)
     StateSelectedElement.selectElement(element)
     this.prepareElementForUndo(element)
     this.makeElementEditable(element)
     HelperCanvas.setCanvasData('operation', 'editing')
     CanvasOverlay.setOverlayEditing()
     this.initSizes(element)
+  },
+
+  // if the text was just made empty, then you need to add a new line (Enter) for editing to work
+  fixEmptyText (element) {
+    if (element.textContent.trim() === '') {
+      element.textContent = '\xA0'
+      const pos = HelperElement.getPosition(element)
+      this.resizeOverlay(pos)
+    }
   },
 
   prepareElementForUndo (element) {

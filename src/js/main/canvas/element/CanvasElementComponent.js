@@ -26,8 +26,7 @@ export default {
 
   async dblclickLoadComponentEvent (event) {
     const element = event.target.closest('.element')
-    if (HelperCanvas.getOperation() !== 'editing' && element &&
-      HelperComponent.isComponent(element)) {
+    if (!HelperCanvas.isOperation('editing') && element && HelperComponent.isComponent(element)) {
       await this.loadComponent(element)
     }
   },

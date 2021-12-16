@@ -44,7 +44,7 @@ export default {
     if (this._element && event.buttons) {
       if (!this._moving) {
         this.initMovement(event.target, event.clientX, event.clientY)
-      } else if (HelperCanvas.getOperation() === 'moving') {
+      } else if (HelperCanvas.isOperation('moving')) {
         this.moveElement(event.target, event.clientX, event.clientY)
       }
     }
@@ -52,7 +52,7 @@ export default {
 
   async mouseupEndMoveEvent (event) {
     if (this._element) {
-      if (this._moving && HelperCanvas.getOperation() === 'moving') {
+      if (this._moving && HelperCanvas.isOperation('moving')) {
         await this.finalizeElementMove(event.altKey)
       }
       // clear it when moving was initialized but not executed

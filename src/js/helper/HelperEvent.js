@@ -43,8 +43,8 @@ export default {
 
   areShortcutsAllowed (event) {
     const isField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName)
-    const isEditable = event.target.hasAttributeNS(null, 'contenteditable')
-    return !isField && !isEditable
+    const isEditing = HelperCanvas.isOperation('editing')
+    return !isField && !isEditing
   },
 
   isNotCtrlAltShift (event) {

@@ -58,6 +58,11 @@ export default {
     if (canvas) return this.getCanvasData().operation
   },
 
+  isOperation (value) {
+    const operation = this.getOperation()
+    return operation === value
+  },
+
   getMain () {
     return document.getElementById('page-main')
   },

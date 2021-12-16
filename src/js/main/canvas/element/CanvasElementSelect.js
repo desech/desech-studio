@@ -28,7 +28,7 @@ export default {
 
   mouseupEndSelectElementEvent (event) {
     if (this._node && this._node.classList.contains('element')) {
-      if (HelperCanvas.getOperation() === 'selecting') {
+      if (HelperCanvas.isOperation('selecting')) {
         StateSelectedElement.selectElement(this._node)
       }
       this.clearState()
@@ -37,7 +37,7 @@ export default {
 
   mouseupEndDeselectElementEvent (event) {
     if (this._node && !this._node.classList.contains('element')) {
-      if (HelperCanvas.getOperation() === 'selecting') {
+      if (HelperCanvas.isOperation('selecting')) {
         StateSelectedElement.deselectElement()
       }
       this.clearState()
@@ -47,7 +47,7 @@ export default {
   ignoreElementEvent (event) {
     // stop all clicks and most mousedowns, except the ones where we edit the text
     if (event.target.closest('.element') && !HelperCanvas.isPreview() &&
-      (event.type === 'click' || HelperCanvas.getOperation() !== 'editing')) {
+      (event.type === 'click' || !HelperCanvas.isOperation('editing'))) {
       event.preventDefault()
     }
   },

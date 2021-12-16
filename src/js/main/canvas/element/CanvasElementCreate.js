@@ -34,7 +34,7 @@ export default {
 
   mousemoveAddMarkerEvent (event) {
     if (event.target.closest('#canvas') && !event.target.closest('.element.inline') &&
-      HelperCanvas.isCreateTool() && HelperCanvas.getOperation() !== 'panning') {
+      HelperCanvas.isCreateTool() && !HelperCanvas.isOperation('panning')) {
       this.addPlacementMarker(event.target, event.clientX, event.clientY)
     }
   },

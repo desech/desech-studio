@@ -140,7 +140,7 @@ export default {
   setOverlayEditing () {
     const container = this.getOverlayContainer()
     if (!container) return
-    HelperCanvas.getOperation() === 'editing'
+    HelperCanvas.isOperation('editing')
       ? container.classList.add('editing')
       : container.classList.remove('editing')
   },

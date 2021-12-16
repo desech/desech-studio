@@ -36,14 +36,14 @@ export default {
   },
 
   mousemoveEvent (event) {
-    if (HelperCanvas.getOperation() === 'resizing' && this._button && event.buttons) {
+    if (HelperCanvas.isOperation('resizing') && this._button && event.buttons) {
       this.resizeElement(event.clientX, event.clientY, event.altKey, event.shiftKey)
     }
   },
 
   async mouseupEndEvent (event) {
     if (this._button) {
-      if (HelperCanvas.getOperation() === 'resizing') {
+      if (HelperCanvas.isOperation('resizing')) {
         await this.finalizeElementResize()
       }
       this.clearState()

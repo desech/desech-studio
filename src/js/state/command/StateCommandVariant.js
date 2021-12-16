@@ -160,6 +160,8 @@ export default {
     }
   },
 
+  // @todo previous component properties don't get passed along properly
+  // you need to reopen/parse the file to see the properties from the previous component
   async switchVariant (component, name, value) {
     const data = HelperComponent.getComponentData(component)
     if (HelperComponent.isComponentElement(component)) {

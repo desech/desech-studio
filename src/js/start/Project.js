@@ -93,6 +93,7 @@ export default {
     const node = document.getElementById(id)
     if (node) node.remove()
     if (!file) return
+    // this also references the icon fonts and they work correctly because of the relative paths
     const link = `<link id="${id}" rel="stylesheet" href="${file}">`
     document.head.insertAdjacentHTML('beforeend', link)
   },

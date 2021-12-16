@@ -15,14 +15,16 @@ export default {
   async syncCss (folder, css) {
     const cssFile = File.resolve(folder, '_export/css/compiled/style.css')
     File.createFile(cssFile, css)
-    await this.syncCustomCss(folder)
+    await this.syncExtraCssFiles(folder)
   },
 
-  async syncCustomCss (folder) {
-    const files = File.readFolder(File.resolve(folder, 'css/general'))
-    const destFolder = File.resolve(folder, '_export')
+  // this will sync any custom css files we have and also the design-system folder used for icons
+  async syncExtraCssFiles (folder) {
+    const source = File.resolve(folder, 'css/general')
+    const dest = File.resolve(folder, '_export/css/compiled')
+    const files = File.readFolder(source)
     const ignoreFiles = ExportCommon.getFilePaths(ExportCommon.getGeneralCssFiles(), folder)
-    await File.syncFolder(files, folder, destFolder, { checkSame: true, ignoreFiles })
+    await File.syncFolder(files, source, dest, { checkSame: true, ignoreFiles })
   },
 
   async syncJs (folder) {

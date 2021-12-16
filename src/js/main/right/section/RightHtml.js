@@ -38,7 +38,8 @@ export default {
   highlightOverides (template, element, overrides) {
     const type = HelperElement.getType(element)
     HelperOverride.highlightOveride(template, overrides?.tag, 'style-tag-dropdown')
-    HelperOverride.highlightOveride(template, overrides?.inner, 'style-html-inner-field')
+    HelperOverride.highlightOveride(template, overrides && 'inner' in overrides,
+      'style-html-inner-field')
     HelperOverride.highlightOverideAttributes(template, overrides?.attributes)
     HelperOverride.highlightOverideCustomAttributes(template, overrides?.attributes)
     HelperOverride.highlightOverideProperties(template, overrides?.properties)

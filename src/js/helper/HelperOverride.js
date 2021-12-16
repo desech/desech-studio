@@ -281,7 +281,8 @@ export default {
     const deletedAttrs = this.getDeletedAttributes(template, overrides?.attributes)
     const deletedProps = this.getDeletedRecords(overrides?.properties)
     for (const node of nodes) {
-      if ((node.dataset.type === 'text' && elementType === 'text' && overrides?.inner) ||
+      if ((node.dataset.type === 'text' && elementType === 'text' && overrides &&
+        'inner' in overrides) ||
         (node.dataset.type === 'attributes' && deletedAttrs) ||
         (node.dataset.type === 'properties' && deletedProps)) {
         this.highlightOverideWarningNode(node, deletedAttrs, deletedProps)

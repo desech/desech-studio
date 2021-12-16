@@ -24,7 +24,7 @@ export default {
   },
 
   setOverrideInner (node, overrides, ref) {
-    if (overrides && overrides[ref]?.inner) {
+    if (overrides && overrides[ref] && 'inner' in overrides[ref]) {
       node.innerHTML = overrides[ref].inner
     }
   },

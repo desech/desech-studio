@@ -1,4 +1,3 @@
-import fs from 'fs'
 import { app, BrowserWindow } from 'electron'
 import Menu from './Menu.js'
 import Settings from '../lib/Settings.js'
@@ -49,7 +48,7 @@ export default {
   async showInitialWindow () {
     this._window.removeMenu() // only linux, windows
     const file = File.resolve(app.getAppPath(), 'html/loading.html')
-    const html = fs.readFileSync(file).toString()
+    const html = File.readFile(file)
     await this._window.loadURL(`data:text/html;charset=utf-8,${html}`)
   },
 
@@ -70,7 +69,7 @@ export default {
     // @todo make this use localization too
     this._window.removeMenu() // only linux, windows
     const file = File.resolve(app.getAppPath(), 'html/error.html')
-    const html = fs.readFileSync(file).toString().replace('{{ERROR}}', error)
+    const html = File.readFile(file).replace('{{ERROR}}', error)
     await this._window.loadURL(`data:text/html;charset=utf-8,${html}`)
   },
 

@@ -217,7 +217,11 @@ export default {
 
   getFileData (file, folder = null) {
     if (folder) file = this.resolve(folder, file)
-    const string = fs.readFileSync(file).toString()
+    const string = this.readFile(file)
     return JSON.parse(string)
+  },
+
+  readFile (file) {
+    return fs.readFileSync(file).toString()
   }
 }

@@ -30,12 +30,12 @@ export default {
   getDesignSystemCssFileLink (check = null) {
     const hasDesignSystem = (check !== null) ? check : this.hasDesignSystem()
     if (!hasDesignSystem) return ''
-    return '\n  <link rel="stylesheet" href="css/general/design-system.css">'
+    return '<link rel="stylesheet" href="css/general/design-system.css">\n  '
   },
 
   getDesignSystemJsFileLink (check = null) {
     const hasDesignSystem = (check !== null) ? check : this.hasDesignSystem()
     if (!hasDesignSystem) return ''
-    return '\n  <script src="js/design-system.js"></script>'
+    return '<script src="js/design-system.js"></script>\n  '
   }
 }

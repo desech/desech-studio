@@ -12,7 +12,6 @@ import Font from '../lib/Font.js'
 import FileManage from '../file/FileManage.js'
 import HelperComponent from '../../js/helper/HelperComponent.js'
 import ProjectCommon from '../project/ProjectCommon.js'
-import ExtendJS from '../../js/helper/ExtendJS.js'
 
 export default {
   addEvents () {
@@ -34,7 +33,7 @@ export default {
 
   rendererGetFileContentsEvent () {
     ipcMain.handle('rendererGetFileContents', async (event, file) => {
-      return await EventMain.handleEvent(this, 'getFileContents', file)
+      return await EventMain.handleEvent(File, 'readFile', file)
     })
   },
 
@@ -116,10 +115,6 @@ export default {
     })
   },
 
-  getFileContents (file) {
-    return fs.readFileSync(file).toString()
-  },
-
   async createFolder (data) {
     const folder = File.resolve(data.root, data.folder)
     await FileManage.validateCreate(folder)
@@ -170,7 +165,7 @@ export default {
   },
 
   saveComponentData (file, data) {
-    const html = fs.readFileSync(file).toString()
+    const html = File.readFile(file)
     const dom = new JSDOM(html)
     const root = dom.window.document.body.children[0]
     HelperComponent.setMainComponentData(root, data)

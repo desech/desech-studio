@@ -1,21 +1,17 @@
-import fs from 'fs'
 import glob from 'glob'
 import Handlebars from 'handlebars'
 import ExtendJS from '../js/helper/ExtendJS.js'
 import Language from '../electron/lib/Language.js'
+import File from '../electron/file/File.js'
 
 export default {
   getHtmlTemplate (file, options = {}) {
     // options: vars, partialFiles, partialDir
-    const template = Handlebars.compile(this.getHtmlFromFile(file))
+    const template = Handlebars.compile(this.File.readFile(file))
     const locale = options.locale || global.locale
     this.setHelpers(locale)
     this.setPartials(options)
     return template(options.vars || {})
-  },
-
-  getHtmlFromFile (file) {
-    return fs.readFileSync(file).toString()
   },
 
   setHelpers (locale) {
@@ -72,7 +68,7 @@ export default {
     for (const file of files) {
       const name = ExtendJS.toCamelCase(file.replace('./src/html/partial/', '')
         .replace('.html', ''))
-      partials[name] = this.getHtmlFromFile(file)
+      partials[name] = File.readFile(file)
     }
     return partials
   }

@@ -1,13 +1,13 @@
-import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import ExportCommon from '../ExportCommon.js'
 import Html from '../../lib/Html.js'
 import ParseHtml from '../../file/parse/ParseHtml.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
+import File from '../../file/File.js'
 
 export default {
   getPageHtml (folder, file, css) {
-    const string = fs.readFileSync(file).toString()
+    const string = File.readFile(file)
     const dom = new JSDOM(string)
     ParseHtml.parseHtml(dom.window.document, file, folder, { ui: 'export' })
     this.formatDom(dom.window.document, css)
@@ -49,10 +49,10 @@ export default {
   },
 
   removeProjectCssFiles (document) {
-    const links = ExportCommon.getGeneralCssFiles()
+    const generalLinks = ExportCommon.getGeneralCssFiles()
     document.querySelectorAll('link[rel="stylesheet"]').forEach(el => {
       const href = el.getAttributeNS(null, 'href')
-      if (links.includes(href) || href.startsWith('css/page/')) {
+      if (generalLinks.includes(href) || href.startsWith('css/page/')) {
         el.remove()
       }
     })
@@ -60,8 +60,8 @@ export default {
 
   replaceJsScripts (document) {
     // we remove it here because in ExportStaticCode.createScriptJs() we add the js to script.js
-    const script = document.querySelector('script[src="js/design-system.js"]')
-    if (script) script.remove()
+    const dsScript = document.querySelector('script[src="js/design-system.js"]')
+    if (dsScript) dsScript.remove()
   },
 
   replaceTags (children, document) {

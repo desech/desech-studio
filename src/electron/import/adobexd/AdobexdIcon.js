@@ -1,4 +1,3 @@
-import fs from 'fs'
 import { app } from 'electron'
 import ImportIcon from '../ImportIcon.js'
 import File from '../../file/File.js'
@@ -43,7 +42,7 @@ export default {
   // we execute a js script on the browser because we can't use ipc `send` to return a value
   async calculateSvgViewBox (data, content) {
     const file = File.resolve(app.getAppPath(), 'scriptParseSvg.js')
-    const code = fs.readFileSync(file).toString().replace('{{CONTENT}}', content)
+    const code = File.readFile(file).replace('{{CONTENT}}', content)
     const viewBox = await EventMain.executeJs(code)
     this.adjustDimensions(data, viewBox)
     return Object.values(viewBox).join(' ')

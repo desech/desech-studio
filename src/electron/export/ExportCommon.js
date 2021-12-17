@@ -2,14 +2,51 @@ import fs from 'fs'
 import File from '../file/File.js'
 
 export default {
+  getGeneralCssFiles () {
+    // order matters
+    return [
+      'css/general/reset.css',
+      'css/general/animation.css',
+      'css/general/font.css',
+      'css/general/design-system.css',
+      'css/general/root.css',
+      'css/general/component-css.css',
+      'css/general/component-html.css'
+    ]
+  },
+
+  getGeneralJsFiles () {
+    return [
+      'js/script.js',
+      'js/design-system.js'
+    ]
+  },
+
   getCompiledCss (folder) {
-    const generalFiles = this.getFilePaths(this.getGeneralCssFiles(), folder,
-      ['css/general/animation.css', 'css/general/design-system.css'])
-    const general = this.getCssContent(generalFiles)
+    const part1 = this.getPart1Files(folder)
     const designSystem = this.getDesignSystemCss(folder)
+    const part2 = this.getPart2Files(folder)
     const page = this.getCssContent(this.getPageCssFiles(folder))
-    const animation = this.getAnimationCss(folder, general + page)
-    return general + '\n' + animation + '\n' + designSystem + '\n' + page
+    const animation = this.getAnimationCss(folder, part1 + part2 + page)
+    return [part1, animation, designSystem, part2, page].join('\n')
+  },
+
+  getPart1Files (folder) {
+    const files = this.getFilePaths([
+      'css/general/reset.css',
+      // here should be the animation file, but we add it after the font css file, which is fine
+      'css/general/font.css'
+    ], folder)
+    return this.getCssContent(files)
+  },
+
+  getPart2Files (folder) {
+    const files = this.getFilePaths([
+      'css/general/root.css',
+      'css/general/component-css.css',
+      'css/general/component-html.css'
+    ], folder)
+    return this.getCssContent(files)
   },
 
   getFilePaths (files, folder, ignore = []) {
@@ -22,24 +59,18 @@ export default {
     return paths
   },
 
-  getGeneralCssFiles () {
-    // order matters
-    return [
-      'css/general/reset.css',
-      'css/general/animation.css',
-      'css/general/font.css',
-      'css/general/root.css',
-      'css/general/component-css.css',
-      'css/general/component-html.css',
-      'css/general/design-system.css'
-    ]
+  getCssContent (files) {
+    let css = ''
+    for (const file of files) {
+      css += css ? '\n' : ''
+      css += File.readFile(file)
+    }
+    return css
   },
 
-  getGeneralJsFiles () {
-    return [
-      'js/script.js',
-      'js/design-system.js'
-    ]
+  getDesignSystemCss (folder) {
+    const file = File.resolve(folder, 'css/general/design-system.css')
+    return fs.existsSync(file) ? File.readFile(file) : ''
   },
 
   getPageCssFiles (folder) {
@@ -51,26 +82,12 @@ export default {
     return paths
   },
 
-  getCssContent (files) {
-    let css = ''
-    for (const file of files) {
-      css += css ? '\n' : ''
-      css += fs.readFileSync(file).toString()
-    }
-    return css
-  },
-
-  getDesignSystemCss (folder) {
-    const file = File.resolve(folder, 'css/general/design-system.css')
-    return fs.existsSync(file) ? fs.readFileSync(file).toString() : ''
-  },
-
   getAnimationCss (folder, css) {
     let selectedCss = ''
     const animations = this.getAnimationsUsed(css)
     if (!animations.length) return ''
     const file = File.resolve(folder, 'css/general/animation.css')
-    const animationCss = fs.readFileSync(file).toString() + '@'
+    const animationCss = File.readFile(file) + '@'
     for (const animation of animations) {
       const regex = new RegExp(`(@keyframes ${animation} [\\s\\S]*?}[\\s]*)@`, 'g')
       const match = regex.exec(animationCss)

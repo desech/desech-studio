@@ -93,6 +93,7 @@ export default {
       this.getDefaultBackgroundImage(),
       this.getDropdownImage(),
       root + '/js/design-system.js',
+      root + '/js/script.js',
       root + '/index.html'
     ].includes(file) || this.isFolderFile(file, 'css')
   },
@@ -163,11 +164,11 @@ export default {
   ${data.meta}
   <title>${data.title}</title>
   <base href="${data.baseHref}">
-  <script src="js/script.js"></script>${data.jsDesignSystem}
+  ${data.jsDesignSystem}<script src="js/script.js"></script>
   <link rel="stylesheet" href="css/general/reset.css">
   <link rel="stylesheet" href="css/general/animation.css">
-  <link rel="stylesheet" href="css/general/font.css">${data.cssDesignSystem}
-  <link rel="stylesheet" href="css/general/root.css">
+  <link rel="stylesheet" href="css/general/font.css">
+  ${data.cssDesignSystem}<link rel="stylesheet" href="css/general/root.css">
   <link rel="stylesheet" href="css/general/component-css.css">
   <link rel="stylesheet" href="css/general/component-html.css">
   <link rel="stylesheet" href="css/page/${data.pageCssFile}">

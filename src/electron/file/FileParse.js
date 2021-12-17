@@ -1,4 +1,3 @@
-import fs from 'fs'
 import { JSDOM } from 'jsdom'
 import { URL } from 'whatwg-url'
 import ParseHtml from './parse/ParseHtml.js'
@@ -12,7 +11,7 @@ import HelperFile from '../../js/helper/HelperFile.js'
 export default {
   async parseHtmlCssFile (file, options = {}) {
     const folder = await Cookie.getCookie('currentFolder')
-    const html = fs.readFileSync(file).toString()
+    const html = File.readFile(file)
     const dom = new JSDOM(html, {
       resources: new CustomResourceLoader(),
       url: new URL('file:' + File.resolve(file))

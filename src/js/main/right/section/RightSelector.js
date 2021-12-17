@@ -108,8 +108,10 @@ export default {
   },
 
   activateSelector (container) {
-    const record = container.querySelector('.class-selector-list li') ||
-      container.querySelector('.default-selector-list li')
+    // don't pre-select the class since people will mostly use components
+    // const record = container.querySelector('.class-selector-list li') ||
+    //   container.querySelector('.default-selector-list li')
+    const record = container.querySelector('.default-selector-list li')
     RightSelectorCommon.activateSelector(record, container)
   },
 

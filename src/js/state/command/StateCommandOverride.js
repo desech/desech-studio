@@ -7,6 +7,7 @@ import HelperFile from '../../helper/HelperFile.js'
 import HelperStyle from '../../helper/HelperStyle.js'
 import HelperOverride from '../../helper/HelperOverride.js'
 import HelperTrigger from '../../helper/HelperTrigger.js'
+import StateCommandComponent from './StateCommandComponent.js'
 
 export default {
   async overrideElement (element, type, value) {
@@ -284,5 +285,12 @@ export default {
     } else {
       delete data.variants[variant.name]
     }
+  },
+
+  async swapOverrideComponent (element, data) {
+    await this.overrideComponent(element, 'component', data.file)
+    // replace the whole parent component because overrides are messy
+    const parent = HelperOverride.getMainParent(element, 'component')
+    await StateCommandComponent.replaceComponent(parent.element, parent.data, data.ref)
   }
 }

@@ -13,7 +13,7 @@ import HelperComponent from '../../helper/HelperComponent.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import StateCommandVariant from './StateCommandVariant.js'
 import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
-import HelperOverride from '../../helper/HelperOverride.js'
+import StateCommandComponent from './StateCommandComponent.js'
 
 export default {
   addElement (data) {
@@ -213,10 +213,11 @@ export default {
   async swapComponent (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    await StateCommandOverride.overrideComponent(element, 'component', data.file)
-    // replace the whole parent component because overrides are messy
-    const parent = HelperOverride.getMainParent(element, 'component')
-    await StateCommandCommon.replaceComponent(parent.element, parent.data, data.ref)
+    if (HelperComponent.isComponentElement(element)) {
+      await StateCommandOverride.swapOverrideComponent(element, data)
+    } else {
+      await StateCommandComponent.swapNormalComponent(element, data)
+    }
   },
 
   assignComponentHole (data) {
@@ -231,7 +232,7 @@ export default {
     const element = HelperElement.getElement(data.parentRef)
     if (!element) return
     StyleSheetComponent.resetComponentStyles(data.style, data.styleAction)
-    await StateCommandCommon.replaceComponent(element, data.component, data.subRef)
+    await StateCommandComponent.replaceComponent(element, data.component, data.subRef)
     HelperTrigger.triggerReload('right-panel')
   },
 

@@ -7,11 +7,9 @@ import HelperFile from '../../helper/HelperFile.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import TopCommandCommon from '../../main/top/command/TopCommandCommon.js'
 import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
-import HelperElement from '../../helper/HelperElement.js'
-import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StateStyleSheet from '../StateStyleSheet.js'
-import StateCommandCommon from './StateCommandCommon.js'
+import StateCommandComponent from './StateCommandComponent.js'
 
 export default {
   async createVariant (component, obj) {
@@ -167,7 +165,7 @@ export default {
       await this.switchOverrideVariant(data, name, value, component)
     } else {
       this.updateVariantInstance(component, name, value, data)
-      await StateCommandCommon.replaceComponent(component, data)
+      await StateCommandComponent.replaceComponent(component, data)
     }
     HelperTrigger.triggerReload('right-panel')
   },
@@ -175,6 +173,6 @@ export default {
   async switchOverrideVariant (data, name, value, component) {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
-    await StateCommandCommon.replaceComponent(parents[0].element, parents[0].data, data.ref)
+    await StateCommandComponent.replaceComponent(parents[0].element, parents[0].data, data.ref)
   }
 }

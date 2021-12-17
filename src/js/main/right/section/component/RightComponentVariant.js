@@ -101,7 +101,7 @@ export default {
   async confirmCreate (form) {
     const element = StateSelectedElement.getElement()
     const data = HelperComponent.getComponentData(element)
-    if (form.checkValidity()) this.fixNames(form)
+    if (form.checkValidity()) this.validateNames(form)
     if (form.checkValidity()) this.validateExists(data, form.elements)
     if (form.checkValidity()) {
       HelperDOM.hide(form)
@@ -109,10 +109,12 @@ export default {
     }
   },
 
-  fixNames (form) {
-    for (const field of form.elements) {
-      field.value = HelperComponent.sanitizeComponent(field.value)
-    }
+  validateNames (form) {
+    const fields = form.elements
+    fields.name.value = HelperComponent.sanitizeComponent(fields.name.value)
+    fields.value.value = HelperComponent.sanitizeComponent(fields.value.value)
+    HelperForm.reportFieldError(fields.name, !ExtendJS.startsNumeric(fields.name.value),
+      'invalidError')
   },
 
   validateExists (data, fields, existingData = null) {
@@ -260,7 +262,7 @@ export default {
     const form = li.children[1]
     const element = StateSelectedElement.getElement()
     const data = JSON.parse(li.dataset.value)
-    if (form.checkValidity()) this.fixNames(form)
+    if (form.checkValidity()) this.validateNames(form)
     if (form.checkValidity()) this.validateExists(element, form.elements, data)
     if (form.checkValidity()) {
       if (form.elements.name.value === data.name && form.elements.value.value === data.value) {

@@ -25,7 +25,7 @@
 
 <template id="template-style-component-variant-form">
   <div>
-    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" required data-exists-error="{{#i18n}} Variant name already exists {{/i18n}}">
+    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" required data-invalid-error="{{#i18n}} Invalid name {{/i18n}}" data-exists-error="{{#i18n}} Variant name already exists {{/i18n}}">
     <input class="style-variant-field" type="text" name="value" placeholder="{{#i18n}} Value {{/i18n}}" required data-exists-error="{{#i18n}} Variant value already exists {{/i18n}}">
 
     <button type="submit" class="style-variant-rename-confirm-button small tooltip left" data-tooltip="{{#i18n}} Confirm {{/i18n}}">

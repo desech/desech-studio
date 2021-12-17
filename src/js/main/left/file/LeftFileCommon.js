@@ -2,6 +2,7 @@ import HelperFile from '../../../helper/HelperFile.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperProject from '../../../helper/HelperProject.js'
 import HelperForm from '../../../helper/HelperForm.js'
+import ExtendJS from '../../../helper/ExtendJS.js'
 
 export default {
   async createFolder (name, root = null) {
@@ -52,7 +53,8 @@ export default {
 
   validateFileName (form) {
     const fields = form.elements
-    const valid = !HelperFile.sanitizeFile(fields.name.value).startsWith('component')
+    const name = HelperFile.sanitizeFile(fields.name.value)
+    const valid = !ExtendJS.startsNumeric(name) && !name.startsWith('component')
     HelperForm.reportFieldError(fields.name, valid, 'invalidError')
     return form.checkValidity()
   }

@@ -5,7 +5,7 @@
   </div>
 
   <form class="style-variant-form grid" hidden>
-    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" list="style-variant-list-names" required>
+    <input class="style-variant-field" type="text" name="name" placeholder="{{#i18n}} Name {{/i18n}}" list="style-variant-list-names" required data-invalid-error="{{#i18n}} Invalid name {{/i18n}}">
     <datalist class="style-variant-list-names" id="style-variant-list-names"></datalist>
 
     <input class="style-variant-field" type="text" name="value" placeholder="{{#i18n}} Value {{/i18n}}" required data-exists-error="{{#i18n}} Variant already exists {{/i18n}}">

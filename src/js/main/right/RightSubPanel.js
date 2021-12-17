@@ -21,7 +21,8 @@ export default {
   },
 
   reloadPanel () {
-    const data = RightCommon.getSectionData()
+    const data = RightCommon.getElementSectionData()
+    if (!data) return
     this.clearPanel()
     this.loadPanel(data)
   },

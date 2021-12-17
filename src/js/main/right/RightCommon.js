@@ -12,12 +12,21 @@ import StyleSheetComponent from '../../state/stylesheet/StyleSheetComponent.js'
 import HelperElement from '../../helper/HelperElement.js'
 
 export default {
+  getElementSectionData () {
+    const element = StateSelectedElement.getElement()
+    if (element && HelperElement.isCanvasElement(element)) {
+      return this.getSectionData(element, true)
+    }
+  },
+
   getSectionData (element = null, addOverrides = false) {
     const currentSelector = StyleSheetSelector.getCurrentSelector()
     const style = StateStyleSheet.getCurrentStyleObject(currentSelector)
     const computedStyle = StateSelectedElement.getComputedStyle()
     const data = { currentSelector, style, computedStyle }
-    if (addOverrides) data.overrides = this.getFullOverrides(element)
+    if (element && addOverrides) {
+      data.overrides = this.getFullOverrides(element)
+    }
     return data
   },
 

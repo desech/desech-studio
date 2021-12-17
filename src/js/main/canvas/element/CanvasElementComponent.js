@@ -37,28 +37,13 @@ export default {
   },
 
   async createElement (file) {
-    const element = await this.buildComponentElement(file)
+    const ref = HelperElement.generateElementRef()
+    const element = await HelperComponent.fetchComponent({ file, ref })
     if (!element) return
     CanvasElementManage.addPastedPlacement()
     CanvasElementManage.addPastedElement(element)
-    const ref = HelperElement.getRef(element)
     await CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-  },
-
-  async buildComponentElement (file, swapRef = null) {
-    const ref = swapRef || HelperElement.generateElementRef()
-    const element = await HelperComponent.fetchComponent({ file, ref })
-    if (!element) return
-    if (swapRef) this.makeComponentElement(element)
-    return element
-  },
-
-  makeComponentElement (component) {
-    component.classList.add('component-element')
-    for (const node of component.querySelectorAll(':not(.component-element)')) {
-      node.classList.add('component-element')
-    }
   },
 
   async assignComponentHole (container) {
@@ -98,7 +83,8 @@ export default {
     const overrides = this.getResetedOverrides(parent, element, type)
     const variants = parent.topLevel ? null : parent.data.variants
     const style = StyleSheetComponent.getOverrides(parent.data.ref, elementRef)
-    const cmd = this.getResetedOverridesCommand(command, style, parent, overrides, variants)
+    const cmd = this.getResetedOverridesCommand(command, element, parent, style, overrides,
+      variants)
     StateCommand.stackCommand(cmd)
     if (execute) await StateCommand.executeCommand(cmd.do)
   },
@@ -113,12 +99,17 @@ export default {
     return obj
   },
 
-  getResetedOverridesCommand (command, style, parent, overrides, variants) {
-    const ref = HelperElement.getRef(parent.element)
+  getResetedOverridesCommand (command, element, parent, style, overrides, variants) {
+    // after the component replacement elements get a new ref, but sub-components still keep
+    // their component ref, so we can use that to select the component back
+    const subRef = HelperComponent.isComponent(element)
+      ? HelperElement.getComponentRef(element)
+      : null
     return {
       do: {
         command,
-        ref,
+        parentRef: parent.data.ref,
+        subRef,
         styleAction: 'remove',
         style,
         component: {
@@ -130,7 +121,8 @@ export default {
       },
       undo: {
         command,
-        ref,
+        parentRef: parent.data.ref,
+        subRef,
         styleAction: 'add',
         style,
         component: {

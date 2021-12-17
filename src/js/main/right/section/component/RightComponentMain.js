@@ -6,6 +6,7 @@ import HelperElement from '../../../../helper/HelperElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
+import HelperOverride from '../../../../helper/HelperOverride.js'
 
 export default {
   getEvents () {
@@ -39,35 +40,22 @@ export default {
   },
 
   async swapComponent (file) {
-    const selected = StateSelectedElement.getElement()
-    const swapRef = this.getSwapRef(selected)
-    const newComp = await CanvasElementComponent.buildComponentElement(file, swapRef)
-    if (!newComp) return
-    selected.classList.add('placement', 'bottom')
-    CanvasElementManage.addPastedElement(newComp)
-    StateSelectedElement.selectElementNode(newComp)
-    await this.swapComponentCommand(selected, newComp)
+    const element = StateSelectedElement.getElement()
+    const data = HelperComponent.getComponentData(element)
+    await this.swapComponentCommand(data, file)
   },
 
-  getSwapRef (element) {
-    if (HelperComponent.isComponentElement(element)) {
-      return HelperElement.getComponentRef(element)
-    }
-  },
-
-  async swapComponentCommand (selected, newComp, execute = true) {
-    const currentRef = HelperElement.getRef(selected)
-    const newRef = HelperElement.getRef(newComp)
+  async swapComponentCommand (data, file, execute = true) {
     const command = {
       do: {
         command: 'swapComponent',
-        currentRef,
-        newRef
+        ref: data.ref,
+        file
       },
       undo: {
         command: 'swapComponent',
-        currentRef: newRef,
-        newRef: currentRef
+        ref: data.ref,
+        file: data.file
       }
     }
     StateCommand.stackCommand(command)

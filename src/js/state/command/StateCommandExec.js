@@ -13,6 +13,7 @@ import HelperComponent from '../../helper/HelperComponent.js'
 import StateCommandOverride from './StateCommandOverride.js'
 import StateCommandVariant from './StateCommandVariant.js'
 import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
+import HelperOverride from '../../helper/HelperOverride.js'
 
 export default {
   addElement (data) {
@@ -210,13 +211,12 @@ export default {
   },
 
   async swapComponent (data) {
-    const currentElem = HelperElement.getElement(data.currentRef)
-    const newElem = HelperElement.getElement(data.newRef)
-    if (!currentElem || !newElem) return
-    HelperDOM.hide(currentElem)
-    HelperDOM.show(newElem)
-    const componentData = HelperComponent.getComponentData(newElem)
-    await StateCommandOverride.overrideComponent(newElem, 'component', componentData.file)
+    const element = HelperElement.getElement(data.ref)
+    if (!element) return
+    await StateCommandOverride.overrideComponent(element, 'component', data.file)
+    // replace the whole parent component because overrides are messy
+    const parent = HelperOverride.getMainParent(element, 'component')
+    await StateCommandCommon.replaceComponent(parent.element, parent.data, data.ref)
   },
 
   assignComponentHole (data) {
@@ -228,10 +228,10 @@ export default {
   },
 
   async resetComponentOverrides (data) {
-    const element = HelperElement.getElement(data.ref)
+    const element = HelperElement.getElement(data.parentRef)
     if (!element) return
     StyleSheetComponent.resetComponentStyles(data.style, data.styleAction)
-    await StateCommandVariant.replaceComponent(element, data.component)
+    await StateCommandCommon.replaceComponent(element, data.component, data.subRef)
     HelperTrigger.triggerReload('right-panel')
   },
 

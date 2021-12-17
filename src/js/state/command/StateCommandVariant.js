@@ -11,6 +11,7 @@ import HelperElement from '../../helper/HelperElement.js'
 import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StateStyleSheet from '../StateStyleSheet.js'
+import StateCommandCommon from './StateCommandCommon.js'
 
 export default {
   async createVariant (component, obj) {
@@ -166,7 +167,7 @@ export default {
       await this.switchOverrideVariant(data, name, value, component)
     } else {
       this.updateVariantInstance(component, name, value, data)
-      await this.replaceComponent(component, data)
+      await StateCommandCommon.replaceComponent(component, data)
     }
     HelperTrigger.triggerReload('right-panel')
   },
@@ -174,28 +175,6 @@ export default {
   async switchOverrideVariant (data, name, value, component) {
     const parents = await StateCommandOverride.overrideComponent(component, 'variants',
       { name, value })
-    await this.replaceComponent(parents[0].element, parents[0].data, data.ref)
-  },
-
-  async replaceComponent (element, data, subRef = null) {
-    const ref = HelperElement.getRef(element)
-    const children = HelperComponent.getInstanceChildren(element)
-    const component = await HelperComponent.fetchComponent(data)
-    element.replaceWith(component)
-    HelperElement.replacePositionRef(component, ref)
-    if (children) HelperComponent.setInstanceChildren(component, children)
-    this.selectReplaceComponent(component, subRef)
-  },
-
-  selectReplaceComponent (component, subCmpRef) {
-    // the positioning refs of the component elements get replaced, so undo will not work
-    // anymore on the previous actions of the component elements
-    if (subCmpRef) {
-      // select this sub component instead
-      const subComponent = HelperElement.getElement(subCmpRef)
-      StateSelectedElement.selectElement(subComponent)
-    } else {
-      StateSelectedElement.selectElement(component)
-    }
+    await StateCommandCommon.replaceComponent(parents[0].element, parents[0].data, data.ref)
   }
 }

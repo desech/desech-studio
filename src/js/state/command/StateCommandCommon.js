@@ -5,6 +5,7 @@ import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StyleSheetCommon from '../stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../StateStyleSheet.js'
+import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   async addSelectorLinkClass (selector) {
@@ -71,6 +72,28 @@ export default {
       const selector = tmpSelector.replace(/\.e0[a-z0-9]+/, refSelector)
       const sheet = StateStyleSheet.getCreateSelectorSheet(selector)
       StyleSheetCommon.addRemoveRules(sheet, selector, rules, true)
+    }
+  },
+
+  async replaceComponent (element, data, subRef = null) {
+    const ref = HelperElement.getRef(element)
+    const children = HelperComponent.getInstanceChildren(element)
+    const component = await HelperComponent.fetchComponent(data)
+    element.replaceWith(component)
+    HelperElement.replacePositionRef(component, ref)
+    if (children) HelperComponent.setInstanceChildren(component, children)
+    this.selectReplaceComponent(component, subRef)
+  },
+
+  selectReplaceComponent (component, subCmpRef) {
+    // the positioning refs of the component elements get replaced, so undo will not work
+    // anymore on the previous actions of the component elements
+    if (subCmpRef) {
+      // select this sub component instead
+      const subComponent = HelperElement.getElement(subCmpRef)
+      StateSelectedElement.selectElement(subComponent)
+    } else {
+      StateSelectedElement.selectElement(component)
     }
   }
 }

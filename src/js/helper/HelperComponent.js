@@ -75,12 +75,34 @@ export default {
   // set the component data on the main component
   setMainComponentData (node, mainData) {
     if (!ExtendJS.isEmpty(mainData)) {
+      // @todo doesn't work because the node doesn't contain all the subcomponents
+      // move this to the open component file code
+      // this.removeMissingElementsFromVariants(node, mainData?.variants)
       ExtendJS.clearEmptyObjects(mainData)
       node.setAttributeNS(null, 'data-ss-component', JSON.stringify(mainData))
     } else {
       node.removeAttributeNS(null, 'data-ss-component')
     }
   },
+
+  // removeMissingElementsFromVariants (node, variants) {
+  //   if (!variants) return
+  //   for (const names of Object.values(variants)) {
+  //     for (const obj of Object.values(names)) {
+  //       this.removeMissingElements(node, obj)
+  //     }
+  //   }
+  // },
+
+  // removeMissingElements (node, elements) {
+  //   for (const [ref, element] of Object.entries(elements)) {
+  //     if (!node.getElementsByClassName(ref).length) {
+  //       delete elements[ref]
+  //     } else if (element.children) {
+  //       this.removeMissingElements(node, element.children)
+  //     }
+  //   }
+  // },
 
   updateComponentData (data, name, value) {
     if (ExtendJS.isEmpty(value)) {

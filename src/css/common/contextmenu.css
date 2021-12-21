@@ -35,9 +35,7 @@
 .desech-studio .contextmenu .menu-list-container.hidden .element-menu-hide,
 .desech-studio .contextmenu .menu-list-container:not(.hidden) .element-menu-show,
 .desech-studio .contextmenu .menu-list-container.component-element .element-menu-delete,
-.desech-studio .contextmenu .menu-list-container.component-element .element-menu-cut,
-.desech-studio .contextmenu .menu-list-container.component-element .element-menu-paste,
-.desech-studio .contextmenu .menu-list-container.component-element .element-menu-duplicate,
+.desech-studio .contextmenu .menu-list-container.component-element .menu-list-copy-element,
 .desech-studio .contextmenu .menu-list-container:not(.component-hole) .element-menu-component-hole {
   display: none;
 }

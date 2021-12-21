@@ -134,11 +134,6 @@ export default {
     throw new Error('Unknown element type')
   },
 
-  getTypeByRef (ref) {
-    const element = this.getElement(ref)
-    return this.getType(element)
-  },
-
   getKeys () {
     return Object.keys(this.getKeyTypeMap())
   },

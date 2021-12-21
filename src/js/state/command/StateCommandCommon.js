@@ -29,9 +29,11 @@ export default {
     if (!data.type || type !== data.type) return
     this.pasteAttributesList(element, data.attributes, data.filter)
     this.pasteContent(element, data.content)
+    this.pasteTag(element, data.tag)
   },
 
   pasteAttributesList (element, attributes, filter) {
+    // when we have no filter, we remove all attributes
     if (!filter) HelperDOM.removeAttributes(element)
     for (const [name, value] of Object.entries(attributes)) {
       if (filter && name === 'class') {
@@ -52,7 +54,16 @@ export default {
     if (content) element.innerHTML = content
   },
 
+  pasteTag (element, tag) {
+    if (tag !== HelperDOM.getTag(element)) {
+      // this will change the element, but it's fine, since it's the last code execution
+      HelperDOM.changeTag(element, tag, document)
+    }
+  },
+
   pasteStyle (element, style) {
+    // we check here if the style data needs to be processed, not if it exists
+    // if this is an empty object, then it's fine because we do need to remove all styles
     if (!style) return
     this.pasteRemoveOldStyle(element)
     this.pasteAddNewStyle(element, style)

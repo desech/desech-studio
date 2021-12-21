@@ -18,38 +18,29 @@ import StyleSheetCommon from '../../../state/stylesheet/StyleSheetCommon.js'
 
 export default {
   async deleteElement () {
-    const ref = StateSelectedElement.getRef()
     const element = StateSelectedElement.getElement()
-    if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
-      return
-    }
-    StateSelectedElement.deselectElement() // this first, before operation
+    if (!this.isElementAllowed(element)) return
+    const ref = StateSelectedElement.getRef()
+    // deselect first, before operation
+    StateSelectedElement.deselectElement()
     await CanvasElement.addRemoveElementCommand(ref, 'removeElement', 'addElement')
   },
 
   async copyElement () {
-    // normally we should allow the copy of elements from inside a component, but we need to
-    // clean it up to look like a non-component, which is hard
-    // @todo maybe implement this later; for now it's not possible
-    const ref = StateSelectedElement.getRef()
     const element = StateSelectedElement.getElement()
-    if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
-      return
-    }
+    if (!this.isElementAllowed(element)) return
     await this.copyElementData(element)
   },
 
   async cutElement () {
-    const ref = StateSelectedElement.getRef()
     const element = StateSelectedElement.getElement()
-    if (!this.isElementAllowed(ref) || !HelperComponent.isMovableElement(element)) {
-      return
-    }
+    if (!this.isElementAllowed(element)) return
     CanvasElement.removeHidden(element)
     const token = Crypto.generateSmallID()
     CanvasElement.appendToken(element, token)
     await this.copyElementData(element, 'cut')
-    StateSelectedElement.deselectElement() // this first, before operation
+    // deselect first, before operation
+    StateSelectedElement.deselectElement()
     await CanvasElement.tokenCommand(token, 'cutElement')
   },
 
@@ -80,10 +71,10 @@ export default {
     StateSelectedElement.selectElement(newElement)
   },
 
-  isElementAllowed (ref) {
-    if (!ref) return false
-    const type = HelperElement.getTypeByRef(ref)
-    return (type !== 'body' && type !== 'inline')
+  isElementAllowed (element) {
+    if (!element) return false
+    const type = HelperElement.getType(element)
+    return (type !== 'body' && type !== 'inline' && HelperComponent.isMovableElement(element))
   },
 
   async copyElementData (element, action = 'copy') {
@@ -96,7 +87,9 @@ export default {
   },
 
   getCopiedAttributes (element, action) {
-    const filter = (action === 'copy') ? { attr: true, cls: false } : { attr: false, cls: false }
+    const filter = (action === 'copy')
+      ? { attributes: true, classes: false }
+      : { attributes: false, classes: false }
     const attrs = this.getAttributesList(element, filter)
     if (action === 'cut') attrs['data-ss-token'] = Crypto.generateSmallID()
     return attrs
@@ -141,9 +134,7 @@ export default {
   },
 
   removeComponentFromSelector (selector, ref) {
-    return ExtendJS.removeExtraSpace(selector
-      .replace(/\.e0[a-z0-9]+\[data-variant\]/g, '')
-      .replace(/\..*?\[data-variant~=".*?"\]/, ''))
+    return ExtendJS.removeExtraSpace(selector.replace(/\.e0[a-z0-9]+\[data-variant\]/g, ''))
   },
 
   async getPastedData () {
@@ -262,10 +253,11 @@ export default {
     await this.saveToClipboard({ style })
   },
 
-  getAttributes (element, type, filter = { attr: true, cls: true }) {
+  getAttributes (element, type, filter = true) {
     return {
       type,
       filter,
+      tag: HelperDOM.getTag(element),
       attributes: this.getAttributesList(element, filter),
       content: this.getContent(element, type)
     }
@@ -275,8 +267,8 @@ export default {
     const ignored = this.getCopyIgnoredAttributes(element)
     const attributes = {}
     for (const attr of element.attributes) {
-      if (!filter.attr || !ignored.includes(attr.name)) {
-        attributes[attr.name] = this.getAttributeValue(attr, filter.cls)
+      if (!filter || !ignored.includes(attr.name)) {
+        attributes[attr.name] = this.getAttributeValue(attr, filter)
       }
     }
     return attributes
@@ -285,18 +277,13 @@ export default {
   // check RightHtmlCommon.getIgnoredAttributes()
   // this is used when we copy attributes from elements
   getCopyIgnoredAttributes (element) {
-    const attrs = ['style', 'data-ss-token']
-    // we don't want to copy the hole attr when it belongs to the main component, because only
-    // one hole is allowed, but we do allow it when it's part of some other component
-    if (!HelperComponent.isComponent(element) && !HelperComponent.isComponentElement(element)) {
-      attrs.push('data-ss-component-hole')
-    }
-    return attrs
+    return ['style', 'data-ss-token', 'data-ss-component', 'data-ss-component-hole',
+      'data-variant']
   },
 
-  getAttributeValue (attr, filterCls) {
+  getAttributeValue (attr, filter) {
     if (attr.name !== 'class') return attr.value
-    if (filterCls) {
+    if (filter) {
       return this.removeNonComponentClasses(attr.value)
     } else {
       return attr.value.replace(' selected', '').replace(' component-element', '').trim()
@@ -352,7 +339,8 @@ export default {
     const type = HelperElement.getType(element)
     const data = {}
     if (pastedData.attributes) {
-      data.attributes = this.getAttributes(element, type, { attr: false, cls: false })
+      // we want the full data because we will remove everything and then add it again
+      data.attributes = this.getAttributes(element, type, false)
     }
     if (pastedData.style) data.style = this.getStyle(element)
     return data

@@ -181,7 +181,7 @@ export default {
 
   toggleComponent (element, container) {
     if (!HelperComponent.isMovableElement(element)) {
-      // this will hide the options to delete, cut, paste, duplicate
+      // this will hide the options to delete, copy, cut, paste, duplicate
       container.classList.add('component-element')
     }
     if (HelperComponent.canAssignComponentHole(element)) {

@@ -3,7 +3,7 @@ import RightHtmlCommon from '../../right/section/html/RightHtmlCommon.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperElement from '../../../helper/HelperElement.js'
-import CanvasElementManage from './CanvasElementManage.js'
+import CanvasElementCopyElement from './copypaste/CanvasElementCopyElement.js'
 import Contextmenu from '../../../component/Contextmenu.js'
 import CanvasElementComponent from './CanvasElementComponent.js'
 import Page from '../../../page/Page.js'
@@ -65,31 +65,31 @@ export default {
 
   async clickCopyElementEvent (event) {
     if (event.target.classList.contains('element-menu-copy')) {
-      await CanvasElementManage.copyElement()
+      await CanvasElementCopyElement.copyElement()
     }
   },
 
   async clickCutElementEvent (event) {
     if (event.target.classList.contains('element-menu-cut')) {
-      await CanvasElementManage.cutElement()
+      await CanvasElementCopyElement.cutElement()
     }
   },
 
   async clickPasteElementEvent (event) {
     if (event.target.classList.contains('element-menu-paste')) {
-      await CanvasElementManage.pasteElement()
+      await CanvasElementCopyElement.pasteElement()
     }
   },
 
   async clickDuplicateElementEvent (event) {
     if (event.target.classList.contains('element-menu-duplicate')) {
-      await CanvasElementManage.duplicateElement()
+      await CanvasElementCopyElement.duplicateElement()
     }
   },
 
   async clickDeleteElementEvent (event) {
     if (event.target.classList.contains('element-menu-delete')) {
-      await CanvasElementManage.deleteElement()
+      await CanvasElementCopyElement.deleteElement()
     }
   },
 

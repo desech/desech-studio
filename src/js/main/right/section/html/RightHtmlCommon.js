@@ -140,7 +140,8 @@ export default {
     return remove
   },
 
-  // check StateHtmlFile.getRemovedAttributes(), CanvasElementManage.getCopyIgnoredAttributes()
+  // check StateHtmlFile.getRemovedAttributes()
+  // CanvasElementCopyAttrStyle.getCopyIgnoredAttributes()
   getIgnoredAttributes () {
     return [
       'class', 'style', 'hidden',

@@ -3,7 +3,7 @@ import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightHtmlCommon from './RightHtmlCommon.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
-import CanvasElementManage from '../../../canvas/element/CanvasElementManage.js'
+import CanvasElementCopyElement from '../../../canvas/element/copypaste/CanvasElementCopyElement.js'
 import CanvasElementComponent from '../../../canvas/element/CanvasElementComponent.js'
 import HelperElement from '../../../../helper/HelperElement.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
@@ -60,7 +60,7 @@ export default {
 
   async clickDeleteElementEvent (event) {
     if (event.target.closest('.style-html-delete')) {
-      await CanvasElementManage.deleteElement()
+      await CanvasElementCopyElement.deleteElement()
     }
   },
 

@@ -1,6 +1,6 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
-import CanvasElementManage from './CanvasElementManage.js'
+import CanvasElementCopyElement from './copypaste/CanvasElementCopyElement.js'
 import CanvasElementCopyAttrStyle from './copypaste/CanvasElementCopyAttrStyle.js'
 import CanvasElementCopySelector from './copypaste/CanvasElementCopySelector.js'
 
@@ -22,7 +22,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
       (event.key.toLowerCase() === 'delete' || event.key.toLowerCase() === 'backspace')) {
-      await CanvasElementManage.deleteElement()
+      await CanvasElementCopyElement.deleteElement()
     }
   },
 
@@ -30,7 +30,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'c' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && !event.shiftKey) {
-      await CanvasElementManage.copyElement()
+      await CanvasElementCopyElement.copyElement()
     }
   },
 
@@ -38,7 +38,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'x' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && !event.shiftKey) {
-      await CanvasElementManage.cutElement()
+      await CanvasElementCopyElement.cutElement()
     }
   },
 
@@ -46,7 +46,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'v' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && !event.shiftKey) {
-      await CanvasElementManage.pasteElement()
+      await CanvasElementCopyElement.pasteElement()
     }
   },
 
@@ -54,7 +54,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'd' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && !event.shiftKey) {
-      await CanvasElementManage.duplicateElement()
+      await CanvasElementCopyElement.duplicateElement()
     }
   },
 

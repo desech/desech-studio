@@ -2,7 +2,7 @@ import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import CanvasElementCreate from './CanvasElementCreate.js'
 import CanvasElement from '../CanvasElement.js'
-import CanvasElementManage from './CanvasElementManage.js'
+import CanvasElementCopyElement from './copypaste/CanvasElementCopyElement.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
@@ -110,7 +110,7 @@ export default {
     HelperDOM.clearStyle(this._element)
     this._element.classList.remove('moving')
     if (altKey) {
-      CanvasElementManage.duplicateElement(this._element)
+      CanvasElementCopyElement.duplicateElement(this._element)
     } else {
       await this.moveElementInCanvas(this._element)
     }
@@ -118,7 +118,7 @@ export default {
 
   async moveElementInCanvas (element) {
     const newElement = this.cloneMoveElement(element)
-    CanvasElementManage.addPastedElement(newElement)
+    CanvasElementCopyElement.addPastedElement(newElement)
     HelperDOM.hide(element)
     StateSelectedElement.selectElementNode(newElement)
     await CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)

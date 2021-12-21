@@ -1,12 +1,9 @@
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import CanvasElementComponent from '../../../canvas/element/CanvasElementComponent.js'
-import CanvasElementManage from '../../../canvas/element/CanvasElementManage.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
-import HelperElement from '../../../../helper/HelperElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
-import HelperOverride from '../../../../helper/HelperOverride.js'
 
 export default {
   getEvents () {

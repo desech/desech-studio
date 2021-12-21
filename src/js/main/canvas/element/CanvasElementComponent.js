@@ -1,4 +1,4 @@
-import CanvasElementManage from './CanvasElementManage.js'
+import CanvasElementCopyElement from './copypaste/CanvasElementCopyElement.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import CanvasElement from '../CanvasElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
@@ -40,8 +40,8 @@ export default {
     const ref = HelperElement.generateElementRef()
     const element = await HelperComponent.fetchComponent({ file, ref })
     if (!element) return
-    CanvasElementManage.addPastedPlacement()
-    CanvasElementManage.addPastedElement(element)
+    CanvasElementCopyElement.addPastedPlacement()
+    CanvasElementCopyElement.addPastedElement(element)
     await CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },

@@ -1,15 +1,15 @@
-import StateSelectedElement from '../../../state/StateSelectedElement.js'
-import CanvasElement from '../CanvasElement.js'
-import CanvasElementCreate from './CanvasElementCreate.js'
-import HelperDOM from '../../../helper/HelperDOM.js'
-import CanvasCommon from '../CanvasCommon.js'
-import HelperElement from '../../../helper/HelperElement.js'
-import HelperTrigger from '../../../helper/HelperTrigger.js'
-import StateStyleSheet from '../../../state/StateStyleSheet.js'
-import HelperComponent from '../../../helper/HelperComponent.js'
-import Crypto from '../../../../electron/lib/Crypto.js'
-import HelperClipboard from '../../../helper/HelperClipboard.js'
-import CanvasElementCopyCommon from './copypaste/CanvasElementCopyCommon.js'
+import StateSelectedElement from '../../../../state/StateSelectedElement.js'
+import CanvasElement from '../../CanvasElement.js'
+import CanvasElementCreate from './../CanvasElementCreate.js'
+import HelperDOM from '../../../../helper/HelperDOM.js'
+import CanvasCommon from '../../CanvasCommon.js'
+import HelperElement from '../../../../helper/HelperElement.js'
+import HelperTrigger from '../../../../helper/HelperTrigger.js'
+import StateStyleSheet from '../../../../state/StateStyleSheet.js'
+import HelperComponent from '../../../../helper/HelperComponent.js'
+import Crypto from '../../../../../electron/lib/Crypto.js'
+import HelperClipboard from '../../../../helper/HelperClipboard.js'
+import CanvasElementCopyCommon from './CanvasElementCopyCommon.js'
 
 export default {
   async deleteElement () {
@@ -56,16 +56,6 @@ export default {
     await this.pasteDuplicateElement(data)
   },
 
-  async pasteDuplicateElement (data) {
-    const newElement = this.createElementFromData(data.element)
-    if (!this.addPastedPlacement('bottom')) return
-    this.addPastedElement(newElement)
-    const ref = HelperElement.getRef(newElement)
-    await CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
-    StateSelectedElement.selectElement(newElement)
-  },
-
   isElementAllowed (element) {
     if (!element) return false
     const type = HelperElement.getType(element)
@@ -109,13 +99,8 @@ export default {
 
   createElementFromData (data) {
     const refMap = (data.action === 'cut') ? null : this.generateNewRefs(data.refs)
-    const node = HelperDOM.createElement(data.tag, document)
-    for (let [name, value] of Object.entries(data.attributes)) {
-      if (name.startsWith('xmlns')) continue
-      if (name === 'class') value = value.replace('selected', '').trim()
-      node.setAttributeNS(null, name, this.replaceMapValue(value, refMap))
-    }
-    node.innerHTML = this.replaceMapValue(data.html, refMap)
+    const html = this.replaceMapValue(data.html, refMap)
+    const node = document.createRange().createContextualFragment(html).children[0]
     this.createElementStyle(data.style, refMap)
     return node
   },
@@ -181,9 +166,19 @@ export default {
       const ref = HelperElement.getRef(element)
       await CanvasElement.addRemoveElementCommand(ref, 'pasteElement', 'removeElement', false)
     } else { // cut
-      const token = data.attributes['data-ss-token']
+      const token = element.getAttributeNS(null, 'data-ss-token')
       await CanvasElement.tokenCommand(token, 'pasteCutElement', false)
       await HelperClipboard.clear()
     }
+  },
+
+  async pasteDuplicateElement (data) {
+    const newElement = this.createElementFromData(data.element)
+    if (!this.addPastedPlacement('bottom')) return
+    this.addPastedElement(newElement)
+    const ref = HelperElement.getRef(newElement)
+    await CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    StateSelectedElement.selectElement(newElement)
   }
 }

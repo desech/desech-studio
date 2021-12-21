@@ -131,7 +131,7 @@ export default {
     return (HelperElement.isCanvasElement(element) && !element.classList.contains('moving'))
   },
 
-  // check CanvasElementManage.addGeneralPastedPlacement()
+  // check CanvasElementCopyElement.addGeneralPastedPlacement()
   addCanvasElementMarker (element, mouseY) {
     const type = HelperElement.getType(element)
     if (type === 'body') {

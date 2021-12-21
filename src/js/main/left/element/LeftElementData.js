@@ -79,7 +79,7 @@ export default {
     if (data.component?.name) {
       title.textContent = data.component.name
     } else {
-      const classes = HelperElement.getClasses(data.element, true)
+      const classes = HelperElement.getClasses(data.element.classList, true)
       title.textContent = `<${data.tag}> ` + classes.join(' ')
     }
   },

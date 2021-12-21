@@ -134,13 +134,5 @@ export default {
       css['-webkit-background-clip'] = css['background-clip']
       delete css['background-clip']
     }
-  },
-
-  getEmptyProperties (properties) {
-    const result = {}
-    for (const name of Object.keys(properties)) {
-      result[name] = ''
-    }
-    return result
   }
 }

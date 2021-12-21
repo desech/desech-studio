@@ -17,13 +17,15 @@ export default {
   // filter = class, variant, ref
   getElementSelectors (element, filter = null) {
     const selectors = []
-    const classes = HelperElement.getClasses(element)
+    const classes = HelperElement.getClasses(element.classList)
     const refSelectors = this.getRefSelectors(element)
     for (const sheet of document.adoptedStyleSheets) {
       const selector = this.getElementSelector(sheet, classes, refSelectors, filter)
       if (selector) selectors.push(selector)
     }
-    this.addOrphanClassesToSelectors(selectors, classes)
+    if (!filter || filter === 'class') {
+      this.addOrphanClassesToSelectors(selectors, classes)
+    }
     return ExtendJS.unique(selectors)
   },
 
@@ -142,6 +144,16 @@ export default {
     return sheet ? Boolean(sheet.cssRules.length) : false
   },
 
+  emptySelector (selector) {
+    const sheet = StyleSheetCommon.getSelectorSheet(selector)
+    for (let i = sheet.cssRules.length - 1; i >= 0; i--) {
+      StyleSheetCommon.deleteRule(sheet, i)
+    }
+    const emptyRule = HelperStyle.buildRule(selector)
+    StyleSheetCommon.addRule(sheet, emptyRule)
+    return sheet
+  },
+
   deleteSelector (selector) {
     this.deleteSelectors([selector])
   },
@@ -194,7 +206,7 @@ export default {
     // when we swap components, we lose the original ref and `undo` will not find it
     if (!element) return
     element.classList.add(cls)
-    await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'add' })
+    await StateCommandOverride.overrideElement(element, 'classes', [{ cls, action: 'add' }])
   },
 
   async unlinkClass (cls, ref) {
@@ -202,7 +214,7 @@ export default {
     // when we swap components, we lose the original ref and `undo` will not find it
     if (!element) return
     element.classList.remove(cls)
-    await StateCommandOverride.overrideElement(element, 'classes', { cls, action: 'delete' })
+    await StateCommandOverride.overrideElement(element, 'classes', [{ cls, action: 'delete' }])
   },
 
   renameSelector (oldSelector, newSelector) {

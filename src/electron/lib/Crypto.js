@@ -2,7 +2,7 @@ import { nanoid, customAlphabet } from 'nanoid'
 
 export default {
   generateID () {
-    // we don't use crypto.randomUUID() because this is used in browser too
+    // we don't use node.js crypto.randomUUID() because we need this in the browser too
     return nanoid()
   },
 

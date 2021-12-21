@@ -159,10 +159,10 @@ export default {
     }
   },
 
-  getCurrentStyleObject (selector = null) {
+  getCurrentStyleObject (selector = null, matchResponsive = true) {
     if (!selector) selector = StyleSheetSelector.getCurrentSelector()
     const sheet = this.getCreateSelectorSheet(selector)
-    const style = StyleSheetCommon.extractStyleFromRules(sheet.cssRules)
+    const style = StyleSheetCommon.extractStyleFromRules(sheet.cssRules, matchResponsive)
     return this.convertStyleArrayToObject(style)
   },
 

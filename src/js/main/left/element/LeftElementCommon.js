@@ -18,7 +18,7 @@ export default {
       element,
       ref: HelperElement.getRef(element),
       styleRef: HelperElement.getStyleRef(element),
-      classes: HelperElement.getClasses(element, true),
+      classes: HelperElement.getClasses(element.classList, true),
       type: HelperElement.getType(element),
       tag: HelperElement.getTag(element),
       isContainer: HelperElement.isContainer(element),

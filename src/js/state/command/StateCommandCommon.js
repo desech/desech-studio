@@ -5,6 +5,9 @@ import StateSelectedElement from '../StateSelectedElement.js'
 import StyleSheetSelector from '../stylesheet/StyleSheetSelector.js'
 import StyleSheetCommon from '../stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../StateStyleSheet.js'
+import StateCommandOverride from './StateCommandOverride.js'
+import ExtendJS from '../../helper/ExtendJS.js'
+import HelperComponent from '../../helper/HelperComponent.js'
 
 export default {
   async addSelectorLinkClass (selector) {
@@ -22,17 +25,24 @@ export default {
     }
   },
 
-  pasteAttributes (element, data) {
+  async pasteAttributes (element, data, resetOverrides) {
     if (!data) return
     const type = HelperElement.getType(element)
     // needs to be the same element type
     if (!data.type || type !== data.type) return
-    this.pasteAttributesList(element, data.attributes, data.filter)
-    this.pasteContent(element, data.content)
-    this.pasteTag(element, data.tag)
+    await this.pasteAttributesList(element, data.attributes, data.filter, resetOverrides)
+    await this.pasteContent(element, data.content, resetOverrides)
+    element = await this.pasteTag(element, data.tag, resetOverrides)
+    this.resetOverrides(element, resetOverrides)
   },
 
-  pasteAttributesList (element, attributes, filter) {
+  async pasteAttributesList (element, attributes, filter, resetOverrides) {
+    // we need the override before the changes
+    // when we have the reset on undo, there's no need to set the overrides since we are already
+    // resetting them
+    if (!resetOverrides) {
+      await this.overrideAttributes(element, ExtendJS.cloneData(attributes))
+    }
     // when we have no filter, we remove all attributes
     if (!filter) HelperDOM.removeAttributes(element)
     for (const [name, value] of Object.entries(attributes)) {
@@ -50,15 +60,62 @@ export default {
     }
   },
 
-  pasteContent (element, content) {
-    if (content) element.innerHTML = content
+  async overrideAttributes (element, attributes) {
+    await this.overrideClasses(element, attributes)
+    await this.overrideElementProperties(element, attributes)
+    // the classes and properties have been deleted from the attributes object
+    await StateCommandOverride.overrideElement(element, 'attributes', attributes, false)
+    // data-ss-component is not copied, which means we can't override the component data like
+    // component properties and variants
+    // @todo maybe in the future implement this too
   },
 
-  pasteTag (element, tag) {
-    if (tag !== HelperDOM.getTag(element)) {
-      // this will change the element, but it's fine, since it's the last code execution
-      HelperDOM.changeTag(element, tag, document)
+  async overrideClasses (element, attributes) {
+    // we don't want to merge the previous classes because undo will no longer work
+    const classes = HelperElement.getClasses(attributes.class.split(' '))
+    const data = []
+    for (const cls of classes) {
+      data.push({ cls, action: 'add' })
     }
+    await StateCommandOverride.overrideElement(element, 'classes', data, false)
+    delete attributes.class
+  },
+
+  async overrideElementProperties (element, attributes) {
+    // we don't want to merge the previous properties because undo will no longer work
+    const properties = attributes['data-ss-properties']
+      ? JSON.parse(attributes['data-ss-properties'])
+      : null
+    await StateCommandOverride.overrideElement(element, 'properties', properties, false)
+    delete attributes['data-ss-properties']
+  },
+
+  async pasteContent (element, content, resetOverrides) {
+    if (content === null || content === element.innerHTML) return
+    element.innerHTML = content
+    if (!resetOverrides) {
+      await StateCommandOverride.overrideElement(element, 'inner', content, false)
+    }
+  },
+
+  async pasteTag (element, tag, resetOverrides) {
+    if (tag === HelperDOM.getTag(element)) return element
+    element = HelperDOM.changeTag(element, tag, document)
+    if (!resetOverrides) {
+      await StateCommandOverride.overrideElement(element, 'tag', tag, false)
+    }
+    return element
+  },
+
+  resetOverrides (element, data) {
+    if (!data || !data.componentRef) return
+    const component = HelperElement.getElement(data.componentRef)
+    if (!component) return
+    const cmpData = HelperComponent.getComponentData(component)
+    cmpData.overrides = data.overrides
+    HelperComponent.setComponentData(component, cmpData)
+    // also set the component-element class because we remove it when we cleanup classes
+    element.classList.add('component-element')
   },
 
   pasteStyle (element, style) {

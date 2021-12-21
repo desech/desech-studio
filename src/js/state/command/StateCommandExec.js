@@ -63,22 +63,34 @@ export default {
     StyleSheetCommon.addRemoveStyleRules(data)
   },
 
-  cutStyle (data) {
-    this.changeStyle(data)
+  cutSelectorStyle (data) {
+    if (!data.style) {
+      StyleSheetSelector.emptySelector(data.selector)
+    } else {
+      // this happens on undo, where we need to add back the previous styles
+      const sheet = StyleSheetCommon.getSelectorSheet(data.selector)
+      StyleSheetCommon.addRemoveRules(sheet, data.selector, data.style)
+    }
+    HelperTrigger.triggerReload('right-panel')
   },
 
-  pasteStyle (data) {
-    this.changeStyle(data)
+  pasteSelectorStyle (data) {
+    // this will wipe out any previous style and then place the new one
+    const sheet = StyleSheetSelector.emptySelector(data.selector)
+    StyleSheetCommon.addRemoveRules(sheet, data.selector, data.style)
+    HelperTrigger.triggerReload('right-panel')
   },
 
   // when pasting cross projects, the image/media file urls and component files will fail
   // @todo find a way to copy these files too if they don't exist,
   // and also integrate the missing components
-  pasteAttrStyle (data) {
+  async pasteAttrStyle (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    StateCommandCommon.pasteAttributes(element, data.data.attributes)
+    await StateCommandCommon.pasteAttributes(element, data.data.attributes,
+      data.data.resetOverrides)
     StateCommandCommon.pasteStyle(element, data.data.style)
+    HelperTrigger.triggerReload('right-panel')
   },
 
   addColor (data) {

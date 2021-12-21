@@ -10,13 +10,13 @@ import HelperTrigger from '../../helper/HelperTrigger.js'
 import StateCommandComponent from './StateCommandComponent.js'
 
 export default {
-  async overrideElement (element, type, value) {
+  async overrideElement (element, type, value, reload = true) {
     if (!HelperComponent.belongsToAComponent(element)) return
     const parents = HelperOverride.getElementParents(element)
     if (!parents.length) return
     await this.processElementData(parents, element, type, value)
     HelperComponent.setComponentData(parents[0].element, parents[0].data)
-    HelperTrigger.triggerReload('right-panel')
+    if (reload) HelperTrigger.triggerReload('right-panel')
     return parents
   },
 
@@ -79,7 +79,7 @@ export default {
         this.processElementAttributes(value, data, originalNode)
         break
       case 'properties':
-        this.processObject(data, 'properties', this.getElementProperties(originalNode), value)
+        this.processElementProperties(value, data, originalNode)
         break
       case 'classes':
         this.processElementClasses(value, data, originalNode)
@@ -88,23 +88,13 @@ export default {
         this.processComponentFile(value, data, originalNode)
         break
       case 'component-properties':
-        this.processObject(data, 'properties', this.getComponentProperties(originalNode), value)
+        this.processComponentProperties(value, data, originalNode)
         break
       case 'variants':
         this.processComponentVariants(value, data, originalNode)
         break
     }
     ExtendJS.clearEmptyObjects(parents[0].data)
-  },
-
-  getElementProperties (originalNode) {
-    // when we swap components, we will not find children of that component in our original cmp
-    return originalNode ? HelperElement.getProperties(originalNode) : null
-  },
-
-  getComponentProperties (originalNode) {
-    // when we swap components, we will not find children of that component in our original cmp
-    return originalNode ? HelperComponent.getInstanceProperties(originalNode) : null
   },
 
   processElementTag (value, data, originalNode) {
@@ -187,48 +177,13 @@ export default {
     }
   },
 
-  processObject (data, type, oldObj, newObj) {
-    if (!data[type]) data[type] = {}
-    if (!oldObj) oldObj = {}
-    if (!newObj) newObj = {}
-    this.updateDeleteObject(oldObj, newObj, data[type])
-    this.addObject(oldObj, newObj, data[type])
-    this.clearObject(oldObj, newObj, data[type])
-  },
-
-  updateDeleteObject (oldObj, newObj, obj) {
-    for (const [name, value] of Object.entries(oldObj)) {
-      if (!(name in newObj)) {
-        obj[name] = { delete: true }
-      } else if (value !== newObj[name]) {
-        obj[name] = { value: newObj[name] }
-      } else {
-        delete obj[name]
-      }
-    }
-  },
-
-  addObject (oldObj, newObj, obj) {
-    for (const [name, value] of Object.entries(newObj)) {
-      if (!(name in oldObj)) {
-        obj[name] = { value }
-      }
-    }
-  },
-
-  clearObject (oldObj, newObj, obj) {
-    for (const name of Object.keys(obj)) {
-      if (!(name in oldObj) && !(name in newObj)) {
-        delete obj[name]
-      }
-    }
-  },
-
-  processElementClasses (value, data, originalNode) {
+  processElementClasses (classes, data, originalNode) {
     if (!data.classes) data.classes = {}
-    const exists = originalNode ? originalNode.classList.contains(value.cls) : false
-    const cls = HelperStyle.getViewableClass(value.cls)
-    this.processElementClass(cls, value.action, data, exists)
+    for (const value of classes) {
+      const exists = originalNode ? originalNode.classList.contains(value.cls) : false
+      const label = HelperStyle.getViewableClass(value.cls)
+      this.processElementClass(label, value.action, data, exists)
+    }
   },
 
   processElementClass (cls, action, data, exists) {
@@ -239,6 +194,19 @@ export default {
     } else {
       delete data.classes[cls]
     }
+  },
+
+  processElementProperties (properties, data, originalNode) {
+    const originalProps = this.getElementProperties(originalNode)
+    data.properties = HelperOverride.processDiffObject(originalProps, properties,
+      (value, action) => {
+        return (action === 'add') ? { value } : { delete: true }
+      })
+  },
+
+  getElementProperties (originalNode) {
+    // when we swap components, we will not find children of that component in our original cmp
+    return originalNode ? HelperElement.getProperties(originalNode) : null
   },
 
   async overrideComponent (element, type, value) {
@@ -274,6 +242,19 @@ export default {
     } else {
       data.component = HelperFile.getRelPath(file)
     }
+  },
+
+  processComponentProperties (properties, data, originalNode) {
+    const originalProps = this.getComponentProperties(originalNode)
+    data.properties = HelperOverride.processDiffObject(originalProps, properties,
+      (value, action) => {
+        return (action === 'add') ? { value } : { delete: true }
+      })
+  },
+
+  getComponentProperties (originalNode) {
+    // when we swap components, we will not find children of that component in our original cmp
+    return originalNode ? HelperComponent.getInstanceProperties(originalNode) : null
   },
 
   processComponentVariants (variant, data, originalNode) {

@@ -347,5 +347,43 @@ export default {
         fields[1].classList.add('override')
       }
     }
+  },
+
+  processDiffObject (oldObj, newObj, callback) {
+    const data = {}
+    if (!oldObj) oldObj = {}
+    if (!newObj) newObj = {}
+    this.updateDeleteObject(oldObj, newObj, data, callback)
+    this.addObject(oldObj, newObj, data, callback)
+    this.clearObject(oldObj, newObj, data)
+    return data
+  },
+
+  updateDeleteObject (oldObj, newObj, data, callback) {
+    for (const [name, value] of Object.entries(oldObj)) {
+      if (!(name in newObj)) {
+        data[name] = callback(newObj[name], 'delete')
+      } else if (value !== newObj[name]) {
+        data[name] = callback(newObj[name], 'add')
+      } else {
+        delete data[name]
+      }
+    }
+  },
+
+  addObject (oldObj, newObj, data, callback) {
+    for (const [name, value] of Object.entries(newObj)) {
+      if (!(name in oldObj)) {
+        data[name] = callback(value, 'add')
+      }
+    }
+  },
+
+  clearObject (oldObj, newObj, data) {
+    for (const name of Object.keys(data)) {
+      if (!(name in oldObj) && !(name in newObj)) {
+        delete data[name]
+      }
+    }
   }
 }

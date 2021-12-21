@@ -1,6 +1,8 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import CanvasElementManage from './CanvasElementManage.js'
+import CanvasElementCopyAttrStyle from './copypaste/CanvasElementCopyAttrStyle.js'
+import CanvasElementCopySelector from './copypaste/CanvasElementCopySelector.js'
 
 export default {
   getEvents () {
@@ -60,7 +62,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'c' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && event.shiftKey) {
-      await CanvasElementManage.copyAttrStyle()
+      await CanvasElementCopyAttrStyle.copyAttrStyle()
     }
   },
 
@@ -68,7 +70,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'a' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && event.shiftKey) {
-      await CanvasElementManage.copyAttributes()
+      await CanvasElementCopyAttrStyle.copyAttributes()
     }
   },
 
@@ -76,7 +78,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 's' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && event.shiftKey) {
-      await CanvasElementManage.copyStyle()
+      await CanvasElementCopyAttrStyle.copyStyle()
     }
   },
 
@@ -84,7 +86,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'v' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && !event.altKey && event.shiftKey) {
-      await CanvasElementManage.pasteAttrStyle()
+      await CanvasElementCopyAttrStyle.pasteAttrStyle()
     }
   },
 
@@ -92,7 +94,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'c' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && event.altKey && !event.shiftKey) {
-      await CanvasElementManage.copySelector()
+      await CanvasElementCopySelector.copySelector()
     }
   },
 
@@ -100,7 +102,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'x' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && event.altKey && !event.shiftKey) {
-      await CanvasElementManage.cutSelector()
+      await CanvasElementCopySelector.cutSelector()
     }
   },
 
@@ -108,7 +110,7 @@ export default {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       event.key.toLowerCase() === 'v' && !HelperCanvas.isPreview() &&
       HelperEvent.isCtrlCmd(event) && event.altKey && !event.shiftKey) {
-      await CanvasElementManage.pasteSelector()
+      await CanvasElementCopySelector.pasteSelector()
     }
   }
 }

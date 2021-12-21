@@ -11,6 +11,8 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import CanvasElementText from './CanvasElementText.js'
+import CanvasElementCopyAttrStyle from './copypaste/CanvasElementCopyAttrStyle.js'
+import CanvasElementCopySelector from './copypaste/CanvasElementCopySelector.js'
 
 export default {
   getEvents () {
@@ -93,43 +95,43 @@ export default {
 
   async clickCopyAllEvent (event) {
     if (event.target.classList.contains('element-menu-copy-all')) {
-      await CanvasElementManage.copyAttrStyle()
+      await CanvasElementCopyAttrStyle.copyAttrStyle()
     }
   },
 
   async clickCopyAttributesEvent (event) {
     if (event.target.classList.contains('element-menu-copy-attributes')) {
-      await CanvasElementManage.copyAttributes()
+      await CanvasElementCopyAttrStyle.copyAttributes()
     }
   },
 
   async clickCopyStyleEvent (event) {
     if (event.target.classList.contains('element-menu-copy-style')) {
-      await CanvasElementManage.copyStyle()
+      await CanvasElementCopyAttrStyle.copyStyle()
     }
   },
 
   async clickPasteAllEvent (event) {
     if (event.target.classList.contains('element-menu-paste-data')) {
-      await CanvasElementManage.pasteAttrStyle()
+      await CanvasElementCopyAttrStyle.pasteAttrStyle()
     }
   },
 
   async clickCopySelectorEvent (event) {
     if (event.target.classList.contains('element-menu-copy-selector')) {
-      await CanvasElementManage.copySelector()
+      await CanvasElementCopySelector.copySelector()
     }
   },
 
   async clickCutSelectorEvent (event) {
     if (event.target.classList.contains('element-menu-cut-selector')) {
-      await CanvasElementManage.cutSelector()
+      await CanvasElementCopySelector.cutSelector()
     }
   },
 
   async clickPasteSelectorEvent (event) {
     if (event.target.classList.contains('element-menu-paste-selector')) {
-      await CanvasElementManage.pasteSelector()
+      await CanvasElementCopySelector.pasteSelector()
     }
   },
 

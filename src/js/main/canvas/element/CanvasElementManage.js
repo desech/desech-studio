@@ -5,16 +5,11 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 import CanvasCommon from '../CanvasCommon.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
-import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
 import StateStyleSheet from '../../../state/StateStyleSheet.js'
-import StateCommand from '../../../state/StateCommand.js'
-import RightCommon from '../../right/RightCommon.js'
-import ExtendJS from '../../../helper/ExtendJS.js'
-import StyleSheetProperties from '../../../state/stylesheet/StyleSheetProperties.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
-import HelperStyle from '../../../helper/HelperStyle.js'
 import Crypto from '../../../../electron/lib/Crypto.js'
-import StyleSheetCommon from '../../../state/stylesheet/StyleSheetCommon.js'
+import HelperClipboard from '../../../helper/HelperClipboard.js'
+import CanvasElementCopyCommon from './copypaste/CanvasElementCopyCommon.js'
 
 export default {
   async deleteElement () {
@@ -45,7 +40,7 @@ export default {
   },
 
   async pasteElement () {
-    const data = await this.getPastedData()
+    const data = await HelperClipboard.getData()
     if (!data.element) return
     const newElement = this.createElementFromData(data.element)
     if (!this.addPastedPlacement()) return
@@ -56,7 +51,7 @@ export default {
 
   async duplicateElement (element = null) {
     element ? await this.copyElementData(element) : await this.copyElement()
-    const data = await this.getPastedData()
+    const data = await HelperClipboard.getData()
     if (!data.element) return
     await this.pasteDuplicateElement(data)
   },
@@ -78,21 +73,14 @@ export default {
   },
 
   async copyElementData (element, action = 'copy') {
-    const tag = HelperDOM.getTag(element)
-    const attributes = this.getCopiedAttributes(element, action)
-    const html = element.innerHTML
-    const refs = this.getAllReplaceableRefs(element.outerHTML)
-    const style = this.getStyleByRefs(refs)
-    await this.saveToClipboard({ element: { action, tag, attributes, html, refs, style } })
-  },
-
-  getCopiedAttributes (element, action) {
-    const filter = (action === 'copy')
-      ? { attributes: true, classes: false }
-      : { attributes: false, classes: false }
-    const attrs = this.getAttributesList(element, filter)
-    if (action === 'cut') attrs['data-ss-token'] = Crypto.generateSmallID()
-    return attrs
+    const clone = element.cloneNode(true)
+    if (action === 'cut') {
+      clone.setAttributeNS(null, 'data-ss-token', Crypto.generateSmallID())
+    }
+    const html = element.outerHTML
+    const refs = this.getAllReplaceableRefs(html)
+    const style = this.getStyleByRefs(refs, false)
+    await HelperClipboard.saveData({ element: { action, html, refs, style } })
   },
 
   // all these refs will be replaced on paste by generateNewRefs()
@@ -109,45 +97,14 @@ export default {
 
   // when copying components, we will have here the position refs which have no style
   // the component ref might have some override style
-  getStyleByRefs (refs) {
+  getStyleByRefs (refs, clean = true) {
     let style = {}
     for (const ref of refs) {
       const element = HelperElement.getElement(ref)
-      const elementStyle = this.getStyle(element)
+      const elementStyle = CanvasElementCopyCommon.getStyle(element, clean)
       style = { ...style, ...elementStyle }
     }
     return style
-  },
-
-  getStyle (element) {
-    const style = {}
-    const ref = HelperElement.getStyleRef(element)
-    const selectors = StyleSheetSelector.getElementSelectors(element, 'ref')
-    for (const selector of selectors) {
-      const css = StyleSheetCommon.getSelectorStyle(selector, false)
-      if (css && css.length) {
-        const key = this.removeComponentFromSelector(selector, ref)
-        style[key] = css
-      }
-    }
-    return style
-  },
-
-  removeComponentFromSelector (selector, ref) {
-    return ExtendJS.removeExtraSpace(selector.replace(/\.e0[a-z0-9]+\[data-variant\]/g, ''))
-  },
-
-  async getPastedData () {
-    const string = await navigator.clipboard.readText()
-    return string ? ExtendJS.parseJsonNoError(string) : {}
-  },
-
-  async saveToClipboard (data) {
-    await navigator.clipboard.writeText(JSON.stringify(data, null, 2))
-  },
-
-  async clearClipboard () {
-    await navigator.clipboard.writeText('')
   },
 
   createElementFromData (data) {
@@ -226,154 +183,7 @@ export default {
     } else { // cut
       const token = data.attributes['data-ss-token']
       await CanvasElement.tokenCommand(token, 'pasteCutElement', false)
-      this.clearClipboard()
+      await HelperClipboard.clear()
     }
-  },
-
-  async copyAttrStyle () {
-    const element = StateSelectedElement.getElement()
-    const type = HelperElement.getType(element)
-    const data = {
-      attributes: this.getAttributes(element, type),
-      style: this.getStyle(element)
-    }
-    await this.saveToClipboard(data)
-  },
-
-  async copyAttributes () {
-    const element = StateSelectedElement.getElement()
-    const type = HelperElement.getType(element)
-    const attributes = this.getAttributes(element, type)
-    await this.saveToClipboard({ attributes })
-  },
-
-  async copyStyle () {
-    const element = StateSelectedElement.getElement()
-    const style = this.getStyle(element)
-    await this.saveToClipboard({ style })
-  },
-
-  getAttributes (element, type, filter = true) {
-    return {
-      type,
-      filter,
-      tag: HelperDOM.getTag(element),
-      attributes: this.getAttributesList(element, filter),
-      content: this.getContent(element, type)
-    }
-  },
-
-  getAttributesList (element, filter) {
-    const ignored = this.getCopyIgnoredAttributes(element)
-    const attributes = {}
-    for (const attr of element.attributes) {
-      if (!filter || !ignored.includes(attr.name)) {
-        attributes[attr.name] = this.getAttributeValue(attr, filter)
-      }
-    }
-    return attributes
-  },
-
-  // check RightHtmlCommon.getIgnoredAttributes()
-  // this is used when we copy attributes from elements
-  getCopyIgnoredAttributes (element) {
-    return ['style', 'data-ss-token', 'data-ss-component', 'data-ss-component-hole',
-      'data-variant']
-  },
-
-  getAttributeValue (attr, filter) {
-    if (attr.name !== 'class') return attr.value
-    if (filter) {
-      return this.removeNonComponentClasses(attr.value)
-    } else {
-      return attr.value.replace(' selected', '').replace(' component-element', '').trim()
-    }
-  },
-
-  removeNonComponentClasses (string) {
-    const classes = string.trim().split(' ')
-    for (let i = classes.length - 1; i >= 0; i--) {
-      if (!classes[i] || !HelperStyle.isCssComponentClass(classes[i])) {
-        classes.splice(i, 1)
-      }
-    }
-    return classes.join(' ')
-  },
-
-  getContent (element, type) {
-    if (['icon', 'video', 'audio', 'dropdown'].includes(type)) {
-      return element.innerHTML
-    }
-  },
-
-  // paste all attributes and styles
-  async pasteAttrStyle () {
-    const ref = StateSelectedElement.getRef()
-    // we can only paste inside elements
-    if (!ref) return
-    const data = await this.getPastedData()
-    if (!data.attributes && !data.style) return
-    await this.pasteAttrStyleCommand(ref, data)
-    HelperTrigger.triggerReload('right-panel')
-  },
-
-  async pasteAttrStyleCommand (ref, data, execute = true) {
-    const command = {
-      do: {
-        command: 'pasteAttrStyle',
-        ref,
-        data
-      },
-      undo: {
-        command: 'pasteAttrStyle',
-        ref,
-        data: this.getCurrentData(ref, data)
-      }
-    }
-    StateCommand.stackCommand(command)
-    if (execute) await StateCommand.executeCommand(command.do)
-  },
-
-  getCurrentData (ref, pastedData) {
-    const element = HelperElement.getElement(ref)
-    const type = HelperElement.getType(element)
-    const data = {}
-    if (pastedData.attributes) {
-      // we want the full data because we will remove everything and then add it again
-      data.attributes = this.getAttributes(element, type, false)
-    }
-    if (pastedData.style) data.style = this.getStyle(element)
-    return data
-  },
-
-  async copySelector () {
-    const selector = StyleSheetSelector.getCurrentSelector()
-    if (!selector) return null
-    const properties = StateStyleSheet.getCurrentStyleObject(selector)
-    await this.saveToClipboard({ selector: { selector, properties } })
-    return properties
-  },
-
-  async cutSelector () {
-    const properties = await this.copySelector()
-    if (!properties) return
-    const empty = StyleSheetProperties.getEmptyProperties(properties)
-    await RightCommon.changeStyle(empty, true, 'cutStyle')
-  },
-
-  async pasteSelector () {
-    const ref = StateSelectedElement.getRef()
-    // we can only paste inside elements
-    if (!ref) return
-    const data = await this.getPastedData()
-    if (!data.selector) return
-    const properties = this.joinProperties(data.selector.properties)
-    await RightCommon.changeStyle(properties, true, 'pasteStyle')
-  },
-
-  joinProperties (pastedProperties) {
-    const currentProperties = StateStyleSheet.getCurrentStyleObject()
-    const empty = StyleSheetProperties.getEmptyProperties(currentProperties)
-    return { ...empty, ...pastedProperties }
   }
 }

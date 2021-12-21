@@ -113,10 +113,10 @@ export default {
     }
   },
 
-  getClasses (element, viewable = false) {
+  getClasses (classList, viewable = false) {
     const classes = []
-    if (!element.classList) return classes
-    for (const name of element.classList) {
+    if (!classList) return classes
+    for (const name of classList) {
       if (!HelperStyle.isCssComponentClass(name)) continue
       const label = viewable ? HelperStyle.getViewableClass(name) : name
       classes.push(label)

@@ -1,16 +1,28 @@
-dialog.dialog {
+.dialog {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: var(--dialog-backdrop);
+}
+
+.dialog .dialog-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 11;
   max-width: 100vw;
   min-width: 250px;
-  margin: auto;
   font-size: 14px;
-  border: none;
   border-radius: 2px;
   background-color: var(--dialog-bg);
   color: var(--dialog-txt);
   box-shadow: var(--dialog-shadow) 0 0 5px 0;
 }
 
-dialog.dialog .dialog-header {
+.dialog .dialog-header {
   display: grid;
   grid-template-columns: auto 18px;
   column-gap: 10px;
@@ -21,11 +33,11 @@ dialog.dialog .dialog-header {
   box-shadow: var(--dialog-header-shadow) 0 -1px 1px 0 inset;
 }
 
-dialog.dialog .dialog-body {
+.dialog .dialog-body {
   padding: 20px 15px;
 }
 
-dialog.dialog .dialog-footer {
+.dialog .dialog-footer {
   display: grid;
   grid-template-columns: auto auto;
   justify-content: space-between;
@@ -33,11 +45,11 @@ dialog.dialog .dialog-footer {
   box-shadow: var(--dialog-header-shadow) -1px 1px 0 0 inset;
 }
 
-dialog.dialog[data-locked] .dialog-close {
+.dialog[data-locked] .dialog-close {
   display: none;
 }
 
-dialog.dialog .grid {
+.dialog .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
@@ -46,13 +58,13 @@ dialog.dialog .grid {
 
 /* specific dialogs */
 
-dialog.dialog .dialog-premium {
+.dialog .dialog-premium {
   width: 410px;
   font-size: 15px;
   line-height: 24px;
 }
 
-dialog.dialog .dialog-premium .premium-icon-container {
+.dialog .dialog-premium .premium-icon-container {
   background-color: #FFF;
   color: #000;
   margin: 10px 0;
@@ -61,98 +73,99 @@ dialog.dialog .dialog-premium .premium-icon-container {
   filter: grayscale(100%);
 }
 
-dialog.dialog .dialog-auth {
+.dialog .dialog-auth {
   padding: 20px;
   text-align: center;
 }
 
-dialog.dialog .dialog-auth .dialog-auth-button {
+.dialog .dialog-auth .dialog-auth-button {
   margin-top: 30px;
 }
 
-dialog.dialog .dialog-about {
+.dialog .dialog-about {
   line-height: 25px;
 }
 
-dialog.dialog .dialog-about p span {
+.dialog .dialog-about p span {
   padding-left: 10px;
   color: var(--dialog-txt-highlight);
 }
 
-dialog.dialog .dialog-project {
+.dialog .dialog-project {
   width: 350px;
 }
 
 /* shortcuts dialog  */
 
-dialog.dialog .dialog-shortcuts {
+.dialog .dialog-shortcuts {
+  width: 1000px;
   height: 475px;
   padding: 0 10px 10px 10px;
   overflow: auto;
 }
 
-dialog.dialog .dialog-shortcuts .title {
+.dialog .dialog-shortcuts .title {
   font-size: 16px;
   line-height: 30px;
   margin-bottom: 15px;
   box-shadow: var(--dialog-header-shadow) 0 -1px 0 0 inset;
 }
 
-dialog.dialog .dialog-shortcuts .grid-section {
+.dialog .dialog-shortcuts .grid-section {
   grid-template-columns: 1fr;
   margin-bottom: 20px;
   row-gap: 0;
 }
 
-dialog.dialog .dialog-shortcuts .grid-section:last-child {
+.dialog .dialog-shortcuts .grid-section:last-child {
   margin-bottom: 0;
 }
 
-dialog.dialog .dialog-shortcuts .grid-section>.grid {
+.dialog .dialog-shortcuts .grid-section>.grid {
   padding: 10px 20px;
 }
 
-dialog.dialog .dialog-shortcuts .grid-section>.grid:hover {
+.dialog .dialog-shortcuts .grid-section>.grid:hover {
   background-color: var(--grid-cell-hover);
 }
 
-dialog.dialog .dialog-shortcuts .description p {
+.dialog .dialog-shortcuts .description p {
   padding-bottom: 15px;
 }
 
-dialog.dialog .dialog-shortcuts .description p:last-child {
+.dialog .dialog-shortcuts .description p:last-child {
   padding: 0;
 }
 
 /* plugin dialog */
 
-dialog.dialog .dialog-plugin {
+.dialog .dialog-plugin {
   width: 400px;
 }
 
-dialog.dialog .dialog-plugin .plugin-list {
+.dialog .dialog-plugin .plugin-list {
   max-height: 400px;
   overflow: auto;
 }
 
-dialog.dialog .dialog-plugin .plugin-item {
+.dialog .dialog-plugin .plugin-item {
   padding: 8px 10px;
 }
 
-dialog.dialog .dialog-plugin .plugin-item:hover {
+.dialog .dialog-plugin .plugin-item:hover {
   background-color: var(--grid-cell-hover);
 }
 
-dialog.dialog .dialog-plugin .plugin-item-meta {
+.dialog .dialog-plugin .plugin-item-meta {
   line-height: 25px;
 }
 
-dialog.dialog .dialog-plugin .plugin-item-button {
+.dialog .dialog-plugin .plugin-item-button {
   align-self: center;
   justify-self: end;
 }
 
-dialog.dialog .dialog-plugin .plugin-meta {
+.dialog .dialog-plugin .plugin-meta {
   font-size: 13px;
   opacity: 0.8;
 }
@@ -160,90 +173,90 @@ dialog.dialog .dialog-plugin .plugin-meta {
 
 /* import dialogs */
 
-dialog.dialog .dialog-import {
+.dialog .dialog-import {
   width: 350px;
 }
 
-dialog.dialog .dialog-import-loader .dialog-figma-continue {
+.dialog .dialog-import-loader .dialog-figma-continue {
   display: block;
   margin: 50px auto 10px auto;
 }
 
-dialog.dialog .dialog-import-loader ul.loader-progress {
+.dialog .dialog-import-loader ul.loader-progress {
   max-height: 200px;
   overflow: auto;
   font-size: 13px;
 }
 
-dialog.dialog .dialog-import-loader ul.loader-progress a {
+.dialog .dialog-import-loader ul.loader-progress a {
   color: var(--link-txt);
 }
 
-dialog.dialog .dialog-import-loader ul.loader-progress a:hover {
+.dialog .dialog-import-loader ul.loader-progress a:hover {
   text-decoration: underline;
 }
 
-dialog.dialog .dialog-import-loader .dialog-import-finished {
+.dialog .dialog-import-loader .dialog-import-finished {
   margin: 15px 0 5px 0;
 }
 
-dialog.dialog .dialog-import-figma .figma-title {
+.dialog .dialog-import-figma .figma-title {
   padding-bottom: 15px;
   font-size: 16px;
 }
 
-dialog.dialog .dialog-import-figma .figma-input {
+.dialog .dialog-import-figma .figma-input {
   height: 40px;
   font-size: 15px;
 }
 
-dialog.dialog .dialog-import-figma .figma-import-file {
+.dialog .dialog-import-figma .figma-import-file {
   width: auto;
   margin-top: 20px;
 }
 
-dialog.dialog .dialog-import-figma .figma-import-file>div {
+.dialog .dialog-import-figma .figma-import-file>div {
   display: grid;
   align-items: center;
   grid-auto-flow: column;
   gap: 8px;
 }
 
-dialog.dialog .dialog-import-figma .figma-warning {
+.dialog .dialog-import-figma .figma-warning {
   margin-top: 20px;
 }
 
 /* font dialog */
 
-dialog.dialog .dialog-font {
+.dialog .dialog-font {
   min-width: 300px;
 }
 
-dialog.dialog .dialog-font .grid {
+.dialog .dialog-font .grid {
   grid-template-columns: 50px 150px 20px auto;
   align-items: center;
   font-size: 13px;
 }
 
-dialog.dialog .dialog-font-or {
+.dialog .dialog-font-or {
   font-size: 12px;
 }
 
-dialog.dialog .dialog-font-custom {
+.dialog .dialog-font-custom {
   margin-top: 15px;
   font-size: 13px;
 }
 
-dialog.dialog .dialog-font-submit {
+.dialog .dialog-font-submit {
   margin-top: 15px;
   width: auto;
 }
 
-dialog.dialog .dialog-font:not(.custom) .dialog-font-form-custom,
-dialog.dialog .dialog-font:not(.custom) .dialog-font-custom {
+.dialog .dialog-font:not(.custom) .dialog-font-form-custom,
+.dialog .dialog-font:not(.custom) .dialog-font-custom {
   display: none;
 }
 
-dialog.dialog .dialog-font:not(.custom) .grid {
+.dialog .dialog-font:not(.custom) .grid {
   grid-template-columns: 50px auto;
 }

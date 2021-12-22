@@ -18,14 +18,14 @@ export default {
   },
 
   clickToggleTextOverlayEvent (event) {
-    if (HelperCanvas.isOperation('editing') && !event.target.closest('#text-overlay')) {
+    if (HelperCanvas.isOperation('editing') && !event.target.closest('.text-overlay')) {
       this.toggleTextOverlay(event.clientX, event.clientY)
     }
   },
 
   keydownHideTextOverlayEvent (event) {
     if (event.key && HelperCanvas.isOperation('editing') &&
-      !event.target.closest('#text-overlay')) {
+      !event.target.closest('.text-overlay')) {
       this.hideTextOverlay()
     }
   },

@@ -108,7 +108,7 @@ export default {
   },
 
   switchImportToFigma (token) {
-    const container = document.querySelector('dialog.dialog .dialog-import')
+    const container = document.querySelector('.dialog .dialog-import')
     const figmaContainer = container.getElementsByClassName('dialog-import-figma')[0]
     figmaContainer.dataset.token = token
     HelperDOM.hide(container.children)

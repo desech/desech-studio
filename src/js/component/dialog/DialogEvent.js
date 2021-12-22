@@ -1,5 +1,6 @@
 import HelperEvent from '../../helper/HelperEvent.js'
 import DialogComponent from '../DialogComponent.js'
+import HelperDOM from '../../helper/HelperDOM.js'
 
 export default {
   getEvents () {
@@ -15,7 +16,7 @@ export default {
 
   clickCloseEvent (event) {
     if (event.target.closest('.dialog-close')) {
-      this.closeDialog(event.target.closest('dialog'))
+      this.closeDialog(event.target.closest('.dialog'))
     }
   },
 

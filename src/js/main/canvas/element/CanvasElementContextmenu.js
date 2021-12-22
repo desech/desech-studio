@@ -13,6 +13,7 @@ import HelperComponent from '../../../helper/HelperComponent.js'
 import CanvasElementText from './CanvasElementText.js'
 import CanvasElementCopyAttrStyle from './copypaste/CanvasElementCopyAttrStyle.js'
 import CanvasElementCopySelector from './copypaste/CanvasElementCopySelector.js'
+import DialogComponent from '../../../component/DialogComponent.js'
 
 export default {
   getEvents () {
@@ -218,7 +219,17 @@ export default {
   },
 
   editText () {
+    this.promptEditText()
     const element = StateSelectedElement.getElement()
-    CanvasElementText.startEditText(element)
+    CanvasElementText.startEditTextPopup(element)
+  },
+
+  promptEditText () {
+    DialogComponent.closeAllDialogs()
+    DialogComponent.showDialog({
+      header: DialogComponent.getContentHtml('edit-text', 'header'),
+      body: DialogComponent.getContentHtml('edit-text', 'body'),
+      footer: DialogComponent.getContentHtml('edit-text', 'footer')
+    })
   }
 }

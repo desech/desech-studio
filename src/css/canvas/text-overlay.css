@@ -1,8 +1,9 @@
-#text-overlay {
+.text-overlay {
   position: absolute;
+  z-index: 11;
 }
 
-#text-overlay .content {
+.text-overlay .content {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto;
   align-items: center;
@@ -13,11 +14,11 @@
   box-shadow: var(--canvas-overlay-shadow1) 0 0 1px 1px, var(--canvas-overlay-shadow2) 0 0 1px 1px;
 }
 
-#text-overlay .content button {
+.text-overlay .content button {
   margin: 0 3px;
 }
 
-#text-overlay .content .text-overlay-select {
+.text-overlay .content .text-overlay-select {
   width: 90px;
   margin: 0 3px;
   vertical-align: top;

@@ -100,6 +100,7 @@ body[data-theme="light"] {
   --overlay-bg: rgb(255, 255, 255);
   --overlay-shadow: rgba(0, 0, 0, 0.3);
   --overlay-txt: rgb(70, 70, 70);
+  --dialog-backdrop: rgba(0, 0, 0, 0.3);
   --dialog-bg: rgb(255, 255, 255);
   --dialog-txt: rgb(70, 70, 70);
   --dialog-shadow: rgba(0, 0, 0, 0.3);
@@ -148,6 +149,7 @@ body[data-theme="dark"] {
   --overlay-bg: rgb(38, 38, 38);
   --overlay-shadow: rgba(255, 255, 255, 0.3);
   --overlay-txt: rgba(255, 255, 255, 0.9);
+  --dialog-backdrop: rgba(255, 255, 255, 0.3);
   --dialog-bg: rgb(38, 38, 38);
   --dialog-txt: rgba(255, 255, 255, 0.9);
   --dialog-shadow: rgba(255, 255, 255, 0.3);

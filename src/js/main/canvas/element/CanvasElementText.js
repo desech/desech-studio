@@ -20,6 +20,7 @@ export default {
     return {
       dblclick: ['dblclickStartEditEvent', 'dblclickSelectWordEvent'],
       mousedown: ['mousedownFinishEditEvent'],
+      click: ['clickConfirmPopupTextEvent'],
       keydown: ['keydownFinishEditEvent', 'keydownNewLineEvent', 'keydownButtonSpaceEvent',
         'keydownFormatTextEvent'],
       keyup: ['keyupUpdateOverlayEvent'],
@@ -44,8 +45,14 @@ export default {
 
   async mousedownFinishEditEvent (event) {
     if (HelperCanvas.isOperation('editing') && !event.target.closest('.element.editable') &&
-      !event.target.closest('#text-overlay')) {
+      !event.target.closest('.text-overlay') && !document.getElementById('edit-text-container')) {
       await this.finishEditText()
+    }
+  },
+
+  async clickConfirmPopupTextEvent (event) {
+    if (event.target.closest('.dialog-edit-text-confirm')) {
+      await this.confirmPopupText(event.target.closest('.dialog'))
     }
   },
 
@@ -57,7 +64,8 @@ export default {
 
   keyupUpdateOverlayEvent () {
     if (HelperCanvas.isOperation('editing')) {
-      this.updateOverlaySizeAfterTyping()
+      const element = StateSelectedElement.getElement()
+      this.updateOverlaySize(element)
     }
   },
 
@@ -158,8 +166,8 @@ export default {
     this._startHeight = pos.height
   },
 
-  async finishEditText () {
-    const element = StateSelectedElement.getElement()
+  async finishEditText (element = null) {
+    if (!element) element = StateSelectedElement.getElement()
     await this.addUndoCommand(element)
     this.cancelElementEditable(element)
     HelperCanvas.deleteCanvasData('operation')
@@ -242,8 +250,7 @@ export default {
     this._textChanged = false
   },
 
-  updateOverlaySizeAfterTyping () {
-    const element = StateSelectedElement.getElement()
+  updateOverlaySize (element) {
     const pos = HelperElement.getPosition(element)
     if (this._startWidth !== pos.width || this._startHeight !== pos.height) {
       this.resizeOverlay(pos)
@@ -274,5 +281,34 @@ export default {
 
   selectWord () {
     window.getSelection().addRange(document.createRange())
+  },
+
+  startEditTextPopup (element) {
+    if (!element) return
+    this.prepareElementForUndo(element)
+    const clone = this.preparePopupClone(element)
+    this.makeElementEditable(clone)
+    HelperCanvas.setCanvasData('operation', 'editing')
+  },
+
+  preparePopupClone (element) {
+    const clone = element.cloneNode(true)
+    const popup = document.getElementById('edit-text-container')
+    popup.appendChild(clone)
+    return clone
+  },
+
+  async confirmPopupText (dialog) {
+    const element = this.replaceCloneElement(dialog)
+    await this.finishEditText(element)
+    this.updateOverlaySize(element)
+  },
+
+  replaceCloneElement (dialog) {
+    const clone = dialog.getElementsByClassName('element')[0]
+    const ref = HelperElement.getRef(clone)
+    const element = HelperElement.getElement(ref)
+    element.replaceWith(clone)
+    return clone
   }
 }

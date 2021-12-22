@@ -11,7 +11,10 @@ export default {
   },
 
   getOverlay () {
-    return document.getElementById('text-overlay')
+    const nodes = document.getElementsByClassName('text-overlay')
+    // we want the last node because if dialogs with text-overlay exist, we want that, over the
+    // text-overlay in the canvas container
+    return nodes[nodes.length - 1]
   },
 
   loadOverlay (clientX, clientY) {
@@ -64,9 +67,15 @@ export default {
   },
 
   positionOverlay (clientX, clientY) {
-    const container = document.getElementsByClassName('canvas-container')[0]
     const overlay = this.getOverlay()
+    const container = this.getElementContainer(overlay)
     overlay.style.left = clientX + container.scrollLeft - container.offsetLeft + 'px'
     overlay.style.top = clientY + container.scrollTop - container.offsetTop + 20 + 'px'
+  },
+
+  // we might be in the edit popup or directly in the canvas
+  getElementContainer (overlay) {
+    return overlay.closest('.dialog-container') ||
+      document.getElementsByClassName('canvas-container')[0]
   }
 }

@@ -120,7 +120,7 @@ export default {
     this.initSelector(preview, data)
     preview.dataset.selector += this.getStructureCss(data)
     preview.textContent = preview.dataset.selector.replaceAll('_ss_', '')
-    form.closest('dialog').getElementsByClassName('dialog-selector-save-button')[0]
+    form.closest('.dialog').getElementsByClassName('dialog-selector-save-button')[0]
       .removeAttributeNS(null, 'disabled')
   },
 

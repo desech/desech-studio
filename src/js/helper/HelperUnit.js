@@ -1,6 +1,10 @@
 import HelperError from './HelperError.js'
 
 export default {
+  getWindowWidth () {
+    return Math.round(window.visualViewport.width)
+  },
+
   getWindowHeight () {
     return Math.round(window.visualViewport.height)
   },

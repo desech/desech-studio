@@ -19,6 +19,7 @@ export default {
   getEvents () {
     return {
       click: ['clickHideMenuEvent', 'clickHideElementEvent', 'clickShowElementEvent',
+        'clickUnrenderElementEvent', 'clickRenderElementEvent',
         'clickCopyElementEvent', 'clickCutElementEvent', 'clickPasteElementEvent',
         'clickDuplicateElementEvent', 'clickDeleteElementEvent', 'clickCopyAllEvent',
         'clickCopyAttributesEvent', 'clickCopyStyleEvent', 'clickPasteAllEvent',
@@ -34,7 +35,7 @@ export default {
 
   clickHideMenuEvent (event) {
     if (HelperDOM.isVisible(document.getElementById('element-contextmenu'))) {
-      Contextmenu.emptyMenu()
+      Contextmenu.removeMenu()
     }
   },
 
@@ -52,15 +53,27 @@ export default {
     }
   },
 
-  clickHideElementEvent (event) {
+  async clickHideElementEvent (event) {
     if (event.target.classList.contains('element-menu-hide')) {
-      this.showHideElement(true)
+      await this.showHideElement(true)
     }
   },
 
-  clickShowElementEvent (event) {
+  async clickShowElementEvent (event) {
     if (event.target.classList.contains('element-menu-show')) {
-      this.showHideElement(false)
+      await this.showHideElement(false)
+    }
+  },
+
+  async clickUnrenderElementEvent (event) {
+    if (event.target.classList.contains('element-menu-unrender')) {
+      await this.renderUnrenderElement(true)
+    }
+  },
+
+  async clickRenderElementEvent (event) {
+    if (event.target.classList.contains('element-menu-render')) {
+      await this.renderUnrenderElement(false)
     }
   },
 
@@ -168,7 +181,8 @@ export default {
     const template = HelperDOM.getTemplate(`template-contextmenu-element-${menuType}`)
     template.classList.add(type)
     this.toggleComponent(element, template)
-    if (!HelperDOM.isVisible(element)) template.classList.add('hidden')
+    if (HelperElement.isHidden(element)) template.classList.add('hidden')
+    if (HelperElement.isUnrender(element)) template.classList.add('unrender')
     return template
   },
 
@@ -205,9 +219,16 @@ export default {
     this.showContextmenu(element, x, y)
   },
 
-  showHideElement (hidden) {
-    Contextmenu.emptyMenu()
-    RightHtmlCommon.setHidden(hidden)
+  async showHideElement (hidden) {
+    Contextmenu.removeMenu()
+    await RightHtmlCommon.setHidden(hidden)
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('right-panel')
+  },
+
+  async renderUnrenderElement (unrender) {
+    Contextmenu.removeMenu()
+    await RightHtmlCommon.setUnrender(unrender)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
     HelperTrigger.triggerReload('right-panel')
   },

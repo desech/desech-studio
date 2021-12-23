@@ -35,7 +35,7 @@ export default {
     data.component ? this.injectComponentDrag(li, data) : this.injectDrag(li, data)
     this.injectTitle(li, data)
     this.injectIcon(li, data)
-    this.injectHidden(li, data)
+    this.injectHiddenUnrender(li, data)
     LeftCommon.setItemCollapse(li, data, level)
   },
 
@@ -102,8 +102,19 @@ export default {
     }
   },
 
-  injectHidden (li, data) {
-    if (data.hidden) HelperDOM.show(li.getElementsByClassName('panel-item-hidden')[0])
-    if (!HelperDOM.isVisible(data.element, true)) li.classList.add('hidden')
+  injectHiddenUnrender (li, data) {
+    // we can't have both the hidden and the unrender icon
+    if (data.hidden) {
+      HelperDOM.show(li.getElementsByClassName('panel-item-hidden')[0])
+    } else if (data.unrender) {
+      HelperDOM.show(li.getElementsByClassName('panel-item-unrender')[0])
+    }
+    // this checks for deep parents that are hidden or unrendered
+    if (!HelperDOM.isVisible(data.element, true)) {
+      li.classList.add('hidden')
+    }
+    if (!HelperDOM.isVisible(data.element, true, 'data-xx-unrender')) {
+      li.classList.add('unrender')
+    }
   }
 }

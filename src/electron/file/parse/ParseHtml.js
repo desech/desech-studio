@@ -72,8 +72,14 @@ export default {
   },
 
   returnBody () {
-    if (this._body) {
-      return this._body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+    if (!this._body) return
+    this.removeUnrenderedNodes()
+    return this._body.outerHTML.trim().replace('<body', '<div').replace('</body>', '</div>')
+  },
+
+  removeUnrenderedNodes () {
+    if (this._options.ui === 'export') {
+      this._body.querySelectorAll('[data-xx-unrender]').forEach(el => el.remove())
     }
   },
 

@@ -200,6 +200,10 @@ export default {
     return element.hasAttributeNS(null, 'data-ss-hidden')
   },
 
+  isUnrender (element) {
+    return element.hasAttributeNS(null, 'data-xx-unrender')
+  },
+
   isContainer (element) {
     return element.classList.contains('body') || element.classList.contains('block')
   },

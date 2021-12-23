@@ -7,10 +7,29 @@
 .sidebar-right #html-section .style-html-top-line.body,
 .sidebar-right #html-section .style-html-top-line.hidden .style-html-hide,
 .sidebar-right #html-section .style-html-top-line:not(.hidden) .style-html-show,
+.sidebar-right #html-section .style-html-top-line.unrender .style-html-unrender,
+.sidebar-right #html-section .style-html-top-line:not(.unrender) .style-html-render,
 .sidebar-right #html-section .style-html-top-line:not(.component-hole) .style-html-component-hole,
 .sidebar-right #html-section .style-html-top-line.inline .style-html-delete,
 .sidebar-right #html-section .style-html-top-line.immovable .style-html-delete {
   display: none;
+}
+
+.sidebar-right #html-section .style-html-top-line .top-line-left {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  font-size:  11px;
+}
+
+.sidebar-right #html-section .style-html-top-line .top-line-right {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: end;
+  align-items: center;
+  gap: 5px;
 }
 
 .sidebar-right #html-section .style-tag-container:not(.custom) {

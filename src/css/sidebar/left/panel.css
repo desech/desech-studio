@@ -144,7 +144,8 @@
   height: 21px;
 }
 
-#sidebar-left-panel ul.panel-element-list .panel-element-item.hidden {
+#sidebar-left-panel ul.panel-element-list .panel-element-item.hidden,
+#sidebar-left-panel ul.panel-element-list .panel-element-item.unrender {
   opacity: 0.3;
 }
 

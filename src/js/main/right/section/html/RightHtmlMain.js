@@ -14,7 +14,8 @@ export default {
     return {
       change: ['changeTagEvent', 'changeCustomTagEvent'],
       click: ['clickCopyRefEvent', 'clickAssignComponentHoleEvent', 'clickHideElementEvent',
-        'clickShowElementEvent', 'clickDeleteElementEvent']
+        'clickShowElementEvent', 'clickUnrenderElementEvent', 'clickRenderElementEvent',
+        'clickDeleteElementEvent']
     }
   },
 
@@ -46,15 +47,27 @@ export default {
     }
   },
 
-  clickHideElementEvent (event) {
+  async clickHideElementEvent (event) {
     if (event.target.closest('.style-html-hide')) {
-      this.hideElement(event.target.closest('.style-html-top-line'))
+      await this.hideElement(event.target.closest('.style-html-top-line'))
     }
   },
 
-  clickShowElementEvent (event) {
+  async clickShowElementEvent (event) {
     if (event.target.closest('.style-html-show')) {
-      this.showElement(event.target.closest('.style-html-top-line'))
+      await this.showElement(event.target.closest('.style-html-top-line'))
+    }
+  },
+
+  async clickUnrenderElementEvent (event) {
+    if (event.target.closest('.style-html-unrender')) {
+      await this.unrenderElement(event.target.closest('.style-html-top-line'))
+    }
+  },
+
+  async clickRenderElementEvent (event) {
+    if (event.target.closest('.style-html-render')) {
+      await this.renderElement(event.target.closest('.style-html-top-line'))
     }
   },
 
@@ -110,7 +123,12 @@ export default {
 
   injectTopLine (template, data) {
     const container = template.getElementsByClassName('style-html-top-line')[0]
-    if (!HelperDOM.isVisible(data.element)) container.classList.add('hidden')
+    if (HelperElement.isHidden(data.element)) {
+      container.classList.add('hidden')
+    }
+    if (HelperElement.isUnrender(data.element)) {
+      container.classList.add('unrender')
+    }
     if (data.type === 'body' || data.type === 'inline') {
       container.classList.add(data.type)
     }
@@ -167,15 +185,27 @@ export default {
     await navigator.clipboard.writeText(div.textContent)
   },
 
-  hideElement (container) {
-    RightHtmlCommon.setHidden(true)
+  async hideElement (container) {
+    await RightHtmlCommon.setHidden(true)
     container.classList.add('hidden')
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   },
 
-  showElement (container) {
-    RightHtmlCommon.setHidden(false)
+  async showElement (container) {
+    await RightHtmlCommon.setHidden(false)
     container.classList.remove('hidden')
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+  },
+
+  async unrenderElement (container) {
+    await RightHtmlCommon.setUnrender(true)
+    container.classList.add('unrender')
+    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+  },
+
+  async renderElement (container) {
+    await RightHtmlCommon.setUnrender(false)
+    container.classList.remove('unrender')
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
   }
 }

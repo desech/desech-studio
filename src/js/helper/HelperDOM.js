@@ -23,9 +23,9 @@ export default {
     return (Array.isArray(node) || node instanceof HTMLCollection || node instanceof NodeList)
   },
 
-  isVisible (node, deep = false) {
-    let visible = !node.hasAttributeNS(null, 'hidden')
-    if (visible && deep && node.closest('[hidden]')) {
+  isVisible (node, deep = false, attribute = 'hidden') {
+    let visible = !node.hasAttributeNS(null, attribute)
+    if (visible && deep && node.closest(`[${attribute}]`)) {
       visible = false
     }
     return visible

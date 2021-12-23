@@ -120,13 +120,21 @@ export default {
     field.textContent = decodeURI(HelperProject.getFileName(decodeURI(file)))
   },
 
-  setHidden (hidden) {
+  async setHidden (hidden) {
     // null will delete the attribute, while '' will set it as a name only attribute
+    const ref = StateSelectedElement.getRef()
     const value = hidden ? '' : null
-    this.changeAttributeCommand(StateSelectedElement.getRef(), {
+    await this.changeAttributeCommand(ref, {
       hidden: value,
       'data-ss-hidden': value
     })
+  },
+
+  async setUnrender (value) {
+    // null will delete the attribute, while '' will set it as a name only attribute
+    const ref = StateSelectedElement.getRef()
+    const properties = { 'data-xx-unrender': value ? '' : null }
+    await this.changeAttributeCommand(ref, properties)
   },
 
   getRemovableAttributes (element) {
@@ -145,7 +153,7 @@ export default {
   getIgnoredAttributes () {
     return [
       'class', 'style', 'hidden',
-      'data-ss-tag', 'data-ss-hidden', 'data-ss-token',
+      'data-ss-tag', 'data-ss-hidden', 'data-xx-unrender', 'data-ss-token',
       'data-ss-properties', 'data-ss-component', 'data-ss-component-hole', 'data-variant'
     ]
   },

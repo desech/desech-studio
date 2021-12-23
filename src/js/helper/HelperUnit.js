@@ -1,5 +1,3 @@
-import HelperError from './HelperError.js'
-
 export default {
   getWindowWidth () {
     return Math.round(window.visualViewport.width)
@@ -25,7 +23,7 @@ export default {
     if (units.includes(unit)) {
       return this[`${unit}ToPx`](val)
     } else {
-      HelperError.warn(new Error(`Unknown unit ${unit}`))
+      console.warn(`Unknown unit ${unit}`)
     }
   },
 

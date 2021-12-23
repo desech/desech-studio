@@ -106,7 +106,7 @@ export default {
   },
 
   hideMenu () {
-    Contextmenu.emptyMenu()
+    Contextmenu.removeMenu()
     LeftFileCommon.clearActiveItem()
   },
 

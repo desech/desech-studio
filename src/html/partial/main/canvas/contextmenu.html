@@ -4,8 +4,7 @@
       <li class="element-menu-component-hole">{{#i18n}} Assign as component hole {{/i18n}}</li>
       <li class="element-menu-component-hole" hidden>{{#i18n}} Unassign as component hole {{/i18n}}</li>
       <li class="element-menu-edit-text">{{#i18n}} Edit text {{/i18n}}</li>
-      <li class="element-menu-hide">{{#i18n}} Hide element {{/i18n}}</li>
-      <li class="element-menu-show">{{#i18n}} Show element {{/i18n}}</li>
+      {{> mainCanvasContextmenuShowRender }}
       <li class="element-menu-delete">{{#i18n}} Delete element {{/i18n}} (DEL)</li>
     </ul>
     {{> mainCanvasContextmenuCopy }}
@@ -16,8 +15,7 @@
 <template id="template-contextmenu-element-body">
   <div class="menu-list-container">
     <ul class="menu-list">
-      <li class="element-menu-hide">{{#i18n}} Hide body {{/i18n}}</li>
-      <li class="element-menu-show">{{#i18n}} Show body {{/i18n}}</li>
+      {{> mainCanvasContextmenuShowRender }}
       <li class="element-menu-paste">{{#i18n}} Paste element {{/i18n}} (CTRL + V)</li>
     </ul>
     {{> mainCanvasContextmenuCopyCss }}
@@ -27,8 +25,7 @@
 <template id="template-contextmenu-element-inline">
   <div class="menu-list-container">
     <ul class="menu-list">
-      <li class="element-menu-hide">{{#i18n}} Hide element {{/i18n}}</li>
-      <li class="element-menu-show">{{#i18n}} Show element {{/i18n}}</li>
+      {{> mainCanvasContextmenuShowRender }}
     </ul>
     {{> mainCanvasContextmenuCopyCss }}
   </div>
@@ -40,8 +37,7 @@
       <li class="element-menu-edit-text">{{#i18n}} Edit text {{/i18n}}</li>
       <li class="element-menu-component-load">{{#i18n}} Open component (Double click) {{/i18n}}</li>
       <li class="element-menu-delete">{{#i18n}} Delete component {{/i18n}} (DEL)</li>
-      <li class="element-menu-hide">{{#i18n}} Hide root element (override) {{/i18n}}</li>
-      <li class="element-menu-show">{{#i18n}} Show root element (override) {{/i18n}}</li>
+      {{> mainCanvasContextmenuShowRenderRoot }}
     </ul>
     {{> mainCanvasContextmenuCopyComponent }}
     {{> mainCanvasContextmenuCopyCss }}

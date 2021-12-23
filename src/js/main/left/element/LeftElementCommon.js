@@ -23,6 +23,7 @@ export default {
       tag: HelperElement.getTag(element),
       isContainer: HelperElement.isContainer(element),
       hidden: HelperElement.isHidden(element),
+      unrender: HelperElement.isUnrender(element),
       children: element.children.length ? this.getElements(element) : [],
       component: this.getComponentData(element)
     }

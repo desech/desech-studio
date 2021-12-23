@@ -13,7 +13,7 @@ export default {
     return y > minY ? minY : y
   },
 
-  emptyMenu () {
+  removeMenu () {
     const menus = document.getElementsByClassName('contextmenu')
     HelperDOM.deleteChildren(menus)
   }

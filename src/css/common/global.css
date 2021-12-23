@@ -44,6 +44,10 @@ textarea {
   cursor: text !important; /* overwrite the manually set cursor */
 }
 
+.element[data-xx-unrender] {
+  display: none !important;
+}
+
 .desech-studio {
   font-family: Roboto;
   font-size: 16px;

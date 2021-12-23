@@ -150,7 +150,6 @@ export default {
   },
 
   processElementAttribute (data, originalNode, name, value) {
-    if (name === 'data-ss-hidden') return
     const attrValue = this.getElementAttributeValue(value)
     const originalValue = originalNode ? this.getNodeAttributeValue(originalNode, name) : null
     if (!ExtendJS.objectsEqual(attrValue, originalValue)) {

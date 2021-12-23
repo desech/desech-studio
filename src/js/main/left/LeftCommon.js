@@ -38,7 +38,7 @@ export default {
   },
 
   collapseExpandItem (button) {
-    if (!HelperDOM.isVisible(button)) return
+    if (HelperDOM.isHidden(button)) return
     if (button.classList.contains('opened')) {
       this.collapseItem(button)
     } else {
@@ -133,7 +133,7 @@ export default {
   },
 
   expandStateItem (li, state) {
-    if (!HelperDOM.isVisible(li) || !state.includes(li.dataset.ref)) return
+    if (HelperDOM.isHidden(li) || !state.includes(li.dataset.ref)) return
     const button = li.getElementsByClassName('panel-item-expand-button')[0]
     this.expandItem(button, false)
   },
@@ -174,7 +174,7 @@ export default {
       this.deselectItem(cls)
       li.classList.add(cls)
     }
-    if (!HelperDOM.isVisible(li)) this.expandParents(li)
+    if (HelperDOM.isHidden(li)) this.expandParents(li)
     if (!HelperDOM.isInView(li.offsetLeft, li.offsetTop, li.closest('.panel-list-box'))) {
       li.scrollIntoView({ block: 'center' })
     }
@@ -199,7 +199,7 @@ export default {
 
   expandParentTriggerButton (parent) {
     const button = parent.getElementsByClassName('panel-item-expand-button')[0]
-    if (HelperDOM.isVisible(parent)) {
+    if (!HelperDOM.isHidden(parent)) {
       // if the parent is visible then we need to stop
       button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
       return true

@@ -119,7 +119,7 @@ export default {
   async moveElementInCanvas (element) {
     const newElement = this.cloneMoveElement(element)
     CanvasElementCopyElement.addPastedElement(newElement)
-    HelperDOM.hide(element)
+    HelperElement.hideInEditor(element)
     StateSelectedElement.selectElementNode(newElement)
     await CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
     HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
@@ -127,7 +127,6 @@ export default {
 
   cloneMoveElement (element) {
     element.classList.remove('selected')
-    CanvasElement.removeHidden(element)
     const token = Crypto.generateSmallID()
     const clone = element.cloneNode(true)
     // the clone has the token, while the previous element has the previous token + the new token

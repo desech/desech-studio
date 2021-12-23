@@ -1,5 +1,6 @@
 import HelperElement from '../../../helper/HelperElement.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
+import HelperDOM from '../../../helper/HelperDOM.js'
 
 export default {
   getElements (container) {
@@ -22,7 +23,7 @@ export default {
       type: HelperElement.getType(element),
       tag: HelperElement.getTag(element),
       isContainer: HelperElement.isContainer(element),
-      hidden: HelperElement.isHidden(element),
+      hidden: HelperDOM.isHidden(element),
       unrender: HelperElement.isUnrender(element),
       children: element.children.length ? this.getElements(element) : [],
       component: this.getComponentData(element)

@@ -30,7 +30,6 @@ export default {
   async cutElement () {
     const element = StateSelectedElement.getElement()
     if (!this.isElementAllowed(element)) return
-    CanvasElement.removeHidden(element)
     const token = Crypto.generateSmallID()
     CanvasElement.appendToken(element, token)
     await this.copyElementData(element, 'cut')
@@ -64,13 +63,19 @@ export default {
 
   async copyElementData (element, action = 'copy') {
     const clone = element.cloneNode(true)
-    if (action === 'cut') {
-      clone.setAttributeNS(null, 'data-ss-token', Crypto.generateSmallID())
-    }
-    const html = element.outerHTML
+    this.processMoveToken(clone, action)
+    const html = clone.outerHTML
     const refs = this.getAllReplaceableRefs(html)
     const style = this.getStyleByRefs(refs, false)
     await HelperClipboard.saveData({ element: { action, html, refs, style } })
+  },
+
+  processMoveToken (element, action) {
+    if (action === 'copy') {
+      element.removeAttributeNS(null, 'data-ss-token')
+    } else { // cut
+      element.setAttributeNS(null, 'data-ss-token', Crypto.generateSmallID())
+    }
   },
 
   // all these refs will be replaced on paste by generateNewRefs()
@@ -156,7 +161,8 @@ export default {
   addPastedElement (element) {
     CanvasElementCreate.createElementForPlacement(element)
     CanvasCommon.removePlacementMarker()
-    if (!HelperElement.isHidden(element)) {
+    // when we paste an element, we make it visible for feedback to see what happened
+    if (!HelperDOM.isHidden(element)) {
       HelperDOM.show(element)
     }
   },

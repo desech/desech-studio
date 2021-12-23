@@ -1,12 +1,6 @@
 import StateCommand from '../../state/StateCommand.js'
 
 export default {
-  removeHidden (element) {
-    // we don't allow hidden elements to be moved, because it will be impossible to undo
-    element.removeAttributeNS(null, 'data-ss-hidden')
-    element.removeAttributeNS(null, 'hidden')
-  },
-
   appendToken (element, token) {
     const tokens = [element.dataset.ssToken, token].join(' ').trim()
     element.setAttributeNS(null, 'data-ss-token', tokens)

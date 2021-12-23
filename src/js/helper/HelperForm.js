@@ -13,7 +13,7 @@ export default {
   getFormElements (form, fieldClasses = null) {
     const fields = {}
     for (const field of form.elements) {
-      if (!field.name || !HelperDOM.isVisible(field, true)) continue
+      if (!field.name || HelperDOM.isHidden(field, true)) continue
       if (fieldClasses && !this.fieldContainsClass(field, fieldClasses)) continue
       this.getFormField(fields, field)
     }

@@ -16,7 +16,7 @@ export default {
   mouseoverEvent (event) {
     if (event.target.closest('.tooltip')) {
       this.showTooltip(event.target.closest('.tooltip'))
-    } else if (HelperDOM.isVisible(this.getContainer())) {
+    } else if (!HelperDOM.isHidden(this.getContainer())) {
       this.hideTooltip()
     }
   },

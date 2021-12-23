@@ -44,6 +44,7 @@ textarea {
   cursor: text !important; /* overwrite the manually set cursor */
 }
 
+.element[data-xx-remove],
 .element[data-xx-unrender] {
   display: none !important;
 }

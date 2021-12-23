@@ -65,7 +65,7 @@ export default {
 
   cycleSearch (cycleType) {
     const cycle = document.getElementsByClassName('panel-search-cycle-element')[0]
-    if (!cycle || !HelperDOM.isVisible(cycle)) return
+    if (!cycle || HelperDOM.isHidden(cycle)) return
     const input = cycle.nextElementSibling
     const li = LeftCommon.getSearchItem(input, cycleType)
     if (li) this.showSearchSelectItem(li, cycle)

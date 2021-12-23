@@ -19,27 +19,20 @@ export default {
   addElement (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    HelperDOM.show(element)
+    HelperElement.showInEditor(element)
   },
 
   removeElement (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
-    element.removeAttributeNS(null, 'data-ss-hidden')
-    HelperDOM.hide(element)
+    HelperElement.hideInEditor(element)
   },
 
   moveElement (data) {
     const canvas = HelperCanvas.getCanvas()
     const elements = canvas.querySelectorAll(`[data-ss-token~="${data.token}"]`)
     for (const element of elements) {
-      if (element.hasAttributeNS(null, 'hidden') &&
-        !element.hasAttributeNS(null, 'data-ss-hidden')) {
-        HelperDOM.show(element)
-      } else {
-        HelperDOM.hide(element)
-        element.removeAttributeNS(null, 'data-ss-hidden')
-      }
+      HelperElement.toggleInEditor(element)
     }
   },
 

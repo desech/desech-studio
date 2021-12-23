@@ -34,7 +34,7 @@ export default {
   },
 
   clickHideMenuEvent (event) {
-    if (HelperDOM.isVisible(document.getElementById('element-contextmenu'))) {
+    if (!HelperDOM.isHidden(document.getElementById('element-contextmenu'))) {
       Contextmenu.removeMenu()
     }
   },
@@ -181,7 +181,7 @@ export default {
     const template = HelperDOM.getTemplate(`template-contextmenu-element-${menuType}`)
     template.classList.add(type)
     this.toggleComponent(element, template)
-    if (HelperElement.isHidden(element)) template.classList.add('hidden')
+    if (HelperDOM.isHidden(element)) template.classList.add('hidden')
     if (HelperElement.isUnrender(element)) template.classList.add('unrender')
     return template
   },

@@ -27,7 +27,7 @@ export default {
   },
 
   clickHideMenuEvent (event) {
-    if (HelperDOM.isVisible(document.getElementById('file-contextmenu'))) {
+    if (!HelperDOM.isHidden(document.getElementById('file-contextmenu'))) {
       this.hideMenu()
     }
   },

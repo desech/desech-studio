@@ -26,7 +26,7 @@ export default {
   },
 
   removeNonCanvasElements (clone) {
-    clone.querySelectorAll('[hidden]:not([data-ss-hidden])').forEach(el => el.remove())
+    clone.querySelectorAll('[data-xx-remove]').forEach(el => el.remove())
   },
 
   addComponentDataToRoot (file, root) {
@@ -137,7 +137,7 @@ export default {
   getRemovedAttributes () {
     // we remove the component data, because we add it with addComponentDataToRoot() at the end,
     // and with setComponentInstanceData() on the div node
-    return ['data-ss-tag', 'data-ss-hidden', 'data-ss-token', 'data-ss-component']
+    return ['data-ss-tag', 'data-ss-token', 'data-ss-component']
   },
 
   cleanClasses (node, checkComponent = true) {

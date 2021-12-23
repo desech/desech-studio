@@ -123,17 +123,14 @@ export default {
   async setHidden (hidden) {
     // null will delete the attribute, while '' will set it as a name only attribute
     const ref = StateSelectedElement.getRef()
-    const value = hidden ? '' : null
-    await this.changeAttributeCommand(ref, {
-      hidden: value,
-      'data-ss-hidden': value
-    })
+    const properties = { hidden: (hidden ? '' : null) }
+    await this.changeAttributeCommand(ref, properties)
   },
 
   async setUnrender (value) {
     // null will delete the attribute, while '' will set it as a name only attribute
     const ref = StateSelectedElement.getRef()
-    const properties = { 'data-xx-unrender': value ? '' : null }
+    const properties = { 'data-xx-unrender': (value ? '' : null) }
     await this.changeAttributeCommand(ref, properties)
   },
 
@@ -150,11 +147,12 @@ export default {
 
   // check StateHtmlFile.getRemovedAttributes()
   // CanvasElementCopyAttrStyle.getCopyIgnoredAttributes()
+  // this removes the attributes from the right html panel section
   getIgnoredAttributes () {
     return [
-      'class', 'style', 'hidden',
-      'data-ss-tag', 'data-ss-hidden', 'data-xx-unrender', 'data-ss-token',
-      'data-ss-properties', 'data-ss-component', 'data-ss-component-hole', 'data-variant'
+      'class', 'style', 'hidden', 'data-xx-remove', 'data-ss-tag', 'data-xx-unrender',
+      'data-ss-token', 'data-ss-properties', 'data-ss-component', 'data-ss-component-hole',
+      'data-variant'
     ]
   },
 

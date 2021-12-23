@@ -110,10 +110,10 @@ export default {
       HelperDOM.show(li.getElementsByClassName('panel-item-unrender')[0])
     }
     // this checks for deep parents that are hidden or unrendered
-    if (!HelperDOM.isVisible(data.element, true)) {
+    if (HelperDOM.isHidden(data.element, true)) {
       li.classList.add('hidden')
     }
-    if (!HelperDOM.isVisible(data.element, true, 'data-xx-unrender')) {
+    if (HelperElement.isUnrender(data.element, true)) {
       li.classList.add('unrender')
     }
   }

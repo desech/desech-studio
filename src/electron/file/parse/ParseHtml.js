@@ -142,7 +142,6 @@ export default {
   },
 
   setBody (body) {
-    this.addDataHidden(body)
     this.cleanClasses(body)
     this.cleanBody(body)
     if (body.children.length) {
@@ -300,13 +299,6 @@ export default {
     if (this._debug) console.info(msg)
   },
 
-  addDataHidden (node) {
-    if (this._options.ui === 'export') return
-    if (node.hasAttributeNS(null, 'hidden')) {
-      node.setAttributeNS(null, 'data-ss-hidden', '')
-    }
-  },
-
   setAbsoluteSource (node) {
     if (this._options.ui === 'export') return
     const tag = HelperDOM.getTag(node)
@@ -338,7 +330,6 @@ export default {
     }
     this.setBasicOverrides(node, component?.data?.fullOverrides)
     this.setAbsoluteSource(node)
-    this.addDataHidden(node)
     this.cleanClasses(node)
     this.addCanvasClasses(node, type)
     this.addComponentClasses(node, component)

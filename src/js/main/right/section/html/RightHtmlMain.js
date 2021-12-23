@@ -123,7 +123,7 @@ export default {
 
   injectTopLine (template, data) {
     const container = template.getElementsByClassName('style-html-top-line')[0]
-    if (HelperElement.isHidden(data.element)) {
+    if (HelperDOM.isHidden(data.element)) {
       container.classList.add('hidden')
     }
     if (HelperElement.isUnrender(data.element)) {

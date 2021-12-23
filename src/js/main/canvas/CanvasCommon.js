@@ -29,7 +29,7 @@ export default {
   },
 
   hideSiblingButtons (button) {
-    if (HelperDOM.isVisible(button)) return
+    if (!HelperDOM.isHidden(button)) return
     HelperDOM.hide(button.parentNode.children)
     HelperDOM.show(button)
   },

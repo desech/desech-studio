@@ -23,27 +23,24 @@ export default {
     return (Array.isArray(node) || node instanceof HTMLCollection || node instanceof NodeList)
   },
 
-  isVisible (node, deep = false, attribute = 'hidden') {
-    let visible = !node.hasAttributeNS(null, attribute)
-    if (visible && deep && node.closest(`[${attribute}]`)) {
-      visible = false
-    }
-    return visible
+  isHidden (node, deep = false) {
+    return this.hasAttributeDeep(node, 'hidden', deep)
   },
 
+  hasAttributeDeep (node, attribute, deep = false) {
+    if (deep) {
+      return node.closest(`[${attribute}]`)
+    } else {
+      return node.hasAttributeNS(null, attribute)
+    }
+  },
+
+  // use node.toggleAttribute() for attributes
   toggle (node, visible = null) {
     if (visible === null) {
-      visible = !this.isVisible(node)
+      visible = this.isHidden(node)
     }
     visible ? this.show(node) : this.hide(node)
-  },
-
-  toggleAttribute (node, add, name, value = '') {
-    if (add) {
-      node.setAttributeNS(null, name, value)
-    } else {
-      node.removeAttributeNS(null, name)
-    }
   },
 
   toggleChild (parent, child) {
@@ -68,7 +65,7 @@ export default {
   getVisibleChildren (parent) {
     const children = []
     for (const child of parent.children) {
-      if (this.isVisible(child)) {
+      if (!this.isHidden(child)) {
         children.push(child)
       }
     }

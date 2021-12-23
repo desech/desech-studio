@@ -16,10 +16,7 @@ export default {
   },
 
   getGeneralJsFiles () {
-    return [
-      'js/script.js',
-      'js/design-system.js'
-    ]
+    return ['js/script.js']
   },
 
   getCompiledCss (folder) {

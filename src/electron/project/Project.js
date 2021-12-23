@@ -5,7 +5,6 @@ import packageJson from '../../../package.json'
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'
-import Plugin from '../lib/Plugin.js'
 import HelperProject from '../../js/helper/HelperProject.js'
 import Font from '../lib/Font.js'
 import Electron from '../lib/Electron.js'
@@ -104,9 +103,5 @@ export default {
     return (responsiveType === 'desktop')
       ? HelperProject.getDesktopFirstResponsive()
       : HelperProject.getMobileFirstResponsive()
-  },
-
-  async getDesignSystemCssFile () {
-    return await Plugin.triggerPlugin('designSystem', 'getEditorCssFile')
   }
 }

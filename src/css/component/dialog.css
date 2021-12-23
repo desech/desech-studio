@@ -160,6 +160,12 @@
   line-height: 25px;
 }
 
+.dialog .dialog-plugin .plugin-name {
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .dialog .dialog-plugin .plugin-item-button {
   align-self: center;
   justify-self: end;

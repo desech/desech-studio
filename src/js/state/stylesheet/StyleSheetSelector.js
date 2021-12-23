@@ -52,7 +52,7 @@ export default {
   },
 
   addOrphanClassesToSelectors (selectors, classes) {
-    // these come from the design system or a class that was deleted, but it's still attached
+    // these come from classes that were deleted, but still attached
     for (const cls of classes) {
       const clsSelector = '.' + cls
       if (this.findClassSelector(selectors, clsSelector)) continue

@@ -2,27 +2,20 @@ import HelperCanvas from '../../helper/HelperCanvas.js'
 import HelperFile from '../../helper/HelperFile.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperStyle from '../../helper/HelperStyle.js'
-import HelperDesignSystem from '../../helper/HelperDesignSystem.js'
 import HelperProject from '../../helper/HelperProject.js'
 import HelperComponent from '../../helper/HelperComponent.js'
 import Html from '../../../electron/lib/Html.js'
 
 export default {
   _css: null,
-  _designSystemClasses: null,
 
   getHtml (file, css) {
-    this.init(css)
+    this._css = css
     const clone = HelperCanvas.getCanvas().cloneNode(true)
     this.removeNonCanvasElements(clone)
     this.prepareElement(clone.children[0])
     this.addComponentDataToRoot(file, clone.children[0])
     return this.returnHtml(clone.innerHTML, file)
-  },
-
-  init (css) {
-    this._css = css
-    this._designSystemClasses = HelperDesignSystem.getDesignSystemClasses()
   },
 
   removeNonCanvasElements (clone) {
@@ -145,8 +138,7 @@ export default {
     if (!cls) return
     const classes = []
     for (let val of cls.split(' ')) {
-      if (checkComponent && val.includes('_ss_') && !this.componentExists(val) &&
-        !this.componentNotDesignSystem(val)) {
+      if (checkComponent && val.includes('_ss_') && !this.componentExists(val)) {
         continue
       }
       val = this.filterClass(val.trim())
@@ -171,14 +163,6 @@ export default {
       if (HelperStyle.extractClassSelector(selector) === cls) {
         return true
       }
-    }
-    return false
-  },
-
-  componentNotDesignSystem (cls) {
-    if (!this._designSystemClasses) return false
-    for (const designClass of this._designSystemClasses) {
-      if (designClass === cls.replace('_ss_', '')) return true
     }
     return false
   },

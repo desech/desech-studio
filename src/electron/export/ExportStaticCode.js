@@ -18,9 +18,7 @@ export default {
     await this.syncExtraCssFiles(folder)
   },
 
-  // this will sync any custom css files we have and also the design-system folder
-  // the design-system folder used to contain the icon fonts, but now it only contains the
-  // icons preview html file
+  // this will sync any custom css files we have
   async syncExtraCssFiles (folder) {
     const source = File.resolve(folder, 'css/general')
     const dest = File.resolve(folder, '_export/css/compiled')
@@ -35,10 +33,9 @@ export default {
   },
 
   createScriptJs (folder) {
-    const dsFile = File.resolve(folder, 'js/design-system.js')
-    let js = fs.existsSync(dsFile) ? fs.readFileSync(dsFile).toString() : ''
+    let js = ''
     const scriptFile = File.resolve(folder, 'js/script.js')
-    if (fs.existsSync(scriptFile)) js += '\n\n' + File.readFile(scriptFile)
+    if (fs.existsSync(scriptFile)) js = File.readFile(scriptFile)
     File.createFile(File.resolve(folder, '_export/js/script.js'), js)
   },
 

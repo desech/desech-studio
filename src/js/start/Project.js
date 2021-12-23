@@ -84,11 +84,6 @@ export default {
     this.addCssFile('project-css-font', file)
   },
 
-  async addDesignSystemCss () {
-    const file = await window.electron.invoke('rendererGetDesignSystemCssFile')
-    this.addCssFile('project-css-design-system', file)
-  },
-
   addCssFile (id, file) {
     const node = document.getElementById(id)
     if (node) node.remove()

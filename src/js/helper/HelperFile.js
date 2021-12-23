@@ -92,7 +92,6 @@ export default {
       this.getDefaultAudio(),
       this.getDefaultBackgroundImage(),
       this.getDropdownImage(),
-      root + '/js/design-system.js',
       root + '/js/script.js',
       root + '/index.html'
     ].includes(file) || this.isFolderFile(file, 'css')
@@ -110,8 +109,7 @@ export default {
       root + '/css/page',
       root + '/js',
       root + '/component'
-    ].includes(folder) ||
-      this.isFolderFile(folder, 'component/design-system')
+    ].includes(folder) || this.isFolderFile(folder, 'component/design-system')
   },
 
   isFolderFile (file, folder, root = null) {
@@ -138,8 +136,7 @@ export default {
       title: meta.title || '',
       meta: meta.meta || '',
       pageCssFile: this.getPageCssFile(htmlFile, rootFolder),
-      cssDesignSystem: HelperDesignSystem.getDesignSystemCssFileLink(hasDesignSystem),
-      jsDesignSystem: HelperDesignSystem.getDesignSystemJsFileLink(hasDesignSystem)
+      cssDesignSystem: HelperDesignSystem.getDesignSystemCssFileLink(hasDesignSystem)
     })
   },
 
@@ -164,7 +161,7 @@ export default {
   ${data.meta}
   <title>${data.title}</title>
   <base href="${data.baseHref}">
-  ${data.jsDesignSystem}<script src="js/script.js"></script>
+  <script src="js/script.js"></script>
   <link rel="stylesheet" href="css/general/reset.css">
   <link rel="stylesheet" href="css/general/animation.css">
   <link rel="stylesheet" href="css/general/font.css">

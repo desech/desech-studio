@@ -11,8 +11,6 @@ export default {
     return {
       file: LeftFileData,
       element: LeftElementData
-      // @todo add a library tab to see the rendered components and drag and drop them
-      // to the canvas; have plugins that will add material design icons, etc
     }
   },
 

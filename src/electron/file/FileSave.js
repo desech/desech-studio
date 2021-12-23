@@ -12,8 +12,6 @@ export default {
     // check TopCommandSave.getCurrentFileData() for data
     await this.saveFileWithBackup(data.htmlFile, data.html)
     await this.saveStyle(data.css, data.htmlFile, data.folder)
-    await Plugin.triggerPlugin('designSystem', 'saveToFile', data)
-    // we want the design system to trigger early to copy the css/js files
     await this.exportCode(data)
   },
 

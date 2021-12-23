@@ -7,11 +7,8 @@ import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightSelectorCommon from './RightSelectorCommon.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
-import HelperDesignSystem from '../../../../helper/HelperDesignSystem.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperError from '../../../../helper/HelperError.js'
-import HelperComponent from '../../../../helper/HelperComponent.js'
-import ExtendJS from '../../../../helper/ExtendJS.js'
 
 export default {
   getEvents () {
@@ -76,9 +73,7 @@ export default {
 
   generateComponentDatalist (form) {
     const datalist = form.getElementsByClassName('selector-components-datalist')[0]
-    const projectClasses = StyleSheetSelector.getSelectorClasses()
-    const designSystemClasses = HelperDesignSystem.getDesignSystemClasses() || []
-    const classes = ExtendJS.unique([...projectClasses, ...designSystemClasses])
+    const classes = StyleSheetSelector.getSelectorClasses()
     this.addComponentsToList(datalist, classes)
   },
 

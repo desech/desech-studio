@@ -313,7 +313,7 @@ export default {
 
   sanitizeClass (name) {
     // only allow alphanumeric, dashes and underscore
-    // material design uses BEM, so we need to allow weirdness like -- and __
+    // some people use BEM, so we need to allow weirdness like -- and __
     return name.toLowerCase().replace(/[^a-z0-9-_]/g, '-')
   },
 

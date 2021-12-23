@@ -35,7 +35,6 @@ export default {
     this.loadPage('main')
     HelperTrigger.triggerReload('responsive-mode-list')
     Project.addProjectFontCss()
-    await Project.addDesignSystemCss()
     HelperLocalStore.removeAllTemporary()
     this.loadMainFilePanel(file)
     TopZoom.setSavedZoomLevel()

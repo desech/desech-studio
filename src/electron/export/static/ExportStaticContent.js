@@ -17,7 +17,6 @@ export default {
   formatDom (document, css) {
     this.cleanClasses(document, css)
     this.replaceCssLinks(document)
-    this.replaceJsScripts(document)
     // needs to be the last one because we are switch to tags like `template`
     this.replaceTags(document.body.children, document)
   },
@@ -56,12 +55,6 @@ export default {
         el.remove()
       }
     })
-  },
-
-  replaceJsScripts (document) {
-    // we remove it here because in ExportStaticCode.createScriptJs() we add the js to script.js
-    const dsScript = document.querySelector('script[src="js/design-system.js"]')
-    if (dsScript) dsScript.remove()
   },
 
   replaceTags (children, document) {

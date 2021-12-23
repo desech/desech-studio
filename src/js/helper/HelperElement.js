@@ -92,19 +92,19 @@ export default {
 
   // is the element part of the ui (visible or not), not a hidden clone that is used for do/undo
   isCanvasElement (node) {
-    return node && !node.closest('[data-xx-remove]')
+    return node && !node.closest('[data-ss-remove]')
   },
 
   showInEditor (node) {
-    node.removeAttributeNS(null, 'data-xx-remove')
+    node.removeAttributeNS(null, 'data-ss-remove')
   },
 
   hideInEditor (node) {
-    node.setAttributeNS(null, 'data-xx-remove', '')
+    node.setAttributeNS(null, 'data-ss-remove', '')
   },
 
   toggleInEditor (node) {
-    node.toggleAttribute('data-xx-remove')
+    node.toggleAttribute('data-ss-remove')
   },
 
   getAttributes (element) {
@@ -208,7 +208,7 @@ export default {
   },
 
   isUnrender (element, deep = false) {
-    return HelperDOM.hasAttributeDeep(element, 'data-xx-unrender', deep)
+    return HelperDOM.hasAttributeDeep(element, 'data-ss-unrender', deep)
   },
 
   isContainer (element) {

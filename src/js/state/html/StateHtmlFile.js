@@ -26,7 +26,7 @@ export default {
   },
 
   removeNonCanvasElements (clone) {
-    clone.querySelectorAll('[data-xx-remove]').forEach(el => el.remove())
+    clone.querySelectorAll('[data-ss-remove]').forEach(el => el.remove())
   },
 
   addComponentDataToRoot (file, root) {

@@ -79,7 +79,7 @@ export default {
 
   removeUnrenderedNodes () {
     if (this._options.ui === 'export') {
-      this._body.querySelectorAll('[data-xx-unrender]').forEach(el => el.remove())
+      this._body.querySelectorAll('[data-ss-unrender]').forEach(el => el.remove())
     }
   },
 

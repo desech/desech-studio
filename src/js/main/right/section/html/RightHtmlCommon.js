@@ -130,7 +130,7 @@ export default {
   async setUnrender (value) {
     // null will delete the attribute, while '' will set it as a name only attribute
     const ref = StateSelectedElement.getRef()
-    const properties = { 'data-xx-unrender': (value ? '' : null) }
+    const properties = { 'data-ss-unrender': (value ? '' : null) }
     await this.changeAttributeCommand(ref, properties)
   },
 
@@ -150,7 +150,7 @@ export default {
   // this removes the attributes from the right html panel section
   getIgnoredAttributes () {
     return [
-      'class', 'style', 'hidden', 'data-xx-remove', 'data-ss-tag', 'data-xx-unrender',
+      'class', 'style', 'hidden', 'data-ss-remove', 'data-ss-tag', 'data-ss-unrender',
       'data-ss-token', 'data-ss-properties', 'data-ss-component', 'data-ss-component-hole',
       'data-variant'
     ]

@@ -65,7 +65,7 @@ export default {
   // check RightHtmlCommon.getIgnoredAttributes()
   // this is used when we copy attributes from elements
   getCopyIgnoredAttributes (element) {
-    return ['style', 'data-xx-remove', 'data-ss-token', 'data-ss-component',
+    return ['style', 'data-ss-remove', 'data-ss-token', 'data-ss-component',
       'data-ss-component-hole', 'data-variant']
   },
 

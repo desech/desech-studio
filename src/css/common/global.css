@@ -44,8 +44,8 @@ textarea {
   cursor: text !important; /* overwrite the manually set cursor */
 }
 
-.element[data-xx-remove],
-.element[data-xx-unrender] {
+.element[data-ss-remove],
+.element[data-ss-unrender] {
   display: none !important;
 }
 

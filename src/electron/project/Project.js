@@ -12,6 +12,7 @@ import Language from '../lib/Language.js'
 import Import from '../import/Import.js'
 import ProjectCommon from './ProjectCommon.js'
 import ProjectMigrate from './ProjectMigrate.js'
+import Plugin from '../lib/Plugin.js'
 
 export default {
   // this can:
@@ -34,6 +35,7 @@ export default {
     if (data?.settings) {
       await this.applyNewSettings(folder, settings, data.settings)
     }
+    await this.syncDesignSystem(folder, settings)
     if (data?.import) {
       await Import.importFile({ ...data.import, folder, settings })
     } else {
@@ -103,5 +105,10 @@ export default {
     return (responsiveType === 'desktop')
       ? HelperProject.getDesktopFirstResponsive()
       : HelperProject.getMobileFirstResponsive()
+  },
+
+  async syncDesignSystem (folder, settings) {
+    if (!settings.designSystem) return
+    await Plugin.triggerPlugin('designSystem', 'syncOpenProject', { folder })
   }
 }

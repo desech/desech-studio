@@ -108,7 +108,11 @@ export default {
   },
 
   async syncDesignSystem (folder, settings) {
-    if (!settings.designSystem) return
-    await Plugin.triggerPlugin('designSystem', 'syncOpenProject', { folder })
+    if (settings.designSystem) {
+      await Plugin.triggerPlugin('designSystem', 'syncOpenProject', { folder })
+    } else {
+      File.deletePath(File.resolve(folder, 'component/design-system'))
+      File.deletePath(File.resolve(folder, 'css/general/design-system.css'))
+    }
   }
 }

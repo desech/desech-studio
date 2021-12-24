@@ -5,6 +5,7 @@ import HelperProject from '../helper/HelperProject.js'
 import Plugin from './Plugin.js'
 import Import from './Import.js'
 import HelperDOM from '../helper/HelperDOM.js'
+import HelperDesignSystem from '../helper/HelperDesignSystem.js'
 
 export default {
   newProject (importData) {
@@ -82,6 +83,12 @@ export default {
   addProjectFontCss () {
     const file = HelperProject.getFolder() + '/css/general/font.css'
     this.addCssFile('project-css-font', file)
+  },
+
+  addDesignSystemCss () {
+    if (!HelperDesignSystem.hasDesignSystem()) return
+    const file = HelperProject.getFolder() + '/css/general/design-system.css'
+    this.addCssFile('project-css-design-system', file)
   },
 
   addCssFile (id, file) {

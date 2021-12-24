@@ -223,5 +223,9 @@ export default {
 
   readFile (file) {
     return fs.readFileSync(file).toString()
+  },
+
+  deletePath (file) {
+    if (fs.existsSync(file)) fs.rmSync(file, { force: true, recursive: true })
   }
 }

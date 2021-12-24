@@ -34,11 +34,16 @@ export default {
     if (file) await TopCommandSave.save(true)
     this.loadPage('main')
     HelperTrigger.triggerReload('responsive-mode-list')
-    Project.addProjectFontCss()
+    this.addCssFiles()
     HelperLocalStore.removeAllTemporary()
     this.loadMainFilePanel(file)
     TopZoom.setSavedZoomLevel()
     TopCommon.positionDragHandle()
+  },
+
+  addCssFiles () {
+    Project.addProjectFontCss()
+    Project.addDesignSystemCss()
   },
 
   loadMainFilePanel (file) {

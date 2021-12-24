@@ -58,6 +58,7 @@ export default {
     node.getElementsByClassName('plugin-meta')[0].textContent = plugin.author + ', ' +
       categories[plugin.category]
     node.getElementsByClassName('plugin-item-button')[0].dataset.url = plugin.url
+    node.getElementsByClassName('plugin-link')[0].href = plugin.url
     if (plugin.installed) this.injectRemoveButton(node, plugin.url)
   },
 

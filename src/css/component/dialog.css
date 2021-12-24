@@ -161,19 +161,39 @@
 }
 
 .dialog .dialog-plugin .plugin-name {
-  width: 300px;
+  width: 270px;
   white-space: nowrap;
   overflow: hidden;
 }
 
 .dialog .dialog-plugin .plugin-item-button {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
   align-self: center;
   justify-self: end;
+  align-items: center;
 }
 
 .dialog .dialog-plugin .plugin-meta {
   font-size: 13px;
   opacity: 0.8;
+}
+
+.dialog .dialog-plugin .plugin-link {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 3px 5px;
+  border-radius: 2px;
+  color: var(--btn-txt);
+  box-shadow: var(--btn-shadow) 0 0 1px 0;
+}
+
+.dialog .dialog-plugin .plugin-link:hover {
+  text-decoration: none;
+  color: var(--btn-txt-hover);
+  box-shadow: var(--btn-shadow-hover) 0 0 2px 0;
 }
 
 

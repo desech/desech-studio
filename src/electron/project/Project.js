@@ -1,7 +1,7 @@
 import fs from 'fs'
 import fse from 'fs-extra'
 import { dialog } from 'electron'
-import packageJson from '../../../package.json'
+import packageJson from '../../../package.json' assert { type: 'json' }
 import Cookie from '../lib/Cookie.js'
 import File from '../file/File.js'
 import EventMain from '../event/EventMain.js'

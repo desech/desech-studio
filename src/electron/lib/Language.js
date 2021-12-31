@@ -1,5 +1,5 @@
-import en from '../i18n/en.json'
-import ro from '../i18n/ro.json'
+import en from '../i18n/en.json' assert { type: 'json' }
+import ro from '../i18n/ro.json' assert { type: 'json' }
 import electron from 'electron'
 
 export default {

@@ -2,7 +2,7 @@ import fs from 'fs'
 import minify from 'html-minifier'
 import Template from '../../src/lib/Template.js'
 import Language from '../../src/electron/lib/Language.js'
-import packageJson from '../../package.json'
+import packageJson from '../../package.json' assert { type: 'json' }
 import Fetch from '../../src/electron/lib/Fetch.js'
 
 async function buildHtml (locale) {

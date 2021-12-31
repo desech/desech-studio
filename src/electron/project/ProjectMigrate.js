@@ -1,4 +1,4 @@
-import packageJson from '../../../package.json'
+import packageJson from '../../../package.json' assert { type: 'json' }
 import ExtendJS from '../../js/helper/ExtendJS.js'
 import ProjectCommon from './ProjectCommon.js'
 import migrate130 from './migrate/migrate130.js'

@@ -1,11 +1,12 @@
 import fs from 'fs'
+import File from './File.js'
 import Plugin from '../lib/Plugin.js'
 import ParseCssMerge from './parse/ParseCssMerge.js'
 import HelperFile from '../../js/helper/HelperFile.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import ExportStaticCode from '../export/ExportStaticCode.js'
 import ExportCommon from '../export/ExportCommon.js'
-import File from './File.js'
+import ExportData from '../export/ExportData.js'
 
 export default {
   async saveCurrentFile (data) {
@@ -97,6 +98,7 @@ export default {
     if (project.exportCode === 'static') {
       await ExportStaticCode.saveToFile(data)
     } else if (project.exportCode) {
+      data.componentOverrides = ExportData.getAllComponentData(data.htmlFiles)
       await Plugin.triggerPlugin('exportCode', 'saveToFile', data)
     }
   },

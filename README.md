@@ -13,7 +13,9 @@ cp .electron-builder.env electron-builder.env
 npm install
 cd app
 npm install
+cd ..
 npm run build-all-dev
+./app/node_modules/.bin/electron ./app/index.js
 ```
 
 Icons

@@ -15,10 +15,15 @@ export default {
   },
 
   formatDom (document, css) {
+    this.removeUnrenderedNodes(document)
     this.cleanClasses(document, css)
     this.replaceCssLinks(document)
-    // needs to be the last one because we are switch to tags like `template`
+    // needs to be the last one because we are switching to tags like `template`
     this.replaceTags(document.body.children, document)
+  },
+
+  removeUnrenderedNodes (document) {
+    document.querySelectorAll('[data-ss-unrender]').forEach(node => node.remove())
   },
 
   cleanClasses (document, css) {

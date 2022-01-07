@@ -44,7 +44,7 @@ export default {
     if (componentData.inner) refData.inner = true
     this.processUnrender(componentData.attributes, refData)
     this.processAttributes(componentData.attributes, refData)
-    this.processAttributes(componentData.properties, refData)
+    this.processAttributes(componentData.properties, refData, 'properties')
     this.processAttributes(componentData.classes, refData, 'classes')
     if (componentData.component) refData.component = true
     if (componentData.variants) refData.variants = true
@@ -70,6 +70,7 @@ export default {
   setActionValue (value, current, type) {
     // for classes, we can't have both create and delete at the same time
     if (type === 'classes') return value.delete ? 'delete' : 'create'
+    // we will set the value to `create` in the export plugin when we check if the attr exists
     switch (current) {
       case 'update-delete':
         return current

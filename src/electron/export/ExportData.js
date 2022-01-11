@@ -8,6 +8,7 @@ export default {
       const html = File.readFile(file.path)
       this.extractOverrides(html, data)
     }
+    ExtendJS.clearEmptyObjects(data)
     return data
   },
 
@@ -39,15 +40,21 @@ export default {
     this.processRefOverrides(clone, data[ref])
   },
 
-  processRefOverrides (componentData, refData) {
-    if (componentData.tag) refData.tag = true
-    if (componentData.inner) refData.inner = true
-    this.processUnrender(componentData.attributes, refData)
-    this.processAttributes(componentData.attributes, refData)
-    this.processAttributes(componentData.properties, refData, 'properties')
-    this.processAttributes(componentData.classes, refData, 'classes')
-    if (componentData.component) refData.component = true
-    if (componentData.variants) refData.variants = true
+  processRefOverrides (cmpData, refData) {
+    if (cmpData.tag) refData.tag = true
+    if (cmpData.inner) refData.inner = true
+    this.processComponentInstances(cmpData.component, refData)
+    this.processUnrender(cmpData.attributes, refData)
+    this.processAttributes(cmpData.attributes, refData)
+    this.processAttributes(cmpData.properties, refData, 'properties')
+    this.processAttributes(cmpData.classes, refData, 'classes')
+    if (cmpData.variants) refData.variants = true
+  },
+
+  processComponentInstances (instance, data) {
+    if (!instance) return
+    if (!data.component) data.component = []
+    data.component.push(instance)
   },
 
   processUnrender (attributes, data) {
@@ -61,8 +68,15 @@ export default {
     if (ExtendJS.isEmpty(attributes)) return
     if (!data[type]) data[type] = {}
     for (const [name, value] of Object.entries(attributes)) {
-      data[type][name] = this.setActionValue(value, data[type][name], type)
+      if (this.isOverridable(name)) {
+        data[type][name] = this.setActionValue(value, data[type][name], type)
+      }
     }
+  },
+
+  // certain properties can't be overridden
+  isOverridable (name) {
+    return !['reactIf', 'reactFor', 'reactIfFor', 'reactForIf'].includes(name)
   },
 
   // attributes: create, update, delete, update-delete

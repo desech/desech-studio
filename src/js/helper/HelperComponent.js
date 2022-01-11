@@ -118,7 +118,8 @@ export default {
   },
 
   getComponentName (file, folder = null) {
-    const name = HelperFile.getRelPath(file, HelperFile.getAbsPath('component', folder))
+    const cmpFolder = HelperFile.getAbsPath('component', folder)
+    const name = HelperFile.getRelPath(file, cmpFolder)
     return name.replace('.html', '')
   },
 

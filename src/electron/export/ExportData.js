@@ -2,6 +2,8 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
 import File from '../file/File.js'
 
 export default {
+  // this data is for figuring out how to build the react/angular/vue component render method
+  // this will tell us if certain attributes need overrides, or inner content, etc
   getAllComponentData (files) {
     const data = {}
     for (const file of files) {
@@ -43,18 +45,11 @@ export default {
   processRefOverrides (cmpData, refData) {
     if (cmpData.tag) refData.tag = true
     if (cmpData.inner) refData.inner = true
-    this.processComponentInstances(cmpData.component, refData)
     this.processUnrender(cmpData.attributes, refData)
     this.processAttributes(cmpData.attributes, refData)
     this.processAttributes(cmpData.properties, refData, 'properties')
     this.processAttributes(cmpData.classes, refData, 'classes')
-    if (cmpData.variants) refData.variants = true
-  },
-
-  processComponentInstances (instance, data) {
-    if (!instance) return
-    if (!data.component) data.component = []
-    data.component.push(instance)
+    if (cmpData.component) refData.component = true
   },
 
   processUnrender (attributes, data) {

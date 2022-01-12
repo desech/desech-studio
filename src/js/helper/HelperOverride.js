@@ -176,9 +176,9 @@ export default {
     this.mergeObjectsFix(obj1)
   },
 
+  // mergeDeep will merge everything including the attribute/property/class values
+  // if we have these pairs value/delete or add/delete, remove the first value
   mergeObjectsFix (obj) {
-    // mergeDeep will merge everything including the attribute/property/class values
-    // if we have these pairs value/delete or add/delete, remove the first value
     if (ExtendJS.isEmpty(obj)) return
     if (Object.keys(obj).length === 2 && (('value' in obj && 'delete' in obj) ||
       ('add' in obj && 'delete' in obj))) {

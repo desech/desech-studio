@@ -47,27 +47,36 @@ export default {
   async save (checkAlreadySaved = false) {
     if (!HelperProject.getFile()) return
     const buttons = TopCommand.getButtons()
-    if (checkAlreadySaved && !buttons.save.classList.contains('active')) return
-    this.validateTopElements()
+    if (checkAlreadySaved && !buttons.save.classList.contains('active')) {
+      return
+    }
+    this.validateElements()
     this.setSaveLoading(buttons.save, buttons.command)
     await this.saveCurrentFile(buttons.save)
   },
 
-  validateTopElements () {
+  validateElements () {
+    if (HelperFile.isPageFile()) return
     const nodes = this.getTopElements()
+    if (!nodes.length) return
     if (nodes.length > 1) {
-      throw new Error('Only one top level element is allowed. ' +
+      throw new Error('Only one top/root level element is allowed. ' +
         `Please delete the other ${nodes.length - 1}`)
     }
-    if (nodes.length && HelperFile.isComponentFile() && HelperComponent.isComponent(nodes[0])) {
-      throw new Error('Components are not allowed as the root element')
+    if (HelperComponent.isComponent(nodes[0])) {
+      throw new Error('Components are not allowed as the top/root element')
+    }
+    if (HelperElement.isUnrender(nodes[0])) {
+      throw new Error("The top/root element can't be unrendered")
     }
   },
 
   getTopElements () {
     const nodes = []
     for (const node of HelperCanvas.getCanvas().children) {
-      if (HelperElement.isCanvasElement(node)) nodes.push(node)
+      if (HelperElement.isCanvasElement(node)) {
+        nodes.push(node)
+      }
     }
     return nodes
   },

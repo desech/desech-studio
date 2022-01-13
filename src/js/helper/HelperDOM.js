@@ -176,9 +176,12 @@ export default {
     for (const attr of node.attributes) {
       clone.setAttributeNS(null, attr.name, attr.value)
     }
-    while (node.firstChild) {
-      clone.appendChild(node.firstChild)
-    }
+    // while (node.firstChild) {
+    //   clone.appendChild(node.firstChild)
+    // }
+    // innerHTML works for template too, while the `while` loop works best for case sensitive
+    // elements, but that's mostly for react
+    clone.innerHTML = node.innerHTML
     node.replaceWith(clone)
     return clone
   },

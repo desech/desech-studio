@@ -75,6 +75,10 @@ export default {
   formatHtml (html) {
     html = html.replace(/ (hidden|checked|selected|disabled|readonly|required|multiple|controls|autoplay|loop|muted|default|reversed)=".*?"/g,
       ' $1')
+    // this means that properties are not used at all for static content
+    // they only work in react/angular/vue
+    // `class` properties are ignored by every export plugin, so you need to add them normally
+    // with selectors
     html = html.replace(/ (data-ss-)([a-z-]+)(="(.*?)")?/g, '')
     return Html.beautifyHtml(html)
   }

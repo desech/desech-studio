@@ -98,7 +98,7 @@ export default {
     if (project.exportCode === 'static') {
       await ExportStaticCode.saveToFile(data)
     } else if (project.exportCode) {
-      data.componentOverrides = ExportData.getAllComponentData(data.htmlFiles)
+      data.component = ExportData.getAllComponentData(data.htmlFiles, data.folder)
       await Plugin.triggerPlugin('exportCode', 'saveToFile', data)
     }
   },

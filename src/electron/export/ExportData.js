@@ -4,17 +4,32 @@ import File from '../file/File.js'
 export default {
   // this data is for figuring out how to build the react/angular/vue component render method
   // this will tell us if certain attributes need overrides, or inner content, etc
-  getAllComponentData (files) {
-    const data = {}
+  // it also lists all variants for all components
+  getAllComponentData (files, folder) {
+    const data = { overrides: {}, variants: {} }
     for (const file of files) {
       const html = File.readFile(file.path)
-      this.extractOverrides(html, data)
+      this.addVariants(file, folder, html, data.variants)
+      this.addOverrides(html, data.overrides)
     }
-    ExtendJS.clearEmptyObjects(data)
+    ExtendJS.clearEmptyObjects(data.overrides)
     return data
   },
 
-  extractOverrides (html, data) {
+  addVariants (file, folder, html, data) {
+    if (!file.isComponent) return
+    // we only want the component data from the root element, the first element found
+    const match = /data-ss-component="(.*?)"/g.exec(html)
+    if (!match) return
+    const json = JSON.parse(match[1].replaceAll('&quot;', '"'))
+    // main component data only has `variants`
+    // instance component data has `ref`, `file`, `overrides` and `variants`
+    if (json.ref) return
+    const cmpFile = file.path.replace(folder, '').substring(1)
+    data[cmpFile] = Object.keys(json.variants)
+  },
+
+  addOverrides (html, data) {
     for (const match of html.matchAll(/data-ss-component="(.*?)"/g)) {
       const json = JSON.parse(match[1].replaceAll('&quot;', '"'))
       this.extractRefOverrides(json, data)

@@ -60,7 +60,8 @@ export default {
       designType: ImportCommon.sanitizeName(node.shape?.type || node.type),
       id: node.id,
       ref: HelperElement.generateElementRef(),
-      name: node.name.substring(0, 32),
+      // @todo fix it; we might have an error here complaining about undefined on `substring`
+      name: node.name ? node.name.substring(0, 32) : 'no-name',
       x: AdobexdCommon.getX(pos.tx, node),
       y: AdobexdCommon.getY(pos.ty, desechType, node),
       width: AdobexdCommon.getWidth(desechType, node),

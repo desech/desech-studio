@@ -6,6 +6,11 @@ import HelperElement from '../../../js/helper/HelperElement.js'
 export default {
   async addInlineText (data, node) {
     if (data.desechType !== 'text') return
+    // @todo fix it; we might have an error here complaining about undefined on `substring`
+    if (!node.text?.rawText) {
+      data.content = ''
+      return
+    }
     const inline = await this.processInlineText(data, node)
     // because of the imprecise width/height of our text, we can't have new lines
     const text = node.text.rawText.replaceAll('\n', ' ')

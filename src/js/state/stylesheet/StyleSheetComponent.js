@@ -95,16 +95,57 @@ export default {
     StateStyleSheet.addSelectors(styles)
   },
 
-  renameVariant (data, values) {
-    const oldPart = HelperComponent.getComponentClassSelector(data.file, values.oldName,
-      values.oldValue)
-    const newPart = HelperComponent.getComponentClassSelector(data.file, values.name, values.value)
-    const componentStyles = this.getVariantOverridesBySelector(oldPart)
-    if (!componentStyles) return
-    for (const oldSelector of Object.keys(componentStyles)) {
-      const newSelector = oldSelector.replace(oldPart, newPart)
+  renameVariant (data, obj) {
+    const regex = this.getRenameVariantRegex(data.file, obj)
+    const selectors = this.getRenameVariantSelectors(regex)
+    if (!selectors) return
+    for (const [oldSelector, newSelector] of Object.entries(selectors)) {
       StyleSheetSelector.renameSelector(oldSelector, newSelector)
     }
+  },
+
+  getRenameVariantRegex (file, obj) {
+    const cls = HelperComponent.getComponentClass(file)
+    if (obj.oldName === obj.name) {
+      // only the value changed, while the name stayed the same
+      return {
+        match: [`\\.${cls}\\[data-variant~="${obj.oldName}=${obj.oldValue}"]`],
+        replace: [`.${cls}[data-variant~="${obj.oldName}=${obj.value}"]`]
+      }
+    } else if (obj.value === obj.oldValue) {
+      // only the name changed, while the value stayed the same
+      return {
+        match: [`\\.${cls}\\[data-variant~="${obj.oldName}=(.*?)"]`],
+        replace: [`.${cls}[data-variant~="${obj.name}=$1"]`]
+      }
+    } else {
+      // both the name and the value has changed; order matter
+      return {
+        match: [
+          `\\.${cls}\\[data-variant~="${obj.oldName}=${obj.oldValue}"]`,
+          `\\.${cls}\\[data-variant~="${obj.oldName}=(.*?)"]`
+        ],
+        replace: [
+          `.${cls}[data-variant~="${obj.name}=${obj.value}"]`,
+          `.${cls}[data-variant~="${obj.name}=$1"]`
+        ]
+      }
+    }
+  },
+
+  getRenameVariantSelectors (regex) {
+    const selectors = {}
+    for (const sheet of document.adoptedStyleSheets) {
+      const selector = sheet.cssRules[0].cssRules[0].selectorText
+      for (let i = 0; i < regex.match.length; i++) {
+        // we can't have duplicates
+        const reg = new RegExp(regex.match[i], 'g')
+        if (!(selector in selectors) && reg.test(selector)) {
+          selectors[selector] = selector.replace(reg, regex.replace[i])
+        }
+      }
+    }
+    return selectors
   },
 
   resetComponentStyles (styles, action) {

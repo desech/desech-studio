@@ -41,8 +41,10 @@ export default {
 
   async copyResizeImages (src, projectFolder, fileName, image, data) {
     const dest = await this.copyResizeImage(src, projectFolder, fileName, image.ext, image.width)
-    await this.copyResizeImage(src, projectFolder, fileName + '@2x', image.ext, image.width * 2)
-    await this.copyResizeImage(src, projectFolder, fileName + '@3x', image.ext, image.width * 3)
+    // @todo if the image is large we don't actually make it smaller, we make it bigger
+    // test this with AdobeXD, the media design file
+    // await this.copyResizeImage(src, projectFolder, fileName + '@2x', image.ext, image.width * 2)
+    // await this.copyResizeImage(src, projectFolder, fileName + '@3x', image.ext, image.width * 3)
     return dest
   },
 

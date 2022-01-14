@@ -2,6 +2,7 @@ import HelperElement from '../../../js/helper/HelperElement.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import HelperComponent from '../../../js/helper/HelperComponent.js'
 import HelperOverride from '../../../js/helper/HelperOverride.js'
+import ParseCommon from './ParseCommon.js'
 
 export default {
   getSubComponentData (child, parentOverrides) {
@@ -42,7 +43,8 @@ export default {
     if (obj.delete) {
       node.removeAttributeNS(null, name)
     } else {
-      node.setAttributeNS(null, name, obj.value)
+      const value = (name === 'srcset') ? ParseCommon.fixSrcSet(obj.value, folder) : obj.value
+      node.setAttributeNS(null, name, value)
     }
   },
 

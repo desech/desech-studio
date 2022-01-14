@@ -11,7 +11,8 @@ import HelperOverride from '../../helper/HelperOverride.js'
 export default {
   getDisplayElementSelectors () {
     const element = StateSelectedElement.getElement()
-    return this.getElementSelectors(element)
+    const selectors = this.getElementSelectors(element)
+    return selectors.map(selector => HelperStyle.removeResponsive(selector))
   },
 
   // filter = class, variant, ref

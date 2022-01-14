@@ -4,6 +4,7 @@ import Html from '../../lib/Html.js'
 import ParseHtml from '../../file/parse/ParseHtml.js'
 import HelperDOM from '../../../js/helper/HelperDOM.js'
 import File from '../../file/File.js'
+import HelperElement from '../../../js/helper/HelperElement.js'
 
 export default {
   getPageHtml (folder, file, css) {
@@ -32,17 +33,11 @@ export default {
       if (node.classList.contains('text')) node.classList.remove('text')
       // remove the ref classes that don't have any css styles
       // @todo make sure we don't remove the component root ref class if we have css
-      const ref = this.getRefFromClasses(node)
+      const ref = HelperElement.getRef(node)
       if (!css.includes('.' + ref)) node.classList.remove(ref)
       if (!node.getAttributeNS(null, 'class')) {
         node.removeAttributeNS(null, 'class')
       }
-    }
-  },
-
-  getRefFromClasses (node) {
-    for (const cls of node.classList) {
-      if (cls.startsWith('e0')) return cls
     }
   },
 

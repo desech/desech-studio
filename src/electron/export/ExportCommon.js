@@ -62,7 +62,12 @@ export default {
       css += css ? '\n' : ''
       css += File.readFile(file)
     }
-    return css
+    return this.cleanUpCss(css)
+  },
+
+  cleanUpCss (css) {
+    // remove empty classes that have no style
+    return css.replace(/.*? {\n}/g, '')
   },
 
   getDesignSystemCss (folder) {

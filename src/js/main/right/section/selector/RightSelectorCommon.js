@@ -2,6 +2,7 @@ import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import HelperStyle from '../../../../helper/HelperStyle.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
+import HelperLocalStore from '../../../../helper/HelperLocalStore.js'
 
 export default {
   async linkClass (selector) {
@@ -50,19 +51,34 @@ export default {
 
   reloadSelectCallback (selector) {
     const section = document.getElementById('selector-section')
-    const query = `.selector-element[data-selector="${CSS.escape(selector)}"`
-    const element = section.querySelector(query)
-    this.selectSelector(element, section)
+    const record = this.getRecordBySelector(section, selector)
+    this.selectSelector(record, section)
   },
 
-  selectSelector (element, container = document) {
-    this.activateSelector(element, container)
+  getRecordBySelector (container, selector) {
+    const query = `.selector-element[data-selector="${CSS.escape(selector)}"`
+    return container.querySelector(query)
+  },
+
+  selectSelector (record, container = document) {
+    this.activateSelector(record, container)
+    this.updateCurrentSelector(record)
     HelperTrigger.triggerReload('sub-style-sections')
   },
 
-  activateSelector (element, container) {
+  activateSelector (record, container) {
     const active = container.querySelector('.selector-element.active')
     if (active) active.classList.remove('active')
-    if (element) element.classList.add('active')
+    if (record) record.classList.add('active')
+  },
+
+  updateCurrentSelector (record) {
+    const ref = StateSelectedElement.getRef()
+    const key = `current-selector-${ref}`
+    if (record.parentNode.classList.contains('default-selector-list')) {
+      HelperLocalStore.removeItem(key)
+    } else {
+      HelperLocalStore.setItem(key, record.dataset.selector)
+    }
   }
 }

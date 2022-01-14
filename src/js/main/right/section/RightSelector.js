@@ -4,6 +4,7 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import RightSelectorCommon from './selector/RightSelectorCommon.js'
 import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
+import HelperLocalStore from '../../../helper/HelperLocalStore.js'
 
 export default {
   getSection (sectionData) {
@@ -108,10 +109,11 @@ export default {
   },
 
   activateSelector (container) {
-    // don't pre-select the class since people will mostly use components
-    // const record = container.querySelector('.class-selector-list li') ||
-    //   container.querySelector('.default-selector-list li')
-    const record = container.querySelector('.default-selector-list li')
+    const ref = StateSelectedElement.getRef()
+    const selector = HelperLocalStore.getItem(`current-selector-${ref}`)
+    const record = (selector)
+      ? RightSelectorCommon.getRecordBySelector(container, selector)
+      : container.querySelector('.default-selector-list li')
     RightSelectorCommon.activateSelector(record, container)
   },
 

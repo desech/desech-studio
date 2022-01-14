@@ -162,7 +162,8 @@ export default {
   deleteSelectors (selectors) {
     const newSheets = []
     for (const sheet of document.adoptedStyleSheets) {
-      if (!selectors.includes(sheet.cssRules[0].cssRules[0].selectorText)) {
+      const selector = HelperStyle.removeResponsive(sheet.cssRules[0].cssRules[0].selectorText)
+      if (!selectors.includes(selector)) {
         newSheets.push(sheet)
       }
     }

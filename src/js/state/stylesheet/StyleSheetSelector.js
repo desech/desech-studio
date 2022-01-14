@@ -71,8 +71,9 @@ export default {
   },
 
   getCurrentSelector () {
-    const record = document.querySelector('.selector-list-container .selector-element.active')
-    return record ? record.dataset.selector : this.getDefaultSelector()
+    const ref = StateSelectedElement.getRef()
+    const selector = HelperLocalStore.getItem(`current-selector-${ref}`)
+    return selector || this.getDefaultSelector()
   },
 
   getDefaultSelector () {

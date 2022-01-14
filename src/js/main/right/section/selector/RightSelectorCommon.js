@@ -9,15 +9,20 @@ export default {
     const ref = StateSelectedElement.getRef()
     const cls = HelperStyle.extractClassSelector(selector)
     await this.callLinkCommand(ref, cls, 'linkClass', 'unlinkClass')
-    this.reloadSection(selector)
-    HelperTrigger.triggerReload('sub-style-sections')
+    this.saveNewCurrentSelector(selector)
+    this.reloadSection()
   },
 
   async unlinkClass (selector) {
     const ref = StateSelectedElement.getRef()
     const cls = HelperStyle.extractClassSelector(selector)
     await this.callLinkCommand(ref, cls, 'unlinkClass', 'linkClass')
+    this.resetCurrentSelector()
     this.reloadSection()
+  },
+
+  reloadSection () {
+    HelperTrigger.triggerReload('selector-section')
     HelperTrigger.triggerReload('sub-style-sections')
   },
 
@@ -36,23 +41,6 @@ export default {
     }
     StateCommand.stackCommand(command)
     await StateCommand.executeCommand(command.do)
-  },
-
-  reloadSection (selector = null) {
-    let detail = null
-    if (selector) {
-      detail = {
-        callback: selector => this.reloadSelectCallback(selector),
-        arg1: selector
-      }
-    }
-    HelperTrigger.triggerReload('selector-section', detail)
-  },
-
-  reloadSelectCallback (selector) {
-    const section = document.getElementById('selector-section')
-    const record = this.getRecordBySelector(section, selector)
-    this.selectSelector(record, section)
   },
 
   getRecordBySelector (container, selector) {
@@ -80,5 +68,17 @@ export default {
     } else {
       HelperLocalStore.setItem(key, record.dataset.selector)
     }
+  },
+
+  saveNewCurrentSelector (selector) {
+    const ref = StateSelectedElement.getRef()
+    const key = `current-selector-${ref}`
+    HelperLocalStore.setItem(key, selector)
+  },
+
+  resetCurrentSelector () {
+    const ref = StateSelectedElement.getRef()
+    const key = `current-selector-${ref}`
+    HelperLocalStore.removeItem(key)
   }
 }

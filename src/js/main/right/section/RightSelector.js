@@ -5,6 +5,7 @@ import RightSelectorCommon from './selector/RightSelectorCommon.js'
 import StyleSheetSelector from '../../../state/stylesheet/StyleSheetSelector.js'
 import HelperOverride from '../../../helper/HelperOverride.js'
 import HelperLocalStore from '../../../helper/HelperLocalStore.js'
+import HelperTrigger from '../../../helper/HelperTrigger.js'
 
 export default {
   getSection (sectionData) {
@@ -24,7 +25,7 @@ export default {
     this.injectDefaultSelector(template, ref)
     const selectors = StyleSheetSelector.getDisplayElementSelectors()
     this.injectSelectors(selectors, template, ref)
-    this.activateSelector(template)
+    this.activateNonDefaultSelector(template)
     this.highlightOverides(template, ref, sectionData.overrides.element)
   },
 
@@ -85,6 +86,7 @@ export default {
     this.prefillSelectorDrag(record, !isDefault)
     this.prefillSelectorTitle(record, title)
     this.prefillSelectorButtons(selector, record, !isDefault)
+    this.prefillActive(record, isDefault)
   },
 
   prefillSelectorDrag (record, show) {
@@ -108,12 +110,17 @@ export default {
     }
   },
 
-  activateSelector (container) {
+  prefillActive (record, isDefault) {
+    if (isDefault) {
+      record.classList.add('active')
+    }
+  },
+
+  activateNonDefaultSelector (container) {
     const ref = StateSelectedElement.getRef()
     const selector = HelperLocalStore.getItem(`current-selector-${ref}`)
-    const record = (selector)
-      ? RightSelectorCommon.getRecordBySelector(container, selector)
-      : container.querySelector('.default-selector-list li')
+    if (!selector) return
+    const record = RightSelectorCommon.getRecordBySelector(container, selector)
     RightSelectorCommon.activateSelector(record, container)
   },
 

@@ -161,8 +161,9 @@ export default {
       await RightSelectorCommon.linkClass(selector)
     } else {
       await this.callCreateCommand(selector)
-      RightSelectorCommon.reloadSection(selector)
     }
+    RightSelectorCommon.saveNewCurrentSelector(selector)
+    RightSelectorCommon.reloadSection()
   },
 
   async callCreateCommand (selector) {

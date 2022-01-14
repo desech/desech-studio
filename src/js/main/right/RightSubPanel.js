@@ -41,8 +41,8 @@ export default {
 
   loadPanel (data) {
     if (!document.getElementById('selector-section')) return
-    const classes = RightSection.getSubSectionClasses()
-    const sections = RightSection.getList(classes, data)
+    const instances = RightSection.getSubSectionClasses()
+    const sections = RightSection.getList(instances, data)
     RightSection.addToPanel(sections, this.getContainer())
   }
 }

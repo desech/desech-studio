@@ -3,7 +3,6 @@ import RightSubPanel from './right/RightSubPanel.js'
 import RightSection from './right/RightSection.js'
 import StateSelectedElement from '../state/StateSelectedElement.js'
 import HelperEvent from '../helper/HelperEvent.js'
-import HelperElement from '../helper/HelperElement.js'
 import RightPage from './right/section/RightPage.js'
 import RightCommon from './right/RightCommon.js'
 

@@ -30,7 +30,7 @@ export default {
 
   reloadcontainerEvent (event) {
     if (event.target.classList.contains('sidebar-section')) {
-      this.reloadSection(event.target.dataset.type, event.detail)
+      this.reloadSection(event.target.dataset.type)
     }
   },
 
@@ -71,10 +71,9 @@ export default {
     }
   },
 
-  reloadSection (name, options) {
+  reloadSection (name) {
     this.clearSection(name)
     this.loadSection(this.getSectionByName(name), this.getContainer(name))
-    if (options && options.callback) options.callback(options.arg1)
   },
 
   getList (classes, data) {

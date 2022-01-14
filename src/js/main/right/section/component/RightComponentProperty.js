@@ -71,13 +71,15 @@ export default {
     }
   },
 
+  // class and className is not allowed
   // https://angular.io/guide/attribute-binding
   // [style.text-decoration], (click), [(size)], #itemForm, *ngIf, [ngClass]
   // https://v3.vuejs.org/api/directives.html#v-text
   // v-text, v-on:click, v-on:[event], @submit.prevent, :xlink:special
   validatePropertyName (field) {
     if (!field.value) return false
-    const valid = /^([a-zA-Z0-9-_.:@#*[\]()])+$/g.test(field.value)
+    const valid = !['class', 'className'].includes(field.value) &&
+      /^([a-zA-Z0-9-_.:@#*[\]()])+$/g.test(field.value)
     this.validateForm(field, valid)
     return valid
   },

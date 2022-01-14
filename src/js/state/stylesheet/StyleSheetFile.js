@@ -45,14 +45,36 @@ export default {
     const css = this.initStyleCss()
     let foundBody = false
     for (const sheet of document.adoptedStyleSheets) {
+      const cls = this.getClass(sheet)
+      let addSuccess = false
       for (const rule of sheet.cssRules) {
         const selector = rule.cssRules[0].selectorText
         if (selector === '.e000body') foundBody = true
         const type = this.getSelectorType(selector, foundBody)
-        this.addStyleRule(rule, selector, type, css)
+        const success = this.addStyleRule(rule, selector, type, css)
+        if (success) addSuccess = true
       }
+      this.addEmptyClass(cls, addSuccess, css)
     }
     return this.formatReturn(css)
+  },
+
+  getClass (sheet) {
+    const selector = sheet.cssRules[0].cssRules[0].selectorText
+    const isClass = HelperStyle.isClassSelector(selector)
+    return isClass ? HelperStyle.extractClassSelector(selector) : null
+  },
+
+  // we need to add classes as empty if no sheets have succeeded because of empty values
+  addEmptyClass (cls, success, css) {
+    if (!cls || success) return
+    const selector = '.' + cls
+    css.componentCss[selector] = [{
+      responsive: '',
+      selector: HelperStyle.sanitizeSelector(selector),
+      property: '',
+      value: ''
+    }]
   },
 
   initStyleCss () {
@@ -77,26 +99,21 @@ export default {
   },
 
   addStyleRule (rule, selector, type, css) {
-    const index = selector + rule.conditionText
     switch (type) {
       case 'root':
-        this.addStyleItem(css.color, ':root', rule, css)
-        break
+        return this.addStyleItem(css.color, ':root', rule)
       case 'componentCss':
-        this.addStyleItem(css.componentCss, index, rule, css)
-        break
+        return this.addStyleItem(css.componentCss, selector, rule)
       case 'componentHtml':
-        this.addStyleItem(css.componentHtml, index, rule, css)
-        break
+        return this.addStyleItem(css.componentHtml, selector, rule)
       case 'element':
-        this.addStyleItem(css.element, index, rule, css)
-        break
+        return this.addStyleItem(css.element, selector, rule)
     }
   },
 
-  addStyleItem (sheet, index, rule, css) {
-    if (!sheet[index]) sheet[index] = []
-    this.addToStyle(sheet[index], this.getStyleData(rule), css)
+  addStyleItem (sheet, selector, rule) {
+    if (!sheet[selector]) sheet[selector] = []
+    return this.addToStyle(sheet[selector], this.getStyleData(rule))
   },
 
   getStyleData (mediaRule) {
@@ -118,12 +135,15 @@ export default {
     return ''
   },
 
-  addToStyle (sheet, data, css) {
+  addToStyle (sheet, data) {
     // ignore empty properties
     if (!data.value) return
-    if (data.value.includes('url(')) data.value = this.fixFileUrl(data.value)
+    if (data.value.includes('url(')) {
+      data.value = this.fixFileUrl(data.value)
+    }
     sheet.push(data)
     this.addPrefixRules(sheet, data)
+    return true
   },
 
   fixFileUrl (value) {

@@ -176,14 +176,21 @@ export default {
     for (const attr of node.attributes) {
       clone.setAttributeNS(null, attr.name, attr.value)
     }
-    // while (node.firstChild) {
-    //   clone.appendChild(node.firstChild)
-    // }
-    // innerHTML works for template too, while the `while` loop works best for case sensitive
-    // elements, but that's mostly for react
-    clone.innerHTML = node.innerHTML
+    this.transferChildren(node, clone)
     node.replaceWith(clone)
     return clone
+  },
+
+  transferChildren (from, to) {
+    // JSDOM's inneHTML is bad because:
+    //    - it changes case sensitive tags
+    //    - doesn't handle self closing tags correctly
+    // JSDOM's while loop appendChild is bad because:
+    //    - it doesn't extract the insides of <template>
+    to.innerHTML = from.innerHTML
+    // while (from.firstChild) {
+    //   to.appendChild(from.firstChild)
+    // }
   },
 
   createElement (tag, document) {

@@ -17,7 +17,7 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^16.0.4"
+    "electron": "^16.0.7"
   },
   "dependencies": {
     "adm-zip": "^0.5.9",
@@ -27,7 +27,7 @@
     "jimp": "^0.16.1",
     "js-beautify": "^1.14.0",
     "jsdom": "^19.0.0",
-    "nanoid": "^3.1.30",
+    "nanoid": "^3.2.0",
     "node-fetch": "2.6.2"
   }
 }

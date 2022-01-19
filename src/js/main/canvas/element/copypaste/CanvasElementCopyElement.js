@@ -62,12 +62,21 @@ export default {
   },
 
   async copyElementData (element, action = 'copy') {
+    // don't allow certain nodes
+    if (this.unallowedNodes().includes(HelperDOM.getTag(element))) {
+      throw new Error('You can\'t copy/paste/duplicate this element type. ' +
+        'Change its tag to a <div> or <p>, then copy/paste it and then change the tag back.')
+    }
     const clone = element.cloneNode(true)
     this.processMoveToken(clone, action)
     const html = clone.outerHTML
     const refs = this.getAllReplaceableRefs(html)
     const style = this.getStyleByRefs(refs, false)
     await HelperClipboard.saveData({ element: { action, html, refs, style } })
+  },
+
+  unallowedNodes () {
+    return ['thead', 'tbody', 'tfoot', 'tr', 'td', 'th', 'caption', 'colgroup', 'col']
   },
 
   processMoveToken (element, action) {

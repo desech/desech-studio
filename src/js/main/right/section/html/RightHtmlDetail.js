@@ -53,6 +53,7 @@ export default {
     const attributes = { [field.name]: (field.value || null) }
     await RightHtmlCommon.changeAttributeCommand(ref, attributes)
     if (field.name === 'value') {
+      // @todo bug: still doesn't reset <progress>
       StateSelectedElement.getElement().value = field.value
     }
   },

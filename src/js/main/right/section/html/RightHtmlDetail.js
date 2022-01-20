@@ -50,7 +50,8 @@ export default {
 
   async setFieldAttribute (field) {
     const ref = StateSelectedElement.getRef()
-    await RightHtmlCommon.changeAttributeCommand(ref, { [field.name]: field.value })
+    const attributes = { [field.name]: (field.value || null) }
+    await RightHtmlCommon.changeAttributeCommand(ref, attributes)
     if (field.name === 'value') {
       StateSelectedElement.getElement().value = field.value
     }

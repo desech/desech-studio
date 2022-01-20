@@ -92,7 +92,9 @@ export default {
 
   async deleteAttribute (li) {
     const form = li.getElementsByClassName('style-html-element-form')[0]
-    await this.deleteAttributeCommand(form.elements.name.value)
+    if (form.elements.name.checkValidity()) {
+      await this.deleteAttributeCommand(form.elements.name.value)
+    }
     li.remove()
   },
 

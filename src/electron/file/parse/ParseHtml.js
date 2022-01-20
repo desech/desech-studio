@@ -318,6 +318,8 @@ export default {
     HelperDOM.addRemoveAttribute(node, 'class', classes.join(' '))
   },
 
+  // it's important that we set the `inner` first and then the attributes
+  // this allows us to change the text and also add attributes to our new inline elements
   setBasic (node, type, component) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${HelperDOM.escapeHtml(node.outerHTML)}`)

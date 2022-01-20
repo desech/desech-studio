@@ -167,6 +167,7 @@ export default {
       posX <= container.offsetWidth)
   },
 
+  // HelperElement.getTag() is more complete
   getTag (node) {
     return node.tagName.toLowerCase()
   },

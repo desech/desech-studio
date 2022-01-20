@@ -98,7 +98,7 @@ export default {
   },
 
   processElementTag (value, data, originalNode) {
-    const originalValue = originalNode ? HelperDOM.getTag(originalNode) : null
+    const originalValue = originalNode ? HelperElement.getTag(originalNode) : null
     if (value === originalValue) {
       delete data.tag
     } else {

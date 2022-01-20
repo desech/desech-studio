@@ -10,6 +10,7 @@ import HelperLocalStore from '../../../helper/HelperLocalStore.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperComponent from '../../../helper/HelperComponent.js'
 import Crypto from '../../../../electron/lib/Crypto.js'
+import HelperTrigger from '../../../helper/HelperTrigger.js'
 
 export default {
   _startWidth: null,
@@ -174,6 +175,8 @@ export default {
     CanvasOverlay.setOverlayEditing()
     this.clearState()
     CanvasTextOverlay.clearOverlay()
+    // refresh the html section to hide the `contentEditable` and `data-text-id` attributes
+    HelperTrigger.triggerReload('html-section')
   },
 
   async addUndoCommand (element) {

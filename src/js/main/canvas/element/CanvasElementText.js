@@ -190,7 +190,7 @@ export default {
   // make sure we have component-element and the second ref class
   updateHtmlNodesForComponent (nodes) {
     for (const node of nodes) {
-      if (!node.classList.contains('component-element')) {
+      if (HelperDOM.getTag(node) !== 'br' && !node.classList.contains('component-element')) {
         node.classList.add('component-element')
       }
       if (HelperElement.getAllRefs(node).length === 1) {

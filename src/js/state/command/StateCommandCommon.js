@@ -44,7 +44,7 @@ export default {
       await this.overrideAttributes(element, ExtendJS.cloneData(attributes))
     }
     // when we have no filter, we remove all attributes
-    if (!filter) HelperDOM.removeAttributes(element)
+    if (!filter) HelperDOM.removeAllAttributes(element)
     for (const [name, value] of Object.entries(attributes)) {
       if (filter && name === 'class') {
         if (value) this.appendAttributeClass(element.classList, value.split(' '))

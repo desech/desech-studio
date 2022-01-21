@@ -118,19 +118,11 @@ export default {
     return HelperDOM.changeTag(node, tag, document)
   },
 
-  cleanAttributes (node) {
-    for (const attr of node.attributes) {
-      if (this.getRemovedAttributes().includes(attr.name)) {
-        node.removeAttributeNS(null, attr.name)
-      }
-    }
-  },
-
   // check RightHtmlCommon.getIgnoredAttributes()
-  getRemovedAttributes () {
-    // we remove the component data, because we add it with addComponentDataToRoot() at the end,
-    // and with setComponentInstanceData() on the div node
-    return ['data-ss-tag', 'data-ss-token', 'data-ss-component']
+  // we remove the component data, because we add it with addComponentDataToRoot() at the end,
+  // and with setComponentInstanceData() on the div node
+  cleanAttributes (node) {
+    HelperDOM.removeAttributes(node, ['data-ss-tag', 'data-ss-token', 'data-ss-component'])
   },
 
   cleanClasses (node, checkComponent = true) {

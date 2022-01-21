@@ -154,9 +154,17 @@ export default {
     return result
   },
 
-  removeAttributes (element) {
-    while (element.attributes.length > 0) {
-      element.removeAttributeNS(null, element.attributes[0].name)
+  removeAttributes (node, attributes) {
+    for (const name of attributes) {
+      if (node.hasAttributeNS(null, name)) {
+        node.removeAttributeNS(null, name)
+      }
+    }
+  },
+
+  removeAllAttributes (node) {
+    while (node.attributes.length > 0) {
+      node.removeAttributeNS(null, node.attributes[0].name)
     }
   },
 

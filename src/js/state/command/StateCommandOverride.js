@@ -11,6 +11,13 @@ import StateCommandComponent from './StateCommandComponent.js'
 
 export default {
   async overrideElement (element, type, value, reload = true) {
+    // any change to an inline element, will override the entire parent text element
+    // this is because react export doesn't allow overrides inside text
+    if (HelperElement.getType(element) === 'inline') {
+      element = element.closest('.text')
+      type = 'inner'
+      value = element.innerHTML
+    }
     if (!HelperComponent.belongsToAComponent(element)) return
     const parents = HelperOverride.getElementParents(element)
     if (!parents.length) return

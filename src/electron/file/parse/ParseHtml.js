@@ -318,8 +318,12 @@ export default {
     HelperDOM.addRemoveAttribute(node, 'class', classes.join(' '))
   },
 
-  // it's important that we set the `inner` first and then the attributes
-  // this allows us to change the text and also add attributes to our new inline elements
+  // we first set the `inner` text and then the attributes, which allows us to overwrite
+  // attributes/etc on new inline elements
+  // but because of react and how we set the inner text, we can't have variables, which means
+  // no overrides for inline elements
+  // this forces us to replace the entire inner text, even if you change an attribute on an
+  // inner bold text element
   setBasic (node, type, component) {
     if (!node.getAttributeNS(null, 'class')) {
       throw new Error(`Unknown ${type} element ${HelperDOM.escapeHtml(node.outerHTML)}`)

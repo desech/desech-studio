@@ -232,9 +232,13 @@ export default {
 
   buildDataVariant (variants) {
     // data-variant="foo-var=bar-val foo2=bar2 foo3=bar3"
-    if (!variants) return ''
-    return Object.entries(variants).reduce((array, variant) => {
-      return [...array, variant.join('=')]
-    }, []).join(' ')
+    // if the value is empty, it will skip the variant
+    // if no variants are set or the component has no variants, then it will show an empty space
+    if (!variants) return ' '
+    const list = []
+    for (const [name, val] of Object.entries(variants)) {
+      if (val) list.push(`${name}=${val}`)
+    }
+    return list.length ? list.join(' ') : ' '
   }
 }

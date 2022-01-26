@@ -12,7 +12,7 @@ export default {
   getEvents () {
     return {
       click: ['clickAttrButtonEvent'],
-      change: ['changeAttrFieldEvent']
+      change: ['changeAttrFieldEvent', 'changeTextareaValueEvent']
     }
   },
 
@@ -29,6 +29,12 @@ export default {
   async changeAttrFieldEvent (event) {
     if (event.target.classList.contains('style-html-field')) {
       await this.setFieldAttribute(event.target)
+    }
+  },
+
+  async changeTextareaValueEvent (event) {
+    if (event.target.classList.contains('style-html-textarea-value')) {
+      await this.setTextareaValue(event.target)
     }
   },
 
@@ -56,6 +62,10 @@ export default {
       // @todo bug: still doesn't reset <progress>
       StateSelectedElement.getElement().value = field.value
     }
+  },
+
+  async setTextareaValue (field) {
+    await RightHtmlCommon.changeTextareaValue(field.value)
   },
 
   injectDetails (template, overrides) {
@@ -133,7 +143,11 @@ export default {
   },
 
   injectFormSvg (form, data) {
-    RightHtmlDetailTag.injectSvg(data.element, form.elements.code)
+    form.elements.code.value = data.element.innerHTML.replace(/\s\s+/g, '')
+  },
+
+  injectFormTextarea (form, data) {
+    form.elements.inner.value = data.element.innerHTML
   },
 
   injectFormImg (form, data) {

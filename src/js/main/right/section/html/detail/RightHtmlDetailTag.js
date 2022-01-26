@@ -156,10 +156,6 @@ export default {
     await RightHtmlDetailOption.setOptions(list)
   },
 
-  injectSvg (element, textarea) {
-    textarea.value = element.innerHTML.replace(/\s\s+/g, '')
-  },
-
   async updateSvgCode (fields) {
     const node = await this.getSvgNode(fields.code.value.trim(), fields.viewBox.value)
     if (!node) return

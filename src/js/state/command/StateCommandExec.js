@@ -190,6 +190,13 @@ export default {
     await StateCommandOverride.overrideElement(element, 'inner', data.inner)
   },
 
+  async changeTextarea (data) {
+    const element = HelperElement.getElement(data.ref)
+    if (!element) return
+    element.innerHTML = data.inner
+    await StateCommandOverride.overrideElement(element, 'inner', data.inner)
+  },
+
   async changeAttribute (data) {
     const element = HelperElement.getElement(data.ref)
     if (!element) return

@@ -96,7 +96,7 @@ export default {
 
   processRefOverrides (currentFile, parentFileRef, cmpData, ref, overrides, imports) {
     if (cmpData.tag) overrides[ref].tag = true
-    if (cmpData.inner) overrides[ref].inner = true
+    if ('inner' in cmpData) overrides[ref].inner = true
     this.processUnrender(cmpData.attributes, overrides[ref])
     this.processObject(cmpData.attributes, overrides[ref], 'attributes')
     this.processObject(cmpData.properties, overrides[ref], 'properties')

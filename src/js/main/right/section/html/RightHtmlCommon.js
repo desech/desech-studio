@@ -165,5 +165,28 @@ export default {
     }
     StateCommand.stackCommand(cmd)
     if (execute) await StateCommand.executeCommand(cmd.do)
+  },
+
+  async changeTextareaValue (newVal, execute = true) {
+    const ref = StateSelectedElement.getRef()
+    const element = StateSelectedElement.getElement()
+    const command = this.getTextareaValueCmd(ref, element.innerHTML, newVal)
+    StateCommand.stackCommand(command)
+    if (execute) await StateCommand.executeCommand(command.do)
+  },
+
+  getTextareaValueCmd (ref, currentVal, newVal) {
+    return {
+      do: {
+        command: 'changeTextarea',
+        ref,
+        inner: newVal
+      },
+      undo: {
+        command: 'changeTextarea',
+        ref,
+        inner: currentVal
+      }
+    }
   }
 }

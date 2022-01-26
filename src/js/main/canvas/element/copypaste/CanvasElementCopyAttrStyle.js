@@ -89,7 +89,7 @@ export default {
   },
 
   getContent (element, type) {
-    if (['icon', 'video', 'audio', 'dropdown'].includes(type)) {
+    if (['icon', 'textarea', 'video', 'audio', 'dropdown'].includes(type)) {
       return element.innerHTML
     }
     return null

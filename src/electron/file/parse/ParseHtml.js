@@ -103,6 +103,8 @@ export default {
       this.setDropdownElement(node, tag, component, ref)
     } else if (tag === 'svg') {
       this.setIconElement(node, component, ref)
+    } else if (tag === 'textarea') {
+      this.setTextareaElement(node, component, ref)
     } else if (tag === 'img') {
       this.setImageElement(node, component)
     } else if (tag === 'video' || tag === 'audio') {
@@ -128,7 +130,6 @@ export default {
       iframe: 'iframe',
       object: 'object',
       canvas: 'canvas',
-      textarea: 'textarea',
       progress: 'progress',
       meter: 'meter'
     }
@@ -362,6 +363,11 @@ export default {
         this.formatSvgChildren(child.children)
       }
     }
+  },
+
+  setTextareaElement (node, component, ref) {
+    ParseOverride.setOverrideInner(node, component?.data?.fullOverrides, ref)
+    this.setBasic(node, 'textarea', component)
   },
 
   setImageElement (node, component) {

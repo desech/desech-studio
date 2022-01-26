@@ -126,7 +126,11 @@ export default {
 
   // certain properties can't be overridden
   isOverridable (name) {
-    return !['reactIf', 'reactFor', 'reactIfFor', 'reactForIf'].includes(name)
+    const array = [
+      'reactIf', 'reactFor', 'reactIfFor', 'reactForIf',
+      'v-if', 'v-for', ':key'
+    ]
+    return !array.includes(name)
   },
 
   // attributes: update, delete, update-delete

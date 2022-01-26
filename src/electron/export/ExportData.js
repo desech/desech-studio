@@ -2,12 +2,17 @@ import ExtendJS from '../../js/helper/ExtendJS.js'
 import File from '../file/File.js'
 
 export default {
+  // we need these temporary values to figure out the parent of the component override
+  _tmpParentImports: {},
+  _tmpRefFileMap: {},
+
   getAllComponentData (files, folder) {
     const data = this.getEmptyData()
     for (const file of files) {
       this.getComponentDataPerFile(file, folder, data)
     }
     ExtendJS.clearEmptyObjects(data.overrides)
+    this.setParentImports(data.imports.parentOverrides)
     return data
   },
 
@@ -18,13 +23,13 @@ export default {
       variants: {},
       // this is used for importing default and overridden components
       // topOverrides is used by React where the component class is set on the top component
-      // closeOverrides is used by Vue where the component class is set right on the closest
+      // parentOverrides is used by Vue where the component class is set right on the closest
       // component that overrides that value
       // {'component/foo.html': ['component/bar.html', 'component/baz.html']}
       imports: {
         default: {},
         topOverrides: {},
-        closeOverrides: {}
+        parentOverrides: {}
       },
       // this is used for creating the override code
       // {e0ref: {tag: true, inner: true, component: true}}
@@ -47,7 +52,8 @@ export default {
   processComponentData (currentFile, json, data) {
     this.addMainVariants(currentFile, json, data.variants)
     this.addDefaultImports(currentFile, json, data.imports.default)
-    this.addOverrides(currentFile, json.file, json, data.overrides, data.imports)
+    const parentFileRef = json.file || currentFile
+    this.addOverrides(currentFile, parentFileRef, json, data.overrides, data.imports)
   },
 
   addMainVariants (currentFile, json, data) {
@@ -62,30 +68,33 @@ export default {
     if (!data[currentFile].includes(json.file)) {
       data[currentFile].push(json.file)
     }
+    this._tmpRefFileMap[json.ref] = json.file
   },
 
-  addOverrides (currentFile, cmpFile, json, overrides, imports) {
+  // we process both the instance overrides and the main variants of a component
+  addOverrides (currentFile, parentFileRef, json, overrides, imports) {
     for (const key of Object.keys(json)) {
       if (key.startsWith('e0')) {
-        this.addRefOverrides(currentFile, cmpFile, key, json, overrides, imports)
+        this.addRefOverrides(currentFile, parentFileRef, key, json, overrides, imports)
       } else if (json[key] && typeof json[key] === 'object') {
-        this.addOverrides(currentFile, cmpFile, json[key], overrides, imports)
+        this.addOverrides(currentFile, parentFileRef, json[key], overrides, imports)
       }
     }
   },
 
-  addRefOverrides (currentFile, cmpFile, ref, json, overrides, imports) {
+  addRefOverrides (currentFile, parentFileRef, ref, json, overrides, imports) {
     const clone = ExtendJS.cloneData(json[ref])
     if (clone.children) {
       delete clone.children
-      this.addOverrides(currentFile, cmpFile, json[ref], overrides, imports)
+      // we now switch the parentFileRef from a file to a ref id
+      this.addOverrides(currentFile, ref, json[ref], overrides, imports)
     }
     if (ExtendJS.isEmpty(clone)) return
     if (!overrides[ref]) overrides[ref] = {}
-    this.processRefOverrides(currentFile, cmpFile, clone, ref, overrides, imports)
+    this.processRefOverrides(currentFile, parentFileRef, clone, ref, overrides, imports)
   },
 
-  processRefOverrides (currentFile, cmpFile, cmpData, ref, overrides, imports) {
+  processRefOverrides (currentFile, parentFileRef, cmpData, ref, overrides, imports) {
     if (cmpData.tag) overrides[ref].tag = true
     if (cmpData.inner) overrides[ref].inner = true
     this.processUnrender(cmpData.attributes, overrides[ref])
@@ -94,7 +103,7 @@ export default {
     this.processObject(cmpData.classes, overrides[ref], 'classes')
     if (cmpData.component) {
       overrides[ref].component = true
-      this.addOverrideImports(currentFile, cmpFile, cmpData.component, ref, imports)
+      this.addOverrideImports(currentFile, parentFileRef, cmpData.component, imports)
     }
   },
 
@@ -139,14 +148,26 @@ export default {
     }
   },
 
-  addOverrideImports (currentFile, parentFile, cmpFile, ref, imports) {
+  addOverrideImports (currentFile, parentFileRef, value, imports) {
     if (!imports.topOverrides[currentFile]) imports.topOverrides[currentFile] = []
-    if (!imports.topOverrides[currentFile].includes(cmpFile)) {
-      imports.topOverrides[currentFile].push(cmpFile)
+    if (!imports.topOverrides[currentFile].includes(value)) {
+      imports.topOverrides[currentFile].push(value)
     }
-    if (!imports.closeOverrides[parentFile]) imports.closeOverrides[parentFile] = []
-    if (!imports.closeOverrides[parentFile].includes(cmpFile)) {
-      imports.closeOverrides[parentFile].push(cmpFile)
+    if (!this._tmpParentImports[parentFileRef]) this._tmpParentImports[parentFileRef] = []
+    this._tmpParentImports[parentFileRef].push(value)
+  },
+
+  setParentImports (imports) {
+    for (const [parentFileRef, files] of Object.entries(this._tmpParentImports)) {
+      if (parentFileRef.startsWith('e0')) {
+        this.setParentImportFiles(imports, this._tmpRefFileMap[parentFileRef], files)
+      } else {
+        this.setParentImportFiles(imports, parentFileRef, files)
+      }
     }
+  },
+
+  setParentImportFiles (imports, file, files) {
+    imports[file] = ExtendJS.unique([...imports[file] || [], ...files])
   }
 }

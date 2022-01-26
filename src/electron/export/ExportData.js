@@ -61,9 +61,9 @@ export default {
     if (cmpData.tag) refData.tag = true
     if (cmpData.inner) refData.inner = true
     this.processUnrender(cmpData.attributes, refData)
-    this.processAttributes(cmpData.attributes, refData)
-    this.processAttributes(cmpData.properties, refData, 'properties')
-    this.processAttributes(cmpData.classes, refData, 'classes')
+    this.processData(cmpData.attributes, refData, 'attributes')
+    this.processData(cmpData.properties, refData, 'properties')
+    this.processData(cmpData.classes, refData, 'classes')
     if (cmpData.component) refData.component = true
   },
 
@@ -74,10 +74,10 @@ export default {
     }
   },
 
-  processAttributes (attributes, data, type = 'attributes') {
-    if (ExtendJS.isEmpty(attributes)) return
+  processData (obj, data, type) {
+    if (ExtendJS.isEmpty(obj)) return
     if (!data[type]) data[type] = {}
-    for (const [name, value] of Object.entries(attributes)) {
+    for (const [name, value] of Object.entries(obj)) {
       if (this.isOverridable(name)) {
         data[type][name] = this.setActionValue(value, data[type][name], type)
       }
@@ -89,12 +89,13 @@ export default {
     return !['reactIf', 'reactFor', 'reactIfFor', 'reactForIf'].includes(name)
   },
 
-  // attributes: create, update, delete, update-delete
+  // attributes: update, delete, update-delete
   // classes: create, delete
   setActionValue (value, current, type) {
-    // for classes, we can't have both create and delete at the same time
-    if (type === 'classes') return value.delete ? 'delete' : 'create'
-    // we will set the value to `create` in the export plugin when we check if the attr exists
+    if (type === 'classes') {
+      return value.delete ? 'delete' : 'create'
+    }
+    // type = attributes, properties
     switch (current) {
       case 'update-delete':
         return current

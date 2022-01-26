@@ -221,14 +221,8 @@ export default {
   },
 
   escapeHtml (html) {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    }
-    return html.replace(/[&<>"']/g, m => map[m])
+    const div = document.createElement('div')
+    return div.appendChild(document.createTextNode(html)).parentNode.innerHTML
   },
 
   addRemoveAttribute (node, name, value) {

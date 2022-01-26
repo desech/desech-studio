@@ -16,7 +16,7 @@
           <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
         </svg>
       </button>
-      <button type="button" value="em" class="text-overlay-button small tooltip top" data-tooltip="{{#i18n}} Emphasize {{/i18n}} &lt;em&gt;">
+      <button type="button" value="span" class="text-overlay-button small tooltip top" data-tooltip="{{#i18n}} Span {{/i18n}} &lt;span&gt;">
         <svg width="18" height="18" viewBox="0 0 24 24">
           <path d="M6,14l3,3v5h6v-5l3-3V9H6V14z M11,2h2v3h-2V2z M3.5,5.88l1.41-1.41l2.12,2.12L5.62,8L3.5,5.88z M16.96,6.59l2.12-2.12 l1.41,1.41L18.38,8L16.96,6.59z"/>
         </svg>
@@ -31,6 +31,7 @@
       <select class="text-overlay-select">
         <option value="">{{#i18n}} Other {{/i18n}}</option>
         <optgroup label="{{#i18n}} Common {{/i18n}}">
+          <option value="em">{{#i18n}} Emphasize {{/i18n}} &lt;em&gt;</option>
           <option value="strong">{{#i18n}} Strong importance {{/i18n}} &lt;strong&gt;</option>
           <option value="time">{{#i18n}} Time {{/i18n}} &lt;time&gt;</option>
           <option value="ins">{{#i18n}} Insertion {{/i18n}} &lt;ins&gt;</option>
@@ -52,7 +53,6 @@
           <option value="code">{{#i18n}} Code {{/i18n}} &lt;code&gt;</option>
           <option value="var">{{#i18n}} Variable {{/i18n}} &lt;var&gt;</option>
           <option value="kbd">{{#i18n}} Keyboard input {{/i18n}} &lt;kbd&gt;</option>
-          <option value="span">{{#i18n}} Span (buggy) {{/i18n}} &lt;span&gt;</option>
         </optgroup>
         <optgroup label="{{#i18n}} Language {{/i18n}}">
           <option value="bdo">{{#i18n}} Bidirectional text override {{/i18n}} &lt;bdo&gt;</option>

@@ -1,6 +1,7 @@
 import HelperElement from '../../../helper/HelperElement.js'
 import StateStyleSheet from '../../../state/StateStyleSheet.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
+import HelperDOM from '../../../helper/HelperDOM.js'
 
 export default {
   createElement (type, selection) {
@@ -12,8 +13,6 @@ export default {
   insertElementInSelection (type, selection) {
     const ref = HelperElement.generateElementRef()
     const html = this.getHtmlForTag(type, selection, ref)
-    // @todo fix bug: when using span on a selection on the end of the string,
-    // chrome will ignore it
     document.execCommand('insertHTML', false, html)
     return ref
   },
@@ -21,7 +20,7 @@ export default {
   getHtmlForTag (type, selection, ref) {
     let attributes = `class="${ref} element inline"`
     if (type === 'a') attributes += ' href=""'
-    return `<${type} ${attributes}>${selection}</${type}>`
+    return `<${type} ${attributes}>${HelperDOM.escapeHtml(selection)}</${type}>`
   },
 
   deleteElement (selection) {

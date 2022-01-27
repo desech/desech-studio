@@ -151,7 +151,7 @@ export default {
   isRootMiscFolder (file, htmlFiles) {
     if (file.type !== 'folder') return false
     return ['asset', 'font'].includes(file.name) ||
-      (!['css', 'js', '_desech', '_export', '.git'].includes(file.name) &&
+      (!['css', 'js', '_desech', '_export', '.git', 'component'].includes(file.name) &&
       !this.isHtmlRootFolder(file.path, htmlFiles))
   },
 

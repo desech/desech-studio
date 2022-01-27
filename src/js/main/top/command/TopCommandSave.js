@@ -58,15 +58,14 @@ export default {
   validateElements () {
     if (HelperFile.isPageFile()) return
     const nodes = this.getTopElements()
-    if (!nodes.length) return
-    if (nodes.length > 1) {
+    if (!nodes.length) {
+      throw new Error('At least one element is required')
+    } else if (nodes.length > 1) {
       throw new Error('Only one top/root level element is allowed. ' +
         `Please delete the other ${nodes.length - 1}`)
-    }
-    if (HelperComponent.isComponent(nodes[0])) {
+    } else if (HelperComponent.isComponent(nodes[0])) {
       throw new Error('Components are not allowed as the top/root element')
-    }
-    if (HelperElement.isUnrender(nodes[0])) {
+    } else if (HelperElement.isUnrender(nodes[0])) {
       throw new Error("The top/root element can't be unrendered")
     }
   },

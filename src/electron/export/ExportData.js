@@ -95,15 +95,19 @@ export default {
   },
 
   processRefOverrides (currentFile, parentFileRef, cmpData, ref, overrides, imports) {
-    if (cmpData.tag) overrides[ref].tag = true
+    this.processTag(cmpData.tag, overrides[ref])
     if ('inner' in cmpData) overrides[ref].inner = true
     this.processUnrender(cmpData.attributes, overrides[ref])
     this.processObject(cmpData.attributes, overrides[ref], 'attributes')
     this.processObject(cmpData.properties, overrides[ref], 'properties')
     this.processObject(cmpData.classes, overrides[ref], 'classes')
-    if (cmpData.component) {
-      overrides[ref].component = true
-      this.addOverrideImports(currentFile, parentFileRef, cmpData.component, imports)
+    this.processComponent(cmpData.component, overrides[ref], currentFile, parentFileRef, imports)
+  },
+
+  processTag (value, data) {
+    if (value) {
+      if (!data.tag) data.tag = []
+      data.tag.push(value)
     }
   },
 
@@ -152,7 +156,14 @@ export default {
     }
   },
 
-  addOverrideImports (currentFile, parentFileRef, value, imports) {
+  processComponent (value, data, currentFile, parentFileRef, imports) {
+    if (!value) return
+    if (!data.component) data.component = []
+    data.component.push(value)
+    this.addOverrideImports(value, currentFile, parentFileRef, imports)
+  },
+
+  addOverrideImports (value, currentFile, parentFileRef, imports) {
     if (!imports.topOverrides[currentFile]) imports.topOverrides[currentFile] = []
     if (!imports.topOverrides[currentFile].includes(value)) {
       imports.topOverrides[currentFile].push(value)

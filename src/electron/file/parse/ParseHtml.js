@@ -10,6 +10,7 @@ import ParseCommon from './ParseCommon.js'
 import ParseOverride from './ParseOverride.js'
 import HelperOverride from '../../../js/helper/HelperOverride.js'
 import HelperStyle from '../../../js/helper/HelperStyle.js'
+import Log from '../../lib/Log.js'
 
 export default {
   _document: null,
@@ -327,7 +328,8 @@ export default {
   // inner bold text element
   setBasic (node, type, component) {
     if (!node.getAttributeNS(null, 'class')) {
-      throw new Error(`Unknown ${type} element ${HelperDOM.escapeHtml(node.outerHTML)}`)
+      Log.warn(new Error(`Unknown ${type} element ${node.outerHTML}`)) // async
+      return
     }
     this.setBasicOverrides(node, component?.data?.fullOverrides)
     this.setAbsoluteSource(node)

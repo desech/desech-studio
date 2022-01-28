@@ -128,7 +128,7 @@ export default {
   isOverridable (name) {
     const array = [
       'reactIf', 'reactFor', 'reactIfFor', 'reactForIf',
-      'v-if', 'v-for', ':key'
+      'v-if', 'v-for', ':key', 'v-pre', 'v-cloak', 'v-once'
     ]
     return !array.includes(name)
   },

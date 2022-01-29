@@ -7,7 +7,7 @@ import File from '../../file/File.js'
 export default {
   // components need to be overhauled completely
   async migrate (folder) {
-    await Log.info('Migrating to version 1.3.0')
+    await Log.info('Migrating to version 2.0.0')
     await ProjectCommon.updateHtmlFiles(folder, async (file, html) => {
       await Log.info(`Migrating file ${file}`)
       html = html.replace('<body>', '<body class="e000body">')
@@ -15,7 +15,7 @@ export default {
         .replace(/class="component-children/g, 'data-ss-component-hole="" class="block')
       return this.replaceComponent(html, folder)
     })
-    await Log.info('Migration 1.3.0 finished')
+    await Log.info('Migration 2.0.0 finished')
   },
 
   replaceComponent (html, folder) {

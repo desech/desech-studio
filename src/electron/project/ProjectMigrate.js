@@ -22,7 +22,7 @@ export default {
 
   getMap () {
     return {
-      '1.3.0': migrate130
+      '2.0.0': migrate200
     }
   }
 }

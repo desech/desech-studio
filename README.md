@@ -67,6 +67,8 @@ cat ~/.ssh/id_rsa.pub
 mkdir dev
 cd dev
 git clone ssh://git@git.desech.com:5522/~/desech-download.git
+git config --global user.email "catalin.luntraru@desech.com"
+git config --global user.name "catalin"
 repoctl conf new /home/manjaro/dev/desech-download/pacman/desech-studio.db.tar.zst
 ```
 
@@ -79,9 +81,11 @@ cat ~/.ssh/id_rsa.pub
 mkdir dev
 cd dev
 git clone ssh://git@git.desech.com:5522/~/desech-download.git
+git config --global user.email "catalin.luntraru@desech.com"
+git config --global user.name "catalin"
 ```
 
-## Build Studio Linux
+## Build Studio and update downloads repository
 
 - disconnect VPN
 - change version in `package.json` and `app/package.json`
@@ -103,11 +107,18 @@ Manjaro
 - open software and update
 
 ```sh
+cd /home/manjaro/dev/desech-download
 sudo -s
-repoctl add /home/manjaro/dev/desech-download/pacman/desech-studio-2.0.0-x64.pacman
+repoctl add ./pacman/desech-studio-2.0.0-x64.pacman
   - File Explorer > go to `~/dev/desech-download/pacman`
   - when the lock file disappears cancel the process
   - remove the previous pacman file
+exit
+sudo chown -R manjaro:manjaro *
+git pull
+git add -A
+git commit -am "manjaro"
+git push
 ```
 
 Fedora
@@ -115,11 +126,47 @@ Fedora
 ```sh
 sudo dnf update --refresh && sudo dnf upgrade --refresh && sudo dnf autoremove
 - remove the previous rpm file
-sudo createrepo -v /home/fedora/dev/desech-download/dnf
+cd /home/fedora/dev/desech-download
+sudo createrepo -v ./dnf
+sudo chown -R fedora:fedora *
+git pull
+git add -A
+git commit -am "fedora"
+git push
 ```
 
-- copy everything from `~/share` to sftp
-- leave only the last 2 versions in `apt/pool/stable/d/desech-studio`, `dnf` and `pacman` on sftp
+Windows
+
+```sh
+- check window updates
+- fetch the latest updates from git
+cd Documents/dev/desech-studio
+npm i
+cd app
+npm i
+cd ..
+npm run build-all-prod
+npm run build-win
+- pull and push on the downloads repo
+```
+
+Mac
+
+```sh
+- fetch the latest updates from git
+cd Documents/dev/desech-studio
+npm i
+cd app
+npm i
+cd ..
+npm run build-all-prod
+npm run build-mac
+- pull and push on the downloads repo
+```
+
+## Check updates
+
+Ubuntu
 
 ```sh
 sudo apt update && sudo apt upgrade && sudo apt autoremove
@@ -142,40 +189,10 @@ sudo dnf update --refresh && sudo dnf upgrade
 - open Desech Studio without logging in and see if it updated
 - power off the vm
 
-## Build Studio Windows
+Windows/Mac
 
-- check window updates
-- fetch the latest updates from git
-
-```sh
-cd Documents/dev/desech-studio
-npm i
-cd app
-npm i
-cd ..
-npm run build-all-prod
-npm run build-win
-```
-
-- copy all the new files to sftp and leave only the last 2 versions
 - open Desech Studio without logging in and see if it auto updates
-
-## Build Studio Mac
-
-- fetch the latest updates from git
-
-```sh
-cd Documents/dev/desech-studio
-npm i
-cd app
-npm i
-cd ..
-npm run build-all-prod
-npm run build-mac
-```
-
-- copy all the new files to sftp and leave only the last 2 versions
-- open Desech Studio without logging in and see if it auto updates
+- power off the vm
 
 ## Website update
 

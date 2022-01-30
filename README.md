@@ -161,7 +161,7 @@ npm i
 cd ..
 npm run build-all-prod
 npm run build-mac
-- pull and push on the downloads repo
+- copy the mac files to the desech-download repo and push/pull
 ```
 
 ## Check updates

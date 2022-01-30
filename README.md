@@ -1,8 +1,17 @@
 # Desech Studio
 
-## Install Repo
+## Gpg key
 
-- Open Passwords and keys > Import from file > Desech.gpg (from bitwarden)
+- download the public and secret gpg file from bitwarden
+
+```sh
+cd ~/Downloads
+gpg --import Desech.public.asc
+gpg --import Desech.secret.asc
+gpg --list-keys --with-colons
+```
+
+## Install Repo
 
 ```sh
 sudo apt install rpm alien libarchive-tools reprepro
@@ -95,6 +104,7 @@ sudo apt update && sudo apt upgrade && sudo apt autoremove
 cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86
+- make sure to copy the gpg passphrase now
 reprepro -b ~/dev/desech-download/apt includedeb apt ./dist/desech-studio-2.0.0-amd64.deb
 reprepro -b ~/dev/desech-download/apt list apt
 - remove the previous deb file in apt/pool/stable/d/desech-studio
@@ -164,6 +174,14 @@ npm run build-mac
 - copy the mac files to the desech-download repo and push/pull
 ```
 
+Web server
+
+```sh
+su sftp
+cd /var/sftp/download.desech.com
+git pull
+```
+
 ## Check updates
 
 Ubuntu
@@ -171,7 +189,6 @@ Ubuntu
 ```sh
 sudo apt update && sudo apt upgrade && sudo apt autoremove
 ```
-
 - open Desech Studio and see if it updated
 
 Manjaro
@@ -185,7 +202,6 @@ Fedora
 ```sh
 sudo dnf update --refresh && sudo dnf upgrade
 ```
-
 - open Desech Studio without logging in and see if it updated
 - power off the vm
 

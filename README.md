@@ -147,7 +147,7 @@ npm i
 cd ..
 npm run build-all-prod
 npm run build-win
-- pull and push on the downloads repo
+- copy the windows files to the desech-download repo and push/pull
 ```
 
 Mac

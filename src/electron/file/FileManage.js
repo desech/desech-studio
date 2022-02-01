@@ -57,7 +57,9 @@ export default {
 
   async managePageMove (oldPath, newPath, root) {
     this.updatePageCssFile(oldPath, newPath, root)
-    await this.updateLinkHtml(oldPath, newPath, root)
+    // we can't update the <a href=""> links because they can start with a slash or without
+    // and we need to be as specific as possible when doing the regex replace,
+    // otherwise we can wrongly change component file data or application text
   },
 
   updatePageCssFile (oldPath, newPath, root) {
@@ -85,22 +87,14 @@ export default {
   },
 
   async manageMediaMove (oldPath, newPath, root) {
-    await this.updateLinkHtml(oldPath, newPath, root)
-    await this.updateLinkCss(oldPath, newPath, root)
+    await this.updateMediaInFiles('updateHtmlFiles', oldPath, newPath, root)
+    await this.updateMediaInFiles('updateCssFiles', oldPath, newPath, root)
   },
 
-  async updateLinkHtml (oldPath, newPath, root) {
+  async updateMediaInFiles (fnc, oldPath, newPath, root) {
     const oldLink = File.relative(root, oldPath)
     const newLink = File.relative(root, newPath)
-    await ProjectCommon.updateHtmlFiles(root, async (file, html) => {
-      return html.replaceAll(oldLink, newLink)
-    })
-  },
-
-  async updateLinkCss (oldPath, newPath, root) {
-    const oldLink = File.relative(root, oldPath)
-    const newLink = File.relative(root, newPath)
-    await ProjectCommon.updateCssFiles(root, async (file, html) => {
+    await ProjectCommon[fnc](root, async (file, html) => {
       return html.replaceAll(oldLink, newLink)
     })
   },

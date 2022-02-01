@@ -105,11 +105,15 @@ cd ~/dev/desech-studio
 npm run build-all-prod
 npm run build-linux-x86
 - make sure to copy the gpg passphrase now
-reprepro -b ~/dev/desech-download/apt includedeb apt ./dist/desech-studio-2.0.0-amd64.deb
+reprepro -b ~/dev/desech-download/apt includedeb apt ./dist/desech-studio-2.0.1-amd64.deb
 reprepro -b ~/dev/desech-download/apt list apt
-- remove the previous deb file in apt/pool/stable/d/desech-studio
-cp ./dist/desech-studio-2.0.0-x86_64.rpm ~/dev/desech-download/dnf
-cp ./dist/desech-studio-2.0.0-x64.pacman ~/dev/desech-download/pacman
+cp ./dist/desech-studio-2.0.1-x86_64.rpm ~/dev/desech-download/dnf
+cp ./dist/desech-studio-2.0.1-x64.pacman ~/dev/desech-download/pacman
+
+cd ../desech-download
+git add -A
+git commit -am "ubuntu"
+git push
 ```
 
 Manjaro
@@ -117,15 +121,19 @@ Manjaro
 - open software and update
 
 ```sh
-cd /home/manjaro/dev/desech-download
+cd ~/dev/desech-download
+git pull
+
+- open a new tab (CTRL+SHIFT+T)
+- next time try to sudo repoctl
 sudo -s
-repoctl add ./pacman/desech-studio-2.0.0-x64.pacman
+repoctl add ./pacman/desech-studio-2.0.1-x64.pacman
   - File Explorer > go to `~/dev/desech-download/pacman`
   - when the lock file disappears cancel the process
   - remove the previous pacman file
-exit
-sudo chown -R manjaro:manjaro *
-git pull
+chown -R manjaro:manjaro *
+
+- back to the other tab
 git add -A
 git commit -am "manjaro"
 git push
@@ -136,10 +144,10 @@ Fedora
 ```sh
 sudo dnf update --refresh && sudo dnf upgrade --refresh && sudo dnf autoremove
 - remove the previous rpm file
-cd /home/fedora/dev/desech-download
+cd ~/dev/desech-download
+git pull
 sudo createrepo -v ./dnf
 sudo chown -R fedora:fedora *
-git pull
 git add -A
 git commit -am "fedora"
 git push

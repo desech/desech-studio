@@ -1,4 +1,4 @@
-import { app, shell } from 'electron'
+import { app } from 'electron'
 import AdmZip from 'adm-zip'
 import archiver from 'archiver'
 import fse from 'fs-extra'
@@ -7,17 +7,17 @@ import beautify from 'js-beautify'
 import jsdom from 'jsdom'
 import fetch from 'node-fetch'
 import fs from 'fs'
-import os from 'os'
 import File from '../file/File.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import HelperPlugin from '../../js/helper/HelperPlugin.js'
 import Zip from '../file/Zip.js'
-import HelperFile from '../../js/helper/HelperFile.js'
 import Config from './Config.js'
 import Electron from './Electron.js'
 import Language from './Language.js'
 import Log from './Log.js'
 import Fetch from './Fetch.js'
+import ExtendJS from '../../js/helper/ExtendJS.js'
+import packageJson from '../../../package.json' assert { type: 'json' }
 
 export default {
   _DIR: null,
@@ -45,10 +45,16 @@ export default {
   },
 
   async updatePlugin (plugin) {
-    if (!plugin.autoupdate) return
+    if (!this.canUpdate(plugin)) return
     const data = await this.fetchPluginData(plugin.url)
     if (plugin.version === data.version) return
     await this.copyPlugin(plugin.url)
+  },
+
+  canUpdate (data) {
+    // @todo remove the `autoupdate` lowercase check in April (added on 1 Feb)
+    return (data.autoupdate || data.autoUpdate) &&
+      (!data.requires || ExtendJS.versionCompare(packageJson.version, data.requires) >= 0)
   },
 
   async fetchPluginData (repoUrl) {

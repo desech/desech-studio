@@ -52,9 +52,11 @@
 }
 
 .sidebar-right #html-section .slider-extra-container form:not([data-type="email"]) .html-show-email,
-.sidebar-right #html-section .slider-extra-container form:not([data-type="number"]) .html-show-number,
+.sidebar-right #html-section .slider-extra-container form:not([data-type="number"]):not([data-type="date"]) .html-show-number,
+.sidebar-right #html-section .slider-extra-container form:not([data-type="number"]):not([data-type="date"]) .html-show-date,
 .sidebar-right #html-section .slider-extra-container form[data-type="password"] .html-hide-password,
 .sidebar-right #html-section .slider-extra-container form[data-type="number"] .html-hide-number,
+.sidebar-right #html-section .slider-extra-container form[data-type="date"] .html-hide-date,
 .sidebar-right #html-section .slider-extra-container form[data-type="hidden"] .html-hide-hidden,
 .sidebar-right #html-section .slider-extra-container[data-type="audio"] form .html-hide-audio {
   display: none;

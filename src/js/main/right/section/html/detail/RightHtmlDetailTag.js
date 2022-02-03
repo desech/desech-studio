@@ -231,7 +231,9 @@ export default {
   },
 
   updateInputTypeForm (select) {
-    select.closest('form').dataset.type = select.value
+    const dateTypes = ['date', 'time', 'datetime-local']
+    const value = dateTypes.includes(select.value) ? 'date' : select.value
+    select.closest('form').dataset.type = value
   },
 
   async setInputTextType (type) {

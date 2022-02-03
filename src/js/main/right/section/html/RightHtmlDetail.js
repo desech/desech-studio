@@ -131,7 +131,7 @@ export default {
   },
 
   injectCustomLogic (form, data) {
-    const name = ExtendJS.capitalize(ExtendJS.toCamelCase(data.template))
+    const name = ExtendJS.capitalize(data.template)
     const method = `injectForm${name}`
     if (typeof this[method] !== 'undefined') {
       this[method](form, data)

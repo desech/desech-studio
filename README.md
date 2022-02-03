@@ -94,6 +94,12 @@ git config --global user.email "catalin.luntraru@desech.com"
 git config --global user.name "catalin"
 ```
 
+## Html elements to watch out for
+
+- [All Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
+- [Dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
+  - soon to be implemented - https://caniuse.com/dialog
+
 ## Build Studio and update downloads repository
 
 - disconnect VPN

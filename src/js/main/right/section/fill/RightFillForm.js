@@ -28,26 +28,26 @@ export default {
   },
 
   async changeFillType (select) {
-    if (await this.validateFillNone(select)) return
+    if (await this.validateGeneralFill(select)) return
     const form = select.closest('form.slide-container')
     const elemIndex = RightFillCommon.getActiveElementIndex(form.closest('#fill-section'))
     this.addMain(form, { type: select.value, value: '' }, elemIndex)
     await this.updateFill(form)
   },
 
-  async validateFillNone (select) {
-    if (select.value !== 'none') return
-    this.cleanForFillNone(select.closest('.sidebar-section'))
+  async validateGeneralFill (select) {
+    if (!RightCommon.isGeneralValue(select.value)) return
+    this.cleanForGeneralFill(select.closest('.sidebar-section'), select.value)
     const properties = RightFillCommon.getAllBlankProperties()
-    properties['background-image'] = 'none'
+    properties['background-image'] = select.value
     await RightCommon.changeStyle(properties)
     return true
   },
 
-  cleanForFillNone (container) {
+  cleanForGeneralFill (container, value) {
     const list = container.getElementsByClassName('fill-list')[0]
     HelperDOM.deleteChildren(list)
-    RightFillCommon.insertElement(list, 'none')
+    RightFillCommon.insertElement(list, value)
     const picker = container.getElementsByClassName('background-fill-container')[0]
     HelperDOM.deleteChildren(picker)
   },

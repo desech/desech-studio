@@ -1,6 +1,7 @@
 import HelperColor from '../../../../../helper/HelperColor.js'
 import ColorPickerSwatch from '../../../../../component/color-picker/ColorPickerSwatch.js'
 import ColorPickerSolidColor from '../../../../../component/color-picker/ColorPickerSolidColor.js'
+import RightCommon from '../../../RightCommon.js'
 
 export default {
   getColorHex (color) {
@@ -27,14 +28,6 @@ export default {
 
   getEffectProperties () {
     return ['filter', 'box-shadow', 'transform', 'transition', 'mix-blend-mode']
-  },
-
-  getGeneralValues () {
-    return ['none', 'inherit', 'initial', 'unset']
-  },
-
-  isGeneralValue (value) {
-    return this.getGeneralValues().includes(value)
   },
 
   getDefaultCreateValue (property) {

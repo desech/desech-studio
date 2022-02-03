@@ -68,8 +68,21 @@ async function buildHtml (locale) {
     }
   }
 
-  // effects list
-  const effects = {
+  // i18n words
+  const words = {
+    // general css values
+    none: Language.localize('None'),
+    inherit: Language.localize('Inherit'),
+    initial: Language.localize('Initial'),
+    revert: Language.localize('Revert'),
+    unset: Language.localize('Unset'),
+
+    // fills
+    'linear-gradient': Language.localize('Linear gradient'),
+    'radial-gradient': Language.localize('Radial gradient'),
+    image: Language.localize('Image'),
+
+    // effects
     filter: Language.localize('Filter'),
     transform: Language.localize('Transform'),
     'drop-shadow': Language.localize('Drop shadow'),
@@ -91,11 +104,7 @@ async function buildHtml (locale) {
     matrix: Language.localize('Matrix'),
     matrix3d: Language.localize('Matrix 3D'),
     transition: Language.localize('Transition'),
-    'mix-blend-mode': Language.localize('Blend mode'),
-    none: Language.localize('None'),
-    inherit: Language.localize('Inherit'),
-    initial: Language.localize('Initial'),
-    unset: Language.localize('Unset')
+    'mix-blend-mode': Language.localize('Blend mode')
   }
 
   // about details
@@ -112,7 +121,7 @@ async function buildHtml (locale) {
       about,
       popularFonts,
       categoryFonts,
-      effectNames: JSON.stringify(effects)
+      words: JSON.stringify(words)
     }
   }).replace('<html lang="">', `<html lang="${locale}">`)
 

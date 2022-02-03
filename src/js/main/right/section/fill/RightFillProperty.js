@@ -73,10 +73,6 @@ export default {
     return HelperParserBackground.getBackgroundValues(source)
   },
 
-  getBackgroundsFromStyle (style) {
-    return HelperParserBackground.getBackgroundValues(style['background-image'])
-  },
-
   getBackgroundAtIndex (index) {
     const backgrounds = this.getBackgrounds()
     return backgrounds[index] || ''

@@ -124,7 +124,7 @@ export default {
   injectBackgroundSize (container, fields, selector, elemIndex) {
     const value = RightFillProperty.getBackgroundPropertyAtIndex(selector, 'background-size',
       elemIndex)
-    if (['cover', 'contain', 'inherit', 'initial', 'unset'].includes(value)) {
+    if (['cover', 'contain', 'inherit', 'initial', 'revert', 'unset'].includes(value)) {
       fields.size.value = value
     } else if (value !== 'auto') {
       // ignore the default auto value

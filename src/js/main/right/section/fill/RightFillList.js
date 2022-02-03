@@ -6,6 +6,7 @@ import RightFillImage from './RightFillImage.js'
 import RightFillCommon from './RightFillCommon.js'
 import RightCommon from '../../RightCommon.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
+import HelperParserBackground from '../../../../helper/parser/HelperParserBackground.js'
 
 export default {
   getEvents () {
@@ -46,7 +47,7 @@ export default {
   },
 
   async addElement (button) {
-    if (this.fillIsNone()) return
+    if (this.fillIsGeneral()) return
     const form = button.closest('form#fill-section')
     const list = form.getElementsByClassName('panel-list')[0]
     this.hideColorPicker(form)
@@ -57,13 +58,11 @@ export default {
     RightCommon.toggleSidebarSection(form)
   },
 
-  fillIsNone (style = null) {
-    // don't allow other backgrounds when we have set it to none
+  fillIsGeneral () {
+    // don't allow other backgrounds when we have set it to a general value
     // you will have to delete this one before adding other backgrounds
-    const bg = style
-      ? style['background-image']
-      : StateStyleSheet.getPropertyValue('background-image')
-    return (bg === 'none')
+    const value = StateStyleSheet.getPropertyValue('background-image')
+    return RightCommon.isGeneralValue(value)
   },
 
   showColorPicker (container) {
@@ -119,7 +118,7 @@ export default {
   },
 
   editElement (li) {
-    if (this.fillIsNone()) return
+    if (this.fillIsGeneral()) return
     if (!li.classList.contains('active')) {
       this.enableEditElement(li)
     } else {
@@ -146,11 +145,12 @@ export default {
   },
 
   injectList (container, data) {
+    const value = data.style['background-image']
     const list = container.getElementsByClassName('fill-list')[0]
-    if (this.fillIsNone(data.style)) {
-      RightFillCommon.insertElement(list, 'none')
+    if (RightCommon.isGeneralValue(value)) {
+      RightFillCommon.insertElement(list, value)
     } else {
-      const backgrounds = RightFillProperty.getBackgroundsFromStyle(data.style)
+      const backgrounds = HelperParserBackground.getBackgroundValues(value)
       for (const background of backgrounds) {
         RightFillCommon.insertElement(list, background)
       }

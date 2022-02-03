@@ -57,7 +57,7 @@ export default {
 
   getDefaultEffectOnCreate () {
     const css = StateStyleSheet.getCurrentStyleObject()
-    const general = RightEffectCommon.getGeneralValues()
+    const general = RightCommon.getGeneralValues()
     const effects = RightEffectCommon.getEffectProperties()
     for (const property of effects) {
       if (general.includes(css[property])) continue
@@ -141,7 +141,7 @@ export default {
   },
 
   editElement (li) {
-    if (RightEffectCommon.isGeneralValue(li.dataset.subtype)) {
+    if (RightCommon.isGeneralValue(li.dataset.subtype)) {
       return
     }
     if (!li.classList.contains('active')) {

@@ -1,6 +1,8 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperColor from '../../../../helper/HelperColor.js'
 import HelperParserBackground from '../../../../helper/parser/HelperParserBackground.js'
+import RightCommon from '../../RightCommon.js'
+import HelperTranslate from '../../../../helper/HelperTranslate.js'
 
 export default {
   getActiveElementIndex (container) {
@@ -21,32 +23,27 @@ export default {
 
   setElementData (elem, value) {
     elem.getElementsByClassName('fill-color')[0].style.backgroundImage = value
-    elem.getElementsByClassName('fill-name')[0].textContent = this.getElementName(elem, value)
+    elem.getElementsByClassName('fill-name')[0].textContent = this.getElementName(value)
   },
 
-  getElementName (elem, value) {
-    if (value === 'none') return 'None'
+  getElementName (value) {
+    const words = HelperTranslate.getWords()
+    if (RightCommon.isGeneralValue(value)) return words[value]
     const solid = HelperParserBackground.convertBgToColor(value)
     if (HelperColor.isSolidColor(solid)) {
       return this.getBgImageColor(solid)
     } else if (value.includes('linear-gradient(')) {
-      return this.getBgImageText(elem, 'linearGradient')
+      return words['linear-gradient']
     } else if (value.includes('radial-gradient(')) {
-      return this.getBgImageText(elem, 'radialGradient')
-    } else {
-      // image
-      return this.getBgImageText(elem, 'image')
+      return words['radial-gradient']
+    } else { // image
+      return words.image
     }
   },
 
   getBgImageColor (color) {
     const rgb = HelperColor.extractRgb(color)
     return '#' + HelperColor.rgbToHex(rgb[0], rgb[1], rgb[2])
-  },
-
-  getBgImageText (elem, type) {
-    // type = linearGradient, radialGradient, image
-    return elem.parentNode.dataset[type]
   },
 
   getAllBlankProperties () {

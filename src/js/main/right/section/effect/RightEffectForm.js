@@ -34,7 +34,7 @@ export default {
   },
 
   async validateGeneralValue (container, property, value) {
-    const values = RightEffectCommon.getGeneralValues()
+    const values = RightCommon.getGeneralValues()
     if (!values.includes(value)) return
     this.cleanForGeneralValue(container, property, value)
     await RightCommon.changeStyle({ [property]: value })
@@ -71,7 +71,7 @@ export default {
   disableSwitchOptions (select) {
     // disable the option groups for effects with general values like `none`, `inherit` etc
     const css = StateStyleSheet.getCurrentStyleObject()
-    const general = RightEffectCommon.getGeneralValues()
+    const general = RightCommon.getGeneralValues()
     const effects = RightEffectCommon.getEffectProperties()
     for (const property of effects) {
       if (!general.includes(css[property])) continue

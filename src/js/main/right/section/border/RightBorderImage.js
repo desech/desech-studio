@@ -87,7 +87,7 @@ export default {
   async changeRepeat (fields) {
     let value = (fields.repeat1.value || 'stretch') + ' ' +
       (fields.repeat2.value || 'stretch')
-    for (const check of ['inherit', 'initial', 'unset']) {
+    for (const check of RightCommon.getGeneralValues(false)) {
       if (value.includes(check)) value = check
     }
     await RightCommon.changeStyle({ 'border-image-repeat': value })

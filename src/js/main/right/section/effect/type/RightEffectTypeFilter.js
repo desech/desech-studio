@@ -4,6 +4,7 @@ import InputUnitField from '../../../../../component/InputUnitField.js'
 import HelperDOM from '../../../../../helper/HelperDOM.js'
 import HelperStyle from '../../../../../helper/HelperStyle.js'
 import RightEffectCommon from './RightEffectCommon.js'
+import RightCommon from '../../../RightCommon.js'
 
 export default {
   getTemplate (type) {
@@ -13,7 +14,7 @@ export default {
 
   getParsedValues (style = null) {
     const value = style ? style.filter : StateStyleSheet.getPropertyValue('filter')
-    if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
+    if (RightCommon.isGeneralValue(value)) return [{ value }]
     return this.parseCSS(value)
   },
 

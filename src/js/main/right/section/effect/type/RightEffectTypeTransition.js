@@ -3,7 +3,7 @@ import HelperStyle from '../../../../../helper/HelperStyle.js'
 import InputUnitField from '../../../../../component/InputUnitField.js'
 import HelperDOM from '../../../../../helper/HelperDOM.js'
 import TimingFunction from '../../../../../component/TimingFunction.js'
-import RightEffectCommon from './RightEffectCommon.js'
+import RightCommon from '../../../RightCommon.js'
 
 export default {
   getTemplate () {
@@ -12,7 +12,7 @@ export default {
 
   getParsedValues (style = null) {
     const value = style ? style.transition : StateStyleSheet.getPropertyValue('transition')
-    if (RightEffectCommon.isGeneralValue(value)) return [{ value }]
+    if (RightCommon.isGeneralValue(value)) return [{ value }]
     return this.parseCSS(value)
   },
 

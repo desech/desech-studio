@@ -180,5 +180,15 @@ export default {
 
   checkExists (overrides, selectors) {
     return Boolean(!ExtendJS.isEmpty(overrides) || selectors.length)
+  },
+
+  getGeneralValues (withNone = true) {
+    const array = ['inherit', 'initial', 'revert', 'unset']
+    if (withNone) array.unshift('none')
+    return array
+  },
+
+  isGeneralValue (value, withNone = true) {
+    return this.getGeneralValues(withNone).includes(value)
   }
 }

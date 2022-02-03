@@ -9,6 +9,7 @@ import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightEffectCommon from './type/RightEffectCommon.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import RightCommon from '../../RightCommon.js'
+import HelperTranslate from '../../../../helper/HelperTranslate.js'
 
 export default {
   getModule (type) {
@@ -164,7 +165,7 @@ export default {
   },
 
   getSubtype (property, data) {
-    if (RightEffectCommon.isGeneralValue(data.value)) {
+    if (RightCommon.isGeneralValue(data.value)) {
       return data.value
     } else if (property === 'filter' || property === 'transform') {
       return data.function
@@ -188,13 +189,13 @@ export default {
   },
 
   getEffectName (elem, property, value, data) {
-    const text = JSON.parse(elem.closest('.effect-lists').dataset.names)
-    if (RightEffectCommon.isGeneralValue(value)) {
-      return `${text[property]} ${text[value]}`
+    const words = HelperTranslate.getWords()
+    if (RightCommon.isGeneralValue(value)) {
+      return `${words[property]} ${words[value]}`
     }
     const label = (['filter', 'transform'].includes(property))
-      ? `${text[property]} ${text[value]}`
-      : text[property]
+      ? `${words[property]} ${words[value]}`
+      : words[property]
     const extra = this.getModule(property).getLabelExtra(data)
     return `${label} ${extra}`
   }

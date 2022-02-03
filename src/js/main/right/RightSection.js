@@ -3,6 +3,7 @@ import RightHtml from './section/RightHtml.js'
 import RightSelector from './section/RightSelector.js'
 import RightSize from './section/RightSize.js'
 import RightGrid from './section/RightGrid.js'
+import RightIcon from './section/RightIcon.js'
 import RightText from './section/RightText.js'
 import RightBorder from './section/RightBorder.js'
 import RightFill from './section/RightFill.js'
@@ -62,6 +63,7 @@ export default {
     return {
       size: RightSize,
       grid: RightGrid,
+      icon: RightIcon,
       text: RightText,
       border: RightBorder,
       fill: RightFill,
@@ -117,6 +119,8 @@ export default {
         return top + ['text', 'border', 'fill'] + bottom
 
       case 'icon':
+        return top + ['icon', 'border', 'fill'] + bottom
+
       case 'checkbox':
       case 'color':
       case 'canvas':

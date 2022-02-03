@@ -21,6 +21,15 @@ export default {
       'padding-left',
       'padding-right',
 
+      // icon
+      'fill',
+      'fill-rule',
+      'stroke',
+      'stroke-width',
+      'stroke-dasharray',
+      'stroke-linejoin',
+      'stroke-miterlimit',
+
       // grid
       'grid', // not used but the sub properties are
       'grid-template', // not used but the sub properties are

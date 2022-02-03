@@ -22,8 +22,13 @@ export default {
   },
 
   setElementData (elem, value) {
-    elem.getElementsByClassName('fill-color')[0].style.backgroundImage = value
     elem.getElementsByClassName('fill-name')[0].textContent = this.getElementName(value)
+    const color = elem.getElementsByClassName('fill-color')[0]
+    if (RightCommon.isGeneralValue(value)) {
+      color.parentNode.style.display = 'none'
+    } else {
+      color.style.backgroundImage = value
+    }
   },
 
   getElementName (value) {

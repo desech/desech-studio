@@ -90,9 +90,8 @@ export default {
     const fields = section.getElementsByClassName('slide-container')[0].elements
     const index = HelperDOM.getElementIndex(current)
     const value = this.getDisplayedValue(fields, index)
-    if (value === 'none') {
-      await RightCommon.changeStyle({ animation: '0s ease 0s 1 normal none running none' })
-      RightAnimationCommon.setElementData(current, value)
+    if (RightCommon.isGeneralValue(value)) {
+      await this.setGeneralAnimation(current, value)
     } else {
       const animation = this.setAnimationAtIndex(value, index)
       await RightCommon.changeStyle({ animation })
@@ -100,8 +99,14 @@ export default {
     }
   },
 
+  async setGeneralAnimation (current, value) {
+    const animation = (value === 'none') ? '0s ease 0s 1 normal none running none' : value
+    await RightCommon.changeStyle({ animation })
+    RightAnimationCommon.setElementData(current, value)
+  },
+
   getDisplayedValue (fields, index) {
-    if (fields.type.value === 'none') return 'none'
+    if (RightCommon.isGeneralValue(fields.type.value)) return fields.type.value
     return [
       InputUnitField.getValue(fields.duration) ||
         RightAnimationCommon.getDefaultFieldValue('duration'),
@@ -140,12 +145,12 @@ export default {
 
   async changeAnimationFields (field, section) {
     await this.setAnimation(section)
-    if (field.name === 'type' && field.value === 'none') {
-      this.setAnimationNone(section)
+    if (field.name === 'type' && RightCommon.isGeneralValue(field.value)) {
+      this.setGeneralAnimationInList(section)
     }
   },
 
-  setAnimationNone (section) {
+  setGeneralAnimationInList (section) {
     const list = section.getElementsByClassName('animation-list')[0]
     list.querySelectorAll('.animation-element:not(.active)').forEach(el => el.remove())
     list.children[0].classList.remove('active')

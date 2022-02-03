@@ -2,6 +2,7 @@ import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperElement from '../../../../helper/HelperElement.js'
 import HelperStyle from '../../../../helper/HelperStyle.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
+import RightCommon from '../../RightCommon.js'
 
 export default {
   getActiveElement (container) {
@@ -24,7 +25,10 @@ export default {
   },
 
   getAnimationType (data, elemType = null) {
-    if (data === 'none') return 'none'
+    // sometimes `data` is a string like `scale-up-top` or an object
+    // {value: '0s ease 0s 1 normal none running scale-up-top', params: Array(8)}
+    const check = data.value || data
+    if (RightCommon.isGeneralValue(check)) return check
     elemType = elemType || HelperElement.getType(StateSelectedElement.getElement())
     return HelperStyle.getParsedCSSParam(data, 7) || this.getDefaultFieldValue('type', elemType)
   },

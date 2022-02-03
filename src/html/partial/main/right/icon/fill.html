@@ -1,0 +1,21 @@
+<div class="color-button-wrapper" data-property="fill">
+  <div class="grid">
+    <div class="grid" style="grid-template-columns: 1fr 18px; padding: 0 15px 0 0;">
+      <select class="color-button-select">
+        <option value="">{{#i18n}} - Fill - {{/i18n}}</option>
+        {{> componentColorPickerSelect }}
+      </select>
+      <div class="color-button-main tooltip top" data-tooltip="{{#i18n}} Fill color {{/i18n}}">
+        {{> componentColorPickerButton }}
+      </div>
+    </div>
+
+    <select class="change-style" name="fill-rule">
+      <option value="">{{#i18n}} - Fill rule - {{/i18n}}</option>
+      <option value="nonzero">{{#i18n}} Non zero {{/i18n}}</option>
+      <option value="evenodd">{{#i18n}} Even odd {{/i18n}}</option>
+      {{> componentSelectGeneralGroup }}
+    </select>
+  </div>
+  <div class="color-button-picker"></div>
+</div>

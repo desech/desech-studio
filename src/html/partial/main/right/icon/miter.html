@@ -1,0 +1,31 @@
+<div class="grid">
+  <div class="grid" style="grid-template-columns: 18px 1fr; padding: 0">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Stroke dash array {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <rect fill="none" height="24" width="24"/>
+        <path d="M3,16h5v-2H3V16z M9.5,16h5v-2h-5V16z M16,16h5v-2h-5V16z M3,20h2v-2H3V20z M7,20h2v-2H7V20z M11,20h2v-2h-2V20z M15,20 h2v-2h-2V20z M19,20h2v-2h-2V20z M3,12h8v-2H3V12z M13,12h8v-2h-8V12z M3,4v4h18V4H3z"/>
+      </svg>
+    </div>
+    <input name="stroke-dasharray" class="change-style" type="text" placeholder="{{#i18n}} Dash array {{/i18n}}">
+  </div>
+
+  <select class="change-style" name="stroke-linejoin">
+    <option value="">{{#i18n}} - Line join - {{/i18n}}</option>
+    <option value="miter">{{#i18n}} Miter {{/i18n}}</option>
+    <option value="round">{{#i18n}} Round {{/i18n}}</option>
+    <option value="bevel">{{#i18n}} Bevel {{/i18n}}</option>
+    {{> componentSelectGeneralGroup }}
+  </select>
+</div>
+
+<div class="grid">
+  <div class="grid" style="grid-template-columns: 18px 1fr; padding: 0">
+    <div class="input-option-label tooltip top" data-tooltip="{{#i18n}} Miter limit {{/i18n}}">
+      <svg width="18" height="18" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0V0z" fill="none"/>
+        <path d="M12 7.77L18.39 18H5.61L12 7.77M12 4L2 20h20L12 4z"/>
+      </svg>
+    </div>
+    <input name="stroke-miterlimit" class="change-style" type="text" placeholder="{{#i18n}} Miter limit {{/i18n}}">
+  </div>
+</div>

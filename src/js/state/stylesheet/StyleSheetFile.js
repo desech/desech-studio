@@ -165,16 +165,10 @@ export default {
   getUnsupportedProperties () {
     return {
       'background-clip': ['-webkit-background-clip'], // safari, chrome; for `text` only
-      'font-kerning': ['-webkit-font-kerning'], // ios safari
       hyphens: ['-webkit-hyphens'], // safari
-      'line-break': ['-webkit-line-break'], // safari
       'text-combine-upright': ['-webkit-text-combine'], // safari
-      'text-orientation': ['-webkit-text-orientation'], // safari
-      'shape-margin': ['-webkit-shape-margin'], // desktop safari
       '-webkit-mask-image': ['mask-image'], // safari, chrome
-      appearance: ['-webkit-appearance'], // safari
-      'user-select': ['-webkit-user-select'], // safari
-      'tab-size': ['-moz-tab-size'] // firefox
+      'user-select': ['-webkit-user-select'] // safari
     }
   },
 

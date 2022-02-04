@@ -77,6 +77,7 @@ import RightCSSProperty from '../main/right/section/css/RightCSSProperty.js'
 import RightComponentMain from '../main/right/section/component/RightComponentMain.js'
 import RightComponentProperty from '../main/right/section/component/RightComponentProperty.js'
 import RightComponentVariant from '../main/right/section/component/RightComponentVariant.js'
+import RightVariableMain from '../main/right/section/variable/RightVariableMain.js'
 
 export default {
   addEvents () {
@@ -201,7 +202,8 @@ export default {
       ...this.getRightEffectEvents(),
       ...this.getRightAnimationEvents(),
       ...this.getRightCSSEvents(),
-      ...this.getRightComponentEvents()
+      ...this.getRightComponentEvents(),
+      ...this.getRightVariableEvents()
     ]
   },
 
@@ -283,6 +285,12 @@ export default {
       RightComponentMain,
       RightComponentProperty,
       RightComponentVariant
+    ]
+  },
+
+  getRightVariableEvents () {
+    return [
+      RightVariableMain
     ]
   }
 }

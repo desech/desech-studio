@@ -75,7 +75,9 @@ export default {
 
   getDoubleFields (width, height) {
     const value1 = InputUnitField.getValue(width)
+    if (RightCommon.isGeneralValue(value1)) return value1
     const value2 = InputUnitField.getValue(height)
+    if (RightCommon.isGeneralValue(value2)) return value2
     return (value1 + ' ' + value2).trim()
   },
 

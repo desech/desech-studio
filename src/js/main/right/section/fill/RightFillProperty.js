@@ -88,16 +88,51 @@ export default {
   },
 
   getBackgroundPropertyAtIndex (selector, property, index) {
-    const values = StateStyleSheet.getPropertyValue(property, selector)
-    return values ? values.split(',')[index].trim() : ''
+    const value = StateStyleSheet.getPropertyValue(property, selector)
+    // when working with general values, we can't have multiple parts
+    if (RightCommon.isGeneralValue(value)) return value
+    return value ? value.split(',')[index].trim() : ''
   },
 
   replaceBackgroundPropertyAtIndex (property, index, value) {
     if (!value) throw new Error('Background value missing')
-    const fullValue = StateStyleSheet.getPropertyValue(property)
-    const parts = fullValue.split(',')
+    // when working with general values, we can't have multiple parts
+    if (RightCommon.isGeneralValue(value)) return value
+    const existingValue = StateStyleSheet.getPropertyValue(property)
+    const parts = this.sanitizeParts(existingValue.split(','), property)
     parts[index] = value
     return parts.join(', ')
+  },
+
+  sanitizeParts (parts, property) {
+    const backgrounds = this.getBackgrounds()
+    const defaultValue = HelperStyle.getDefaultProperty(property)
+    if (RightCommon.isGeneralValue(parts[0])) {
+      return this.getDefaultParts(backgrounds, defaultValue)
+    } else {
+      return this.removeGeneralValuesFromParts(backgrounds, parts, defaultValue)
+    }
+  },
+
+  // if the current value is a general one, then we need to recreate it with default values
+  getDefaultParts (backgrounds, defaultValue) {
+    const parts = []
+    for (let i = 0; i < backgrounds.length; i++) {
+      parts.push(defaultValue)
+    }
+    return parts
+  },
+
+  // if we want to change one part to something other than a general values,
+  // we need to replace the general values from the other parts to default values
+  removeGeneralValuesFromParts (backgrounds, parts, defaultValue) {
+    for (let i = 0; i < backgrounds.length; i++) {
+      // because of invalid css values, sometimes the values are empty, but we don't want that
+      if (RightCommon.isGeneralValue(parts[i]) || !parts[i]) {
+        parts[i] = defaultValue
+      }
+    }
+    return parts
   },
 
   insertBackgroundProperty (property, selector, index = null) {

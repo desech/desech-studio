@@ -30,8 +30,10 @@ export default {
   },
 
   deselectButtons (container) {
-    const selected = container.getElementsByClassName('selected')[0]
-    if (selected) selected.classList.remove('selected')
+    // getElementsByClassName will not work because of shifting indexes
+    for (const button of container.querySelectorAll('.selected')) {
+      button.classList.remove('selected')
+    }
   },
 
   getValue (button) {

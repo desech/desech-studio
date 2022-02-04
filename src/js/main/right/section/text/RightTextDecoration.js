@@ -1,5 +1,4 @@
 import CheckButtonField from '../../../../component/CheckButtonField.js'
-import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import ColorPickerButton from '../../../../component/color-picker/ColorPickerButton.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
@@ -7,7 +6,8 @@ import RightCommon from '../../RightCommon.js'
 export default {
   getEvents () {
     return {
-      click: ['clickSetDecorationEvent']
+      click: ['clickSetDecorationButtonEvent'],
+      change: ['changeSetDecorationGeneralEvent']
     }
   },
 
@@ -15,38 +15,36 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  async clickSetDecorationEvent (event) {
+  async clickSetDecorationButtonEvent (event) {
     if (event.target.closest('button.text-decoration')) {
-      await this.setDecoration(event.target.closest('button'))
+      await this.setDecorationButton(event.target.closest('form').elements)
     }
   },
 
-  async setDecoration (button) {
-    this.validateState(button, button.parentNode.elements)
-    const value = this.getButtonsValue(button.parentNode)
+  async changeSetDecorationGeneralEvent (event) {
+    if (event.target.closest('select.text-decoration-general')) {
+      await this.setDecorationGeneral(event.target.closest('form'))
+    }
+  },
+
+  async setDecorationButton (fields) {
+    fields.general.value = ''
+    const value = this.getButtonsValue(fields)
     await RightCommon.changeStyle({ 'text-decoration-line': value })
   },
 
-  validateState (button, fields) {
-    // `none` and the other buttons can't be selected at the same time
-    if (!button.classList.contains('selected')) return
-    const none = fields[0]
-    const others = [fields[1], fields[2], fields[3]]
-    if (button.value === 'none') {
-      for (const button of others) {
-        if (button.classList.contains('selected')) button.classList.remove('selected')
-      }
-    } else {
-      if (none.classList.contains('selected')) none.classList.remove('selected')
-    }
-  },
-
-  getButtonsValue (container) {
+  getButtonsValue (fields) {
     const values = []
-    for (const button of container.getElementsByTagName('button')) {
+    for (const button of fields.button) {
       values.push(CheckButtonField.getValue(button))
     }
     return values.join(' ')
+  },
+
+  async setDecorationGeneral (form) {
+    CheckButtonField.deselectButtons(form)
+    const value = form.elements.general.value
+    await RightCommon.changeStyle({ 'text-decoration-line': value })
   },
 
   injectTextDecorationLine (container, style) {
@@ -55,16 +53,22 @@ export default {
   },
 
   injectDecorationLine (container, style) {
-    const values = this.getStyleValues(style)
-    if (!values) return
-    for (const button of container.getElementsByClassName('text-decoration')) {
-      if (values.includes(button.value)) button.classList.add('selected')
+    const value = style['text-decoration-line']
+    if (!value) return
+    const fields = container.getElementsByClassName('text-decoration-form')[0].elements
+    if (RightCommon.isGeneralValue(value)) {
+      fields.general.value = value
+    } else {
+      this.injectButtons(fields.button, value)
     }
   },
 
-  getStyleValues (style) {
-    const value = style['text-decoration-line']
-    return value ? value.split(' ') : null
+  injectButtons (buttons, value) {
+    for (const button of buttons) {
+      if (value.includes(button.value)) {
+        button.classList.add('selected')
+      }
+    }
   },
 
   injectDecorationColor (container, style) {

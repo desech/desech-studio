@@ -1,4 +1,5 @@
 import HelperEvent from '../helper/HelperEvent.js'
+import HelperForm from '../helper/HelperForm.js'
 
 export default {
   // these are the first events after the component and start events, but before other main events
@@ -8,7 +9,8 @@ export default {
       mouseup: ['mouseupNavigateButtonsEvent'],
       focusin: ['focusinInputEvent'],
       change: ['changeFocusOutEvent'],
-      submit: ['submitIgnoreEvent']
+      submit: ['submitIgnoreEvent'],
+      input: ['inputResetFormValidationEvent']
     }
   },
 
@@ -41,5 +43,11 @@ export default {
 
   submitIgnoreEvent (event) {
     event.preventDefault()
+  },
+
+  inputResetFormValidationEvent (event) {
+    if (event.target.closest('form')) {
+      HelperForm.resetValidity(event.target.closest('form'))
+    }
   }
 }

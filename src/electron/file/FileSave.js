@@ -22,33 +22,31 @@ export default {
   },
 
   async saveStyle (css, htmlFile, folder) {
-    await this.saveStyleToFile(css.color, css.color, folder, 'css/general/root.css')
-    await this.saveStyleToFile(css.componentCss, css.color, folder,
-      'css/general/component-css.css')
-    await this.saveStyleToFile(css.componentHtml, css.color, folder,
-      'css/general/component-html.css')
+    await this.saveStyleToFile(css.variable, folder, 'css/general/root.css')
+    await this.saveStyleToFile(css.componentCss, folder, 'css/general/component-css.css')
+    await this.saveStyleToFile(css.componentHtml, folder, 'css/general/component-html.css')
     await this.savePageStyle(css, htmlFile, folder)
   },
 
   async savePageStyle (css, htmlFile, folder) {
     if (HelperFile.isPageFile(htmlFile, folder)) {
       const pageCssFile = HelperFile.getPageCssFile(htmlFile, folder)
-      await this.saveStyleToFile(css.element, css.color, folder, `css/page/${pageCssFile}`)
+      await this.saveStyleToFile(css.element, folder, `css/page/${pageCssFile}`)
     }
   },
 
-  async saveStyleToFile (data, colors, folder, file) {
+  async saveStyleToFile (data, folder, file) {
     const filePath = File.resolve(folder, file)
-    const css = this.getStyle(data, colors)
+    const css = this.getStyle(data)
     await this.saveFileWithBackup(filePath, css)
   },
 
-  getStyle (data, colors = null) {
+  getStyle (data) {
     let css = ''
     for (const rule of data) {
       if (!rule.length) continue
       if (css) css += '\n'
-      css += this.addRule(rule[0], this.getProperties(rule, colors))
+      css += this.addRule(rule[0], this.getProperties(rule))
     }
     return css
   },
@@ -69,8 +67,8 @@ export default {
     }
   },
 
-  getProperties (rule, colors) {
-    const properties = this.getParsedProperties(rule, colors)
+  getProperties (rule) {
+    const properties = this.getParsedProperties(rule)
     let css = ''
     for (const [name, prop] of Object.entries(properties)) {
       css += prop.responsive ? '\n    ' : '\n  '
@@ -79,7 +77,7 @@ export default {
     return css
   },
 
-  getParsedProperties (rule, colors) {
+  getParsedProperties (rule) {
     const properties = {}
     for (const prop of rule) {
       if (!prop.property || !prop.value) continue
@@ -89,7 +87,7 @@ export default {
       }
     }
     if (rule.length && rule[0].selector === ':root') return properties
-    return ParseCssMerge.mergeProperties(properties, colors)
+    return ParseCssMerge.mergeProperties(properties)
   },
 
   async exportCode (data) {

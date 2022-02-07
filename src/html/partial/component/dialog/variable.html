@@ -1,0 +1,15 @@
+<template id="template-dialog-variable-create">
+  <div>
+    <div class="dialog-header">{{#i18n}} Create variable {{/i18n}}</div>
+    <div class="dialog-body">
+      <form>
+        <input type="text" name="name" placeholder="{{#i18n}} Variable name {{/i18n}}" required data-error-duplicate="{{#i18n}} Name already exists {{/i18n}}">
+        <input type="hidden" name="property">
+      </form>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="dialog-create-variable-confirm composed highlighted fill">{{#i18n}} Confirm {{/i18n}}</button>
+      <button type="button" class="dialog-close composed highlighted">{{#i18n}} Cancel {{/i18n}}</button>
+    </div>
+  </div>
+</template>

@@ -10,7 +10,6 @@ export default {
   getEvents () {
     return {
       click: ['clickAddPropertyEvent', 'clickDeletePropertyEvent'],
-      input: ['inputResetPropertyEvent'],
       change: ['changeEditPropertyEvent']
     }
   },
@@ -31,12 +30,6 @@ export default {
     }
   },
 
-  inputResetPropertyEvent (event) {
-    if (event.target.classList.contains('style-component-property-field')) {
-      this.resetProperty(event.target.closest('li'))
-    }
-  },
-
   async changeEditPropertyEvent (event) {
     if (event.target.classList.contains('style-component-property-field')) {
       await this.editProperty(event.target.closest('li'))
@@ -54,13 +47,6 @@ export default {
     const form = li.closest('form')
     li.remove()
     await this.changePropertiesCommand(form)
-  },
-
-  resetProperty (li) {
-    // @todo check HelperForm.resetValidity(form)
-    const name = li.getElementsByClassName('style-component-property-name')[0]
-    name.setCustomValidity('')
-    name.reportValidity()
   },
 
   async editProperty (li) {

@@ -4,7 +4,7 @@ import HelperParserBackground from '../../../js/helper/parser/HelperParserBackgr
 import HelperColor from '../../../js/helper/HelperColor.js'
 
 export default {
-  mergeProperties (props, colors) {
+  mergeProperties (props) {
     this.mergeMarginPadding(props, 'margin')
     this.mergeMarginPadding(props, 'padding')
     this.mergeBorderRadius(props)
@@ -14,7 +14,6 @@ export default {
     this.mergeBorder(props)
     this.cleanBorderImage(props)
     this.cleanBackgroundImage(props)
-    this.replaceSwatchColors(props, colors)
     return props
   },
 
@@ -117,20 +116,5 @@ export default {
     }
     const solid = HelperParserBackground.convertBgToColor(props['background-image'].value)
     if (HelperColor.isSolidColor(solid)) return solid
-  },
-
-  replaceSwatchColors (props, colors) {
-    for (const prop of Object.values(props)) {
-      prop.value = this.replaceSwatchColor(prop.value, colors)
-    }
-  },
-
-  replaceSwatchColor (value, colors) {
-    if (!colors || !colors.length) return value
-    for (const color of colors[0]) {
-      if (!value.includes(color.value)) continue
-      value = value.replaceAll(color.value, `var(${color.property})`)
-    }
-    return value
   }
 }

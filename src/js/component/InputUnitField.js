@@ -5,7 +5,7 @@ export default {
   getEvents () {
     return {
       change: ['changeInputValueEvent', 'changeSelectUnitEvent'],
-      keydown: ['keydownOperateNumberEvent', 'keydownSaveNumberEvent']
+      keydown: ['keydownOperateNumberEvent']
     }
   },
 
@@ -31,14 +31,46 @@ export default {
     }
   },
 
-  keydownSaveNumberEvent (event) {
-    if (event.key === 'Enter' && event.target.classList.contains('input-unit-value')) {
-      this.triggerChange(event.target)
+  changeInputValue (input) {
+    this.setValueField(input, input.value)
+  },
+
+  setValueField (field, value) {
+    if (ExtendJS.startsNumeric(value)) {
+      this.setNumericValue(field, value)
+    } else if (value) {
+      this.setCustomValue(field, value)
+    } else {
+      this.setDefaultUnit(field.nextElementSibling)
     }
   },
 
-  changeInputValue (input) {
-    this.setValueField(input, input.value)
+  setNumericValue (field, value) {
+    const numeric = this.getNumericValue(value)
+    if (Array.isArray(numeric)) {
+      field.value = numeric[0]
+      field.nextElementSibling.value = numeric[1]
+    } else {
+      field.value = numeric
+    }
+  },
+
+  getNumericValue (value) {
+    const regexData = /(?<value>^-?[0-9]([0-9.,]+)?)(?<unit>[a-z%]+)/gi.exec(value)
+    if (regexData) {
+      return [regexData.groups.value, regexData.groups.unit]
+    } else {
+      return value
+    }
+  },
+
+  setCustomValue (field, value) {
+    field.value = value
+    field.nextElementSibling.value = '-'
+  },
+
+  setDefaultUnit (select) {
+    select.value = select.options[0].value
   },
 
   selectUnit (select) {
@@ -135,50 +167,8 @@ export default {
     }
   },
 
-  setDefaultUnit (select) {
-    select.value = select.options[0].value
-  },
-
   injectInputPlaceholder (input, style) {
     const value = ExtendJS.startsNumeric(style) ? ExtendJS.roundToTwo(style) : style
     if (value) input.placeholder = value
-  },
-
-  setValueField (field, value) {
-    if (ExtendJS.startsNumeric(value)) {
-      this.setNumericValue(field, value)
-    } else if (value) {
-      this.setCustomValue(field, value)
-    } else {
-      this.setDefaultUnit(field.nextElementSibling)
-    }
-  },
-
-  setNumericValue (field, value) {
-    const numeric = this.getNumericValue(value)
-    if (Array.isArray(numeric)) {
-      field.value = numeric[0]
-      field.nextElementSibling.value = numeric[1]
-    } else {
-      field.value = numeric
-    }
-  },
-
-  getNumericValue (value) {
-    const regexData = this.splitNumericValue(value)
-    if (regexData) {
-      return [regexData.groups.value, regexData.groups.unit]
-    } else {
-      return value
-    }
-  },
-
-  splitNumericValue (value) {
-    return /(?<value>^-?[0-9]([0-9.,]+)?)(?<unit>[a-z%]+)/gi.exec(value)
-  },
-
-  setCustomValue (field, value) {
-    field.value = value
-    field.nextElementSibling.value = '-'
   }
 }

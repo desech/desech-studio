@@ -3,7 +3,7 @@
     placeholder="{{#if placeholder }} {{ placeholder }} {{else}} {{#i18n}} Auto {{/i18n}} {{/if}}"
     {{#if disabled }} disabled {{/if}}>
 
-  <select class="input-unit-measure variable-field" name="{{ name }}-unit-measure" {{#if disabled }} disabled {{/if}}>
+  <select class="input-unit-measure variable-field" name="{{ name }}-unit-measure" data-name="{{ name }}" {{#if disabled }} disabled {{/if}}>
     {{#if length }} <optgroup label="{{#i18n}} Common {{/i18n}}"> {{/if}}
       {{#if number }} <option {{#ifeq selected ''}} selected {{/ifeq}} data-numeric="1" value="">-</option> {{/if}}
       {{#if length }} <option {{#ifeq selected 'px'}} selected {{/ifeq}} data-numeric="1" value="px">PX</option> {{/if}}

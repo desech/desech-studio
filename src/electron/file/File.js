@@ -218,7 +218,7 @@ export default {
   getFileData (file, folder = null) {
     if (folder) file = this.resolve(folder, file)
     const string = this.readFile(file)
-    return JSON.parse(string)
+    return string ? JSON.parse(string) : null
   },
 
   readFile (file) {

@@ -79,7 +79,7 @@ export default {
 
   initStyleCss () {
     return {
-      color: {},
+      variable: {},
       componentCss: {},
       componentHtml: {},
       element: {}
@@ -101,7 +101,7 @@ export default {
   addStyleRule (rule, selector, type, css) {
     switch (type) {
       case 'root':
-        return this.addStyleItem(css.color, ':root', rule)
+        return this.addStyleItem(css.variable, ':root', rule)
       case 'componentCss':
         return this.addStyleItem(css.componentCss, selector, rule)
       case 'componentHtml':
@@ -174,7 +174,7 @@ export default {
 
   formatReturn (data) {
     return {
-      color: this.formatStyle(data.color),
+      variable: this.formatStyle(data.variable),
       componentCss: this.formatStyle(data.componentCss),
       componentHtml: this.formatStyle(data.componentHtml),
       element: this.formatStyle(data.element)

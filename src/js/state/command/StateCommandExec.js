@@ -14,6 +14,7 @@ import StateCommandOverride from './StateCommandOverride.js'
 import StateCommandVariant from './StateCommandVariant.js'
 import StyleSheetComponent from '../stylesheet/StyleSheetComponent.js'
 import StateCommandComponent from './StateCommandComponent.js'
+import RightVariableCommon from '../../main/right/section/variable/RightVariableCommon.js'
 
 export default {
   addElement (data) {
@@ -280,5 +281,13 @@ export default {
     const element = HelperElement.getElement(data.ref)
     if (!element) return
     await StateCommandVariant.renameVariant(element, data.values)
+  },
+
+  async createVariable (data) {
+    await RightVariableCommon.createVariable(data.variable, data.style)
+  },
+
+  async deleteVariable (data) {
+    await RightVariableCommon.deleteVariable(data.variable, data.style)
   }
 }

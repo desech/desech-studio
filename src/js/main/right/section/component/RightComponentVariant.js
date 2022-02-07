@@ -15,7 +15,6 @@ export default {
       click: ['clickShowCreateEvent', 'clickConfirmCreateEvent', 'clickUpdateVariantEvent',
         'clickPromptDeleteEvent', 'clickConfirmDeleteEvent', 'clickShowRenameEvent',
         'clickCancelRenameEvent', 'clickConfirmRenameEvent'],
-      input: ['inputResetInvalidFieldsEvent'],
       change: ['changeSwitchVariantEvent']
     }
   },
@@ -39,12 +38,6 @@ export default {
   async clickUpdateVariantEvent (event) {
     if (event.target.classList.contains('style-variant-update-button')) {
       await this.updateVariant()
-    }
-  },
-
-  inputResetInvalidFieldsEvent (event) {
-    if (event.target.classList.contains('style-variant-field')) {
-      HelperForm.resetValidity(event.target.closest('form'))
     }
   },
 

@@ -2,10 +2,7 @@ import File from '../File.js'
 import ParseCssSplit from './ParseCssSplit.js'
 
 export default {
-  _colors: [],
-
   parseCss (document, folder, options = {}) {
-    this._colors = []
     const css = {}
     this.addStyle(document, css, folder, options)
     return Object.values(css)
@@ -82,12 +79,10 @@ export default {
     const name = rule.style[i] || ''
     const propVal = name ? rule.style.getPropertyValue(name) : ''
     const value = this.parsePropertyValue(propVal, folder)
-    if (name.includes('--color-')) this._colors[name] = value
     this.addRuleToCss(media, rule, name, value, css)
   },
 
   parsePropertyValue (value, folder) {
-    value = this.replaceSwatchColor(value)
     value = this.fixFileUrl(value, folder)
     return value
   },
@@ -97,13 +92,6 @@ export default {
     return value.replace(/url\("(.*?)"\)/g, (match, file) => {
       const absFile = File.sanitizePath(File.resolve(folder, file.replace(/\.\.\//g, '')))
       return `url("${absFile}")`
-    })
-  },
-
-  replaceSwatchColor (value) {
-    if (!value.includes('var(')) return value
-    return value.replace(/var\((.*?)\)/g, (match, name) => {
-      return this._colors[name]
     })
   },
 

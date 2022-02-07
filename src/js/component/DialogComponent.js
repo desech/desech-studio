@@ -62,6 +62,10 @@ export default {
     return template.getElementsByClassName(`dialog-${section}`)[0]
   },
 
+  closeDialog (dialog) {
+    if (!dialog.dataset.locked) dialog.remove()
+  },
+
   closeAllDialogs (event = null) {
     const dialogs = document.getElementsByClassName('dialog')
     for (let i = dialogs.length - 1; i >= 0; i--) {

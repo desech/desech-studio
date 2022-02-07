@@ -1,6 +1,5 @@
 import HelperEvent from '../../helper/HelperEvent.js'
 import DialogComponent from '../DialogComponent.js'
-import HelperDOM from '../../helper/HelperDOM.js'
 
 export default {
   getEvents () {
@@ -16,7 +15,7 @@ export default {
 
   clickCloseEvent (event) {
     if (event.target.closest('.dialog-close')) {
-      this.closeDialog(event.target.closest('.dialog'))
+      DialogComponent.closeDialog(event.target.closest('.dialog'))
     }
   },
 
@@ -24,9 +23,5 @@ export default {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'Escape') {
       DialogComponent.closeAllDialogs(event)
     }
-  },
-
-  closeDialog (dialog) {
-    if (!dialog.dataset.locked) dialog.remove()
   }
 }

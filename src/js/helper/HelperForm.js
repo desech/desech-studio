@@ -76,6 +76,7 @@ export default {
     }
   },
 
+  // errorKey is camelCase, so for data-error-invalid, it's errorInvalid
   reportFieldError (field, valid, errorKey) {
     const output = valid ? '' : field.dataset[errorKey]
     field.setCustomValidity(output)

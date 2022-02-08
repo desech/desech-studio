@@ -3,6 +3,8 @@ import CheckButtonField from './CheckButtonField.js'
 import HelperEvent from '../helper/HelperEvent.js'
 import RightCommon from '../main/right/RightCommon.js'
 import RightVariableCommon from '../main/right/section/variable/RightVariableCommon.js'
+import RightVariableInject from '../main/right/section/variable/RightVariableInject.js'
+import HelperDOM from '../helper/HelperDOM.js'
 
 export default {
   getEvents () {
@@ -31,9 +33,8 @@ export default {
   },
 
   async changeStyle (field) {
-    await RightCommon.changeStyle({
-      [field.name]: this.getValue(field)
-    })
+    await RightCommon.changeStyle({ [field.name]: this.getValue(field) })
+    this.updateUnitMeasureVariables(field)
   },
 
   getValue (field) {
@@ -45,6 +46,11 @@ export default {
     } else if (field.tagName === 'BUTTON') {
       return CheckButtonField.getValue(field)
     }
+  },
+
+  updateUnitMeasureVariables (field) {
+    const select = (HelperDOM.getTag(field) === 'select') ? field : field.nextElementSibling
+    RightVariableInject.toggleOptions(select)
   },
 
   injectFields (form, data) {

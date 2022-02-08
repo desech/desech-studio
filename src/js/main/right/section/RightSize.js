@@ -1,6 +1,7 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import ChangeStyleField from '../../../component/ChangeStyleField.js'
 import RightSizeMargin from './size/RightSizeMargin.js'
+import RightVariableInject from './variable/RightVariableInject.js'
 
 export default {
   getSection (sectionData) {
@@ -13,9 +14,10 @@ export default {
     return HelperDOM.getTemplate('template-style-size')
   },
 
-  injectData (template, sectionData) {
-    ChangeStyleField.injectFields(template, sectionData)
-    RightSizeMargin.injectFields(template, sectionData)
-    RightSizeMargin.injectConstraints(template)
+  injectData (form, sectionData) {
+    ChangeStyleField.injectFields(form, sectionData)
+    RightSizeMargin.injectFields(form, sectionData)
+    RightSizeMargin.injectConstraints(form)
+    RightVariableInject.injectInputUnit(form.elements)
   }
 }

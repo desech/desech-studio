@@ -9,6 +9,7 @@ import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.
 import HelperCanvas from '../../../../helper/HelperCanvas.js'
 import HelperGlobal from '../../../../helper/HelperGlobal.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
+import HelperVariable from '../../../../helper/HelperVariable.js'
 
 export default {
   getEvents () {
@@ -64,36 +65,37 @@ export default {
   async createVariableSubmit (dialog) {
     const form = dialog.getElementsByTagName('form')[0]
     const data = this.getVariableData(form.elements)
-    if (form.checkValidity()) this.validateVariable(form.elements, data)
-    if (form.checkValidity()) await this.finishCreateVariable(dialog, data)
+    const propertyName = form.elements.property.value
+    if (form.checkValidity()) this.validateVariable(form.elements.name, data)
+    if (form.checkValidity()) await this.finishCreateVariable(dialog, data, propertyName)
     form.elements.name.reportValidity()
   },
 
   getVariableData (fields) {
     return {
-      variableName: RightVariableCommon.sanitizeVariable(fields.name.value),
-      propertyName: fields.property.value,
-      propertySet: RightVariableCommon.getPropertySet(fields.property.value),
-      propertyValue: StateStyleSheet.getPropertyValue(fields.property.value)
+      ref: HelperVariable.generateVariableRef(),
+      name: RightVariableCommon.sanitizeVariable(fields.name.value),
+      type: RightVariableCommon.getPropertyType(fields.property.value),
+      value: StateStyleSheet.getPropertyValue(fields.property.value)
     }
   },
 
-  validateVariable (fields, data) {
-    const duplicate = data.variableName in HelperGlobal.getVariables()
-    HelperForm.reportFieldError(fields.name, !duplicate, 'errorDuplicate')
+  validateVariable (field, data) {
+    const duplicate = HelperGlobal.checkVarByName(data.name)
+    HelperForm.reportFieldError(field, !duplicate, 'errorDuplicate')
     if (duplicate) return
-    const numeric = ExtendJS.startsNumeric(data.variableName)
-    HelperForm.reportFieldError(fields.name, !numeric, 'errorInvalid')
+    const numeric = ExtendJS.startsNumeric(data.name)
+    HelperForm.reportFieldError(field, !numeric, 'errorInvalid')
   },
 
-  async finishCreateVariable (dialog, data) {
+  async finishCreateVariable (dialog, data, propertyName) {
     DialogComponent.closeDialog(dialog)
-    await this.createVariableExec(data)
+    await this.createVariableExec(data, propertyName)
     HelperTrigger.triggerReload('right-panel')
   },
 
-  async createVariableExec (variable) {
-    const style = this.getStyleData()
+  async createVariableExec (variable, propertyName) {
+    const style = this.getStyleData(propertyName)
     const command = {
       do: {
         command: 'createVariable',
@@ -110,8 +112,9 @@ export default {
     await StateCommand.executeCommand(command.do)
   },
 
-  getStyleData () {
+  getStyleData (propertyName) {
     return {
+      propertyName,
       selector: StyleSheetSelector.getCurrentSelector(),
       responsive: HelperCanvas.getCurrentResponsiveWidth()
     }

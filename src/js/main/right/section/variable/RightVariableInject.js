@@ -19,16 +19,19 @@ export default {
   addVariables (select) {
     const option = RightVariableCommon.getOptionByValue(select, 'var-desech-input-create')
     const optgroup = option.parentNode
-    const set = RightVariableCommon.getPropertySet(select.dataset.name)
-    for (const [varName, varVal] of Object.entries(HelperGlobal.getVariables())) {
-      if (varVal.set === set) this.addVariableOption(optgroup, varName)
+    const type = RightVariableCommon.getPropertyType(select.dataset.name)
+    const variables = HelperGlobal.getVariables().data
+    for (const [ref, variable] of Object.entries(variables)) {
+      if (variable.type === type) {
+        this.addVariableOption(optgroup, ref, variable.name)
+      }
     }
   },
 
-  addVariableOption (optgroup, varName) {
+  addVariableOption (optgroup, ref, name) {
     const option = document.createElement('option')
-    option.textContent = varName
-    option.value = `var(--${varName})`
+    option.value = `var(--${ref})`
+    option.textContent = name
     optgroup.appendChild(option)
   },
 
@@ -37,7 +40,7 @@ export default {
     const createOpt = RightVariableCommon.getOptionByValue(select, 'var-desech-input-create')
     const updateOpt = RightVariableCommon.getOptionByValue(select, 'var-desech-input-update')
     this.resetAllVariables(select)
-    const varExists = HelperGlobal.variableExists(input.value)
+    const varExists = HelperGlobal.checkVarByRef(input.value)
     if (input.value.startsWith('var(--') && varExists) {
       this.toggleUpdateIfExists(createOpt, updateOpt, select, input)
     } else if (input.value.startsWith('var(--') || !input.value) {
@@ -59,7 +62,7 @@ export default {
     HelperDOM.hide(createOpt)
     HelperDOM.show(updateOpt)
     const option = RightVariableCommon.getOptionByValue(select, input.value)
-    option.classList.add('selected')
+    if (option) option.classList.add('selected')
   },
 
   toggleNoneOrMissing (createOpt, updateOpt, select) {

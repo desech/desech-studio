@@ -6,8 +6,16 @@ export default {
     return nanoid()
   },
 
-  generateSmallID () {
+  generateAlphaNumID (length) {
     const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz'
-    return customAlphabet(alphabet, 6)()
+    return customAlphabet(alphabet, length)()
+  },
+
+  generateSmallID () {
+    return this.generateAlphaNumID(6)
+  },
+
+  generateMediumID () {
+    return this.generateAlphaNumID(32)
   }
 }

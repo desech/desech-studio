@@ -1,3 +1,5 @@
+import HelperVariable from './HelperVariable.js'
+
 export default {
   initGlobal () {
     window.desech = {}
@@ -16,26 +18,26 @@ export default {
   },
 
   addVariable (data) {
-    window.desech.variables[data.variableName] = {
-      set: data.propertySet,
-      value: data.propertyValue
+    window.desech.variables.data[data.ref] = {
+      name: data.name,
+      type: data.type,
+      value: data.value
     }
   },
 
-  removeVariable (name) {
-    delete window.desech.variables[name]
+  removeVariable (ref) {
+    delete window.desech.variables.data[ref]
   },
 
-  variableExists (name) {
-    return this.getVariableName(name) in window.desech.variables
+  checkVarByRef (ref) {
+    ref = HelperVariable.getVariableRef(ref)
+    return ref in window.desech.variables.data
   },
 
-  // the name can be in this format `var(--name)`
-  getVariableName (name) {
-    if (/var\(--(.*?)\)/g.test(name)) {
-      return /var\(--(.*?)\)/g.exec(name)[1]
-    } else {
-      return name
+  checkVarByName (name) {
+    for (const variable of Object.values(window.desech.variables.data)) {
+      if (variable.name === name) return true
     }
+    return false
   }
 }

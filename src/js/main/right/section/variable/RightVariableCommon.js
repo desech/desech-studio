@@ -19,7 +19,7 @@ export default {
     }
   },
 
-  getPropertySet (name) {
+  getPropertyType (name) {
     switch (name) {
       case 'width': case 'min-width': case 'max-width':
         return 'width'
@@ -42,19 +42,19 @@ export default {
     StyleSheetCommon.addRemoveStyleRules({
       selector: style.selector,
       responsive: style.responsive,
-      properties: { [variable.propertyName]: `var(--${variable.variableName})` }
+      properties: { [style.propertyName]: `var(--${variable.ref})` }
     })
   },
 
   addStyleVariable (variable) {
     StyleSheetCommon.addRemoveStyleRules({
       selector: ':root',
-      properties: { ['--' + variable.variableName]: variable.propertyValue }
+      properties: { ['--' + variable.ref]: variable.value }
     })
   },
 
   deleteVariable (variable, style = null) {
-    HelperGlobal.removeVariable(variable.variableName)
+    HelperGlobal.removeVariable(variable.ref)
     if (!style) return
     this.revertStyleProperty(variable, style)
     this.deleteStyleVariable(variable)
@@ -64,14 +64,14 @@ export default {
     StyleSheetCommon.addRemoveStyleRules({
       selector: style.selector,
       responsive: style.responsive,
-      properties: { [variable.propertyName]: variable.propertyValue }
+      properties: { [style.propertyName]: variable.value }
     })
   },
 
   deleteStyleVariable (variable) {
     StateStyleSheet.removeStyleRule({
       selector: ':root',
-      property: '--' + variable.variableName
+      property: '--' + variable.ref
     })
   }
 }

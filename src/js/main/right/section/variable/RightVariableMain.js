@@ -8,11 +8,13 @@ import RightVariableCommon from './RightVariableCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
 import HelperCanvas from '../../../../helper/HelperCanvas.js'
 import HelperGlobal from '../../../../helper/HelperGlobal.js'
+import ExtendJS from '../../../../helper/ExtendJS.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickCreateVariablePromptEvent', 'clickCreateVariableSubmitEvent']
+      click: ['clickCreateVariablePromptEvent', 'clickCancelVariablePromptEvent',
+        'clickCreateVariableSubmitEvent']
     }
   },
 
@@ -22,8 +24,14 @@ export default {
 
   clickCreateVariablePromptEvent (event) {
     if (event.target.classList.contains('variable-field') &&
-      event.target.value === 'desech-variable-input-create') {
+      event.target.value === 'var-desech-input-create') {
       this.createVariablePrompt(event.target)
+    }
+  },
+
+  clickCancelVariablePromptEvent (event) {
+    if (event.target.closest('.dialog-create-variable-cancel')) {
+      this.cancelVariablePrompt(event.target.closest('.dialog'))
     }
   },
 
@@ -48,6 +56,11 @@ export default {
     })
   },
 
+  cancelVariablePrompt (dialog) {
+    DialogComponent.closeDialog(dialog)
+    HelperTrigger.triggerReload('right-panel')
+  },
+
   async createVariableSubmit (dialog) {
     const form = dialog.getElementsByTagName('form')[0]
     const data = this.getVariableData(form.elements)
@@ -60,13 +73,17 @@ export default {
     return {
       variableName: RightVariableCommon.sanitizeVariable(fields.name.value),
       propertyName: fields.property.value,
+      propertySet: RightVariableCommon.getPropertySet(fields.property.value),
       propertyValue: StateStyleSheet.getPropertyValue(fields.property.value)
     }
   },
 
   validateVariable (fields, data) {
-    const valid = !(data.variableName in HelperGlobal.getVariables())
-    HelperForm.reportFieldError(fields.name, valid, 'errorDuplicate')
+    const duplicate = data.variableName in HelperGlobal.getVariables()
+    HelperForm.reportFieldError(fields.name, !duplicate, 'errorDuplicate')
+    if (duplicate) return
+    const numeric = ExtendJS.startsNumeric(data.variableName)
+    HelperForm.reportFieldError(fields.name, !numeric, 'errorInvalid')
   },
 
   async finishCreateVariable (dialog, data) {

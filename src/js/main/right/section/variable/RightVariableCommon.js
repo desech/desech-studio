@@ -9,8 +9,27 @@ export default {
   },
 
   isExecuteValue (value) {
-    const array = ['desech-variable-input-create', 'desech-variable-input-edit']
+    const array = ['var-desech-input-create', 'var-desech-input-edit']
     return array.includes(value)
+  },
+
+  getOptionByValue (select, value) {
+    for (const option of select.options) {
+      if (option.value === value) return option
+    }
+  },
+
+  getPropertySet (name) {
+    switch (name) {
+      case 'width': case 'min-width': case 'max-width':
+        return 'width'
+      case 'height': case 'min-height': case 'max-height':
+        return 'height'
+      case 'margin-top': case 'margin-right': case 'margin-bottom': case 'margin-left':
+        return 'margin'
+      case 'padding-top': case 'padding-right': case 'padding-bottom': case 'padding-left':
+        return 'padding'
+    }
   },
 
   createVariable (variable, style) {

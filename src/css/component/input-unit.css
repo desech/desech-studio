@@ -52,6 +52,10 @@
   font-size: 11px;
 }
 
+.desech-studio .component-input-unit select option.selected {
+  color: var(--list-txt-special);
+}
+
 .desech-studio .small-inputs .component-input-unit {
   height: 20px;
 }

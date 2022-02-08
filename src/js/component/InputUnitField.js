@@ -1,5 +1,6 @@
 import ExtendJS from '../helper/ExtendJS.js'
 import HelperEvent from '../helper/HelperEvent.js'
+import RightVariableCommon from '../main/right/section/variable/RightVariableCommon.js'
 
 export default {
   getEvents () {
@@ -78,7 +79,9 @@ export default {
     if (!select.selectedOptions[0].dataset.numeric) {
       this.selectUnitCustom(input, select)
     }
-    this.triggerChange(input)
+    if (!RightVariableCommon.isExecuteValue(input.value)) {
+      this.triggerChange(input)
+    }
   },
 
   selectUnitCustom (input, select) {

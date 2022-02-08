@@ -1,10 +1,7 @@
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
-import HelperDOM from '../../../../helper/HelperDOM.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
-import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
-import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 
 export default {
   getEvents () {
@@ -80,8 +77,8 @@ export default {
     })
   },
 
-  injectFields (container, data) {
-    for (const field of container.elements) {
+  injectFields (form, data) {
+    for (const field of form.elements) {
       if (!field.classList.contains('margpad-field')) continue
       InputUnitField.setValue(field, data.style[field.name], data.computedStyle[field.name])
     }

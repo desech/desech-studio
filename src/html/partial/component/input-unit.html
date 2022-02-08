@@ -15,6 +15,11 @@
       {{#if length }} <option {{#ifeq selected 'vh'}} selected {{/ifeq}} data-numeric="1" value="vh">VH</option> {{/if}}
     {{#if length }} </optgroup> {{/if}}
 
+    <optgroup label="{{#i18n}} Variables {{/i18n}}">
+      <option value="var-desech-input-create" hidden>{{#i18n}} Save as variable {{/i18n}}</option>
+      <option value="var-desech-input-update" hidden>{{#i18n}} Update variable {{/i18n}}</option>
+    </optgroup>
+
     {{#if length }}
       <optgroup label="{{#i18n}} Other {{/i18n}}">
         <option {{#ifeq selected 'ex'}} selected {{/ifeq}} data-numeric="1" value="ex">EX</option>
@@ -152,10 +157,5 @@
     {{/if}}
 
     {{^if number }} <option value="-" hidden>-</option> {{/if}}
-
-    <optgroup label="{{#i18n}} Variables {{/i18n}}">
-      <option value="desech-variable-input-create" hidden>{{#i18n}} Save as variable {{/i18n}}</option>
-      <option value="desech-variable-input-update" hidden>{{#i18n}} Update variable {{/i18n}}</option>
-    </optgroup>
   </select>
 </div>

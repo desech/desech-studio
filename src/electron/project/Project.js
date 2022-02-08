@@ -13,6 +13,7 @@ import Import from '../import/Import.js'
 import ProjectCommon from './ProjectCommon.js'
 import ProjectMigrate from './ProjectMigrate.js'
 import Plugin from '../lib/Plugin.js'
+import Variable from '../lib/Variable.js'
 
 export default {
   // this can:
@@ -39,7 +40,11 @@ export default {
     if (data?.import) {
       await Import.importFile({ ...data.import, folder, settings })
     } else {
-      EventMain.ipcMainInvoke('mainOpenProject', folder, settings)
+      EventMain.ipcMainInvoke('mainOpenProject', {
+        folder,
+        settings,
+        variables: Variable.getVariables(folder)
+      })
     }
   },
 

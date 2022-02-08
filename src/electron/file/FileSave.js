@@ -1,4 +1,3 @@
-import fs from 'fs'
 import File from './File.js'
 import Plugin from '../lib/Plugin.js'
 import ParseCssMerge from './parse/ParseCssMerge.js'
@@ -7,18 +6,15 @@ import ProjectCommon from '../project/ProjectCommon.js'
 import ExportStaticCode from '../export/ExportStaticCode.js'
 import ExportCommon from '../export/ExportCommon.js'
 import ExportData from '../export/ExportData.js'
+import Variable from '../lib/Variable.js'
 
 export default {
   async saveCurrentFile (data) {
     // check TopCommandSave.getCurrentFileData() for data
-    await this.saveFileWithBackup(data.htmlFile, data.html)
+    Variable.saveVariables(data.global.variables, data.folder)
+    await File.saveFileWithBackup(data.htmlFile, data.html)
     await this.saveStyle(data.css, data.htmlFile, data.folder)
     await this.exportCode(data)
-  },
-
-  async saveFileWithBackup (file, contents) {
-    await File.sendToTrash(file)
-    fs.writeFileSync(file, contents)
   },
 
   async saveStyle (css, htmlFile, folder) {
@@ -38,7 +34,7 @@ export default {
   async saveStyleToFile (data, folder, file) {
     const filePath = File.resolve(folder, file)
     const css = this.getStyle(data)
-    await this.saveFileWithBackup(filePath, css)
+    await File.saveFileWithBackup(filePath, css)
   },
 
   getStyle (data) {

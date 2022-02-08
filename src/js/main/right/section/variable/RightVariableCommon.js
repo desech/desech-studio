@@ -1,5 +1,6 @@
 import StyleSheetCommon from '../../../../state/stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
+import HelperGlobal from '../../../../helper/HelperGlobal.js'
 
 export default {
   sanitizeVariable (name) {
@@ -12,8 +13,8 @@ export default {
     return array.includes(value)
   },
 
-  async createVariable (variable, style) {
-    await window.electron.invoke('rendererCreateVariable', variable)
+  createVariable (variable, style) {
+    HelperGlobal.addVariable(variable)
     this.addStyleProperty(variable, style)
     this.addStyleVariable(variable)
   },
@@ -33,8 +34,8 @@ export default {
     })
   },
 
-  async deleteVariable (variable, style = null) {
-    await window.electron.invoke('rendererDeleteVariable', variable)
+  deleteVariable (variable, style = null) {
+    HelperGlobal.removeVariable(variable.variableName)
     if (!style) return
     this.revertStyleProperty(variable, style)
     this.deleteStyleVariable(variable)

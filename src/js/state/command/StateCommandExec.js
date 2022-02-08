@@ -283,11 +283,11 @@ export default {
     await StateCommandVariant.renameVariant(element, data.values)
   },
 
-  async createVariable (data) {
-    await RightVariableCommon.createVariable(data.variable, data.style)
+  createVariable (data) {
+    RightVariableCommon.createVariable(data.variable, data.style)
   },
 
-  async deleteVariable (data) {
-    await RightVariableCommon.deleteVariable(data.variable, data.style)
+  deleteVariable (data) {
+    RightVariableCommon.deleteVariable(data.variable, data.style)
   }
 }

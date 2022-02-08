@@ -7,7 +7,6 @@ import EventMenu from '../event/EventMenu.js'
 import EventFile from '../event/EventFile.js'
 import EventMain from '../event/EventMain.js'
 import EventApi from '../event/EventApi.js'
-import EventMisc from '../event/EventMisc.js'
 import Plugin from '../lib/Plugin.js'
 import File from '../file/File.js'
 
@@ -92,7 +91,6 @@ export default {
     EventMenu.addEvents()
     EventFile.addEvents()
     EventApi.addEvents()
-    EventMisc.addEvents()
   },
 
   windowEvents () {

@@ -128,6 +128,11 @@ export default {
     return newPath
   },
 
+  async saveFileWithBackup (file, contents) {
+    await this.sendToTrash(file)
+    fs.writeFileSync(file, contents)
+  },
+
   async sendToTrash (file) {
     if (fs.existsSync(file)) {
       file = HelperFile.convertPathForWin(file, os.platform())

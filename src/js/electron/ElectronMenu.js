@@ -3,6 +3,7 @@ import DialogComponent from '../component/DialogComponent.js'
 import Page from '../page/Page.js'
 import Project from '../start/Project.js'
 import HelperProject from '../helper/HelperProject.js'
+import HelperGlobal from '../helper/HelperGlobal.js'
 
 export default {
   addEvents () {
@@ -33,8 +34,8 @@ export default {
   },
 
   mainOpenProjectEvent () {
-    window.electron.on('mainOpenProject', (event, folder, settings) => {
-      ElectronCommon.handleEvent(this, 'openProject', folder, settings)
+    window.electron.on('mainOpenProject', (event, data) => {
+      ElectronCommon.handleEvent(this, 'openProject', data)
     })
   },
 
@@ -64,9 +65,10 @@ export default {
     })
   },
 
-  async openProject (folder, settings) {
-    HelperProject.setFolder(folder)
-    HelperProject.setProjectSettings(settings)
+  async openProject (data) {
+    HelperProject.setFolder(data.folder)
+    HelperProject.setProjectSettings(data.settings)
+    HelperGlobal.setVariables(data.variables)
     await Page.loadMain()
   },
 

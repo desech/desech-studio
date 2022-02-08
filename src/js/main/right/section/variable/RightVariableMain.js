@@ -7,6 +7,7 @@ import HelperTrigger from '../../../../helper/HelperTrigger.js'
 import RightVariableCommon from './RightVariableCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
 import HelperCanvas from '../../../../helper/HelperCanvas.js'
+import HelperGlobal from '../../../../helper/HelperGlobal.js'
 
 export default {
   getEvents () {
@@ -50,7 +51,7 @@ export default {
   async createVariableSubmit (dialog) {
     const form = dialog.getElementsByTagName('form')[0]
     const data = this.getVariableData(form.elements)
-    if (form.checkValidity()) await this.validateVariable(form.elements, data)
+    if (form.checkValidity()) this.validateVariable(form.elements, data)
     if (form.checkValidity()) await this.finishCreateVariable(dialog, data)
     form.elements.name.reportValidity()
   },
@@ -63,8 +64,8 @@ export default {
     }
   },
 
-  async validateVariable (fields, data) {
-    const valid = await window.electron.invoke('rendererValidateVariable', data.variableName)
+  validateVariable (fields, data) {
+    const valid = !(data.variableName in HelperGlobal.getVariables())
     HelperForm.reportFieldError(fields.name, valid, 'errorDuplicate')
   },
 

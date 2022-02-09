@@ -130,8 +130,7 @@ export default {
   getStyleData (propertyName) {
     return {
       propertyName,
-      selector: StyleSheetSelector.getCurrentSelector(),
-      responsive: HelperCanvas.getCurrentResponsiveWidth()
+      selector: StyleSheetSelector.getCurrentSelector()
     }
   },
 

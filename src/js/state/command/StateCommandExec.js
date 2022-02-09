@@ -287,6 +287,10 @@ export default {
     RightVariableCommon.createVariable(data.variable, data.style)
   },
 
+  updateVariable (data) {
+    RightVariableCommon.updateVariable(data.ref, data.data)
+  },
+
   deleteVariable (data) {
     RightVariableCommon.deleteVariable(data.variable, data.style)
   }

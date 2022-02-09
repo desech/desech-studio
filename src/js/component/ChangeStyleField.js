@@ -14,8 +14,8 @@ export default {
 
   async changeStyleInputEvent (event) {
     if (event.target.classList.contains('change-style') &&
-      ['INPUT', 'SELECT'].includes(event.target.tagName)) {console.log('changeStyleInputEvent exec')
-      // await this.changeStyle(event.target)
+      ['INPUT', 'SELECT'].includes(event.target.tagName)) {
+      await this.changeStyle(event.target)
     }
   },
 

@@ -32,16 +32,15 @@ export default {
     }
   },
 
-  createVariable (variable, style) {
+  createVariable (variable, style = null) {
     HelperGlobal.addVariable(variable)
-    this.addStyleProperty(variable, style)
+    if (style) this.addStyleProperty(variable, style)
     this.addStyleVariable(variable)
   },
 
   addStyleProperty (variable, style) {
     StyleSheetCommon.addRemoveStyleRules({
       selector: style.selector,
-      responsive: style.responsive,
       properties: { [style.propertyName]: `var(--${variable.ref})` }
     })
   },
@@ -53,17 +52,31 @@ export default {
     })
   },
 
+  updateVariable (ref, data) {
+    if ('name' in data) {
+      HelperGlobal.updateVariable(ref, 'name', data.name)
+    } else if ('value' in data) {
+      HelperGlobal.updateVariable(ref, 'value', data.value)
+      this.updateStyleVariable(ref, data.value)
+    }
+  },
+
+  updateStyleVariable (ref, value) {
+    StyleSheetCommon.addRemoveStyleRules({
+      selector: ':root',
+      properties: { ['--' + ref]: value }
+    })
+  },
+
   deleteVariable (variable, style = null) {
     HelperGlobal.removeVariable(variable.ref)
-    if (!style) return
-    this.revertStyleProperty(variable, style)
+    if (style) this.revertStyleProperty(variable, style)
     this.deleteStyleVariable(variable)
   },
 
   revertStyleProperty (variable, style) {
     StyleSheetCommon.addRemoveStyleRules({
       selector: style.selector,
-      responsive: style.responsive,
       properties: { [style.propertyName]: variable.value }
     })
   },

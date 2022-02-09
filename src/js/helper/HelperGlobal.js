@@ -25,6 +25,10 @@ export default {
     }
   },
 
+  updateVariable (ref, key, value) {
+    window.desech.variables.data[ref][key] = value
+  },
+
   removeVariable (ref) {
     delete window.desech.variables.data[ref]
   },

@@ -78,6 +78,7 @@ import RightComponentMain from '../main/right/section/component/RightComponentMa
 import RightComponentProperty from '../main/right/section/component/RightComponentProperty.js'
 import RightComponentVariant from '../main/right/section/component/RightComponentVariant.js'
 import RightVariableMain from '../main/right/section/variable/RightVariableMain.js'
+import RightVariableForm from '../main/right/section/variable/RightVariableForm.js'
 
 export default {
   addEvents () {
@@ -321,7 +322,8 @@ export default {
 
   getRightVariableEvents () {
     return [
-      RightVariableMain
+      RightVariableMain,
+      RightVariableForm
     ]
   }
 }

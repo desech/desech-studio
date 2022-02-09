@@ -68,11 +68,16 @@ export default {
     if (!sheet.cssRules || !sheet.cssRules.length) return
     for (let i = 0; i < sheet.cssRules.length; i++) {
       const rule = sheet.cssRules[i] ? sheet.cssRules[i].cssRules[0] : null
-      if (rule && this.equalResponsiveRules(rule, responsive) && rule.style[property]) {
+      if (rule && this.equalResponsiveRules(rule, responsive) &&
+        this.propertyBelongsToStyle(rule.style, property)) {
         this.deleteRule(sheet, i)
         return
       }
     }
+  },
+
+  propertyBelongsToStyle (style, property) {
+    return (style[property] || style[0] === property)
   },
 
   equalResponsiveRules (rule, data) {

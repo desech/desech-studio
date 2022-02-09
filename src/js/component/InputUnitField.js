@@ -11,7 +11,6 @@ export default {
 
   changeInputValueEvent (event) {
     if (event.target.classList.contains('input-unit-value')) {
-      console.log('changeInputValueEvent exec')
       this.changeInputValue(event.target)
     }
   },
@@ -19,7 +18,6 @@ export default {
   changeSelectUnitEvent (event) {
     if (event.target.classList.contains('input-unit-measure') &&
       !RightVariableCommon.isExecuteAction(event.target.value)) {
-      console.log('changeSelectUnitEvent exec', event.target.value)
       this.selectUnit(event.target)
     }
   },

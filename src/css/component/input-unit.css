@@ -11,6 +11,10 @@
   box-shadow: var(--field-shadow) 0 0 1px 0;
 }
 
+.desech-studio .right-variable-value .component-input-unit {
+  width: 100px;
+}
+
 .desech-studio .component-input-unit input {
   height: 100%;
   line-height: 1.2;

@@ -1,5 +1,4 @@
 import Crypto from '../../electron/lib/Crypto.js'
-import HelperGlobal from './HelperGlobal.js'
 
 export default {
   // the ref can be in this format `var(--ref)`
@@ -13,9 +12,5 @@ export default {
 
   generateVariableRef () {
     return 'v0' + Crypto.generateMediumID()
-  },
-
-  getVariable (ref) {
-    return HelperGlobal.getVariables().data[ref]
   }
 }

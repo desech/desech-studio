@@ -26,7 +26,7 @@ export default {
     container.scrollTop = 0
   },
 
-  // data = tool, operation, selectedElement
+  // data = tool, operation, selectedElement, selectedVariable
   getCanvasData () {
     const canvas = this.getCanvas()
     if (canvas) return canvas.dataset

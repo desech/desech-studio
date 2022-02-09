@@ -9,13 +9,16 @@ import HelperCanvas from '../../../../helper/HelperCanvas.js'
 import HelperGlobal from '../../../../helper/HelperGlobal.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
 import HelperVariable from '../../../../helper/HelperVariable.js'
+import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
+import HelperEvent from '../../../../helper/HelperEvent.js'
 
 export default {
   getEvents () {
     return {
       focusin: ['focusinUnitSavePreviousValueEvent'],
       change: ['changeCreateVariablePromptEvent', 'changeGotoUpdateVariableEvent'],
-      click: ['clickCreateVariableSubmitEvent']
+      click: ['clickCreateVariableSubmitEvent'],
+      keydown: ['keydownDeselectVariableEvent']
     }
   },
 
@@ -42,6 +45,14 @@ export default {
   async clickCreateVariableSubmitEvent (event) {
     if (event.target.closest('.dialog-create-variable-confirm')) {
       await this.createVariableSubmit(event.target.closest('.dialog'))
+    }
+  },
+
+  keydownDeselectVariableEvent (event) {
+    if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
+      HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
+      event.key === 'Escape') {
+      StateSelectedVariable.deselectVariable()
     }
   },
 
@@ -126,6 +137,8 @@ export default {
 
   gotoUpdateVariable (select) {
     this.setSelectData(select)
-    console.log('update')
+    const ref = HelperVariable.getVariableRef(select.previousElementSibling.value)
+    StateSelectedVariable.selectVariable(ref)
+    HelperTrigger.triggerReload('right-panel')
   }
 }

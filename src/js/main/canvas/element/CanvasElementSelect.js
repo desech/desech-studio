@@ -1,6 +1,7 @@
 import HelperEvent from '../../../helper/HelperEvent.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
+import StateSelectedVariable from '../../../state/StateSelectedVariable.js'
 
 export default {
   _node: null,
@@ -48,10 +49,11 @@ export default {
     }
   },
 
+  // if we have a variable selected, then ignore this
   keydownDeselectElementEvent (event) {
     if (event.key && HelperEvent.areMainShortcutsAllowed(event) &&
       HelperEvent.isNotCtrlAltShift(event) && !HelperCanvas.isPreview() &&
-      event.key === 'Escape') {
+      event.key === 'Escape' && !StateSelectedVariable.getRef()) {
       StateSelectedElement.deselectElement()
     }
   },

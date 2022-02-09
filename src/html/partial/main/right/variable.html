@@ -1,0 +1,21 @@
+<template id="template-style-variable">
+  <form id="variable-section" class="sidebar-section active" data-type="variable">
+    <div class="sidebar-title">
+      <div class="sidebar-title-text">
+        <span>{{#i18n}} Variable {{/i18n}}</span>
+        <svg width="12" height="12" viewBox="0 0 24 24">
+          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
+          <path fill="none" d="M0 0h24v24H0V0z"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="sidebar-content">
+      <form class="right-variable-form">
+        <div class="grid" style="grid-template-columns: auto; gap: 5px;">
+          <div>{{#i18n}} Name {{/i18n}}</div>
+          <input name="name">
+        </div>
+      </form>
+    </div>
+  </form>
+</template>

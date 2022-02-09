@@ -4,6 +4,8 @@ import RightSection from './right/RightSection.js'
 import StateSelectedElement from '../state/StateSelectedElement.js'
 import RightPage from './right/section/RightPage.js'
 import RightCommon from './right/RightCommon.js'
+import StateSelectedVariable from '../state/StateSelectedVariable.js'
+import RightVariable from './right/section/RightVariable.js'
 
 export default {
   getEvents () {
@@ -26,7 +28,7 @@ export default {
   },
 
   reloadPanel () {
-    if (StateSelectedElement.getRef() && this.getContainer()) {
+    if (this.getContainer() && (StateSelectedVariable.getRef() || StateSelectedElement.getRef())) {
       this.clearPanel()
       this.loadPanel()
     }
@@ -48,6 +50,19 @@ export default {
   },
 
   loadPanel () {
+    if (StateSelectedVariable.getRef()) {
+      this.loadPanelVariable()
+    } else {
+      this.loadPanelElement()
+    }
+  },
+
+  loadPanelVariable () {
+    const section = RightVariable.getSection()
+    this.getContainer().appendChild(section)
+  },
+
+  loadPanelElement () {
     const data = RightCommon.getElementSectionData()
     if (!data) return
     const classes = RightSection.getSectionClasses()

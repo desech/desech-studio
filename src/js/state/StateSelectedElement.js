@@ -2,11 +2,12 @@ import HelperElement from '../helper/HelperElement.js'
 import HelperCanvas from '../helper/HelperCanvas.js'
 import LeftCommon from '../main/left/LeftCommon.js'
 import HelperTrigger from '../helper/HelperTrigger.js'
+import StateSelectedVariable from './StateSelectedVariable.js'
 
 export default {
   getRef () {
-    const canvas = document.getElementById('canvas')
-    return canvas.dataset.selectedElement
+    const data = HelperCanvas.getCanvasData()
+    return data?.selectedElement
   },
 
   getElement (checkValid = true) {
@@ -40,15 +41,15 @@ export default {
     }
   },
 
-  deselectElement () {
+  deselectElement (clear = true) {
     const selected = HelperCanvas.getCanvas().getElementsByClassName('selected')[0]
     if (selected) selected.classList.remove('selected')
     HelperCanvas.deleteCanvasData('selectedElement')
-    this.updateUiAfterElementDeselect()
+    LeftCommon.deselectItem()
+    if (clear) this.updateUiAfterElementDeselect()
   },
 
   updateUiAfterElementDeselect () {
-    LeftCommon.deselectItem()
     HelperTrigger.triggerClear('element-overlay')
     HelperTrigger.triggerClear('right-panel')
   },
@@ -61,7 +62,8 @@ export default {
   },
 
   selectElementNode (element) {
-    this.deselectElement()
+    // don't clear the containers, because there's a race condition with the select reload
+    this.deselectElement(false)
     element.classList.add('selected')
     const ref = HelperElement.getRef(element)
     HelperCanvas.setCanvasData('selectedElement', ref)
@@ -71,6 +73,8 @@ export default {
 
   updateUiAfterElementSelect (ref) {
     LeftCommon.selectItemByRef(ref)
+    // clear the selected variable, so we can see the new selected item
+    StateSelectedVariable.deselectVariable()
     HelperTrigger.triggerReload('element-overlay')
   },
 

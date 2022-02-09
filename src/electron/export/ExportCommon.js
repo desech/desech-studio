@@ -19,13 +19,14 @@ export default {
     return ['js/script.js']
   },
 
-  getCompiledCss (folder) {
+  getCompiledCss (folder, variables) {
     const part1 = this.getPart1Files(folder)
     const designSystem = this.getDesignSystemCss(folder)
     const part2 = this.getPart2Files(folder)
     const page = this.getCssContent(this.getPageCssFiles(folder))
     const animation = this.getAnimationCss(folder, part1 + part2 + page)
-    return [part1, animation, designSystem, part2, page].join('\n')
+    const css = [part1, animation, designSystem, part2, page].join('\n')
+    return this.replaceCssRefVariables(css, variables)
   },
 
   getPart1Files (folder) {
@@ -106,6 +107,21 @@ export default {
       list.push(value)
     }
     return list
+  },
+
+  // we want to use the variable names, not the variable refs
+  replaceCssRefVariables (css, variables) {
+    const map = this.getVariablesRefName(variables)
+    const regex = new RegExp(Object.keys(map).join('|'), 'g')
+    return css.replace(regex, match => map[match])
+  },
+
+  getVariablesRefName (variables) {
+    const map = {}
+    for (const [ref, variable] of Object.entries(variables.data)) {
+      map[ref] = variable.name
+    }
+    return map
   },
 
   getHtmlFiles (folder) {

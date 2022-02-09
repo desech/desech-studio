@@ -98,7 +98,8 @@ export default {
   },
 
   prepareDataForExport (data) {
-    data.compiledCss = ExportCommon.getCompiledCss(data.folder)
+    const variables = Variable.getVariables(data.folder)
+    data.compiledCss = ExportCommon.getCompiledCss(data.folder, variables)
     data.htmlFiles = ExportCommon.getHtmlFiles(data.folder)
     data.rootMiscFiles = ExportCommon.getRootMiscFiles(data.folder, data.htmlFiles)
   }

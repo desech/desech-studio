@@ -5,7 +5,7 @@ import RightVariableCommon from './RightVariableCommon.js'
 export default {
   injectInputUnitFields (fields) {
     for (const select of fields) {
-      if (select.classList.contains('variable-field')) {
+      if (select.classList.contains('input-unit-measure')) {
         this.injectInputUnitField(select)
       }
     }
@@ -54,6 +54,7 @@ export default {
     for (const option of select.options) {
       if (option.value.startsWith('var(--') && option.classList.contains('selected')) {
         option.classList.remove('selected')
+        option.removeAttributeNS(null, 'disabled')
       }
     }
   },
@@ -62,7 +63,10 @@ export default {
     HelperDOM.hide(createOpt)
     HelperDOM.show(updateOpt)
     const option = RightVariableCommon.getOptionByValue(select, input.value)
-    if (option) option.classList.add('selected')
+    if (option) {
+      option.classList.add('selected')
+      option.setAttributeNS(null, 'disabled', '')
+    }
   },
 
   toggleNoneOrMissing (createOpt, updateOpt, select) {

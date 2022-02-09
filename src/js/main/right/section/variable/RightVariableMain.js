@@ -14,8 +14,9 @@ import HelperVariable from '../../../../helper/HelperVariable.js'
 export default {
   getEvents () {
     return {
-      click: ['clickCreateVariablePromptEvent', 'clickCancelVariablePromptEvent',
-        'clickCreateVariableSubmitEvent']
+      focusin: ['focusinUnitSavePreviousValueEvent'],
+      change: ['changeCreateVariablePromptEvent', 'changeGotoUpdateVariableEvent'],
+      click: ['clickCreateVariableSubmitEvent']
     }
   },
 
@@ -23,16 +24,16 @@ export default {
     HelperEvent.handleEvents(this, event)
   },
 
-  clickCreateVariablePromptEvent (event) {
-    if (event.target.classList.contains('variable-field') &&
-      event.target.value === 'var-desech-input-create') {
-      this.createVariablePrompt(event.target)
+  focusinUnitSavePreviousValueEvent () {
+    if (event.target.classList.contains('input-unit-measure')) {
+      event.target.dataset.previous = event.target.value
     }
   },
 
-  clickCancelVariablePromptEvent (event) {
-    if (event.target.closest('.dialog-create-variable-cancel')) {
-      this.cancelVariablePrompt(event.target.closest('.dialog'))
+  changeCreateVariablePromptEvent (event) {
+    if (event.target.classList.contains('input-unit-measure') &&
+      event.target.value === 'var-desech-input-create') {
+      this.createVariablePrompt(event.target)
     }
   },
 
@@ -42,11 +43,24 @@ export default {
     }
   },
 
-  createVariablePrompt (field) {
+  changeGotoUpdateVariableEvent (event) {
+    if (event.target.classList.contains('input-unit-measure') &&
+      event.target.value === 'var-desech-input-update') {
+      this.gotoUpdateVariable(event.target)
+    }
+  },
+
+  createVariablePrompt (select) {
+    this.setSelectData(select)
     const dialog = this.showCreateOverlay()
     const fields = dialog.getElementsByTagName('form')[0].elements
     fields.name.focus()
-    fields.property.value = field.dataset.name
+    fields.property.value = select.dataset.name
+  },
+
+  setSelectData (select) {
+    select.dataset.action = select.value
+    select.value = select.dataset.previous
   },
 
   showCreateOverlay () {
@@ -55,11 +69,6 @@ export default {
       body: DialogComponent.getContentHtml('variable-create', 'body'),
       footer: DialogComponent.getContentHtml('variable-create', 'footer')
     })
-  },
-
-  cancelVariablePrompt (dialog) {
-    DialogComponent.closeDialog(dialog)
-    HelperTrigger.triggerReload('right-panel')
   },
 
   async createVariableSubmit (dialog) {
@@ -118,5 +127,10 @@ export default {
       selector: StyleSheetSelector.getCurrentSelector(),
       responsive: HelperCanvas.getCurrentResponsiveWidth()
     }
+  },
+
+  gotoUpdateVariable (select) {
+    this.setSelectData(select)
+    console.log('update')
   }
 }

@@ -21,7 +21,8 @@ export default {
   },
 
   changeSelectUnitEvent (event) {
-    if (event.target.classList.contains('input-unit-measure')) {
+    if (event.target.classList.contains('input-unit-measure') &&
+      !RightVariableCommon.isExecuteAction(event.target.dataset.action)) {
       this.selectUnit(event.target)
     }
   },
@@ -79,9 +80,7 @@ export default {
     if (!select.selectedOptions[0].dataset.numeric) {
       this.selectUnitCustom(input, select)
     }
-    if (!RightVariableCommon.isExecuteValue(input.value)) {
-      this.triggerChange(input)
-    }
+    this.triggerChange(input)
   },
 
   selectUnitCustom (input, select) {

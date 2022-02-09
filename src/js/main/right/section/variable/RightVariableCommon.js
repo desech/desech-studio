@@ -8,8 +8,8 @@ export default {
     return name.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
   },
 
-  isExecuteValue (value) {
-    const array = ['var-desech-input-create', 'var-desech-input-edit']
+  isExecuteAction (value) {
+    const array = ['var-desech-input-create', 'var-desech-input-update']
     return array.includes(value)
   },
 

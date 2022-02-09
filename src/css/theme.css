@@ -55,6 +55,8 @@ body {
   --override-color: rgb(253, 106, 21);
   --override-btn: rgba(253, 106, 21, 0.2);
   --override-selector-bg: rgba(0, 140, 255, 0.3);
+  --option-selected: rgb(0, 140, 255);
+  --option-highlighted: rgb(253, 106, 21);
 }
 
 /* theme light */

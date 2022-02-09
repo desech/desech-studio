@@ -53,7 +53,11 @@
 }
 
 .desech-studio .component-input-unit select option.selected {
-  color: var(--list-txt-special);
+  color: var(--option-selected);
+}
+
+.desech-studio .component-input-unit select option.highlighted {
+  color: var(--option-highlighted);
 }
 
 .desech-studio .small-inputs .component-input-unit {

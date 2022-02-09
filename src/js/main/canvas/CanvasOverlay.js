@@ -1,7 +1,6 @@
 import HelperDOM from '../../helper/HelperDOM.js'
 import CanvasOverlayResize from './overlay/CanvasOverlayResize.js'
 import StateSelectedElement from '../../state/StateSelectedElement.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import CanvasOverlayCommon from './overlay/CanvasOverlayCommon.js'
 import ExtendJS from '../../helper/ExtendJS.js'
 import CanvasOverlayGrid from './overlay/CanvasOverlayGrid.js'
@@ -21,10 +20,6 @@ export default {
       resize: ['resizeWindowEvent'],
       wheel: ['wheelPositionElementOverlayEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   reloadcontainerEvent (event) {

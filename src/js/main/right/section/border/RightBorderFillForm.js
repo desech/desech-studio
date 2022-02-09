@@ -7,7 +7,6 @@ import ColorPickerSwatch from '../../../../component/color-picker/ColorPickerSwa
 import HelperParserBackground from '../../../../helper/parser/HelperParserBackground.js'
 import ColorPickerGradient from '../../../../component/color-picker/ColorPickerGradient.js'
 import RightBorderImage from './RightBorderImage.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
 
@@ -16,10 +15,6 @@ export default {
     return {
       change: ['changeFillTypeEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   changeFillTypeEvent (event) {

@@ -2,7 +2,6 @@ import HelperColor from '../../../../helper/HelperColor.js'
 import ColorPicker from '../../../../component/ColorPicker.js'
 import ColorPickerSolidColor from '../../../../component/color-picker/ColorPickerSolidColor.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import RightCommon from '../../RightCommon.js'
@@ -13,10 +12,6 @@ export default {
       change: ['changeBorderStyleEvent'],
       colorchange: ['changecolorEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   changecolorEvent (event) {

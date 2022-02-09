@@ -13,10 +13,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   pushcommandEvent (event) {
     if (event.target.id === 'command-history') {
       this.pushCommand(event.detail)

@@ -1,6 +1,5 @@
 import CheckButtonField from '../../../../component/CheckButtonField.js'
 import ColorPickerButton from '../../../../component/color-picker/ColorPickerButton.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 
 export default {
@@ -9,10 +8,6 @@ export default {
       click: ['clickSetDecorationButtonEvent'],
       change: ['changeSetDecorationGeneralEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickSetDecorationButtonEvent (event) {

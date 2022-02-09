@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import CanvasElementComponent from '../../../canvas/element/CanvasElementComponent.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
@@ -11,10 +10,6 @@ export default {
       setsource: ['setsourceSwapComponentEvent'],
       click: ['clickPromptResetOverridesEvent', 'clickConfirmResetOverridesEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async setsourceSwapComponentEvent (event) {

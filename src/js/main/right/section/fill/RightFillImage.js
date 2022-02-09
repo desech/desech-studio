@@ -1,7 +1,6 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
 import RightFillProperty from './RightFillProperty.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightFillCommon from './RightFillCommon.js'
 import RightCommon from '../../RightCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
@@ -15,10 +14,6 @@ export default {
         'changeSelectEvent'],
       setsource: ['setsourceImageEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeSizeLengthEvent (event) {

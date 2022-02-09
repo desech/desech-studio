@@ -1,5 +1,4 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightEffectType from './RightEffectType.js'
 import RightCommon from '../../RightCommon.js'
 import RightEffectCommon from './type/RightEffectCommon.js'
@@ -10,10 +9,6 @@ export default {
     return {
       change: ['changeEffectTypeEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeEffectTypeEvent (event) {

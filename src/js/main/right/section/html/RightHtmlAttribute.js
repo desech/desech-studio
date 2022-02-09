@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightHtmlCommon from './RightHtmlCommon.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
@@ -10,10 +9,6 @@ export default {
       click: ['clickAddAttributeEvent', 'clickDeleteAttributeEvent'],
       change: ['changeEditAttributeEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickAddAttributeEvent (event) {

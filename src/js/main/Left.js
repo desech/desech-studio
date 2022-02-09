@@ -31,10 +31,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   async openpanelEvent (event) {
     if (event.target.classList.contains('panel-list-button')) {
       await this.openPanel(event.target, event.detail || {})

@@ -31,10 +31,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   dblclickStartEditEvent (event) {
     if (!HelperCanvas.isOperation('editing') && !HelperCanvas.isPreview() &&
       event.target.closest('.element.text')) {
@@ -57,13 +53,13 @@ export default {
     }
   },
 
-  async keydownFinishEditEvent () {
+  async keydownFinishEditEvent (event) {
     if (event.key && HelperCanvas.isOperation('editing') && event.key === 'Escape') {
       await this.finishEditText()
     }
   },
 
-  keyupUpdateOverlayEvent () {
+  keyupUpdateOverlayEvent (event) {
     if (HelperCanvas.isOperation('editing')) {
       const element = StateSelectedElement.getElement()
       this.updateOverlaySize(element)
@@ -100,7 +96,7 @@ export default {
     }
   },
 
-  dblclickSelectWordEvent () {
+  dblclickSelectWordEvent (event) {
     if (HelperCanvas.isOperation('editing')) {
       this.selectWord()
     }

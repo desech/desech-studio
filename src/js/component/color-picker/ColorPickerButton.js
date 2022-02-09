@@ -2,7 +2,6 @@ import HelperDOM from '../../helper/HelperDOM.js'
 import ColorPickerSwatch from './ColorPickerSwatch.js'
 import HelperColor from '../../helper/HelperColor.js'
 import ColorPickerSolidColor from './ColorPickerSolidColor.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import StateStyleSheet from '../../state/StateStyleSheet.js'
 import ColorPicker from '../ColorPicker.js'
 import ColorPickerCommon from './ColorPickerCommon.js'
@@ -17,10 +16,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   async clickButtonEvent (event) {
     const query = '.color-button-wrapper:not([data-no-interact]) .color-button-main'
     if (event.target.closest(query)) {
@@ -28,7 +23,7 @@ export default {
     }
   },
 
-  async changeSelectColorEvent () {
+  async changeSelectColorEvent (event) {
     const query = '.color-button-wrapper:not([data-no-interact]) .color-button-select'
     if (event.target.closest(query)) {
       await this.setSelectColor(event.target.closest('.color-button-wrapper'))

@@ -3,7 +3,6 @@ import HelperForm from '../../../../helper/HelperForm.js'
 import HelperStyle from '../../../../helper/HelperStyle.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightSelectorCommon from './RightSelectorCommon.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
@@ -17,10 +16,6 @@ export default {
         'clickSaveSelectorEvent'],
       change: ['changePseudoClassEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickCreateSelectorEvent (event) {

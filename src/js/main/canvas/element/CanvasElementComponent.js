@@ -2,7 +2,6 @@ import CanvasElementCopyElement from './copypaste/CanvasElementCopyElement.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import CanvasElement from '../CanvasElement.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
-import HelperEvent from '../../../helper/HelperEvent.js'
 import Page from '../../../page/Page.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import StateSelectedElement from '../../../state/StateSelectedElement.js'
@@ -18,10 +17,6 @@ export default {
     return {
       dblclick: ['dblclickLoadComponentEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async dblclickLoadComponentEvent (event) {

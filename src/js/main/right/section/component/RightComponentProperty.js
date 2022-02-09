@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import StateCommand from '../../../../state/StateCommand.js'
@@ -12,10 +11,6 @@ export default {
       click: ['clickAddPropertyEvent', 'clickDeletePropertyEvent'],
       change: ['changeEditPropertyEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickAddPropertyEvent (event) {

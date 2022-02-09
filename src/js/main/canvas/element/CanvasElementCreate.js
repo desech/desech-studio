@@ -1,7 +1,6 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import StateStyleSheet from '../../../state/StateStyleSheet.js'
 import CanvasElement from '../CanvasElement.js'
-import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import CanvasCommon from '../CanvasCommon.js'
@@ -26,10 +25,6 @@ export default {
       click: ['clickCreateElementEvent'],
       mouseout: ['mouseoutRemoveMarkerEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   mousemoveAddMarkerEvent (event) {

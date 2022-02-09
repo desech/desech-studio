@@ -1,5 +1,4 @@
 import ChangeStyleField from '../../../../component/ChangeStyleField.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 
 export default {
@@ -7,10 +6,6 @@ export default {
     return {
       change: ['changeUpdateCustomNameEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeUpdateCustomNameEvent (event) {

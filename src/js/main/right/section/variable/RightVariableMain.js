@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperForm from '../../../../helper/HelperForm.js'
@@ -20,11 +19,7 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
-  focusinUnitSavePreviousValueEvent () {
+  focusinUnitSavePreviousValueEvent (event) {
     if (event.target.classList.contains('input-unit-measure')) {
       event.target.dataset.previous = event.target.value
     }
@@ -37,16 +32,16 @@ export default {
     }
   },
 
-  async clickCreateVariableSubmitEvent (event) {
-    if (event.target.closest('.dialog-create-variable-confirm')) {
-      await this.createVariableSubmit(event.target.closest('.dialog'))
-    }
-  },
-
   changeGotoUpdateVariableEvent (event) {
     if (event.target.classList.contains('input-unit-measure') &&
       event.target.value === 'var-desech-input-update') {
       this.gotoUpdateVariable(event.target)
+    }
+  },
+
+  async clickCreateVariableSubmitEvent (event) {
+    if (event.target.closest('.dialog-create-variable-confirm')) {
+      await this.createVariableSubmit(event.target.closest('.dialog'))
     }
   },
 

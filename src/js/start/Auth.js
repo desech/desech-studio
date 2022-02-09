@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import DialogComponent from '../component/DialogComponent.js'
 import HelperDOM from '../helper/HelperDOM.js'
 import Crypto from '../../electron/lib/Crypto.js'
@@ -8,10 +7,6 @@ export default {
     return {
       click: ['clickContinueAuthEvent', 'clickLogoutEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickContinueAuthEvent (event) {

@@ -1,7 +1,6 @@
 import HelperStyle from '../../../../helper/HelperStyle.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
 import ColorPickerGradient from '../../../../component/color-picker/ColorPickerGradient.js'
@@ -14,10 +13,6 @@ export default {
       change: ['changeOutsetEvent', 'changeSliceEvent', 'changeRepeatEvent'],
       setsource: ['setsourceImageEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeOutsetEvent (event) {

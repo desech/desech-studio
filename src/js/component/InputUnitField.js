@@ -1,5 +1,4 @@
 import ExtendJS from '../helper/ExtendJS.js'
-import HelperEvent from '../helper/HelperEvent.js'
 import RightVariableCommon from '../main/right/section/variable/RightVariableCommon.js'
 
 export default {
@@ -10,19 +9,17 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   changeInputValueEvent (event) {
     if (event.target.classList.contains('input-unit-value')) {
+      console.log('changeInputValueEvent exec')
       this.changeInputValue(event.target)
     }
   },
 
   changeSelectUnitEvent (event) {
     if (event.target.classList.contains('input-unit-measure') &&
-      !RightVariableCommon.isExecuteAction(event.target.dataset.action)) {
+      !RightVariableCommon.isExecuteAction(event.target.value)) {
+      console.log('changeSelectUnitEvent exec', event.target.value)
       this.selectUnit(event.target)
     }
   },

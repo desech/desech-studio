@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import HelperProject from '../../../../helper/HelperProject.js'
 
@@ -7,10 +6,6 @@ export default {
     return {
       change: ['changeEditMetaEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeEditMetaEvent (event) {

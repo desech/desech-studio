@@ -1,6 +1,5 @@
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperColor from '../../helper/HelperColor.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import ChangeStyleField from '../ChangeStyleField.js'
 import ColorPickerCommon from './ColorPickerCommon.js'
 import HelperProject from '../../helper/HelperProject.js'
@@ -11,10 +10,6 @@ export default {
       click: ['clickRepeatingButtonEvent'],
       dblclick: ['dblclickDeletePinEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickRepeatingButtonEvent (event) {

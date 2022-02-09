@@ -12,10 +12,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   inputSearchEvent (event) {
     if (event.target.classList.contains('panel-element-search')) {
       this.searchList(event.target)

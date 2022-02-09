@@ -1,6 +1,5 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightAnimationForm from './RightAnimationForm.js'
 import RightAnimationCommon from './RightAnimationCommon.js'
 import RightCommon from '../../RightCommon.js'
@@ -14,10 +13,6 @@ export default {
         'clickStopAnimationEvent', 'clickPlayAnimationEvent'],
       dragdropbefore: ['dragdropbeforeElementEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickAddElementEvent (event) {

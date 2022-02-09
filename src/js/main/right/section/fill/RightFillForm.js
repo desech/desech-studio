@@ -2,7 +2,6 @@ import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperParserBackground from '../../../../helper/parser/HelperParserBackground.js'
 import ColorPickerGradient from '../../../../component/color-picker/ColorPickerGradient.js'
 import ColorPickerSwatch from '../../../../component/color-picker/ColorPickerSwatch.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightFillProperty from './RightFillProperty.js'
 import RightFillImage from './RightFillImage.js'
 import RightFillCommon from './RightFillCommon.js'
@@ -15,10 +14,6 @@ export default {
     return {
       change: ['changeFillTypeEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeFillTypeEvent (event) {

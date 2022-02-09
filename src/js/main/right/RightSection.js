@@ -11,7 +11,6 @@ import RightEffect from './section/RightEffect.js'
 import RightAnimation from './section/RightAnimation.js'
 import RightCSS from './section/RightCSS.js'
 import RightComponent from './section/RightComponent.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import HelperElement from '../../helper/HelperElement.js'
 import StateSelectedElement from '../../state/StateSelectedElement.js'
 import RightCommon from './RightCommon.js'
@@ -23,10 +22,6 @@ export default {
       reloadcontainer: ['reloadcontainerEvent'],
       click: ['clickToggleSectionEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   reloadcontainerEvent (event) {

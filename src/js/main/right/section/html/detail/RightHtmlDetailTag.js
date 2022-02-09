@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../../helper/HelperEvent.js'
 import HelperDOM from '../../../../../helper/HelperDOM.js'
 import RightHtmlDetailOption from './RightHtmlDetailOption.js'
 import RightHtmlCommon from '../RightHtmlCommon.js'
@@ -19,10 +18,6 @@ export default {
         'setsourceTrackEvent', 'setsourceObjectEvent'],
       dragdropafter: ['dragdropafterSelectSortOptionEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   changeButtonTypeEvent (event) {

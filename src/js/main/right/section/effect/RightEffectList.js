@@ -1,5 +1,4 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightEffectForm from './RightEffectForm.js'
 import RightEffectType from './RightEffectType.js'
 import RightEffectCommon from './type/RightEffectCommon.js'
@@ -12,10 +11,6 @@ export default {
       click: ['clickAddElementEvent', 'clickDeleteElementEvent', 'clickEditElementEvent'],
       dragdropbefore: ['dragdropbeforeElementEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickAddElementEvent (event) {

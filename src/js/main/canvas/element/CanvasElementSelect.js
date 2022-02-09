@@ -14,10 +14,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   mousedownStartOperationEvent (event) {
     if ((event.target.closest('#canvas .element') || event.target.id === 'canvas' ||
       event.target.classList.contains('canvas-container')) && HelperEvent.isLeftClick(event) &&

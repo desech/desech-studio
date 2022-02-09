@@ -17,10 +17,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   async keydownSaveEvent (event) {
     if (event.key && HelperCanvas.getMain() && event.key.toLowerCase() === 's' &&
       HelperEvent.isCtrlCmd(event) && !event.shiftKey && !event.altKey) {

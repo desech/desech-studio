@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import HelperRegex from '../helper/HelperRegex.js'
 import DialogComponent from '../component/DialogComponent.js'
 import HelperDOM from '../helper/HelperDOM.js'
@@ -13,10 +12,6 @@ export default {
         'clickImportFilePromptEvent', 'clickImportFigmaEvent', 'clickFinishImportEvent',
         'clickContinueFigmaAuthEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickPremiumButton (event) {

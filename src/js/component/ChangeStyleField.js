@@ -1,6 +1,5 @@
 import InputUnitField from './InputUnitField.js'
 import CheckButtonField from './CheckButtonField.js'
-import HelperEvent from '../helper/HelperEvent.js'
 import RightCommon from '../main/right/RightCommon.js'
 import RightVariableInject from '../main/right/section/variable/RightVariableInject.js'
 import HelperDOM from '../helper/HelperDOM.js'
@@ -13,14 +12,10 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   async changeStyleInputEvent (event) {
     if (event.target.classList.contains('change-style') &&
-      ['INPUT', 'SELECT'].includes(event.target.tagName)) {
-      await this.changeStyle(event.target)
+      ['INPUT', 'SELECT'].includes(event.target.tagName)) {console.log('changeStyleInputEvent exec')
+      // await this.changeStyle(event.target)
     }
   },
 

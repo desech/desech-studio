@@ -2,7 +2,6 @@ import InputUnitField from '../../../../component/InputUnitField.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import RightBorderFill from './RightBorderFill.js'
 import HelperStyle from '../../../../helper/HelperStyle.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
@@ -13,10 +12,6 @@ export default {
       click: ['clickSideEvent'],
       change: ['changeStyleAllEvent', 'changeStyleEachEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickSideEvent (event) {

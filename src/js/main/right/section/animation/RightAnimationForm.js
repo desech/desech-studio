@@ -6,7 +6,6 @@ import HelperElement from '../../../../helper/HelperElement.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightAnimationCommon from './RightAnimationCommon.js'
 import RightCommon from '../../RightCommon.js'
 
@@ -15,10 +14,6 @@ export default {
     return {
       change: ['changeAnimationFieldsEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeAnimationFieldsEvent (event) {

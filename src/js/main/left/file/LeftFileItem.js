@@ -24,10 +24,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickCollapseExpandEvent (event) {
     if (event.target.closest('.panel-item-expand-button[data-type="file"]')) {
       this.collapseExpand(event.target.closest('li'))

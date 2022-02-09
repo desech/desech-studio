@@ -12,10 +12,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickSwitchPreviewEvent (event) {
     if (event.target.closest('.top-preview-button')) {
       TopCommon.switchPreview()

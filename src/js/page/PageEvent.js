@@ -1,4 +1,4 @@
-import HelperEvent from '../helper/HelperEvent.js'
+import HelperError from '../helper/HelperError.js'
 import InputUnitField from '../component/InputUnitField.js'
 import CheckButtonField from '../component/CheckButtonField.js'
 import TabComponent from '../component/TabComponent.js'
@@ -81,14 +81,45 @@ import RightVariableMain from '../main/right/section/variable/RightVariableMain.
 
 export default {
   addEvents () {
-    for (const obj of this.getEventClasses()) {
-      HelperEvent.addEvents(obj, Object.keys(obj.getEvents()))
+    for (const type of this.getEventTypes()) {
+      window.addEventListener(type, this)
     }
   },
 
-  removeEvents () {
+  getEventTypes () {
+    return [
+      'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'click', 'dblclick', 'wheel',
+      'keydown', 'keyup', 'input', 'change', 'focusin', 'submit', 'contextmenu', 'resize', 'paste',
+      'dragstart', 'dragend', 'dragover', 'dragdropbefore', 'dragdropafter', 'dragdroproot',
+      'colorchange', 'reloadcontainer', 'clearcontainer', 'openpanel', 'closepanel', 'pushcommand',
+      'setsource'
+    ]
+  },
+
+  async handleEvent (event) {
+    try {
+      await this.handleObjectEvents(event)
+    } catch (error) {
+      HelperError.error(error)
+    }
+  },
+
+  async handleObjectEvents (event) {
     for (const obj of this.getEventClasses()) {
-      HelperEvent.removeEvents(obj, Object.keys(obj.getEvents()))
+      for (const [type, events] of Object.entries(obj.getEvents())) {
+        for (const eventName of events) {
+          await this.processEvent(event, obj, type, eventName)
+        }
+      }
+    }
+  },
+
+  async processEvent (event, obj, type, eventName) {
+    // not all events are cancelable, for example `change`
+    if (event.type === type && (!event.cancelable || !event.defaultPrevented)) {
+      // preventDefault() will stop the rest of the events of the same type
+      if (!obj[eventName]) throw new Error(`Unknown event ${eventName}`)
+      await obj[eventName](event)
     }
   },
 

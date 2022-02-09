@@ -1,15 +1,10 @@
 import HelperDOM from '../helper/HelperDOM.js'
-import HelperEvent from '../helper/HelperEvent.js'
 
 export default {
   getEvents () {
     return {
       click: ['clickButtonEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickButtonEvent (event) {

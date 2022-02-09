@@ -27,10 +27,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickAddOverlayEvent (event) {
     if (event.target.closest('.responsive-add')) {
       this.toggleAddOverlay(event.target.closest('.responsive-add'))

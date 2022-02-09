@@ -1,5 +1,4 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import HelperComponent from '../../../../helper/HelperComponent.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
@@ -17,10 +16,6 @@ export default {
         'clickCancelRenameEvent', 'clickConfirmRenameEvent'],
       change: ['changeSwitchVariantEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickShowCreateEvent (event) {

@@ -12,10 +12,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickZoomInEvent (event) {
     if (event.target.closest('.canvas-zoom-in')) {
       this.zoomIn(event.clientX, event.clientY)

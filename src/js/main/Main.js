@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import HelperForm from '../helper/HelperForm.js'
 
 export default {
@@ -12,10 +11,6 @@ export default {
       submit: ['submitIgnoreEvent'],
       input: ['inputResetFormValidationEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickOpenLinkEvent (event) {

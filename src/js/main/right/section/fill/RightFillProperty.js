@@ -6,7 +6,6 @@ import HelperParserBackground from '../../../../helper/parser/HelperParserBackgr
 import HelperStyle from '../../../../helper/HelperStyle.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightFillCommon from './RightFillCommon.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import RightCommon from '../../RightCommon.js'
@@ -20,10 +19,6 @@ export default {
     return {
       colorchange: ['changecolorEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changecolorEvent (event) {

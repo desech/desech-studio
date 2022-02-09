@@ -1,5 +1,4 @@
 import ExtendJS from '../../../helper/ExtendJS.js'
-import HelperEvent from '../../../helper/HelperEvent.js'
 import CanvasOverlayResizeSize from './resize/CanvasOverlayResizeSize.js'
 import CanvasOverlayResizeMargin from './resize/CanvasOverlayResizeMargin.js'
 import CanvasOverlayResizePadding from './resize/CanvasOverlayResizePadding.js'
@@ -23,10 +22,6 @@ export default {
       mousemove: ['mousemoveEvent'],
       mouseup: ['mouseupEndEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   mousedownEvent (event) {

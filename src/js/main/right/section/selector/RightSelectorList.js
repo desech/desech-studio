@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
 import RightSelectorCommon from './RightSelectorCommon.js'
@@ -9,10 +8,6 @@ export default {
       click: ['clickSelectSelectorEvent', 'clickDeleteSelectorEvent', 'clickUnlinkClassEvent'],
       dragdropbefore: ['dragdropbeforeSortSelectorEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickSelectSelectorEvent (event) {

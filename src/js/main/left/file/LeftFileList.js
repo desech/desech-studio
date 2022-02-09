@@ -21,10 +21,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickCreateFolderOverlayEvent (event) {
     if (event.target.closest('.panel-file-create-folder')) {
       this.createOverlay(event.target.closest('.panel-file-create-folder'))

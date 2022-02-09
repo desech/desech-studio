@@ -1,5 +1,3 @@
-import StateStyleSheet from '../../../../state/StateStyleSheet.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
@@ -12,10 +10,6 @@ export default {
       click: ['clickAddFontEvent'],
       change: ['changeSetFontEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickAddFontEvent (event) {

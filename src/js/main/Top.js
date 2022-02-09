@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import TopCommon from './top/TopCommon.js'
 import HelperDOM from '../helper/HelperDOM.js'
 import HelperProject from '../helper/HelperProject.js'
@@ -10,10 +9,6 @@ export default {
     return {
       reloadcontainer: ['reloadcontainerEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   reloadcontainerEvent (event) {

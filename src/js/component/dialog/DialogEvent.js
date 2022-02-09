@@ -9,10 +9,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickCloseEvent (event) {
     if (event.target.closest('.dialog-close')) {
       DialogComponent.closeDialog(event.target.closest('.dialog'))

@@ -1,6 +1,5 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import CanvasOverlayCommon from '../../../canvas/overlay/CanvasOverlayCommon.js'
 import CanvasOverlayGrid from '../../../canvas/overlay/CanvasOverlayGrid.js'
 import CanvasOverlayGridTrack from '../../../canvas/overlay/grid/CanvasOverlayGridTrack.js'
@@ -11,10 +10,6 @@ export default {
       click: ['clickAddCellEvent', 'clickDeleteCellEvent'],
       change: ['changeUpdateCellEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickAddCellEvent (event) {

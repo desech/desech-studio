@@ -1,4 +1,3 @@
-import HelperEvent from '../../../helper/HelperEvent.js'
 import CanvasElementInline from '../element/CanvasElementInline.js'
 import CanvasTextOverlay from '../CanvasTextOverlay.js'
 import HelperCanvas from '../../../helper/HelperCanvas.js'
@@ -11,10 +10,6 @@ export default {
       click: ['clickToggleTextOverlayEvent', 'clickButtonEvent', 'clickClearFormattingEvent'],
       change: ['changeOtherTagsEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickToggleTextOverlayEvent (event) {

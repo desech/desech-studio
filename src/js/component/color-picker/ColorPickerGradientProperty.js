@@ -1,5 +1,4 @@
 import HelperDOM from '../../helper/HelperDOM.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import ColorPickerCommon from './ColorPickerCommon.js'
 
 export default {
@@ -7,10 +6,6 @@ export default {
     return {
       change: ['changeRadialSizeEvent', 'changeFieldEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   changeRadialSizeEvent (event) {

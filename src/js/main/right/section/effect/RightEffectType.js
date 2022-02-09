@@ -5,7 +5,6 @@ import RightEffectTypeTransition from './type/RightEffectTypeTransition.js'
 import RightEffectTypeBlend from './type/RightEffectTypeBlend.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightEffectCommon from './type/RightEffectCommon.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import RightCommon from '../../RightCommon.js'
@@ -29,10 +28,6 @@ export default {
       change: ['changeEffectFieldsEvent'],
       colorchange: ['colorchangeShadowEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickEffectFieldsEvent (event) {

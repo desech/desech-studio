@@ -1,7 +1,6 @@
 import ColorPickerInput from './ColorPickerInput.js'
 import HelperDOM from '../../helper/HelperDOM.js'
 import StateCommand from '../../state/StateCommand.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import HelperColor from '../../helper/HelperColor.js'
 import StyleSheetCommon from '../../state/stylesheet/StyleSheetCommon.js'
 
@@ -13,10 +12,6 @@ export default {
       click: ['clickSaveSwatchEvent', 'clickLoadSwatchEvent'],
       dblclick: ['dblclickDeleteSwatchEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickSaveSwatchEvent (event) {

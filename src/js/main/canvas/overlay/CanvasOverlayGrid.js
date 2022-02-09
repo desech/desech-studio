@@ -17,10 +17,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickSwitchButtonEvent (event) {
     if (event.target.closest('.overlay-button-switch')) {
       this.switchOverlayModes()

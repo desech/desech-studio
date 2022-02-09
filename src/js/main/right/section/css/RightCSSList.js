@@ -1,7 +1,6 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightCSSProperty from './RightCSSProperty.js'
 import ChangeStyleField from '../../../../component/ChangeStyleField.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import ColorPickerButton from '../../../../component/color-picker/ColorPickerButton.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
@@ -12,10 +11,6 @@ export default {
       change: ['changeCreatePropertyEvent'],
       click: ['clickDeletePropertyEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async changeCreatePropertyEvent (event) {

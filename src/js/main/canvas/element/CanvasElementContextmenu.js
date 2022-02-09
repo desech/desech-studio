@@ -1,4 +1,3 @@
-import HelperEvent from '../../../helper/HelperEvent.js'
 import RightHtmlCommon from '../../right/section/html/RightHtmlCommon.js'
 import HelperTrigger from '../../../helper/HelperTrigger.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
@@ -27,10 +26,6 @@ export default {
         'clickAssignComponentHoleEvent', 'clickLoadComponentEvent', 'clickEditText'],
       contextmenu: ['contextmenuCanvasShowMenuEvent', 'contextmenuSidebarShowMenuEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickHideMenuEvent (event) {

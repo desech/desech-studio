@@ -29,10 +29,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   mousedownStartMoveEvent (event) {
     if (event.target.closest('.element') && HelperEvent.isLeftClick(event) &&
       HelperCanvas.canInteract()) {

@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import HelperDOM from '../helper/HelperDOM.js'
 import ExtendJS from '../helper/ExtendJS.js'
 
@@ -7,10 +6,6 @@ export default {
     return {
       mouseover: ['mouseoverEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   mouseoverEvent (event) {

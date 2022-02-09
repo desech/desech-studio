@@ -1,6 +1,5 @@
 import InputUnitField from '../../../../component/InputUnitField.js'
 import TabComponent from '../../../../component/TabComponent.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 
 export default {
@@ -9,10 +8,6 @@ export default {
       click: ['clickSwitchRadiusEvent'],
       change: ['changeStyleAllEvent', 'changeStyleEachEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickSwitchRadiusEvent (event) {

@@ -12,10 +12,6 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   clickPanelButtonEvent (event) {
     if (event.target.closest('.tool-button')) {
       this.enableButton(event.target.closest('.tool-button').dataset.type)

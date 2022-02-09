@@ -1,5 +1,4 @@
 import HelperDOM from '../helper/HelperDOM.js'
-import HelperEvent from '../helper/HelperEvent.js'
 
 export default {
   _dragged: null,
@@ -11,10 +10,6 @@ export default {
       dragend: ['dragendEvent'],
       dragover: ['dragoverEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   dragstartEvent (event) {

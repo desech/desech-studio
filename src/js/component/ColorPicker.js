@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import ColorPickerCommon from './color-picker/ColorPickerCommon.js'
 import ColorPickerGradient from './color-picker/ColorPickerGradient.js'
 import ExtendJS from '../helper/ExtendJS.js'
@@ -14,10 +13,6 @@ export default {
       mousemove: ['mousemoveContinueDragEvent'],
       mouseup: ['mouseupEndDragEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   mousedownStartDragEvent (event) {

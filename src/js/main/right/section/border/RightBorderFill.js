@@ -1,6 +1,5 @@
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightBorderFillForm from './RightBorderFillForm.js'
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
 import RightBorderFillProperty from './RightBorderFillProperty.js'
 import RightCommon from '../../RightCommon.js'
@@ -13,17 +12,13 @@ export default {
     }
   },
 
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
-  },
-
   async clickSetBorderFillEvent (event) {
     if (event.target.closest('.border-details-container .color-button-main')) {
       await this.setBorderFill(event.target.closest('form'))
     }
   },
 
-  async changeSelectColorEvent () {
+  async changeSelectColorEvent (event) {
     if (event.target.closest('.border-details-container .color-button-select')) {
       await this.setSelectColor(event.target, event.target.closest('form'))
     }

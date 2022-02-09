@@ -1,17 +1,12 @@
 import HelperDOM from '../helper/HelperDOM.js'
 import InputUnitField from './InputUnitField.js'
 import HelperStyle from '../helper/HelperStyle.js'
-import HelperEvent from '../helper/HelperEvent.js'
 
 export default {
   getEvents () {
     return {
       change: ['changeFunctionEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   changeFunctionEvent (event) {

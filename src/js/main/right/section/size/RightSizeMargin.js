@@ -1,4 +1,3 @@
-import HelperEvent from '../../../../helper/HelperEvent.js'
 import RightCommon from '../../RightCommon.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
@@ -9,10 +8,6 @@ export default {
       click: ['clickConstrainEvent'],
       change: ['changeFieldEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickConstrainEvent (event) {

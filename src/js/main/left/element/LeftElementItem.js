@@ -1,4 +1,3 @@
-import HelperEvent from '../../../helper/HelperEvent.js'
 import HelperElement from '../../../helper/HelperElement.js'
 import LeftCommon from '../LeftCommon.js'
 import CanvasElementMove from '../../canvas/element/CanvasElementMove.js'
@@ -14,10 +13,6 @@ export default {
       dragstart: ['dragstartSortItemEvent'],
       dragdropbefore: ['dragdropbeforeSortItemEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickCollapseExpandEvent (event) {

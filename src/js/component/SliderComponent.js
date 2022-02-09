@@ -1,4 +1,3 @@
-import HelperEvent from '../helper/HelperEvent.js'
 import HelperLocalStore from '../helper/HelperLocalStore.js'
 
 export default {
@@ -6,10 +5,6 @@ export default {
     return {
       click: ['clickToggleContainerEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   clickToggleContainerEvent (event) {

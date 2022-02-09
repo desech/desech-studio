@@ -1,6 +1,5 @@
 import HelperDOM from '../../helper/HelperDOM.js'
 import RightSection from './RightSection.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import RightCommon from './RightCommon.js'
 
 export default {
@@ -8,10 +7,6 @@ export default {
     return {
       reloadcontainer: ['reloadcontainerEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   reloadcontainerEvent (event) {

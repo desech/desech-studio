@@ -1,6 +1,5 @@
 import HelperDOM from '../../helper/HelperDOM.js'
 import HelperColor from '../../helper/HelperColor.js'
-import HelperEvent from '../../helper/HelperEvent.js'
 import ColorPickerCommon from './ColorPickerCommon.js'
 
 export default {
@@ -9,10 +8,6 @@ export default {
       change: ['changeHexInputEvent', 'changeRgbInputEvent', 'changeHslInputEvent',
         'changeHsvInputEvent', 'changeAlphaInputEvent', 'changeColorTypeEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   changeColorTypeEvent (event) {

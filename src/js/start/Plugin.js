@@ -1,5 +1,4 @@
 import DialogComponent from '../component/DialogComponent.js'
-import HelperEvent from '../helper/HelperEvent.js'
 import HelperDOM from '../helper/HelperDOM.js'
 
 export default {
@@ -7,10 +6,6 @@ export default {
     return {
       click: ['clickInstallPluginEvent', 'clickRemovePluginEvent']
     }
-  },
-
-  handleEvent (event) {
-    HelperEvent.handleEvents(this, event)
   },
 
   async clickInstallPluginEvent (event) {

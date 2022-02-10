@@ -5,19 +5,22 @@ import LeftFileData from './left/file/LeftFileData.js'
 import LeftElementData from './left/element/LeftElementData.js'
 import HelperCanvas from '../helper/HelperCanvas.js'
 import TopCommon from './top/TopCommon.js'
+import LeftVariableData from './left/variable/LeftVariableData.js'
 
 export default {
   getList () {
     return {
       file: LeftFileData,
-      element: LeftElementData
+      element: LeftElementData,
+      variable: LeftVariableData
     }
   },
 
   getKeyMap () {
     return {
       1: 'file',
-      2: 'element'
+      2: 'element',
+      3: 'variable'
     }
   },
 
@@ -126,10 +129,6 @@ export default {
   async buildPanel (container, type, options) {
     if (!Object.keys(this.getList()).includes(type)) return
     const list = container.getElementsByClassName('panel-list')[0]
-    await this.buildList(container, type, list, options)
-  },
-
-  async buildList (container, type, list, options) {
     await this.getList()[type].buildList(container, type, list, options)
   }
 }

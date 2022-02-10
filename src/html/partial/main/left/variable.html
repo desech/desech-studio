@@ -1,0 +1,16 @@
+<template id="template-panel-variable">
+  <div class="sidebar-left-panel-inner">
+    <div class="panel-list-empty">
+      {{#i18n}} No variables created so far {{/i18n}}
+    </div>
+    <div class="panel-list-items panel-list-variables" hidden>
+      <header>
+        <div hidden class="panel-search-cycle-variable panel-search-cycle">{{#i18n}} Press F3/F2 {{/i18n}}</div>
+        <input class="panel-variable-search panel-search" type="text" placeholder="{{#i18n}} All Variables {{/i18n}}">
+      </header>
+      <div class="panel-list-variables-box panel-list-box scrollbar">
+        <ul class="panel-variable-list panel-list-container panel-list dragdrop-container"></ul>
+      </div>
+    </div>
+  </div>
+</template>

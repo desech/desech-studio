@@ -154,5 +154,9 @@ export default {
         this.removeDeepIndex(obj[key][childrenIndex], index, childrenIndex)
       }
     }
+  },
+
+  sortArrayByObjKey (array, key) {
+    return array.sort((a, b) => a[key].localeCompare(b[key]))
   }
 }

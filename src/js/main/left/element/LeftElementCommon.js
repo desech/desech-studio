@@ -5,16 +5,15 @@ import HelperDOM from '../../../helper/HelperDOM.js'
 export default {
   getElements (container) {
     const results = []
-    const componentData = HelperComponent.getMainData()
     for (const element of container.children) {
       if (element.classList.contains('element') && HelperElement.isCanvasElement(element)) {
-        results.push(this.getElementData(element, componentData))
+        results.push(this.getElementData(element))
       }
     }
     return results
   },
 
-  getElementData (element, componentData) {
+  getElementData (element) {
     return {
       element,
       ref: HelperElement.getRef(element),

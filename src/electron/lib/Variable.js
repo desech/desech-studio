@@ -3,7 +3,7 @@ import File from '../file/File.js'
 export default {
   getVariables (folder) {
     const json = File.getFileData('_desech/variable.json', folder)
-    return json || { data: {}, tree: {} }
+    return json || { data: {} }
   },
 
   async saveVariables (variables, folder) {

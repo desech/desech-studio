@@ -1,6 +1,8 @@
 import StyleSheetCommon from '../../../../state/stylesheet/StyleSheetCommon.js'
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import HelperGlobal from '../../../../helper/HelperGlobal.js'
+import HelperForm from '../../../../helper/HelperForm.js'
+import ExtendJS from '../../../../helper/ExtendJS.js'
 
 export default {
   sanitizeVariable (name) {
@@ -30,6 +32,14 @@ export default {
       case 'padding-top': case 'padding-right': case 'padding-bottom': case 'padding-left':
         return 'padding'
     }
+  },
+
+  validateName (field, name) {
+    const duplicate = HelperGlobal.checkVarByName(name)
+    HelperForm.reportFieldError(field, !duplicate, 'errorDuplicate')
+    if (duplicate) return
+    const numeric = ExtendJS.startsNumeric(name)
+    HelperForm.reportFieldError(field, !numeric, 'errorInvalid')
   },
 
   createVariable (variable, style = null) {

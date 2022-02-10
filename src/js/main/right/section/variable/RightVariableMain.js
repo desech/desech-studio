@@ -79,11 +79,12 @@ export default {
 
   async createVariableSubmit (dialog) {
     const form = dialog.getElementsByTagName('form')[0]
+    const input = form.elements.name
     const data = this.getVariableData(form.elements)
     const propertyName = form.elements.property.value
-    if (form.checkValidity()) this.validateVariable(form.elements.name, data)
+    if (form.checkValidity()) RightVariableCommon.validateName(input, data.name)
     if (form.checkValidity()) await this.finishCreateVariable(dialog, data, propertyName)
-    form.elements.name.reportValidity()
+    input.reportValidity()
   },
 
   getVariableData (fields) {
@@ -93,14 +94,6 @@ export default {
       type: RightVariableCommon.getPropertyType(fields.property.value),
       value: StateStyleSheet.getPropertyValue(fields.property.value)
     }
-  },
-
-  validateVariable (field, data) {
-    const duplicate = HelperGlobal.checkVarByName(data.name)
-    HelperForm.reportFieldError(field, !duplicate, 'errorDuplicate')
-    if (duplicate) return
-    const numeric = ExtendJS.startsNumeric(data.name)
-    HelperForm.reportFieldError(field, !numeric, 'errorInvalid')
   },
 
   async finishCreateVariable (dialog, data, propertyName) {

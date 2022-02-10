@@ -1,11 +1,12 @@
 import StateCommand from '../../../../state/StateCommand.js'
 import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
+import RightVariableCommon from './RightVariableCommon.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickDeleteVariableEvent'],
+      click: ['clickDeleteVariableEvent', 'clickCancelEvent'],
       change: ['changeUpdateNameEvent', 'changeUpdateValueInputEvent']
     }
   },
@@ -16,9 +17,15 @@ export default {
     }
   },
 
+  clickCancelEvent (event) {
+    if (event.target.closest('.right-variable-back')) {
+      StateSelectedVariable.deselectVariable()
+    }
+  },
+
   async changeUpdateNameEvent (event) {
     if (event.target.classList.contains('right-variable-name')) {
-      await this.updateName(event.target.value)
+      await this.updateName(event.target.closest('form'))
     }
   },
 
@@ -49,7 +56,15 @@ export default {
     await StateCommand.executeCommand(command.do)
   },
 
-  async updateName (name) {
+  async updateName (form) {
+    const input = form.elements.name
+    const value = RightVariableCommon.sanitizeVariable(input.value)
+    if (form.checkValidity()) RightVariableCommon.validateName(input, value)
+    if (form.checkValidity()) await this.updateNameExec(value)
+    input.reportValidity()
+  },
+
+  async updateNameExec (name) {
     const variable = StateSelectedVariable.getVariable()
     const command = {
       do: {

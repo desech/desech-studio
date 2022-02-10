@@ -169,7 +169,7 @@ export default {
     this.setCurrentCommand(other)
     const data = JSON.parse(dataType === 'undo' ? current.dataset.data : other.dataset.data)
     // we do want to reload the side panel
-    await StateCommand.executeCommand(data[dataType], true, true)
+    await StateCommand.executeCommand(data[dataType], { rightPanel: true })
     this.updateButtonStates()
   }
 }

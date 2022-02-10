@@ -7,7 +7,7 @@ export default {
   createElement (type, selection) {
     const ref = this.insertElementInSelection(type, selection)
     StateStyleSheet.initElementStyle(ref)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   insertElementInSelection (type, selection) {
@@ -28,6 +28,6 @@ export default {
     if (node.parentNode.classList.contains('editable')) return
     // @todo fix it when we have nested formattings
     node.parentNode.replaceWith(node)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   }
 }

@@ -10,19 +10,19 @@ export default {
       root: root || HelperProject.getFolder(),
       folder: HelperFile.sanitizeFolder(name)
     })
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['file'] })
   },
 
   async copyFile (file, root = null) {
     root = root || HelperProject.getFolder()
     const name = HelperFile.sanitizeFile(HelperFile.getBasename(file))
     await window.electron.invoke('rendererCopyFile', { root, file, name })
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['file'] })
   },
 
   async createFile (file, contents) {
     const success = await window.electron.invoke('rendererCreateFile', { file, contents })
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['file'] })
     return success
   },
 

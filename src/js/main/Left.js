@@ -48,7 +48,7 @@ export default {
 
   async reloadcontainerEvent (event) {
     if (event.target.id === 'sidebar-left-panel') {
-      await this.reloadPanel(event.target, event.detail)
+      await this.reloadPanel(event.target, event.detail.panels)
     }
   },
 
@@ -79,10 +79,11 @@ export default {
     this.hidePanel(button, container)
   },
 
-  async reloadPanel (container, data) {
+  async reloadPanel (container, panels) {
     const button = document.querySelector('.panel-list-button.selected')
-    if (!button || (data && button.dataset.panel !== data.panel)) return
-    await this.addPanelData(container, button.dataset.panel)
+    if (button && (!panels || panels.includes(button.dataset.panel))) {
+      await this.addPanelData(container, button.dataset.panel)
+    }
   },
 
   async togglePanel (type, options = {}) {

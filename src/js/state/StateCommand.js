@@ -68,17 +68,29 @@ export default {
     return this.pushCommand()
   },
 
-  async executeCommand (data, overlayReload = true, panelReload = false) {
+  async executeCommand (data, reload = {}) {
     if (typeof StateCommandExec[data.command] !== 'function') {
       throw new Error(`Unknown command "${data.command}"`)
     }
     await StateCommandExec[data.command](data)
     StateSelectedElement.clearInvalidSelected()
-    if (overlayReload) this.reloadContainers(panelReload)
+    this.reloadContainers(reload)
   },
 
-  reloadContainers (panelReload) {
-    HelperTrigger.triggerReload('element-overlay', { panelReload })
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+  reloadContainers (data) {
+    this.initReload(data)
+    if (data.elementOverlay) {
+      HelperTrigger.triggerReload('element-overlay', { panelReload: data.rightPanel })
+    }
+    if (data.leftPanels) {
+      HelperTrigger.triggerReload('sidebar-left-panel', { panels: data.leftPanels })
+    }
+  },
+
+  // reload: { elementOverlay, leftPanels: ['file', element', 'variable'], rightPanel }
+  initReload (data) {
+    if (!('elementOverlay' in data)) data.elementOverlay = true
+    if (!('rightPanel' in data)) data.rightPanel = false
+    if (!('leftPanels' in data)) data.leftPanels = ['element', 'variable']
   }
 }

@@ -4,13 +4,7 @@ import HelperFile from '../../../helper/HelperFile.js'
 import ExtendJS from '../../../helper/ExtendJS.js'
 
 export default {
-  loadSection () {
-    const container = document.getElementById('main-style-sections')
-    const section = this.getSection()
-    container.appendChild(section)
-  },
-
-  getSection (sectionData) {
+  getSection () {
     const template = HelperDOM.getTemplate('template-style-page')
     if (HelperFile.isComponentFile()) {
       this.hideFields(template)

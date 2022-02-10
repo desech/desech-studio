@@ -191,7 +191,7 @@ export default {
   async moveToFolder (from, to) {
     await TopCommandSave.save(true)
     await window.electron.invoke('rendererMoveToFolder', from, to)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['file'] })
     await LeftFileLoad.reloadCurrentFile()
   }
 }

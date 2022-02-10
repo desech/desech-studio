@@ -28,15 +28,20 @@ export default {
   },
 
   reloadPanel () {
-    if (this.getContainer() && (StateSelectedVariable.getRef() || StateSelectedElement.getRef())) {
+    if (!this.getContainer()) return
+    if (StateSelectedVariable.getRef() || StateSelectedElement.getRef()) {
       this.clearPanel()
       this.loadPanel()
+    } else {
+      // when we have no selected id, we need to see the default panel
+      this.loadDefaultPanel()
     }
   },
 
   loadDefaultPanel () {
     this.clearPanel()
-    RightPage.loadSection()
+    const section = RightPage.getSection()
+    this.getContainer().appendChild(section)
   },
 
   clearPanel () {

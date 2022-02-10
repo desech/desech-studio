@@ -38,7 +38,7 @@ export default {
     CanvasElementCopyElement.addPastedPlacement()
     CanvasElementCopyElement.addPastedElement(element)
     await CanvasElement.addRemoveElementCommand(ref, 'addElement', 'removeElement', false)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   async assignComponentHole (container) {

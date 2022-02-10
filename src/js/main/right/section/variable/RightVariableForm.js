@@ -53,7 +53,7 @@ export default {
       }
     }
     StateCommand.stackCommand(command)
-    await StateCommand.executeCommand(command.do)
+    await StateCommand.executeCommand(command.do, { rightPanel: true })
   },
 
   async updateName (form) {

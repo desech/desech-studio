@@ -183,24 +183,24 @@ export default {
   async hideElement (container) {
     await RightHtmlCommon.setHidden(true)
     container.classList.add('hidden')
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   async showElement (container) {
     await RightHtmlCommon.setHidden(false)
     container.classList.remove('hidden')
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   async unrenderElement (container) {
     await RightHtmlCommon.setUnrender(true)
     container.classList.add('unrender')
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   async renderElement (container) {
     await RightHtmlCommon.setUnrender(false)
     container.classList.remove('unrender')
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   }
 }

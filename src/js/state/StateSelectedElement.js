@@ -45,7 +45,7 @@ export default {
     const selected = HelperCanvas.getCanvas().getElementsByClassName('selected')[0]
     if (selected) selected.classList.remove('selected')
     HelperCanvas.deleteCanvasData('selectedElement')
-    LeftCommon.deselectItem()
+    LeftCommon.deselectItem('element')
     if (clear) this.updateUiAfterElementDeselect()
   },
 

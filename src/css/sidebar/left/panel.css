@@ -37,6 +37,12 @@
   align-items: center;
 }
 
+#sidebar-left-panel header.variable-grid {
+  display: grid;
+  grid-template-columns: auto 24px;
+  column-gap: 5px;
+}
+
 #sidebar-left-panel .panel-search {
   padding: 0 80px 0 22px;
   background-image: var(--list-svg-search);
@@ -67,6 +73,10 @@
   right: 70px;
 }
 
+#sidebar-left-panel .panel-search-cycle-variable {
+  right: 41px
+}
+
 #sidebar-left-panel .panel-list-empty {
   margin: 10px;
   padding: 10px;
@@ -89,6 +99,11 @@
   align-items: start;
   height: 25px;
   line-height: 25px;
+}
+
+#sidebar-left-panel ul.panel-variable-list>li {
+  grid-template-columns: initial;
+  padding: 0 10px;
 }
 
 #sidebar-left-panel .list-item-tree {

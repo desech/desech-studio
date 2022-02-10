@@ -64,11 +64,11 @@ export default {
     }
   },
 
-  async runCommand (command, panelReload) {
+  async runCommand (command, rightPanel) {
     if (ExtendJS.isEmpty(command.do.properties)) return
     // we don't want to wait for the stacking to take effect, so no await
     StateCommand.stackCommand(command)
-    await StateCommand.executeCommand(command.do, true, panelReload)
+    await StateCommand.executeCommand(command.do, { rightPanel })
   },
 
   processToggle (container) {

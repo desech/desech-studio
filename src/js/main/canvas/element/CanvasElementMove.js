@@ -118,7 +118,7 @@ export default {
     HelperElement.hideInEditor(element)
     StateSelectedElement.selectElementNode(newElement)
     await CanvasElement.tokenCommand(newElement.dataset.ssToken, 'moveElement', false)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   cloneMoveElement (element) {

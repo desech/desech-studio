@@ -7,7 +7,6 @@ import StateSelectedElement from '../../../state/StateSelectedElement.js'
 export default {
   getEvents () {
     return {
-      // order matters
       click: ['clickCollapseExpandEvent', 'clickSelectItemEvent', 'clickDeselectItemEvent'],
       dblclick: ['dblclickCollapseExpandEvent'],
       dragstart: ['dragstartSortItemEvent'],

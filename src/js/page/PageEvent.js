@@ -43,6 +43,9 @@ import LeftElementItem from '../main/left/element/LeftElementItem.js'
 import LeftFileList from '../main/left/file/LeftFileList.js'
 import LeftFileItem from '../main/left/file/LeftFileItem.js'
 import LeftFileContextmenu from '../main/left/file/LeftFileContextmenu.js'
+import LeftVariableList from '../main/left/variable/LeftVariableList.js'
+import LeftVariableItem from '../main/left/variable/LeftVariableItem.js'
+import LeftVariableContextmenu from '../main/left/variable/LeftVariableContextmenu.js'
 import Right from '../main/Right.js'
 import RightSubPanel from '../main/right/RightSubPanel.js'
 import RightSection from '../main/right/RightSection.js'
@@ -212,9 +215,11 @@ export default {
       LeftElementList,
       LeftElementItem,
       LeftFileList,
-      LeftFileContextmenu,
-      // before LeftFileItem
-      LeftFileItem
+      LeftFileContextmenu, // before LeftFileItem
+      LeftFileItem,
+      LeftVariableList,
+      LeftVariableContextmenu,
+      LeftVariableItem
     ]
   },
 

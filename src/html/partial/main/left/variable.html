@@ -1,16 +1,38 @@
 <template id="template-panel-variable">
-  <div class="sidebar-left-panel-inner">
+  <div class="sidebar-left-panel-inner" data-type="variable">
     <div class="panel-list-empty">
       {{#i18n}} No variables created so far {{/i18n}}
     </div>
     <div class="panel-list-items panel-list-variables" hidden>
-      <header>
+      <header class="variable-grid">
         <div hidden class="panel-search-cycle-variable panel-search-cycle">{{#i18n}} Press F3/F2 {{/i18n}}</div>
         <input class="panel-variable-search panel-search" type="text" placeholder="{{#i18n}} All Variables {{/i18n}}">
+
+        <button type="button" class="panel-variable-create small tooltip bottom" data-tooltip="{{#i18n}} Create variable {{/i18n}}">
+          <svg width="18" height="18" viewBox="0 0 22 22">
+            <path d="M0 0h24v24H0V0z" fill="none"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+          </svg>
+        </button>
       </header>
       <div class="panel-list-variables-box panel-list-box scrollbar">
         <ul class="panel-variable-list panel-list-container panel-list dragdrop-container"></ul>
       </div>
     </div>
+  </div>
+</template>
+
+<template id="template-variable-item">
+  <li class="panel-item panel-variable-item">
+    <div class="panel-item-name"></div>
+  </li>
+</template>
+
+<template id="template-contextmenu-variable">
+  <div>
+    <ul class="menu-list">
+      <li class="panel-option panel-option-variable-update">{{#i18n}} Update {{/i18n}}</li>
+      <li class="panel-option panel-option-variable-delete">{{#i18n}} Delete {{/i18n}}</li>
+    </ul>
   </div>
 </template>

@@ -217,14 +217,14 @@ export default {
   async showHideElement (hidden) {
     Contextmenu.removeMenu()
     await RightHtmlCommon.setHidden(hidden)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
     HelperTrigger.triggerReload('right-panel')
   },
 
   async renderUnrenderElement (unrender) {
     Contextmenu.removeMenu()
     await RightHtmlCommon.setUnrender(unrender)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
     HelperTrigger.triggerReload('right-panel')
   },
 

@@ -1,13 +1,10 @@
 import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import DialogComponent from '../../../../component/DialogComponent.js'
-import HelperForm from '../../../../helper/HelperForm.js'
 import StateCommand from '../../../../state/StateCommand.js'
 import HelperTrigger from '../../../../helper/HelperTrigger.js'
 import RightVariableCommon from './RightVariableCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
 import HelperCanvas from '../../../../helper/HelperCanvas.js'
-import HelperGlobal from '../../../../helper/HelperGlobal.js'
-import ExtendJS from '../../../../helper/ExtendJS.js'
 import HelperVariable from '../../../../helper/HelperVariable.js'
 import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
@@ -131,6 +128,5 @@ export default {
     this.setSelectData(select)
     const ref = HelperVariable.getVariableRef(select.previousElementSibling.value)
     StateSelectedVariable.selectVariable(ref)
-    HelperTrigger.triggerReload('right-panel')
   }
 }

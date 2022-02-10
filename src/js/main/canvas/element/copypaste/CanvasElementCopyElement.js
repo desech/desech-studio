@@ -45,7 +45,7 @@ export default {
     if (!this.addPastedPlacement()) return
     this.addPastedElement(newElement)
     await this.pasteExecute(newElement, data.element)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   },
 
   async duplicateElement (element = null) {
@@ -193,7 +193,7 @@ export default {
     this.addPastedElement(newElement)
     const ref = HelperElement.getRef(newElement)
     await CanvasElement.addRemoveElementCommand(ref, 'duplicateElement', 'removeElement', false)
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
     StateSelectedElement.selectElement(newElement)
   }
 }

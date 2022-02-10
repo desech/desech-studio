@@ -262,6 +262,6 @@ export default {
     StateSelectedElement.selectElement(element)
     // go back to the selection tool
     CanvasCommon.enablePanelButton('select')
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'element' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
   }
 }

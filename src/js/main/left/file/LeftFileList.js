@@ -165,7 +165,7 @@ export default {
 
   clearSearchSelectItem (cycle) {
     HelperDOM.hide(cycle)
-    LeftCommon.deselectItem()
+    LeftCommon.deselectItem('file')
   },
 
   cycleSearch (cycleType) {

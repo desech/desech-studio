@@ -1,6 +1,7 @@
 import HelperCanvas from '../helper/HelperCanvas.js'
 import HelperTrigger from '../helper/HelperTrigger.js'
 import HelperGlobal from '../helper/HelperGlobal.js'
+import LeftCommon from '../main/left/LeftCommon.js'
 
 export default {
   getRef () {
@@ -16,10 +17,13 @@ export default {
 
   selectVariable (ref) {
     HelperCanvas.setCanvasData('selectedVariable', ref)
+    LeftCommon.selectItemByRef(ref)
+    HelperTrigger.triggerReload('right-panel')
   },
 
   deselectVariable () {
     HelperCanvas.deleteCanvasData('selectedVariable')
+    LeftCommon.deselectItem('variable')
     HelperTrigger.triggerReload('right-panel')
   }
 }

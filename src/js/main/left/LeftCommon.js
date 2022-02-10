@@ -171,7 +171,8 @@ export default {
   selectItem (li, cls = 'active') {
     if (!li) return
     if (!li.classList.contains(cls)) {
-      this.deselectItem(cls)
+      const type = li.closest('.sidebar-left-panel-inner').dataset.type
+      this.deselectItem(type, cls)
       li.classList.add(cls)
     }
     if (HelperDOM.isHidden(li)) this.expandParents(li)
@@ -180,8 +181,8 @@ export default {
     }
   },
 
-  deselectItem (cls = 'active') {
-    const active = document.querySelector(`.panel-item.${cls}`)
+  deselectItem (type, cls = 'active') {
+    const active = document.querySelector(`.panel-${type}-item.${cls}`)
     if (active) active.classList.remove(cls)
   },
 
@@ -210,7 +211,8 @@ export default {
   },
 
   startSortItem (item) {
-    this.deselectItem()
+    const type = item.closest('.sidebar-left-panel-inner').dataset.type
+    this.deselectItem(type)
     const button = item.getElementsByClassName('panel-item-expand-button')[0]
     if (button.classList.contains('opened')) this.collapseItem(button)
   }

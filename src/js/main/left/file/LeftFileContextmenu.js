@@ -14,23 +14,23 @@ import LeftFileLoad from './LeftFileLoad.js'
 export default {
   getEvents () {
     return {
+      contextmenu: ['contextmenuShowMenuEvent'],
       click: ['clickHideMenuEvent', 'clickLoadHtmlEvent', 'clickAddComponentHtmlEvent',
         'clickOpenFileEvent', 'clickShowRenameItemEvent', 'clickDeleteItemEvent',
         'clickNewFolderEvent', 'clickNewFileEvent', 'clickCopySvgEvent'],
-      keydown: ['keydownFinishRenameItemEvent', 'keydownCloseEvent'],
-      contextmenu: ['contextmenuShowMenuEvent']
+      keydown: ['keydownFinishRenameItemEvent', 'keydownCloseEvent']
+    }
+  },
+
+  contextmenuShowMenuEvent (event) {
+    if (event.target.closest('.panel-file-item')) {
+      this.showContextmenu(event.target.closest('li'), event.clientX, event.clientY)
     }
   },
 
   clickHideMenuEvent (event) {
     if (!HelperDOM.isHidden(document.getElementById('file-contextmenu'))) {
       this.hideMenu()
-    }
-  },
-
-  contextmenuShowMenuEvent (event) {
-    if (event.target.closest('.panel-file-item')) {
-      this.showContextmenu(event.target.closest('.panel-file-item'), event.clientX, event.clientY)
     }
   },
 
@@ -96,16 +96,6 @@ export default {
     }
   },
 
-  getActiveMenuElement () {
-    const menu = document.getElementById('file-contextmenu')
-    return document.querySelector(`.panel-file-item[data-ref="${menu.dataset.ref}"]`)
-  },
-
-  hideMenu () {
-    Contextmenu.removeMenu()
-    LeftFileCommon.clearActiveItem()
-  },
-
   showContextmenu (item, x, y) {
     LeftFileCommon.setActiveItem(item)
     const menu = document.getElementById('file-contextmenu')
@@ -149,6 +139,16 @@ export default {
     for (const li of menu.getElementsByClassName('writable')) {
       li.classList.toggle('disabled', check)
     }
+  },
+
+  getActiveMenuElement () {
+    const menu = document.getElementById('file-contextmenu')
+    return document.querySelector(`.panel-file-item[data-ref="${menu.dataset.ref}"]`)
+  },
+
+  hideMenu () {
+    Contextmenu.removeMenu()
+    LeftFileCommon.clearActiveItem()
   },
 
   async loadHtmlFile (item) {
@@ -212,7 +212,7 @@ export default {
   },
 
   async finishDestructiveOperation () {
-    HelperTrigger.triggerReload('sidebar-left-panel', { panel: 'file' })
+    HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['file'] })
     // we can't reload the current file because it might have been renamed by the operation
     await LeftFileLoad.reloadIndexFile()
   },

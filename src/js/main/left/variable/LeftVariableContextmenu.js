@@ -3,7 +3,6 @@ import Contextmenu from '../../../component/Contextmenu.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import HelperEvent from '../../../helper/HelperEvent.js'
 import RightVariableForm from '../../right/section/variable/RightVariableForm.js'
-import HelperTrigger from '../../../helper/HelperTrigger.js'
 
 export default {
   getEvents () {

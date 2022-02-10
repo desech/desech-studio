@@ -2,12 +2,14 @@ import HelperEvent from '../../../helper/HelperEvent.js'
 import LeftCommon from '../LeftCommon.js'
 import HelperDOM from '../../../helper/HelperDOM.js'
 import StateSelectedVariable from '../../../state/StateSelectedVariable.js'
+import RightVariableMain from '../../right/section/variable/RightVariableMain.js'
 
 export default {
   getEvents () {
     return {
       input: ['inputSearchEvent'],
-      keydown: ['keydownCycleNextSearchEvent', 'keydownCyclePreviousSearchEvent']
+      keydown: ['keydownCycleNextSearchEvent', 'keydownCyclePreviousSearchEvent'],
+      click: ['clickCreateVariablePromptEvent']
     }
   },
 
@@ -26,6 +28,12 @@ export default {
   keydownCyclePreviousSearchEvent (event) {
     if (event.key && HelperEvent.isNotCtrlAltShift(event) && event.key === 'F2') {
       this.cycleSearch('previous')
+    }
+  },
+
+  clickCreateVariablePromptEvent (event) {
+    if (event.target.closest('.panel-variable-create')) {
+      RightVariableMain.showCreateDialog()
     }
   },
 

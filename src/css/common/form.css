@@ -29,7 +29,8 @@
   opacity: 0.5;
 }
 
-.desech-studio input:invalid {
+.desech-studio input:invalid,
+.desech-studio select:invalid {
   box-shadow: var(--error) 0 0 4px 0;
 }
 

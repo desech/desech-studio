@@ -3,6 +3,7 @@ import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import HelperGlobal from '../../../../helper/HelperGlobal.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
+import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 
 export default {
   sanitizeVariable (name) {
@@ -34,31 +35,54 @@ export default {
     }
   },
 
-  validateName (field, name) {
-    const duplicate = HelperGlobal.checkVarByName(name)
-    HelperForm.reportFieldError(field, !duplicate, 'errorDuplicate')
+  validateName (input) {
+    input.value = this.sanitizeVariable(input.value)
+    const duplicate = HelperGlobal.checkVarByName(input.value)
+    HelperForm.reportFieldError(input, !duplicate, 'errorDuplicate')
     if (duplicate) return
-    const numeric = ExtendJS.startsNumeric(name)
-    HelperForm.reportFieldError(field, !numeric, 'errorInvalid')
+    const numeric = ExtendJS.startsNumeric(input.value)
+    HelperForm.reportFieldError(input, !numeric, 'errorInvalid')
   },
 
-  createVariable (variable, style = null) {
-    HelperGlobal.addVariable(variable)
-    if (style) this.addStyleProperty(variable, style)
-    this.addStyleVariable(variable)
+  createVariable (data) {
+    HelperGlobal.addVariable(data)
+    if (data.propertyName) this.addStyleProperty(data)
+    this.addStyleVariable(data)
+    StateSelectedVariable.selectVariable(data.ref)
   },
 
-  addStyleProperty (variable, style) {
+  addStyleProperty (data) {
     StyleSheetCommon.addRemoveStyleRules({
-      selector: style.selector,
-      properties: { [style.propertyName]: `var(--${variable.ref})` }
+      selector: data.selector,
+      properties: { [data.propertyName]: `var(--${data.ref})` }
     })
   },
 
-  addStyleVariable (variable) {
+  addStyleVariable (data) {
     StyleSheetCommon.addRemoveStyleRules({
       selector: ':root',
-      properties: { ['--' + variable.ref]: variable.value }
+      properties: { ['--' + data.ref]: data.value }
+    })
+  },
+
+  deleteVariable (data) {
+    HelperGlobal.removeVariable(data.ref)
+    if (data.propertyName) this.revertStyleProperty(data)
+    this.deleteStyleVariable(data.ref)
+    StateSelectedVariable.deselectVariable()
+  },
+
+  revertStyleProperty (data) {
+    StyleSheetCommon.addRemoveStyleRules({
+      selector: data.selector,
+      properties: { [data.propertyName]: data.value }
+    })
+  },
+
+  deleteStyleVariable (ref) {
+    StateStyleSheet.removeStyleRule({
+      selector: ':root',
+      property: '--' + ref
     })
   },
 
@@ -75,26 +99,6 @@ export default {
     StyleSheetCommon.addRemoveStyleRules({
       selector: ':root',
       properties: { ['--' + ref]: value }
-    })
-  },
-
-  deleteVariable (variable, style = null) {
-    HelperGlobal.removeVariable(variable.ref)
-    if (style) this.revertStyleProperty(variable, style)
-    this.deleteStyleVariable(variable)
-  },
-
-  revertStyleProperty (variable, style) {
-    StyleSheetCommon.addRemoveStyleRules({
-      selector: style.selector,
-      properties: { [style.propertyName]: variable.value }
-    })
-  },
-
-  deleteStyleVariable (variable) {
-    StateStyleSheet.removeStyleRule({
-      selector: ':root',
-      property: '--' + variable.ref
     })
   }
 }

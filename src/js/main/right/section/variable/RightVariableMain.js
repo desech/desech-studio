@@ -8,6 +8,8 @@ import HelperCanvas from '../../../../helper/HelperCanvas.js'
 import HelperVariable from '../../../../helper/HelperVariable.js'
 import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
+import HelperDOM from '../../../../helper/HelperDOM.js'
+import HelperForm from '../../../../helper/HelperForm.js'
 
 export default {
   getEvents () {
@@ -55,10 +57,7 @@ export default {
 
   createVariablePrompt (select) {
     this.setSelectData(select)
-    const dialog = this.showCreateOverlay()
-    const fields = dialog.getElementsByTagName('form')[0].elements
-    fields.name.focus()
-    fields.property.value = select.dataset.name
+    this.showCreateDialog(select.dataset.name)
   },
 
   setSelectData (select) {
@@ -66,7 +65,14 @@ export default {
     select.value = select.dataset.previous
   },
 
-  showCreateOverlay () {
+  showCreateDialog (propertyName = null) {
+    const dialog = this.getCreateDialog()
+    const form = dialog.getElementsByTagName('form')[0]
+    form.elements.name.focus()
+    this.prepareCreateForm(form.elements, propertyName)
+  },
+
+  getCreateDialog () {
     return DialogComponent.showDialog({
       header: DialogComponent.getContentHtml('variable-create', 'header'),
       body: DialogComponent.getContentHtml('variable-create', 'body'),
@@ -74,54 +80,45 @@ export default {
     })
   },
 
+  prepareCreateForm (fields, propertyName) {
+    fields.ref.value = HelperVariable.generateVariableRef()
+    if (!propertyName) return
+    fields.propertyName.value = propertyName
+    fields.value.value = StateStyleSheet.getPropertyValue(propertyName)
+    fields.type.value = RightVariableCommon.getPropertyType(propertyName)
+    HelperDOM.hide(fields.type)
+  },
+
   async createVariableSubmit (dialog) {
     const form = dialog.getElementsByTagName('form')[0]
-    const input = form.elements.name
-    const data = this.getVariableData(form.elements)
-    const propertyName = form.elements.property.value
-    if (form.checkValidity()) RightVariableCommon.validateName(input, data.name)
-    if (form.checkValidity()) await this.finishCreateVariable(dialog, data, propertyName)
-    input.reportValidity()
+    const fields = form.elements
+    if (form.checkValidity()) RightVariableCommon.validateName(fields.name)
+    if (form.checkValidity()) await this.finishCreateVariable(dialog, fields)
   },
 
-  getVariableData (fields) {
-    return {
-      ref: HelperVariable.generateVariableRef(),
-      name: RightVariableCommon.sanitizeVariable(fields.name.value),
-      type: RightVariableCommon.getPropertyType(fields.property.value),
-      value: StateStyleSheet.getPropertyValue(fields.property.value)
-    }
-  },
-
-  async finishCreateVariable (dialog, data, propertyName) {
+  async finishCreateVariable (dialog, fields) {
     DialogComponent.closeDialog(dialog)
-    await this.createVariableExec(data, propertyName)
+    const data = HelperForm.getFieldsData(fields)
+    if (data.propertyName) {
+      data.selector = StyleSheetSelector.getCurrentSelector()
+    }
+    await this.createVariableExec(data)
     HelperTrigger.triggerReload('right-panel')
   },
 
-  async createVariableExec (variable, propertyName) {
-    const style = this.getStyleData(propertyName)
+  async createVariableExec (variable) {
     const command = {
       do: {
         command: 'createVariable',
-        variable,
-        style
+        variable
       },
       undo: {
         command: 'deleteVariable',
-        variable,
-        style
+        variable
       }
     }
     StateCommand.stackCommand(command)
     await StateCommand.executeCommand(command.do)
-  },
-
-  getStyleData (propertyName) {
-    return {
-      propertyName,
-      selector: StyleSheetSelector.getCurrentSelector()
-    }
   },
 
   gotoUpdateVariable (select) {

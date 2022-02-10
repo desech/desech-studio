@@ -36,8 +36,8 @@ export default {
   },
 
   async deleteVariable () {
-    const variable = StateSelectedVariable.getVariable()
-    await this.deleteVariableExec(variable)
+    const data = StateSelectedVariable.getVariable()
+    await this.deleteVariableExec(data)
     StateSelectedVariable.deselectVariable()
   },
 
@@ -58,9 +58,8 @@ export default {
 
   async updateName (form) {
     const input = form.elements.name
-    const value = RightVariableCommon.sanitizeVariable(input.value)
-    if (form.checkValidity()) RightVariableCommon.validateName(input, value)
-    if (form.checkValidity()) await this.updateNameExec(value)
+    if (form.checkValidity()) RightVariableCommon.validateName(input)
+    if (form.checkValidity()) await this.updateNameExec(input.value)
     input.reportValidity()
   },
 

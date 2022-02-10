@@ -1,6 +1,14 @@
 import HelperDOM from './HelperDOM.js'
 
 export default {
+  getFieldsData (fields) {
+    const data = {}
+    for (const field of fields) {
+      data[field.name] = field.value
+    }
+    return data
+  },
+
   getFormValues (form, fieldClasses = null) {
     const data = {}
     const fields = this.getFormElements(form, fieldClasses)

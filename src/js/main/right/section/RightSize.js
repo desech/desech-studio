@@ -16,8 +16,8 @@ export default {
 
   injectData (form, sectionData) {
     ChangeStyleField.injectFields(form, sectionData)
-    RightVariableInject.injectInputUnitFields(form.elements)
     RightSizeMargin.injectFields(form, sectionData)
-    RightSizeMargin.injectConstraints(form)
+    RightSizeMargin.injectConstraints(form, sectionData.style)
+    RightVariableInject.injectInputUnitFields(form.elements)
   }
 }

@@ -27,7 +27,7 @@ export default {
 
   async changeStyle (field) {
     await RightCommon.changeStyle({ [field.name]: this.getValue(field) })
-    this.updateUnitMeasureVariables(field)
+    RightVariableInject.updateUnitMeasureVariables(field)
   },
 
   getValue (field) {
@@ -39,11 +39,6 @@ export default {
     } else if (field.tagName === 'BUTTON') {
       return CheckButtonField.getValue(field)
     }
-  },
-
-  updateUnitMeasureVariables (field) {
-    const select = (HelperDOM.getTag(field) === 'select') ? field : field.nextElementSibling
-    RightVariableInject.toggleOptions(select)
   },
 
   injectFields (form, data) {

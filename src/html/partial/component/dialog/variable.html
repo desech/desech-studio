@@ -1,23 +1,24 @@
 <template id="template-dialog-variable-create">
   <div>
     <div class="dialog-header">{{#i18n}} Create variable {{/i18n}}</div>
-
     <div class="dialog-body">
       <form>
         <input type="hidden" name="ref">
         <input type="hidden" name="value" value="inherit">
         <input type="hidden" name="propertyName">
 
-        <input name="name" placeholder="{{#i18n}} Variable name {{/i18n}}" required data-error-duplicate="{{#i18n}} Name already exists {{/i18n}}" data-error-invalid="{{#i18n}} Invalid name {{/i18n}}">
+        <input name="name" placeholder="{{#i18n}} Variable name {{/i18n}}" required data-error-duplicate="{{#i18n}} Name already exists {{/i18n}}" data-error-invalid="{{#i18n}} Invalid name {{/i18n}}" data-required-type="{{#i18n}} Variable type required {{/i18n}}">
 
-        <select name="type" required style="margin-top: 15px;">
-          <option>{{#i18n}} - Variable type - {{/i18n}}</option>
+        <!-- dialog/variable.html, variable/template.html, RightVariableCommon.getPropertyType() -->
+        <select name="type" style="margin-top: 15px;">
+          <option value="">{{#i18n}} - Variable type - {{/i18n}}</option>
           <option value="width">{{#i18n}} Width {{/i18n}}</option>
           <option value="height">{{#i18n}} Height {{/i18n}}</option>
+          <option value="margin">{{#i18n}} Margin {{/i18n}}</option>
+          <option value="padding">{{#i18n}} Padding {{/i18n}}</option>
         </select>
       </form>
     </div>
-
     <div class="dialog-footer">
       <button type="button" class="dialog-create-variable-confirm composed highlighted fill">{{#i18n}} Confirm {{/i18n}}</button>
       <button type="button" class="dialog-close composed highlighted">{{#i18n}} Cancel {{/i18n}}</button>

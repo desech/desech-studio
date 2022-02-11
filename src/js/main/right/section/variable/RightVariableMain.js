@@ -91,9 +91,17 @@ export default {
 
   async createVariableSubmit (dialog) {
     const form = dialog.getElementsByTagName('form')[0]
+    const success = this.validateVariable(form)
+    if (success) await this.finishCreateVariable(dialog, form.elements)
+  },
+
+  validateVariable (form) {
     const fields = form.elements
-    if (form.checkValidity()) RightVariableCommon.validateName(fields.name)
-    if (form.checkValidity()) await this.finishCreateVariable(dialog, fields)
+    if (!form.checkValidity()) return false
+    RightVariableCommon.validateName(fields.name)
+    if (!form.checkValidity()) return false
+    HelperForm.reportFieldError(fields.name, fields.type.value, 'requiredType')
+    return form.checkValidity()
   },
 
   async finishCreateVariable (dialog, fields) {

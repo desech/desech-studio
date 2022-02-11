@@ -22,17 +22,42 @@ export default {
     }
   },
 
+  // dialog/variable.html, variable/template.html, RightVariableCommon.getPropertyType()
   getPropertyType (name) {
     switch (name) {
-      case 'width': case 'min-width': case 'max-width':
+      case 'min-width': case 'max-width':
         return 'width'
-      case 'height': case 'min-height': case 'max-height':
+      case 'min-height': case 'max-height':
         return 'height'
       case 'margin-top': case 'margin-right': case 'margin-bottom': case 'margin-left':
         return 'margin'
       case 'padding-top': case 'padding-right': case 'padding-bottom': case 'padding-left':
         return 'padding'
+      default:
+        return name
     }
+  },
+
+  getStyleProperties (data, value) {
+    const style = StateStyleSheet.getCurrentStyleObject(data.selector)
+    if ((['margin', 'padding'].includes(data.type)) &&
+      this.isMarginPaddingSame(data.type, style)) {
+      return {
+        [`${data.type}-top`]: value,
+        [`${data.type}-right`]: value,
+        [`${data.type}-bottom`]: value,
+        [`${data.type}-left`]: value
+      }
+    }
+    return { [data.propertyName]: value }
+  },
+
+  isMarginPaddingSame (type, data) {
+    const value = data[`${type}-top`]
+    for (const dir of ['bottom', 'left', 'right']) {
+      if (value !== data[`${type}-${dir}`]) return false
+    }
+    return true
   },
 
   validateName (input) {
@@ -54,7 +79,7 @@ export default {
   addStyleProperty (data) {
     StyleSheetCommon.addRemoveStyleRules({
       selector: data.selector,
-      properties: { [data.propertyName]: `var(--${data.ref})` }
+      properties: this.getStyleProperties(data, `var(--${data.ref})`)
     })
   },
 
@@ -75,7 +100,7 @@ export default {
   revertStyleProperty (data) {
     StyleSheetCommon.addRemoveStyleRules({
       selector: data.selector,
-      properties: { [data.propertyName]: data.value }
+      properties: this.getStyleProperties(data, data.value)
     })
   },
 

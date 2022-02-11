@@ -41,13 +41,7 @@ export default {
     const updateOpt = RightVariableCommon.getOptionByValue(select, 'var-desech-input-update')
     this.resetAllVariables(select)
     const varExists = HelperGlobal.checkVarByRef(input.value)
-    if (input.value.startsWith('var(--') && varExists) {
-      this.toggleUpdateIfExists(createOpt, updateOpt, select, input)
-    } else if (input.value.startsWith('var(--') || !input.value) {
-      this.toggleNoneOrMissing(createOpt, updateOpt, select)
-    } else {
-      this.toggleCreate(createOpt, updateOpt, select)
-    }
+    this.toggleOptionsCond(select, input, createOpt, updateOpt, varExists)
   },
 
   resetAllVariables (select) {
@@ -56,6 +50,16 @@ export default {
         option.classList.remove('selected')
         option.removeAttributeNS(null, 'disabled')
       }
+    }
+  },
+
+  toggleOptionsCond (select, input, createOpt, updateOpt, varExists) {
+    if (input.value.startsWith('var(--') && varExists) {
+      this.toggleUpdateIfExists(createOpt, updateOpt, select, input)
+    } else if (input.value.startsWith('var(--') || !input.value) {
+      this.toggleNoneOrMissing(createOpt, updateOpt, select)
+    } else {
+      this.toggleCreate(createOpt, updateOpt, select)
     }
   },
 
@@ -77,5 +81,10 @@ export default {
   toggleCreate (createOpt, updateOpt, select) {
     HelperDOM.show(createOpt)
     HelperDOM.hide(updateOpt)
+  },
+
+  updateUnitMeasureVariables (field) {
+    const select = (HelperDOM.getTag(field) === 'select') ? field : field.nextElementSibling
+    this.toggleOptions(select)
   }
 }

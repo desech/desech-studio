@@ -1,6 +1,8 @@
 import RightCommon from '../../RightCommon.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
 import StateSelectedElement from '../../../../state/StateSelectedElement.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
+import RightVariableCommon from '../variable/RightVariableCommon.js'
 
 export default {
   getEvents () {
@@ -49,17 +51,19 @@ export default {
     const fields = input.closest('form').elements
     if (fields[`${type}-constrain`].classList.contains('selected')) {
       await this.changeStyleAll(type, value)
-      this.changeOtherFields(fields, type, value)
+      this.changeAllFields(fields, type, value)
     } else {
       await RightCommon.changeStyle({ [input.name]: value })
+      RightVariableInject.updateUnitMeasureVariables(input)
     }
   },
 
-  changeOtherFields (fields, type, value) {
+  changeAllFields (fields, type, value) {
     const style = StateSelectedElement.getComputedStyle()
-    for (const dir of ['left', 'right', 'bottom']) {
+    for (const dir of ['top', 'left', 'right', 'bottom']) {
       const name = `${type}-${dir}`
       InputUnitField.setValue(fields[name], value, style[name])
+      RightVariableInject.updateUnitMeasureVariables(fields[name])
     }
   },
 
@@ -79,21 +83,11 @@ export default {
     }
   },
 
-  injectConstraints (form) {
+  injectConstraints (form, style) {
     for (const type of ['margin', 'padding']) {
-      if (!this.isContrained(form.elements, type)) {
+      if (!RightVariableCommon.isMarginPaddingSame(type, style)) {
         this.switchConstrain(form.elements[`${type}-constrain`])
       }
     }
-  },
-
-  isContrained (fields, type) {
-    const value = InputUnitField.getValue(fields[`${type}-top`])
-    for (const dir of ['bottom', 'left', 'right']) {
-      if (value !== InputUnitField.getValue(fields[`${type}-${dir}`])) {
-        return false
-      }
-    }
-    return true
   }
 }

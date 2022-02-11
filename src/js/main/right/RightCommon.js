@@ -20,10 +20,10 @@ export default {
   },
 
   getSectionData (element = null, addOverrides = false) {
-    const currentSelector = StyleSheetSelector.getCurrentSelector()
-    const style = StateStyleSheet.getCurrentStyleObject(currentSelector)
-    const computedStyle = StateSelectedElement.getComputedStyle()
-    const data = { currentSelector, style, computedStyle }
+    const data = {}
+    data.currentSelector = StyleSheetSelector.getCurrentSelector()
+    data.style = StateStyleSheet.getCurrentStyleObject(data.currentSelector)
+    data.computedStyle = StateSelectedElement.getComputedStyle()
     if (element && addOverrides) {
       data.overrides = this.getFullOverrides(element)
     }

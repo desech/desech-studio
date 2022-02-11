@@ -11,6 +11,6 @@ export default {
   },
 
   generateVariableRef () {
-    return 'v0' + Crypto.generateMediumID()
+    return 'v0' + Crypto.generateSmallID()
   }
 }

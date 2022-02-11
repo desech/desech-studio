@@ -3,6 +3,7 @@ import HelperDOM from '../../../../helper/HelperDOM.js'
 import CanvasOverlayCommon from '../CanvasOverlayCommon.js'
 import RightCommon from '../../../../main/right/RightCommon.js'
 import InputUnitField from '../../../../component/InputUnitField.js'
+import RightVariableInject from '../../../right/section/variable/RightVariableInject.js'
 
 export default {
   async addCell (type, reloadPanel = true) {
@@ -35,18 +36,19 @@ export default {
   },
 
   showCellOptions (cell) {
-    const container = document.getElementsByClassName('track-cell-options')[0]
-    this.setCellOptions(container, cell)
-    this.setCellInput(container, cell)
+    const container = document.getElementsByClassName('track-cell-options-container')[0]
+    const template = HelperDOM.getTemplate('template-grid-cell-options')
+    HelperDOM.replaceOnlyChild(container, template)
+    const main = container.children[0]
+    this.setCellOptions(main, cell)
+    this.setCellInput(main, cell)
   },
 
   setCellOptions (container, cell) {
-    HelperDOM.show(container)
     container.dataset.index = cell.dataset.index
     if (cell.classList.contains('track-column')) {
       this.setColumnOptions(container, cell)
-    } else {
-      // row
+    } else { // row
       this.setRowOptions(container, cell)
     }
   },
@@ -68,11 +70,20 @@ export default {
     const value = (cell.textContent === 'auto') ? '' : cell.textContent
     InputUnitField.setValue(input, value)
     input.focus()
+    this.addCellInputName(input, cell.dataset.index)
+    RightVariableInject.injectFieldVariables(input.nextElementSibling)
+    RightVariableInject.updateFieldVariables(input)
   },
 
-  applyCellChanges (input) {
-    this.updateCell(input)
-    HelperDOM.hide(input.closest('.track-cell-options'))
+  addCellInputName (input, index) {
+    const type = this.extractTypeFromIndex(index)
+    input.name = `grid-template-${type}s`
+    input.nextElementSibling.dataset.name = input.name
+  },
+
+  async applyCellChanges (input) {
+    await this.updateCell(input)
+    input.closest('.track-cell-options').remove()
   },
 
   async updateCell (input, reloadPanel = true) {
@@ -80,6 +91,7 @@ export default {
     const type = this.extractTypeFromIndex(index)
     const value = this.getCellInputValue(input, type, index.substring(1))
     await this.changeStyle(`grid-template-${type}s`, value, reloadPanel)
+    RightVariableInject.updateFieldVariables(input)
   },
 
   getCellInputValue (input, type, cellIndex) {

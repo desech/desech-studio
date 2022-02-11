@@ -16,11 +16,18 @@ export default {
   injectData (template) {
     const data = StateSelectedVariable.getVariable()
     const fields = template.getElementsByClassName('right-variable-form')[0].elements
+    this.injectRef(template, data)
     fields.name.value = data.name
-    this.injectFieldValue(template, data)
+    fields.type.value = data.type
+    this.injectValue(template, data)
   },
 
-  injectFieldValue (container, data) {
+  injectRef (container, data) {
+    const node = container.getElementsByClassName('right-variable-ref')[0]
+    node.textContent = data.ref
+  },
+
+  injectValue (container, data) {
     const parent = container.getElementsByClassName('right-variable-value-container')[0]
     const template = HelperDOM.getTemplate(`template-variable-${data.type}`)
     HelperDOM.replaceOnlyChild(parent, template)

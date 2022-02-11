@@ -79,9 +79,8 @@ export default {
 
   reloadContainers (data) {
     this.initReload(data)
-    if (data.elementOverlay) {
-      HelperTrigger.triggerReload('element-overlay', { panelReload: data.rightPanel })
-    }
+    if (data.elementOverlay) HelperTrigger.triggerReload('element-overlay')
+    if (data.rightPanel) HelperTrigger.triggerReload('right-panel')
     if (data.leftPanels) {
       HelperTrigger.triggerReload('sidebar-left-panel', { panels: data.leftPanels })
     }

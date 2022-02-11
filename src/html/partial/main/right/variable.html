@@ -2,11 +2,8 @@
   <form id="variable-section" class="sidebar-section active" data-type="variable">
     <div class="sidebar-title">
       <div class="sidebar-title-text">
-        <span>{{#i18n}} Variable {{/i18n}}</span>
-        <svg width="12" height="12" viewBox="0 0 24 24">
-          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
-          <path fill="none" d="M0 0h24v24H0V0z"></path>
-        </svg>
+        <strong>{{#i18n}} Variable {{/i18n}}</strong>
+        <span class="right-variable-ref style-html-ref tooltip bottom" data-tooltip="{{#i18n}} Click to copy ref {{/i18n}}" style="padding-left: 10px;"></span>
       </div>
     </div>
 
@@ -15,6 +12,13 @@
         <div class="grid" style="grid-template-columns: auto; gap: 5px;">
           <div>{{#i18n}} Name {{/i18n}}</div>
           <input class="right-variable-name" type="text" name="name" placeholder="{{#i18n}} Variable name {{/i18n}}" required data-error-duplicate="{{#i18n}} Name already exists {{/i18n}}" data-error-invalid="{{#i18n}} Invalid name {{/i18n}}">
+        </div>
+
+        <div class="grid" style="grid-template-columns: auto; gap: 5px;">
+          <div>{{#i18n}} Type {{/i18n}}</div>
+          <select name="type" disabled>
+            {{> mainRightVariableType }}
+          </select>
         </div>
 
         <div class="grid" style="grid-template-columns: auto; gap: 5px;">
@@ -38,6 +42,6 @@
   </form>
 </template>
 
-<!-- dialog/variable.html, right/variable.html, RightVariableCommon.getPropertyType() -->
+<!-- right/variable.html, RightVariableCommon.getPropertyType() -->
 {{> mainRightVariableGrid }}
 {{> mainRightVariableSize }}

@@ -3,6 +3,7 @@ import InputUnitField from '../../../../component/InputUnitField.js'
 import CanvasOverlayCommon from '../../../canvas/overlay/CanvasOverlayCommon.js'
 import CanvasOverlayGrid from '../../../canvas/overlay/CanvasOverlayGrid.js'
 import CanvasOverlayGridTrack from '../../../canvas/overlay/grid/CanvasOverlayGridTrack.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
 
 export default {
   getEvents () {
@@ -42,8 +43,12 @@ export default {
   },
 
   clearTrack (parent, type) {
-    const container = this.getTrackContainer(parent, type)
-    HelperDOM.deleteChildren(container)
+    const form = this.getTrackContainer(parent, type)
+    HelperDOM.deleteChildren(form)
+  },
+
+  getTrackContainer (template, type) {
+    return template.getElementsByClassName(`grid-${type}s-list`)[0]
   },
 
   async deleteCell (button) {
@@ -54,11 +59,16 @@ export default {
   },
 
   injectTrack (template, type, style = null) {
-    const container = this.getTrackContainer(template, type)
+    const form = this.getTrackContainer(template, type)
     const cells = CanvasOverlayCommon.getTrackArray(type, style)
     if (!cells) return
+    this.injectTrackCells(form, type, cells)
+    this.injectVariables(form)
+  },
+
+  injectTrackCells (form, type, cells) {
     for (let i = 0; i < cells.length; i++) {
-      this.injectCell(container, {
+      this.injectCell(form, {
         type: type,
         index: i,
         value: cells[i]
@@ -66,18 +76,10 @@ export default {
     }
   },
 
-  injectCell (container, data) {
-    const cell = this.getCellTemplate(data.type)
+  injectCell (form, data) {
+    const cell = HelperDOM.getTemplate('template-style-grid-' + data.type)
     this.prefillCell(cell, data)
-    this.addCellToContainer(cell, container)
-  },
-
-  getTrackContainer (template, type) {
-    return template.getElementsByClassName(`grid-${type}s-list`)[0]
-  },
-
-  getCellTemplate (type) {
-    return HelperDOM.getTemplate('template-style-grid-' + type)
+    form.appendChild(cell)
   },
 
   prefillCell (template, data) {
@@ -86,7 +88,8 @@ export default {
     template.dataset.index = data.type.substring(0, 1) + data.index
   },
 
-  addCellToContainer (cell, container) {
-    container.appendChild(cell)
+  injectVariables (form) {
+    RightVariableInject.injectAllFieldVariables(form.elements)
+    RightVariableInject.updateAllFieldVariables(form.elements)
   }
 }

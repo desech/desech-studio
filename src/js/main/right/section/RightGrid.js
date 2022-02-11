@@ -15,10 +15,15 @@ export default {
   },
 
   injectData (form, sectionData) {
-    RightVariableInject.injectAllFieldVariables(form.elements)
-    ChangeStyleField.injectFields(form, sectionData)
     RightGridTrack.injectTrack(form, 'row', sectionData.style)
     RightGridTrack.injectTrack(form, 'column', sectionData.style)
+    this.injectFields(form, sectionData)
+  },
+
+  injectFields (form, sectionData) {
+    // this skips the track forms; we deal with the track in RightGridTrack.injectVariables()
+    RightVariableInject.injectAllFieldVariables(form.elements)
+    ChangeStyleField.injectFields(form, sectionData)
     RightVariableInject.updateAllFieldVariables(form.elements)
   }
 }

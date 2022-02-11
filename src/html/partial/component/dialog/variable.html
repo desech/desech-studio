@@ -9,21 +9,8 @@
 
         <input name="name" placeholder="{{#i18n}} Variable name {{/i18n}}" required data-error-duplicate="{{#i18n}} Name already exists {{/i18n}}" data-error-invalid="{{#i18n}} Invalid name {{/i18n}}" data-required-type="{{#i18n}} Variable type required {{/i18n}}">
 
-        <!-- dialog/variable.html, right/variable.html, RightVariableCommon.getPropertyType() -->
         <select name="type" style="margin-top: 15px;">
-          <option value="">{{#i18n}} - Variable type - {{/i18n}}</option>
-          <option value="width">{{#i18n}} Width {{/i18n}}</option>
-          <option value="height">{{#i18n}} Height {{/i18n}}</option>
-          <option value="margin">{{#i18n}} Margin {{/i18n}}</option>
-          <option value="padding">{{#i18n}} Padding {{/i18n}}</option>
-          <option value="grid-auto-flow">{{#i18n}} Grid auto flow {{/i18n}}</option>
-          <option value="gap">{{#i18n}} Gap {{/i18n}}</option>
-          <option value="justify-content">{{#i18n}} Content vertical align {{/i18n}}</option>
-          <option value="align-content">{{#i18n}} Content horizontal align {{/i18n}}</option>
-          <option value="justify-items">{{#i18n}} Vertical align {{/i18n}}</option>
-          <option value="align-items">{{#i18n}} Horizontal align {{/i18n}}</option>
-          <option value="justify-self">{{#i18n}} Self vertical align {{/i18n}}</option>
-          <option value="align-self">{{#i18n}} Self horizontal align {{/i18n}}</option>
+          {{> mainRightVariableType }}
         </select>
       </form>
     </div>

@@ -63,17 +63,7 @@
             <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
           </svg>
         </div>
-        <div class="track-cell-options cell" hidden>
-          <div class="track-cell-options-grid">
-            {{> componentInputUnit class="track-cell-size" length="1" percent="1" grid="1" content="1" none="1" }}
-            <button type="button" class="track-cell-delete small tooltip top" data-tooltip="{{#i18n}} Delete cell {{/i18n}}">
-              <svg width="16" height="16" viewBox="0 0 24 24">
-                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
-                <path d="M0 0h24v24H0z" fill="none"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
+        <div class="track-cell-options-container"></div>
       </div>
       <div class="grid"></div>
     </div>
@@ -90,4 +80,18 @@
 
 <template id="template-grid-cells">
   <div class="cell"></div>
+</template>
+
+<template id="template-grid-cell-options">
+  <div class="track-cell-options cell">
+    <div class="track-cell-options-grid">
+      {{> componentInputUnit class="track-cell-size" length="1" percent="1" grid="1" content="1" none="1" }}
+      <button type="button" class="track-cell-delete small tooltip top" data-tooltip="{{#i18n}} Delete cell {{/i18n}}">
+        <svg width="16" height="16" viewBox="0 0 24 24">
+          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
+          <path d="M0 0h24v24H0z" fill="none"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
 </template>

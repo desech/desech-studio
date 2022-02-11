@@ -11,7 +11,7 @@ export default {
   getEvents () {
     return {
       // order matters
-      click: ['clickSwitchButtonEvent', 'clickAddCellEvent', 'clickHideCellEvent',
+      click: ['clickSwitchButtonEvent', 'clickAddCellEvent', 'clickClearCellEvent',
         'clickShowCellEvent', 'clickDeleteCellEvent'],
       keydown: ['keydownSwitchButtonEvent', 'keydownUpdateCellEvent']
     }
@@ -43,9 +43,9 @@ export default {
     }
   },
 
-  clickHideCellEvent (event) {
+  clickClearCellEvent (event) {
     if (!event.target.closest('.track-cell-options')) {
-      this.hideCell()
+      this.clearCell()
     }
   },
 
@@ -55,11 +55,10 @@ export default {
     }
   },
 
-  keydownUpdateCellEvent (event) {
-    if (event.key && (event.key === 'Escape' || event.key === 'Enter') &&
-      event.target.classList.contains('track-cell-size')) {
+  async keydownUpdateCellEvent (event) {
+    if (event.key && event.key === 'Enter' && event.target.classList.contains('track-cell-size')) {
       InputUnitField.setValueField(event.target, event.target.value)
-      CanvasOverlayGridTrack.applyCellChanges(event.target)
+      await CanvasOverlayGridTrack.applyCellChanges(event.target)
       // stop de-selecting the element on Escape, but it also stops the InputUnitField event
       event.preventDefault()
     }
@@ -87,8 +86,8 @@ export default {
     HelperDOM.toggle(overlay.getElementsByClassName('grid-mode')[0], type === 'grid')
   },
 
-  hideCell () {
-    const cell = document.querySelector('#element-overlay .track-cell-options:not([hidden])')
-    if (cell) HelperDOM.hide(cell)
+  clearCell () {
+    const cell = document.getElementsByClassName('track-cell-options')[0]
+    if (cell) cell.remove()
   }
 }

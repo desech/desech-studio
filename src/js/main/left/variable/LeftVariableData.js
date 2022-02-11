@@ -25,7 +25,7 @@ export default {
 
   injectItemData (li, data) {
     li.dataset.ref = data.ref
-    li.dataset.search = [data.name, data.type, data.value].join('-')
+    li.dataset.search = [data.ref, data.name, data.type, data.value].join('-')
     this.injectSelection(li, data)
     this.injectTitle(li, data)
   },

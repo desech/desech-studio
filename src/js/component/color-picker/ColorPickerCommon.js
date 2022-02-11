@@ -23,11 +23,12 @@ export default {
   },
 
   triggerColorChangeEvent (container, detail = {}) {
-    const data = { detail: detail, bubbles: true, cancelable: true }
+    const data = { detail, bubbles: true, cancelable: true }
     const event = new CustomEvent('colorchange', data)
     container.dispatchEvent(event)
   },
 
+  // we don't use the properties when we apply the temporary style, we take them from style
   async setColor (properties, options = {}) {
     if (options.temp) {
       options.apply

@@ -1,7 +1,6 @@
 import HelperColor from '../../../../../helper/HelperColor.js'
 import ColorPickerSwatch from '../../../../../component/color-picker/ColorPickerSwatch.js'
 import ColorPickerSolidColor from '../../../../../component/color-picker/ColorPickerSolidColor.js'
-import RightCommon from '../../../RightCommon.js'
 
 export default {
   getColorHex (color) {
@@ -10,7 +9,7 @@ export default {
   },
 
   injectColor (container, value) {
-    ColorPickerSwatch.injectSwatches(container)
+    ColorPickerSwatch.injectColors(container)
     if (value) {
       const rgb = HelperColor.extractRgb(value)
       ColorPickerSolidColor.injectColor(container, rgb)

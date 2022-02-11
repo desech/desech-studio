@@ -4,6 +4,7 @@ import HelperGlobal from '../../../../helper/HelperGlobal.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import ExtendJS from '../../../../helper/ExtendJS.js'
 import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
+import HelperCanvas from '../../../../helper/HelperCanvas.js'
 
 export default {
   sanitizeVariable (name) {
@@ -37,6 +38,8 @@ export default {
         return 'grid-template-cells'
       case 'column-gap': case 'row-gap':
         return 'gap'
+      case 'fill': case 'stroke':
+        return 'color'
       default:
         return name
     }
@@ -81,9 +84,11 @@ export default {
   },
 
   addStyleProperty (data) {
+    // we want the the style to be applied to the current responsive mode
     StyleSheetCommon.addRemoveStyleRules({
       selector: data.selector,
-      properties: this.getStyleProperties(data, `var(--${data.ref})`)
+      properties: this.getStyleProperties(data, `var(--${data.ref})`),
+      responsive: HelperCanvas.getCurrentResponsiveWidth()
     })
   },
 
@@ -102,9 +107,11 @@ export default {
   },
 
   revertStyleProperty (data) {
+    // we want the the style to be applied to the current responsive mode
     StyleSheetCommon.addRemoveStyleRules({
       selector: data.selector,
-      properties: this.getStyleProperties(data, data.value)
+      properties: this.getStyleProperties(data, data.value),
+      responsive: HelperCanvas.getCurrentResponsiveWidth()
     })
   },
 

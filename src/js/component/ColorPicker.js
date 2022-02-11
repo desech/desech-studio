@@ -161,13 +161,10 @@ export default {
     switch (fillType) {
       case 'solid-color':
         return ColorPickerCommon.getRgbColor(data)
-
       case 'linear-gradient':
         return ColorPickerGradient.getGradientBackground(data, 'linear')
-
       case 'radial-gradient':
         return ColorPickerGradient.getGradientBackground(data, 'radial')
-
       case 'image':
         return ColorPickerGradient.getBackgroundImage(container)
     }

@@ -80,7 +80,7 @@ export default {
         this.addImage(container, background.value, elemIndex)
         break
     }
-    ColorPickerSwatch.injectSwatches(container)
+    ColorPickerSwatch.injectColors(container)
   },
 
   addSolidColor (container, value, elemIndex) {

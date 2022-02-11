@@ -6,6 +6,7 @@ import StateStyleSheet from '../../state/StateStyleSheet.js'
 import ColorPicker from '../ColorPicker.js'
 import ColorPickerCommon from './ColorPickerCommon.js'
 import RightCommon from '../../main/right/RightCommon.js'
+import StyleSheetVariable from '../../state/stylesheet/StyleSheetVariable.js'
 
 export default {
   getEvents () {
@@ -36,6 +37,7 @@ export default {
     }
   },
 
+  // it's not just nodes, but also some data
   getNodes (container) {
     return {
       property: container.dataset.property,
@@ -49,13 +51,21 @@ export default {
 
   injectPropertyColor (container, style = null) {
     const nodes = this.getNodes(container)
-    const color = style ? style[nodes.property] : StateStyleSheet.getPropertyValue(nodes.property)
-    if (color && color.startsWith('rgb')) {
+    const color = this.getStyleColor(nodes.property, style)
+    if (color && (color.startsWith('rgb'))) {
       nodes.select.value = 'choose'
       nodes.button.style.backgroundColor = color
     } else if (color) {
       nodes.select.value = color
     }
+  },
+
+  getStyleColor (property, style) {
+    let color = style ? style[property] : StateStyleSheet.getPropertyValue(property)
+    if (color && color.startsWith('var(--')) {
+      color = StyleSheetVariable.getVariableValue(color)
+    }
+    return color
   },
 
   async toggleButton (container) {
@@ -85,7 +95,7 @@ export default {
   },
 
   injectColorInPicker (colorPicker, color) {
-    ColorPickerSwatch.injectSwatches(colorPicker)
+    ColorPickerSwatch.injectColors(colorPicker)
     if (color) {
       const rgb = HelperColor.extractRgb(color)
       ColorPickerSolidColor.injectColor(colorPicker, rgb)
@@ -109,8 +119,12 @@ export default {
 
   async changeColor (container, options = {}) {
     const nodes = this.getNodes(container)
-    const color = ColorPicker.getColorPickerValue(nodes.picker)
-    nodes.button.style.backgroundColor = color
-    await ColorPickerCommon.setColor({ [nodes.property]: color }, options)
+    const value = this.getChangeColor(nodes.picker, options?.variable)
+    nodes.button.style.backgroundColor = value
+    await ColorPickerCommon.setColor({ [nodes.property]: value }, options)
+  },
+
+  getChangeColor (picker, variable) {
+    return variable ? `var(--${variable})` : ColorPicker.getColorPickerValue(picker)
   }
 }

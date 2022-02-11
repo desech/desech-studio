@@ -1,6 +1,9 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import StateSelectedVariable from '../../../state/StateSelectedVariable.js'
 import ChangeStyleField from '../../../component/ChangeStyleField.js'
+import ColorPickerSolidColor from '../../../component/color-picker/ColorPickerSolidColor.js'
+import HelperColor from '../../../helper/HelperColor.js'
+import StyleSheetVariable from '../../../state/stylesheet/StyleSheetVariable.js'
 
 export default {
   getSection () {
@@ -31,7 +34,24 @@ export default {
     const parent = container.getElementsByClassName('right-variable-value-container')[0]
     const template = HelperDOM.getTemplate(`template-variable-${data.type}`)
     HelperDOM.replaceOnlyChild(parent, template)
-    const field = parent.querySelector('input,select,button')
+    this.injectFieldValue(parent, data)
+  },
+
+  injectFieldValue (container, data) {
+    if (data.type === 'color') return
+    const field = container.querySelector('input,select,button')
     ChangeStyleField.setValue(field, data.value)
+  },
+
+  // inject things after the template is added to the container
+  injectAfterAppend (container) {
+    const data = StateSelectedVariable.getVariable()
+    this.injectColorPicker(container, data)
+  },
+
+  injectColorPicker (container, data) {
+    const color = StyleSheetVariable.getVariableValue(data.ref)
+    const rgb = HelperColor.extractRgb(color)
+    ColorPickerSolidColor.injectColor(container, rgb)
   }
 }

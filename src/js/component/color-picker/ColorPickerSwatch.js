@@ -1,38 +1,40 @@
 import ColorPickerInput from './ColorPickerInput.js'
-import HelperDOM from '../../helper/HelperDOM.js'
-import StateCommand from '../../state/StateCommand.js'
 import HelperColor from '../../helper/HelperColor.js'
-import StyleSheetCommon from '../../state/stylesheet/StyleSheetCommon.js'
+import RightVariableMain from '../../main/right/section/variable/RightVariableMain.js'
+import StateSelectedVariable from '../../state/StateSelectedVariable.js'
+import LeftVariableCommon from '../../main/left/variable/LeftVariableCommon.js'
+import HelperDOM from '../../helper/HelperDOM.js'
 
 export default {
   _timer: null,
 
   getEvents () {
     return {
-      click: ['clickSaveSwatchEvent', 'clickLoadSwatchEvent'],
-      dblclick: ['dblclickDeleteSwatchEvent']
+      click: ['clickSaveColorEvent', 'clickLoadColorEvent'],
+      dblclick: ['dblclickGotoUpdateColorEvent']
     }
   },
 
-  async clickSaveSwatchEvent (event) {
+  clickSaveColorEvent (event) {
     if (event.target.closest('.save-swatch-button')) {
-      await this.saveSwatch(event.target.closest('.save-swatch-button'))
+      this.saveColor(event.target.closest('.color-button-wrapper'))
     }
   },
 
-  clickLoadSwatchEvent (event) {
-    // use a timer and the event.detail check, to prevent the click events firing twice for double click
+  clickLoadColorEvent (event) {
+    // use a timer and the event.detail check, to prevent the click events firing twice
+    // for double click
     if (event.target.closest('.swatch-color') && event.detail === 1) {
       this._timer = setTimeout(() => {
-        this.loadSwatch(event.target.closest('.swatch-color'))
+        this.loadColor(event.target.closest('.swatch-color'))
       }, 200)
     }
   },
 
-  async dblclickDeleteSwatchEvent (event) {
+  dblclickGotoUpdateColorEvent (event) {
     if (event.target.closest('.swatch-color')) {
       this.clearTimeout()
-      await this.deleteSwatch(event.target.closest('.swatch-color'))
+      this.gotoUpdateVariable(event.target.closest('.swatch-color'))
     }
   },
 
@@ -42,57 +44,20 @@ export default {
     this._timer = null
   },
 
-  async saveSwatch (button) {
-    const container = button.closest('.color-picker')
-    const color = ColorPickerInput.getRgbColor(container)
-    const name = this.getColorName(container)
-    await this.saveAddSwatchColor(name, color)
-    this.addSwatchColor(button, name, color)
+  saveColor (container) {
+    const propertyName = container.dataset.property
+    RightVariableMain.showCreateDialog(propertyName)
   },
 
-  getColorName (container) {
-    const hex = ColorPickerInput.getHexInput(container).value
-    const alpha = HelperColor.getHexAlpha(ColorPickerInput.getAlpha(container))
-    return '--color-' + (hex + alpha).toLowerCase()
-  },
-
-  async saveAddSwatchColor (name, color) {
-    const command = {
-      do: {
-        command: 'addColor',
-        name: name,
-        value: color
-      },
-      undo: {
-        command: 'removeColor',
-        name: name
-      }
-    }
-    StateCommand.stackCommand(command)
-    await StateCommand.executeCommand(command.do)
-  },
-
-  addSwatchColor (button, name, color) {
-    const swatch = this.prepareSwatchElement(name, color)
-    button.insertAdjacentElement('afterend', swatch)
-  },
-
-  prepareSwatchElement (name, color) {
-    const container = HelperDOM.getTemplate('template-color-picker-swatch')
-    const swatch = container.children[0]
-    swatch.dataset.name = name
-    swatch.dataset.value = color
-    swatch.style.backgroundColor = color
-    return container
-  },
-
-  loadSwatch (swatch) {
+  loadColor (swatch) {
     const container = swatch.closest('.color-picker')
     const inputs = container.getElementsByClassName('color-rgb-input')
     const rgb = HelperColor.extractRgb(swatch.dataset.value)
     ColorPickerInput.setRgbInputs(inputs, rgb)
     this.setAlpha(container, rgb[3] || 1)
-    ColorPickerInput.inputRgbInput(inputs[0])
+    // this will trigger a color change event
+    const options = { variable: swatch.dataset.ref }
+    ColorPickerInput.updateRgbInput(inputs[0], true, options)
   },
 
   setAlpha (container, alpha) {
@@ -102,48 +67,29 @@ export default {
     palette.dataset.alpha = alpha
   },
 
-  async deleteSwatch (swatch) {
-    await this.saveRemoveSwatchColor(swatch.dataset.name, swatch.dataset.value)
-    this.removeSwatchColor(swatch)
+  gotoUpdateVariable (node) {
+    StateSelectedVariable.selectVariable(node.dataset.ref)
   },
 
-  async saveRemoveSwatchColor (name, value) {
-    const command = {
-      do: {
-        command: 'removeColor',
-        name
-      },
-      undo: {
-        command: 'addColor',
-        name,
-        value
-      }
-    }
-    StateCommand.stackCommand(command)
-    await StateCommand.executeCommand(command.do)
-  },
-
-  removeSwatchColor (swatch) {
-    swatch.parentNode.remove()
-  },
-
-  injectSwatches (container) {
+  injectColors (container) {
     const button = container.getElementsByClassName('save-swatch-button')[0]
-    if (button) {
-      const swatches = this.getSwatches()
-      for (const [name, color] of Object.entries(swatches)) {
-        this.addSwatchColor(button, name, color.trim())
-      }
+    if (!button) return
+    for (const variable of LeftVariableCommon.getColors()) {
+      this.addSwatchColor(button, variable)
     }
   },
 
-  getSwatches () {
-    const colors = {}
-    const style = StyleSheetCommon.getSelectorStyle(':root', false)
-    if (!style) return colors
-    for (const prop of style) {
-      if (prop.name && prop.name.startsWith('--color-')) colors[prop.name] = prop.value
-    }
-    return colors
+  addSwatchColor (button, variable) {
+    const swatch = this.prepareSwatchElement(variable)
+    button.insertAdjacentElement('afterend', swatch)
+  },
+
+  prepareSwatchElement (variable) {
+    const container = HelperDOM.getTemplate('template-color-picker-swatch')
+    const swatch = container.children[0]
+    swatch.dataset.ref = variable.ref
+    container.dataset.tooltip = variable.name + ' - ' + container.dataset.tooltip
+    swatch.dataset.value = swatch.style.backgroundColor = variable.value
+    return container
   }
 }

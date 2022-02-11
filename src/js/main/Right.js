@@ -64,7 +64,9 @@ export default {
 
   loadPanelVariable () {
     const section = RightVariable.getSection()
-    this.getContainer().appendChild(section)
+    const container = this.getContainer()
+    container.appendChild(section)
+    RightVariable.injectAfterAppend(container)
   },
 
   loadPanelElement () {

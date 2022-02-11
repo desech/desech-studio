@@ -3,7 +3,8 @@
   cursor: pointer;
 }
 
-.sidebar-right .color-button-main .color-button-container {
+.sidebar-right .color-button-main .color-button-container,
+#sidebar-left-panel .color-button-container {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -20,7 +21,8 @@
   box-shadow: var(--picker-btn-shadow-hover) 0 0 3px 2px;
 }
 
-.sidebar-right .color-button-main .color-button {
+.sidebar-right .color-button-main .color-button,
+#sidebar-left-panel .color-button {
   height: 100%;
   background-position: center;
   background-size: cover;

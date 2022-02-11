@@ -113,7 +113,7 @@ export default {
     return new CSSStyleSheet()
   },
 
-  // returns undefined or empty array as empty values
+  // returns undefined or an empty array
   getSelectorStyle (selector, matchResponsive = true) {
     const sheet = this.getSelectorSheet(selector)
     if (sheet) return this.extractStyleFromRules(sheet.cssRules, matchResponsive)

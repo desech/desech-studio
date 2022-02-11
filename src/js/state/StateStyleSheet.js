@@ -19,7 +19,7 @@ export default {
       if (matchResponsive && !StyleSheetCommon.equalResponsiveRules(rule, responsive)) {
         continue
       }
-      const value = rule ? rule.style.getPropertyValue(property) : null
+      const value = rule ? rule.style.getPropertyValue(property).trim() : null
       if (value) return value
     }
     return ''

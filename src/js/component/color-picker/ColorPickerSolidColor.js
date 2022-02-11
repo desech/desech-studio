@@ -2,6 +2,7 @@ import ColorPickerInput from './ColorPickerInput.js'
 import ColorPickerCommon from './ColorPickerCommon.js'
 
 export default {
+  // only works when the color picker is visible, so watch out for templates
   injectColor (container, rgb) {
     if (!rgb) return
     const inputs = container.getElementsByClassName('color-rgb-input')

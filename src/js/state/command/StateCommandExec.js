@@ -87,22 +87,6 @@ export default {
     HelperTrigger.triggerReload('right-panel')
   },
 
-  addColor (data) {
-    StyleSheetCommon.addRemoveStyleRules({
-      selector: ':root',
-      properties: {
-        [data.name]: data.value
-      }
-    })
-  },
-
-  removeColor (data) {
-    StateStyleSheet.removeStyleRule({
-      selector: ':root',
-      property: data.name
-    })
-  },
-
   addResponsive (data) {
     ProjectResponsive.insertResponsive(data.responsive)
     HelperTrigger.triggerReload('responsive-mode-list')

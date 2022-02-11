@@ -2,12 +2,14 @@ import StateCommand from '../../../../state/StateCommand.js'
 import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 import RightVariableCommon from './RightVariableCommon.js'
 import ChangeStyleField from '../../../../component/ChangeStyleField.js'
+import ColorPicker from '../../../../component/ColorPicker.js'
 
 export default {
   getEvents () {
     return {
       click: ['clickDeleteVariableEvent', 'clickCancelEvent'],
-      change: ['changeUpdateNameEvent', 'changeUpdateValueEvent']
+      change: ['changeUpdateNameEvent', 'changeUpdateFieldValueEvent'],
+      colorchange: ['changecolorEvent']
     }
   },
 
@@ -29,9 +31,16 @@ export default {
     }
   },
 
-  async changeUpdateValueEvent (event) {
+  async changeUpdateFieldValueEvent (event) {
     if (event.target.classList.contains('right-variable-value')) {
-      await this.updateValue(event.target)
+      await this.updateFieldValue(event.target)
+    }
+  },
+
+  async changecolorEvent (event) {
+    if (event.target.closest('.right-variable-value-container .color-picker') &&
+      event.detail.apply) {
+      await this.changeFill(event.target)
     }
   },
 
@@ -81,8 +90,17 @@ export default {
     await StateCommand.executeCommand(command.do)
   },
 
-  async updateValue (field) {
+  async updateFieldValue (field) {
     const value = ChangeStyleField.getValue(field)
+    await this.updateValue(value)
+  },
+
+  async changeFill (picker) {
+    const value = ColorPicker.getColorPickerValue(picker)
+    await this.updateValue(value)
+  },
+
+  async updateValue (value) {
     const variable = StateSelectedVariable.getVariable()
     const command = {
       do: {

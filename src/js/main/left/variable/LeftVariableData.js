@@ -28,6 +28,7 @@ export default {
     li.dataset.search = [data.ref, data.name, data.type, data.value].join('-')
     this.injectSelection(li, data)
     this.injectTitle(li, data)
+    this.injectColor(li, data)
   },
 
   injectSelection (li, data) {
@@ -38,5 +39,12 @@ export default {
   injectTitle (li, data) {
     const title = li.getElementsByClassName('panel-item-name')[0]
     title.textContent = data.name
+  },
+
+  injectColor (li, data) {
+    if (data.type !== 'color') return
+    const swatch = li.getElementsByClassName('panel-item-color')[0]
+    HelperDOM.show(swatch)
+    swatch.children[0].style.backgroundColor = data.value
   }
 }

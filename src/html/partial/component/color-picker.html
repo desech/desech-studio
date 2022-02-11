@@ -64,7 +64,7 @@
         <input class="color-input color-hsv-input" type="number" step="1" min="0" max="100" value="0">
         <input class="color-input color-hsv-input" type="number" step="1" min="0" max="100" value="0">
       </div>
-    </div>    
+    </div>
   
     <div class="input-extra" style="justify-self: right;">
       <input class="input-extra-value color-alpha" type="number" step="1" min="0" max="100" value="100">
@@ -72,7 +72,7 @@
     </div>
   </div>
 
-  <div class="grid" style="grid-template-columns: repeat(9, 1fr); column-gap: 2px">
+  <div class="grid color-picker-swatches">
     <!-- @todo implement eye dropper https://discuss.atom.io/t/how-to-build-an-eye-dropper-for-color-selection/27077 -->
     <button type="button" hidden class="eye-dropper-button tooltip top" data-tooltip="{{#i18n}} Pick a color {{/i18n}}" style="width:20px; height:20px; padding:2px;">
       <svg width="16" height="16" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@
         <path d="M20.71 5.63l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-3.12 3.12-1.93-1.91-1.41 1.41 1.42 1.42L3 16.25V21h4.75l8.92-8.92 1.42 1.42 1.41-1.41-1.92-1.92 3.12-3.12c.4-.4.4-1.03.01-1.42zM6.92 19L5 17.08l8.06-8.06 1.92 1.92L6.92 19z"/>
       </svg>
     </button>
-    <button type="button" class="save-swatch-button tooltip top" data-tooltip="{{#i18n}} Save color swatch {{/i18n}}" style="width:20px;height:20px;padding:0">
+    <button type="button" class="save-swatch-button tooltip top" data-tooltip="{{#i18n}} Save as color variable {{/i18n}}" style="width:20px;height:20px;padding:0">
       <svg width="18" height="18" viewBox="0 0 24 24">
         <path d="M0 0h24v24H0z" fill="none"></path>
         <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>

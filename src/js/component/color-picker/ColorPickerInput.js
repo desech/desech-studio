@@ -24,7 +24,7 @@ export default {
 
   changeRgbInputEvent (event) {
     if (event.target.classList.contains('color-rgb-input')) {
-      this.inputRgbInput(event.target)
+      this.updateRgbInput(event.target)
     }
   },
 
@@ -77,24 +77,17 @@ export default {
     }
   },
 
-  inputRgbInput (input) {
-    this.updateRgbInput(input)
-  },
-
-  updateRgbInput (input, trigger = true) {
+  updateRgbInput (input, trigger = true, options = {}) {
     const color = { rgb: this.extractRgbValues(input.parentNode.children) }
-    if (HelperColor.validateRgb(color.rgb[0], color.rgb[1], color.rgb[2])) {
-      color.hex = HelperColor.rgbToHex(...color.rgb)
-      color.hsl = HelperColor.rgbToHsl(...color.rgb)
-      color.hsv = HelperColor.rgbToHsv(...color.rgb)
-      const container = input.closest('.color-picker')
-      const data = ColorPickerCommon.getColorPickerData(container)
-      color.alpha = ColorPickerCommon.getAlpha(data)
-      ColorPickerCommon.updateColorPicker(container, color)
-      if (trigger) {
-        ColorPickerCommon.triggerColorChangeEvent(container)
-      }
-    }
+    if (!HelperColor.validateRgb(color.rgb[0], color.rgb[1], color.rgb[2])) return
+    color.hex = HelperColor.rgbToHex(...color.rgb)
+    color.hsl = HelperColor.rgbToHsl(...color.rgb)
+    color.hsv = HelperColor.rgbToHsv(...color.rgb)
+    const container = input.closest('.color-picker')
+    const data = ColorPickerCommon.getColorPickerData(container)
+    color.alpha = ColorPickerCommon.getAlpha(data)
+    ColorPickerCommon.updateColorPicker(container, color)
+    if (trigger) ColorPickerCommon.triggerColorChangeEvent(container, options)
   },
 
   extractRgbValues (inputs) {

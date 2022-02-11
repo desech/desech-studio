@@ -80,6 +80,15 @@
   color: var(--field-txt-disabled);
 }
 
+.sidebar-right .slide-container .color-picker-swatches {
+  grid-template-columns: repeat(9, 1fr);
+  column-gap: 2px;
+}
+
+.sidebar-right .right-variable-form .color-picker-swatches {
+  display: none;
+}
+
 .sidebar-right .slide-container .swatch-color-container {
   position: relative;
   width: 20px;

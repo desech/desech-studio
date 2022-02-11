@@ -103,6 +103,9 @@
 
 #sidebar-left-panel ul.panel-variable-list>li {
   grid-template-columns: initial;
+  grid-auto-flow: column;
+  align-items: center;
+  gap: 7px;
   padding: 0 10px;
 }
 

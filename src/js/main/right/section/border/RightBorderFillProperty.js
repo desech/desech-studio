@@ -14,9 +14,9 @@ export default {
     }
   },
 
-  changecolorEvent (event) {
+  async changecolorEvent (event) {
     if (event.target.closest('.border-fill-container .color-picker')) {
-      this.changeFill(event.target, event.detail)
+      await this.changeFill(event.target, event.detail)
     }
   },
 
@@ -36,8 +36,6 @@ export default {
   async updateFill (container, value, options = {}) {
     const type = container.getElementsByClassName('border-details-container')[0].dataset.type
     const properties = this.getBorderFillProperties(type, value)
-    // we don't use the properties when we apply the temporary style,
-    // we take them from style, directly
     await ColorPickerCommon.setColor(properties, options)
   },
 

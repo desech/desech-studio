@@ -1,6 +1,6 @@
 import HelperDOM from '../../../helper/HelperDOM.js'
 import StateSelectedVariable from '../../../state/StateSelectedVariable.js'
-import InputUnitField from '../../../component/InputUnitField.js'
+import ChangeStyleField from '../../../component/ChangeStyleField.js'
 
 export default {
   getSection () {
@@ -21,10 +21,10 @@ export default {
   },
 
   injectFieldValue (container, data) {
-    const parent = container.getElementsByClassName('right-variable-value')[0]
+    const parent = container.getElementsByClassName('right-variable-value-container')[0]
     const template = HelperDOM.getTemplate(`template-variable-${data.type}`)
-    const input = template.getElementsByClassName('input-unit-value')[0]
-    InputUnitField.setValue(input, data.value)
     HelperDOM.replaceOnlyChild(parent, template)
+    const field = parent.querySelector('input,select,button')
+    ChangeStyleField.setValue(field, data.value)
   }
 }

@@ -19,10 +19,10 @@
 
         <div class="grid" style="grid-template-columns: auto; gap: 5px;">
           <div>{{#i18n}} Value {{/i18n}}</div>
-          <div class="right-variable-value"></div>
+          <div class="right-variable-value-container"></div>
         </div>
 
-        <div class="grid" style="grid-template-columns: 97px auto; gap: 5px; margin-top: 10px;">
+        <div class="grid" style="grid-template-columns: 75px auto; gap: 5px; margin-top: 10px;">
           <button type="button" class="right-variable-delete composed small" type="button" style="width: max-content">
             <svg width="14" height="14" viewBox="0 0 24 24">
               <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
@@ -38,4 +38,6 @@
   </form>
 </template>
 
-{{> mainRightVariableTemplate }}
+<!-- dialog/variable.html, right/variable.html, RightVariableCommon.getPropertyType() -->
+{{> mainRightVariableGrid }}
+{{> mainRightVariableSize }}

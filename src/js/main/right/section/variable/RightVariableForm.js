@@ -1,13 +1,13 @@
 import StateCommand from '../../../../state/StateCommand.js'
 import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
-import InputUnitField from '../../../../component/InputUnitField.js'
 import RightVariableCommon from './RightVariableCommon.js'
+import ChangeStyleField from '../../../../component/ChangeStyleField.js'
 
 export default {
   getEvents () {
     return {
       click: ['clickDeleteVariableEvent', 'clickCancelEvent'],
-      change: ['changeUpdateNameEvent', 'changeUpdateValueInputEvent']
+      change: ['changeUpdateNameEvent', 'changeUpdateValueEvent']
     }
   },
 
@@ -29,9 +29,9 @@ export default {
     }
   },
 
-  async changeUpdateValueInputEvent (event) {
-    if (event.target.classList.contains('right-variable-input')) {
-      await this.updateValueInput(event.target)
+  async changeUpdateValueEvent (event) {
+    if (event.target.classList.contains('right-variable-value')) {
+      await this.updateValue(event.target)
     }
   },
 
@@ -81,8 +81,8 @@ export default {
     await StateCommand.executeCommand(command.do)
   },
 
-  async updateValueInput (input) {
-    const value = InputUnitField.getValue(input)
+  async updateValue (field) {
+    const value = ChangeStyleField.getValue(field)
     const variable = StateSelectedVariable.getVariable()
     const command = {
       do: {

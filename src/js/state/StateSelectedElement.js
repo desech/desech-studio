@@ -73,9 +73,9 @@ export default {
 
   updateUiAfterElementSelect (ref) {
     LeftCommon.selectItemByRef(ref)
-    // clear the selected variable, so we can see the new selected item
-    StateSelectedVariable.deselectVariable()
-    HelperTrigger.triggerReload('element-overlay')
+    // clear the selected variable, so we can see the new selected item; don't reload the panel
+    StateSelectedVariable.deselectVariable(false)
+    HelperTrigger.triggerReload('element-overlay', { panelReload: true })
   },
 
   scrollToItem (element) {

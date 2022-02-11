@@ -89,7 +89,7 @@ export default {
   async togglePanel (type, options = {}) {
     const container = document.getElementById('sidebar-left-panel')
     await this.showHidePanel(container, type, options)
-    HelperTrigger.triggerReload('element-overlay', { panelReload: false })
+    HelperTrigger.triggerReload('element-overlay')
     TopCommon.positionDragHandle()
   },
 

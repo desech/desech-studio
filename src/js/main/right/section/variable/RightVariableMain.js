@@ -10,33 +10,32 @@ import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperForm from '../../../../helper/HelperForm.js'
+import ChangeStyleField from '../../../../component/ChangeStyleField.js'
 
 export default {
   getEvents () {
     return {
-      focusin: ['focusinUnitSavePreviousValueEvent'],
+      focusin: ['focusinSavePreviousValueEvent'],
       change: ['changeCreateVariablePromptEvent', 'changeGotoUpdateVariableEvent'],
       click: ['clickCreateVariableSubmitEvent'],
       keydown: ['keydownDeselectVariableEvent']
     }
   },
 
-  focusinUnitSavePreviousValueEvent (event) {
-    if (event.target.classList.contains('input-unit-measure')) {
+  focusinSavePreviousValueEvent (event) {
+    if (this.isVariableSelect(event.target)) {
       event.target.dataset.previous = event.target.value
     }
   },
 
   changeCreateVariablePromptEvent (event) {
-    if (event.target.classList.contains('input-unit-measure') &&
-      event.target.value === 'var-desech-input-create') {
+    if (this.isVariableSelect(event.target) && event.target.value === 'var-desech-input-create') {
       this.createVariablePrompt(event.target)
     }
   },
 
   changeGotoUpdateVariableEvent (event) {
-    if (event.target.classList.contains('input-unit-measure') &&
-      event.target.value === 'var-desech-input-update') {
+    if (this.isVariableSelect(event.target) && event.target.value === 'var-desech-input-update') {
       this.gotoUpdateVariable(event.target)
     }
   },
@@ -55,9 +54,14 @@ export default {
     }
   },
 
+  isVariableSelect (node) {
+    return node.tagName === 'SELECT' && (node.classList.contains('input-unit-measure') ||
+      node.classList.contains('change-style'))
+  },
+
   createVariablePrompt (select) {
     this.setSelectData(select)
-    this.showCreateDialog(select.dataset.name)
+    this.showCreateDialog(select.dataset.name || select.name)
   },
 
   setSelectData (select) {
@@ -131,7 +135,8 @@ export default {
 
   gotoUpdateVariable (select) {
     this.setSelectData(select)
-    const ref = HelperVariable.getVariableRef(select.previousElementSibling.value)
+    const value = ChangeStyleField.getValue(select)
+    const ref = HelperVariable.getVariableRef(value)
     StateSelectedVariable.selectVariable(ref)
   }
 }

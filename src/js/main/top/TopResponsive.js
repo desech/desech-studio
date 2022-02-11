@@ -121,7 +121,7 @@ export default {
   switchResponsive (button) {
     const data = JSON.parse(button.dataset.data)
     TopCommon.setResponsiveSizeCanvas(data)
-    HelperTrigger.triggerReload('element-overlay')
+    HelperTrigger.triggerReload('element-overlay', { panelReload: true })
   },
 
   async addResponsive (form) {

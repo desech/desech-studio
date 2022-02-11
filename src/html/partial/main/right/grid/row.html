@@ -17,61 +17,14 @@
   </div>
 
   <select class="change-style" name="align-content" style="margin-bottom: 15px;">
-    <option value="">{{#i18n}} - Content align - {{/i18n}}</option>
-    <option value="start">{{#i18n}} Top (start) {{/i18n}}</option>
-    <option value="center">{{#i18n}} Center {{/i18n}}</option>
-    <option value="end">{{#i18n}} Bottom (end) {{/i18n}}</option>
-    <option value="stretch">{{#i18n}} Stretch {{/i18n}}</option>
-    <option value="space-between">{{#i18n}} Space between {{/i18n}}</option>
-    <option value="space-around">{{#i18n}} Space around {{/i18n}}</option>
-    <option value="space-evenly">{{#i18n}} Space evenly {{/i18n}}</option>
-    <option value="baseline">{{#i18n}} Baseline {{/i18n}}</option>
-    <optgroup label="{{#i18n}} Extra {{/i18n}}">
-      <option value="flex-start">{{#i18n}} Flex start {{/i18n}}</option>
-      <option value="flex-end">{{#i18n}} Flex end {{/i18n}}</option>
-    </optgroup>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-      {{> componentSelectGeneralOption }}
-    </optgroup>
+    {{> mainRightVariableFieldAlignContent }} 
   </select>
 
   <select class="change-style" name="align-items" style="margin-bottom: 15px;">
-    <option value="">{{#i18n}} - Rows align - {{/i18n}}</option>
-    <option value="start">{{#i18n}} Top (start) {{/i18n}}</option>
-    <option value="center">{{#i18n}} Center {{/i18n}}</option>
-    <option value="end">{{#i18n}} Bottom (end) {{/i18n}}</option>
-    <option value="stretch">{{#i18n}} Stretch {{/i18n}}</option>
-    <option value="baseline">{{#i18n}} Baseline {{/i18n}}</option>
-    <optgroup label="{{#i18n}} Extra {{/i18n}}">
-      <option value="self-start">{{#i18n}} Self start {{/i18n}}</option>
-      <option value="self-end">{{#i18n}} Self end {{/i18n}}</option>
-      <option value="flex-start">{{#i18n}} Flex start {{/i18n}}</option>
-      <option value="flex-end">{{#i18n}} Flex end {{/i18n}}</option>
-    </optgroup>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-      {{> componentSelectGeneralOption }}
-    </optgroup>
+    {{> mainRightVariableFieldAlignItems }}
   </select>
 
   <select class="change-style" name="align-self">
-    <option value="">{{#i18n}} - Self align - {{/i18n}}</option>
-    <option value="start">{{#i18n}} Top (start) {{/i18n}}</option>
-    <option value="center">{{#i18n}} Center {{/i18n}}</option>
-    <option value="end">{{#i18n}} Bottom (end) {{/i18n}}</option>
-    <option value="stretch">{{#i18n}} Stretch {{/i18n}}</option>
-    <option value="baseline">{{#i18n}} Baseline {{/i18n}}</option>
-    <optgroup label="{{#i18n}} Extra {{/i18n}}">
-      <option value="self-start">{{#i18n}} Self start {{/i18n}}</option>
-      <option value="self-end">{{#i18n}} Self end {{/i18n}}</option>
-      <option value="flex-start">{{#i18n}} Flex start {{/i18n}}</option>
-      <option value="flex-end">{{#i18n}} Flex end {{/i18n}}</option>
-    </optgroup>
-    <optgroup label="{{#i18n}} General {{/i18n}}">
-      <option value="auto">{{#i18n}} Auto {{/i18n}}</option>
-      <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-      {{> componentSelectGeneralOption }}
-    </optgroup>
+    {{> mainRightVariableFieldAlignSelf }}
   </select>  
 </div>

@@ -47,7 +47,7 @@ export default {
     }
   },
 
-  reloadOverlay (panelReload = true) {
+  reloadOverlay (panelReload = false) {
     if (!this.getOverlay()) return
     this.clearOverlay(panelReload)
     this.loadOverlay(panelReload)
@@ -57,11 +57,11 @@ export default {
     HelperDOM.deleteChildren(this.getOverlay())
   },
 
-  loadOverlay (panelReload = true) {
+  loadOverlay (panelReload) {
     const element = StateSelectedElement.getElement()
     if (!HelperElement.isCanvasElement(element)) return
     this.injectOverlay()
-    if (panelReload !== false) HelperTrigger.triggerReload('right-panel')
+    if (panelReload) HelperTrigger.triggerReload('right-panel')
   },
 
   injectOverlay () {

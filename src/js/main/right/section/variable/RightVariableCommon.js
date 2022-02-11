@@ -22,7 +22,7 @@ export default {
     }
   },
 
-  // dialog/variable.html, variable/template.html, RightVariableCommon.getPropertyType()
+  // dialog/variable.html, right/variable.html, RightVariableCommon.getPropertyType()
   getPropertyType (name) {
     switch (name) {
       case 'min-width': case 'max-width':
@@ -33,6 +33,8 @@ export default {
         return 'margin'
       case 'padding-top': case 'padding-right': case 'padding-bottom': case 'padding-left':
         return 'padding'
+      case 'column-gap': case 'row-gap':
+        return 'gap'
       default:
         return name
     }

@@ -75,7 +75,7 @@ export default {
   setZoom (value) {
     this.setZoomValue(value)
     TopCommon.positionDragHandle()
-    HelperTrigger.triggerReload('element-overlay', { panelReload: false })
+    HelperTrigger.triggerReload('element-overlay')
   },
 
   setZoomValue (value) {

@@ -11,8 +11,9 @@
   box-shadow: var(--field-shadow) 0 0 1px 0;
 }
 
-.desech-studio .right-variable-value .component-input-unit {
-  width: 100px;
+.desech-studio .right-variable-value-container .component-input-unit,
+.desech-studio .right-variable-value-container>select {
+  width: 126px;
 }
 
 .desech-studio .component-input-unit input {
@@ -60,7 +61,8 @@
   color: var(--option-selected);
 }
 
-.desech-studio .component-input-unit select option.highlighted {
+.desech-studio .component-input-unit select option.highlighted,
+.desech-studio select option.highlighted {
   color: var(--option-highlighted);
 }
 

@@ -54,7 +54,7 @@ export default {
       this.changeAllFields(fields, type, value)
     } else {
       await RightCommon.changeStyle({ [input.name]: value })
-      RightVariableInject.updateUnitMeasureVariables(input)
+      RightVariableInject.updateFieldVariables(input)
     }
   },
 
@@ -63,7 +63,7 @@ export default {
     for (const dir of ['top', 'left', 'right', 'bottom']) {
       const name = `${type}-${dir}`
       InputUnitField.setValue(fields[name], value, style[name])
-      RightVariableInject.updateUnitMeasureVariables(fields[name])
+      RightVariableInject.updateFieldVariables(fields[name])
     }
   },
 

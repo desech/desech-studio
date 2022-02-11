@@ -15,15 +15,15 @@ export default {
     return { ref, ...data }
   },
 
-  selectVariable (ref) {
+  selectVariable (ref, panelReload = true) {
     HelperCanvas.setCanvasData('selectedVariable', ref)
     LeftCommon.selectItemByRef(ref)
-    HelperTrigger.triggerReload('right-panel')
+    if (panelReload) HelperTrigger.triggerReload('right-panel')
   },
 
-  deselectVariable () {
+  deselectVariable (panelReload = true) {
     HelperCanvas.deleteCanvasData('selectedVariable')
     LeftCommon.deselectItem('variable')
-    HelperTrigger.triggerReload('right-panel')
+    if (panelReload) HelperTrigger.triggerReload('right-panel')
   }
 }

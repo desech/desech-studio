@@ -178,7 +178,7 @@ export default {
   },
 
   reloadSuccess () {
-    HelperTrigger.triggerReload('element-overlay', { panelReload: false })
+    HelperTrigger.triggerReload('element-overlay')
     HelperTrigger.triggerReload('sidebar-left-panel', { panels: ['element'] })
     DialogComponent.closeAllDialogs()
   }

@@ -16,14 +16,7 @@
     {{#if length }} </optgroup> {{/if}}
 
     {{^if noVariables }}
-      <optgroup label="{{#i18n}} Variables {{/i18n}}">
-        <option class="highlighted" value="var-desech-input-create" hidden>
-          {{#i18n}} Save as variable {{/i18n}}
-        </option>
-        <option class="highlighted" value="var-desech-input-update" hidden>
-          {{#i18n}} Update variable {{/i18n}}
-        </option>
-      </optgroup>
+      {{> componentVariableInteract }}
     {{/if}}
 
     {{#if length }}

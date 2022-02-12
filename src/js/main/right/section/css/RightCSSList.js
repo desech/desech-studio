@@ -41,14 +41,6 @@ export default {
     return element
   },
 
-  focusFields (type, element) {
-    if (type === 'custom') {
-      element.getElementsByClassName('style-css-name')[0].focus()
-    } else {
-      element.getElementsByClassName('style-css-field')[0].focus()
-    }
-  },
-
   prepareCreateElement (createSelect, data) {
     const template = HelperDOM.getTemplate('template-style-css-element')
     const allData = this.getSelectPropertyData(createSelect, data)
@@ -106,6 +98,14 @@ export default {
       nameField.setAttributeNS(null, 'disabled', '')
     }
     if (data.value) field.value = data.value
+  },
+
+  focusFields (type, element) {
+    if (type === 'custom') {
+      element.getElementsByClassName('style-css-name')[0].focus()
+    } else {
+      element.getElementsByClassName('style-css-field')[0].focus()
+    }
   },
 
   async deleteProperty (element) {

@@ -6,7 +6,7 @@ export default {
     return {
       click: ['clickOpenLinkEvent'],
       mouseup: ['mouseupNavigateButtonsEvent'],
-      focusin: ['focusinInputEvent'],
+      focusin: ['focusinInputEvent', 'focusinSavePreviousSelectEvent'],
       change: ['changeFocusOutEvent'],
       submit: ['submitIgnoreEvent'],
       input: ['inputResetFormValidationEvent']
@@ -29,6 +29,12 @@ export default {
     if ((event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') &&
       !event.target.hasAttributeNS(null, 'readonly')) {
       event.target.select()
+    }
+  },
+
+  focusinSavePreviousSelectEvent (event) {
+    if (event.target.tagName === 'SELECT') {
+      event.target.dataset.previous = event.target.value
     }
   },
 

@@ -102,6 +102,8 @@ export default {
 
   async updateValue (value) {
     const variable = StateSelectedVariable.getVariable()
+    // when installing fonts, this is triggered, so we need to skip duplicated values
+    if (variable.value === value) return
     const command = {
       do: {
         command: 'updateVariable',

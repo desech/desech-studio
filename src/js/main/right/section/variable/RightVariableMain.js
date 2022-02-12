@@ -15,16 +15,9 @@ import ChangeStyleField from '../../../../component/ChangeStyleField.js'
 export default {
   getEvents () {
     return {
-      focusin: ['focusinSavePreviousValueEvent'],
       change: ['changeCreateVariablePromptEvent', 'changeGotoUpdateVariableEvent'],
       click: ['clickCreateVariableSubmitEvent'],
       keydown: ['keydownDeselectVariableEvent']
-    }
-  },
-
-  focusinSavePreviousValueEvent (event) {
-    if (this.isVariableSelect(event.target)) {
-      event.target.dataset.previous = event.target.value
     }
   },
 
@@ -56,7 +49,7 @@ export default {
 
   isVariableSelect (node) {
     return node.tagName === 'SELECT' && (node.classList.contains('input-unit-measure') ||
-      node.classList.contains('change-style'))
+      node.classList.contains('change-style') || node.classList.contains('custom-change-style'))
   },
 
   createVariablePrompt (select) {

@@ -4,6 +4,7 @@ import RightTextFont from './text/RightTextFont.js'
 import RightTextDecoration from './text/RightTextDecoration.js'
 import SliderComponent from '../../../component/SliderComponent.js'
 import ColorPickerButton from '../../../component/color-picker/ColorPickerButton.js'
+import RightVariableInject from './variable/RightVariableInject.js'
 
 export default {
   getSection (sectionData) {
@@ -16,13 +17,23 @@ export default {
     return HelperDOM.getTemplate('template-style-text')
   },
 
-  injectData (template, sectionData) {
-    ChangeStyleField.injectFields(template, sectionData)
-    RightTextFont.injectFontList(template)
-    RightTextFont.injectFontFamily(template, sectionData.style)
-    const colorContainer = template.querySelector('.color-button-wrapper[data-property="color"]')
+  injectData (form, sectionData) {
+    RightVariableInject.injectAllFieldVariables(form.elements)
+    this.injectFields(form, sectionData)
+    RightVariableInject.updateAllFieldVariables(form.elements)
+  },
+
+  injectFields (form, sectionData) {
+    ChangeStyleField.injectFields(form, sectionData)
+    this.injectFontFamily(form, sectionData)
+    const colorContainer = form.querySelector('.color-button-wrapper[data-property="color"]')
     ColorPickerButton.injectPropertyColor(colorContainer, sectionData.style)
-    RightTextDecoration.injectTextDecorationLine(template, sectionData.style)
-    SliderComponent.setOpened(template)
+    RightTextDecoration.injectTextDecorationLine(form, sectionData.style)
+    SliderComponent.setOpened(form)
+  },
+
+  injectFontFamily (form, sectionData) {
+    RightTextFont.injectFontList(form)
+    RightTextFont.injectFontFamily(form, sectionData.style['font-family'])
   }
 }

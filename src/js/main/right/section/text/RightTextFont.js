@@ -3,35 +3,44 @@ import DialogComponent from '../../../../component/DialogComponent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import Page from '../../../../page/Page.js'
 import HelperProject from '../../../../helper/HelperProject.js'
+import RightVariableCommon from '../variable/RightVariableCommon.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickAddFontEvent'],
-      change: ['changeSetFontEvent']
+      change: ['changeSetFontEvent', 'changeAddFontPromptEvent'],
+      click: ['clickAddFontSaveEvent']
     }
   },
 
-  async clickAddFontEvent (event) {
-    if (event.target.classList.contains('dialog-font-submit')) {
-      await this.addFont(event.target.closest('form'))
-    }
-  },
-
+  // this one first, so we don't trigger it when installing fonts
   async changeSetFontEvent (event) {
-    if (event.target.classList.contains('font-family')) {
+    if (event.target.classList.contains('font-family') &&
+      !RightVariableCommon.isExecuteAction(event.target.value) &&
+      !event.target.selectedOptions[0]?.classList.contains('font-family-add-option')) {
       await this.setFont(event.target)
     }
   },
 
-  async setFont (select) {
-    const option = select.selectedOptions[0]
-    if (option.classList.contains('font-family-add-font')) {
-      this.installFont(select.value, option.dataset.url || null)
-      select.value = ''
-    } else {
-      await RightCommon.changeStyle({ 'font-family': select.value })
+  changeAddFontPromptEvent (event) {
+    if (event.target.classList.contains('font-family-add-select') &&
+      event.target.selectedOptions[0]?.classList.contains('font-family-add-option')) {
+      // we want this for variables too
+      this.addFontPrompt(event.target)
     }
+  },
+
+  async clickAddFontSaveEvent (event) {
+    if (event.target.classList.contains('dialog-font-submit')) {
+      await this.addFontSave(event.target.closest('form'))
+    }
+  },
+
+  addFontPrompt (select) {
+    this.installFont(select.value, select.selectedOptions[0].dataset.url || null)
+    // this will keep the previous font value, after reload, without changing it
+    select.value = select.dataset.previous
   },
 
   installFont (family, url) {
@@ -55,12 +64,17 @@ export default {
     }
   },
 
-  async addFont (form) {
+  async addFontSave (form) {
     const url = form.elements.url.value
     const file = form.elements.file.files[0] ? form.elements.file.files[0].path : null
     if (!url && !file) return
     const sucess = await window.electron.invoke('rendererAddFont', url, file)
     if (sucess) await Page.loadMain(HelperProject.getFile())
+  },
+
+  async setFont (select) {
+    await RightCommon.changeStyle({ 'font-family': select.value })
+    RightVariableInject.updateFieldVariables(select)
   },
 
   injectFontList (container) {
@@ -82,8 +96,8 @@ export default {
     return option
   },
 
-  injectFontFamily (container, style) {
-    const select = container.getElementsByClassName('font-family')[0]
-    select.value = style['font-family'] ? style['font-family'].replaceAll('"', '') : ''
+  injectFontFamily (container, value) {
+    const select = container.querySelector('[name="font-family"]')
+    select.value = value ? value.replaceAll('"', '') : ''
   }
 }

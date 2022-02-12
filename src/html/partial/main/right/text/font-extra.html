@@ -1,19 +1,10 @@
 <div class="grid">
   <select class="change-style" name="font-style">
-    <option value="">{{#i18n}} - Style - {{/i18n}}</option>
-    <option value="italic">{{#i18n}} Italic {{/i18n}}</option>
-    <option value="oblique">{{#i18n}} Oblique {{/i18n}}</option>
-    <option value="normal">{{#i18n}} Normal {{/i18n}}</option>
-    {{> componentSelectGeneralGroup }}
+    {{> mainRightVariableFieldFontStyle }}
   </select>
 
   <select class="change-style" name="text-transform">
-    <option value="">{{#i18n}} - Transform - {{/i18n}}</option>
-    <option value="none">{{#i18n}} None {{/i18n}}</option>
-    <option value="capitalize">{{#i18n}} Capitalize {{/i18n}}</option>
-    <option value="uppercase">{{#i18n}} Uppercase {{/i18n}}</option>
-    <option value="lowercase">{{#i18n}} Lowercase {{/i18n}}</option>
-    {{> componentSelectGeneralGroup }}
+    {{> mainRightVariableFieldTextTransform }}
   </select>
 </div>
 
@@ -47,13 +38,7 @@
 <div class="color-button-wrapper" data-property="text-decoration-color">
   <div class="grid">
     <select class="change-style" name="text-decoration-style">
-      <option value="">{{#i18n}} - Line style - {{/i18n}}</option>
-      <option value="solid">{{#i18n}} Solid {{/i18n}}</option>
-      <option value="double">{{#i18n}} Double {{/i18n}}</option>
-      <option value="dotted">{{#i18n}} Dotted {{/i18n}}</option>
-      <option value="dashed">{{#i18n}} Dashed {{/i18n}}</option>
-      <option value="wavy">{{#i18n}} Wavy {{/i18n}}</option>
-      {{> componentSelectGeneralGroup }}
+      {{> mainRightVariableFieldTextDecorationStyle }}
     </select>
 
     <div class="grid" style="grid-template-columns: 1fr 18px; padding: 0;">

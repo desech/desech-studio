@@ -38,7 +38,7 @@ export default {
         return 'grid-template-cells'
       case 'column-gap': case 'row-gap':
         return 'gap'
-      case 'fill': case 'stroke':
+      case 'fill': case 'stroke': case 'text-decoration-color':
         return 'color'
       default:
         return name

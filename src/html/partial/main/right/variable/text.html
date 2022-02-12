@@ -1,0 +1,47 @@
+<template id="template-variable-font-family">
+  <select class="right-variable-value font-family-add-select" name="font-family">
+    {{> mainRightVariableFieldFontFamily }}
+  </select>
+</template>
+
+<template id="template-variable-font-size">
+  {{> componentInputUnit name="font-size" class="right-variable-value" length="1" percent="1" fontSize="1" noVariables="1" }}
+</template>
+
+<template id="template-variable-font-weight">
+  <select name="font-weight" class="right-variable-value">
+    {{> mainRightVariableFieldFontWeight }}
+  </select>
+</template>
+
+<template id="template-variable-line-height">
+  {{> componentInputUnit name="line-height" class="right-variable-value" length="1" percent="1" number="1" normal="1" noVariables="1" }}
+</template>
+
+<template id="template-variable-text-align">
+  <select name="text-align" class="right-variable-value">
+    {{> mainRightVariableFieldTextAlign }}
+  </select>
+</template>
+
+<template id="template-variable-letter-spacing">
+  {{> componentInputUnit name="letter-spacing" class="right-variable-value" length="1" normal="1" noVariables="1" }}
+</template>
+
+<template id="template-variable-font-style">
+  <select name="font-style" class="right-variable-value">
+    {{> mainRightVariableFieldFontStyle }}
+  </select>
+</template>
+
+<template id="template-variable-text-transform">
+  <select name="text-transform" class="right-variable-value">
+    {{> mainRightVariableFieldTextTransform }}
+  </select>
+</template>
+
+<template id="template-variable-text-decoration-style">
+  <select name="text-decoration-style" class="right-variable-value">
+    {{> mainRightVariableFieldTextDecorationStyle }}
+  </select>
+</template>

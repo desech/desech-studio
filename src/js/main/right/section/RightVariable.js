@@ -4,6 +4,7 @@ import ChangeStyleField from '../../../component/ChangeStyleField.js'
 import ColorPickerSolidColor from '../../../component/color-picker/ColorPickerSolidColor.js'
 import HelperColor from '../../../helper/HelperColor.js'
 import StyleSheetVariable from '../../../state/stylesheet/StyleSheetVariable.js'
+import RightTextFont from './text/RightTextFont.js'
 
 export default {
   getSection () {
@@ -38,9 +39,13 @@ export default {
   },
 
   injectFieldValue (container, data) {
-    if (data.type === 'color') return
-    const field = container.querySelector('input,select,button')
-    ChangeStyleField.setValue(field, data.value)
+    if (data.type === 'font-family') {
+      RightTextFont.injectFontList(container)
+      RightTextFont.injectFontFamily(container, data.value)
+    } else if (data.type !== 'color') {
+      const field = container.querySelector('input,select,button')
+      ChangeStyleField.setValue(field, data.value)
+    }
   },
 
   // inject things after the template is added to the container
@@ -50,6 +55,7 @@ export default {
   },
 
   injectColorPicker (container, data) {
+    if (data.type !== 'color') return
     const color = StyleSheetVariable.getVariableValue(data.ref)
     const rgb = HelperColor.extractRgb(color)
     ColorPickerSolidColor.injectColor(container, rgb)

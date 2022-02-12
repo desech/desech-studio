@@ -1,0 +1,23 @@
+<template id="template-variable-fill-rule">
+  <select name="fill-rule" class="right-variable-value">
+    {{> mainRightVariableFieldFillRule }}
+  </select>
+</template>
+
+<template id="template-variable-stroke-width">
+  {{> componentInputUnit name="stroke-width" class="right-variable-value" length="1" percent="1" noVariables="1" }}
+</template>
+
+<template id="template-variable-stroke-dasharray">
+  {{> componentInputUnit name="stroke-dasharray" class="right-variable-value" number="1" noMath="1" noVariables="1" }}
+</template>
+
+<template id="template-variable-stroke-linejoin">
+  <select name="fill-rule" class="right-variable-value">
+    {{> mainRightVariableFieldStrokeLinejoin }}
+  </select>
+</template>
+
+<template id="template-variable-stroke-miterlimit">
+  {{> componentInputUnit name="stroke-miterlimit" class="right-variable-value" number="1" noMath="1" noVariables="1" }}
+</template>

@@ -1,0 +1,27 @@
+<option value="">{{#i18n}} - Font - {{/i18n}}</option>
+<optgroup class="font-family-my-fonts" hidden label="{{#i18n}} My Fonts {{/i18n}}"></optgroup>
+{{> componentVariableInteract }}
+{{> componentSelectGeneralGroup }}
+
+<option class="font-family-add-option" value="font-desech-custom">
+  {{#i18n}} Install Custom Font {{/i18n}}
+</option>
+
+<optgroup label="{{#i18n}} Popular {{/i18n}}">
+  {{#popularFonts}}
+    <option class="font-family-add-option" value="{{family}}" data-url="{{url}}"
+      style="font-family: '{{family}}';">
+      {{family}}
+    </option>
+  {{/popularFonts}}
+</optgroup>
+
+{{#categoryFonts}}
+  <optgroup label="{{category}}">
+    {{#fonts}}
+      <option class="font-family-add-option" value="{{family}}" data-url="{{url}}">
+        {{family}}
+      </option>
+    {{/fonts}}
+  </optgroup>
+{{/categoryFonts}}

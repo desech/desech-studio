@@ -43,7 +43,7 @@ export default {
     if (field.closest('.component-input-unit')) {
       this.processUnitField(field.closest('.component-input-unit'))
     } else {
-      this.toggleOptions(field, field.value)
+      this.toggleOptions(field, field.dataset.value || field.value)
     }
   },
 

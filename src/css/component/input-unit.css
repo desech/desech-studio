@@ -16,10 +16,6 @@
   width: 126px;
 }
 
-.desech-studio select.right-variable-value optgroup[data-type="variable"] {
-  display: none;
-}
-
 .desech-studio .component-input-unit input {
   height: 100%;
   line-height: 1.2;

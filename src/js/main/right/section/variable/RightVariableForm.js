@@ -3,12 +3,15 @@ import StateSelectedVariable from '../../../../state/StateSelectedVariable.js'
 import RightVariableCommon from './RightVariableCommon.js'
 import ChangeStyleField from '../../../../component/ChangeStyleField.js'
 import ColorPicker from '../../../../component/ColorPicker.js'
+import RightTextDecoration from '../text/RightTextDecoration.js'
+import CheckButtonField from '../../../../component/CheckButtonField.js'
 
 export default {
   getEvents () {
     return {
-      click: ['clickDeleteVariableEvent', 'clickCancelEvent'],
-      change: ['changeUpdateNameEvent', 'changeUpdateFieldValueEvent'],
+      click: ['clickDeleteVariableEvent', 'clickCancelEvent', 'clickSetDecorationButtonEvent'],
+      change: ['changeUpdateNameEvent', 'changeUpdateFieldValueEvent',
+        'changeSetDecorationGeneralEvent'],
       colorchange: ['changecolorEvent']
     }
   },
@@ -41,6 +44,21 @@ export default {
     if (event.target.closest('.right-variable-value-container .color-picker') &&
       event.detail.apply) {
       await this.changeFill(event.target)
+    }
+  },
+
+  // same logic in RightTextDecoration
+  async clickSetDecorationButtonEvent (event) {
+    if (event.target.closest('button.text-decoration') &&
+      event.target.closest('#variable-section')) {
+      await this.setDecorationButton(event.target.closest('form').elements)
+    }
+  },
+
+  async changeSetDecorationGeneralEvent (event) {
+    if (event.target.closest('select.text-decoration-general') &&
+      event.target.closest('#variable-section')) {
+      await this.setDecorationGeneral(event.target.closest('form'))
     }
   },
 
@@ -97,6 +115,18 @@ export default {
 
   async changeFill (picker) {
     const value = ColorPicker.getColorPickerValue(picker)
+    await this.updateValue(value)
+  },
+
+  async setDecorationButton (fields) {
+    fields.decorationSelect.value = ''
+    const value = RightTextDecoration.getButtonsValue(fields.decorationButton)
+    await this.updateValue(value)
+  },
+
+  async setDecorationGeneral (form) {
+    CheckButtonField.deselectButtons(form)
+    const value = form.elements.decorationSelect.value
     await this.updateValue(value)
   },
 

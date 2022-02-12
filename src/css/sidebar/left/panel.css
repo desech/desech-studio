@@ -181,3 +181,7 @@
   column-gap: 10px;
   align-items: center;
 }
+
+#variable-section select optgroup[data-type="variable"] {
+  display: none;
+}

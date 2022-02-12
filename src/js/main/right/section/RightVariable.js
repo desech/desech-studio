@@ -5,6 +5,7 @@ import ColorPickerSolidColor from '../../../component/color-picker/ColorPickerSo
 import HelperColor from '../../../helper/HelperColor.js'
 import StyleSheetVariable from '../../../state/stylesheet/StyleSheetVariable.js'
 import RightTextFont from './text/RightTextFont.js'
+import RightTextDecoration from './text/RightTextDecoration.js'
 
 export default {
   getSection () {
@@ -42,6 +43,9 @@ export default {
     if (data.type === 'font-family') {
       RightTextFont.injectFontList(container)
       RightTextFont.injectFontFamily(container, data.value)
+    } else if (data.type === 'text-decoration-line') {
+      const fields = container.closest('form').elements
+      RightTextDecoration.injectDecorationLine(fields, data.value)
     } else if (data.type !== 'color') {
       const field = container.querySelector('input,select,button')
       ChangeStyleField.setValue(field, data.value)

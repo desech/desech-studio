@@ -1,0 +1,16 @@
+.sidebar-right #text-section .text-decoration-container,
+#variable-section .text-decoration-container {
+  padding: 0;
+  margin-left: -3px;
+  gap: 0;
+  grid-template-columns: 30px 30px 30px auto;
+  justify-content: start;
+}
+
+.sidebar-right #text-section select.text-decoration-general {
+  width: 125px;
+}
+
+#variable-section select.text-decoration-general {
+  width: 132px;
+}

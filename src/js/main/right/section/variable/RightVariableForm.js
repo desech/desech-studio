@@ -109,8 +109,22 @@ export default {
   },
 
   async updateFieldValue (field) {
-    const value = ChangeStyleField.getValue(field)
+    const value = this.getFieldValue(field)
     await this.updateValue(value)
+  },
+
+  getFieldValue (field) {
+    if (field.name.startsWith('border-radius')) {
+      return this.getBorderRadius(field.closest('form').elements)
+    } else {
+      return ChangeStyleField.getValue(field)
+    }
+  },
+
+  getBorderRadius (fields) {
+    const first = ChangeStyleField.getValue(fields['border-radius']) || '0px'
+    const last = ChangeStyleField.getValue(fields['border-radius-vertical'])
+    return `${first} ${last}`.trim()
   },
 
   async changeFill (picker) {

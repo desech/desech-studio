@@ -40,6 +40,12 @@ export default {
         return 'gap'
       case 'fill': case 'stroke': case 'text-decoration-color':
         return 'color'
+      case 'border-top-left-radius': case 'border-top-right-radius':
+      case 'border-bottom-left-radius': case 'border-bottom-right-radius':
+      case 'border-top-left-radius-vertical': case 'border-top-right-radius-vertical':
+      case 'border-bottom-left-radius-vertical': case 'border-bottom-right-radius-vertical':
+      case 'border-radius-vertical':
+        return 'border-radius'
       default:
         return name
     }
@@ -49,14 +55,12 @@ export default {
     const style = StateStyleSheet.getCurrentStyleObject(data.selector)
     if ((['margin', 'padding'].includes(data.type)) &&
       this.isMarginPaddingSame(data.type, style)) {
-      return {
-        [`${data.type}-top`]: value,
-        [`${data.type}-right`]: value,
-        [`${data.type}-bottom`]: value,
-        [`${data.type}-left`]: value
-      }
+      return this.getMarginPaddingStyle(data.type, value)
+    } else if (data.propertyName === 'border-radius') {
+      return this.getBorderRadiusAllStyle(value)
+    } else {
+      return { [data.propertyName]: value }
     }
-    return { [data.propertyName]: value }
   },
 
   isMarginPaddingSame (type, data) {
@@ -65,6 +69,24 @@ export default {
       if (value !== data[`${type}-${dir}`]) return false
     }
     return true
+  },
+
+  getMarginPaddingStyle (type, value) {
+    return {
+      [`${type}-top`]: value,
+      [`${type}-right`]: value,
+      [`${type}-bottom`]: value,
+      [`${type}-left`]: value
+    }
+  },
+
+  getBorderRadiusAllStyle (value) {
+    return {
+      'border-top-left-radius': value,
+      'border-top-right-radius': value,
+      'border-bottom-left-radius': value,
+      'border-bottom-right-radius': value
+    }
   },
 
   validateName (input) {

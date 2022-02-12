@@ -1,6 +1,7 @@
 import InputUnitField from '../../../../component/InputUnitField.js'
 import TabComponent from '../../../../component/TabComponent.js'
 import RightCommon from '../../RightCommon.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
 
 export default {
   getEvents () {
@@ -42,6 +43,7 @@ export default {
       'border-bottom-left-radius': value,
       'border-bottom-right-radius': value
     })
+    RightVariableInject.updateFieldVariables(input)
   },
 
   getInputAllContainer (input) {
@@ -78,6 +80,7 @@ export default {
     await RightCommon.changeStyle({
       [name]: this.getRadiusValue(container)
     })
+    RightVariableInject.updateFieldVariables(input)
   },
 
   getInputEachContainer (input) {

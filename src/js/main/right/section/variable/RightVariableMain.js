@@ -54,7 +54,8 @@ export default {
 
   createVariablePrompt (select) {
     this.setSelectData(select)
-    this.showCreateDialog(select.dataset.name || select.name)
+    const propertyName = this.getPropertyName(select)
+    this.showCreateDialog(propertyName)
   },
 
   setSelectData (select) {
@@ -81,9 +82,22 @@ export default {
     fields.ref.value = HelperVariable.generateVariableRef()
     if (!propertyName) return
     fields.propertyName.value = propertyName
-    fields.value.value = StateStyleSheet.getPropertyValue(propertyName)
+    fields.value.value = this.getPropertyValue(propertyName)
     fields.type.value = RightVariableCommon.getPropertyType(propertyName)
     HelperDOM.hide(fields.type)
+  },
+
+  getPropertyName (select) {
+    let name = select.dataset.name || select.name
+    if (name.startsWith('border-') && name.endsWith('-vertical')) {
+      name = name.replace('-vertical', '')
+    }
+    return name
+  },
+
+  getPropertyValue (name) {
+    if (name === 'border-radius') name = 'border-top-left-radius'
+    return StateStyleSheet.getPropertyValue(name)
   },
 
   async createVariableSubmit (dialog) {

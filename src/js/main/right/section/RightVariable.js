@@ -6,6 +6,8 @@ import HelperColor from '../../../helper/HelperColor.js'
 import StyleSheetVariable from '../../../state/stylesheet/StyleSheetVariable.js'
 import RightTextFont from './text/RightTextFont.js'
 import RightTextDecoration from './text/RightTextDecoration.js'
+import InputUnitField from '../../../component/InputUnitField.js'
+import HelperRegex from '../../../helper/HelperRegex.js'
 
 export default {
   getSection () {
@@ -24,7 +26,7 @@ export default {
     this.injectRef(template, data)
     fields.name.value = data.name
     fields.type.value = data.type
-    this.injectValue(template, data)
+    this.injectValue(template, fields, data)
   },
 
   injectRef (container, data) {
@@ -32,24 +34,31 @@ export default {
     node.textContent = data.ref
   },
 
-  injectValue (container, data) {
+  injectValue (container, fields, data) {
     const parent = container.getElementsByClassName('right-variable-value-container')[0]
     const template = HelperDOM.getTemplate(`template-variable-${data.type}`)
     HelperDOM.replaceOnlyChild(parent, template)
-    this.injectFieldValue(parent, data)
+    this.injectFieldValue(parent, fields, data)
   },
 
-  injectFieldValue (container, data) {
+  injectFieldValue (container, fields, data) {
     if (data.type === 'font-family') {
       RightTextFont.injectFontList(container)
       RightTextFont.injectFontFamily(container, data.value)
     } else if (data.type === 'text-decoration-line') {
-      const fields = container.closest('form').elements
       RightTextDecoration.injectDecorationLine(fields, data.value)
+    } else if (data.type === 'border-radius') {
+      this.injectBorderRadius(fields, data)
     } else if (data.type !== 'color') {
       const field = container.querySelector('input,select,button')
       ChangeStyleField.setValue(field, data.value)
     }
+  },
+
+  injectBorderRadius (fields, data) {
+    const [first, last] = HelperRegex.splitByCharacter(data.value, ' ')
+    InputUnitField.setValue(fields['border-radius'], first)
+    InputUnitField.setValue(fields['border-radius-vertical'], last)
   },
 
   // inject things after the template is added to the container

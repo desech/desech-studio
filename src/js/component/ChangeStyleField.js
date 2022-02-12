@@ -52,9 +52,9 @@ export default {
     }
   },
 
-  setValue (field, cssValue, style = null) {
+  setValue (field, cssValue, computedValue = null) {
     if (field.classList.contains('input-unit-value')) {
-      InputUnitField.setValue(field, cssValue, style)
+      InputUnitField.setValue(field, cssValue, computedValue)
     } else if ((field.tagName === 'SELECT' || field.tagName === 'INPUT') &&
       !field.classList.contains('input-unit-measure')) {
       field.value = cssValue || ''

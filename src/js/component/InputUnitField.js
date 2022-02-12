@@ -144,28 +144,30 @@ export default {
     }
   },
 
-  setValue (field, value, style = null) {
+  setValue (field, cssValue, computedValue = null) {
     if (!field) return
-    if (value) {
-      this.setValueField(field, value)
-    } else if (style !== null) {
-      this.setUnitValue(field.nextElementSibling, style)
+    if (cssValue) {
+      this.setValueField(field, cssValue)
+    } else if (computedValue !== null) {
+      this.setUnitValue(field.nextElementSibling, computedValue)
       field.value = ''
-      this.injectInputPlaceholder(field, style)
+      this.injectInputPlaceholder(field, computedValue)
     }
   },
 
-  setUnitValue (select, value) {
-    if (ExtendJS.startsNumeric(value)) {
-      const numeric = this.getNumericValue(value)
+  setUnitValue (select, computedValue) {
+    if (ExtendJS.startsNumeric(computedValue)) {
+      const numeric = this.getNumericValue(computedValue)
       if (Array.isArray(numeric)) select.value = numeric[1]
-    } else if (value) {
+    } else if (computedValue) {
       this.setDefaultUnit(select)
     }
   },
 
-  injectInputPlaceholder (input, style) {
-    const value = ExtendJS.startsNumeric(style) ? ExtendJS.roundToTwo(style) : style
+  injectInputPlaceholder (input, computedValue) {
+    const value = ExtendJS.startsNumeric(computedValue)
+      ? ExtendJS.roundToTwo(computedValue)
+      : computedValue
     if (value) input.placeholder = value
   }
 }

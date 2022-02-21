@@ -38,5 +38,15 @@ export default {
     button.classList.remove('active')
     const fill = container.getElementsByClassName('border-fill-container')[0]
     HelperDOM.deleteChildren(fill)
+  },
+
+  getBorderFormType (node) {
+    return node.closest('.border-fill-container').dataset.type
+  },
+
+  getBorderStyleName (node) {
+    const type = this.getBorderFormType(node)
+    const extra = (type === 'all') ? '' : '-' + type
+    return `border${extra}-style`
   }
 }

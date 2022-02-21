@@ -11,6 +11,7 @@ import HelperEvent from '../../../../helper/HelperEvent.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import HelperForm from '../../../../helper/HelperForm.js'
 import ChangeStyleField from '../../../../component/ChangeStyleField.js'
+import RightBorderFillCommon from '../border/RightBorderFillCommon.js'
 
 export default {
   getEvents () {
@@ -92,12 +93,16 @@ export default {
     if (name.startsWith('border-') && name.endsWith('-vertical')) {
       name = name.replace('-vertical', '')
     }
+    if (name === 'border-style') {
+      name = RightBorderFillCommon.getBorderStyleName(select)
+    }
     return name
   },
 
   getPropertyValue (name) {
     if (name === 'border-radius') name = 'border-top-left-radius'
     if (name === 'border-width') name = 'border-top-width'
+    if (name === 'border-style') name = 'border-top-style'
     return StateStyleSheet.getPropertyValue(name)
   },
 

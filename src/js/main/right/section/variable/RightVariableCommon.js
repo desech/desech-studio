@@ -49,6 +49,9 @@ export default {
       case 'border-top-width': case 'border-right-width': case 'border-bottom-width':
       case 'border-left-width':
         return 'border-width'
+      case 'border-top-style': case 'border-right-style': case 'border-bottom-style':
+      case 'border-left-style':
+        return 'border-style'
       default:
         return name
     }
@@ -64,6 +67,8 @@ export default {
       return this.getBorderRadiusAllStyle(value)
     } else if (data.propertyName === 'border-width') {
       return this.getFacesStyle(value, 'border-', '-width')
+    } else if (data.propertyName === 'border-style') {
+      return this.getFacesStyle(value, 'border-', '-style')
     } else {
       return { [data.propertyName]: value }
     }

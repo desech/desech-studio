@@ -5,6 +5,7 @@ import RightCommon from '../../RightCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
 import ColorPickerGradient from '../../../../component/color-picker/ColorPickerGradient.js'
 import RightBorderFillProperty from './RightBorderFillProperty.js'
+import RightBorderFillCommon from './RightBorderFillCommon.js'
 
 export default {
   getEvents () {
@@ -53,7 +54,7 @@ export default {
   },
 
   getInput4SidesValue (input, fullValue) {
-    const type = input.closest('.border-fill-container').dataset.type
+    const type = RightBorderFillCommon.getBorderFormType(input)
     const value = InputUnitField.getValue(input)
     return HelperStyle.set4SidesValue(type, value, fullValue)
   },
@@ -98,7 +99,7 @@ export default {
 
   injectBorderImage (container) {
     const fields = container.getElementsByClassName('fill-border-image')[0].elements
-    const type = container.closest('.border-fill-container').dataset.type
+    const type = RightBorderFillCommon.getBorderFormType(container)
     const selector = StyleSheetSelector.getCurrentSelector()
     this.injectOutset(fields.outset, type, selector)
     this.injectSlice(fields.slice, type, selector)

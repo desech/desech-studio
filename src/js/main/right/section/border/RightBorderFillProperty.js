@@ -5,6 +5,8 @@ import StateStyleSheet from '../../../../state/StateStyleSheet.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import RightCommon from '../../RightCommon.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
+import RightVariableCommon from '../variable/RightVariableCommon.js'
 
 export default {
   getEvents () {
@@ -21,7 +23,8 @@ export default {
   },
 
   async changeBorderStyleEvent (event) {
-    if (event.target.classList.contains('border-style-select')) {
+    if (event.target.classList.contains('border-style-select') &&
+      !RightVariableCommon.isExecuteAction(event.target.value)) {
       await this.changeBorderStyle(event.target)
     }
   },
@@ -80,9 +83,10 @@ export default {
   },
 
   async changeBorderStyle (select) {
-    const type = select.closest('.border-fill-container').dataset.type
+    const type = RightBorderFillCommon.getBorderFormType(select)
     const properties = this.getBorderFillPropertiesByName(type, select.value, 'style')
     await RightCommon.changeStyle(properties)
+    RightVariableInject.updateFieldVariables(select)
   },
 
   injectColor (container, borderType) {

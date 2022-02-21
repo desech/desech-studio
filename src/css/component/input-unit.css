@@ -52,7 +52,9 @@
   font-size: 11px;
 }
 
-.desech-studio .component-input-unit select option.selected {
+.desech-studio .component-input-unit select option.selected,
+.desech-studio select.change-style option.selected,
+.desech-studio select.custom-change-style option.selected {
   color: var(--option-selected);
 }
 

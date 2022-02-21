@@ -9,6 +9,7 @@ import ColorPickerGradient from '../../../../component/color-picker/ColorPickerG
 import RightBorderImage from './RightBorderImage.js'
 import ColorPickerCommon from '../../../../component/color-picker/ColorPickerCommon.js'
 import StyleSheetSelector from '../../../../state/stylesheet/StyleSheetSelector.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
 
 export default {
   getEvents () {
@@ -73,7 +74,7 @@ export default {
     const container = form.getElementsByClassName('fill-details-container')[0]
     switch (fillType) {
       case 'solid-color':
-        this.addSolidColor(container, borderType)
+        this.addSolidColor(form, container, borderType)
         break
       case 'linear-gradient':
         this.addGradient(container, 'linear')
@@ -88,17 +89,19 @@ export default {
     ColorPickerSwatch.injectColors(container)
   },
 
-  addSolidColor (container, borderType) {
+  addSolidColor (form, container, borderType) {
     const template = HelperDOM.getTemplate('template-border-fill-solid-color')
     HelperDOM.replaceOnlyChild(container, template)
     // the color picker needs the dom to be updated before we do any color changes
-    this.injectSolidColor(template, borderType)
+    this.injectSolidColor(form, template, borderType)
   },
 
-  injectSolidColor (template, borderType) {
+  injectSolidColor (form, template, borderType) {
+    RightVariableInject.injectAllFieldVariables(form.elements)
     RightBorderFillProperty.injectColor(template, borderType)
     const selector = StyleSheetSelector.getCurrentSelector()
     RightBorderFillProperty.injectBorderStyle(template, borderType, selector)
+    RightVariableInject.updateAllFieldVariables(form.elements)
   },
 
   addGradient (container, type) {

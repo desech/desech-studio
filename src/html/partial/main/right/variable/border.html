@@ -9,3 +9,9 @@
 <template id="template-variable-border-width">
   {{> componentInputUnit name="border-width" class="right-variable-value" length="1" borderWidth="1" noVariables="1" }}
 </template>
+
+<template id="template-variable-border-style">
+  <select name="border-style" class="right-variable-value">
+    {{> mainRightVariableFieldBorderStyle }}
+  </select>
+</template>

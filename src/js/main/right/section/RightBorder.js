@@ -15,6 +15,7 @@ export default {
   },
 
   injectData (form, sectionData) {
+    RightBorderSide.injectSideContainer(form)
     RightVariableInject.injectAllFieldVariables(form.elements)
     RightBorderRadius.injectRadius(form, sectionData)
     RightBorderSide.injectSide(form, sectionData)

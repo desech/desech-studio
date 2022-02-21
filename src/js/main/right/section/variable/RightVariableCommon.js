@@ -23,7 +23,7 @@ export default {
     }
   },
 
-  // right/variable.html, RightVariableCommon.getPropertyType()
+  // right/variable.html, RightVariableCommon.getPropertyType(), getStyleProperties()
   getPropertyType (name) {
     switch (name) {
       case 'min-width': case 'max-width':
@@ -46,18 +46,24 @@ export default {
       case 'border-bottom-left-radius-vertical': case 'border-bottom-right-radius-vertical':
       case 'border-radius-vertical':
         return 'border-radius'
+      case 'border-top-width': case 'border-right-width': case 'border-bottom-width':
+      case 'border-left-width':
+        return 'border-width'
       default:
         return name
     }
   },
 
+  // this is when we apply the variable value to the element style
   getStyleProperties (data, value) {
     const style = StateStyleSheet.getCurrentStyleObject(data.selector)
     if ((['margin', 'padding'].includes(data.type)) &&
       this.isMarginPaddingSame(data.type, style)) {
-      return this.getMarginPaddingStyle(data.type, value)
+      return this.getFacesStyle(value, data.type + '-')
     } else if (data.propertyName === 'border-radius') {
       return this.getBorderRadiusAllStyle(value)
+    } else if (data.propertyName === 'border-width') {
+      return this.getFacesStyle(value, 'border-', '-width')
     } else {
       return { [data.propertyName]: value }
     }
@@ -71,12 +77,12 @@ export default {
     return true
   },
 
-  getMarginPaddingStyle (type, value) {
+  getFacesStyle (value, prefix, sufix = '') {
     return {
-      [`${type}-top`]: value,
-      [`${type}-right`]: value,
-      [`${type}-bottom`]: value,
-      [`${type}-left`]: value
+      [`${prefix}top${sufix}`]: value,
+      [`${prefix}right${sufix}`]: value,
+      [`${prefix}bottom${sufix}`]: value,
+      [`${prefix}left${sufix}`]: value
     }
   },
 

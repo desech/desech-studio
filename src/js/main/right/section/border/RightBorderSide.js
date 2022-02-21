@@ -5,6 +5,7 @@ import HelperStyle from '../../../../helper/HelperStyle.js'
 import RightCommon from '../../RightCommon.js'
 import HelperDOM from '../../../../helper/HelperDOM.js'
 import RightBorderFillCommon from './RightBorderFillCommon.js'
+import RightVariableInject from '../variable/RightVariableInject.js'
 
 export default {
   getEvents () {
@@ -37,7 +38,7 @@ export default {
     const form = button.closest('form')
     RightBorderFillCommon.hideFillContainer(form)
     const data = RightCommon.getSectionData()
-    this.injectSide(form, data, button.value)
+    this.injectSideDynamic(form, data, button.value)
   },
 
   selectButton (button) {
@@ -46,10 +47,20 @@ export default {
     button.classList.add('selected')
   },
 
+  async changeWidthAll (input) {
+    await this.changeStyle(input)
+  },
+
+  async changeWidthEach (input) {
+    const infix = '-' + input.name.split('-')[1]
+    await this.changeStyle(input, infix)
+  },
+
   async changeStyle (input, infix = '') {
     const value = InputUnitField.getValue(input)
     const properties = this.getStyleProperties(value, infix)
     await RightCommon.changeStyle(properties)
+    RightVariableInject.updateFieldVariables(input)
   },
 
   getStyleProperties (value, infix = '') {
@@ -89,22 +100,19 @@ export default {
     return infix ? infix.substring(1) : 'all'
   },
 
-  async changeWidthAll (input) {
-    await this.changeStyle(input)
-  },
-
-  async changeWidthEach (input) {
-    const infix = '-' + input.name.split('-')[1]
-    await this.changeStyle(input, infix)
+  injectSideDynamic (form, data, type) {
+    this.injectSideContainer(form, type)
+    RightVariableInject.injectAllFieldVariables(form.elements)
+    this.injectSide(form, data, type)
+    RightVariableInject.updateAllFieldVariables(form.elements)
   },
 
   injectSide (form, data, type = 'all') {
-    this.injectSideContainer(form, type)
     this.injectSize(form, data, type)
     RightBorderFill.injectFill(form, data, type)
   },
 
-  injectSideContainer (container, type) {
+  injectSideContainer (container, type = 'all') {
     const block = container.getElementsByClassName('border-side-container')[0]
     const template = HelperDOM.getTemplate(`template-border-side-${type}`)
     HelperDOM.replaceOnlyChild(block, template)

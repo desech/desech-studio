@@ -97,6 +97,7 @@ export default {
 
   getPropertyValue (name) {
     if (name === 'border-radius') name = 'border-top-left-radius'
+    if (name === 'border-width') name = 'border-top-width'
     return StateStyleSheet.getPropertyValue(name)
   },
 

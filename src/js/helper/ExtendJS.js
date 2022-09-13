@@ -26,6 +26,12 @@ export default {
     }).replace(/\W/g, '')
   },
 
+  toTitleCase (string) {
+    return string.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    })
+  },
+
   camelCaseToKebab (string) {
     return string.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
   },

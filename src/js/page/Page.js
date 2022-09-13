@@ -5,7 +5,6 @@ import TopCommandSave from '../main/top/command/TopCommandSave.js'
 import DialogComponent from '../component/DialogComponent.js'
 import HelperProject from '../helper/HelperProject.js'
 import Project from '../start/Project.js'
-import Auth from '../start/Auth.js'
 import TopZoom from '../main/top/TopZoom.js'
 import TopCommon from '../main/top/TopCommon.js'
 import LeftFileLoad from '../main/left/file/LeftFileLoad.js'
@@ -15,7 +14,6 @@ export default {
   loadStart () {
     this.loadPage('start')
     HelperLocalStore.clearStore()
-    Auth.injectAuthData()
   },
 
   loadPage (page) {

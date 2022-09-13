@@ -1,4 +1,4 @@
-import Zip from '../../file/Zip.js'
+import Unzip from '../../file/Unzip.js'
 import File from '../../file/File.js'
 import ImportCommon from '../ImportCommon.js'
 import AdobexdElement from './AdobexdElement.js'
@@ -21,7 +21,7 @@ export default {
     this._data = {}
     this._settings = {
       ...params,
-      importFolder: Zip.unzipFileTmp(params.file),
+      importFolder: Unzip.unzipFileTmp(params.file),
       components: {},
       // ImportImage.getImageName() uses this
       allImages: {}

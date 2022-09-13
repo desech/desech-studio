@@ -1,10 +1,7 @@
 node_modules
 .DS_Store
-config.json
 dist
 electron-builder.env
-build/mac/application.p12
-build/win/desech.pfx
 app/css
 app/html
 app/js

@@ -4,9 +4,11 @@ import Font from '../lib/Font.js'
 import Fetch from '../lib/Fetch.js'
 
 export default {
+  _baseUrl: 'https://raw.githubusercontent.com/desech/desech-studio/master/download',
+
   async installFonts (data, params) {
     const elementFonts = this.getElementFonts(data)
-    const webFonts = await Fetch.fetch('https://download.desech.com/font/list.json')
+    const webFonts = await Fetch.fetch(this._baseUrl + '/font.json')
     const folderFonts = Font.getFontsList(params.folder)
     for (const val of elementFonts) {
       if (this.isGoogleFont(val.name, webFonts)) {
@@ -52,7 +54,7 @@ export default {
       fonts.push({
         name,
         count: 1,
-        url: `https://download.desech.com/font/${name.replaceAll(' ', '+')}.zip`
+        url: this._baseUrl + `/font/${name.replaceAll(' ', '+')}.zip`
       })
     }
   },

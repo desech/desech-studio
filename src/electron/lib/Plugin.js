@@ -10,8 +10,7 @@ import fs from 'fs'
 import File from '../file/File.js'
 import ProjectCommon from '../project/ProjectCommon.js'
 import HelperPlugin from '../../js/helper/HelperPlugin.js'
-import Zip from '../file/Zip.js'
-import Config from './Config.js'
+import Unzip from '../file/Unzip.js'
 import Electron from './Electron.js'
 import Language from './Language.js'
 import Log from './Log.js'
@@ -80,7 +79,7 @@ export default {
   async unzipTemp (url) {
     const buffer = await this.getApiZip(url)
     const zip = new AdmZip(buffer)
-    const folder = Zip.unzipInstanceTmp(zip)
+    const folder = Unzip.unzipInstanceTmp(zip)
     // we want the subfolder
     return File.resolve(folder, fs.readdirSync(folder)[0])
   },
@@ -123,7 +122,7 @@ export default {
   },
 
   async getPluginsList () {
-    const url = Config.getConfig('api') + '/plugins'
+    const url = 'https://raw.githubusercontent.com/desech/studio-plugins/main/plugins.json'
     const json = await Fetch.fetch(url)
     return json.plugins
   },

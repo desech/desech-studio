@@ -5,20 +5,6 @@
   align-content: center;
 }
 
-#page-start .start-user {
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 30px;
-  justify-content: center;
-  margin: 0 auto 50px auto;
-  text-align: center;
-  font-size: 14px;
-}
-
-#page-start .start-user-logout {
-  font-size: 13px;
-}
-
 #page-start .start-container {
   width: 700px;
   height: 300px;

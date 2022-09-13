@@ -58,30 +58,6 @@
 
 /* specific dialogs */
 
-.dialog .dialog-premium {
-  width: 410px;
-  font-size: 15px;
-  line-height: 24px;
-}
-
-.dialog .dialog-premium .premium-icon-container {
-  background-color: #FFF;
-  color: #000;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 3px;
-  filter: grayscale(100%);
-}
-
-.dialog .dialog-auth {
-  padding: 20px;
-  text-align: center;
-}
-
-.dialog .dialog-auth .dialog-auth-button {
-  margin-top: 30px;
-}
-
 .dialog .dialog-about {
   line-height: 25px;
 }

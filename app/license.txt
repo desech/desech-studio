@@ -1,5 +1,5 @@
 Desech Studio
-Copyright Desech Studio SRL
+GNU LESSER GENERAL PUBLIC LICENSE
 
 Google Material design icons
 Apache 2.0 License

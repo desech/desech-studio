@@ -2,16 +2,16 @@
   "productName": "Desech Studio",
   "name": "desech-studio",
   "description": "Desech Studio, a nocode visual html/css editor for web programmers and designers",
-  "homepage": "https://www.desech.com",
+  "homepage": "https://github.com/desech/desech-studio",
   "author": {
-    "name": "Desech Studio SRL",
-    "email": "contact@desech.com"
+    "name": "Catalin Luntraru",
+    "email": "catalin.luntraru@protonmail.com"
   },
   "version": "2.0.1",
-  "license": "license.txt",
+  "license": "GNU LESSER GENERAL PUBLIC LICENSE",
   "repository": {
     "type": "git",
-    "url": "https://git.desech.com/desech/desech-studio"
+    "url": "https://github.com/desech/desech-studio"
   },
   "scripts": {
     "start": "electron ."

@@ -1,29 +1,13 @@
 import ElectronCommon from './ElectronCommon.js'
 import HelperDOM from '../helper/HelperDOM.js'
 import Start from '../start/Start.js'
-import Auth from '../start/Auth.js'
 import DialogComponent from '../component/DialogComponent.js'
-import TopCommandCommon from '../main/top/command/TopCommandCommon.js'
 
 export default {
   addEvents () {
-    this.mainLoginSuccessEvent()
-    this.mainPremiumPromptEvent()
     this.mainImportFilePromptEvent()
     this.mainShowFigmaImportEvent()
     this.mainImportProgressEvent()
-  },
-
-  mainLoginSuccessEvent () {
-    window.electron.on('mainLoginSuccess', (event, user) => {
-      ElectronCommon.handleEvent(this, 'loginSuccess', user)
-    })
-  },
-
-  mainPremiumPromptEvent () {
-    window.electron.on('mainPremiumPrompt', (event) => {
-      ElectronCommon.handleEvent(this, 'triggerPremiumPrompt')
-    })
   },
 
   mainImportFilePromptEvent () {
@@ -42,38 +26,6 @@ export default {
     window.electron.on('mainShowFigmaImport', (event, token) => {
       ElectronCommon.handleEvent(Start, 'switchImportToFigma', token)
     })
-  },
-
-  loginSuccess (user) {
-    const dialog = document.getElementsByClassName('dialog')[0]
-    if (dialog) dialog.remove()
-    document.body.dataset.email = user.email
-    Auth.injectAuthData()
-  },
-
-  triggerPremiumPrompt () {
-    // 30 minutes
-    setTimeout(async () => {
-      await TopCommandCommon.executeSaveFile()
-      this.showPremiumPrompt()
-    }, 1000 * 60 * 30)
-  },
-
-  showPremiumPrompt () {
-    const dialog = DialogComponent.showDialog({
-      header: DialogComponent.getContentHtml('premium', 'header'),
-      body: DialogComponent.getContentHtml('premium', 'body'),
-      footer: DialogComponent.getContentHtml('premium', 'footer'),
-      locked: true
-    })
-    this.randomizePromptButtons(dialog)
-  },
-
-  randomizePromptButtons (dialog) {
-    const container = dialog.querySelector('.dialog-footer')
-    for (let i = container.children.length; i >= 0; i--) {
-      container.appendChild(container.children[Math.random() * i | 0])
-    }
   },
 
   importProgress (html, type, folder) {

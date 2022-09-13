@@ -26,7 +26,7 @@ export default {
 
   rendererInitProjectEvent () {
     ipcMain.handle('rendererInitProject', async (event, data) => {
-      return await EventMain.handleEvent(this, 'initProject', data)
+      return await EventMain.handleEvent(Project, 'initProject', data)
     })
   },
 
@@ -38,7 +38,7 @@ export default {
 
   rendererImportFileEvent () {
     ipcMain.handle('rendererImportFile', async (event, type) => {
-      return await EventMain.handleEvent(this, 'importChooseFile', type)
+      return await EventMain.handleEvent(Import, 'importChooseFile', type)
     })
   },
 
@@ -54,34 +54,17 @@ export default {
     })
   },
 
-  isAuthenticated () {
-    return Settings.getSetting('userToken') && Settings.getSetting('loginToken') &&
-      Cookie.getCookie('accountType')
-  },
-
   newSampleProject () {
-    // if (!this.isAuthenticated()) return
     // @todo do the sample code
   },
 
   newProject () {
-    if (!this.isAuthenticated()) return
     EventMain.ipcMainInvoke('mainNewProject')
   },
 
-  async initProject (data) {
-    if (!this.isAuthenticated()) return
-    await Project.initProject(data)
-  },
-
   async importShowFilePrompt (type) {
-    if (!this.isAuthenticated()) return
     await this.closeProject()
     EventMain.ipcMainInvoke('mainImportFilePrompt', type)
-  },
-
-  async importChooseFile (type) {
-    if (this.isAuthenticated()) await Import.importChooseFile(type)
   },
 
   async openProjectSettings () {

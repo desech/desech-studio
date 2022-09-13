@@ -16,7 +16,6 @@ import ColorPickerGradient from '../component/color-picker/ColorPickerGradient.j
 import ColorPickerGradientProperty from '../component/color-picker/ColorPickerGradientProperty.js'
 import Start from '../start/Start.js'
 import Plugin from '../start/Plugin.js'
-import Auth from '../start/Auth.js'
 import Main from '../main/Main.js'
 import Canvas from '../main/Canvas.js'
 import CanvasHand from '../main/canvas/CanvasHand.js'
@@ -128,8 +127,7 @@ export default {
   getStartEvents () {
     return [
       Start,
-      Plugin,
-      Auth
+      Plugin
     ]
   },
 

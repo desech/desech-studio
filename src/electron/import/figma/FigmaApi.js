@@ -1,5 +1,4 @@
 import { shell } from 'electron'
-import Config from '../../lib/Config.js'
 import Settings from '../../lib/Settings.js'
 import EventMain from '../../event/EventMain.js'
 import Language from '../../lib/Language.js'
@@ -17,13 +16,13 @@ export default {
   },
 
   async getUserTokens () {
-    const url = Config.getConfig('api') + '/user/tokens-fetch?user=' +
+    const url = 'https://api.desech.com/user/tokens-fetch?user=' +
       Settings.getSetting('userToken') + '&login=' + Settings.getSetting('loginToken')
     return await Fetch.fetch(url)
   },
 
   startAuth () {
-    const url = Config.getConfig('api') + '/user/figma?user=' +
+    const url = 'https://api.desech.com/user/figma?user=' +
       Settings.getSetting('userToken') + '&login=' + Settings.getSetting('loginToken')
     shell.openExternal(url)
   },

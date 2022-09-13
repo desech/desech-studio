@@ -2,16 +2,16 @@
   "type": "module",
   "name": "desech-studio",
   "description": "Desech Studio, a nocode visual html/css editor for web programmers and designers",
-  "homepage": "https://www.desech.com",
+  "homepage": "https://github.com/desech/desech-studio",
   "author": {
-    "name": "Desech Studio SRL",
-    "email": "contact@desech.com"
+    "name": "Catalin Luntraru",
+    "email": "catalin.luntraru@protonmail.com"
   },
   "version": "2.0.1",
-  "license": "license.txt",
+  "license": "GNU LESSER GENERAL PUBLIC LICENSE",
   "repository": {
     "type": "git",
-    "url": "ssh://git@git.desech.com:5522/~/desech-studio.git"
+    "url": "https://github.com/desech/desech-studio"
   },
   "scripts": {
     "build-all-dev": "npm-run-all build-locale build-html build-css build-js-dev",
@@ -42,19 +42,11 @@
     "csv": "^6.0.5",
     "electron": "^16.0.8",
     "electron-builder": "22.14.5",
-    "electron-notarize": "^1.1.1",
     "electron-updater": "^4.6.1",
-    "eslint": "^8.8.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-standard": "^4.1.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "handlebars": "^4.7.7",
     "html-minifier": "^4.0.0",
-    "javascript-obfuscator": "3.1.0",
     "jimp": "^0.16.1",
     "js-beautify": "^1.14.0",
     "jsdom": "^19.0.0",
@@ -63,8 +55,7 @@
     "npm-run-all": "^4.1.5",
     "webpack": "^5.67.0",
     "webpack-cli": "^4.9.2",
-    "webpack-node-externals": "^3.0.0",
-    "webpack-obfuscator": "3.5.0"
+    "webpack-node-externals": "^3.0.0"
   },
   "ava": {
     "files": [
@@ -79,7 +70,7 @@
     "appId": "com.desech.desech-studio",
     "productName": "Desech Studio",
     "artifactName": "${name}-${version}-${arch}.${ext}",
-    "copyright": "Desech Studio SRL",
+    "copyright": "Desech Studio",
     "directories": {
       "app": "app",
       "buildResources": "build/resource",
@@ -106,7 +97,7 @@
       "publish": [
         {
           "provider": "generic",
-          "url": "https://download.desech.com/win"
+          "url": "https://github.com/desech/desech-studio"
         }
       ]
     },
@@ -129,10 +120,9 @@
       "publish": [
         {
           "provider": "generic",
-          "url": "https://download.desech.com/mac"
+          "url": "https://github.com/desech/desech-studio"
         }
       ]
-    },
-    "afterSign": "build/scripts/notarize.cjs"
+    }
   }
 }

@@ -5,10 +5,9 @@ import Language from '../../src/electron/lib/Language.js'
 import packageJson from '../../package.json' assert { type: 'json' }
 import Fetch from '../../src/electron/lib/Fetch.js'
 
-async function buildHtml (locale) {
+function buildHtml (locale) {
   global.locale = locale
-  // sort the fonts by category
-  const fonts = await Fetch.fetch('https://download.desech.com/font/list.json')
+
   // first 20 from https://fonts.google.com/?sort=popularity
   const popularCategory = [
     'Poppins',
@@ -55,6 +54,9 @@ async function buildHtml (locale) {
       fonts: []
     }
   ]
+
+  // sort the fonts by category
+  const fonts = fs.readFileSync('./download/font.json')
   for (const font of fonts) {
     if (popularCategory.includes(font.family)) {
       popularFonts.push(getFontData(font))
@@ -138,10 +140,11 @@ async function buildHtml (locale) {
 }
 
 function getFontData (font) {
+  const baseUrl = 'https://raw.githubusercontent.com/desech/desech-studio/master/download'
   const dir = font.family.replaceAll(' ', '+')
   return {
     family: font.family,
-    url: `https://download.desech.com/font/${dir}.zip`
+    url: baseUrl + `/font/${dir}.zip`
   }
 }
 
@@ -155,6 +158,6 @@ function buildMainHtml () {
 fs.rmSync('./app/html', { recursive: true, force: true })
 fs.mkdirSync('./app/html')
 
-buildHtml('en') // async
-// buildHtml('ro') // async
+buildHtml('en')
+// buildHtml('ro')
 buildMainHtml()

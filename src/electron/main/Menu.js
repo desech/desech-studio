@@ -2,8 +2,8 @@ import { app, Menu } from 'electron'
 import Language from '../lib/Language.js'
 import EventMain from '../event/EventMain.js'
 import EventMenu from '../event/EventMenu.js'
-import Config from '../lib/Config.js'
 import ExportFolder from '../export/ExportFolder.js'
+import Project from '../project/Project.js'
 
 export default {
   setMenu () {
@@ -46,7 +46,7 @@ export default {
         {
           label: Language.localize('Open Project'),
           click: async () => {
-            await EventMain.handleEvent(EventMenu, 'initProject', { action: 'open' })
+            await EventMain.handleEvent(Project, 'initProject', { action: 'open' })
           }
         },
         { type: 'separator' },
@@ -177,7 +177,7 @@ export default {
         {
           label: Language.localize('Support'),
           click: async () => {
-            const url = Config.getConfig('web') + '/support.html'
+            const url = 'https://github.com/desech/desech-studio'
             await EventMain.handleEvent(EventMenu, 'openLink', url)
           }
         },

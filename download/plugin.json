@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    {
+      "title": "React",
+      "author": "Desech",
+      "category": "exportCode",
+      "url": "https://github.com/desech/studio-react"
+    },
+    {
+      "title": "Angular",
+      "author": "Desech",
+      "category": "exportCode",
+      "url": "https://github.com/desech/studio-angular"
+    },
+    {
+      "title": "Vue",
+      "author": "Desech",
+      "category": "exportCode",
+      "url": "https://github.com/desech/studio-vue"
+    }
+  ]
+}

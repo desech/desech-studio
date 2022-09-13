@@ -122,7 +122,7 @@ export default {
   },
 
   async getPluginsList () {
-    const url = 'https://raw.githubusercontent.com/desech/studio-plugins/main/plugins.json'
+    const url = 'https://raw.githubusercontent.com/desech/desech-studio/master/download/plugin.json'
     const json = await Fetch.fetch(url)
     return json.plugins
   },

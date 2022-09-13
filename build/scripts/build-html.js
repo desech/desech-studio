@@ -56,7 +56,7 @@ function buildHtml (locale) {
   ]
 
   // sort the fonts by category
-  const fonts = fs.readFileSync('./download/font.json')
+  const fonts = JSON.parse(fs.readFileSync('./download/font.json').toString())
   for (const font of fonts) {
     if (popularCategory.includes(font.family)) {
       popularFonts.push(getFontData(font))
